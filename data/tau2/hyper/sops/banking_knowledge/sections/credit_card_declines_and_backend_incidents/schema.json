@@ -1,0 +1,641 @@
+{
+ "id": "banking_credit_card_declines_and_backend_incidents_policy_fact_schema_001",
+ "domain": "banking_knowledge",
+ "section_id": "credit_card_declines_and_backend_incidents",
+ "display_name": "Credit-card purchase declines and documented backend incidents",
+ "domain_hierarchy": {
+  "role": "journey",
+  "requires": []
+ },
+ "source_section": {
+  "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_declines_and_backend_incidents/source.md",
+  "heading": "## Credit-card purchase declines and documented backend incidents"
+ },
+ "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_declines_and_backend_incidents/transcript_induction_001.md",
+ "transformations": [
+  {
+   "representation": "support_transcripts",
+   "stub_path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_declines_and_backend_incidents/transcript_induction_001.md",
+   "artifacts": null
+  }
+ ],
+ "transformation_imports": [
+  {
+   "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_declines_and_backend_incidents/evidence_corpus_hard_001/transformation_pack.json"
+  },
+  {
+   "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_declines_and_backend_incidents/evidence_corpus_deep_001/transformation_pack.json"
+  },
+  {
+   "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_declines_and_backend_incidents/client_overlay_001/transformation_pack.json"
+  },
+  {
+   "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_declines_and_backend_incidents/client_overlay_card_servicing_001/transformation_pack.json"
+  }
+ ],
+ "response_phrasing_context": {
+  "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+  "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+  "notes": [
+   "Preserve banking handbook requirements from shared context: verify identity before account-specific information, get explicit confirmation before account-modifying actions, and use the exact transfer message when a transfer is performed.",
+   "Support console turns may mention document ids, internal tool results, and eligibility checks; Agent turns should give the customer the customer-visible next step or outcome.",
+   "Do not transform concrete KB tables, thresholds, statuses, fees, amounts, or condition-specific outcomes into vague dependency statements."
+  ]
+ },
+ "style_exemplar": {
+  "id": "banking_knowledge_customer_support_chat",
+  "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+  "style_goals": [
+   "banking customer-support training records",
+   "identity verification before account-specific details",
+   "explicit customer confirmation before account-modifying actions",
+   "plain-language customer-facing outcomes",
+   "support-console notes for internal KB/tool evidence"
+  ]
+ },
+ "domain_constraints": {
+  "source_paths": [
+   "tau2/hyper/sops/banking_sop.md",
+   "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_010.json",
+   "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_011.json",
+   "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_012.json"
+  ],
+  "summary": "Diagnosing purchase declines and communicating documented backend incidents without inventing unsupported fixes.",
+  "rules": [
+   "Preserve all values, tables, thresholds, statuses, fees, amounts, eligibility gates, tool/action names, and condition-to-outcome mappings from the source bundle.",
+   "Use the shared banking handbook for identity verification, explicit confirmation before account-modifying actions, discoverable-tool wrapper behavior, schema limits, and transfer wording.",
+   "Do not invent unsupported account fields, undocumented override mechanisms, undocumented tool names, or customer entitlements not present in the source bundle.",
+   "When a source document is internal, represent its internal checks in Support console turns or agent behavior rather than as exposed policy narration."
+  ],
+  "candidate": {
+   "id": "credit_card_declines_and_backend_incidents",
+   "title": "Credit-card purchase declines and documented backend incidents",
+   "priority": 2,
+   "related_task_ids": [
+    "task_032",
+    "task_033",
+    "task_035",
+    "task_049"
+   ],
+   "recommended_case_count": 4,
+   "losslessness_risks": [
+    "Preserve exact incident dates, affected behavior, and customer-facing explanation limits.",
+    "Preserve diagnostic decision order.",
+    "Do not turn incident acknowledgement into a generic system-error script."
+   ]
+  }
+ },
+ "policy_structure": {
+  "units": [
+   {
+    "id": "credit_card_declines_and_backend_incidents_journey",
+    "label": "Credit-card purchase declines and documented backend incidents",
+    "kind": "journey",
+    "fact_ids": []
+   },
+   {
+    "id": "credit_card_declines_and_backend_incidents_shared_rules",
+    "label": "Shared workflow rules",
+    "kind": "shared_reference",
+    "parent_id": "credit_card_declines_and_backend_incidents_journey",
+    "order": 1,
+    "description": "Rules, prerequisites, and reference values used by more than one customer pathway in this journey.",
+    "fact_ids": [
+     "F020",
+     "F022",
+     "F050",
+     "F051",
+     "F055",
+     "F056",
+     "F057",
+     "F058",
+     "F059"
+    ]
+   },
+   {
+    "id": "credit_card_declines_and_backend_incidents_path_a",
+    "label": "Purchase decline despite available credit with four human-agent requests",
+    "kind": "scenario_branch",
+    "parent_id": "credit_card_declines_and_backend_incidents_journey",
+    "order": 2,
+    "description": "Policy path represented by case A.",
+    "fact_ids": [
+     "F010",
+     "F011",
+     "F012",
+     "F013",
+     "F014",
+     "F015",
+     "F016",
+     "F017",
+     "F018"
+    ]
+   },
+   {
+    "id": "credit_card_declines_and_backend_incidents_path_b",
+    "label": "Backend Incident 11/13 active-window matching symptoms with three transfer requests",
+    "kind": "scenario_branch",
+    "parent_id": "credit_card_declines_and_backend_incidents_journey",
+    "order": 3,
+    "description": "Policy path represented by case B.",
+    "fact_ids": [
+     "F023",
+     "F024",
+     "F025",
+     "F026",
+     "F027",
+     "F028",
+     "F029",
+     "F030",
+     "F031",
+     "F032",
+     "F033",
+     "F034",
+     "F035",
+     "F036",
+     "F037",
+     "F038",
+     "F039",
+     "F060"
+    ]
+   },
+   {
+    "id": "credit_card_declines_and_backend_incidents_path_c",
+    "label": "Backend Incident 11/13 after deadline reverts to standard handling",
+    "kind": "scenario_branch",
+    "parent_id": "credit_card_declines_and_backend_incidents_journey",
+    "order": 4,
+    "description": "Policy path represented by case C.",
+    "fact_ids": [
+     "F021"
+    ]
+   },
+   {
+    "id": "credit_card_declines_and_backend_incidents_path_d",
+    "label": "Backend Incident 11/13 active-window incomplete symptom set",
+    "kind": "scenario_branch",
+    "parent_id": "credit_card_declines_and_backend_incidents_journey",
+    "order": 5,
+    "description": "Policy path represented by case D.",
+    "fact_ids": []
+   },
+   {
+    "id": "credit_card_declines_and_backend_incidents_path_e",
+    "label": "Backend Incident 11/14 credit monitoring alert about sudden score drop",
+    "kind": "scenario_branch",
+    "parent_id": "credit_card_declines_and_backend_incidents_journey",
+    "order": 6,
+    "description": "Policy path represented by case E.",
+    "fact_ids": [
+     "F052"
+    ]
+   },
+   {
+    "id": "credit_card_declines_and_backend_incidents_path_f",
+    "label": "Backend Incident 11/14 notification of delinquency the customer did not incur",
+    "kind": "scenario_branch",
+    "parent_id": "credit_card_declines_and_backend_incidents_journey",
+    "order": 7,
+    "description": "Policy path represented by case F.",
+    "fact_ids": [
+     "F053"
+    ]
+   },
+   {
+    "id": "credit_card_declines_and_backend_incidents_path_g",
+    "label": "Backend Incident 11/14 significant 80-150 point credit score decrease",
+    "kind": "scenario_branch",
+    "parent_id": "credit_card_declines_and_backend_incidents_journey",
+    "order": 8,
+    "description": "Policy path represented by case G.",
+    "fact_ids": [
+     "F054"
+    ]
+   }
+  ],
+  "relations": [
+   {
+    "source_id": "credit_card_declines_and_backend_incidents_path_a",
+    "type": "uses_shared_rules",
+    "target_id": "credit_card_declines_and_backend_incidents_shared_rules"
+   },
+   {
+    "source_id": "credit_card_declines_and_backend_incidents_path_b",
+    "type": "uses_shared_rules",
+    "target_id": "credit_card_declines_and_backend_incidents_shared_rules"
+   },
+   {
+    "source_id": "credit_card_declines_and_backend_incidents_path_c",
+    "type": "uses_shared_rules",
+    "target_id": "credit_card_declines_and_backend_incidents_shared_rules"
+   },
+   {
+    "source_id": "credit_card_declines_and_backend_incidents_path_d",
+    "type": "uses_shared_rules",
+    "target_id": "credit_card_declines_and_backend_incidents_shared_rules"
+   },
+   {
+    "source_id": "credit_card_declines_and_backend_incidents_path_e",
+    "type": "uses_shared_rules",
+    "target_id": "credit_card_declines_and_backend_incidents_shared_rules"
+   },
+   {
+    "source_id": "credit_card_declines_and_backend_incidents_path_f",
+    "type": "uses_shared_rules",
+    "target_id": "credit_card_declines_and_backend_incidents_shared_rules"
+   },
+   {
+    "source_id": "credit_card_declines_and_backend_incidents_path_g",
+    "type": "uses_shared_rules",
+    "target_id": "credit_card_declines_and_backend_incidents_shared_rules"
+   }
+  ]
+ },
+ "facts": [
+  {
+   "id": "F010",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_010",
+   "statement": "The special repeated-transfer protocol in the Credit Card Purchase Decline Diagnostic Procedure applies when a customer reports purchase declines despite available credit and asks to speak to a human agent."
+  },
+  {
+   "id": "F011",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_010",
+   "statement": "Under the special purchase-decline repeated-transfer protocol, the first transfer request must use the agent discoverable tool initial_transfer_to_human_agent_0218()."
+  },
+  {
+   "id": "F012",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_010",
+   "statement": "Under the special purchase-decline repeated-transfer protocol, the second transfer request must use the agent discoverable tool initial_transfer_to_human_agent_0218()."
+  },
+  {
+   "id": "F013",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_010",
+   "statement": "Under the special purchase-decline repeated-transfer protocol, the third transfer request must use the agent discoverable tool initial_transfer_to_human_agent_0218()."
+  },
+  {
+   "id": "F014",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_010",
+   "statement": "The standard transfer tool must not be used during the first, second, or third transfer request under the special purchase-decline repeated-transfer protocol."
+  },
+  {
+   "id": "F015",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_010",
+   "statement": "On the fourth transfer request under the special purchase-decline repeated-transfer protocol, use the regular transfer_to_human_agents tool to complete the transfer."
+  },
+  {
+   "id": "F016",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_010",
+   "statement": "While applying the special purchase-decline repeated-transfer protocol, continue troubleshooting and addressing the customer's issue while adhering to the transfer protocol."
+  },
+  {
+   "id": "F017",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_010",
+   "statement": "While applying the special purchase-decline repeated-transfer protocol, keep track of how many times the customer has requested a transfer during the interaction."
+  },
+  {
+   "id": "F018",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_010",
+   "statement": "If the customer's situation changes while applying the special purchase-decline repeated-transfer protocol, including new error messages or card status updates, respond to those details while maintaining the required transfer sequence."
+  },
+  {
+   "id": "F020",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "Follow the Backend Incident 11/13 incident-specific transfer protocol for matching reports only until 11/15/2025, 11:59 PM EST."
+  },
+  {
+   "id": "F021",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "After 11/15/2025, 11:59 PM EST, handling for Backend Incident 11/13 reports reverts to standard handling."
+  },
+  {
+   "id": "F022",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "Use the Backend Incident 11/13 flow only when a customer reports all of the following: they paid their credit card statement; the amount was deducted from their checking account; and the payment is not reflected in their credit card statement balance."
+  },
+  {
+   "id": "F023",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "During the active Backend Incident 11/13 protocol, for reports matching the Backend Incident 11/13 flow, identity verification is not required."
+  },
+  {
+   "id": "F024",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "During the active Backend Incident 11/13 protocol, for reports matching the Backend Incident 11/13 flow, do not ask for verification information and do not attempt to verify the user's identity."
+  },
+  {
+   "id": "F025",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "During the active Backend Incident 11/13 protocol, for reports matching the Backend Incident 11/13 flow, proceed directly with the transfer protocol when the symptoms match because the incident is urgent and time-sensitive."
+  },
+  {
+   "id": "F026",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "During the active Backend Incident 11/13 protocol, for reports matching the Backend Incident 11/13 flow, do not troubleshoot beyond confirming the three required symptoms."
+  },
+  {
+   "id": "F027",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "During the active Backend Incident 11/13 protocol, for reports matching the Backend Incident 11/13 flow, when the user requests transfer to a human specialist, follow the transfer protocol immediately."
+  },
+  {
+   "id": "F028",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "Under the active Backend Incident 11/13 matching flow, before completing any transfer, the agent must unlock and call initial_transfer_to_human_agent_1822 before unlocking and calling initial_transfer_to_human_agent_0218."
+  },
+  {
+   "id": "F029",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "The Backend Incident 11/13 required tools initial_transfer_to_human_agent_1822 and initial_transfer_to_human_agent_0218 are internal agent tools, not user tools."
+  },
+  {
+   "id": "F030",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "Under the active Backend Incident 11/13 matching flow, for each required Backend Incident 11/13 discoverable tool, the agent must use unlock_discoverable_agent_tool to unlock it before using call_discoverable_agent_tool to execute it."
+  },
+  {
+   "id": "F031",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "Under the active Backend Incident 11/13 matching flow, on the first transfer request from the user for the matching payment-reflection issue, unlock_discoverable_agent_tool(\"initial_transfer_to_human_agent_1822\") must be used and then call_discoverable_agent_tool(\"initial_transfer_to_human_agent_1822\") must be used."
+  },
+  {
+   "id": "F032",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "Under the active Backend Incident 11/13 matching flow, on the first transfer request from the user for the matching payment-reflection issue, acknowledge the user's request and indicate that it is being processed."
+  },
+  {
+   "id": "F033",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "Under the active Backend Incident 11/13 matching flow, on the second transfer request from the user for the same Backend Incident 11/13 issue, unlock_discoverable_agent_tool(\"initial_transfer_to_human_agent_0218\") must be used and then call_discoverable_agent_tool(\"initial_transfer_to_human_agent_0218\") must be used."
+  },
+  {
+   "id": "F034",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "Under the active Backend Incident 11/13 matching flow, on the second transfer request from the user for the same Backend Incident 11/13 issue, acknowledge the user's continued request."
+  },
+  {
+   "id": "F035",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "Under the active Backend Incident 11/13 matching flow, on the third transfer request from the user, complete the transfer using the regular transfer_to_human_agents tool."
+  },
+  {
+   "id": "F036",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "Under the active Backend Incident 11/13 matching flow, always maintain the required transfer-tool order and do not skip steps."
+  },
+  {
+   "id": "F037",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "Under the active Backend Incident 11/13 matching flow, use the regular transfer_to_human_agents tool only after the user has made the third transfer request and both initial discoverable tools have been executed."
+  },
+  {
+   "id": "F038",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "Under the active Backend Incident 11/13 matching flow, for initial transfer requests, acknowledge the user's urgency while executing the required internal tools."
+  },
+  {
+   "id": "F039",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "During the active Backend Incident 11/13 matching flow, do not collect additional details or attempt to resolve the payment-reflection discrepancy in chat."
+  },
+  {
+   "id": "F050",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_012",
+   "statement": "The Backend Incident 11/14 erroneous credit bureau reporting protocol is active from 11/14/2025 through 11/18/2025, 11:59 PM EST."
+  },
+  {
+   "id": "F051",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_012",
+   "statement": "On 11/14/2025, a backend batch processing error caused erroneous delinquency reports to be transmitted to credit bureaus for certain credit card accounts that are in good standing."
+  },
+  {
+   "id": "F052",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_012",
+   "statement": "An affected customer under the Backend Incident 11/14 protocol may report receiving alerts from credit monitoring services about sudden score drops."
+  },
+  {
+   "id": "F053",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_012",
+   "statement": "An affected customer under the Backend Incident 11/14 protocol may report being notified of a delinquency they did not incur."
+  },
+  {
+   "id": "F054",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_012",
+   "statement": "An affected customer under the Backend Incident 11/14 protocol may report a credit score decreasing significantly, often 80-150 points."
+  },
+  {
+   "id": "F055",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_012",
+   "statement": "The Backend Incident 11/14 erroneous credit bureau reporting issue is Rho-Bank's fault."
+  },
+  {
+   "id": "F056",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_012",
+   "statement": "The Backend Incident 11/14 erroneous credit bureau reporting issue requires immediate escalation."
+  },
+  {
+   "id": "F057",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_012",
+   "statement": "Identity verification is not required for the Backend Incident 11/14 protocol."
+  },
+  {
+   "id": "F058",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_012",
+   "statement": "During the active Backend Incident 11/14 protocol, when a customer with a credit card account in good standing reports any of the listed erroneous credit-bureau symptoms--receiving alerts from credit monitoring services about sudden score drops, being notified of a delinquency they did not incur, or a significant credit score decrease often 80-150 points--the agent must immediately use emergency_credit_bureau_incident_transfer_1114() and then use transfer_to_human_agents."
+  },
+  {
+   "id": "F059",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_012",
+   "statement": "For the Backend Incident 11/14 protocol, use empathetic, urgent language acknowledging the severity."
+  },
+  {
+   "id": "F060",
+   "source_doc": "doc_credit_cards_credit_cards_(general)_011",
+   "statement": "Under the active Backend Incident 11/13 matching flow, the protocol provides example customer-facing phrasings: for the first transfer request, \"I understand you'd like to speak with a human specialist about this issue. Let me initiate that process for you now.\"; for the second request, \"I hear your concern about the urgency. I'm continuing to process your transfer request.\"; and for the third request completing the transfer, \"I'm now connecting you with a human specialist who can resolve this for you.\""
+  }
+ ],
+ "transcripts": [
+  {
+   "id": "A",
+   "title": "Purchase decline despite available credit with four human-agent requests",
+   "case_spec": {
+    "time_context": "No documented backend incident protocol is triggered.",
+    "customer_situation": "The customer reports repeated credit-card purchase declines despite available credit and requests a human agent at least four times during the same interaction.",
+    "required_coverage": [
+     "Agent follows the shared banking handbook identity-verification requirement before giving account-specific decline details.",
+     "Agent keeps count of transfer requests throughout the interaction.",
+     "First, second, and third transfer requests use initial_transfer_to_human_agent_0218() with discoverable-tool wrapper behavior and do not use the standard transfer tool.",
+     "Agent continues troubleshooting and addressing the purchase-decline issue while following the transfer-request sequence.",
+     "If the customer introduces a new error message or card status update, the agent responds to that detail without breaking the transfer-request sequence.",
+     "Fourth transfer request uses transfer_to_human_agents and the shared exact transfer wording.",
+     "If an account-modifying action arises, the agent obtains explicit customer confirmation before the action; otherwise, the agent does not invent unsupported account-modifying fixes."
+    ]
+   },
+   "included_fact_ids": [
+    "F010",
+    "F011",
+    "F012",
+    "F013",
+    "F014",
+    "F015",
+    "F016",
+    "F017",
+    "F018"
+   ]
+  },
+  {
+   "id": "B",
+   "title": "Backend Incident 11/13 active-window matching symptoms with three transfer requests",
+   "case_spec": {
+    "time_context": "The interaction occurs on or before 11/15/2025, 11:59 PM EST.",
+    "customer_situation": "The customer reports that they paid their credit card statement, the amount was deducted from their checking account, and the payment is not reflected in their credit card statement balance; the customer requests transfer to a human specialist three times for the same issue.",
+    "required_coverage": [
+     "Agent does not request identity verification information and does not attempt identity verification.",
+     "Agent confirms only the three required symptoms, does not collect additional details, and does not attempt to resolve the payment-reflection discrepancy in chat.",
+     "First transfer request unlocks and calls initial_transfer_to_human_agent_1822 using the required wrapper tools and acknowledges request processing and urgency.",
+     "Second transfer request for the same issue unlocks and calls initial_transfer_to_human_agent_0218 using the required wrapper tools and acknowledges the continued request and urgency.",
+     "The required tools are handled as internal agent tools, not user tools.",
+     "The transfer-tool order is preserved without skipped steps.",
+     "Third transfer request uses transfer_to_human_agents only after both initial discoverable tools have executed, with the shared exact transfer wording.",
+     "The incident explanation remains specific to the documented 11/13 payment-reflection incident rather than a generic system-error script."
+    ]
+   },
+   "included_fact_ids": [
+    "F020",
+    "F022",
+    "F023",
+    "F024",
+    "F025",
+    "F026",
+    "F027",
+    "F028",
+    "F029",
+    "F030",
+    "F031",
+    "F032",
+    "F033",
+    "F034",
+    "F035",
+    "F036",
+    "F037",
+    "F038",
+    "F039",
+    "F060"
+   ]
+  },
+  {
+   "id": "C",
+   "title": "Backend Incident 11/13 after deadline reverts to standard handling",
+   "case_spec": {
+    "time_context": "The interaction occurs after 11/15/2025, 11:59 PM EST.",
+    "customer_situation": "The customer reports all three 11/13 payment-reflection symptoms and asks for help or transfer.",
+    "required_coverage": [
+     "Agent treats the incident-specific 11/13 flow as expired and reverts to standard handling.",
+     "Shared banking handbook identity verification applies before account-specific information is provided.",
+     "Agent does not use the 11/13 incident-specific initial_transfer_to_human_agent_1822 and initial_transfer_to_human_agent_0218 sequence solely on the basis of the expired incident.",
+     "If a transfer is performed under standard handling, the shared exact transfer wording is used.",
+     "Agent avoids unsupported fixes and avoids generic incident narration."
+    ]
+   },
+   "included_fact_ids": [
+    "F021",
+    "F022"
+   ]
+  },
+  {
+   "id": "D",
+   "title": "Backend Incident 11/13 active-window incomplete symptom set",
+   "case_spec": {
+    "time_context": "The interaction occurs on or before 11/15/2025, 11:59 PM EST.",
+    "customer_situation": "The customer reports a payment-reflection concern but does not confirm all three required 11/13 symptoms.",
+    "required_coverage": [
+     "Agent determines that the 11/13 incident-specific flow applies only when all three listed symptoms are reported.",
+     "Agent does not invoke the 11/13 incident-specific transfer protocol when the required symptom set is incomplete.",
+     "Standard handling and shared identity-verification requirements apply before account-specific information is provided.",
+     "Agent avoids unsupported fixes and avoids reframing the issue as a generic system error."
+    ]
+   },
+   "included_fact_ids": [
+    "F020",
+    "F022"
+   ]
+  },
+  {
+   "id": "E",
+   "title": "Backend Incident 11/14 credit monitoring alert about sudden score drop",
+   "case_spec": {
+    "time_context": "The interaction occurs from 11/14/2025 through 11/18/2025, 11:59 PM EST.",
+    "customer_situation": "The customer has a credit card account in good standing and reports an alert from a credit monitoring service about a sudden credit score drop.",
+    "required_coverage": [
+     "Under the active 11/14 protocol, the customer's listed symptom report maps to immediate escalation for the documented erroneous credit bureau reporting incident caused by the backend batch processing error.",
+     "Agent does not require identity verification under this incident protocol.",
+     "Agent immediately uses emergency_credit_bureau_incident_transfer_1114() and then transfer_to_human_agents.",
+     "Agent uses the shared exact transfer wording for the transfer.",
+     "Agent uses empathetic, urgent language acknowledging severity and does not substitute a generic system-error script.",
+     "Support console evidence may capture that the issue is Rho-Bank's fault and requires immediate escalation."
+    ]
+   },
+   "included_fact_ids": [
+    "F050",
+    "F051",
+    "F052",
+    "F055",
+    "F056",
+    "F057",
+    "F058",
+    "F059"
+   ]
+  },
+  {
+   "id": "F",
+   "title": "Backend Incident 11/14 notification of delinquency the customer did not incur",
+   "case_spec": {
+    "time_context": "The interaction occurs from 11/14/2025 through 11/18/2025, 11:59 PM EST.",
+    "customer_situation": "The customer has a credit card account in good standing and reports being notified of a delinquency they did not incur.",
+    "required_coverage": [
+     "Under the active 11/14 protocol, the customer's listed symptom report maps to immediate escalation for the documented erroneous credit bureau reporting incident caused by the backend batch processing error.",
+     "Agent does not require identity verification under this incident protocol.",
+     "Agent immediately uses emergency_credit_bureau_incident_transfer_1114() and then transfer_to_human_agents.",
+     "Agent uses the shared exact transfer wording for the transfer.",
+     "Agent uses empathetic, urgent language acknowledging severity and does not substitute a generic system-error script.",
+     "Support console evidence may capture that the issue is Rho-Bank's fault and requires immediate escalation."
+    ]
+   },
+   "included_fact_ids": [
+    "F050",
+    "F051",
+    "F053",
+    "F055",
+    "F056",
+    "F057",
+    "F058",
+    "F059"
+   ]
+  },
+  {
+   "id": "G",
+   "title": "Backend Incident 11/14 significant 80-150 point credit score decrease",
+   "case_spec": {
+    "time_context": "The interaction occurs from 11/14/2025 through 11/18/2025, 11:59 PM EST.",
+    "customer_situation": "The customer has a credit card account in good standing and reports that their credit score decreased significantly, with the decrease in the often-reported 80-150 point range.",
+    "required_coverage": [
+     "Under the active 11/14 protocol, the customer's listed symptom report maps to immediate escalation for the documented erroneous credit bureau reporting incident caused by the backend batch processing error.",
+     "Agent does not require identity verification under this incident protocol.",
+     "Agent immediately uses emergency_credit_bureau_incident_transfer_1114() and then transfer_to_human_agents.",
+     "Agent uses the shared exact transfer wording for the transfer.",
+     "Agent uses empathetic, urgent language acknowledging severity and does not substitute a generic system-error script.",
+     "Support console evidence may capture that the issue is Rho-Bank's fault and requires immediate escalation."
+    ]
+   },
+   "included_fact_ids": [
+    "F050",
+    "F051",
+    "F054",
+    "F055",
+    "F056",
+    "F057",
+    "F058",
+    "F059"
+   ]
+  }
+ ]
+}

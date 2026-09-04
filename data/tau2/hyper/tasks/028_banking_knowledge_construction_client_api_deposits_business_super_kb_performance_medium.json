@@ -1,0 +1,323 @@
+{
+  "id": "028_banking_knowledge_construction_client_api_deposits_business_super_kb_performance_medium",
+  "source_domain": "banking_knowledge",
+  "task_type": "construction",
+  "task_description": "Build a Banking Knowledge customer service agent scoped to the combined deposits-and-business super-subdomain - deposit opening (personal checking and savings account recommendation and opening, including the Green checking lineup), deposit services (savings APY boosts and interest discrepancies, ATM fee rebates and credits, checking referral programs, mobile check deposit, and direct deposit delays), and business banking (business checking and savings account opening promotions and business credit card selection) - against a client-owned REST API, using the operational SOP and the raw knowledge-base documents. The initial OpenAPI document exposes baseline operations; the SOP and knowledge-base documents describe additional directly callable operations.",
+  "sop_document_path": "tau2/hyper/sops/banking_sop.md",
+  "knowledge_base_path": "tau2/domains/banking_knowledge/documents",
+  "knowledge_base_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_001.json",
+    "doc_bank_accounts_bank_accounts_(general)_002.json",
+    "doc_bank_accounts_bank_accounts_(general)_003.json",
+    "doc_bank_accounts_bank_accounts_(general)_004.json",
+    "doc_bank_accounts_bank_accounts_(general)_005.json",
+    "doc_bank_accounts_bank_accounts_(general)_006.json",
+    "doc_bank_accounts_bank_accounts_(general)_009.json",
+    "doc_bank_accounts_bank_accounts_(general)_010.json",
+    "doc_bank_accounts_bank_accounts_(general)_011.json",
+    "doc_bank_accounts_bank_accounts_(general)_012.json",
+    "doc_bank_accounts_bank_accounts_(general)_013.json",
+    "doc_bank_accounts_bank_accounts_(general)_014.json",
+    "doc_bank_accounts_bank_accounts_(general)_015.json",
+    "doc_bank_accounts_bank_accounts_(general)_016.json",
+    "doc_bank_accounts_bank_accounts_(general)_017.json",
+    "doc_bank_accounts_bank_accounts_(general)_018.json",
+    "doc_bank_accounts_bank_accounts_(general)_028.json",
+    "doc_bank_accounts_bank_accounts_(general)_030.json",
+    "doc_bank_accounts_bank_accounts_(general)_043.json",
+    "doc_bank_accounts_bank_accounts_(general)_044.json",
+    "doc_bank_accounts_bank_accounts_(general)_045.json",
+    "doc_bank_accounts_bank_accounts_(general)_046.json",
+    "doc_bank_accounts_bank_accounts_(general)_047.json",
+    "doc_bank_accounts_bank_accounts_(general)_048.json",
+    "doc_business_checking_accounts_beige_001.json",
+    "doc_business_checking_accounts_beige_012.json",
+    "doc_business_checking_accounts_cobalt_blue_001.json",
+    "doc_business_checking_accounts_cobalt_blue_002.json",
+    "doc_business_checking_accounts_cobalt_blue_004.json",
+    "doc_business_checking_accounts_cobalt_blue_005.json",
+    "doc_business_checking_accounts_cobalt_blue_006.json",
+    "doc_business_checking_accounts_hunter_green_001.json",
+    "doc_business_checking_accounts_hunter_green_010.json",
+    "doc_business_checking_accounts_lime_green_001.json",
+    "doc_business_checking_accounts_lime_green_003.json",
+    "doc_business_checking_accounts_lime_green_007.json",
+    "doc_business_checking_accounts_navy_blue_001.json",
+    "doc_business_checking_accounts_sky_blue_001.json",
+    "doc_business_checking_accounts_sky_blue_002.json",
+    "doc_business_checking_accounts_sky_blue_007.json",
+    "doc_business_checking_accounts_sky_blue_010.json",
+    "doc_business_checking_accounts_true_blue_001.json",
+    "doc_business_checking_accounts_true_blue_002.json",
+    "doc_business_checking_accounts_world_blue_001.json",
+    "doc_business_checking_accounts_world_blue_007.json",
+    "doc_business_credit_cards_business_bronze_rewards_card_001.json",
+    "doc_business_credit_cards_business_bronze_rewards_card_002.json",
+    "doc_business_credit_cards_business_bronze_rewards_card_006.json",
+    "doc_business_credit_cards_business_bronze_rewards_card_010.json",
+    "doc_business_credit_cards_business_platinum_rewards_card_001.json",
+    "doc_business_credit_cards_business_platinum_rewards_card_002.json",
+    "doc_business_credit_cards_business_platinum_rewards_card_008.json",
+    "doc_business_credit_cards_business_platinum_rewards_card_011.json",
+    "doc_business_credit_cards_business_silver_rewards_card_001.json",
+    "doc_business_credit_cards_business_silver_rewards_card_002.json",
+    "doc_business_credit_cards_business_silver_rewards_card_005.json",
+    "doc_business_credit_cards_business_silver_rewards_card_012.json",
+    "doc_business_savings_accounts_bronze_saver_account_001.json",
+    "doc_business_savings_accounts_diamond_vault_001.json",
+    "doc_business_savings_accounts_emerald_saver_001.json",
+    "doc_business_savings_accounts_gold_plus_saver_001.json",
+    "doc_business_savings_accounts_gold_plus_saver_006.json",
+    "doc_business_savings_accounts_gold_saver_account_001.json",
+    "doc_business_savings_accounts_gold_saver_account_006.json",
+    "doc_business_savings_accounts_platinum_reserve_account_001.json",
+    "doc_business_savings_accounts_silver_plus_saver_001.json",
+    "doc_business_savings_accounts_silver_plus_saver_002.json",
+    "doc_business_savings_accounts_silver_plus_saver_003.json",
+    "doc_business_savings_accounts_silver_plus_saver_006.json",
+    "doc_business_savings_accounts_silver_saver_account_001.json",
+    "doc_checking_accounts_blue_account_001.json",
+    "doc_checking_accounts_blue_account_003.json",
+    "doc_checking_accounts_blue_account_010.json",
+    "doc_checking_accounts_blue_account_012.json",
+    "doc_checking_accounts_bluest_account_001.json",
+    "doc_checking_accounts_bluest_account_003.json",
+    "doc_checking_accounts_bluest_account_007.json",
+    "doc_checking_accounts_bluest_account_010.json",
+    "doc_checking_accounts_checking_accounts_(general)_009.json",
+    "doc_checking_accounts_dark_green_account_001.json",
+    "doc_checking_accounts_dark_green_account_002.json",
+    "doc_checking_accounts_dark_green_account_004.json",
+    "doc_checking_accounts_dark_green_account_010.json",
+    "doc_checking_accounts_evergreen_account_001.json",
+    "doc_checking_accounts_evergreen_account_002.json",
+    "doc_checking_accounts_evergreen_account_008.json",
+    "doc_checking_accounts_gold_years_account_001.json",
+    "doc_checking_accounts_gold_years_account_010.json",
+    "doc_checking_accounts_green_account_(checking)_001.json",
+    "doc_checking_accounts_green_account_(checking)_010.json",
+    "doc_checking_accounts_green_account_(checking)_012.json",
+    "doc_checking_accounts_green_fee-free_account_001.json",
+    "doc_checking_accounts_green_fee-free_account_003.json",
+    "doc_checking_accounts_green_fee-free_account_005.json",
+    "doc_checking_accounts_green_fee-free_account_007.json",
+    "doc_checking_accounts_light_blue_account_001.json",
+    "doc_checking_accounts_light_blue_account_004.json",
+    "doc_checking_accounts_light_blue_account_006.json",
+    "doc_checking_accounts_light_blue_account_007.json",
+    "doc_checking_accounts_light_green_account_001.json",
+    "doc_checking_accounts_light_green_account_002.json",
+    "doc_checking_accounts_light_green_account_013.json",
+    "doc_checking_accounts_purple_account_001.json",
+    "doc_checking_accounts_purple_account_004.json",
+    "doc_checking_accounts_purple_account_010.json",
+    "doc_checking_accounts_purple_account_011.json",
+    "doc_checking_accounts_purple_account_012.json",
+    "doc_credit_cards_bronze_rewards_card_001.json",
+    "doc_credit_cards_ecocard_001.json",
+    "doc_credit_cards_gold_rewards_card_001.json",
+    "doc_credit_cards_platinum_rewards_card_001.json",
+    "doc_credit_cards_silver_rewards_card_001.json",
+    "doc_credit_cards_silver_rewards_card_005.json",
+    "doc_savings_accounts_bronze_account_001.json",
+    "doc_savings_accounts_bronze_account_002.json",
+    "doc_savings_accounts_bronze_account_003.json",
+    "doc_savings_accounts_bronze_account_004.json",
+    "doc_savings_accounts_bronze_account_006.json",
+    "doc_savings_accounts_bronze_account_007.json",
+    "doc_savings_accounts_diamond_elite_account_001.json",
+    "doc_savings_accounts_diamond_elite_account_011.json",
+    "doc_savings_accounts_gold_account_001.json",
+    "doc_savings_accounts_gold_account_002.json",
+    "doc_savings_accounts_gold_account_003.json",
+    "doc_savings_accounts_gold_account_013.json",
+    "doc_savings_accounts_gold_account_014.json",
+    "doc_savings_accounts_gold_plus_account_001.json",
+    "doc_savings_accounts_gold_plus_account_002.json",
+    "doc_savings_accounts_gold_plus_account_003.json",
+    "doc_savings_accounts_gold_plus_account_009.json",
+    "doc_savings_accounts_green_account_(savings)_001.json",
+    "doc_savings_accounts_green_account_(savings)_003.json",
+    "doc_savings_accounts_green_account_(savings)_005.json",
+    "doc_savings_accounts_platinum_account_001.json",
+    "doc_savings_accounts_platinum_account_010.json",
+    "doc_savings_accounts_platinum_plus_account_001.json",
+    "doc_savings_accounts_platinum_plus_account_002.json",
+    "doc_savings_accounts_platinum_plus_account_009.json",
+    "doc_savings_accounts_silver_account_001.json",
+    "doc_savings_accounts_silver_account_002.json",
+    "doc_savings_accounts_silver_account_003.json",
+    "doc_savings_accounts_silver_account_005.json",
+    "doc_savings_accounts_silver_account_006.json",
+    "doc_savings_accounts_silver_plus_account_001.json",
+    "doc_savings_accounts_silver_plus_account_002.json",
+    "doc_savings_accounts_silver_plus_account_003.json",
+    "doc_savings_accounts_silver_plus_account_004.json",
+    "doc_savings_accounts_silver_plus_account_006.json",
+    "doc_savings_accounts_silver_plus_account_009.json"
+  ],
+  "test_task_ids": [
+    "task_024",
+    "task_025",
+    "task_034",
+    "task_055",
+    "task_056",
+    "task_057",
+    "task_058",
+    "task_059",
+    "task_060",
+    "task_061",
+    "task_062",
+    "task_063",
+    "task_064",
+    "task_065",
+    "task_066",
+    "task_067",
+    "task_068",
+    "task_069",
+    "task_070",
+    "task_071",
+    "task_072",
+    "task_073",
+    "task_074",
+    "task_075",
+    "task_076",
+    "task_093",
+    "task_094",
+    "task_095",
+    "task_096",
+    "task_097",
+    "task_098",
+    "task_099",
+    "task_100",
+    "task_101",
+    "task_102",
+    "task_103",
+    "task_104",
+    "task_105",
+    "task_106",
+    "task_107",
+    "task_108",
+    "task_109",
+    "task_110",
+    "task_111",
+    "task_112",
+    "task_113",
+    "task_114",
+    "task_115",
+    "task_116",
+    "task_117",
+    "task_118",
+    "task_119",
+    "task_120",
+    "task_121",
+    "task_122",
+    "task_123",
+    "task_124",
+    "task_125",
+    "task_126",
+    "task_127",
+    "task_128",
+    "task_147",
+    "task_148",
+    "task_149"
+  ],
+  "interaction_mode": "sandbox",
+  "client_api_mode": "rest",
+  "sandbox_config": {
+    "max_time_seconds": 28800,
+    "command_timeout": 120,
+    "docker_image": "tau2-construction-runtime:contract-v7",
+    "docker_memory": "4g",
+    "docker_cpus": "2"
+  },
+  "performance_profile": {
+    "medium": {
+      "budget": 0.17,
+      "models": [
+        {
+          "model": "gpt-5.6-terra",
+          "constraints": {
+            "reasoning_effort": "none"
+          }
+        },
+        {
+          "model": "anthropic/claude-sonnet-5",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          },
+          "credit_rates": {
+            "input_per_million": 0.5,
+            "output_per_million": 3.2,
+            "rate_card_date": "2026-08-23",
+            "pricing_basis": "capability_bucket_median_list_price"
+          }
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "constraints": {
+            "reasoning_effort": "none"
+          }
+        },
+        {
+          "model": "anthropic/claude-haiku-4-5",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          },
+          "credit_rates": {
+            "input_per_million": 0.25,
+            "output_per_million": 1.6,
+            "rate_card_date": "2026-08-23",
+            "pricing_basis": "capability_bucket_median_list_price"
+          }
+        },
+        {
+          "model": "google/gemini-3-flash-preview",
+          "constraints": {
+            "reasoning_effort": "minimal"
+          }
+        },
+        {
+          "model": "moonshotai/kimi-k2.6",
+          "constraints": {
+            "extra_body": {
+              "thinking": {
+                "type": "disabled"
+              }
+            }
+          }
+        },
+        {
+          "model": "qwen/qwen3.8-27b",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          }
+        },
+        {
+          "model": "google/gemma-4-31b-it",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "effort": "low"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "user_llm": "gpt-5.5",
+  "user_reasoning_effort": "none"
+}

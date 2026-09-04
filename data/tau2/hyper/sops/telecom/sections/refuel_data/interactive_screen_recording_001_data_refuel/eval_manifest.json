@@ -1,0 +1,65 @@
+{
+  "format": "interactive_screen_recording_eval_v1",
+  "artifacts": [
+    {
+      "filename": "assisted_data_refuel.mp4",
+      "fixture": "controlled_distractor",
+      "duration_seconds": 58.0,
+      "events": [
+        {
+          "kind": "context",
+          "start_seconds": 0.0,
+          "end_seconds": 7.0,
+          "description": "The verified line shows 5G signal while the customer reports unusable mobile data; usage is not loaded yet."
+        },
+        {
+          "kind": "authoritative",
+          "start_seconds": 7.0,
+          "end_seconds": 18.0,
+          "fact_ids": [
+            "check_usage_and_plan_before_refuel"
+          ],
+          "description": "The line's plan and data usage are loaded and checked before any refuel is discussed."
+        },
+        {
+          "kind": "distractor",
+          "disposition": "failed",
+          "start_seconds": 18.0,
+          "end_seconds": 26.0,
+          "description": "A 2.0 GB refuel request is blocked because the line's total refueled data would exceed the 2.0 GB maximum."
+        },
+        {
+          "kind": "context",
+          "start_seconds": 26.0,
+          "end_seconds": 34.0,
+          "description": "A valid 1.0 GB request prices at $12.00; quote RF-88241 awaits customer confirmation."
+        },
+        {
+          "kind": "distractor",
+          "disposition": "rejected",
+          "start_seconds": 34.0,
+          "end_seconds": 41.0,
+          "description": "The customer asks a question instead of confirming; the refuel stays unapplied and usage unchanged."
+        },
+        {
+          "kind": "authoritative",
+          "start_seconds": 41.0,
+          "end_seconds": 50.0,
+          "fact_ids": [
+            "apply_refuel_after_confirmation"
+          ],
+          "description": "After the customer confirms the 1.0 GB amount and the $12.00 charge, the refuel is applied as RF-88241."
+        },
+        {
+          "kind": "authoritative",
+          "start_seconds": 50.0,
+          "end_seconds": 58.0,
+          "fact_ids": [
+            "rerun_speed_test_after_refuel"
+          ],
+          "description": "After the refuel is applied, the agent asks the customer to rerun the speed test and records the observed result."
+        }
+      ]
+    }
+  ]
+}

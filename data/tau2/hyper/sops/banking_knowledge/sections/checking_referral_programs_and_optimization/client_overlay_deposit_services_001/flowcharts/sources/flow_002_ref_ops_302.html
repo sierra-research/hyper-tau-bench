@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>REF-OPS-302 — Referred-person eligibility decision tree</title>
+<style>
+  body { margin: 0; background: #e9edea; font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 1300px; background: #fcfdfc; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #2f5d52; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #bfd6d0; }
+  .node { position: absolute; width: 310px; box-sizing: border-box; border: 2px solid #4d5f59; border-radius: 6px; background: #fff; padding: 10px 12px; font-size: 13px; line-height: 1.35; color: #1e2a26; }
+  .node .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding: 1px 6px; border-radius: 3px; margin-bottom: 6px; }
+  .entry { border-color: #2f5d52; } .entry .tag { background: #dcebe6; color: #24473f; }
+  .todo { border-color: #8a6d2f; background: #fdfaf2; } .todo .tag { background: #f1e6cb; color: #6e5525; }
+  .work { border-color: #4d5f59; } .work .tag { background: #e4eae8; color: #3b4a45; }
+  .terminal { border-color: #2f5d52; background: #f1f8f5; } .terminal .tag { background: #dcebe6; color: #24473f; }
+  .terminal.parked { border-color: #8a6d2f; background: #fcf8ee; } .terminal.parked .tag { background: #f1e6cb; color: #6e5525; }
+  .terminal.ineligible { border-color: #7d4a3a; background: #faf3f0; } .terminal.ineligible .tag { background: #efdcd4; color: #63382b; }
+  .decision { position: absolute; width: 310px; box-sizing: border-box; }
+  .decision .diamond { width: 290px; height: 132px; margin: 0 auto; background: #eef6ee; border: 2px solid #5c8a4f; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 8px 16px; box-sizing: border-box; font-size: 12.5px; text-align: center; color: #2c4425; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+  svg.edges { position: absolute; left: 0; top: 0; width: 1560px; height: 1300px; pointer-events: none; }
+  svg.edges path { stroke: #57675f; stroke-width: 2; fill: none; marker-end: url(#arrowb2); }
+  .edge-label { position: absolute; font-size: 11px; font-weight: 600; color: #37453f; background: #fcfdfccc; padding: 0 4px; border-radius: 2px; }
+  .sticky { position: absolute; width: 260px; box-sizing: border-box; padding: 10px 12px; font-size: 12px; line-height: 1.35; box-shadow: 2px 3px 6px rgba(0,0,0,0.12); }
+  .sticky.yellow { background: #fdf3c0; } .sticky.blue { background: #d9e9f7; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>Referred-person eligibility — decision tree</h1>
+    <div class="meta">REF-OPS-302 &nbsp;·&nbsp; Owner: Referral desk working group &nbsp;·&nbsp; Updated 2025-09-30 &nbsp;·&nbsp; Applies to: referred-person eligibility screening on consumer checking referrals</div>
+  </div>
+
+  <svg class="edges" viewBox="0 0 1560 1300">
+    <defs><marker id="arrowb2" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#57675f"></path></marker></defs>
+    <!-- entry -> D1 -->
+    <path d="M 780 194 L 780 248"></path>
+    <!-- D1 yes -> not eligible (existing) -->
+    <path d="M 935 316 L 1085 316"></path>
+    <!-- D1 no -> D2 -->
+    <path d="M 780 384 L 780 438"></path>
+    <!-- D2 yes -> TODO lookback -->
+    <path d="M 935 506 L 1085 506"></path>
+    <!-- TODO lookback -> parked lookback -->
+    <path d="M 1240 572 L 1240 682"></path>
+    <!-- D2 no -> D3 -->
+    <path d="M 780 574 L 780 628"></path>
+    <!-- D3 no -> TODO minor -->
+    <path d="M 625 696 L 475 696"></path>
+    <!-- TODO minor -> parked youth desk -->
+    <path d="M 320 766 L 320 872"></path>
+    <!-- D3 yes -> D4 -->
+    <path d="M 780 764 L 780 818"></path>
+    <!-- D4 yes -> TODO owner overlap -->
+    <path d="M 935 886 L 1085 886"></path>
+    <!-- TODO owner overlap -> parked risk -->
+    <path d="M 1240 938 L 1240 1062"></path>
+    <!-- D4 no -> D5 -->
+    <path d="M 780 954 L 780 1008"></path>
+    <!-- D5 yes -> handoff -->
+    <path d="M 625 1076 L 475 1076"></path>
+    <!-- handoff -> handoff terminal: none (handoff node is terminal) -->
+    <!-- D5 no -> eligible -->
+    <path d="M 780 1144 L 780 1188"></path>
+  </svg>
+
+  <span class="edge-label" style="left:942px;top:290px">yes — existing customer</span>
+  <span class="edge-label" style="left:790px;top:400px">no</span>
+  <span class="edge-label" style="left:948px;top:480px">yes — account closed</span>
+  <span class="edge-label" style="left:790px;top:590px">no prior relationship</span>
+  <span class="edge-label" style="left:508px;top:672px">no — minor</span>
+  <span class="edge-label" style="left:790px;top:780px">yes — adult</span>
+  <span class="edge-label" style="left:958px;top:860px">yes — business</span>
+  <span class="edge-label" style="left:790px;top:970px">no — personal</span>
+  <span class="edge-label" style="left:508px;top:1052px">yes — same address</span>
+  <span class="edge-label" style="left:790px;top:1152px">no — clear</span>
+
+  <article class="node entry" style="left:625px;top:100px"><span class="tag">ENTRY</span>
+    Agent screening a proposed referred person — runs before any referral link or code is sent. Referrer-side checks live in REF-OPS-301.
+  </article>
+
+  <div class="decision" style="left:625px;top:252px"><div class="diamond">Existing Rho Bank checking or savings relationship?</div></div>
+
+  <article class="node terminal ineligible" style="left:1085px;top:268px"><span class="tag">TERMINAL — NOT ELIGIBLE</span>
+    Existing customer: referral does not apply. Explain and log.
+  </article>
+
+  <div class="decision" style="left:625px;top:442px"><div class="diamond">Prior Rho Bank account closed recently?</div></div>
+
+  <article class="node todo" style="left:1085px;top:458px"><span class="tag">TODO — LOOKBACK BRANCH</span>
+    Closure lookback: confirm the window and the reopened-account edge case with the program desk before drawing this branch.
+  </article>
+
+  <article class="node terminal parked" style="left:1085px;top:686px"><span class="tag">TERMINAL — PARKED (LOOKBACK)</span>
+    Branch incomplete on this board; screening falls back to the desk.
+  </article>
+
+  <div class="decision" style="left:625px;top:632px"><div class="diamond">Referred person an adult?</div></div>
+
+  <article class="node todo" style="left:165px;top:648px"><span class="tag">TODO — MINOR PATH</span>
+    Minor-referral exception: the youth-products desk owns the exception wording and which program carries it — waiting on their ruling before drawing this branch.
+  </article>
+
+  <article class="node terminal parked" style="left:165px;top:876px"><span class="tag">TERMINAL — PARKED (YOUTH DESK)</span>
+    Branch incomplete on this board; screening falls back to the desk.
+  </article>
+
+  <div class="decision" style="left:625px;top:822px"><div class="diamond">Business referral?</div></div>
+
+  <article class="node todo" style="left:1085px;top:838px"><span class="tag">TODO — OWNER OVERLAP</span>
+    Primary-owner overlap check: data source TBD (signer match? confirm with risk before this lane ships).
+  </article>
+
+  <article class="node terminal parked" style="left:1085px;top:1066px"><span class="tag">TERMINAL — PARKED (RISK DATA)</span>
+    Branch incomplete on this board; business referrals route to the business desk meanwhile.
+  </article>
+
+  <div class="decision" style="left:625px;top:1012px"><div class="diamond">Shares a registered address with the referrer?</div></div>
+
+  <article class="node work" style="left:165px;top:1028px"><span class="tag">HANDOFF — REF-OPS-301 RISK LANE</span>
+    Same-address flags route through the REF-OPS-301 risk lane. Do not duplicate that routing here.
+  </article>
+
+  <article class="node terminal" style="left:625px;top:1192px"><span class="tag">TERMINAL — ELIGIBLE</span>
+    Referred person clears this tree; proceed per the REF-OPS-301 exit.
+  </article>
+
+  <aside class="sticky blue" style="left:60px;top:150px">
+    Scope question (C. Whitmore): does this tree become console field logic or stay a training visual? Changes how precise the wording has to be.
+  </aside>
+  <aside class="sticky yellow" style="left:60px;top:310px">
+    Numbers wait for the Q4 refresh — tree shape only for now. Fill thresholds from the desk's terms records once the calendar lands.
+  </aside>
+</div>
+</body>
+</html>

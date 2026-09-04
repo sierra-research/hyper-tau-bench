@@ -1,0 +1,633 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "Rho Helpdesk",
+    "account": "rho-bank-consumer-and-business",
+    "workspace": "referral-console",
+    "environment": "production",
+    "exported_at": "2025-11-11T15:05:00-05:00",
+    "timezone": "America/New_York",
+    "export_version": "2025.46",
+    "requested_by": "owen.gallagher@rhobank.com"
+  },
+  "cover_email": "From: Helpdesk Administration <helpdesk-admin@rhobank.com>\nTo: Owen Gallagher <owen.gallagher@rhobank.com>\nDate: Tue, 11 Nov 2025 15:19:44 -0500\nSubject: referral-console workspace export (2025.46)\nMessage-ID: <hd-export-2025-46-referralconsole@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nOwen,\n\nAttached is the full production export of the referral-console workspace for the norming pass — macros, triggers, field definitions, contracts, SLAs, and views as of this afternoon. Drafts and disabled objects ship with their status flags rather than being filtered, so the launch-era auto-approve pair is still in there; it has been off since February and nothing references it.\n\nTwo things to check on your side before you circulate anything: the reminder-nudge macro is mid-edit (marked draft), and the business desk group was renamed in early October, so screenshots in older training material show the old group name.\n\nHelpdesk Administration",
+  "macros": [
+    {
+      "macro_id": "MAC-4402",
+      "name": "Referral status walkthrough",
+      "description": "Walks a customer through finding their referral's current status in the dashboard, with the status-glossary link for what each value means.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2024-10-02",
+      "updated_at": "2025-10-21",
+      "usage_30d": 486,
+      "usage_90d": 1440,
+      "superseded_by": null,
+      "steps": [
+        "Set ticket type = referral_status_inquiry",
+        "Insert dashboard walkthrough reply (referrals tab path placeholder)",
+        "Attach status-glossary link (console field definitions)",
+        "Set status = solved-pending-close"
+      ]
+    },
+    {
+      "macro_id": "MAC-4410",
+      "name": "Referral code validation — second code attempt",
+      "description": "Handles tickets where a customer asks to add a referral code to a new account that already has one applied.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-02-11",
+      "updated_at": "2025-09-17",
+      "usage_30d": 74,
+      "usage_90d": 219,
+      "superseded_by": null,
+      "steps": [
+        "Run referral-code validation (validation rule: only one referral code can be applied to a new account — a second code fails validation with referral_code_check = failed_existing_code)",
+        "Insert validation-outcome reply (accepted or declined wording keyed to the referral_code_check result)",
+        "Set ticket type = referral_code_issue",
+        "Set status = solved-pending-close"
+      ]
+    },
+    {
+      "macro_id": "MAC-3961",
+      "name": "Auto-approve second referral code (launch period)",
+      "description": "Approves an additional referral code submitted for a new account and posts the launch-period override note to the case.",
+      "active": false,
+      "environment": "production",
+      "status": "disabled_legacy",
+      "effective_at": "2024-09-30",
+      "disabled_at": "2025-02-11",
+      "updated_at": "2025-02-11",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "MAC-4410",
+      "steps": [
+        "Set referral_code_check = passed (override)",
+        "Insert launch-period approval reply",
+        "Assign group = Referral Launch Team",
+        "Set ticket type = referral_code_issue"
+      ]
+    },
+    {
+      "macro_id": "MAC-4433",
+      "name": "Bonus payout status reply",
+      "description": "Reply for customers asking when a referral bonus pays out; pulls the case-specific dates from the console record rather than restating program terms.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2024-11-18",
+      "updated_at": "2025-08-06",
+      "usage_30d": 158,
+      "usage_90d": 463,
+      "superseded_by": null,
+      "steps": [
+        "Set ticket type = bonus_payout_question",
+        "Insert payout status reply (case-specific dates placeholder, no term restatement)",
+        "Set status = pending-customer"
+      ]
+    },
+    {
+      "macro_id": "MAC-4451",
+      "name": "Invitation-program terms — refer to RM",
+      "description": "Long-form reply for invitation-based business referral program terms questions; directs the customer to their relationship manager and logs the RM handoff. Retained in long form because the business desk reuses it in secure messages.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2024-12-09",
+      "updated_at": "2025-10-07",
+      "usage_30d": 39,
+      "usage_90d": 121,
+      "superseded_by": null,
+      "steps": [
+        "Set ticket type = program_terms_question",
+        "Insert RM referral reply (relationship-manager contact placeholder, no term restatement)",
+        "Assign group = Business Referral Desk",
+        "Set tag = biz-referral"
+      ]
+    },
+    {
+      "macro_id": "MAC-4467",
+      "name": "Duplicate ticket merge note",
+      "description": "Posts the merge note when two open tickets track the same referral case.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2024-08-14",
+      "updated_at": "2025-06-02",
+      "usage_30d": 203,
+      "usage_90d": 611,
+      "superseded_by": null,
+      "steps": [
+        "Insert merge note (surviving ticket reference placeholder)",
+        "Set status = solved-pending-close"
+      ]
+    },
+    {
+      "macro_id": "MAC-4479",
+      "name": "Referral reminder nudge (draft)",
+      "description": "Draft follow-up nudge for referrals sitting idle; copy under review with the enablement team.",
+      "active": false,
+      "environment": "production",
+      "status": "draft",
+      "effective_at": null,
+      "updated_at": "2025-11-06",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": null,
+      "steps": [
+        "Insert nudge copy (draft v1)",
+        "Set tag = referral-nudge"
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "TRG-3120",
+      "name": "Route referral keywords to Referral Desk Tier 1",
+      "description": "Keyword routing into the Referral Desk Tier 1 group for inbound referral traffic.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 4,
+      "effective_at": "2024-10-02",
+      "updated_at": "2025-09-29",
+      "usage_30d": 917,
+      "conditions": [
+        "channel is email OR webform",
+        "subject/body contains any: referral, refer a friend, referral code, referral bonus"
+      ],
+      "actions": [
+        "set group = Referral Desk Tier 1",
+        "set ticket type = referral_status_inquiry"
+      ]
+    },
+    {
+      "trigger_id": "TRG-3155",
+      "name": "Second referral code — validation decline follow-up",
+      "description": "Applies the validation-outcome macro when a submitted code fails validation because the account already carries one.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 5,
+      "effective_at": "2025-02-11",
+      "updated_at": "2025-09-17",
+      "usage_30d": 61,
+      "conditions": [
+        "event = referral_code_submission",
+        "referral_code_check = failed_existing_code"
+      ],
+      "actions": [
+        "apply macro MAC-4410",
+        "set tag = second-code"
+      ]
+    },
+    {
+      "trigger_id": "TRG-2871",
+      "name": "Auto-approve second referral code (launch period)",
+      "description": "Fires the launch-period override macro on second-code submissions inside the launch campaign window.",
+      "active": false,
+      "environment": "production",
+      "status": "disabled_legacy",
+      "priority": 5,
+      "effective_at": "2024-09-30",
+      "disabled_at": "2025-02-11",
+      "updated_at": "2025-02-11",
+      "usage_30d": 0,
+      "conditions": [
+        "event = referral_code_submission",
+        "referral_code_check = failed_existing_code",
+        "campaign window = launch (2024-09-30 to 2024-11-15)"
+      ],
+      "actions": [
+        "apply macro MAC-3961",
+        "assign group = Referral Launch Team (retired group)"
+      ]
+    },
+    {
+      "trigger_id": "TRG-3170",
+      "name": "Escalate aged referral tickets",
+      "description": "Escalates referral tickets breaching 48 business hours without agent touch.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 6,
+      "effective_at": "2024-11-04",
+      "updated_at": "2025-07-15",
+      "usage_30d": 33,
+      "conditions": [
+        "ticket type in (referral_status_inquiry, referral_code_issue, bonus_payout_question)",
+        "hours since last agent update > 48 (business)"
+      ],
+      "actions": [
+        "set priority = high",
+        "notify group lead (referral desk)"
+      ]
+    },
+    {
+      "trigger_id": "TRG-3188",
+      "name": "Tag business referral tickets",
+      "description": "Applies the business tag and desk assignment for business-segment referral traffic so the views split consumer from business.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 8,
+      "effective_at": "2024-12-09",
+      "updated_at": "2025-10-07",
+      "usage_30d": 189,
+      "conditions": [
+        "ticket type = program_terms_question OR referral_status_inquiry",
+        "account segment = business"
+      ],
+      "actions": [
+        "assign group = Business Referral Desk",
+        "set tag = biz-referral"
+      ]
+    }
+  ],
+  "policy_contracts": [
+    {
+      "contract_id": "CON-0512",
+      "name": "referral-console workspace routing scope",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Helpdesk Administration",
+      "scope": "Ticket routing, macros, and console field handling for the referral-console workspace at this snapshot. Console configuration only; referral program terms, bonus values, and offer calendars are owned by the published product pages, Growth Marketing go-live records, and referral program desk records.",
+      "required_fields": [
+        "ticket_type",
+        "group",
+        "status"
+      ],
+      "closed_world": false,
+      "effective_at": "2024-10-02",
+      "updated_at": "2025-10-07"
+    },
+    {
+      "contract_id": "CON-0518",
+      "name": "referral_status field model — production contract",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Referral Program Desk / Helpdesk Administration",
+      "scope": "The referral_status picklist as displayed in the referral console and returned by the console status lookup at this snapshot. The six listed option values are the complete production set for this field; console writes carrying an unlisted referral_status value are rejected by field validation.",
+      "source_of_truth": "referral console production field registry",
+      "complete": true,
+      "unlisted_value_behavior": "reject",
+      "required_fields": [
+        "referral_status"
+      ],
+      "closed_world": true,
+      "effective_at": "2025-01-20",
+      "updated_at": "2025-10-03"
+    }
+  ],
+  "field_columns": [
+    "row_id",
+    "field_key",
+    "field_name",
+    "field_type",
+    "option_value",
+    "option_description",
+    "active",
+    "status",
+    "environment",
+    "updated_at"
+  ],
+  "fields": [
+    {
+      "row_id": "F-101",
+      "field_key": "referral_status",
+      "field_name": "Referral status",
+      "field_type": "picklist",
+      "option_value": "COMPLETE",
+      "option_description": "The referred person opened the account and met the qualifying criteria; the referral bonuses will be paid.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-01-20"
+    },
+    {
+      "row_id": "F-102",
+      "field_key": "referral_status",
+      "field_name": "Referral status",
+      "field_type": "picklist",
+      "option_value": "IN_PROGRESS",
+      "option_description": "The new account is open and is still working toward the qualifying-deposit requirement.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-01-20"
+    },
+    {
+      "row_id": "F-103",
+      "field_key": "referral_status",
+      "field_name": "Referral status",
+      "field_type": "picklist",
+      "option_value": "NO_PROGRESS",
+      "option_description": "The referred person has not started an application.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-01-20"
+    },
+    {
+      "row_id": "F-104",
+      "field_key": "referral_status",
+      "field_name": "Referral status",
+      "field_type": "picklist",
+      "option_value": "APPLIED",
+      "option_description": "The application was submitted and is awaiting a decision or review.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-01-20"
+    },
+    {
+      "row_id": "F-105",
+      "field_key": "referral_status",
+      "field_name": "Referral status",
+      "field_type": "picklist",
+      "option_value": "REJECTED",
+      "option_description": "The referral was denied; this includes rolling-window and eligibility failures.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-14"
+    },
+    {
+      "row_id": "F-106",
+      "field_key": "referral_status",
+      "field_name": "Referral status",
+      "field_type": "picklist",
+      "option_value": "ERROR",
+      "option_description": "A system error occurred; try again later or contact support.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-01-20"
+    },
+    {
+      "row_id": "F-110",
+      "field_key": "referral_code_check",
+      "field_name": "Referral code validation result",
+      "field_type": "picklist",
+      "option_value": "passed",
+      "option_description": "Code accepted at submission.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-02-11"
+    },
+    {
+      "row_id": "F-111",
+      "field_key": "referral_code_check",
+      "field_name": "Referral code validation result",
+      "field_type": "picklist",
+      "option_value": "failed_existing_code",
+      "option_description": "Submission declined: the account already has a referral code applied.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-02-11"
+    },
+    {
+      "row_id": "F-112",
+      "field_key": "referral_code_check",
+      "field_name": "Referral code validation result",
+      "field_type": "picklist",
+      "option_value": "failed_other",
+      "option_description": "Submission declined for another validation reason; see the case log.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-02-11"
+    },
+    {
+      "row_id": "F-120",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "referral_status_inquiry",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-10-02"
+    },
+    {
+      "row_id": "F-121",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "referral_code_issue",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-09-30"
+    },
+    {
+      "row_id": "F-122",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "bonus_payout_question",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-18"
+    },
+    {
+      "row_id": "F-123",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "program_terms_question",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-12-09"
+    },
+    {
+      "row_id": "F-130",
+      "field_key": "group",
+      "field_name": "Assignment group",
+      "field_type": "picklist",
+      "option_value": "Referral Desk Tier 1",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-10-02"
+    },
+    {
+      "row_id": "F-131",
+      "field_key": "group",
+      "field_name": "Assignment group",
+      "field_type": "picklist",
+      "option_value": "Business Referral Desk",
+      "option_description": "Renamed from Business Programs Queue on 2025-10-07.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-07"
+    },
+    {
+      "row_id": "F-132",
+      "field_key": "group",
+      "field_name": "Assignment group",
+      "field_type": "picklist",
+      "option_value": "Referral Launch Team",
+      "option_description": null,
+      "active": false,
+      "status": "retired",
+      "environment": "production",
+      "updated_at": "2025-02-11"
+    },
+    {
+      "row_id": "F-140",
+      "field_key": "status",
+      "field_name": "Ticket status",
+      "field_type": "picklist",
+      "option_value": "pending-customer",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-08-14"
+    },
+    {
+      "row_id": "F-141",
+      "field_key": "status",
+      "field_name": "Ticket status",
+      "field_type": "picklist",
+      "option_value": "solved-pending-close",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-08-14"
+    },
+    {
+      "row_id": "F-150",
+      "field_key": "tag",
+      "field_name": "Tag",
+      "field_type": "tag",
+      "option_value": "second-code",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-02-11"
+    },
+    {
+      "row_id": "F-151",
+      "field_key": "tag",
+      "field_name": "Tag",
+      "field_type": "tag",
+      "option_value": "launch-override",
+      "option_description": null,
+      "active": false,
+      "status": "retired",
+      "environment": "production",
+      "updated_at": "2025-02-11"
+    },
+    {
+      "row_id": "F-152",
+      "field_key": "tag",
+      "field_name": "Tag",
+      "field_type": "tag",
+      "option_value": "biz-referral",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-12-09"
+    },
+    {
+      "row_id": "F-153",
+      "field_key": "tag",
+      "field_name": "Tag",
+      "field_type": "tag",
+      "option_value": "referral-error",
+      "option_description": "Applied to tickets tracking a console status lookup failure so the errors view catches them.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-05-27"
+    },
+    {
+      "row_id": "F-154",
+      "field_key": "tag",
+      "field_name": "Tag",
+      "field_type": "tag",
+      "option_value": "referral-nudge",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-11-06"
+    }
+  ],
+  "sla_policies": [
+    {
+      "name": "Referral desk — email first response",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "8 business hours first response",
+      "applies_to": "group = Referral Desk Tier 1",
+      "updated_at": "2025-01-27",
+      "policy_id": "SLA-330"
+    },
+    {
+      "name": "Business referral desk — RM callback cadence",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "1 business day callback",
+      "applies_to": "group = Business Referral Desk",
+      "updated_at": "2025-10-07",
+      "policy_id": "SLA-334"
+    }
+  ],
+  "views": [
+    {
+      "view_id": "VW-52",
+      "name": "Referral desk — open queue",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "group = Referral Desk Tier 1",
+        "status != solved-pending-close"
+      ],
+      "updated_at": "2025-09-29"
+    },
+    {
+      "view_id": "VW-58",
+      "name": "Business referral desk — open",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "group = Business Referral Desk",
+        "status != solved-pending-close"
+      ],
+      "updated_at": "2025-10-07"
+    },
+    {
+      "view_id": "VW-61",
+      "name": "Referral console errors",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "tag = referral-error",
+        "status != solved-pending-close"
+      ],
+      "updated_at": "2025-05-27"
+    }
+  ]
+}

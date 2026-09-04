@@ -1,0 +1,817 @@
+{
+  "format": "api_contract_pack_v1",
+  "release": {
+    "contract_id": "CONTRACT-NOTIFY-PREFS-V2",
+    "environment": "production",
+    "status": "published",
+    "current": true,
+    "effective_at": "2026-06-29T09:00:00-04:00",
+    "snapshot_at": "2026-06-29T14:00:00-04:00",
+    "superseded_by": null
+  },
+  "cover_email": "From: Ruben Castile <ruben.castile@northstaroutfitters.com>\nTo: Messaging Integrations <messaging-integrations@northstaroutfitters.com>\nDate: Mon, 29 Jun 2026 14:00:00 -0400\nSubject: Published notification preference contract, 2.3 snapshot\n\nAttached is the 14:00 production snapshot for CONTRACT-NOTIFY-PREFS-V2. Two\nthings the on-call rotation keeps re-learning, written down this time: the\nsuppression list is append-only through this interface, and the retired v1\ndigest projection still answers reads for the two integrations that have not\nmigrated — its lifecycle markers are in the export, please stop filing bugs\nabout it.\n",
+  "openapi": {
+    "openapi": "3.1.0",
+    "info": {
+      "title": "NorthStar Notification Preference API",
+      "version": "2.3.0",
+      "description": "Published production contract for channel preferences, topic subscriptions, quiet hours, and suppressions. The retired digest projection and the ops-only deliverability projection stay in the export with lifecycle markers.",
+      "x-contract-id": "CONTRACT-NOTIFY-PREFS-V2",
+      "x-contract-status": "published",
+      "x-environment": "production",
+      "x-effective-at": "2026-06-29T09:00:00-04:00",
+      "x-superseded-by": null,
+      "x-source-of-truth": true
+    },
+    "servers": [
+      {
+        "url": "https://api.northstaroutfitters.com/notify-prefs/v2"
+      }
+    ],
+    "paths": {
+      "/preferences/{profile_ref}": {
+        "get": {
+          "operationId": "getPreferenceEnvelope",
+          "summary": "Read the full preference envelope",
+          "parameters": [
+            {
+              "name": "profile_ref",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Current preference envelope",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PreferenceEnvelope"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/preferences/{profile_ref}/channels/{channel}": {
+        "put": {
+          "operationId": "putChannelPreference",
+          "summary": "Replace one channel preference",
+          "parameters": [
+            {
+              "name": "profile_ref",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "channel",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "email",
+                  "sms",
+                  "push"
+                ]
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChannelPreference"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Stored channel preference with audit stamp",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ChannelPreference"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/preferences/{profile_ref}/topics": {
+        "get": {
+          "operationId": "listTopicSubscriptions",
+          "summary": "List topic subscriptions",
+          "parameters": [
+            {
+              "name": "profile_ref",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Topic subscriptions for the profile reference",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/TopicSubscription"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/suppressions": {
+        "post": {
+          "operationId": "appendSuppression",
+          "summary": "Append a suppression entry",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Suppression"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Suppression recorded; entries are never edited or removed here",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Suppression"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/migration/v1/digest/{profile_ref}": {
+        "get": {
+          "operationId": "getRetiredDigestProjection",
+          "summary": "Retired v1 digest schedule projection",
+          "deprecated": true,
+          "parameters": [
+            {
+              "name": "profile_ref",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Frozen v1 digest shape, migration reference only",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/DigestScheduleV1"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/internal/deliverability/{campaign_id}": {
+        "get": {
+          "operationId": "getDeliverabilityProjection",
+          "summary": "Messaging-ops-only deliverability projection",
+          "parameters": [
+            {
+              "name": "campaign_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Aggregated deliverability counters; messaging-ops audience",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/DeliverabilityProjection"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "AuditStamp": {
+          "type": "object",
+          "properties": {
+            "changed_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "changed_via": {
+              "type": "string",
+              "enum": [
+                "site",
+                "app",
+                "import"
+              ]
+            },
+            "request_id": {
+              "type": "string"
+            }
+          }
+        },
+        "QuietHours": {
+          "type": "object",
+          "properties": {
+            "start_local": {
+              "type": "string"
+            },
+            "end_local": {
+              "type": "string"
+            },
+            "timezone": {
+              "type": "string"
+            }
+          }
+        },
+        "ChannelPreference": {
+          "type": "object",
+          "properties": {
+            "channel": {
+              "type": "string",
+              "enum": [
+                "email",
+                "sms",
+                "push"
+              ]
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "quiet_hours": {
+              "$ref": "#/components/schemas/QuietHours"
+            },
+            "audit": {
+              "$ref": "#/components/schemas/AuditStamp"
+            }
+          }
+        },
+        "TopicSubscription": {
+          "type": "object",
+          "properties": {
+            "topic_id": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "subscribed",
+                "unsubscribed",
+                "frozen"
+              ]
+            },
+            "state_source": {
+              "type": "string",
+              "enum": [
+                "explicit",
+                "default",
+                "compliance"
+              ]
+            },
+            "audit": {
+              "$ref": "#/components/schemas/AuditStamp"
+            }
+          }
+        },
+        "Suppression": {
+          "type": "object",
+          "properties": {
+            "suppression_id": {
+              "type": "string"
+            },
+            "address_hash": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string",
+              "enum": [
+                "hard_bounce",
+                "complaint",
+                "compliance_hold"
+              ]
+            },
+            "recorded_at": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "PreferenceEnvelope": {
+          "type": "object",
+          "properties": {
+            "profile_ref": {
+              "type": "string"
+            },
+            "channels": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ChannelPreference"
+              }
+            },
+            "topics": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/TopicSubscription"
+              }
+            },
+            "envelope_version": {
+              "type": "integer"
+            }
+          }
+        },
+        "DigestScheduleV1": {
+          "type": "object",
+          "description": "Frozen v1 shape. Weekday numbering starts at zero on Sunday, which is half of why it was retired.",
+          "properties": {
+            "profile_ref": {
+              "type": "string"
+            },
+            "weekday": {
+              "type": "integer"
+            },
+            "hour_utc": {
+              "type": "integer"
+            },
+            "enabled": {
+              "type": "boolean"
+            }
+          }
+        },
+        "DeliverabilityProjection": {
+          "type": "object",
+          "properties": {
+            "campaign_id": {
+              "type": "string"
+            },
+            "accepted": {
+              "type": "integer"
+            },
+            "deferred": {
+              "type": "integer"
+            },
+            "bounced": {
+              "type": "integer"
+            },
+            "window_hours": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    }
+  },
+  "postman_collection": {
+    "info": {
+      "name": "Notification preference saved examples",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+      {
+        "key": "baseUrl",
+        "value": "https://api.northstaroutfitters.com/notify-prefs/v2"
+      }
+    ],
+    "item": [
+      {
+        "name": "Full preference envelope",
+        "id": "POSTMAN-NPF-ENVELOPE",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=current."
+        },
+        "response": [
+          {
+            "name": "Envelope response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "current"
+              }
+            ],
+            "body": "{\n  \"profile_ref\": \"prf-demo-4410\",\n  \"channels\": [\n    {\"channel\": \"email\", \"enabled\": true, \"quiet_hours\": null, \"audit\": {\"changed_at\": \"2026-06-02T19:04:00-04:00\", \"changed_via\": \"site\", \"request_id\": \"req-demo-a71\"}},\n    {\"channel\": \"push\", \"enabled\": false, \"quiet_hours\": null, \"audit\": {\"changed_at\": \"2026-05-28T08:12:00-04:00\", \"changed_via\": \"app\", \"request_id\": \"req-demo-a72\"}}\n  ],\n  \"topics\": [\n    {\"topic_id\": \"topic-restock\", \"state\": \"subscribed\", \"state_source\": \"explicit\", \"audit\": {\"changed_at\": \"2026-06-02T19:05:00-04:00\", \"changed_via\": \"site\", \"request_id\": \"req-demo-a73\"}}\n  ],\n  \"envelope_version\": 6\n}"
+          }
+        ]
+      },
+      {
+        "name": "Channel replace with quiet hours",
+        "id": "POSTMAN-NPF-CHANNEL-PUT",
+        "request": {
+          "method": "PUT",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=current."
+        },
+        "response": [
+          {
+            "name": "Stored channel response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "current"
+              }
+            ],
+            "body": "{\n  \"channel\": \"sms\",\n  \"enabled\": true,\n  \"quiet_hours\": {\"start_local\": \"21:30\", \"end_local\": \"07:00\", \"timezone\": \"America/Chicago\"},\n  \"audit\": {\"changed_at\": \"2026-06-14T21:31:00-05:00\", \"changed_via\": \"app\", \"request_id\": \"req-demo-b18\"}\n}"
+          }
+        ]
+      },
+      {
+        "name": "Compliance-frozen topic",
+        "id": "POSTMAN-NPF-TOPIC-FROZEN",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=current. Frozen topics reject writes with 409."
+        },
+        "response": [
+          {
+            "name": "Frozen topic response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "current"
+              }
+            ],
+            "body": "{\n  \"topic_id\": \"topic-partner-offers\",\n  \"state\": \"frozen\",\n  \"state_source\": \"compliance\",\n  \"audit\": {\"changed_at\": \"2026-04-30T11:00:00-04:00\", \"changed_via\": \"import\", \"request_id\": \"req-demo-c04\"}\n}"
+          }
+        ]
+      },
+      {
+        "name": "Suppression append",
+        "id": "POSTMAN-NPF-SUPPRESSION",
+        "request": {
+          "method": "POST",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=current. Address travels as a hash."
+        },
+        "response": [
+          {
+            "name": "Suppression recorded response",
+            "status": "Created",
+            "code": 201,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "current"
+              }
+            ],
+            "body": "{\n  \"suppression_id\": \"sup-demo-9917\",\n  \"address_hash\": \"h:2f61c0de\",\n  \"reason\": \"hard_bounce\",\n  \"recorded_at\": \"2026-06-21T03:40:00-04:00\"\n}"
+          }
+        ]
+      },
+      {
+        "name": "Duplicate suppression conflict",
+        "id": "POSTMAN-NPF-SUPPRESSION-DUP",
+        "request": {
+          "method": "POST",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=current. Replays return the original entry."
+        },
+        "response": [
+          {
+            "name": "Duplicate suppression response",
+            "status": "Conflict",
+            "code": 409,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "current"
+              }
+            ],
+            "body": "{\n  \"response_code\": \"suppression_exists\",\n  \"suppression_id\": \"sup-demo-9917\"\n}"
+          }
+        ]
+      },
+      {
+        "name": "Retired digest projection",
+        "id": "POSTMAN-NPF-DIGEST-V1",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=retired. Sunday-zero weekday numbering."
+        },
+        "response": [
+          {
+            "name": "Retired digest response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "retired"
+              }
+            ],
+            "body": "{\n  \"profile_ref\": \"prf-demo-4410\",\n  \"weekday\": 0,\n  \"hour_utc\": 13,\n  \"enabled\": true\n}"
+          }
+        ]
+      },
+      {
+        "name": "Deliverability counters",
+        "id": "POSTMAN-NPF-DELIVERABILITY",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=internal. Messaging-ops audience."
+        },
+        "response": [
+          {
+            "name": "Deliverability response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "internal"
+              }
+            ],
+            "body": "{\n  \"campaign_id\": \"cmp-demo-julyrestock\",\n  \"accepted\": 48210,\n  \"deferred\": 302,\n  \"bounced\": 77,\n  \"window_hours\": 24\n}"
+          }
+        ]
+      },
+      {
+        "name": "Draft webhook echo",
+        "id": "POSTMAN-NPF-WEBHOOK-DRAFT",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=draft. Sandbox webhook echo for the event-feed trial."
+        },
+        "response": [
+          {
+            "name": "Draft webhook response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "draft"
+              }
+            ],
+            "body": "{\n  \"event\": \"preference.changed\",\n  \"profile_ref\": \"prf-demo-4410\",\n  \"echo_only\": true\n}"
+          }
+        ]
+      }
+    ]
+  },
+  "error_behavior_columns": [
+    "rule_id",
+    "status",
+    "environment",
+    "audience",
+    "http_status",
+    "condition",
+    "response_code",
+    "notes",
+    "updated_at",
+    "superseded_by"
+  ],
+  "error_behavior": [
+    {
+      "rule_id": "NPF-3001",
+      "status": "published",
+      "environment": "production",
+      "audience": "messaging",
+      "http_status": "401",
+      "condition": "Missing or invalid service credential",
+      "response_code": "authentication_failed",
+      "notes": "Transport control shared across the platform gateway",
+      "updated_at": "2026-06-08T09:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "NPF-3002",
+      "status": "published",
+      "environment": "production",
+      "audience": "messaging",
+      "http_status": "404",
+      "condition": "Profile reference is unknown to the preference store",
+      "response_code": "profile_ref_unknown",
+      "notes": "References arrive from upstream identity; this store never mints them",
+      "updated_at": "2026-06-08T09:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "NPF-3003",
+      "status": "published",
+      "environment": "production",
+      "audience": "messaging",
+      "http_status": "422",
+      "condition": "Channel value outside the published enum",
+      "response_code": "channel_unsupported",
+      "notes": "The enum is closed; fax is not coming back",
+      "updated_at": "2026-05-11T09:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "NPF-3004",
+      "status": "published",
+      "environment": "production",
+      "audience": "messaging",
+      "http_status": "409",
+      "condition": "Write attempted on a compliance-frozen topic",
+      "response_code": "topic_frozen",
+      "notes": "Frozen topics thaw through the compliance queue, not through writes",
+      "updated_at": "2026-05-11T09:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "NPF-3005",
+      "status": "published",
+      "environment": "production",
+      "audience": "messaging",
+      "http_status": "409",
+      "condition": "Suppression replay for an existing address hash",
+      "response_code": "suppression_exists",
+      "notes": "Append-only store answers replays with the original entry",
+      "updated_at": "2026-04-27T09:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "NPF-3006",
+      "status": "published",
+      "environment": "production",
+      "audience": "messaging",
+      "http_status": "429",
+      "condition": "Client transport quota exceeded",
+      "response_code": "rate_limited",
+      "notes": "Retry metadata is in the response headers",
+      "updated_at": "2026-04-27T09:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "NPF-3007",
+      "status": "published",
+      "environment": "production",
+      "audience": "messaging",
+      "http_status": "503",
+      "condition": "Preference store dependency unavailable",
+      "response_code": "dependency_unavailable",
+      "notes": "Reads degrade to the last committed envelope version",
+      "updated_at": "2026-03-30T09:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "NPF-0701",
+      "status": "retired",
+      "environment": "production",
+      "audience": "digest-v1",
+      "http_status": "422",
+      "condition": "Weekday above six in the Sunday-zero numbering",
+      "response_code": "digest_weekday_invalid",
+      "notes": "Retired with the v1 digest projection",
+      "updated_at": "2026-02-16T09:00:00-05:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "NPF-0702",
+      "status": "retired",
+      "environment": "staging",
+      "audience": "digest-v1",
+      "http_status": "409",
+      "condition": "Digest rehearsal replay conflict",
+      "response_code": "digest_replay_conflict",
+      "notes": "Disabled with the migration rehearsal environment",
+      "updated_at": "2026-02-16T09:00:00-05:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "NPF-D301",
+      "status": "draft",
+      "environment": "sandbox",
+      "audience": "event-feed",
+      "http_status": "400",
+      "condition": "Webhook echo signature malformed",
+      "response_code": "webhook_signature_invalid",
+      "notes": "Event-feed trial; sandbox only",
+      "updated_at": "2026-06-22T09:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "NPF-D302",
+      "status": "draft",
+      "environment": "sandbox",
+      "audience": "messaging-ops",
+      "http_status": "403",
+      "condition": "Ops role absent on deliverability read",
+      "response_code": "ops_scope_missing",
+      "notes": "Internal projection gate, unreleased",
+      "updated_at": "2026-06-22T09:00:00-04:00",
+      "superseded_by": ""
+    }
+  ],
+  "record_contract_notes": "# NorthStar notification preference contract notes\n\nContract: `CONTRACT-NOTIFY-PREFS-V2`  \nEnvironment: production  \nStatus: published and current  \nEffective: 2026-06-29 09:00 ET  \nSuperseded by: none\n\n## How to read this snapshot\n\nThe preference envelope is the unit of consistency: channels, topics, and the\nenvelope version travel together, and a stale version on write is a conflict,\nnot a merge. `openapi.yaml` owns the shapes; saved Postman responses are\nsingle worked examples. Retired, draft, sandbox, and internal material is\noutside the current messaging surface.\n\n## Profile references\n\nThis store keys everything by an opaque `profile_ref` minted upstream. It\nnever stores or exposes the address book behind the reference; email and\nphone values appear only as salted hashes on the suppression list, which is\nwhy suppression entries cannot be searched by address through this interface.\n\n## Suppressions are append-only\n\nA suppression entry, once recorded, is never edited or deleted here. Replays\nof the same address hash return the original entry with a conflict status so\nintegrations can idempotently retry. Removal exists only as a compliance\nworkflow on the messaging-ops side, and it leaves a tombstone this contract\ndeliberately does not model.\n\n## Quiet hours\n\nQuiet hours are stored in the customer's local wall-clock time with an\nexplicit timezone, because the daylight-saving cutover twice fired campaigns\nan hour into windows customers had asked to keep silent. Senders convert at\nsend time; this store never converts.\n\n## Lifecycle material\n\nThe v1 digest projection keeps answering reads for the two unmigrated\nintegrations; its Sunday-zero weekday numbering is frozen with it. The\nevent-feed webhook rows are a sandbox trial. The deliverability projection is\naggregated counters for the messaging-ops audience and carries its own role\ngate.\n"
+}

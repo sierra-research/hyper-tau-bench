@@ -1,0 +1,90 @@
+{
+  "id": "airline_plus_customer_identity_policy_fact_schema_001",
+  "domain": "airline_plus",
+  "display_name": "Customer identity",
+  "global_rules_path": "tau2/hyper/sops/airline_plus/global_rules.json",
+  "section_id": "customer_identity",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/airline_plus_sop.md",
+    "heading": "## 3. Customer Identity"
+  },
+  "domain_hierarchy": {
+    "role": "shared_reference",
+    "requires": []
+  },
+  "rendered_section_path": "tau2/hyper/sops/airline_plus/sections/customer_identity/transcript_induction_001.md",
+  "transformations": [
+    {
+      "id": "customer_identity_explicit_rules",
+      "representation": "explicit_rules"
+    }
+  ],
+  "response_phrasing_context": {
+    "selected_rule_ids": [
+      "never_say_unfortunately",
+      "max_one_apology_per_conversation",
+      "no_premature_outcome_language",
+      "identifier_minimization",
+      "avoid_repeated_openings",
+      "no_generic_service_invitations",
+      "customer_visible_failure_language",
+      "no_long_menu_dumps",
+      "match_warmth_to_outcome",
+      "no_internal_tool_or_source_language"
+    ],
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "rules_path": "tau2/hyper/response_phrasing/airline_plus_response_phrasing.yaml"
+  },
+  "style_exemplar": {
+    "id": "customer_support_chat",
+    "path": "tau2/hyper/sops/airline_plus/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "short reservation-support chat",
+      "collect the customer-provided user ID before reservation actions"
+    ]
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "reservation_action_identity_gate",
+        "label": "Reservation-action user ID gate",
+        "kind": "conditional_prerequisite",
+        "fact_ids": [
+          "customer_provided_user_id_required_for_reservation_actions"
+        ]
+      }
+    ],
+    "relations": []
+  },
+  "facts": [
+    {
+      "id": "customer_provided_user_id_required_for_reservation_actions",
+      "category": "identity",
+      "statement": "Before booking a flight or modifying or cancelling a reservation, the agent must obtain the user ID from the customer; this is not a prerequisite for every interaction or public flight-information lookup."
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "reservation action waits for the customer-provided user ID",
+      "start_turn": 1,
+      "included_fact_ids": [
+        "customer_provided_user_id_required_for_reservation_actions"
+      ],
+      "style_notes": [
+        "Customer requests a booking, modification, or cancellation and provides the user ID before the reservation action."
+      ]
+    },
+    {
+      "id": "B",
+      "title": "information-only request does not invent an identity gate",
+      "start_turn": 1,
+      "included_fact_ids": [
+        "customer_provided_user_id_required_for_reservation_actions"
+      ],
+      "style_notes": [
+        "Customer requests public flight information without a reservation action."
+      ]
+    }
+  ]
+}

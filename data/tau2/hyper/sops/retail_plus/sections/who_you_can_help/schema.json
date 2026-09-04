@@ -1,0 +1,143 @@
+{
+  "id": "retail_plus_who_you_can_help_policy_fact_schema_001",
+  "domain": "retail_plus",
+  "studio_hidden": true,
+  "section_id": "who_you_can_help",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/retail_plus_sop.md",
+    "heading": "## Who you can help"
+  },
+  "rendered_section_path": "tau2/hyper/sops/retail_plus/sections/who_you_can_help/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/who_you_can_help/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "response_phrasing_context": {
+    "selected_rule_ids": [
+      "never_say_unfortunately",
+      "max_one_apology_per_conversation",
+      "no_premature_outcome_language",
+      "identifier_minimization",
+      "avoid_repeated_openings",
+      "no_generic_service_invitations",
+      "no_support_deflection",
+      "customer_visible_failure_language",
+      "no_long_menu_dumps",
+      "match_warmth_to_outcome",
+      "no_first_person_cant",
+      "no_internal_tool_mentions",
+      "no_policy_jargon"
+    ],
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "The no_generic_service_invitations rule must still allow current-request procedural completeness checks required by one-shot item changes and exchanges.",
+      "Transfer language must use the exact SOP-mandated message even when other phrasing rules are active."
+    ],
+    "rules_path": "tau2/hyper/response_phrasing/retail_plus_response_phrasing.yaml"
+  },
+  "style_exemplar": {
+    "id": "customer_support_chat",
+    "path": "tau2/hyper/sops/retail_plus/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "support chat transcript with short turns",
+      "customer lookup and verification",
+      "polite denial for someone else's account",
+      "explicit confirmation before account changes"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/retail_plus_sop.md",
+      "src/tau2/domains/retail/data_model.py"
+    ],
+    "summary": "Retail customer identity rules must remain tied to the documented account/profile fields.",
+    "rules": [
+      "Do not act on another person's account, even if the caller has order details.",
+      "Do not treat a provided customer identifier alone as verified identity."
+    ]
+  },
+  "facts": [
+    {
+      "id": "one_customer_per_conversation_own_profile_only",
+      "category": "identity_scope",
+      "statement": "The agent can help one customer per conversation and cannot act on a friend's, spouse's, or other person's account, even if the caller has all order details.",
+      "canonical_source": "Who you can help"
+    },
+    {
+      "id": "multiple_requests_same_customer_allowed",
+      "category": "identity_scope",
+      "statement": "The same verified customer may make multiple requests in one conversation.",
+      "canonical_source": "Who you can help"
+    },
+    {
+      "id": "identify_customer_first_every_time",
+      "category": "identity_verification",
+      "statement": "The first task in every conversation is to identify who the customer is.",
+      "canonical_source": "Who you can help"
+    },
+    {
+      "id": "lookup_by_account_id_email_or_name_zip",
+      "category": "identity_verification",
+      "statement": "The customer can be found by unique account identifier, by email address, or by first name plus last name plus zip code.",
+      "canonical_source": "Who you can help"
+    },
+    {
+      "id": "account_id_requires_email_or_name_zip_verification",
+      "category": "identity_verification",
+      "statement": "Even when the customer provides an account identifier, the agent must verify it belongs to them by matching email or first name plus last name plus zip code.",
+      "canonical_source": "Who you can help"
+    },
+    {
+      "id": "pull_full_profile_after_verification",
+      "category": "identity_verification",
+      "statement": "After verification, the agent should pull the full customer profile to see orders, addresses, and saved payment methods.",
+      "canonical_source": "Who you can help"
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Account identifier verified before profile access",
+      "included_fact_ids": [
+        "identify_customer_first_every_time",
+        "lookup_by_account_id_email_or_name_zip",
+        "account_id_requires_email_or_name_zip_verification",
+        "pull_full_profile_after_verification",
+        "multiple_requests_same_customer_allowed"
+      ],
+      "style_notes": [
+        "customer starts with account identifier",
+        "agent asks for email verification before profile lookup",
+        "same verified customer asks for more than one action"
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Caller cannot act on spouse's order",
+      "included_fact_ids": [
+        "one_customer_per_conversation_own_profile_only",
+        "lookup_by_account_id_email_or_name_zip"
+      ],
+      "style_notes": [
+        "customer has someone else's order details",
+        "agent declines account action without using first-person inability phrasing"
+      ]
+    },
+    {
+      "id": "C",
+      "title": "Customer leading with an order number is still identified first",
+      "included_fact_ids": [
+        "identify_customer_first_every_time",
+        "lookup_by_account_id_email_or_name_zip",
+        "pull_full_profile_after_verification"
+      ],
+      "style_notes": [
+        "customer gives only an order number for their own order",
+        "agent treats the order number as lookup context but still verifies identity before acting"
+      ]
+    }
+  ]
+}

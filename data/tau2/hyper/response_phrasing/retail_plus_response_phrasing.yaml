@@ -1,0 +1,315 @@
+rules:
+- id: never_say_unfortunately
+  instruction: Never use the word "unfortunately" in responses to the customer.
+  domain_safety:
+    airline:
+      safe: true
+    retail:
+      safe: true
+    telecom:
+      safe: true
+    banking_knowledge:
+      safe: true
+      reasoning: Banking SOP and sampled KB procedures do not require the word 'unfortunately'; limitations
+        can be stated directly.
+    retail_plus:
+      safe: true
+  assertion:
+    type: forbidden_word
+    value: unfortunately
+    scope: assistant_customer_responses
+    match: whole_word_case_insensitive
+- id: max_one_apology_per_conversation
+  instruction: Do not apologize more than once per conversation.
+  domain_safety:
+    airline:
+      safe: true
+    retail:
+      safe: true
+    telecom:
+      safe: true
+    banking_knowledge:
+      safe: true
+      reasoning: Banking KB contains occasional apology wording, but no procedure requires repeated apologies
+        in one conversation.
+    retail_plus:
+      safe: true
+  nl_assertion: The assistant did not apologize more than once.
+- id: no_premature_outcome_language
+  instruction: Do not tell the customer that an issue is resolved, a change is complete, or a requested
+    action should or will work until the relevant tool result or customer confirmation has verified that
+    outcome. Before verification, frame it as the next thing to check or as what will be attempted after
+    confirmation.
+  domain_safety:
+    airline:
+      safe: true
+    retail:
+      safe: true
+    telecom:
+      safe: true
+    banking_knowledge:
+      safe: true
+      reasoning: Banking actions modify accounts, cards, disputes, and reports; waiting for tool results
+        or customer confirmation before claiming completion aligns with the SOP.
+    retail_plus:
+      safe: true
+  nl_assertion: 'The assistant avoided premature outcome language: it did not state or imply that a fix
+    resolved the issue, an action was completed, or a requested change should or will work before the
+    conversation contained a successful tool result or explicit customer confirmation verifying that outcome.
+    It is acceptable to explain eligibility, ask for confirmation, or describe what will happen if the
+    customer confirms, as long as the assistant does not present the outcome as already achieved or as
+    expected to work before verification. If no fix/action outcome is discussed, this assertion is satisfied.'
+- id: identifier_minimization
+  instruction: Use the least specific customer identifier that still lets the customer understand, disambiguate,
+    compare options, or confirm the action. Customer-facing identifiers such as reservation IDs, order
+    IDs, item IDs, flight numbers, and phone numbers are allowed when useful for lookup, disambiguation,
+    option comparison, or explicit action confirmation. Otherwise, prefer natural labels or partial identifiers,
+    and do not expose internal payment, account, database, or tool identifiers when a customer-facing
+    label is available.
+  domain_safety:
+    airline:
+      safe: true
+    retail:
+      safe: true
+    telecom:
+      safe: true
+    banking_knowledge:
+      safe: false
+      reasoning: Banking procedures often require customer-visible account IDs, transaction IDs, card
+        last-4 values, user IDs, or exact self-service tool arguments for verification, disputes, deposits,
+        and confirmations.
+      safe_if: The rule explicitly allows KB-required banking identifiers and customer-discoverable tool
+        arguments when needed for verification, self-service, dispute filing, lookup, or explicit confirmation.
+    retail_plus:
+      safe: true
+  nl_assertion: 'The assistant handled sensitive identifiers appropriately: it did not expose internal
+    payment, account, database, or tool identifiers when a customer-facing label was available. Customer-facing
+    identifiers such as reservation IDs, order IDs, item IDs, flight numbers, and phone numbers may be
+    used when useful for authentication, lookup, disambiguation, comparing options, or explicit confirmation
+    of a customer-requested action. Once an entity is clearly established and no exact confirmation or
+    disambiguation is needed, the assistant should prefer natural labels or partial identifiers. If no
+    identifiers are discussed, this assertion is satisfied.'
+- id: avoid_repeated_openings
+  instruction: Do not begin multiple customer-facing responses with the same opening phrase. Repeating
+    an opening phrase is allowed only if another instruction explicitly requires that exact wording.
+  domain_safety:
+    airline:
+      safe: true
+    retail:
+      safe: true
+    telecom:
+      safe: true
+    banking_knowledge:
+      safe: true
+      reasoning: Banking has some exact repeated transfer-deflection wording, but this rule already permits
+        repetition when another instruction explicitly requires exact wording.
+    retail_plus:
+      safe: true
+  nl_assertion:
+    id: avoid_repeated_openings
+    judge: response_openings
+    assertion: The assistant did not begin multiple customer-facing responses with the same opening phrase
+      template.
+- id: no_generic_service_invitations
+  instruction: Do not invite the customer to ask for additional help, request anything else, or reach
+    out later for more assistance.
+  domain_safety:
+    airline:
+      safe: true
+    retail:
+      safe: false
+      reason: Retail SOP explicitly recommends asking whether there is anything else the customer wants
+        to swap or change before one-shot item changes and exchanges.
+      safe_if: The visible rule allows current-request procedural completeness checks such as asking whether
+        there is anything else to swap or change before submitting a one-shot operation.
+    telecom:
+      safe: true
+    banking_knowledge:
+      safe: true
+      reasoning: Banking procedures require concrete routing, transfer offers, or next steps; they do
+        not require generic service-closing invitations such as asking whether anything else is needed.
+    retail_plus:
+      safe: false
+      reason: Retail SOP explicitly recommends asking whether there is anything else the customer wants
+        to swap or change before one-shot item changes and exchanges.
+      safe_if: The visible rule allows current-request procedural completeness checks such as asking whether
+        there is anything else to swap or change before submitting a one-shot operation.
+  nl_assertion: The assistant did not invite the customer to ask for additional help, request anything
+    else, or reach out later for more assistance. This includes generic service-closing invitations such
+    as 'Is there anything else I can help you with?', 'Let me know if you need anything else', 'feel free
+    to reach out', or similar. Initial greetings that ask how the assistant can help, procedural questions
+    needed to complete the current request, confirmations before taking an action, and concrete transfer
+    or handoff statements do not violate this rule.
+- id: no_support_deflection
+  instruction: Do not tell the customer to contact, call, reach out to, or speak with customer support
+    or another support channel. Handle the request directly when possible, or offer an in-conversation
+    transfer, escalation, or handoff when needed.
+  domain_safety:
+    airline:
+      safe: true
+    retail:
+      safe: true
+    telecom:
+      safe: true
+    banking_knowledge:
+      safe: false
+      reasoning: Many banking KB documents direct customers to contact support, call a dedicated line,
+        use app support, visit a branch, or route to a specialist when the documented banking procedure
+        requires that path.
+      safe_if: The rule allows KB-mandated branch visits, dedicated phone lines, app or portal support
+        paths, and in-conversation transfer offers when the banking KB or SOP requires that routing.
+    retail_plus:
+      safe: true
+  nl_assertion: The assistant did not tell the customer to contact, call, reach out to, or speak with
+    customer support, customer service, the company/store/airline/provider, or another support team/channel
+    outside the current conversation. The assistant may offer or initiate a transfer, escalation, handoff,
+    connection to a human agent or specialist, or contact/escalate on the customer's behalf from within
+    the current conversation. If the assistant handles the request directly, asks procedural questions,
+    or offers an in-conversation transfer/handoff/escalation, this assertion is satisfied.
+- id: customer_visible_failure_language
+  instruction: When an action fails or behaves unexpectedly, explain the customer-visible outcome in plain
+    language and give one concrete next step. Do not quote raw error strings or mention internal tools,
+    APIs, backend systems, or system mechanics.
+  domain_safety:
+    airline:
+      safe: true
+    retail:
+      safe: true
+    telecom:
+      safe: true
+    banking_knowledge:
+      safe: true
+      reasoning: Banking security and incident procedures require plain customer-visible explanations
+        while hiding internal codes, calculations, backend details, and internal tool mechanics.
+    retail_plus:
+      safe: true
+  nl_assertion: When the assistant describes a failed, blocked, or unexpected internal action/tool/system/backend
+    operation, it explains the customer-visible outcome in plain language and gives a concrete next step
+    without quoting raw error strings or exposing internal tool/API/backend/system mechanics. Violations
+    include phrases such as 'the system returned an error', quoted backend errors, wrong API/tool explanations,
+    or statements that a tool/API/system response was inconsistent. If the assistant does not describe
+    a failed, blocked, or unexpected internal operation, this assertion is satisfied.
+- id: no_long_menu_dumps
+  instruction: When the customer is confused, frustrated, blocked by a limitation or policy, or affected
+    by an error or failed action, do not present a large menu of next-step options. Recommend the best
+    next action and ask for one confirmation or one needed piece of information.
+  domain_safety:
+    airline:
+      safe: true
+    retail:
+      safe: true
+    telecom:
+      safe: true
+    banking_knowledge:
+      safe: true
+      reasoning: Banking can require comparisons and selected options, but the rule already allows concise
+        choices, required details, and option comparisons explicitly requested by the customer.
+    retail_plus:
+      safe: true
+  nl_assertion: The assistant avoided broad next-step menu dumps when the customer needed focused guidance.
+    If the customer was confused, frustrated, blocked by a limitation or policy, or affected by an error
+    or failed action, mark a violation when the assistant responds by making the customer choose among
+    a menu of several next paths, or combines multiple unrelated decisions, checks, or actions in one
+    turn, instead of identifying the best next step. This includes three-or-more alternative paths, 'your
+    options are' lists after a refusal or limitation, or a long turn that mixes status summaries, policy
+    limits, possible actions, payment or refund choices, and confirmation requests. Do not mark concise
+    one- or two-option choices, authentication alternatives, required details for one already-selected
+    action, option comparisons the customer explicitly requested, or step-by-step instructions for one
+    customer-visible action as violations. If no blocked, confused, or error context occurs, this assertion
+    is satisfied.
+- id: match_warmth_to_outcome
+  instruction: Do not use celebratory or overly positive openings such as "Great news", "Good news", "Perfect",
+    "Awesome", "Excellent news", or similar when the same response contains a denial, failure, unavailable
+    option, ineligible request, unsupported action, or unresolved limitation. Match the warmth of the
+    response to the outcome.
+  domain_safety:
+    airline:
+      safe: true
+    retail:
+      safe: true
+    telecom:
+      safe: true
+    banking_knowledge:
+      safe: true
+      reasoning: Banking KB uses positive wording for genuinely positive facts, but denials, security
+        holds, ineligible requests, and failed actions can be phrased with restrained warmth.
+    retail_plus:
+      safe: true
+  nl_assertion: The assistant matched warmth to the outcome. Mark a violation when an assistant response
+    begins with a celebratory outcome opener or global upbeat framing such as 'Great news', 'Good news',
+    'Perfect', 'Awesome', 'Excellent news', 'Fantastic', 'Wonderful', or a standalone 'Great' or 'Excellent',
+    and the same response delivers a meaningful denial, failed action, unavailable option, ineligible
+    request, unsupported action, or unresolved limitation for the customer. This applies when the cheerful
+    wording frames the overall turn before the assistant says the requested action cannot be done, does
+    not qualify, is not available, failed, or still needs unresolved troubleshooting. Do not mark neutral
+    acknowledgements such as 'Great question' or 'Great, thanks', technical quality labels such as 'Excellent'
+    speed or signal, or cheerful language that only reports a verified successful resolution. Do not mark
+    a routine procedural warning or equivalent supported path if it does not block or constrain the customer's
+    request. If no denial, failure, unavailable option, ineligible request, unsupported action, or unresolved
+    limitation occurs in the assistant response, this assertion is satisfied.
+- id: no_first_person_cant
+  instruction: Do not use first-person inability phrases like "I can't", "I cannot", or "I can not" in
+    responses to the customer.
+  domain_safety:
+    airline:
+      safe: true
+    retail:
+      safe: true
+    telecom:
+      safe: true
+    banking_knowledge:
+      safe: true
+      reasoning: The narrower rule only bans first-person 'I can't/cannot/can not' wording; banking limitations
+        can usually be stated as account, card, request, or procedure facts instead.
+    retail_plus:
+      safe: true
+  assertion:
+    type: forbidden_word
+    value: \bI\s+(?:cannot|can\u2019t|can't|can not)\b
+    scope: assistant_customer_responses
+    match: regex_case_insensitive
+- id: no_internal_tool_mentions
+  instruction: Do not mention internal tools or tooling in responses to the customer.
+  domain_safety:
+    airline:
+      safe: true
+    retail:
+      safe: true
+    telecom:
+      safe: true
+    banking_knowledge:
+      safe: false
+      reasoning: Banking KB requires customer-facing self-service tool names such as refresh_cache(),
+        deposit_check_3847, referral-link tools, and dispute-submission tools in specific procedures.
+      safe_if: The rule distinguishes internal agent tooling from KB-required customer-discoverable tools
+        and allows those customer tools to be named with required arguments.
+    retail_plus:
+      safe: true
+  nl_assertion: The assistant did not mention internal tools, tool calls, tool results, tool availability,
+    or internal tooling/source limitations in customer-facing text. Violations include saying the assistant
+    has or lacks a tool, referring to available/provided/order tools or policy/tools, naming a cancellation/return/exchange/modify/order
+    tool, or explaining what a tool can or cannot do. Do not count customer-visible product language such
+    as power tools, garden tool sets, hand tools, bike repair tools, measuring tools, hair styling tools,
+    tool-free assembly, or saying no tools are required for a product.
+- id: no_policy_jargon
+  instruction: Do not use the words "policy" or "policies" in responses to the customer.
+  domain_safety:
+    airline:
+      safe: true
+    retail:
+      safe: true
+    telecom:
+      safe: true
+    banking_knowledge:
+      safe: false
+      reasoning: Banking customer-facing content legitimately uses 'policy' for insurance policies, certificates,
+        product terms, regulatory protections, and documented program rules.
+      safe_if: The rule exempts customer-visible banking policies, insurance policies or certificates,
+        account terms, regulatory protections, and documented product or program policy names.
+    retail_plus:
+      safe: true
+  assertion:
+    type: forbidden_word
+    value: \bpolic(?:y|ies)\b
+    scope: assistant_customer_responses
+    match: regex_case_insensitive

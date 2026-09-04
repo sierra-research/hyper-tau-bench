@@ -1,0 +1,157 @@
+{
+  "id": "retail_plus_customer_identity_policy_fact_schema_001",
+  "domain": "retail_plus",
+  "display_name": "Customer identity and account scope",
+  "global_rules_path": "tau2/hyper/sops/retail_plus/global_rules.json",
+  "section_id": "customer_identity",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/retail_plus_sop.md",
+    "heading": "## Who you can help"
+  },
+  "domain_hierarchy": {
+    "role": "global_prerequisite",
+    "requires": []
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "customer_identity",
+        "label": "Identify and verify the customer",
+        "kind": "procedure",
+        "fact_ids": []
+      },
+      {
+        "id": "conversation_account_scope",
+        "label": "One verified customer per conversation",
+        "kind": "entry_condition",
+        "parent_id": "customer_identity",
+        "order": 1,
+        "fact_ids": [
+          "one_customer_per_conversation_own_profile_only",
+          "multiple_requests_same_customer_allowed"
+        ]
+      },
+      {
+        "id": "identify_customer_first",
+        "label": "Identify the customer first",
+        "kind": "step",
+        "parent_id": "customer_identity",
+        "order": 2,
+        "fact_ids": [
+          "identify_customer_first_every_time"
+        ]
+      },
+      {
+        "id": "find_customer_profile",
+        "label": "Find the customer profile",
+        "kind": "lookup",
+        "parent_id": "customer_identity",
+        "order": 3,
+        "fact_ids": [
+          "lookup_by_account_id_email_or_name_zip"
+        ]
+      },
+      {
+        "id": "verify_customer_profile",
+        "label": "Verify profile ownership",
+        "kind": "verification_gate",
+        "parent_id": "customer_identity",
+        "order": 4,
+        "fact_ids": [
+          "account_id_requires_email_or_name_zip_verification"
+        ]
+      },
+      {
+        "id": "load_verified_profile",
+        "label": "Load the full verified profile",
+        "kind": "step",
+        "parent_id": "customer_identity",
+        "order": 5,
+        "fact_ids": [
+          "pull_full_profile_after_verification"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "find_customer_profile",
+        "type": "requires",
+        "target_id": "identify_customer_first"
+      },
+      {
+        "source_id": "verify_customer_profile",
+        "type": "uses_result_from",
+        "target_id": "find_customer_profile"
+      },
+      {
+        "source_id": "load_verified_profile",
+        "type": "requires",
+        "target_id": "verify_customer_profile"
+      },
+      {
+        "source_id": "conversation_account_scope",
+        "type": "governs",
+        "target_id": "load_verified_profile"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "one_customer_per_conversation_own_profile_only",
+      "category": "identity_scope",
+      "statement": "The agent can help one customer per conversation and cannot act on a friend's, spouse's, or other person's account, even if the caller has all order details."
+    },
+    {
+      "id": "multiple_requests_same_customer_allowed",
+      "category": "identity_scope",
+      "statement": "The same verified customer may make multiple requests in one conversation."
+    },
+    {
+      "id": "identify_customer_first_every_time",
+      "category": "identity_verification",
+      "statement": "The first task in every conversation is to identify who the customer is."
+    },
+    {
+      "id": "lookup_by_account_id_email_or_name_zip",
+      "category": "identity_verification",
+      "statement": "The customer can be found by unique account identifier, by email address, or by first name plus last name plus zip code."
+    },
+    {
+      "id": "account_id_requires_email_or_name_zip_verification",
+      "category": "identity_verification",
+      "statement": "Even when the customer provides an account identifier, the agent must verify it belongs to them by matching email or first name plus last name plus zip code."
+    },
+    {
+      "id": "pull_full_profile_after_verification",
+      "category": "identity_verification",
+      "statement": "After verification, the agent pulls the full customer profile to see orders, addresses, and saved payment methods."
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/retail_plus/hard_bundle_001/customer_identity_transformation_pack.json"
+    }
+  ],
+  "transformations": [
+    {
+      "id": "retail_customer_identity_discovery_intake",
+      "representation": "customer_kickoff_document",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/customer_identity/bundles/discovery_intake/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/customer_identity/customer_kickoff_document_001/northstar_identity_and_crm_readiness_intake.md",
+          "kit_filename": "northstar_identity_and_crm_readiness_intake.md",
+          "eval_manifest_path": "tau2/hyper/sops/retail_plus/sections/customer_identity/customer_kickoff_document_001/eval_manifest.json",
+          "included_fact_ids": [
+            "one_customer_per_conversation_own_profile_only",
+            "multiple_requests_same_customer_allowed",
+            "identify_customer_first_every_time",
+            "lookup_by_account_id_email_or_name_zip",
+            "account_id_requires_email_or_name_zip_verification",
+            "pull_full_profile_after_verification"
+          ]
+        }
+      ]
+    }
+  ]
+}

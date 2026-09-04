@@ -1,0 +1,121 @@
+WEBVTT
+
+00:00:04.400 --> 00:00:29.496
+<v Maya Castillo>Okay, this is the program-refresh planning session, Light Blue edition — the foreign withdrawal allowance. Housekeeping first: this is a working session, we are not deciding anything today. The refresh, if there is one, goes live by announcement on the program thread like everything else this year. Today is options and homework.
+
+00:00:31.403 --> 00:00:37.724
+<v Tom Brzezinski>"If there is one" is doing polite work in that sentence, given my slides.
+
+00:00:39.527 --> 00:00:54.069
+<v Maya Castillo>Your slides can speak for themselves in a second. Lena, Ravi — you two are here because whatever happens hits your page and your pipeline, so interrupt freely. Tom. Slides.
+
+00:00:54.942 --> 00:01:14.103
+<v Tom Brzezinski>Sharing. Okay — the allowance as it stands, and everyone knows it but the numbers matter: Light Blue account, three free foreign ATM withdrawals a month, three-fifty for each one after. That structure's been in place since the product launched.
+
+00:01:15.593 --> 00:01:18.340
+[Tom shares the usage analysis deck.]
+
+00:01:58.100 --> 00:02:30.918
+<v Tom Brzezinski>And here's what usage did to it. Two years ago the median Light Blue holder used zero point eight of those free withdrawals a month. Today it's one point nine and climbing — the account got popular with exactly the people it was designed for, students abroad, gig folks who travel, and they use machines. The allowance was priced for a customer who barely existed, and now the actual customer eats most of it.
+
+00:02:32.022 --> 00:02:40.651
+<v Maya Castillo>Which on its own is fine — allowances are supposed to get used. Say the cost line out loud though.
+
+00:02:42.782 --> 00:03:05.800
+<v Tom Brzezinski>The free-withdrawal subsidy has roughly doubled in eighteen months. It's not an emergency, it's a trend line with an opinion. Extend it two more years and Light Blue's fee income on foreign ATM activity is functionally zero while the interchange and network costs keep growing. That's the case for touching it at all.
+
+00:03:08.111 --> 00:03:13.824
+<v Ravi Menon>Dumb question from engineering: is the answer allowed to be "touch nothing"?
+
+00:03:15.246 --> 00:03:31.527
+<v Maya Castillo>It's allowed. It's on the option list. It just has to beat the alternatives on the merits, not win by inertia — that's the whole reason for a structured refresh instead of a hallway decision.
+
+00:03:33.072 --> 00:03:51.810
+<v Tom Brzezinski>So, the option grid. A: keep three free, raise the overage — three-fifty goes to something like four-fifty. Recovers meaningfully only from the heavy tail, median customer never notices, but the overage starts looking punitive next to the peer products.
+
+00:03:52.533 --> 00:04:01.854
+<v Lena Fischer>Four-fifty for the fourth withdrawal when the first three were free is a weird sentence on a page, I'll say that now.
+
+00:04:04.182 --> 00:04:46.861
+<v Tom Brzezinski>Noted, and it's weirder in the disclosure table. B: trim the allowance — two free instead of three, and the overage moves to four even. Two free still covers the median customer — remember, one point nine — while the trim plus the four dollars does the actual cost recovery. It's the balanced one. C: kill the free allowance, flat fee per foreign withdrawal, lowest number wins the optics war. Cleanest to explain, biggest customer-visible loss, and my model says it overshoots — we don't need that much recovery.
+
+00:04:48.920 --> 00:05:09.422
+<v Maya Castillo>Before reactions — Tom, one clarifying pass on the B mechanics, because if I'm carrying this to the thread I want to be able to answer the obvious questions without phoning you. The counter. Walk the month for a customer under B.
+
+00:05:10.124 --> 00:05:42.299
+<v Tom Brzezinski>Sure. Calendar month, per account. First foreign machine withdrawal of the month: free, counter reads one. Second: free, counter reads two. Third and everything after until the month rolls: the fee, per withdrawal, whatever the amount they take. First of the next month, counter's back to zero. No carryover of unused ones, no partial credit, nothing rides across the month boundary — that's how the current three-free works too, B just moves the wall.
+
+00:05:44.073 --> 00:05:52.630
+<v Maya Castillo>And a withdrawal that gets declined, or cancelled at the surcharge screen — does it burn a free one?
+
+00:05:54.257 --> 00:06:11.605
+<v Tom Brzezinski>No. Successful cash out or it doesn't count, same as today. That's worth keeping in mind for the announcement drafting later, because "my declined withdrawal ate my free one" would be a support call we manufacture ourselves if the wording's sloppy.
+
+00:06:12.102 --> 00:06:16.294
+<v Maya Castillo>Noted for future-us. Okay — reactions. Lena first, page perspective.
+
+00:06:17.290 --> 00:07:10.932
+<v Lena Fischer>Two things. One: whatever option lands, the page copy change is trivial — it's a number and a sentence, that's a day. What's not trivial is timing, and I want this on the record because it bit us in September with the Bluest launch: the page renders a cycle behind program announcements. That's not a bug I'm apologizing for, it's how the pipeline works — the announcement is the source of truth, the page catches up on the next publish. So if the refresh lands mid-cycle, there WILL be days where the thread says one thing and the live page still shows the old allowance, and the floor needs to know the thread wins.
+
+00:07:13.192 --> 00:07:35.736
+<v Ravi Menon>Confirming the mechanics: the product pages build off the content snapshot at cycle start. I can do an out-of-cycle publish for something like this, but it needs to be requested WITH the announcement, not discovered after. Put it on the go-live checklist as a line item and it'll just happen.
+
+00:07:37.680 --> 00:08:05.207
+<v Maya Castillo>That goes on the checklist template today, honestly — that lesson's been earned twice now. Floor-facing note for the eventual rollout doc: current values live in the dated announcement; the page is the lagging copy. Okay, Tom — pressure on option B, since you called it balanced and "balanced" always hides something. What's the ugly part?
+
+00:08:05.965 --> 00:08:34.124
+<v Tom Brzezinski>The ugly part is the customer at exactly two-point-something withdrawals — the one who used all three every month. Trim to two and that specific person gets a four-dollar surprise in month one. It's maybe fifteen percent of active users. They're also the segment most likely to read the announcement email, so the surprise is manageable, but it's real and I'm not hiding it.
+
+00:08:35.485 --> 00:08:43.442
+<v Lena Fischer>Can the announcement lead with the two-free-still-covers-most framing? Because it does — most customers genuinely never touch the third.
+
+00:08:44.218 --> 00:09:23.490
+<v Ravi Menon>Before the homework list — one implementation reality check, because option shapes have different build costs and nobody ever asks until the announcement's out. A is a config change, one number. B changes the counter logic AND the number — the allowance counter's the same, we just start the fee one withdrawal earlier, so call it a small change with real testing. C rips the counter out entirely, which sounds simple and never is; there are three downstream reports that read that counter, including one of Tom's.
+
+00:09:24.445 --> 00:09:26.291
+<v Tom Brzezinski>Which one of mine?
+
+00:09:26.802 --> 00:09:38.391
+<v Ravi Menon>The monthly allowance-utilization cut. Kill the allowance, the report's denominator goes to zero and somebody's dashboard divides by it. Ask me how I know.
+
+00:09:39.563 --> 00:09:51.760
+<v Tom Brzezinski>I withdraw my curiosity. Fine — C carries a hidden engineering tax on top of overshooting the recovery. That's two strikes on C from two different departments.
+
+00:09:53.863 --> 00:10:17.632
+<v Maya Castillo>Which is worth capturing while we're all in the room, but let me keep it honest: strikes are inputs, not verdicts. C stays on the grid until the thread closes it. What I will say is nobody today argued FOR it, and the notes should reflect that accurately.
+
+00:10:19.429 --> 00:10:52.464
+<v Lena Fischer>One more input for the pile, from the September search logs: "light blue foreign atm" queries doubled during the travel season, and the page's current three-free sentence is the single most-visited paragraph on that page. Whatever we do, that paragraph is load-bearing — people check it before trips. Which is an argument for announcing well before the winter travel wave, whichever option wins, because that's when the checking happens.
+
+00:10:54.629 --> 00:11:33.756
+<v Maya Castillo>Good — that actually firms up my timeline instinct. If the rerun holds, I'd want the announcement out well ahead of the December travel checking, not landing in the middle of it. Okay, the homework list. Tom: I want the B model rerun with the September and October actuals — the summer travel bump is in your current numbers and it flatters the case for trimming. If B still pencils on shoulder-season data, it's a real candidate. A and C stay in the deck as foils unless the rerun surprises us.
+
+00:11:34.388 --> 00:11:44.073
+<v Tom Brzezinski>Rerun with September-October actuals, two weeks. And I'll break out that fifteen-percent segment explicitly so the impact number's honest.
+
+00:11:45.102 --> 00:12:32.999
+<v Maya Castillo>Ravi: the out-of-cycle publish path, written down — what it costs, how it's requested, added to the go-live checklist template. Lena: draft page copy for both A and B shapes, sitting in the drawer, no publish. And to say the obvious once more for the notes: no decision today. Nothing changes on the account until it's announced on the thread — we'll confirm on the thread, dated, from my desk, and THAT's the document the floor and the page both follow. If anyone hears an agent quoting a new allowance before that thread exists, send them to me.
+
+00:12:35.273 --> 00:12:41.487
+<v Lena Fischer>Same as the Purple cap thing in August. The thread is the record.
+
+00:12:42.906 --> 00:13:14.446
+<v Tom Brzezinski>One calendar constraint that belongs in the notes, since we're talking timing: my team goes dark for year-end close from mid-December. If the rerun says go and the announcement wants a January effective date, all the finance sign-offs need to be done by the second week of December or they're waiting for February. There's a real window here and it's narrower than it looks.
+
+00:13:16.267 --> 00:13:51.758
+<v Maya Castillo>Understood — so the working backwards math is: rerun in two weeks, decision on the thread shortly after if it's clean, announcement with runway before the winter travel checking, finance sign-offs beaten into December's first half. Tight but honest. If the rerun's messy, we slip to a spring refresh and nothing changes for the winter — which is also a fine outcome, for the record. No one should hear urgency where there's only tidiness.
+
+00:13:53.238 --> 00:14:14.040
+<v Ravi Menon>And engineering-side, the same window: we've got the usual holiday deploy freeze from the third week of December. A config-level change fits before it easily; option C's counter surgery would not. One more quiet vote for not-C, from the calendar itself.
+
+00:14:14.571 --> 00:14:19.208
+<v Lena Fischer>The calendar has opinions. I respect that in a calendar.
+
+00:14:19.720 --> 00:14:27.627
+<v Maya Castillo>The calendar votes last, but it votes. Okay — anything else while I have this crew? Going once.
+
+00:14:28.545 --> 00:14:40.303
+<v Ravi Menon>One small one: the locator weekly pull went live Monday, three weeks early. The bowling alley is gone. I just wanted it said in a meeting.
+
+00:14:40.793 --> 00:14:54.021
+<v Maya Castillo>And the crowd goes wild. Genuinely — nice work, tell network services they've earned a quiet week. Alright: reruns, drawer copy, checklist line, and a thread to watch for. Thanks, all.

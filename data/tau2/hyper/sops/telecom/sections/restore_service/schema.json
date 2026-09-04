@@ -1,0 +1,503 @@
+{
+  "id": "telecom_restore_service_policy_fact_schema_001",
+  "domain": "telecom",
+  "display_name": "Restore cellular service",
+  "global_rules_path": "tau2/hyper/sops/telecom/global_rules.json",
+  "section_id": "restore_service",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/telecom_sop.md",
+    "heading": "## No Service Or Cannot Connect"
+  },
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": [
+      {
+        "section_id": "customer_identity",
+        "fact_ids": [
+          "identify_customer_before_technical_support",
+          "phone_side_troubleshooting_can_begin_first",
+          "phone_side_checks_available_before_account",
+          "device_side_uses_symptom_and_phone_checks",
+          "open_account_for_carrier_side_information",
+          "carrier_side_workflow_examples",
+          "lookup_account_or_line_by_phone_number",
+          "phone_lookup_covers_contact_and_line_numbers",
+          "lookup_account_by_customer_id",
+          "lookup_account_by_name_requires_dob",
+          "dob_required_for_verification"
+        ],
+        "relationship": "global_prerequisite",
+        "description": "Service troubleshooting starts phone-side and identifies the affected line only when device-side checks fail and line status must be read."
+      },
+      {
+        "section_id": "service_foundations",
+        "fact_ids": [
+          "can_guide_customer_side_phone_actions",
+          "can_guide_customer_side_checks",
+          "can_look_up_account_and_records",
+          "cannot_override_locked_sim_security",
+          "cannot_renew_ended_contract",
+          "cannot_complete_work_sent_to_human",
+          "responses_concise_accurate_no_speculation",
+          "one_customer_care_action_at_a_time",
+          "wait_for_result_before_next_step",
+          "close_case_only_after_final_check_shows_resolved",
+          "transfer_triggers_out_of_scope_or_policy_step",
+          "handoff_recorded_via_console_control",
+          "transfer_notice_exact_text",
+          "transfer_action_exact_name_for_every_handoff",
+          "phone_checks_show_device_side_state",
+          "affected_line_is_number_being_troubleshot",
+          "missing_or_unseated_sim_reports_missing",
+          "active_line_can_regain_service_suspended_cannot",
+          "customer_records_contents",
+          "records_are_source_of_truth_for_account_decisions",
+          "ground_responses_in_customer_reports_records_and_phone_checks",
+          "setting_toggle_reports_new_state",
+          "apn_reset_restores_carrier_defaults",
+          "reboot_applies_pending_changes_and_reruns_search",
+          "work_relevant_steps_before_technical_transfer"
+        ],
+        "relationship": "shared_reference",
+        "description": "Service restoration uses the shared phone-check model, SIM reporting, line-status reflection, device behavior, and transfer protocol."
+      },
+      {
+        "section_id": "resume_suspended_line",
+        "fact_ids": [
+          "suspension_cause_overdue_bill",
+          "suspension_cause_contract_ended",
+          "ended_contract_suspension_is_transferred"
+        ],
+        "relationship": "workflow_handoff",
+        "description": "When the affected line turns out to be suspended, the suspension cause routes the case into the suspended-line resumption journey or a handoff."
+      }
+    ]
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "restore_service",
+        "label": "Restore cellular service",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "service_entry",
+        "label": "Route no-service complaints",
+        "kind": "entry_conditions",
+        "parent_id": "restore_service",
+        "order": 1,
+        "fact_ids": [
+          "entry_no_service_or_cannot_connect"
+        ]
+      },
+      {
+        "id": "status_bar_triage",
+        "label": "Check the status bar first",
+        "kind": "decision",
+        "parent_id": "restore_service",
+        "order": 2,
+        "fact_ids": [
+          "start_with_status_bar_check",
+          "connected_status_not_a_no_service_issue"
+        ]
+      },
+      {
+        "id": "device_side_checks",
+        "label": "Work through device-side causes",
+        "kind": "procedure",
+        "parent_id": "restore_service",
+        "order": 3,
+        "fact_ids": []
+      },
+      {
+        "id": "cellular_network_step",
+        "label": "Check cellular network status and airplane mode",
+        "kind": "step",
+        "parent_id": "device_side_checks",
+        "order": 1,
+        "fact_ids": [
+          "no_service_check_cellular_network_status",
+          "airplane_mode_on_disable_and_recheck"
+        ]
+      },
+      {
+        "id": "sim_checks",
+        "label": "Check and reseat the SIM",
+        "kind": "decision",
+        "parent_id": "device_side_checks",
+        "order": 2,
+        "fact_ids": [
+          "check_sim_status_after_network_check",
+          "missing_sim_reseat_and_recheck"
+        ]
+      },
+      {
+        "id": "sim_lock_escalation",
+        "label": "Hand off PIN/PUK-locked SIMs",
+        "kind": "escalation",
+        "parent_id": "device_side_checks",
+        "order": 3,
+        "fact_ids": [
+          "pin_puk_locked_sim_is_transferred"
+        ]
+      },
+      {
+        "id": "apn_reset_step",
+        "label": "Reset APN settings and reboot",
+        "kind": "step",
+        "parent_id": "device_side_checks",
+        "order": 4,
+        "fact_ids": [
+          "active_sim_no_service_check_apn_settings",
+          "incorrect_apn_reset_reboot_recheck"
+        ]
+      },
+      {
+        "id": "carrier_side_diagnosis",
+        "label": "Check the line when the device is not the cause",
+        "kind": "procedure",
+        "parent_id": "restore_service",
+        "order": 4,
+        "fact_ids": [
+          "device_side_failure_check_line_suspension",
+          "overdue_suspension_uses_resumption_flow",
+          "ended_contract_suspension_uses_suspended_line_handling"
+        ]
+      },
+      {
+        "id": "unresolved_service_transfer",
+        "label": "Hand off service that remains unresolved",
+        "kind": "escalation",
+        "parent_id": "restore_service",
+        "order": 5,
+        "fact_ids": [
+          "unresolved_service_after_supported_steps_transfers"
+        ]
+      },
+      {
+        "id": "service_resolution",
+        "label": "Verify service and affected calling or texting functions",
+        "kind": "verification_gate",
+        "parent_id": "restore_service",
+        "order": 6,
+        "fact_ids": [
+          "resolved_when_status_bar_connected"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "status_bar_triage",
+        "type": "requires",
+        "target_id": "service_entry"
+      },
+      {
+        "source_id": "device_side_checks",
+        "type": "evaluated_after",
+        "target_id": "status_bar_triage"
+      },
+      {
+        "source_id": "carrier_side_diagnosis",
+        "type": "requires",
+        "target_id": "device_side_checks"
+      },
+      {
+        "source_id": "unresolved_service_transfer",
+        "type": "requires",
+        "target_id": "carrier_side_diagnosis"
+      },
+      {
+        "source_id": "service_resolution",
+        "type": "uses_result_from",
+        "target_id": "device_side_checks"
+      },
+      {
+        "source_id": "service_resolution",
+        "type": "uses_result_from",
+        "target_id": "carrier_side_diagnosis"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "entry_no_service_or_cannot_connect",
+      "category": "entry_conditions",
+      "statement": "The service workflow applies when the phone shows no service or cannot connect to the cellular network."
+    },
+    {
+      "id": "start_with_status_bar_check",
+      "category": "device_side",
+      "statement": "Start by asking the customer to check the status bar."
+    },
+    {
+      "id": "connected_status_not_a_no_service_issue",
+      "category": "device_side",
+      "statement": "If the status bar shows service is connected, the customer is not facing a no-service issue and the no-service flow does not apply."
+    },
+    {
+      "id": "no_service_check_cellular_network_status",
+      "category": "device_side",
+      "statement": "If there is no service, ask the customer to check cellular network status."
+    },
+    {
+      "id": "airplane_mode_on_disable_and_recheck",
+      "category": "device_side",
+      "statement": "If airplane mode is on, ask the customer to turn it off and recheck the status bar."
+    },
+    {
+      "id": "check_sim_status_after_network_check",
+      "category": "device_side",
+      "statement": "After the cellular-network-status step, ask the customer to check SIM status."
+    },
+    {
+      "id": "missing_sim_reseat_and_recheck",
+      "category": "device_side",
+      "statement": "If the SIM is missing, ask the customer to reseat it, check that the SIM is active, and recheck the status bar."
+    },
+    {
+      "id": "pin_puk_locked_sim_is_transferred",
+      "category": "escalations",
+      "statement": "If the SIM is locked by PIN or PUK, record the handoff with the transfer or escalation control, then give the customer the required transfer message."
+    },
+    {
+      "id": "active_sim_no_service_check_apn_settings",
+      "category": "device_side",
+      "statement": "If the SIM is active and service is still unavailable, ask the customer to check APN settings."
+    },
+    {
+      "id": "incorrect_apn_reset_reboot_recheck",
+      "category": "device_side",
+      "statement": "If the APN settings are incorrect, ask the customer to reset them, reboot, and recheck the status bar."
+    },
+    {
+      "id": "device_side_failure_check_line_suspension",
+      "category": "carrier_side",
+      "statement": "If device-side checks do not restore service, identify the affected line and check whether it is suspended."
+    },
+    {
+      "id": "overdue_suspension_uses_resumption_flow",
+      "category": "carrier_side",
+      "statement": "If the line is suspended for an overdue bill, use the overdue-bill flow."
+    },
+    {
+      "id": "ended_contract_suspension_uses_suspended_line_handling",
+      "category": "workflow_routing",
+      "statement": "If the line is suspended because the contract ended, use the ended-contract handling in the suspended-line workflow."
+    },
+    {
+      "id": "unresolved_service_after_supported_steps_transfers",
+      "category": "escalations",
+      "statement": "If all relevant device-side checks are complete and no supported suspension flow restores service, record the handoff with the transfer or escalation control, then give the customer the required transfer message."
+    },
+    {
+      "id": "resolved_when_status_bar_connected",
+      "category": "resolution",
+      "statement": "The service case is resolved when the customer reports connected service on the status bar after the relevant fix."
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/telecom/hard_bundle_001/restore_service_transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/telecom/client_overlay_001/restore_service_client_transformation_pack.json"
+    }
+  ],
+  "transformations": [
+    {
+      "id": "telecom_restore_service_explicit_rules",
+      "representation": "explicit_rules"
+    },
+    {
+      "id": "telecom_restore_service_apn_recording_clean",
+      "representation": "interactive_screen_recording",
+      "stub_path": "tau2/hyper/sops/telecom/sections/restore_service/bundles/restore_service_apn_screen_recording/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_service/interactive_screen_recording_001_apn_recovery/apn_recovery_clean.mp4",
+          "kit_filename": "device_walkthrough.mp4",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_service/interactive_screen_recording_001_apn_recovery/apn_recovery_clean_timeline.md",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_service/interactive_screen_recording_001_apn_recovery/eval_manifest.json",
+          "duration_seconds": 30,
+          "included_fact_ids": [
+            "active_sim_no_service_check_apn_settings",
+            "incorrect_apn_reset_reboot_recheck",
+            "resolved_when_status_bar_connected"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "telecom_restore_service_apn_recording_controlled_distractors",
+      "representation": "interactive_screen_recording",
+      "stub_path": "tau2/hyper/sops/telecom/sections/restore_service/bundles/restore_service_apn_screen_recording/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_service/interactive_screen_recording_001_apn_recovery/apn_recovery_controlled_distractors.mp4",
+          "kit_filename": "device_walkthrough.mp4",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_service/interactive_screen_recording_001_apn_recovery/apn_recovery_controlled_distractors_timeline.md",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_service/interactive_screen_recording_001_apn_recovery/eval_manifest.json",
+          "duration_seconds": 50,
+          "included_fact_ids": [
+            "active_sim_no_service_check_apn_settings",
+            "incorrect_apn_reset_reboot_recheck",
+            "resolved_when_status_bar_connected"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "telecom_restore_service_full_journey_flowchart",
+      "representation": "process_flowchart",
+      "stub_path": "tau2/hyper/sops/telecom/sections/restore_service/bundles/restore_service_full_flowchart_recording/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_service/process_flowchart_001_full_journey/eval_manifest.json",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_service/process_flowchart_001_full_journey/restore_service_flowchart_01_signal_triage.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_service/process_flowchart_001_full_journey/restore_service_flowchart_01_signal_triage.txt",
+          "author_source_path": "tau2/hyper/sops/telecom/sections/restore_service/process_flowchart_001_full_journey/restore_service_flowcharts.html",
+          "kit_filename": "restore_service_01_signal_triage.png",
+          "reference_id": "service-recovery-01_signal_triage",
+          "artifact_ref": "service-recovery-01_signal_triage",
+          "included_fact_ids": [
+            "entry_no_service_or_cannot_connect",
+            "start_with_status_bar_check",
+            "connected_status_not_a_no_service_issue",
+            "no_service_check_cellular_network_status",
+            "airplane_mode_on_disable_and_recheck"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_service/process_flowchart_001_full_journey/restore_service_flowchart_02_sim_apn.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_service/process_flowchart_001_full_journey/restore_service_flowchart_02_sim_apn.txt",
+          "author_source_path": "tau2/hyper/sops/telecom/sections/restore_service/process_flowchart_001_full_journey/restore_service_flowcharts.html",
+          "kit_filename": "restore_service_02_sim_apn.png",
+          "reference_id": "service-recovery-02_sim_apn",
+          "artifact_ref": "service-recovery-02_sim_apn",
+          "included_fact_ids": [
+            "check_sim_status_after_network_check",
+            "missing_sim_reseat_and_recheck",
+            "pin_puk_locked_sim_is_transferred"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_service/process_flowchart_001_full_journey/restore_service_flowchart_03_carrier_side.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_service/process_flowchart_001_full_journey/restore_service_flowchart_03_carrier_side.txt",
+          "author_source_path": "tau2/hyper/sops/telecom/sections/restore_service/process_flowchart_001_full_journey/restore_service_flowcharts.html",
+          "kit_filename": "restore_service_03_carrier_side.png",
+          "reference_id": "service-recovery-03_carrier_side",
+          "artifact_ref": "service-recovery-03_carrier_side",
+          "included_fact_ids": [
+            "device_side_failure_check_line_suspension",
+            "overdue_suspension_uses_resumption_flow",
+            "ended_contract_suspension_uses_suspended_line_handling",
+            "unresolved_service_after_supported_steps_transfers"
+          ]
+        }
+      ]
+    }
+  ],
+  "transformation_bundles": [
+    {
+      "id": "restore_service_apn_recording_clean",
+      "description": "A clean 30-second device recording showing the active-SIM APN check, carrier-default reset, reboot, and connected-service outcome.",
+      "stub_path": "tau2/hyper/sops/telecom/sections/restore_service/bundles/restore_service_apn_screen_recording/stub.md",
+      "fact_ids": [
+        "active_sim_no_service_check_apn_settings",
+        "incorrect_apn_reset_reboot_recheck",
+        "resolved_when_status_bar_connected"
+      ],
+      "members": [
+        {
+          "transformation_id": "telecom_restore_service_apn_recording_clean",
+          "primary": true,
+          "authoritative_fact_ids": [
+            "active_sim_no_service_check_apn_settings",
+            "incorrect_apn_reset_reboot_recheck",
+            "resolved_when_status_bar_connected"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "restore_service_apn_recording_controlled_distractors",
+      "description": "The same APN recovery sequence with an explicitly rejected wrong SIM, an unrelated settings detour, and a visibly failed reboot-before-reset attempt.",
+      "stub_path": "tau2/hyper/sops/telecom/sections/restore_service/bundles/restore_service_apn_screen_recording/stub.md",
+      "fact_ids": [
+        "active_sim_no_service_check_apn_settings",
+        "incorrect_apn_reset_reboot_recheck",
+        "resolved_when_status_bar_connected"
+      ],
+      "members": [
+        {
+          "transformation_id": "telecom_restore_service_apn_recording_controlled_distractors",
+          "primary": true,
+          "authoritative_fact_ids": [
+            "active_sim_no_service_check_apn_settings",
+            "incorrect_apn_reset_reboot_recheck",
+            "resolved_when_status_bar_connected"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "restore_service_full_flowchart_recording",
+      "description": "A full Restore Service replacement pairing three linked 1760-by-1280 branching flowcharts for the twelve routing and device-triage facts with the controlled-distractor APN screen recording for the three temporal recovery facts.",
+      "stub_path": "tau2/hyper/sops/telecom/sections/restore_service/bundles/restore_service_full_flowchart_recording/stub.md",
+      "fact_ids": [
+        "entry_no_service_or_cannot_connect",
+        "start_with_status_bar_check",
+        "connected_status_not_a_no_service_issue",
+        "no_service_check_cellular_network_status",
+        "airplane_mode_on_disable_and_recheck",
+        "check_sim_status_after_network_check",
+        "missing_sim_reseat_and_recheck",
+        "pin_puk_locked_sim_is_transferred",
+        "active_sim_no_service_check_apn_settings",
+        "incorrect_apn_reset_reboot_recheck",
+        "device_side_failure_check_line_suspension",
+        "overdue_suspension_uses_resumption_flow",
+        "ended_contract_suspension_uses_suspended_line_handling",
+        "unresolved_service_after_supported_steps_transfers",
+        "resolved_when_status_bar_connected"
+      ],
+      "members": [
+        {
+          "transformation_id": "telecom_restore_service_full_journey_flowchart",
+          "authoritative_fact_ids": [
+            "entry_no_service_or_cannot_connect",
+            "start_with_status_bar_check",
+            "connected_status_not_a_no_service_issue",
+            "no_service_check_cellular_network_status",
+            "airplane_mode_on_disable_and_recheck",
+            "check_sim_status_after_network_check",
+            "missing_sim_reseat_and_recheck",
+            "pin_puk_locked_sim_is_transferred",
+            "device_side_failure_check_line_suspension",
+            "overdue_suspension_uses_resumption_flow",
+            "ended_contract_suspension_uses_suspended_line_handling",
+            "unresolved_service_after_supported_steps_transfers"
+          ],
+          "primary": true,
+          "depends_on_fact_ids": [
+            "active_sim_no_service_check_apn_settings",
+            "incorrect_apn_reset_reboot_recheck",
+            "resolved_when_status_bar_connected"
+          ]
+        },
+        {
+          "transformation_id": "telecom_restore_service_apn_recording_controlled_distractors",
+          "authoritative_fact_ids": [
+            "active_sim_no_service_check_apn_settings",
+            "incorrect_apn_reset_reboot_recheck",
+            "resolved_when_status_bar_connected"
+          ],
+          "depends_on_fact_ids": [
+            "check_sim_status_after_network_check"
+          ]
+        }
+      ]
+    }
+  ]
+}

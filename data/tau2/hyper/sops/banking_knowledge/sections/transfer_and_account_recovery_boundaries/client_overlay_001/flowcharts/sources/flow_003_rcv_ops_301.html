@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>RCV-OPS-301 — Account Recovery Bypass Code verification gates</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 1150px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #4b2a52; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #dcc9e2; }
+  .node { position: absolute; width: 300px; box-sizing: border-box; border: 2px solid #4a5b6d; border-radius: 6px; background: #fff; padding: 10px 12px; font-size: 13px; line-height: 1.35; color: #1d2733; }
+  .node .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding: 1px 6px; border-radius: 3px; margin-bottom: 6px; }
+  .entry { border-color: #1d6a44; } .entry .tag { background: #d9efe3; color: #17573a; }
+  .read { border-color: #2b5f8f; } .read .tag { background: #dcebf7; color: #234d73; }
+  .work { border-color: #4a5b6d; } .work .tag { background: #e6ebf0; color: #3a4a5a; }
+  .toolcall { border-color: #7a4a94; } .toolcall .tag { background: #efe3f6; color: #5f3675; }
+  .queue { border-color: #8a2f3c; } .queue .tag { background: #f6dde1; color: #6e2530; }
+  .terminal { border-color: #1d6a44; background: #f2faf5; } .terminal .tag { background: #d9efe3; color: #17573a; }
+  .decision { position: absolute; width: 300px; box-sizing: border-box; }
+  .decision .diamond { width: 280px; height: 128px; margin: 0 auto; background: #fff8e8; border: 2px solid #b08a1f; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 8px 14px; box-sizing: border-box; font-size: 13px; text-align: center; color: #4b3d10; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+  svg.edges { position: absolute; left: 0; top: 0; width: 1560px; height: 1150px; pointer-events: none; }
+  svg.edges path { stroke: #51606f; stroke-width: 2; fill: none; marker-end: url(#arrowrcv301); }
+  .edge-label { position: absolute; font-size: 11px; font-weight: 600; color: #38424d; background: #fbfcfdcc; padding: 0 4px; border-radius: 2px; }
+  .sticky { position: absolute; width: 260px; box-sizing: border-box; padding: 10px 12px; font-size: 12px; line-height: 1.35; box-shadow: 2px 3px 6px rgba(0,0,0,0.12); }
+  .sticky.yellow { background: #fdf3c0; } .sticky.blue { background: #d8e9f9; }
+  .gate { position: absolute; width: 720px; box-sizing: border-box; border: 2px solid #8a2f3c; border-radius: 6px; background: #fdf5f6; padding: 10px 14px; font-size: 13px; line-height: 1.4; color: #4d1f27; }
+  .gate .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding: 1px 6px; border-radius: 3px; margin-bottom: 6px; background: #f6dde1; color: #6e2530; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>Account Recovery Bypass Code — verification gate sequence</h1>
+    <div class="meta">RCV-OPS-301 rev A &nbsp;·&nbsp; Owner: V. Osei, Security Operations &nbsp;·&nbsp; Effective 2025-10-29 &nbsp;·&nbsp; Next review 2026-01 &nbsp;·&nbsp; Applies to: account recovery contacts where the caller presents a bypass code during identity verification</div>
+  </div>
+
+  <svg class="edges" viewBox="0 0 1560 1150">
+    <defs><marker id="arrowrcv301" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#51606f"></path></marker></defs>
+    <!-- entry -> collect -->
+    <path d="M 190 226 L 190 274"></path>
+    <!-- collect -> match? -->
+    <path d="M 190 420 L 190 472"></path>
+    <!-- match? no -> standard path -->
+    <path d="M 190 604 L 190 664"></path>
+    <!-- match? yes -> log toolcall -->
+    <path d="M 340 536 L 560 536"></path>
+    <!-- log -> proceed -->
+    <path d="M 860 536 L 1080 536"></path>
+    <!-- exposure suspicion from anywhere: collect -> stop -->
+    <path d="M 340 700 L 1080 700 L 1080 774"></path>
+    <!-- gate banner sits under the yes lane; no edge needed -->
+  </svg>
+
+  <span class="edge-label" style="left:100px;top:624px">code does not match exactly</span>
+  <span class="edge-label" style="left:380px;top:516px">exact match confirmed</span>
+  <span class="edge-label" style="left:906px;top:516px">entry submitted</span>
+  <span class="edge-label" style="left:560px;top:680px">exposure or misuse suspected — at any step</span>
+
+  <article class="node entry" style="left:40px;top:100px"><span class="tag">ENTRY</span>
+    During identity verification on an account recovery contact, the caller says they have an <b>Account Recovery Bypass Code</b>. This board governs the gates from that moment; scope and limits of the program come from the Security Operations issuance of <b>2025-10-23</b>.
+  </article>
+
+  <article class="node work" style="left:40px;top:282px"><span class="tag">COLLECT THE CODE</span>
+    Take the caller's code — code-collection discipline per the <b>2025-10-28 recovery calibration</b> (recorded). Compare what they give you against the <b>current issued code</b>. The value itself is distributed only in the 2025-10-23 issuance; it is not printed on this board.
+  </article>
+
+  <div class="decision" style="left:40px;top:476px"><div class="diamond">Provided code exactly matches the current issued code?</div></div>
+
+  <article class="node queue" style="left:40px;top:672px"><span class="tag">NO MATCH — NO BYPASS</span>
+    Do <b>not</b> proceed with bypass. Follow <b>standard identity procedures</b>, or escalate per your queue policy. A near-miss code is a no; there is no partial credit on an exact-match gate.
+  </article>
+
+  <article class="node toolcall" style="left:560px;top:476px"><span class="tag">LOG — log_verification</span>
+    Log the identity verification with the <b>log_verification</b> tool. Field entries for a bypass-code event follow the console's <b>bypass logging macro</b> (support-console automation export) — the macro carries the field-by-field mapping; don't reconstruct it from memory.
+  </article>
+
+  <article class="node terminal" style="left:1080px;top:476px"><span class="tag">PROCEED — RECOVERY</span>
+    Once the code is <b>confirmed</b> and the <b>log_verification entry is submitted</b>, continue with the account recovery workflow <b>appropriate to the channel</b> (phone, chat, or secure message each have their own recovery track).
+  </article>
+
+  <article class="node queue" style="left:1080px;top:782px"><span class="tag">STOP — SECURITY ESCALATION</span>
+    Any suspicion that the code has been <b>exposed or misused</b>: stop the process and <b>escalate per security procedure</b>. Do not finish the recovery, do not re-run the gate — Security Operations owns the contact from here.
+  </article>
+
+  <section class="gate" style="left:560px;top:314px"><span class="tag">GATE RULE</span>
+    Only proceed with bypass-code recovery <b>if the code matches</b>. Otherwise revert to standard verification or escalate. The match gate sits <b>before</b> the log step and before any recovery action — nothing on the right side of this board happens on an unmatched code.
+  </section>
+
+  <aside class="sticky blue" style="left:40px;top:900px">
+    What you say to the caller and what goes in notes during a bypass event is governed by the <b>#recovery-desk pinned ruling (Osei, 2025-10-21)</b>. Read the pin — it exists because of a real incident, not as decoration.
+  </aside>
+
+  <aside class="sticky yellow" style="left:340px;top:900px">
+    The bypass event stands alone: the issuance spells out what the code may be used for and what may not be bundled into the same verification event. When in doubt, the issuance thread wins over habit.
+  </aside>
+</div>
+</body>
+</html>

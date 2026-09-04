@@ -1,0 +1,560 @@
+{
+  "capture_format": "slack_mcp_tool_call_log",
+  "server": "slack",
+  "captured_at": "2025-11-13T18:12:40Z",
+  "tool_calls": [
+    {
+      "call_id": "slack-4-01",
+      "request": {
+        "method": "tools/call",
+        "params": {
+          "name": "slack_search_messages",
+          "arguments": {
+            "query": "CONS-3182",
+            "limit": 15
+          }
+        }
+      },
+      "response": {
+        "is_error": false,
+        "structured_content": {
+          "messages": [
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762246800.104271",
+              "thread_ts": "1762246800.104271",
+              "user_id": "U09RAVIM",
+              "text": "console r42 goes out this morning — CONS-3182. mostly under-the-hood, you should notice faster case search and not much else. shout here if anything looks off",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762246800104271",
+              "reply_count": 12
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762336800.310592",
+              "thread_ts": "1762336800.310592",
+              "user_id": "U09RAVIM",
+              "text": "r42 (CONS-3182) rollback completed overnight, CONS-3191 closed. console's back on r41.9 — timeline panel, notes editor and search should all behave. please confirm on your first few cases",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762336800310592",
+              "reply_count": 7
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762506000.402318",
+              "thread_ts": "1762506000.402318",
+              "user_id": "U09RAVIM",
+              "text": "postmortem notes for the CONS-3182 release are up on the eng wiki. short version: the notes-editor regression slipped through because the test env doesn't mirror our case-note templates — that env gap gets fixed before any retry. floor reports cut the diagnosis time in half, keep doing that",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762506000402318",
+              "reply_count": 5
+            }
+          ]
+        }
+      }
+    },
+    {
+      "call_id": "slack-4-02",
+      "request": {
+        "method": "tools/call",
+        "params": {
+          "name": "slack_get_thread_replies",
+          "arguments": {
+            "channel_id": "C09ATMOPS",
+            "thread_ts": "1762246800.104271"
+          }
+        }
+      },
+      "response": {
+        "is_error": false,
+        "structured_content": {
+          "messages": [
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762246800.104271",
+              "thread_ts": "1762246800.104271",
+              "user_id": "U09RAVIM",
+              "text": "console r42 goes out this morning — CONS-3182. mostly under-the-hood, you should notice faster case search and not much else. shout here if anything looks off",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762246800104271",
+              "reply_count": 12
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762252260.211308",
+              "thread_ts": "1762246800.104271",
+              "user_id": "U09KEISH",
+              "text": "case timeline panel is coming up blank on maybe every third case since the update. a refresh fixes it, sometimes",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762252260211308"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762252980.308417",
+              "thread_ts": "1762246800.104271",
+              "user_id": "U09JORDP",
+              "text": "same. and search is slower, not faster, for whatever that's worth",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762252980308417"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762253460.402529",
+              "thread_ts": "1762246800.104271",
+              "user_id": "U09RAVIM",
+              "text": "ack on both. blank panel is filed as CONS-3187 — pile your screenshots in keisha's side thread. digging into the search thing",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762253460402529"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762254300.517632",
+              "thread_ts": "1762246800.104271",
+              "user_id": "U09NOORH",
+              "text": "the notes editor just ate a paragraph on me — saved an old version over what I typed",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762254300517632"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762255200.618745",
+              "thread_ts": "1762246800.104271",
+              "user_id": "U09MARCB",
+              "text": "can confirm the notes thing, twice now. writing everything in notepad and pasting like it's 2009",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762255200618745"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762256100.729854",
+              "thread_ts": "1762246800.104271",
+              "user_id": "U09DARNL",
+              "text": "ravi — blank panels are annoying, silently losing case notes is a different animal. what's the call",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762256100729854"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762257000.831967",
+              "thread_ts": "1762246800.104271",
+              "user_id": "U09RAVIM",
+              "text": "agreed, the notes one is the bad one. escalated to the console team, fix-forward vs rollback decision within the hour",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762257000831967"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762259700.942075",
+              "thread_ts": "1762246800.104271",
+              "user_id": "U09ANHVU",
+              "text": "meanwhile drafting notes outside the console and double-checking after every save. living the dream",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762259700942075"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762262100.053184",
+              "thread_ts": "1762246800.104271",
+              "user_id": "U09RAVIM",
+              "text": "decision's in: rollback. r42 comes out tonight after close, CONS-3191 tracks it. keep the notepad workflow till tomorrow",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762262100053184"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762262700.164297",
+              "thread_ts": "1762246800.104271",
+              "user_id": "U09TARAW",
+              "text": "notepad squad rise up",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762262700164297"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762263600.275308",
+              "thread_ts": "1762246800.104271",
+              "user_id": "U09DARNL",
+              "text": "thanks for the fast call. everyone: anything you saved to a case since 9am, reopen it tomorrow and sanity-check the notes",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762263600275308"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762264500.386419",
+              "thread_ts": "1762246800.104271",
+              "user_id": "U09KEISH",
+              "text": "diarying a sweep of my morning cases. what a day",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762264500386419"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "call_id": "slack-4-03",
+      "request": {
+        "method": "tools/call",
+        "params": {
+          "name": "slack_get_thread_replies",
+          "arguments": {
+            "channel_id": "C09ATMOPS",
+            "thread_ts": "1762253100.220184"
+          }
+        }
+      },
+      "response": {
+        "is_error": false,
+        "structured_content": {
+          "messages": [
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762253100.220184",
+              "thread_ts": "1762253100.220184",
+              "user_id": "U09KEISH",
+              "text": "CONS-3187 side thread — blank timeline panels go here, case numbers included, so the console team gets one pile instead of forty pings",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762253100220184",
+              "reply_count": 5
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762254000.310295",
+              "thread_ts": "1762253100.220184",
+              "user_id": "U09JORDP",
+              "text": "two from this morning, both ATM-2511 cases. blank till the second refresh",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762254000310295"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762254900.421308",
+              "thread_ts": "1762253100.220184",
+              "user_id": "U09NOORH",
+              "text": "one more. mine came back when I resized the window, which is the most computers thing ever",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762254900421308"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762255800.532417",
+              "thread_ts": "1762253100.220184",
+              "user_id": "U09ANHVU",
+              "text": "adding two. pattern check: all of mine were opened from search results, none from the queue view",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762255800532417"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762256700.643529",
+              "thread_ts": "1762253100.220184",
+              "user_id": "U09RAVIM",
+              "text": "that pattern is real — repro'd it in one try going through search results. you may have saved the console team a day of guessing",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762256700643529"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762257600.754638",
+              "thread_ts": "1762253100.220184",
+              "user_id": "U09KEISH",
+              "text": "floor debugging. we accept payment in coffee",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762257600754638"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "call_id": "slack-4-04",
+      "request": {
+        "method": "tools/call",
+        "params": {
+          "name": "slack_get_thread_replies",
+          "arguments": {
+            "channel_id": "C09ATMOPS",
+            "thread_ts": "1762336800.310592"
+          }
+        }
+      },
+      "response": {
+        "is_error": false,
+        "structured_content": {
+          "messages": [
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762336800.310592",
+              "thread_ts": "1762336800.310592",
+              "user_id": "U09RAVIM",
+              "text": "r42 (CONS-3182) rollback completed overnight, CONS-3191 closed. console's back on r41.9 — timeline panel, notes editor and search should all behave. please confirm on your first few cases",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762336800310592",
+              "reply_count": 7
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762338600.415203",
+              "thread_ts": "1762336800.310592",
+              "user_id": "U09KEISH",
+              "text": "timeline loading normally six cases straight",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762338600415203"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762339500.526314",
+              "thread_ts": "1762336800.310592",
+              "user_id": "U09MARCB",
+              "text": "notes saving what I actually typed. retiring the notepad, it served with honor",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762339500526314"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762340400.637425",
+              "thread_ts": "1762336800.310592",
+              "user_id": "U09NOORH",
+              "text": "search feels like it did before, which after yesterday reads as blazing fast",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762340400637425"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762341300.748536",
+              "thread_ts": "1762336800.310592",
+              "user_id": "U09JORDP",
+              "text": "did the morning-case sweep from darnell's ask — found one case where old notes came back after the rollback, fixed it by hand and flagged the case number on CONS-3187",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762341300748536"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762342200.859647",
+              "thread_ts": "1762336800.310592",
+              "user_id": "U09RAVIM",
+              "text": "good catch. if anyone finds another like that, straight onto the ticket today please",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762342200859647"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762343100.960758",
+              "thread_ts": "1762336800.310592",
+              "user_id": "U09DARNL",
+              "text": "calling it recovered. the r42 retry lands when the console team is actually happy with it — not promising dates",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762343100960758"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762344000.071869",
+              "thread_ts": "1762336800.310592",
+              "user_id": "U09TARAW",
+              "text": "the real r42 was the friends we made along the way",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762344000071869"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "call_id": "slack-4-05",
+      "request": {
+        "method": "tools/call",
+        "params": {
+          "name": "slack_search_messages",
+          "arguments": {
+            "query": "notepad",
+            "limit": 10
+          }
+        }
+      },
+      "response": {
+        "is_error": false,
+        "structured_content": {
+          "messages": [
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762255200.618745",
+              "thread_ts": "1762246800.104271",
+              "user_id": "U09MARCB",
+              "text": "can confirm the notes thing, twice now. writing everything in notepad and pasting like it's 2009",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762255200618745"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762262100.053184",
+              "thread_ts": "1762246800.104271",
+              "user_id": "U09RAVIM",
+              "text": "decision's in: rollback. r42 comes out tonight after close, CONS-3191 tracks it. keep the notepad workflow till tomorrow",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762262100053184"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762262700.164297",
+              "thread_ts": "1762246800.104271",
+              "user_id": "U09TARAW",
+              "text": "notepad squad rise up",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762262700164297"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762339500.526314",
+              "thread_ts": "1762336800.310592",
+              "user_id": "U09MARCB",
+              "text": "notes saving what I actually typed. retiring the notepad, it served with honor",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762339500526314"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "call_id": "slack-4-06",
+      "request": {
+        "method": "tools/call",
+        "params": {
+          "name": "slack_get_thread_replies",
+          "arguments": {
+            "channel_id": "C09ATMOPS",
+            "thread_ts": "1762506000.402318"
+          }
+        }
+      },
+      "response": {
+        "is_error": false,
+        "structured_content": {
+          "messages": [
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762506000.402318",
+              "thread_ts": "1762506000.402318",
+              "user_id": "U09RAVIM",
+              "text": "postmortem notes for the CONS-3182 release are up on the eng wiki. short version: the notes-editor regression slipped through because the test env doesn't mirror our case-note templates — that env gap gets fixed before any retry. floor reports cut the diagnosis time in half, keep doing that",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762506000402318",
+              "reply_count": 5
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762506900.513429",
+              "thread_ts": "1762506000.402318",
+              "user_id": "U09DARNL",
+              "text": "good writeup. floor takeaway stands — anything weird in the console gets said out loud in here early, even if it feels small",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762506900513429"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762507800.624530",
+              "thread_ts": "1762506000.402318",
+              "user_id": "U09KEISH",
+              "text": "does the retry come with more warning than 'this morning'? asking for my blood pressure",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762507800624530"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762508700.735641",
+              "thread_ts": "1762506000.402318",
+              "user_id": "U09RAVIM",
+              "text": "yes — it's written down: the floor gets notice the day before, plus a floor rep on the release check. taking volunteers for that",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762508700735641"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762509600.846752",
+              "thread_ts": "1762506000.402318",
+              "user_id": "U09KEISH",
+              "text": "volunteering before jordan can",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762509600846752"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762510500.957863",
+              "thread_ts": "1762506000.402318",
+              "user_id": "U09JORDP",
+              "text": "rude but fair",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762510500957863"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "call_id": "slack-4-07",
+      "request": {
+        "method": "tools/call",
+        "params": {
+          "name": "slack_get_thread_replies",
+          "arguments": {
+            "channel_id": "C09ATMOPS",
+            "thread_ts": "1762164000.117482"
+          }
+        }
+      },
+      "response": {
+        "is_error": false,
+        "structured_content": {
+          "messages": [
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762164000.117482",
+              "thread_ts": "1762164000.117482",
+              "user_id": "U09MARCB",
+              "text": "softphone dropped three calls on me in ten minutes this morning. anyone else, or do I owe IT an apology in advance",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762164000117482",
+              "reply_count": 4
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762164900.228593",
+              "thread_ts": "1762164000.117482",
+              "user_id": "U09ANHVU",
+              "text": "two here, both around the 10:15 blip",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762164900228593"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762165800.339604",
+              "thread_ts": "1762164000.117482",
+              "user_id": "U09TARAW",
+              "text": "IT status page says a network maintenance window ran long. so it's them AND you owe the apology",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762165800339604"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762166700.440715",
+              "thread_ts": "1762164000.117482",
+              "user_id": "U09MARCB",
+              "text": "apology drafted, filed under pending",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762166700440715"
+            },
+            {
+              "channel_id": "C09ATMOPS",
+              "channel_name": "atm-ops",
+              "ts": "1762168500.551826",
+              "thread_ts": "1762164000.117482",
+              "user_id": "U09JORDP",
+              "text": "status page flipped to resolved. calls holding for the last hour",
+              "permalink": "https://rho-bank.example/slack/archives/C09ATMOPS/p1762168500551826"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,1055 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1760">
+<title>Beacon Pending-Order Servicing Flow (Cancel + Change) Milestones</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    width: 1760px;
+    background: #fdfdfc;
+    color: #17181a;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    background-image: radial-gradient(circle, #e3e4e6 1px, transparent 1px);
+    background-size: 26px 26px;
+  }
+  .frame {
+    position: relative;
+    width: 1720px;
+    margin: 20px auto 34px auto;
+    background: #ffffff;
+    border: 1.5px solid #c9cbcf;
+    box-shadow: 0 1px 4px rgba(20,20,30,.06);
+    overflow: hidden;
+  }
+  .flabel {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 40;
+    background: #17181a;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    padding: 6px 16px;
+  }
+  .fnote {
+    position: absolute;
+    z-index: 40;
+    font-size: 10px;
+    color: #8a8d93;
+  }
+  svg.wires {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    pointer-events: none;
+  }
+  .wp { position: absolute; width: 2px; height: 2px; z-index: 1; }
+  .panel {
+    position: absolute;
+    background: #f2f3f5;
+    border: 1px solid #dcdee2;
+    border-radius: 10px;
+    z-index: 1;
+  }
+  .panel > .plabel {
+    position: absolute;
+    left: 14px;
+    top: -9px;
+    background: #5f6368;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .6px;
+    padding: 3px 10px;
+    border-radius: 3px;
+  }
+  .journey {
+    position: absolute;
+    background: #ffffff;
+    border: 1.2px solid #9aa0a8;
+    border-radius: 6px;
+    z-index: 3;
+  }
+  .journey > .jlabel {
+    position: absolute;
+    left: -1px;
+    top: -20px;
+    background: #3b3f46;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 3px 3px 0 0;
+    white-space: nowrap;
+  }
+  .sectionchip {
+    position: absolute;
+    z-index: 6;
+    background: #e8f0fe;
+    border: 1px solid #1a73e8;
+    color: #1a4fb8;
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .node, .deny, .terminal, .callout, .locknode {
+    position: absolute;
+    z-index: 5;
+    background: #fff;
+    border: 1.3px solid #23252a;
+    border-radius: 4px;
+    padding: 8px 10px;
+    font-size: 11px;
+    line-height: 1.3;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .node { width: 178px; min-height: 64px; }
+  .node .sys {
+    margin-top: 6px;
+    color: #4e7d74;
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    text-decoration: underline;
+  }
+  .node .sub, .deny .sub, .terminal .sub {
+    margin-top: 5px;
+    font-size: 9.5px;
+    color: #55585e;
+  }
+  .start {
+    border-radius: 26px;
+    background: #eef7ef;
+    border-color: #2e7d32;
+  }
+  .terminal {
+    width: 176px;
+    min-height: 52px;
+    border-radius: 26px;
+  }
+  .deny {
+    width: 190px;
+    min-height: 64px;
+    background: #fdf3f2;
+    border-color: #b3382e;
+  }
+  .locknode {
+    width: 208px;
+    background: #fff5f5;
+    border: 2px solid #b3382e;
+  }
+  .locknode .locktag {
+    font-weight: 800;
+    color: #b3382e;
+    font-size: 10px;
+    letter-spacing: .8px;
+    margin-bottom: 4px;
+  }
+  .decision {
+    position: absolute;
+    z-index: 5;
+    border: 1.6px solid #2e7d32;
+    background: #ffffff;
+    transform: rotate(45deg);
+    border-radius: 6px;
+  }
+  .decision > span {
+    position: absolute;
+    inset: 8px;
+    transform: rotate(-45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 10px;
+    line-height: 1.22;
+  }
+  .decision.neutral { border-color: #23252a; }
+  .handoff {
+    position: absolute;
+    z-index: 5;
+    width: 92px;
+    height: 92px;
+    border: 1.6px solid #2e7d32;
+    background: #f2fbf3;
+    transform: rotate(45deg);
+    border-radius: 6px;
+  }
+  .handoff > span {
+    position: absolute;
+    inset: 6px;
+    transform: rotate(-45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 8.5px;
+    font-weight: 700;
+    color: #1d5e21;
+    line-height: 1.25;
+  }
+  .callout {
+    text-align: left;
+    background: #f0f6fd;
+    border: 1.2px solid #7d9cc0;
+    font-size: 10px;
+    line-height: 1.35;
+  }
+  .callout .ctitle {
+    font-weight: 800;
+    font-size: 9.5px;
+    letter-spacing: .4px;
+    color: #2c568a;
+    margin-bottom: 4px;
+  }
+  .sticky {
+    position: absolute;
+    z-index: 20;
+    width: 168px;
+    padding: 10px 11px 20px 11px;
+    background: #fff59d;
+    box-shadow: 1px 3px 6px rgba(60,50,10,.22);
+    font-size: 10px;
+    line-height: 1.35;
+    text-align: left;
+  }
+  .sticky .sig {
+    position: absolute;
+    right: 9px;
+    bottom: 5px;
+    font-size: 8.5px;
+    color: #7c6f2a;
+    font-style: italic;
+  }
+  .sticky.green { background: #b9f6ca; }
+  .sticky.green .sig { color: #2c6e3f; }
+  .sticky.pink { background: #ffd0e0; }
+  .sticky.pink .sig { color: #8c4460; }
+  .sticky.blue { background: #cfe8ff; }
+  .sticky.blue .sig { color: #3a6a95; }
+  .r1 { transform: rotate(-1.4deg); }
+  .r2 { transform: rotate(1.1deg); }
+  .r3 { transform: rotate(-0.6deg); }
+  .r4 { transform: rotate(1.8deg); }
+  .miles {
+    position: absolute;
+    border: 1.2px solid #6f737a;
+    border-radius: 6px;
+    background: rgba(255,255,255,.72);
+    z-index: 3;
+  }
+  .miles > .mlabel {
+    position: absolute;
+    left: -1px;
+    top: -20px;
+    background: #17181a;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    white-space: nowrap;
+  }
+  .miles > .mship {
+    position: absolute;
+    right: 8px;
+    top: 6px;
+    font-size: 9px;
+    font-weight: 700;
+    color: #2e7d32;
+    background: #e9f6ea;
+    border: 1px solid #79b07d;
+    border-radius: 3px;
+    padding: 2px 7px;
+  }
+  .mwork {
+    position: absolute;
+    border: 2.2px solid #17181a;
+    border-radius: 8px;
+    z-index: 4;
+  }
+  .mwork > .wlabel {
+    position: absolute;
+    left: 10px;
+    top: -10px;
+    background: #17181a;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+  .dead {
+    position: absolute;
+    z-index: 6;
+    background: #f4f4f4;
+    border: 1.2px dashed #9a9da3;
+    border-radius: 4px;
+    padding: 8px 10px;
+    font-size: 10px;
+    line-height: 1.3;
+    color: #6b6e74;
+    text-align: center;
+  }
+  .dead .dtag {
+    display: inline-block;
+    margin-bottom: 4px;
+    font-size: 8.5px;
+    font-weight: 800;
+    letter-spacing: .8px;
+    color: #fff;
+    background: #9a3b32;
+    padding: 2px 7px;
+    border-radius: 2px;
+  }
+  .dead .dtag.parked { background: #8a6d1d; }
+  .strike-x { position: absolute; z-index: 7; pointer-events: none; }
+  .fence {
+    position: absolute;
+    z-index: 3;
+    background: repeating-linear-gradient(-45deg, #f6f2ea 0 14px, #efe9dc 14px 28px);
+    border: 1.6px dashed #a08949;
+    border-radius: 8px;
+  }
+  .fence > .flabel2 {
+    position: absolute;
+    left: 10px;
+    top: -11px;
+    background: #8a6d1d;
+    color: #fff;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: .6px;
+    padding: 3px 10px;
+    border-radius: 3px;
+  }
+  .chip {
+    position: absolute;
+    z-index: 8;
+    font-size: 9.5px;
+    font-weight: 700;
+    background: #eef0f3;
+    border: 1px solid #b9bdc4;
+    border-radius: 12px;
+    padding: 3px 11px;
+    color: #43464c;
+    white-space: nowrap;
+  }
+  .linkchip {
+    position: absolute;
+    z-index: 8;
+    font-size: 10px;
+    color: #1a4fb8;
+    text-decoration: underline;
+    white-space: nowrap;
+  }
+  .linkchip::before { content: "🔗 "; text-decoration: none; }
+  .avatar {
+    position: absolute;
+    z-index: 21;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,.25);
+  }
+  .cursor {
+    position: absolute;
+    z-index: 22;
+    font-size: 9px;
+    font-weight: 700;
+    color: #fff;
+    padding: 2px 7px;
+    border-radius: 2px 8px 8px 8px;
+    white-space: nowrap;
+  }
+  .cursor::before { content: "➤ "; font-size: 8px; }
+  .note {
+    position: absolute;
+    z-index: 8;
+    font-size: 9.5px;
+    color: #55585e;
+    line-height: 1.3;
+  }
+  .title-h1 {
+    font-size: 24px;
+    font-weight: 800;
+    text-align: center;
+    letter-spacing: .2px;
+  }
+  .title-meta {
+    font-size: 12px;
+    text-align: center;
+    color: #43464c;
+    margin-top: 6px;
+  }
+  .title-purpose {
+    font-size: 12px;
+    text-align: center;
+    color: #17181a;
+    margin-top: 14px;
+    line-height: 1.45;
+  }
+  .title-purpose b { text-decoration: underline; }
+  .titleblock { position: absolute; z-index: 10; }
+  table.changelog {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 10px;
+  }
+  table.changelog th, table.changelog td {
+    border: 1px solid #c3c6cb;
+    padding: 5px 8px;
+    text-align: left;
+    vertical-align: top;
+  }
+  table.changelog th { background: #eef0f3; font-size: 9.5px; letter-spacing: .4px; }
+  table.changelog td.sup { color: #8a8d93; }
+  .legend-item { display: flex; align-items: center; gap: 8px; margin: 5px 0; font-size: 10px; }
+</style>
+</head>
+<body>
+
+<!-- ================= FRAME 1 : COVER + DEFAULT SCENARIO ================= -->
+<div class="frame" id="frame1" style="height:1450px;">
+  <div class="flabel">FRAME 1 · COVER + DEFAULT SCENARIO (CURRENT STATE)</div>
+  <div class="fnote" style="right:14px; top:8px;">northstar-outfitters · figboard export · 100%</div>
+
+  <svg class="wires" id="wires1"></svg>
+
+  <div class="titleblock" style="left:480px; top:44px; width:760px;">
+    <div class="title-h1">Beacon Pending-Order Servicing Flow<br>(Cancel + Change) Milestones</div>
+    <div class="title-meta">Last Updated: 7.28.26 &nbsp;·&nbsp; Contact: <b><i>@Priya Shah</i></b> &nbsp;·&nbsp; Board ref: BCN-PO-11 · v0.9</div>
+    <div class="title-purpose"><b>Artifact Purpose:</b> Progressive assisted-servicing journeys showing how Project Beacon
+      pending-order milestones reached production. The DEFAULT SCENARIO below is the flow as it runs in servicing
+      <u>today</u> and reflects the standing rulings CR8 and RD5, the split half of QS4, and the EM arc as it stands. Milestone frames further down are history —
+      read them for context, not for current policy.</div>
+  </div>
+
+  <div class="avatar" style="left:1250px; top:52px; background:#7b1fa2;">PS</div>
+  <div class="avatar" style="left:1272px; top:52px; background:#00695c;">DW</div>
+  <div class="avatar" style="left:1294px; top:52px; background:#ef6c00;">RC</div>
+  <div class="avatar" style="left:1316px; top:52px; background:#283593;">MT</div>
+  <div class="avatar" style="left:1338px; top:52px; background:#5d4037;">GO</div>
+  <div class="note" style="left:1252px; top:82px;">+9 viewing</div>
+
+  <!-- legend -->
+  <div class="journey" style="left:40px; top:70px; width:300px; height:190px;">
+    <div class="jlabel">LEGEND</div>
+    <div style="padding:12px 14px;">
+      <div class="legend-item"><span style="width:26px;height:14px;border:1.3px solid #23252a;border-radius:3px;display:inline-block;"></span> step performed by the care agent</div>
+      <div class="legend-item"><span style="width:16px;height:16px;border:1.6px solid #2e7d32;transform:rotate(45deg);display:inline-block;border-radius:3px;"></span> decision / gate</div>
+      <div class="legend-item"><span style="width:26px;height:14px;border:1.3px solid #b3382e;background:#fdf3f2;border-radius:3px;display:inline-block;"></span> decline / stop outcome</div>
+      <div class="legend-item"><span style="width:26px;height:14px;border:1.3px solid #23252a;border-radius:9px;display:inline-block;"></span> terminal state</div>
+      <div class="legend-item"><span style="width:26px;height:14px;border:1.2px dashed #9a9da3;background:#f4f4f4;display:inline-block;"></span> superseded / parked — not policy</div>
+      <div class="legend-item"><span style="width:26px;height:14px;background:#fff59d;box-shadow:1px 1px 2px rgba(0,0,0,.2);display:inline-block;"></span> commentary sticky (not policy)</div>
+    </div>
+  </div>
+
+  <div class="sticky r2" style="left:1245px; top:108px;">This is the flow that is <b>live in servicing today</b>. If a screenshot disagrees with this frame, the screenshot is stale.<div class="sig">Beacon Deploys</div></div>
+
+  <div class="sticky green r1" style="left:1450px; top:96px;">Reminder: the identity + verification gate happens <b>before</b> anything on this board. It lives in the Handbook, not here — this board starts after the customer is verified.<div class="sig">Dana Whitfield</div></div>
+
+  <svg class="strike-x" style="left:1418px; top:80px;" width="230" height="130">
+    <ellipse cx="115" cy="65" rx="108" ry="56" fill="none" stroke="#d3372c" stroke-width="2.6" transform="rotate(-3 115 65)"/>
+  </svg>
+
+  <!-- DEFAULT SCENARIO panel -->
+  <div class="panel" style="left:40px; top:300px; width:1640px; height:1080px;">
+    <div class="plabel">DEFAULT SCENARIO — ASSISTED SERVICING, PENDING ORDERS</div>
+  </div>
+
+  <div class="node start" id="f1_start" style="left:76px; top:380px; width:190px;">Verified customer asks to <b>cancel or change an order</b><div class="sub">assisted channel · one customer per conversation</div></div>
+
+  <div class="node" id="f1_orderid" style="left:76px; top:520px;">Confirm the <b>order identifier</b> with the customer<div class="sys">SERVICING CONSOLE</div></div>
+
+  <div class="node" id="f1_lookup" style="left:76px; top:660px;">Pull the order up and <b>check its status before anything else</b> — this check is not optional on any path<div class="sys">ORDER LOOKUP</div></div>
+
+  <div class="decision" id="f1_status" style="left:330px; top:610px; width:118px; height:118px;"><span>Order status?</span></div>
+
+  <div class="sectionchip" style="left:330px; top:560px;">Status Triage Section</div>
+
+  <!-- non-pending outcomes -->
+  <div class="deny" id="f1_processed" style="left:560px; top:400px;">Status <b>processed</b> → cancel/change is off the table in this flow. Explain why. If the customer is stuck on that processed order and really wants it stopped → <b>transfer to a person.</b></div>
+  <div class="deny" id="f1_delivered" style="left:560px; top:590px;">Status <b>delivered</b> → no cancellation here. Redirect the customer into the <b>Returns journey</b> instead.</div>
+  <div class="deny" id="f1_already" style="left:560px; top:700px;">Status <b>cancelled</b> → it is already cancelled; there is nothing left to cancel. Explain that.</div>
+
+  <div class="handoff" id="f1_ho_returns" style="left:820px; top:590px;"><span>HANDOFF CUT<br>Journey: Delivered Orders (Returns / Exchanges)</span></div>
+
+  <div class="note" style="left:562px; top:372px; width:220px;"><b>Non-pending triage</b> — one explanation per status, never a silent dead end.</div>
+
+  <!-- pending proceeds -->
+  <div class="node" id="f1_pendingok" style="left:330px; top:820px; width:190px;">Status is <b>pending</b> → servicing can proceed.<div class="sub">Cancellation is only possible while the order still sits at pending — and the same gate holds for every change lane below.</div></div>
+
+  <div class="decision neutral" id="f1_what" style="left:620px; top:860px; width:126px; height:126px;"><span>What does the customer need?</span></div>
+
+  <div class="sectionchip" style="left:445px; top:766px;">Request Routing Section</div>
+
+  <!-- routing outcomes -->
+  <div class="node" id="f1_cancel_lane" style="left:900px; top:700px; width:170px;"><b>CANCEL</b> the pending order<div class="sub">→ Frame 2</div></div>
+  <div class="node" id="f1_addr_lane" style="left:900px; top:812px; width:170px;"><b>CHANGE</b> the shipping address<div class="sub">→ Frame 3, top lane</div></div>
+  <div class="node" id="f1_pay_lane" style="left:900px; top:924px; width:170px;"><b>SWAP</b> the payment method<div class="sub">→ Frame 3, bottom lane</div></div>
+  <div class="node" id="f1_item_lane" style="left:900px; top:1036px; width:170px;"><b>CHANGE ITEMS</b> in the order<div class="sub">→ Frame 4 (read it twice!)</div></div>
+
+  <div class="handoff" id="f1_ho_cancel" style="left:1160px; top:706px;"><span>KICKOFF CUT<br>Cancellation flow (Frame 2)</span></div>
+  <div class="handoff" id="f1_ho_addr" style="left:1160px; top:818px;"><span>KICKOFF CUT<br>Address lane (Frame 3)</span></div>
+  <div class="handoff" id="f1_ho_pay" style="left:1160px; top:930px;"><span>KICKOFF CUT<br>Payment lane (Frame 3)</span></div>
+  <div class="handoff" id="f1_ho_items" style="left:1160px; top:1042px;"><span>KICKOFF CUT<br>Item change (Frame 4)</span></div>
+
+  <div class="deny" id="f1_other" style="left:880px; top:1180px; width:230px;">Anything outside those three change lanes — <b>splitting a shipment, put-a-note-in-the-box asks, etc.</b> — is unsupported in assisted servicing. Decline politely; <b>offer a transfer</b> if the customer wants to push it.</div>
+
+  <div class="note" style="left:598px; top:1170px; width:170px;">Three change lanes, plus cancel. That's the whole router — if a request doesn't fit one of the four arrows, it exits through the unsupported box.</div>
+
+  <div class="callout" id="f1_gate_note" style="left:330px; top:1032px; width:230px;">
+    <div class="ctitle">GATE — READ FIRST</div>
+    Every change lane on this board assumes the agent has <b>confirmed the order status is pending</b> immediately before acting. Re-check on every new request in the same conversation; a pending order can move to processed mid-chat.
+  </div>
+
+  <div class="sticky r3" style="left:1420px; top:700px;">QS4 standing ruling: care does not split shipments. The quantity half went to the desk joint review at the steering readout — status lives in #beacon-fulfillment-scope, not on this board.<div class="sig">Rob Calderon</div></div>
+
+  <div class="sticky blue r2" style="left:1420px; top:850px;">EM3: the email-change wording sits with Care Enablement — their bulletin is the operating reference when it lands. Watch #beacon-identity.<div class="sig">Grace Okafor</div></div>
+
+  <div class="sticky pink r1" style="left:1420px; top:1000px;">Do we ever want a fifth lane for "cancel just one item"? Today that's an item change conversation, not a partial cancel. Parking-lot it — see Frame 5.<div class="sig">Mia Tran</div></div>
+
+  <div class="dead" style="left:1420px; top:1150px; width:200px;">
+    <span class="dtag parked">PARKED — NO DECISION</span><br>
+    "Self-serve cancel button in account portal, assisted flow becomes fallback." Raised 4.30.26, never scheduled. Nothing on this frame changes if it ships.
+  </div>
+
+  <div class="cursor" style="left:1105px; top:678px; background:#7b1fa2;">Priya Shah</div>
+  <div class="cursor" style="left:508px; top:948px; background:#ef6c00;">Rob Calderon</div>
+
+  <div class="linkchip" style="left:56px; top:1402px;">Link to Project Plan with Milestones (Beacon wiki › Servicing › BCN-PO)</div>
+  <div class="linkchip" style="left:480px; top:1402px;">#beacon-order-servicing</div>
+  <div class="linkchip" style="left:680px; top:1402px;">Beacon assisted-servicing runbook v3</div>
+  <div class="fnote" style="right:16px; bottom:10px;">Internal working material — NorthStar Outfitters · Project Beacon · not customer-facing</div>
+</div>
+
+<!-- ================= FRAME 2 : CANCELLATION ================= -->
+<div class="frame" id="frame2" style="height:1400px;">
+  <div class="flabel">FRAME 2 · CANCELLATION OF A PENDING ORDER — CURRENT FLOW + MILESTONE HISTORY</div>
+  <div class="fnote" style="right:14px; top:8px;">reflects CR8 (final, 4.29.26) · #beacon-order-servicing</div>
+
+  <svg class="wires" id="wires2"></svg>
+
+  <div class="sectionchip" style="left:60px; top:52px;">Reason Intake Section</div>
+  <div class="sectionchip" style="left:640px; top:52px;">Recap &amp; Confirm Section</div>
+  <div class="sectionchip" style="left:1120px; top:52px;">Refund Execution Section</div>
+
+  <div class="node start" id="f2_start" style="left:48px; top:90px; width:182px;">Pending order confirmed (Frame 1 gate passed) — customer wants to cancel</div>
+
+  <div class="node" id="f2_askwhy" style="left:48px; top:230px;"><b>Ask why</b> the customer wants to cancel and get the answer <b>on the record</b> — sequencing per the QA deck's C-2 card<div class="sys">SERVICING CONSOLE</div></div>
+
+  <div class="decision" id="f2_reason" style="left:300px; top:212px; width:124px; height:124px;"><span>Reason on the accepted list?</span></div>
+
+  <div class="note" style="left:48px; top:392px; width:200px;">Accepted list per CR8: <b>"no longer needed"</b> — the customer's own wording counts, e.g. "I don't want it anymore" — and <b>"ordered by mistake"</b>. Two entries. That's the whole list.</div>
+
+  <div class="deny" id="f2_badreason" style="left:300px; top:480px; width:210px;">Cheaper elsewhere, shipping too slow, changed my mind about the brand, anything else → <b>do not process the cancellation.</b> Tell the customer politely, and offer a transfer if they want to escalate.</div>
+
+  <div class="node" id="f2_recap" style="left:560px; top:230px; width:190px;"><b>Recap before processing:</b> the order, the total, and where the refund will land — then get an <b>explicit confirmation</b><div class="sub">a clear "yes", not silence</div></div>
+
+  <div class="decision" id="f2_confirm" style="left:820px; top:212px; width:118px; height:118px;"><span>Customer explicitly confirms?</span></div>
+
+  <div class="node" id="f2_process" style="left:1030px; top:230px; width:190px;">Process the cancellation → order status flips to <b>cancelled</b> and the refund job takes over from there<div class="sys">ORDER SERVICE</div></div>
+
+  <div class="decision neutral" id="f2_paytype" style="left:1270px; top:212px; width:118px; height:118px;"><span>Instrument type on the charge?</span></div>
+
+  <div class="node" id="f2_gc" style="left:1490px; top:140px; width:190px;"><b>Gift card:</b> the refund job posts the balance restore — timing comes off the job's SLA table</div>
+  <div class="terminal" id="f2_done" style="left:1500px; top:268px; width:170px;">END — order cancelled, refund on its way</div>
+  <div class="node" id="f2_cc" style="left:1490px; top:352px; width:190px;"><b>Credit card / PayPal:</b> the refund job publishes the clearing window — say that timeline to the customer out loud, don't make them ask</div>
+
+  <div class="node" id="f2_hold" style="left:820px; top:420px; width:170px;">Customer hesitates or says no → nothing is processed; order stays pending. Pick the conversation back up whenever they're ready.</div>
+
+  <!-- multi-charge callout -->
+  <div class="callout" id="f2_multi" style="left:1030px; top:430px; width:240px;">
+    <div class="ctitle">MULTI-CHARGE ORDERS — DON'T NET THEM</div>
+    If the payment history shows <b>more than one charge</b> — say an initial payment plus a top-up from an earlier item modification — <b>each charge is refunded separately</b> — in the same amount, back to the method that made that charge. Separate refunds land as <b>separate payment-history lines.</b> Never collapse them into one net refund, even when both charges used the same method.
+  </div>
+
+  <svg class="strike-x" style="left:990px; top:400px;" width="330" height="240">
+    <ellipse cx="165" cy="118" rx="155" ry="106" fill="none" stroke="#d3372c" stroke-width="2.6" transform="rotate(-2 165 118)"/>
+  </svg>
+  <div class="note" style="left:1330px; top:600px; width:170px; color:#b3382e;"><b>← top escalation driver in May.</b> Agents netted the two refunds into one line and reconciliation flagged every single one. Read the circled box twice.</div>
+
+  <div class="sticky r1" style="left:560px; top:430px;">"Explicit confirmation" survived every milestone unchanged — it was in M1 word-for-word. If you only memorize one box on this frame, make it the recap one.<div class="sig">Hank Fischer</div></div>
+
+  <!-- milestone history strip -->
+  <div class="miles" style="left:48px; top:700px; width:1620px; height:250px;">
+    <div class="mlabel">Milestone 1 (M1) — assisted cancels, free-text reason (pilot)</div>
+    <div class="mship">shipped 2.9.26 · retired</div>
+    <div class="dead" style="left:20px; top:40px; width:230px;"><span class="dtag">SUPERSEDED 2.17.26 · CR2</span><br>Reason captured as free text, no gate. Pilot month only. Do not copy anything from this row into current practice.</div>
+    <div class="dead" style="left:280px; top:40px; width:230px;"><span class="dtag">SUPERSEDED 3.30.26 · CR5</span><br>M2-era five-option reason pick list ("other" + note). Screenshots of that picker still float around the wiki — they are stale.</div>
+    <div class="dead" style="left:540px; top:40px; width:240px;"><span class="dtag">KILLED 3.16.26 · CR4</span><br>M2.5 price-match counteroffer on "cheaper elsewhere" cancels (one per order). Removed entirely; cheaper-elsewhere went to an escalation queue for a while (also gone — see CR5).</div>
+    <div class="dead" style="left:810px; top:40px; width:230px;"><span class="dtag">SUPERSEDED 4.20.26 · CR7</span><br>M3-era verbatim matching — customer had to say the reason words exactly. CR7 replaced it with mapping the customer's own phrasing.</div>
+    <div class="dead" style="left:1070px; top:40px; width:230px;"><span class="dtag parked">PARKED — NO DECISION</span><br>"Auto-approve cancels under $25 with no reason question." Raised in the CR7 thread, tabled, never scheduled. The reason question still gets asked at every amount.</div>
+    <div class="sticky r4" style="left:1340px; top:36px;">New-hire decks: pull anything showing the five-reason picker or the counteroffer script. Training on CR8 material only, please.<div class="sig">Lena Ortiz</div></div>
+    <div class="note" style="left:24px; top:200px; width:1560px;">History strip is <b>context only</b>. Current policy on this frame = the flow above + CR8. When history and the flow disagree, the flow wins.</div>
+  </div>
+
+  <!-- refund workflow milestone box -->
+  <div class="miles" style="left:48px; top:1020px; width:1000px; height:330px;">
+    <div class="mlabel">Milestone 4 (M4) — refund execution, current</div>
+    <div class="mship">shipped 5.11.26 · live</div>
+    <div class="mwork" style="left:20px; top:44px; width:950px; height:240px;">
+      <div class="wlabel">M4 Work — what "process it" actually does</div>
+    </div>
+    <div class="node" id="f2_m4_a" style="left:48px; top:90px; width:170px;">Cancellation submitted<div class="sys">ORDER SERVICE</div></div>
+    <div class="node" id="f2_m4_b" style="left:290px; top:90px; width:180px;">Status write: <b>cancelled</b><div class="sub">exact status string, lowercase</div></div>
+    <div class="node" id="f2_m4_c" style="left:540px; top:90px; width:190px;">Refund job per charge in payment history<div class="sys">PAYMENTS</div></div>
+    <div class="node" id="f2_m4_d" style="left:790px; top:90px; width:160px;">Customer notification email<div class="sys">COMMS</div></div>
+    <div class="note" style="left:48px; top:196px; width:880px;">Timelines surface to the agent from the refund job: per-instrument windows come off the job's SLA table, current revision. The agent quotes; the job executes. No agent-side overrides — the "rush refund" button from the RD2 era no longer exists.</div>
+  </div>
+
+  <div class="sticky green r2" style="left:1090px; top:1060px;">Q from audit: does the M4 notification email restate the refund timeline? Yes since 5.19 — agents still say it in-chat anyway. Belt and suspenders.<div class="sig">Noor Danesh</div></div>
+
+  <div class="sticky r3" style="left:1090px; top:1210px;">If a customer asks "can you just refund to a different card," that's a <b>refund destination</b> ask — the RD tracker entry is the wording of record; pull it up rather than answering from memory. Full stop.<div class="sig">Priya Shah</div></div>
+
+  <div class="dead" style="left:1300px; top:1060px; width:210px;">
+    <span class="dtag parked">PARKED — NO DECISION</span><br>
+    "Goodwill: put cancel refunds on a brand-new gift card with +5% bonus." Floated by growth 5.28.26 in #beacon-payments-risk, parked same day. See the M4 box above for what the refund job actually does.
+  </div>
+
+  <div class="cursor" style="left:1240px; top:648px; background:#00695c;">Dana Whitfield</div>
+  <div class="fnote" style="right:16px; bottom:10px;">Internal working material — NorthStar Outfitters · Project Beacon · not customer-facing</div>
+</div>
+
+<!-- ================= FRAME 3 : ADDRESS + PAYMENT ================= -->
+<div class="frame" id="frame3" style="height:1700px;">
+  <div class="flabel">FRAME 3 · ADDRESS CHANGE + PAYMENT-METHOD SWAP (PENDING ORDERS)</div>
+  <div class="fnote" style="right:14px; top:8px;">two independent lanes · both re-enter from the Frame 1 router</div>
+
+  <svg class="wires" id="wires3"></svg>
+
+  <!-- ADDRESS LANE -->
+  <div class="journey" style="left:40px; top:70px; width:1640px; height:480px;">
+    <div class="jlabel">LANE A — SHIPPING ADDRESS ON THE ORDER</div>
+  </div>
+
+  <div class="sectionchip" style="left:64px; top:100px;">Capture Section</div>
+  <div class="sectionchip" style="left:620px; top:100px;">Confirm &amp; Update Section</div>
+
+  <div class="node start" id="f3_a_start" style="left:64px; top:140px; width:180px;">Pending confirmed — customer wants the order shipped somewhere else</div>
+
+  <div class="node" id="f3_a_give" style="left:64px; top:290px;">Customer gives the <b>new address</b> — all fields<div class="sub">name · street · unit · city · state · zip</div></div>
+
+  <div class="node" id="f3_a_read" style="left:330px; top:290px;"><b>Read the whole address back</b> to the customer, field by field<div class="sys">SERVICING CONSOLE</div></div>
+
+  <div class="decision" id="f3_a_ok" style="left:600px; top:272px; width:116px; height:116px;"><span>Customer confirms the read-back?</span></div>
+
+  <div class="node" id="f3_a_update" style="left:820px; top:290px;"><b>Update the shipping address on the order</b><div class="sys">ORDER SERVICE</div></div>
+
+  <div class="terminal" id="f3_a_done" style="left:1090px; top:296px; width:200px;">END — address updated.<br><span style="font-size:9.5px;">Status stays <b>pending</b>. <b>No money moves</b> on an address change.</span></div>
+
+  <div class="node" id="f3_a_fix" style="left:600px; top:440px; width:170px;">Correction offered → capture the fixed field(s), read back again</div>
+
+  <div class="sticky blue r2" style="left:1360px; top:150px;">This lane is the <b>order's</b> address only. The profile's default address is a separate journey (Journey: Profile) and updating one never touches the other.<div class="sig">Felix Navarro</div></div>
+
+  <div class="sticky r1" style="left:1360px; top:310px;">Yes, even a one-letter street-name typo goes through the full read-back loop. It's ten seconds. Wrong-address reships are not.<div class="sig">Iris Kovac</div></div>
+
+  <div class="dead" style="left:1360px; top:440px; width:200px;"><span class="dtag parked">PARKED — NO DECISION</span><br>"Address-validation API autocomplete for the assisted flow." Nice-to-have; read-back loop stays either way.</div>
+
+  <!-- PAYMENT LANE -->
+  <div class="journey" style="left:40px; top:620px; width:1640px; height:760px;">
+    <div class="jlabel">LANE B — PAYMENT-METHOD SWAP</div>
+  </div>
+
+  <div class="sectionchip" style="left:64px; top:650px;">Method Eligibility Section</div>
+  <div class="sectionchip" style="left:820px; top:650px;">Execution &amp; Refund Section</div>
+
+  <div class="node start" id="f3_p_start" style="left:64px; top:700px; width:180px;">Pending confirmed — customer wants to pay with a different method</div>
+
+  <div class="node" id="f3_p_pick" style="left:64px; top:850px;">Customer picks the replacement from methods <b>already saved on their profile</b><div class="sub">nothing gets added mid-flow</div></div>
+
+  <div class="decision" id="f3_p_elig" style="left:330px; top:830px; width:124px; height:124px;"><span>Different from the original, and exactly ONE method?</span></div>
+
+  <div class="deny" id="f3_p_no" style="left:300px; top:1030px; width:210px;">Same method as the original, or any ask to <b>split the total across two methods</b> → not eligible. One different saved method is the entire menu.</div>
+
+  <div class="decision" id="f3_p_gc" style="left:570px; top:830px; width:124px; height:124px;"><span>Replacement is a gift card?</span></div>
+
+  <div class="decision" id="f3_p_bal" style="left:560px; top:1060px; width:124px; height:124px;"><span>Balance covers the ENTIRE order total?</span></div>
+
+  <div class="deny" id="f3_p_short" style="left:540px; top:1260px; width:200px;">Balance short of the total → <b>stop — the swap cannot proceed.</b> No partial cover, no topping up the difference from a second method.</div>
+
+  <div class="node" id="f3_p_exec" style="left:1010px; top:850px; width:184px;">Execute the swap → charge the new method; <b>refund the original method for the full order amount</b><div class="sys">PAYMENTS</div></div>
+
+  <div class="decision neutral" id="f3_p_reftype" style="left:1270px; top:830px; width:118px; height:118px;"><span>Original method type?</span></div>
+
+  <div class="node" id="f3_p_refgc" style="left:1450px; top:730px; width:180px;">Original was a gift card → the refund job posts the restore per its SLA table</div>
+  <div class="terminal" id="f3_p_done" style="left:1460px; top:875px; width:190px;">END — swap complete.<br><span style="font-size:9.5px;">Order status stays <b>pending</b> after the swap.</span></div>
+  <div class="node" id="f3_p_refcc" style="left:1450px; top:990px; width:180px;">Original was credit card / PayPal → clearing window per the refund job's SLA table</div>
+
+  <div class="callout" style="left:64px; top:1030px; width:200px;">
+    <div class="ctitle">WHY "SAVED ONLY"?</div>
+    Adding a brand-new instrument mid-conversation was cut from scope for this lane back in the M2 planning round (see Frame 5 changelog).
+  </div>
+
+  <div class="sticky r3" style="left:1030px; top:1060px;">Sequencing gotcha: the refund of the original method starts when the swap executes, not when the order ships. Customers ask. One SLA table for every refund leg — same clock as everywhere else on this board.<div class="sig">Tomas Egan</div></div>
+
+  <div class="dead" style="left:1240px; top:1080px; width:190px;"><span class="dtag parked">PARKED — NO DECISION</span><br>"Split-tender (two cards) for orders over $500." Raised 6.2.26. Conflicts with the ONE-method gate; parked without a champion.</div>
+
+  <!-- wholesale fence -->
+  <div class="fence" style="left:40px; top:1420px; width:1640px; height:220px;">
+    <div class="flabel2">WHOLESALE PILOT ONLY — NOT CONSUMER POLICY · fenced 5.6.26</div>
+  </div>
+  <div class="note" style="left:64px; top:1460px; width:400px;"><b>Context, so nobody copies it by accident:</b> the wholesale pilot runs its own servicing lane for wholesale accounts. None of it applies to the consumer flow above.</div>
+  <div class="dead" style="left:500px; top:1460px; width:250px;"><span class="dtag parked">WHOLESALE ACCOUNTS ONLY</span><br>Wholesale pilot: payment changes route through the account rep, and refunds issue as <b>credit memos</b> on the wholesale ledger, not to the original instrument.</div>
+  <div class="dead" style="left:790px; top:1460px; width:250px;"><span class="dtag parked">WHOLESALE ACCOUNTS ONLY</span><br>Wholesale pilot: net-30 invoicing means "payment method" is a purchase-order field. There is no gift-card concept in the wholesale lane at all.</div>
+  <div class="sticky r2" style="left:1090px; top:1460px;">Every box inside this fence says "wholesale" because someone once pasted a credit-memo screenshot into a consumer training doc. Never again.<div class="sig">Bea Sandoval</div></div>
+
+  <div class="cursor" style="left:700px; top:1005px; background:#283593;">Mia Tran</div>
+  <div class="fnote" style="right:16px; bottom:10px;">Internal working material — NorthStar Outfitters · Project Beacon · not customer-facing</div>
+</div>
+
+<!-- ================= FRAME 4 : ITEM CHANGE ================= -->
+<div class="frame" id="frame4" style="height:1500px;">
+  <div class="flabel">FRAME 4 · ITEM CHANGE ON A PENDING ORDER — HIGHEST-STAKES LANE, READ THIS FRAME TWICE</div>
+  <div class="fnote" style="right:14px; top:8px;">highest-stakes lane on the board · Milestone 5 scope</div>
+
+  <svg class="wires" id="wires4"></svg>
+
+  <div class="sectionchip" style="left:64px; top:52px;">Change-List Assembly Section</div>
+  <div class="sectionchip" style="left:760px; top:52px;">Price Difference Section</div>
+  <div class="sectionchip" style="left:64px; top:660px;">Final Recap &amp; Submit Section</div>
+
+  <div class="wp" id="f4_wpA" style="left:660px; top:170px;"></div>
+  <div class="wp" id="f4_wpB" style="left:40px; top:170px;"></div>
+  <div class="wp" id="f4_wpC" style="left:150px; top:700px;"></div>
+  <div class="wp" id="f4_wpD" style="left:512px; top:560px;"></div>
+  <div class="wp" id="f4_wpE" style="left:153px; top:560px;"></div>
+
+  <div class="node start" id="f4_start" style="left:64px; top:90px; width:190px;">Pending confirmed — customer wants different variants of items in the order</div>
+
+  <div class="node" id="f4_which" style="left:64px; top:240px;">Walk the order line by line: <b>which items change, and to which new variant?</b><div class="sys">SERVICING CONSOLE</div></div>
+
+  <div class="decision" id="f4_sameprod" style="left:330px; top:222px; width:124px; height:124px;"><span>New variant is the SAME product, different option?</span></div>
+
+  <div class="deny" id="f4_cross" style="left:300px; top:400px; width:210px;">Different product type entirely (shirt → shoes) → not an item change; that's outside this lane. Decline the swap for that line.</div>
+
+  <div class="decision" id="f4_avail" style="left:570px; top:222px; width:124px; height:124px;"><span>New variant currently available?</span></div>
+
+  <div class="deny" id="f4_noavail" style="left:540px; top:400px; width:200px;">Variant out of stock → offer a different option or leave that line as-is. Unavailable variants never go on the change list.</div>
+
+  <div class="node" id="f4_list" style="left:800px; top:240px; width:184px;">Add the line to the <b>change list</b> and ask: any other items to change?<div class="sub">loop until the list is complete</div></div>
+
+  <div class="node" id="f4_diff" style="left:1070px; top:240px; width:190px;">Compute the <b>price difference</b> across the whole list — it can land higher or lower than the original<div class="sys">PRICING</div></div>
+
+  <div class="node" id="f4_method" style="left:1340px; top:240px; width:200px;">Customer names <b>one payment method to settle the whole difference</b> — it takes the charge if the new total is higher, or receives the refund if it's lower</div>
+
+  <div class="decision" id="f4_gcup" style="left:1090px; top:440px; width:130px; height:130px;"><span>Difference is a CHARGE and the method is a gift card?</span></div>
+
+  <div class="decision" id="f4_gcbal" style="left:1340px; top:440px; width:124px; height:124px;"><span>Gift-card balance covers the FULL difference?</span></div>
+
+  <div class="deny" id="f4_gcshort" style="left:1330px; top:640px; width:200px;">Balance can't cover the increase → that gift card can't settle this change. Pick a different method (or a different variant mix) before anything is submitted.</div>
+
+  <!-- recap + submit -->
+  <div class="node" id="f4_recap" style="left:64px; top:780px; width:210px;"><b>Final recap — confirm the list is COMPLETE:</b> every line swap, the price difference, and the settling method, read back in one pass</div>
+
+  <div class="node" id="f4_lastcall" style="left:340px; top:780px; width:210px;">End the recap with the last-call question: <b>"anything else you'd like to change before I submit?"</b> — then <b>wait for the customer's answer.</b> Never submit while that question is still open.</div>
+
+  <div class="decision" id="f4_more" style="left:620px; top:762px; width:118px; height:118px;"><span>Customer adds another item?</span></div>
+
+  <div class="decision" id="f4_go" style="left:830px; top:762px; width:118px; height:118px;"><span>Customer says go?</span></div>
+
+  <div class="node" id="f4_submit" style="left:1020px; top:780px; width:180px;"><b>SUBMIT the item change</b> — single call, entire list at once<div class="sys">ORDER SERVICE</div></div>
+
+  <div class="locknode" id="f4_lock" style="left:1280px; top:770px;">
+    <div class="locktag">⚠ POST-SUBMIT STATE</div>
+    Status becomes <b>pending (items modified)</b> at submit. What the order record supports from that point is the <b>Order Ops write-path matrix</b>'s call — the matrix lives in the servicing appendix, off-board since M5 scope closed.
+  </div>
+
+  <div class="terminal" id="f4_done" style="left:1540px; top:786px; width:150px;">END<br>Items swapped, status updated</div>
+
+  <div class="note" style="left:1022px; top:880px; width:190px;">Difference settles at submit: charge or refund runs against the named method as part of the same operation.</div>
+
+  <div class="sticky r1" style="left:64px; top:950px;"><b>#1 escalation source, three months running:</b> three items swapped, customer rings back about a fourth — and where that lands post-submit is a write-path-matrix lookup nobody enjoys mid-call. The last-call question exists for exactly this. Ask it like you mean it.<div class="sig">Priya Shah</div></div>
+
+  <div class="sticky green r2" style="left:250px; top:950px;">Phrasing tip that tests well: "before I hit submit — anything else on this order, even a maybe?" Surfaces the hesitant ones.<div class="sig">Iris Kovac</div></div>
+
+  <div class="sticky r4" style="left:436px; top:950px;">If the customer wavers at the go/no-go, do NOT park a half-submitted change. Nothing exists until submit; let them sleep on it and rebuild the list tomorrow.<div class="sig">Sanjay Rao</div></div>
+
+  <!-- status-string callout -->
+  <div class="callout" style="left:640px; top:950px; width:250px;">
+    <div class="ctitle">STATUS STRING — EXACT</div>
+    Post-submit status is the literal string <b>pending (items modified)</b> — lowercase, parenthesised. Downstream systems compare on it literally. If a tool shows anything else, stop and flag in #beacon-order-servicing before touching the order again.
+  </div>
+
+  <!-- milestone history -->
+  <div class="miles" style="left:64px; top:1140px; width:1600px; height:300px;">
+    <div class="mlabel">Milestone 5 (M5) — item changes, launch history</div>
+    <div class="mship">shipped 6.1.26 · live</div>
+    <div class="dead" style="left:20px; top:44px; width:250px;"><span class="dtag">SUPERSEDED 5.22.26 · design review</span><br>Draft flow allowed submitting line-by-line (one call per item). Cut before launch at design review — recap quality and reconciliation both wanted the whole list in one call, as drawn above.</div>
+    <div class="dead" style="left:300px; top:44px; width:240px;"><span class="dtag parked">PARKED — NO DECISION</span><br>"Grace window: allow a second item-change call within 15 minutes." Raised 6.9.26 after the callback escalations. Engineering sized it at a full quarter; parked with Order Ops.</div>
+    <div class="dead" style="left:570px; top:44px; width:240px;"><span class="dtag parked">PARKED — NO DECISION</span><br>"Top-spender exception on quantity asks" (again). Out of this lane's scope either way: item changes swap variants; unit counts are the fulfillment desks' question.</div>
+    <div class="sticky blue r3" style="left:840px; top:40px;">UAT seeded three orders that were already in pending (items modified) to make sure the router denies them cleanly. It does — they fail the Frame 1 status gate like any other non-pending status.<div class="sig">Noor Danesh</div></div>
+    <div class="sticky r2" style="left:1030px; top:40px;">Reminder: exchanges on <b>delivered</b> orders rhyme with this lane but live in the Delivered Orders journey, with their own rules. Don't cross-reference from memory — open that board.<div class="sig">Dana Whitfield</div></div>
+    <div class="note" style="left:24px; top:250px; width:1540px;">M5 rollout note: the last-call question is mandatory by design, and the write-path matrix for post-submit servicing stayed with Order Ops in the appendix. Coach the question; cite the matrix.</div>
+  </div>
+
+  <div class="cursor" style="left:960px; top:748px; background:#5d4037;">Grace Okafor</div>
+  <div class="cursor" style="left:1420px; top:1100px; background:#c2185b;">Iris Kovac</div>
+  <div class="fnote" style="right:16px; bottom:10px;">Internal working material — NorthStar Outfitters · Project Beacon · not customer-facing</div>
+</div>
+
+<!-- ================= FRAME 5 : OPEN QUESTIONS + CHANGELOG ================= -->
+<div class="frame" id="frame5" style="height:1170px;">
+  <div class="flabel">FRAME 5 · OPEN QUESTIONS · PARKING LOT · DECISION CHANGELOG</div>
+  <div class="fnote" style="right:14px; top:8px;">nothing on this frame is policy — it's the room where policy gets argued about</div>
+
+  <div class="journey" style="left:40px; top:70px; width:800px; height:560px;">
+    <div class="jlabel">OPEN QUESTIONS — leave stickies here</div>
+  </div>
+
+  <div class="sticky r1" style="left:70px; top:120px;">Are we renaming "assisted servicing" to "care console" in the Q4 brand pass? Affects every label on this board and the runbook. No answer yet.<div class="sig">Mia Tran</div></div>
+  <div class="sticky green r2" style="left:260px; top:130px;">Does the refund-window language need a localized variant for the EU storefront launch? Legal review requested 7.14.26, pending.<div class="sig">Grace Okafor</div></div>
+  <div class="sticky r3" style="left:450px; top:118px;">Frame 2 history strip is getting long. Propose archiving M1–M2 rows to the wiki and keeping only KILLED/PARKED items that people still ask about.<div class="sig">Hank Fischer</div></div>
+  <div class="sticky blue r2" style="left:640px; top:126px;">Can the console pre-compute the item-change price difference while the agent is still assembling the list? Would shave ~40s. Eng spike unscheduled.<div class="sig">Tomas Egan</div></div>
+  <div class="sticky r4" style="left:70px; top:300px;">Sticky-vote from the floor: rename "KICKOFF CUT" to "continues on frame N". Nobody outside this team knows what a kickoff cut is.<div class="sig">Bea Sandoval</div></div>
+  <div class="sticky pink r1" style="left:260px; top:310px;">Partial cancel (cancel one line, keep the rest) keeps coming up in CSAT verbatims. Today the answer is an item conversation or a full cancel. Needs a real product decision — parking-lot until then.<div class="sig">Mia Tran</div></div>
+  <div class="sticky r2" style="left:450px; top:300px;">Who owns re-verifying this board against the Handbook after each Handbook release? Proposing: deploy bot files a checklist task per release. Volunteers?<div class="sig">Noor Danesh</div></div>
+  <div class="sticky green r3" style="left:640px; top:308px;">Board hygiene: Frame 3's wholesale fence saved us twice in onboarding this month. Recommend the same fence pattern for the marketplace-seller pilot when it lands.<div class="sig">Lena Ortiz</div></div>
+  <div class="note" style="left:70px; top:480px; width:720px;">If you have specific questions, comments, feedback — leave sticky notes in this area and tag the board contact. Stickies here are triaged Mondays; anything decided moves into the changelog on the right and gets drawn into the frames above.</div>
+
+  <div class="chip" style="left:70px; top:560px;">triage: mondays 10:15</div>
+  <div class="chip" style="left:230px; top:560px;">owner: @Priya Shah</div>
+  <div class="chip" style="left:390px; top:560px;">escalations: #beacon-order-servicing</div>
+
+  <!-- changelog -->
+  <div class="journey" style="left:880px; top:70px; width:800px; height:600px;">
+    <div class="jlabel">DECISION CHANGELOG — where the frames above came from</div>
+    <div style="padding:16px 18px;">
+      <table class="changelog">
+        <tr><th>date</th><th>ruling</th><th>what it settled</th><th>status</th></tr>
+        <tr><td>2.6.26</td><td>CR1</td><td class="sup">free-text cancel reasons (pilot month)</td><td class="sup">superseded</td></tr>
+        <tr><td>2.17.26</td><td>CR2</td><td class="sup">five-option reason pick list</td><td class="sup">superseded</td></tr>
+        <tr><td>2.26.26</td><td>CR3</td><td class="sup">price-match counteroffer on cheaper-elsewhere</td><td class="sup">superseded</td></tr>
+        <tr><td>3.16.26</td><td>CR4</td><td class="sup">counteroffer killed; cheaper-elsewhere paused to escalation queue</td><td class="sup">superseded</td></tr>
+        <tr><td>3.30.26</td><td>CR5</td><td class="sup">reason list trimmed to three</td><td class="sup">superseded</td></tr>
+        <tr><td>4.8.26</td><td>CR6</td><td class="sup">slow-shipping rerouted to carrier escalation; verbatim matching</td><td class="sup">superseded</td></tr>
+        <tr><td>4.20.26</td><td>CR7</td><td class="sup">verbatim matching dropped; map customer phrasing</td><td class="sup">superseded</td></tr>
+        <tr><td>4.29.26</td><td><b>CR8</b></td><td>the two accepted cancel reasons as drawn on Frame 2</td><td><b>final — current</b></td></tr>
+        <tr><td>5.4.26</td><td><b>RD5</b></td><td>refund destinations for <i>returns</i> (delivered-order journey — different board)</td><td><b>final — current</b></td></tr>
+        <tr><td>4.27.26</td><td><b>QS4</b></td><td>no split shipments anywhere in care; the quantity half went to the desk joint review, still open</td><td><b>split final — current</b></td></tr>
+        <tr><td>4.10.26</td><td><b>EM3</b></td><td>profile-email handling — wording moved to Care Enablement's bulletin</td><td><b>pending bulletin</b></td></tr>
+        <tr><td>5.11.26</td><td>M4</td><td>refund execution wiring as drawn on Frame 2</td><td>live</td></tr>
+        <tr><td>6.1.26</td><td>M5</td><td>item-change lane as drawn on Frame 4</td><td>live</td></tr>
+        <tr><td>7.24.26</td><td>audit</td><td>board re-verified line-by-line against Handbook §"Cancelling a pending order" and §"Changing a pending order"</td><td>clean</td></tr>
+      </table>
+      <div class="note" style="position:static; margin-top:10px;">Ruling IDs link to their decision threads in Slack. If a frame and a ruling ever disagree, say so in #beacon-order-servicing loudly and assume the ruling wins until the board is patched.</div>
+    </div>
+  </div>
+
+  <!-- parking lot -->
+  <div class="journey" style="left:40px; top:680px; width:800px; height:280px;">
+    <div class="jlabel">PARKING LOT — engaged with, decided on by no one</div>
+    <div class="dead" style="left:20px; top:40px; width:230px;"><span class="dtag parked">PARKED</span><br>Self-serve cancel button in the account portal (4.30.26)</div>
+    <div class="dead" style="left:280px; top:40px; width:230px;"><span class="dtag parked">PARKED</span><br>Auto-approve sub-$25 cancels with no reason question (CR7 thread)</div>
+    <div class="dead" style="left:540px; top:40px; width:230px;"><span class="dtag parked">PARKED</span><br>Goodwill new-gift-card refunds with +5% bonus (5.28.26)</div>
+    <div class="dead" style="left:20px; top:150px; width:230px;"><span class="dtag parked">PARKED</span><br>Split-tender payment swaps for $500+ orders (6.2.26)</div>
+    <div class="dead" style="left:280px; top:150px; width:230px;"><span class="dtag parked">PARKED</span><br>15-minute grace window on item changes (6.9.26)</div>
+    <div class="dead" style="left:540px; top:150px; width:230px;"><span class="dtag parked">PARKED</span><br>Address-validation autocomplete in the assisted flow</div>
+  </div>
+
+  <div class="note" style="left:44px; top:990px; width:790px;"><b>Reading rule for this whole board:</b> a PARKED or SUPERSEDED card never changes what agents do. Only the DEFAULT SCENARIO frame and the live lanes (Frames 2–4) describe current behavior, and the Handbook outranks the board if they ever drift.</div>
+
+  <div class="linkchip" style="left:44px; top:1060px;">Handbook — NorthStar assisted servicing (canonical)</div>
+  <div class="linkchip" style="left:400px; top:1060px;">#beacon-order-servicing</div>
+  <div class="linkchip" style="left:610px; top:1060px;">#beacon-payments-risk</div>
+  <div class="linkchip" style="left:810px; top:1060px;">#beacon-fulfillment-scope</div>
+  <div class="linkchip" style="left:1050px; top:1060px;">Beacon deploy log (bot)</div>
+
+  <div class="chip" style="left:44px; top:1110px;">board export: frames 1–5 · PNG · 7.28.26</div>
+  <div class="chip" style="left:310px; top:1110px;">next review: 8.25.26</div>
+  <div class="fnote" style="right:16px; bottom:10px;">Internal working material — NorthStar Outfitters · Project Beacon · not customer-facing</div>
+</div>
+
+<script>
+/* Orthogonal connector drawing. Deterministic: fixed layout, no timers. */
+const EDGES = [
+  // frame 1
+  ["wires1","f1_start","f1_orderid","solid",""],
+  ["wires1","f1_orderid","f1_lookup","solid",""],
+  ["wires1","f1_lookup","f1_status","solid",""],
+  ["wires1","f1_status","f1_processed","solid","processed"],
+  ["wires1","f1_status","f1_delivered","solid","delivered"],
+  ["wires1","f1_status","f1_already","solid","cancelled"],
+  ["wires1","f1_delivered","f1_ho_returns","dashed",""],
+  ["wires1","f1_status","f1_pendingok","solid","pending"],
+  ["wires1","f1_pendingok","f1_what","solid",""],
+  ["wires1","f1_what","f1_cancel_lane","solid","cancel"],
+  ["wires1","f1_what","f1_addr_lane","solid","address"],
+  ["wires1","f1_what","f1_pay_lane","solid","payment"],
+  ["wires1","f1_what","f1_item_lane","solid","items"],
+  ["wires1","f1_what","f1_other","solid","anything else"],
+  ["wires1","f1_cancel_lane","f1_ho_cancel","dashed",""],
+  ["wires1","f1_addr_lane","f1_ho_addr","dashed",""],
+  ["wires1","f1_pay_lane","f1_ho_pay","dashed",""],
+  ["wires1","f1_item_lane","f1_ho_items","dashed",""],
+  // frame 2
+  ["wires2","f2_start","f2_askwhy","solid",""],
+  ["wires2","f2_askwhy","f2_reason","solid",""],
+  ["wires2","f2_reason","f2_badreason","solid","No"],
+  ["wires2","f2_reason","f2_recap","solid","Yes"],
+  ["wires2","f2_recap","f2_confirm","solid",""],
+  ["wires2","f2_confirm","f2_hold","solid","No / unsure"],
+  ["wires2","f2_confirm","f2_process","solid","Yes"],
+  ["wires2","f2_process","f2_paytype","solid",""],
+  ["wires2","f2_paytype","f2_gc","solid","gift card"],
+  ["wires2","f2_paytype","f2_cc","solid","card / PayPal"],
+  ["wires2","f2_gc","f2_done","dashed",""],
+  ["wires2","f2_cc","f2_done","dashed",""],
+  ["wires2","f2_m4_a","f2_m4_b","solid",""],
+  ["wires2","f2_m4_b","f2_m4_c","solid",""],
+  ["wires2","f2_m4_c","f2_m4_d","solid",""],
+  // frame 3
+  ["wires3","f3_a_start","f3_a_give","solid",""],
+  ["wires3","f3_a_give","f3_a_read","solid",""],
+  ["wires3","f3_a_read","f3_a_ok","solid",""],
+  ["wires3","f3_a_ok","f3_a_update","solid","Yes"],
+  ["wires3","f3_a_ok","f3_a_fix","solid","No — fix a field"],
+  ["wires3","f3_a_fix","f3_a_read","dashed",""],
+  ["wires3","f3_a_update","f3_a_done","solid",""],
+  ["wires3","f3_p_start","f3_p_pick","solid",""],
+  ["wires3","f3_p_pick","f3_p_elig","solid",""],
+  ["wires3","f3_p_elig","f3_p_no","solid","No"],
+  ["wires3","f3_p_elig","f3_p_gc","solid","Yes"],
+  ["wires3","f3_p_gc","f3_p_bal","solid","Yes"],
+  ["wires3","f3_p_gc","f3_p_exec","dashed","No — card / PayPal"],
+  ["wires3","f3_p_bal","f3_p_short","solid","No"],
+  ["wires3","f3_p_bal","f3_p_exec","solid","Yes"],
+  ["wires3","f3_p_exec","f3_p_reftype","solid",""],
+  ["wires3","f3_p_reftype","f3_p_refgc","solid","gift card"],
+  ["wires3","f3_p_reftype","f3_p_refcc","solid","card / PayPal"],
+  ["wires3","f3_p_refgc","f3_p_done","dashed",""],
+  ["wires3","f3_p_refcc","f3_p_done","dashed",""],
+  // frame 4
+  ["wires4","f4_start","f4_which","solid",""],
+  ["wires4","f4_which","f4_sameprod","solid","per line"],
+  ["wires4","f4_sameprod","f4_cross","solid","No"],
+  ["wires4","f4_sameprod","f4_avail","solid","Yes"],
+  ["wires4","f4_avail","f4_noavail","solid","No"],
+  ["wires4","f4_avail","f4_list","solid","Yes"],
+  ["wires4","f4_list","f4_wpA","dashed",""],
+  ["wires4","f4_wpA","f4_wpB","dashed","more lines"],
+  ["wires4","f4_wpB","f4_which","dashed",""],
+  ["wires4","f4_list","f4_diff","solid","list complete"],
+  ["wires4","f4_diff","f4_method","solid",""],
+  ["wires4","f4_method","f4_gcup","solid",""],
+  ["wires4","f4_gcup","f4_gcbal","solid","Yes"],
+  ["wires4","f4_gcup","f4_wpC","dashed","No"],
+  ["wires4","f4_gcbal","f4_gcshort","solid","No"],
+  ["wires4","f4_gcbal","f4_wpC","dashed","Yes"],
+  ["wires4","f4_wpC","f4_recap","dashed",""],
+  ["wires4","f4_recap","f4_lastcall","solid",""],
+  ["wires4","f4_lastcall","f4_more","solid",""],
+  ["wires4","f4_more","f4_wpD","dashed",""],
+  ["wires4","f4_wpD","f4_wpE","dashed","Yes — reopen the list"],
+  ["wires4","f4_wpE","f4_which","dashed",""],
+  ["wires4","f4_more","f4_go","solid","No"],
+  ["wires4","f4_go","f4_wpC","dashed","wavers — nothing submitted yet"],
+  ["wires4","f4_go","f4_submit","solid","Yes"],
+  ["wires4","f4_submit","f4_lock","solid",""],
+  ["wires4","f4_lock","f4_done","solid",""],
+];
+
+function centerOf(el, frame) {
+  const r = el.getBoundingClientRect();
+  const f = frame.getBoundingClientRect();
+  return {
+    x: r.left - f.left + r.width / 2,
+    y: r.top - f.top + r.height / 2,
+    w: r.width, h: r.height,
+  };
+}
+
+function anchor(b, side) {
+  if (side === "l") return { x: b.x - b.w / 2, y: b.y };
+  if (side === "r") return { x: b.x + b.w / 2, y: b.y };
+  if (side === "t") return { x: b.x, y: b.y - b.h / 2 };
+  return { x: b.x, y: b.y + b.h / 2 };
+}
+
+function draw() {
+  for (const [svgId, fromId, toId, kind, label] of EDGES) {
+    const svg = document.getElementById(svgId);
+    const frame = svg.closest(".frame");
+    const a = document.getElementById(fromId);
+    const b = document.getElementById(toId);
+    if (!a || !b) continue;
+    const A = centerOf(a, frame), B = centerOf(b, frame);
+    const dx = B.x - A.x, dy = B.y - A.y;
+    let p1, p2, d;
+    if (Math.abs(dx) > Math.abs(dy)) {
+      p1 = anchor(A, dx > 0 ? "r" : "l");
+      p2 = anchor(B, dx > 0 ? "l" : "r");
+      const midx = (p1.x + p2.x) / 2;
+      d = `M ${p1.x} ${p1.y} L ${midx} ${p1.y} L ${midx} ${p2.y} L ${p2.x} ${p2.y}`;
+    } else {
+      p1 = anchor(A, dy > 0 ? "b" : "t");
+      p2 = anchor(B, dy > 0 ? "t" : "b");
+      const midy = (p1.y + p2.y) / 2;
+      d = `M ${p1.x} ${p1.y} L ${p1.x} ${midy} L ${p2.x} ${midy} L ${p2.x} ${p2.y}`;
+    }
+    const ns = "http://www.w3.org/2000/svg";
+    const path = document.createElementNS(ns, "path");
+    path.setAttribute("d", d);
+    path.setAttribute("fill", "none");
+    path.setAttribute("stroke", kind === "dashed" ? "#8d939c" : "#31567d");
+    path.setAttribute("stroke-width", kind === "dashed" ? "1.4" : "1.8");
+    if (kind === "dashed") path.setAttribute("stroke-dasharray", "5 4");
+    svg.appendChild(path);
+    // arrowhead
+    const ah = document.createElementNS(ns, "path");
+    const angle = Math.atan2(p2.y - (Math.abs(dx) > Math.abs(dy) ? p2.y : (p1.y + p2.y) / 2 === p2.y ? p2.y : p2.y - Math.sign(dy) * 8), 0) || 0;
+    let tip;
+    if (Math.abs(dx) > Math.abs(dy)) {
+      const s = dx > 0 ? 1 : -1;
+      tip = `M ${p2.x} ${p2.y} l ${-7 * s} -4 l 0 8 z`;
+    } else {
+      const s = dy > 0 ? 1 : -1;
+      tip = `M ${p2.x} ${p2.y} l -4 ${-7 * s} l 8 0 z`;
+    }
+    ah.setAttribute("d", tip);
+    ah.setAttribute("fill", kind === "dashed" ? "#8d939c" : "#31567d");
+    svg.appendChild(ah);
+    if (label) {
+      const t = document.createElementNS(ns, "text");
+      const lx = (p1.x + p2.x) / 2, ly = (p1.y + p2.y) / 2 - 6;
+      t.setAttribute("x", lx);
+      t.setAttribute("y", ly);
+      t.setAttribute("text-anchor", "middle");
+      t.setAttribute("font-size", "9.5");
+      t.setAttribute("font-weight", "700");
+      t.setAttribute("fill", "#31567d");
+      t.setAttribute("paint-order", "stroke");
+      t.setAttribute("stroke", "#ffffff");
+      t.setAttribute("stroke-width", "3");
+      t.textContent = label;
+      svg.appendChild(t);
+    }
+  }
+  window.__boardReady = true;
+}
+draw();
+</script>
+</body>
+</html>

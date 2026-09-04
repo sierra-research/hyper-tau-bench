@@ -1,0 +1,264 @@
+{
+ "format": "helpdesk_automation_export_v2",
+ "snapshot": {
+  "source_system": "rho-helpdesk",
+  "account": "rho-bank-checking-support",
+  "workspace": "everyday-banking-console",
+  "environment": "production",
+  "exported_at": "2025-11-13T09:05:48-05:00",
+  "timezone": "America/New_York",
+  "export_version": "2025.46",
+  "requested_by": "farrah.dubois"
+ },
+ "cover_email": "From: Farrah Dubois <farrah.dubois@rhobank.com>\nTo: Everyday Banking Servicing <everyday-banking@rhobank.com>\nDate: Thu, 13 Nov 2025 09:14:31 -0500\nSubject: everyday-banking console export, 2025.46\nMessage-ID: <9e51d0bb32ac74@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nTeam,\n\nNovember cut of the everyday-banking workspace, requested so the QA reviewers and the new cohort read the ladders the console actually runs.\n\nThe two things the season keeps testing. First: fee questions get the three-read route - the account names its schedule, the schedule prices the code, the legend explains it. People who quote from marketing pages or old screenshots spend the next call apologizing. Second: PIN ladders start at the lookup, not at the customer's story. The fields decide the branch; the story decides your tone.\n\nSaved-response bodies are excluded from exports as usual - the code-83 wording reference is the QA library's call, not anyone's memory.\n\nFarrah\nEveryday Banking Servicing\n",
+ "macros": [
+  {
+   "macro_id": "MCR-6110",
+   "name": "Code 55 ladder - lookup first",
+   "description": "Incorrect-PIN declines. The lookup fields decide the branch; HC-8418 is the quick card.",
+   "active": true,
+   "environment": "production",
+   "status": "current",
+   "effective_at": "2025-08-11T09:00:00-04:00",
+   "updated_at": "2025-11-03T09:00:00-05:00",
+   "usage_30d": 214,
+   "usage_90d": 512,
+   "superseded_by": null,
+   "steps": [
+    "Get the code from the slip, the terminal message, or the app's card activity screen (HC-8416)",
+    "Lookup before advice: read pin_locked and pin_attempts_remaining; the branch hangs off those two fields",
+    "pin_locked false and attempts low: deliver the low-attempts warning in the approved template with the live counter value substituted (the quality team's wave rubric carries the wording verbatim)",
+    "When the customer has forgotten the PIN and the card is not locked, offer or help with a PIN reset - Card controls -> Set PIN, agent-assisted if they want company; attempts stop mattering once the new PIN is set",
+    "pin_locked true: stop. Route per HC-8420 - the investigation completes before any action at any desk"
+   ]
+  },
+  {
+   "macro_id": "MCR-6114",
+   "name": "Code 83 recovery ladder",
+   "description": "Network PIN-verification failures. Open with the approved code-83 wording (saved response GC-83-1; the spoken reference is the QA calibration library's code-83 call), then walk the ladder in printed order.",
+   "active": true,
+   "environment": "production",
+   "status": "current",
+   "effective_at": "2025-08-11T09:00:00-04:00",
+   "updated_at": "2025-11-03T09:00:00-05:00",
+   "usage_30d": 58,
+   "usage_90d": 96,
+   "superseded_by": null,
+   "steps": [
+    "First, advise the customer to retry the transaction - retrying usually resolves the issue",
+    "If it persists and the merchant permits it, the customer can try a signature-based transaction instead of PIN",
+    "If it persists, the customer can try a different terminal or merchant",
+    "If it persists, the customer can wait 10-15 minutes and retry",
+    "An 83 that survives different terminals and the wait is a network event, not a card event - log terminal, merchant, and timestamps for the card desk"
+   ]
+  },
+  {
+   "macro_id": "MCR-6118",
+   "name": "Fee explanation - schedule route",
+   "description": "Every fee question gets the same three reads, in order. CON-FEEQUOTE-1 is the discipline.",
+   "active": true,
+   "environment": "production",
+   "status": "current",
+   "effective_at": "2025-07-14T09:00:00-04:00",
+   "updated_at": "2025-07-14T09:00:00-04:00",
+   "usage_30d": 173,
+   "usage_90d": 388,
+   "superseded_by": null,
+   "steps": [
+    "Read the account's details screen: the Fee schedule line names which FEE-* schedule applies (record it in account.fee_schedule)",
+    "Read the amount from that schedule, by fee code",
+    "Read the meaning and the statement-line mapping from Key FEE-LEGEND",
+    "Quote all three to the customer in plain words, and name the schedule you read - 'your account is on GRN-C' ends repeat calls"
+   ]
+  },
+  {
+   "macro_id": "MCR-5710",
+   "name": "PIN unlock - manual override",
+   "active": false,
+   "environment": "production",
+   "status": "retired",
+   "effective_at": "2024-06-17T09:00:00-04:00",
+   "updated_at": "2025-08-11T09:00:00-04:00",
+   "usage_30d": 0,
+   "usage_90d": 0,
+   "superseded_by": null,
+   "steps": [
+    "Retired step text withheld from active view; see workspace version history"
+   ]
+  }
+ ],
+ "triggers": [
+  {
+   "trigger_id": "TRG-8101",
+   "name": "Route card-decline contacts to the ladders",
+   "description": "Decline-topic contacts get the matching ladder attached by code and land in card-declines.",
+   "active": true,
+   "environment": "production",
+   "status": "current",
+   "priority": 2,
+   "effective_at": "2025-08-11T09:00:00-04:00",
+   "updated_at": "2025-11-03T09:00:00-05:00",
+   "usage_30d": 289,
+   "conditions": [
+    "contact.topic == 'debit_card_declined'"
+   ],
+   "actions": [
+    "attach_macro:by_decline_code",
+    "set_queue:card-declines"
+   ]
+  },
+  {
+   "trigger_id": "TRG-8108",
+   "name": "Route fee questions to the schedule route",
+   "description": "Fee-topic contacts get MCR-6118 attached and land in everyday-banking.",
+   "active": true,
+   "environment": "production",
+   "status": "current",
+   "priority": 3,
+   "effective_at": "2025-07-14T09:00:00-04:00",
+   "updated_at": "2025-07-14T09:00:00-04:00",
+   "usage_30d": 197,
+   "conditions": [
+    "contact.topic == 'fee_question_or_dispute'"
+   ],
+   "actions": [
+    "attach_macro:MCR-6118",
+    "set_queue:everyday-banking"
+   ]
+  }
+ ],
+ "policy_contracts": [
+  {
+   "contract_id": "CON-FEEQUOTE-1",
+   "name": "Fee quoting discipline",
+   "status": "current",
+   "effective_at": "2025-07-14T09:00:00-04:00",
+   "clauses": [
+    "Fee amounts are quoted from the FEE-* schedule the account's details screen names - never from product marketing pages, search results, or saved screenshots, whatever their design polish.",
+    "Meanings and statement-line mappings come from Key FEE-LEGEND; the schedule prices codes, the legend explains them, the account binds them.",
+    "A code absent from the account's schedule is not that account's charge; route the question to the desk whose schedule carries it."
+   ]
+  },
+  {
+   "contract_id": "CON-GCSAVED-1",
+   "name": "Saved-response bodies excluded from export",
+   "status": "current",
+   "effective_at": "2025-10-27T09:00:00-04:00",
+   "clauses": [
+    "Saved responses (GC-83-1) are workspace content and are not serialized into console exports; the console renders them at use time.",
+    "Spoken reference instances live in the QA calibration library, which the reviewers curate. Wording questions go to the library's reference interactions, not to memory."
+   ]
+  }
+ ],
+ "field_columns": ["row_id", "field_key", "field_name", "field_type", "option_value", "option_description", "active", "status", "environment", "updated_at"],
+ "fields": [
+  {
+   "row_id": "FLD-902",
+   "field_key": "decline.code",
+   "field_name": "Decline code",
+   "field_type": "dropdown",
+   "option_value": "55",
+   "option_description": "Incorrect PIN entered (network-defined).",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-08-11T09:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-903",
+   "field_key": "decline.code",
+   "field_name": "Decline code",
+   "field_type": "dropdown",
+   "option_value": "75",
+   "option_description": "PIN tries exceeded (network-defined).",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-08-11T09:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-904",
+   "field_key": "decline.code",
+   "field_name": "Decline code",
+   "field_type": "dropdown",
+   "option_value": "83",
+   "option_description": "Network could not verify the PIN (technical).",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-08-11T09:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-906",
+   "field_key": "pin_locked",
+   "field_name": "PIN locked (lookup mirror)",
+   "field_type": "boolean",
+   "option_value": null,
+   "option_description": "Mirrors the debit-card lookup at contact time.",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-08-11T09:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-907",
+   "field_key": "pin_attempts_remaining",
+   "field_name": "PIN attempts remaining (lookup mirror)",
+   "field_type": "integer",
+   "option_value": null,
+   "option_description": "Mirrors the debit-card lookup at contact time.",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-08-11T09:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-909",
+   "field_key": "account.fee_schedule",
+   "field_name": "Fee schedule (from account details)",
+   "field_type": "text",
+   "option_value": null,
+   "option_description": "The FEE-* schedule code the account's details screen names, e.g. GRN-C.",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-07-14T09:00:00-04:00"
+  }
+ ],
+ "sla_policies": [
+  {
+   "policy_id": "SLA-EB-1",
+   "name": "Card-decline first response",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "target": "first_response < 2 business hours",
+   "applies_to": "queue:card-declines",
+   "updated_at": "2025-08-11T09:00:00-04:00"
+  }
+ ],
+ "views": [
+  {
+   "view_id": "VIEW-5201",
+   "name": "Card declines - open",
+   "active": true,
+   "status": "current",
+   "filters": [
+    "queue == card-declines",
+    "state == open"
+   ],
+   "updated_at": "2025-08-11T09:00:00-04:00"
+  },
+  {
+   "view_id": "VIEW-5204",
+   "name": "Fee questions - open",
+   "active": true,
+   "status": "current",
+   "filters": [
+    "queue == everyday-banking",
+    "state == open"
+   ],
+   "updated_at": "2025-07-14T09:00:00-04:00"
+  }
+ ]
+}

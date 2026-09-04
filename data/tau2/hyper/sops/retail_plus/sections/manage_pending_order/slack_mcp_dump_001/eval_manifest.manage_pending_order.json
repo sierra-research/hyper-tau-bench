@@ -1,0 +1,417 @@
+{
+  "id": "retail_beacon_slack_mcp_dump_001_manage_pending_order",
+  "representation": "slack_mcp_dump",
+  "section_id": "manage_pending_order",
+  "scoped_from": "eval_manifest.json",
+  "artifacts": [
+    {
+      "filename": "beacon_servicing_slack_mcp_capture.json",
+      "authoritative_fact_ids": [
+        "accepted_cancel_reason_no_longer_needed",
+        "accepted_cancel_reason_ordered_by_mistake",
+        "unaccepted_cancel_reasons_decline_and_offer_transfer"
+      ]
+    }
+  ],
+  "tool_call_count": 76,
+  "thread_count": 67,
+  "message_count": 460,
+  "current_evidence_phrases": {
+    "accepted_cancel_reason_no_longer_needed": "no longer needed still counts when the customer words it their own way",
+    "accepted_cancel_reason_ordered_by_mistake": "ordered by mistake is the second accepted reason",
+    "unaccepted_cancel_reasons_decline_and_offer_transfer": "anything outside those two, the agent explains we cannot take that reason and offers to bring in a person"
+  },
+  "current_claim_occurrences": {
+    "accepted_cancel_reason_no_longer_needed": 3,
+    "accepted_cancel_reason_ordered_by_mistake": 3,
+    "unaccepted_cancel_reasons_decline_and_offer_transfer": 3
+  },
+  "historical_claim_occurrences": {
+    "the reason stays a free-text note": 3,
+    "five standardized reasons": 3,
+    "a price-match counteroffer before the cancellation goes through": 3,
+    "cheaper-elsewhere cancellations are paused": 3,
+    "list comes down to three reasons": 3,
+    "read the two reasons exactly as written": 3,
+    "anything in the neighborhood of either reason counts": 3
+  },
+  "decision_history": [
+    {
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR1",
+      "thread_key": "decision_cr1_freetext",
+      "thread_ts": "1770394020.920839",
+      "channel_id": "C09BCORD01",
+      "channel_name": "beacon-order-servicing",
+      "decision_timestamp": "2026-02-06T16:07:00Z",
+      "status": "superseded",
+      "summary": "Assisted cancellations record the reason as free text for the pilot month.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1770394020.920839"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1770395931.447444"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1770397502.064134"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1770400774.417488"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1770402843.360169"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "the reason stays a free-text note",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_cr1_reporting",
+        "thread_ts": "1770990960.646376",
+        "timestamp": "2026-02-13T13:56:00Z",
+        "trigger_summary": "Two weeks of free-text notes produced 900+ distinct reason strings and made the weekly mix report impossible."
+      }
+    },
+    {
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR2",
+      "thread_key": "decision_cr2_picklist",
+      "thread_ts": "1771362660.438143",
+      "channel_id": "C09BCORD01",
+      "channel_name": "beacon-order-servicing",
+      "decision_timestamp": "2026-02-17T21:11:00Z",
+      "status": "superseded",
+      "summary": "Cancellation reasons move to a five-option pick list with a note only on other.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1771362660.438143"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1771366526.077844"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1771368001.699011"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1771370758.080546"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1771373126.328336"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "five standardized reasons",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_cr2_cheaper_volume",
+        "thread_ts": "1771942620.903712",
+        "timestamp": "2026-02-24T14:17:00Z",
+        "trigger_summary": "Cheaper-elsewhere hit 31% of week-three cancels and agents had no counter move."
+      }
+    },
+    {
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR3",
+      "thread_key": "decision_cr3_pricematch",
+      "thread_ts": "1772138580.453237",
+      "channel_id": "C09BCORD01",
+      "channel_name": "beacon-order-servicing",
+      "decision_timestamp": "2026-02-26T20:43:00Z",
+      "status": "superseded",
+      "summary": "Cheaper-elsewhere cancellations get a one-per-order price-match counteroffer.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1772138580.453237"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1772143050.962421"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1772145470.741509"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1772140853.459970"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1772147981.808333"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "a price-match counteroffer before the cancellation goes through",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_cr3_margin",
+        "thread_ts": "1773320880.358260",
+        "timestamp": "2026-03-12T13:08:00Z",
+        "trigger_summary": "Match data showed concentration, sub-target margin, and forged competitor screenshots."
+      }
+    },
+    {
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR4",
+      "thread_key": "decision_cr4_pause_cheaper",
+      "thread_ts": "1773682560.691948",
+      "channel_id": "C09BCORD01",
+      "channel_name": "beacon-order-servicing",
+      "decision_timestamp": "2026-03-16T17:36:00Z",
+      "status": "superseded",
+      "summary": "Counteroffer removed; cheaper-elsewhere cancels pause to an escalation queue pending the abuse review.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1773682560.691948"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1773686262.034146"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1773688491.715914"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1773684050.307137"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1773691103.435386"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "cheaper-elsewhere cancellations are paused",
+      "reopened_by": {
+        "mode": "inline_successor_root",
+        "trigger_summary": "The commissioned risk abuse review returned and settled the paused category."
+      }
+    },
+    {
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR5",
+      "thread_key": "decision_cr5_trim_three",
+      "thread_ts": "1774884660.984052",
+      "channel_id": "C09BCORD01",
+      "channel_name": "beacon-order-servicing",
+      "decision_timestamp": "2026-03-30T15:31:00Z",
+      "status": "superseded",
+      "summary": "Reason list trimmed to three; cheaper-elsewhere and other removed after the risk review.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1774884660.984052"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1774889253.397898"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1774891778.008411"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1774887040.264532"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1774894430.147092"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "list comes down to three reasons",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_cr5_slow_shipping",
+        "thread_ts": "1775486340.165275",
+        "timestamp": "2026-04-06T14:39:00Z",
+        "trigger_summary": "60% of slow-shipping cancels had packages arriving within 48 hours and callbacks spiked."
+      }
+    },
+    {
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR6",
+      "thread_key": "decision_cr6_reroute_slow",
+      "thread_ts": "1775674620.611910",
+      "channel_id": "C09BCORD01",
+      "channel_name": "beacon-order-servicing",
+      "decision_timestamp": "2026-04-08T18:57:00Z",
+      "status": "superseded",
+      "summary": "Shipping-too-slow moves to the carrier escalation flow; agents match the two remaining reasons verbatim.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1775674620.611910"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1775676452.148350"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1775678807.614966"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1775681240.090615"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1775683638.930778"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "read the two reasons exactly as written",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_cr6_verbatim",
+        "thread_ts": "1776347220.334129",
+        "timestamp": "2026-04-16T13:47:00Z",
+        "trigger_summary": "Transcript review showed verbatim re-prompting frustrating customers into hand-off requests."
+      }
+    },
+    {
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR7",
+      "thread_key": "decision_cr7_paraphrase",
+      "thread_ts": "1776704880.475377",
+      "channel_id": "C09BCORD01",
+      "channel_name": "beacon-order-servicing",
+      "decision_timestamp": "2026-04-20T17:08:00Z",
+      "status": "superseded",
+      "summary": "Verbatim matching dropped; agents map customer wording to the nearest of the two reasons.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1776704880.475377"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1776707046.817372"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1776708860.504817"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1776711353.733193"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1776713770.932688"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "anything in the neighborhood of either reason counts",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_cr7_drift",
+        "thread_ts": "1776948660.626382",
+        "timestamp": "2026-04-23T12:51:00Z",
+        "trigger_summary": "Audit found price complaints being coded into no-longer-needed via the neighborhood mapping."
+      }
+    },
+    {
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR8",
+      "thread_key": "decision_cr8_final",
+      "thread_ts": "1777488060.813739",
+      "channel_id": "C09BCORD01",
+      "channel_name": "beacon-order-servicing",
+      "decision_timestamp": "2026-04-29T18:41:00Z",
+      "status": "final_current",
+      "summary": "Two accepted reasons \u2014 no longer needed (customer phrasing counts) and ordered by mistake; anything else is declined with an offer to bring in a person.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1777488060.813739"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1777492004.842895"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1777494142.935846"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1777489937.070764"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1777496521.456799"
+        }
+      ],
+      "authoritative_fact_ids": [
+        "accepted_cancel_reason_no_longer_needed",
+        "accepted_cancel_reason_ordered_by_mistake",
+        "unaccepted_cancel_reasons_decline_and_offer_transfer"
+      ],
+      "evidence_phrases": {
+        "accepted_cancel_reason_no_longer_needed": "no longer needed still counts when the customer words it their own way",
+        "accepted_cancel_reason_ordered_by_mistake": "ordered by mistake is the second accepted reason",
+        "unaccepted_cancel_reasons_decline_and_offer_transfer": "anything outside those two, the agent explains we cannot take that reason and offers to bring in a person"
+      }
+    }
+  ],
+  "notes": [
+    "Section-scoped view of eval_manifest.json; the delivered capture is shared by three retail sections."
+  ]
+}

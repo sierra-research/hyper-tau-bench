@@ -1,0 +1,130 @@
+{
+  "id": "retail_plus_core_evidence_bundle_001",
+  "domain": "retail_plus",
+  "description": "Retail+ construction SOP organized around four journeys: manage a pending order, manage a delivered order, manage the customer profile, and service foundations. Customer identity is inherited globally and arrives as a discovery intake document. Every canonical handbook chapter is externalized into the evidence bundle; the handbook itself travels as a cover sheet among the uploaded materials. The evidence bundle uses only retail+ schemas and artifacts.",
+  "canonical_sop_path": "tau2/hyper/sops/retail_plus_sop.md",
+  "global_rules_path": "tau2/hyper/sops/retail_plus/global_rules.json",
+  "section_order": [
+    {
+      "id": "front_matter",
+      "label": "Title, effective date, and welcome note",
+      "heading": null
+    },
+    {
+      "id": "who_you_can_help",
+      "heading": "## Who you can help"
+    },
+    {
+      "id": "how_operation_works",
+      "heading": "## How the operation works"
+    },
+    {
+      "id": "what_you_can_do",
+      "heading": "## What you can do for customers"
+    },
+    {
+      "id": "cancelling_pending_order",
+      "heading": "## Cancelling a pending order"
+    },
+    {
+      "id": "changing_pending_order",
+      "heading": "## Changing a pending order"
+    },
+    {
+      "id": "updating_default_shipping_address",
+      "heading": "## Updating the customer's default shipping address"
+    },
+    {
+      "id": "returning_delivered_order",
+      "heading": "## Returning a delivered order"
+    },
+    {
+      "id": "exchanging_delivered_order",
+      "heading": "## Exchanging a delivered order"
+    },
+    {
+      "id": "wrong_entitlement",
+      "heading": "## When a customer is wrong about what they're entitled to"
+    },
+    {
+      "id": "transferring_to_person",
+      "heading": "## Transferring to a person"
+    },
+    {
+      "id": "a_few_last_notes",
+      "heading": "## A few last notes"
+    }
+  ],
+  "sop_delivery": "uploaded_material",
+  "section_replacements": {
+    "front_matter": "tau2/hyper/sops/retail_plus/sections/uploaded_handbook_front_matter.md",
+    "who_you_can_help": "tau2/hyper/sops/retail_plus/sections/folded_into_journeys.md",
+    "how_operation_works": "tau2/hyper/sops/retail_plus/sections/folded_into_journeys.md",
+    "what_you_can_do": "tau2/hyper/sops/retail_plus/sections/folded_into_journeys.md",
+    "cancelling_pending_order": "tau2/hyper/sops/retail_plus/sections/folded_into_journeys.md",
+    "changing_pending_order": "tau2/hyper/sops/retail_plus/sections/folded_into_journeys.md",
+    "updating_default_shipping_address": "tau2/hyper/sops/retail_plus/sections/folded_into_journeys.md",
+    "returning_delivered_order": "tau2/hyper/sops/retail_plus/sections/folded_into_journeys.md",
+    "exchanging_delivered_order": "tau2/hyper/sops/retail_plus/sections/folded_into_journeys.md",
+    "wrong_entitlement": "tau2/hyper/sops/retail_plus/sections/folded_into_journeys.md",
+    "transferring_to_person": "tau2/hyper/sops/retail_plus/sections/folded_into_journeys.md",
+    "a_few_last_notes": "tau2/hyper/sops/retail_plus/sections/folded_into_journeys.md"
+  },
+  "section_source_schemas": {
+    "customer_identity": "tau2/hyper/sops/retail_plus/sections/customer_identity/schema.json",
+    "service_foundations": "tau2/hyper/sops/retail_plus/sections/service_foundations/schema.json",
+    "manage_pending_order": "tau2/hyper/sops/retail_plus/sections/manage_pending_order/schema.json",
+    "manage_delivered_order": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/schema.json",
+    "manage_customer_profile": "tau2/hyper/sops/retail_plus/sections/manage_customer_profile/schema.json"
+  },
+  "section_bundles": {
+    "service_foundations": "service_foundations_multimodal",
+    "manage_pending_order": "manage_pending_order_multimodal",
+    "manage_delivered_order": "manage_delivered_order_multimodal",
+    "manage_customer_profile": "manage_customer_profile_multimodal"
+  },
+  "additional_transformations": [
+    {
+      "section_id": "customer_identity",
+      "representation": "customer_kickoff_document",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/customer_identity/bundles/discovery_intake/stub.md"
+    }
+  ],
+  "uncovered_fact_policy": "error",
+  "information_distribution": {
+    "representation": "helpdesk_automation_export",
+    "explicitness": "implicit",
+    "requires_inference": true,
+    "transformed_sections": [
+      "customer_identity",
+      "service_foundations",
+      "manage_pending_order",
+      "manage_delivered_order",
+      "manage_customer_profile"
+    ],
+    "target_procedures": [
+      "customer_identity_verification",
+      "operational_record_schema",
+      "money_and_arithmetic_conventions",
+      "pending_order_cancellation",
+      "pending_order_changes",
+      "delivered_order_returns",
+      "delivered_order_exchanges",
+      "default_address_updates",
+      "entitlement_denials",
+      "transfer_conditions"
+    ],
+    "source_artifact_types": [
+      "customer_kickoff_document",
+      "website_screenshot",
+      "slack_mcp_dump",
+      "email_thread_archive",
+      "process_flowchart",
+      "process_presentation",
+      "support_transcripts",
+      "recorded_working_session",
+      "helpdesk_automation_export",
+      "api_contract_pack"
+    ]
+  }
+}

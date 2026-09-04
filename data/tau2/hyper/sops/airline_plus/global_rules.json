@@ -1,0 +1,55 @@
+{
+  "domain": "airline_plus",
+  "canonical_sop_path": "tau2/hyper/sops/airline_plus_sop.md",
+  "rules": [
+    {
+      "id": "customer_id_before_reservation_action",
+      "rule_scope": "global",
+      "source_heading": "## 3. Customer Identity",
+      "statement": "Before booking a flight or modifying or cancelling a reservation, the agent must obtain the user ID from the customer.",
+      "case_record_requirement": "A record that books, modifies, or cancels a reservation must show the customer providing the user ID before the reservation action; information-only interactions do not inherit this requirement."
+    },
+    {
+      "id": "confirm_before_booking_change",
+      "rule_scope": "global",
+      "source_heading": "## 1. General Conduct",
+      "statement": "Before creating, modifying, or cancelling a reservation, the agent must clearly describe the intended change and receive the customer's explicit confirmation.",
+      "case_record_requirement": "Whenever a visible record executes a reservation creation, modification, or cancellation, the record must show the agent requesting confirmation and the customer explicitly saying yes before the action."
+    },
+    {
+      "id": "ground_responses_in_customer_or_records",
+      "rule_scope": "global",
+      "source_heading": "## 1. General Conduct",
+      "statement": "The agent must not make up information and may use only information supplied by the customer or retrieved from records; the agent must not offer subjective opinions or personal recommendations.",
+      "case_record_requirement": "Customer-facing conclusions must be supported by visible Customer turns or Support console records."
+    },
+    {
+      "id": "one_tool_call_or_customer_response_at_a_time",
+      "rule_scope": "global",
+      "source_heading": "## 1. General Conduct",
+      "statement": "The agent may make only one tool call at a time and must not make a tool call and respond to the customer simultaneously.",
+      "case_record_requirement": "Every tool or Support console action and every customer-facing Agent response must occupy separate turns; a turn must never contain multiple tool calls or combine a tool call with a customer response."
+    },
+    {
+      "id": "transfer_out_of_scope_or_on_request",
+      "rule_scope": "global",
+      "source_heading": "## 1. General Conduct",
+      "statement": "The agent transfers the customer to a human supervisor only when the request cannot be handled within the scope of the agent's policies and actions. A request the policy prohibits is handled by declining it and is not by itself a transfer condition. Reaching the condition is sufficient; the agent does not ask a separate consent question before initiating the transfer.",
+      "case_record_requirement": "A record that reaches the transfer condition must visibly initiate the transfer without an extra consent turn, and no record may initiate a transfer merely because a policy-prohibited request was declined."
+    },
+    {
+      "id": "exact_transfer_notice",
+      "rule_scope": "global",
+      "source_heading": "## 11. Escalation",
+      "statement": "When transferring, the agent first initiates the transfer and then tells the customer exactly: YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON. The notice is a standalone sentence and is not expanded with another transfer script.",
+      "case_record_requirement": "A recorded transfer or handoff must be followed by the exact customer-facing transfer notice, with no extra transfer explanation in that turn."
+    },
+    {
+      "id": "decline_policy_conflicts",
+      "rule_scope": "global",
+      "source_heading": "## 1. General Conduct",
+      "statement": "The agent must decline any customer request that conflicts with the handbook.",
+      "case_record_requirement": "A record containing a policy-conflicting request must show the agent declining the conflicting action."
+    }
+  ]
+}

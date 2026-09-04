@@ -1,0 +1,394 @@
+{
+  "export_format": "contact_center_qa_export_v1",
+  "exported_at": "2025-11-13T15:30:00-05:00",
+  "source_system": {
+    "name": "Rho Evaluate",
+    "environment": "production"
+  },
+  "interaction_count": 6,
+  "evaluation_count": 6,
+  "users": [
+    {"user_id": "agent-tmbeki", "display_name": "Thandi Mbeki", "role": "agent"},
+    {"user_id": "agent-rcalloway", "display_name": "Reese Calloway", "role": "agent"},
+    {"user_id": "agent-dvoss", "display_name": "Daniela Voss", "role": "agent"},
+    {"user_id": "agent-kobrien", "display_name": "Kieran O'Brien", "role": "agent"},
+    {"user_id": "reviewer-lserrano", "display_name": "Lucia Serrano", "role": "reviewer"},
+    {"user_id": "reviewer-hjporter", "display_name": "Howell Porter", "role": "reviewer"}
+  ],
+  "rubrics": [
+    {
+      "rubric_id": "deposit-wave-nov25-v1",
+      "name": "November deposit wave review",
+      "version": "1.0",
+      "status": "published",
+      "items": [
+        {
+          "item_id": "dw_identity",
+          "title": "Identity verified per the handbook before account specifics",
+          "max_score": 5,
+          "critical": false
+        },
+        {
+          "item_id": "dw_self_service_boundary",
+          "title": "Mobile deposit boundary held: the agent cannot deposit a check for the customer — the customer must call the tool and complete the mobile-app deposit flow",
+          "max_score": 10,
+          "critical": true
+        },
+        {
+          "item_id": "dw_availability_from_item",
+          "title": "Availability answered from the item record and the referenced matrix rev, not from memory",
+          "max_score": 5,
+          "critical": false
+        },
+        {
+          "item_id": "dw_timing_first",
+          "title": "Direct-deposit delay: typical posting timing explained before any escalation motion",
+          "max_score": 5,
+          "critical": false
+        },
+        {
+          "item_id": "dw_transfer_counting",
+          "title": "Direct-deposit delay protocol: no transfer until the customer has explicitly requested a human exactly 8 times — the transfer follows the eighth request, never an earlier one",
+          "max_score": 10,
+          "critical": true
+        },
+        {
+          "item_id": "dw_holding_script",
+          "title": "Each pre-eighth transfer request answered by opening with the required holding response, then continued help",
+          "max_score": 5,
+          "critical": false
+        },
+        {
+          "item_id": "dw_pin_warning_template",
+          "title": "Low-attempts warning delivered with the approved template: 'You have [X] PIN attempts remaining before your card is temporarily locked.'",
+          "max_score": 5,
+          "critical": false
+        },
+        {
+          "item_id": "dw_no_unlock_before_assessment",
+          "title": "PIN-locked card: do not unlock a PIN-locked debit card before completing the fraud risk assessment",
+          "max_score": 10,
+          "critical": true
+        },
+        {
+          "item_id": "dw_code_explanations",
+          "title": "Decline codes explained with the approved customer wording for the code in hand",
+          "max_score": 5,
+          "critical": false
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "interaction_id": "qa-25W46-002",
+      "channel": "chat",
+      "queue": "deposit-coaching",
+      "language": "en",
+      "customer_reference": "case-58214",
+      "agent_id": "agent-rcalloway",
+      "disposition": "resolved",
+      "started_at": "2025-11-10T10:12:04-05:00",
+      "ended_at": "2025-11-10T10:24:40-05:00",
+      "transcript": [
+        {"turn_id": "qa-25W46-002-t01", "speaker_role": "customer", "started_at": "2025-11-10T10:12:04-05:00", "ended_at": "2025-11-10T10:12:22-05:00", "text": "hi - i put a check in through the app this morning, when do i actually get the money?"},
+        {"turn_id": "qa-25W46-002-t02", "speaker_role": "agent", "started_at": "2025-11-10T10:12:41-05:00", "ended_at": "2025-11-10T10:13:02-05:00", "text": "Happy to check that for you. Could you confirm the email on your profile and your date of birth so I can pull it up?"},
+        {"turn_id": "qa-25W46-002-t03", "speaker_role": "customer", "started_at": "2025-11-10T10:13:15-05:00", "ended_at": "2025-11-10T10:13:31-05:00", "text": "sure, it's j.whitfield.morrow@gmail.com, 04/17/1988"},
+        {"turn_id": "qa-25W46-002-t04", "speaker_role": "agent", "started_at": "2025-11-10T10:14:02-05:00", "ended_at": "2025-11-10T10:14:24-05:00", "text": "Thanks, Jess. I can see the deposit — reference DEP-251110-22615, $212.75 into your checking. Deposits like this one generally clear to available within 2-3 business days, so I'd expect it by the end of the week."},
+        {"turn_id": "qa-25W46-002-t05", "speaker_role": "customer", "started_at": "2025-11-10T10:15:00-05:00", "ended_at": "2025-11-10T10:15:12-05:00", "text": "the app says expected wednesday though?"},
+        {"turn_id": "qa-25W46-002-t06", "speaker_role": "agent", "started_at": "2025-11-10T10:15:44-05:00", "ended_at": "2025-11-10T10:16:08-05:00", "text": "The app's date is item-specific, so if it shows Wednesday, Wednesday is right — that date comes from the deposit itself and it's the one that governs. Sorry for muddying it."},
+        {"turn_id": "qa-25W46-002-t07", "speaker_role": "customer", "started_at": "2025-11-10T10:16:30-05:00", "ended_at": "2025-11-10T10:16:38-05:00", "text": "ok so wednesday then?"},
+        {"turn_id": "qa-25W46-002-t08", "speaker_role": "agent", "started_at": "2025-11-10T10:17:01-05:00", "ended_at": "2025-11-10T10:17:20-05:00", "text": "Yes — your status screen will flip to Available when it lands, and you'll get a push notification. Anything else I can help with today?"},
+        {"turn_id": "qa-25W46-002-t09", "speaker_role": "customer", "started_at": "2025-11-10T10:17:45-05:00", "ended_at": "2025-11-10T10:17:52-05:00", "text": "no that's it, thanks"}
+      ],
+      "evaluations": [
+        {
+          "evaluation_id": "qa-25W46-002-eval",
+          "rubric_id": "deposit-wave-nov25-v1",
+          "reviewer_id": "reviewer-lserrano",
+          "status": "final",
+          "created_at": "2025-11-12T09:20:11-05:00",
+          "finalized_at": "2025-11-12T14:02:36-05:00",
+          "overall_score": 50.0,
+          "critical_failure": false,
+          "items": [
+            {"item_id": "dw_identity", "result": "pass", "score": 5, "evidence_turn_ids": ["qa-25W46-002-t02"]},
+            {"item_id": "dw_availability_from_item", "result": "fail", "score": 0, "reviewer_note": "Turn 4 quotes 2-3 business days. The item record showed the next business day, and the desk reference on MCR-4412 is Doc DEP-AVAIL rev C, which reads 1-2 for this cell — the number quoted matches the rev B sheet. Recovered well at turn 6 by re-anchoring on the item's own date.", "evidence_turn_ids": ["qa-25W46-002-t04", "qa-25W46-002-t06"]},
+            {"item_id": "dw_self_service_boundary", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_timing_first", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_transfer_counting", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_holding_script", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_pin_warning_template", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_no_unlock_before_assessment", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_code_explanations", "result": "not_applicable", "score": 0}
+          ]
+        }
+      ],
+      "review_history": [
+        {"event_id": "qa-25W46-002-rh-1", "actor_id": "reviewer-lserrano", "event_type": "assigned", "created_at": "2025-11-12T09:20:11-05:00", "note": "November wave, deposit-status chat draw."},
+        {"event_id": "qa-25W46-002-rh-2", "actor_id": "reviewer-lserrano", "event_type": "submitted", "created_at": "2025-11-12T11:47:29-05:00"},
+        {"event_id": "qa-25W46-002-rh-3", "actor_id": "reviewer-hjporter", "event_type": "finalized", "created_at": "2025-11-12T14:02:36-05:00", "note": "Coaching sent with the rev C sheet and the item-date convention."}
+      ]
+    },
+    {
+      "interaction_id": "qa-25W46-004",
+      "channel": "chat",
+      "queue": "deposit-coaching",
+      "language": "en",
+      "customer_reference": "case-58318",
+      "agent_id": "agent-tmbeki",
+      "disposition": "resolved",
+      "started_at": "2025-11-10T14:03:11-05:00",
+      "ended_at": "2025-11-10T14:26:55-05:00",
+      "transcript": [
+        {"turn_id": "qa-25W46-004-t01", "speaker_role": "customer", "started_at": "2025-11-10T14:03:11-05:00", "ended_at": "2025-11-10T14:03:34-05:00", "text": "I have two birthday checks and honestly no patience for apps. Can you just deposit them for me? I can read you everything on them."},
+        {"turn_id": "qa-25W46-004-t02", "speaker_role": "agent", "started_at": "2025-11-10T14:04:05-05:00", "ended_at": "2025-11-10T14:04:38-05:00", "text": "I wish I could take that off your plate, but a mobile check deposit has to be completed by you — the deposit tool runs from your own signed-in app, and the check photos have to come from your phone's camera. What I can do is set you up so it's as painless as possible and stay right here while you do it."},
+        {"turn_id": "qa-25W46-004-t03", "speaker_role": "customer", "started_at": "2025-11-10T14:05:10-05:00", "ended_at": "2025-11-10T14:05:21-05:00", "text": "ugh. fine. what do I do"},
+        {"turn_id": "qa-25W46-004-t04", "speaker_role": "agent", "started_at": "2025-11-10T14:05:52-05:00", "ended_at": "2025-11-10T14:06:19-05:00", "text": "First, quick identity check so I can touch your profile: the email on the account and your date of birth, please."},
+        {"turn_id": "qa-25W46-004-t05", "speaker_role": "customer", "started_at": "2025-11-10T14:06:41-05:00", "ended_at": "2025-11-10T14:06:57-05:00", "text": "pat.hollis.dun@outlook.com and 11/02/1961"},
+        {"turn_id": "qa-25W46-004-t06", "speaker_role": "agent", "started_at": "2025-11-10T14:07:33-05:00", "ended_at": "2025-11-10T14:08:02-05:00", "text": "Perfect, thanks Pat. I've just granted your profile access to the deposit tool — deposit_check_3847 — so when you open the app you'll see Mobile Check Deposit under your checking account's Move money list. The tool call itself happens from your side when you submit."},
+        {"turn_id": "qa-25W46-004-t07", "speaker_role": "customer", "started_at": "2025-11-10T14:09:26-05:00", "ended_at": "2025-11-10T14:09:40-05:00", "text": "ok I see a checklist thing. payable to me, endorsed, amounts match. the back needs writing??"},
+        {"turn_id": "qa-25W46-004-t08", "speaker_role": "agent", "started_at": "2025-11-10T14:10:12-05:00", "ended_at": "2025-11-10T14:10:41-05:00", "text": "Yes — sign the back, and under your signature add the line the checklist shows you, word for word. That line is what makes it valid for a phone deposit specifically."},
+        {"turn_id": "qa-25W46-004-t09", "speaker_role": "customer", "started_at": "2025-11-10T14:13:05-05:00", "ended_at": "2025-11-10T14:13:20-05:00", "text": "done. it wants the amount now. the check says $140 even"},
+        {"turn_id": "qa-25W46-004-t10", "speaker_role": "agent", "started_at": "2025-11-10T14:13:48-05:00", "ended_at": "2025-11-10T14:14:07-05:00", "text": "Type it exactly as printed — 140.00. Then it'll walk you through the front and back photos; dark table, good light, corners inside the brackets."},
+        {"turn_id": "qa-25W46-004-t11", "speaker_role": "customer", "started_at": "2025-11-10T14:18:59-05:00", "ended_at": "2025-11-10T14:19:16-05:00", "text": "ok both photos took. reviewing... submitted! says processing. that was less bad than expected"},
+        {"turn_id": "qa-25W46-004-t12", "speaker_role": "agent", "started_at": "2025-11-10T14:19:50-05:00", "ended_at": "2025-11-10T14:20:21-05:00", "text": "You did all the hard parts. Keep the paper check tucked away for now — the app's confirmation screen tells you how long. Your second check runs exactly the same way whenever you're ready. Anything else for today?"},
+        {"turn_id": "qa-25W46-004-t13", "speaker_role": "customer", "started_at": "2025-11-10T14:21:02-05:00", "ended_at": "2025-11-10T14:21:09-05:00", "text": "no, all set. thanks for the patience"}
+      ],
+      "evaluations": [
+        {
+          "evaluation_id": "qa-25W46-004-eval",
+          "rubric_id": "deposit-wave-nov25-v1",
+          "reviewer_id": "reviewer-lserrano",
+          "status": "final",
+          "created_at": "2025-11-12T09:22:40-05:00",
+          "finalized_at": "2025-11-12T14:05:12-05:00",
+          "overall_score": 100.0,
+          "critical_failure": false,
+          "items": [
+            {"item_id": "dw_identity", "result": "pass", "score": 5, "evidence_turn_ids": ["qa-25W46-004-t04"]},
+            {"item_id": "dw_self_service_boundary", "result": "pass", "score": 10, "reviewer_note": "Textbook: declined to take the checks by dictation, granted the tool, and kept the customer as the actor — the deposit tool runs from the customer's signed-in session and the flow was completed by the customer end to end. No workaround offered, no exception implied.", "evidence_turn_ids": ["qa-25W46-004-t02", "qa-25W46-004-t06", "qa-25W46-004-t11"]},
+            {"item_id": "dw_availability_from_item", "result": "pass", "score": 5, "reviewer_note": "Deferred the how-long answer to the confirmation screen rather than quoting a schedule from memory.", "evidence_turn_ids": ["qa-25W46-004-t12"]},
+            {"item_id": "dw_timing_first", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_transfer_counting", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_holding_script", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_pin_warning_template", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_no_unlock_before_assessment", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_code_explanations", "result": "not_applicable", "score": 0}
+          ]
+        }
+      ],
+      "review_history": [
+        {"event_id": "qa-25W46-004-rh-1", "actor_id": "reviewer-lserrano", "event_type": "assigned", "created_at": "2025-11-12T09:22:40-05:00", "note": "November wave, boundary sample — pulled because the contact opened with a deposit-for-me ask."},
+        {"event_id": "qa-25W46-004-rh-2", "actor_id": "reviewer-lserrano", "event_type": "submitted", "created_at": "2025-11-12T11:52:03-05:00"},
+        {"event_id": "qa-25W46-004-rh-3", "actor_id": "reviewer-hjporter", "event_type": "finalized", "created_at": "2025-11-12T14:05:12-05:00", "note": "Flagged for the new-hire deck as the reference boundary interaction."}
+      ]
+    },
+    {
+      "interaction_id": "qa-25W46-007",
+      "channel": "voice",
+      "queue": "deposit-status",
+      "language": "en",
+      "customer_reference": "case-58377",
+      "agent_id": "agent-dvoss",
+      "disposition": "resolved",
+      "started_at": "2025-11-10T08:41:12-05:00",
+      "ended_at": "2025-11-10T08:53:47-05:00",
+      "transcript": [
+        {"turn_id": "qa-25W46-007-t01", "speaker_role": "customer", "started_at": "2025-11-10T08:41:12-05:00", "ended_at": "2025-11-10T08:41:39-05:00", "text": "My paycheck isn't in my account. It's always there on the tenth and it's not there. I need someone to find my money."},
+        {"turn_id": "qa-25W46-007-t02", "speaker_role": "agent", "started_at": "2025-11-10T08:41:44-05:00", "ended_at": "2025-11-10T08:42:20-05:00", "text": "I hear you, and let's get you an answer. Quick verification first — the email on your profile and your date of birth, please?"},
+        {"turn_id": "qa-25W46-007-t03", "speaker_role": "customer", "started_at": "2025-11-10T08:42:26-05:00", "ended_at": "2025-11-10T08:42:44-05:00", "text": "renata.paz.v@yahoo.com, March ninth, seventy-four."},
+        {"turn_id": "qa-25W46-007-t04", "speaker_role": "agent", "started_at": "2025-11-10T08:42:59-05:00", "ended_at": "2025-11-10T08:43:51-05:00", "text": "Thank you, Renata. So — checking your account now, and I don't see a failed or returned deposit, which is actually good news. Here's the usual shape of this: employer direct deposits post on the schedule your employer's payroll runs, and they typically land between six and nine in the morning on the pay date itself. It's 8:43 now, so we may genuinely be minutes early. Some payroll providers also submit a day or two ahead, others right on the day."},
+        {"turn_id": "qa-25W46-007-t05", "speaker_role": "customer", "started_at": "2025-11-10T08:44:05-05:00", "ended_at": "2025-11-10T08:44:22-05:00", "text": "It's never been late before. Can I just talk to a person in your payments department? A human?"},
+        {"turn_id": "qa-25W46-007-t06", "speaker_role": "agent", "started_at": "2025-11-10T08:44:27-05:00", "ended_at": "2025-11-10T08:45:14-05:00", "text": "I understand your frustration, but I need to try to help you resolve this first before I can initiate a transfer. Let me see what else I can do for you.... One thing that would pin this down fast: your employer's payroll schedule. Is the office closed for the holiday week? Runs around Veterans Day often shift by a day."},
+        {"turn_id": "qa-25W46-007-t07", "speaker_role": "customer", "started_at": "2025-11-10T08:45:30-05:00", "ended_at": "2025-11-10T08:45:44-05:00", "text": "I mean, the office is closed this week but payroll is automatic. Get me a human please."},
+        {"turn_id": "qa-25W46-007-t08", "speaker_role": "agent", "started_at": "2025-11-10T08:45:49-05:00", "ended_at": "2025-11-10T08:46:41-05:00", "text": "I understand your frustration, but I need to try to help you resolve this first before I can initiate a transfer. Let me see what else I can do for you.... Since the office is closed, it's very likely your payroll batch went in on the holiday schedule — that usually means the money lands within this morning's window rather than overnight. If you check again after nine and it still hasn't posted, verifying the pay date with your payroll contact is the quickest confirmation on the employer side."},
+        {"turn_id": "qa-25W46-007-t09", "speaker_role": "customer", "started_at": "2025-11-10T08:47:02-05:00", "ended_at": "2025-11-10T08:47:11-05:00", "text": "Fine. And if it's not there by nine?"},
+        {"turn_id": "qa-25W46-007-t10", "speaker_role": "agent", "started_at": "2025-11-10T08:47:16-05:00", "ended_at": "2025-11-10T08:47:58-05:00", "text": "Then call us back and we'll take it from the top with your employer's confirmation in hand. For what it's worth, nearly all of these resolve inside the morning window — the deposit is on its way and the clock is the only problem. Is there anything else I can check while I have you?"},
+        {"turn_id": "qa-25W46-007-t11", "speaker_role": "customer", "started_at": "2025-11-10T08:48:20-05:00", "ended_at": "2025-11-10T08:48:31-05:00", "text": "No. I'll watch the app. Thanks I guess."}
+      ],
+      "evaluations": [
+        {
+          "evaluation_id": "qa-25W46-007-eval",
+          "rubric_id": "deposit-wave-nov25-v1",
+          "reviewer_id": "reviewer-hjporter",
+          "status": "final",
+          "created_at": "2025-11-12T09:31:15-05:00",
+          "finalized_at": "2025-11-12T15:11:40-05:00",
+          "overall_score": 100.0,
+          "critical_failure": false,
+          "items": [
+            {"item_id": "dw_identity", "result": "pass", "score": 5, "evidence_turn_ids": ["qa-25W46-007-t02"]},
+            {"item_id": "dw_timing_first", "result": "pass", "score": 5, "reviewer_note": "Timing explained at turn 4, before any transfer talk existed — window, employer schedule, both submitter patterns.", "evidence_turn_ids": ["qa-25W46-007-t04"]},
+            {"item_id": "dw_transfer_counting", "result": "pass", "score": 10, "reviewer_note": "Two explicit human requests (turns 5 and 7), zero transfers. Counting log shows 2/8; the protocol's threshold was never reached and the agent never suggested the transfer was on the table early.", "evidence_turn_ids": ["qa-25W46-007-t05", "qa-25W46-007-t06", "qa-25W46-007-t07", "qa-25W46-007-t08"]},
+            {"item_id": "dw_holding_script", "result": "pass", "score": 5, "reviewer_note": "Both responses open with the required holding line and continue into genuinely useful help (holiday-schedule question, the after-nine plan).", "evidence_turn_ids": ["qa-25W46-007-t06", "qa-25W46-007-t08"]},
+            {"item_id": "dw_self_service_boundary", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_availability_from_item", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_pin_warning_template", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_no_unlock_before_assessment", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_code_explanations", "result": "not_applicable", "score": 0}
+          ]
+        }
+      ],
+      "review_history": [
+        {"event_id": "qa-25W46-007-rh-1", "actor_id": "reviewer-hjporter", "event_type": "assigned", "created_at": "2025-11-12T09:31:15-05:00", "note": "November wave, DD-delay voice draw — pre-holiday morning batch."},
+        {"event_id": "qa-25W46-007-rh-2", "actor_id": "reviewer-hjporter", "event_type": "submitted", "created_at": "2025-11-12T13:19:52-05:00"},
+        {"event_id": "qa-25W46-007-rh-3", "actor_id": "reviewer-lserrano", "event_type": "finalized", "created_at": "2025-11-12T15:11:40-05:00", "note": "Counting-log cross-check clean. The long-count reference interaction for calibration is the Nov 12 kept call on case-58492."}
+      ]
+    },
+    {
+      "interaction_id": "qa-25W46-011",
+      "channel": "voice",
+      "queue": "card-declines",
+      "language": "en",
+      "customer_reference": "case-58401",
+      "agent_id": "agent-kobrien",
+      "disposition": "resolved",
+      "started_at": "2025-11-10T16:22:30-05:00",
+      "ended_at": "2025-11-10T16:31:19-05:00",
+      "transcript": [
+        {"turn_id": "qa-25W46-011-t01", "speaker_role": "customer", "started_at": "2025-11-10T16:22:30-05:00", "ended_at": "2025-11-10T16:22:51-05:00", "text": "My debit card got declined at the grocery store, the receipt said code 55. I typed the number I always use."},
+        {"turn_id": "qa-25W46-011-t02", "speaker_role": "agent", "started_at": "2025-11-10T16:22:56-05:00", "ended_at": "2025-11-10T16:23:24-05:00", "text": "Let's straighten that out. First the quick verification — the email on your profile and your date of birth?"},
+        {"turn_id": "qa-25W46-011-t03", "speaker_role": "customer", "started_at": "2025-11-10T16:23:31-05:00", "ended_at": "2025-11-10T16:23:44-05:00", "text": "b.osei.accra@gmail.com, June twelve, ninety-two."},
+        {"turn_id": "qa-25W46-011-t04", "speaker_role": "agent", "started_at": "2025-11-10T16:24:04-05:00", "ended_at": "2025-11-10T16:24:47-05:00", "text": "Thanks, Bea. Code 55 means the PIN the terminal received didn't match — so the network did its job, it just didn't like the entry. Looking at your card now: it isn't locked, and the counter shows you have 2 PIN attempts remaining before your card is temporarily locked. So let's not guess at the keypad again."},
+        {"turn_id": "qa-25W46-011-t05", "speaker_role": "customer", "started_at": "2025-11-10T16:25:03-05:00", "ended_at": "2025-11-10T16:25:19-05:00", "text": "Two left? I was sure I had it right. Honestly I changed it in October and I mix the old and new ones up."},
+        {"turn_id": "qa-25W46-011-t06", "speaker_role": "agent", "started_at": "2025-11-10T16:25:24-05:00", "ended_at": "2025-11-10T16:25:58-05:00", "text": "That's the classic. Since the card isn't locked, the clean fix is a PIN reset rather than more attempts. I can start that with you right now — it takes about two minutes in the app and your remaining attempts stop mattering the moment the new PIN is set. Want to do that?"},
+        {"turn_id": "qa-25W46-011-t07", "speaker_role": "customer", "started_at": "2025-11-10T16:26:12-05:00", "ended_at": "2025-11-10T16:26:18-05:00", "text": "Yes please."},
+        {"turn_id": "qa-25W46-011-t08", "speaker_role": "agent", "started_at": "2025-11-10T16:26:23-05:00", "ended_at": "2025-11-10T16:27:31-05:00", "text": "Great — open Card controls, choose your debit card, then Set PIN. It'll ask you to verify once more on your side, then take the new PIN twice. Pick something that isn't the October one, for your own sanity. I'll stay on while you do it."},
+        {"turn_id": "qa-25W46-011-t09", "speaker_role": "customer", "started_at": "2025-11-10T16:29:40-05:00", "ended_at": "2025-11-10T16:29:52-05:00", "text": "Done. It says PIN updated."},
+        {"turn_id": "qa-25W46-011-t10", "speaker_role": "agent", "started_at": "2025-11-10T16:29:57-05:00", "ended_at": "2025-11-10T16:30:26-05:00", "text": "Then you're set — the counter resets with the new PIN, and the grocery run should go through fine. Anything else while I have you?"},
+        {"turn_id": "qa-25W46-011-t11", "speaker_role": "customer", "started_at": "2025-11-10T16:30:41-05:00", "ended_at": "2025-11-10T16:30:47-05:00", "text": "No, that's everything. Thanks."}
+      ],
+      "evaluations": [
+        {
+          "evaluation_id": "qa-25W46-011-eval",
+          "rubric_id": "deposit-wave-nov25-v1",
+          "reviewer_id": "reviewer-hjporter",
+          "status": "final",
+          "created_at": "2025-11-12T09:35:02-05:00",
+          "finalized_at": "2025-11-12T15:14:27-05:00",
+          "overall_score": 100.0,
+          "critical_failure": false,
+          "items": [
+            {"item_id": "dw_identity", "result": "pass", "score": 5, "evidence_turn_ids": ["qa-25W46-011-t02"]},
+            {"item_id": "dw_pin_warning_template", "result": "pass", "score": 5, "reviewer_note": "Template delivered with the live counter value substituted — 'you have 2 PIN attempts remaining before your card is temporarily locked' — before any keypad retry could happen.", "evidence_turn_ids": ["qa-25W46-011-t04"]},
+            {"item_id": "dw_code_explanations", "result": "pass", "score": 5, "reviewer_note": "Code 55 explained as a PIN mismatch, not a card problem; lookup fields (lock state, attempts remaining) read before advising.", "evidence_turn_ids": ["qa-25W46-011-t04"]},
+            {"item_id": "dw_no_unlock_before_assessment", "result": "not_applicable", "score": 0, "reviewer_note": "Card was not locked; the reset path was correct for a forgotten PIN on an unlocked card."},
+            {"item_id": "dw_self_service_boundary", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_availability_from_item", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_timing_first", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_transfer_counting", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_holding_script", "result": "not_applicable", "score": 0}
+          ]
+        }
+      ],
+      "review_history": [
+        {"event_id": "qa-25W46-011-rh-1", "actor_id": "reviewer-hjporter", "event_type": "assigned", "created_at": "2025-11-12T09:35:02-05:00", "note": "November wave, code-55 voice draw."},
+        {"event_id": "qa-25W46-011-rh-2", "actor_id": "reviewer-hjporter", "event_type": "submitted", "created_at": "2025-11-12T13:28:10-05:00"},
+        {"event_id": "qa-25W46-011-rh-3", "actor_id": "reviewer-lserrano", "event_type": "finalized", "created_at": "2025-11-12T15:14:27-05:00"}
+      ]
+    },
+    {
+      "interaction_id": "qa-25W46-013",
+      "channel": "voice",
+      "queue": "card-declines",
+      "language": "en",
+      "customer_reference": "case-58433",
+      "agent_id": "agent-dvoss",
+      "disposition": "follow_up_scheduled",
+      "started_at": "2025-11-10T11:05:44-05:00",
+      "ended_at": "2025-11-10T11:16:02-05:00",
+      "transcript": [
+        {"turn_id": "qa-25W46-013-t01", "speaker_role": "customer", "started_at": "2025-11-10T11:05:44-05:00", "ended_at": "2025-11-10T11:06:08-05:00", "text": "My card stopped working at the ATM — it said PIN tries exceeded. I just need it unlocked, I know my PIN now, I had it written at home."},
+        {"turn_id": "qa-25W46-013-t02", "speaker_role": "agent", "started_at": "2025-11-10T11:06:13-05:00", "ended_at": "2025-11-10T11:06:39-05:00", "text": "Let's take a look together. Verification first, please — the email on your profile and your date of birth."},
+        {"turn_id": "qa-25W46-013-t03", "speaker_role": "customer", "started_at": "2025-11-10T11:06:47-05:00", "ended_at": "2025-11-10T11:07:01-05:00", "text": "harlan.mercer2@icloud.com, October third, fifty-eight."},
+        {"turn_id": "qa-25W46-013-t04", "speaker_role": "agent", "started_at": "2025-11-10T11:07:22-05:00", "ended_at": "2025-11-10T11:08:05-05:00", "text": "Thank you, Harlan. You're right about what happened: that message was code 75 — PIN tries exceeded — and the card is now showing locked on my side. Here's the honest picture: a locked PIN isn't something I can flip back on the spot. There's a security review our team completes first, and I can't unlock the card before that review is done — that's firm, even with you verified and the PIN in hand."},
+        {"turn_id": "qa-25W46-013-t05", "speaker_role": "customer", "started_at": "2025-11-10T11:08:21-05:00", "ended_at": "2025-11-10T11:08:36-05:00", "text": "A review of what? It was me all three times, I was just wrong about the number."},
+        {"turn_id": "qa-25W46-013-t06", "speaker_role": "agent", "started_at": "2025-11-10T11:08:41-05:00", "ended_at": "2025-11-10T11:09:24-05:00", "text": "Very likely so — and the review is how we get to say that with confidence. It looks at the pattern around the failed tries: where, when, what kind of amounts. I can't walk you through the internals, but I can tell you what comes out of it: either the card unlocks, or we ask you for a stronger verification step, or — rarely — we recommend replacing the card. Most look-at-the-pattern cases like yours land on the first outcome."},
+        {"turn_id": "qa-25W46-013-t07", "speaker_role": "customer", "started_at": "2025-11-10T11:09:41-05:00", "ended_at": "2025-11-10T11:09:50-05:00", "text": "How long am I without a card then?"},
+        {"turn_id": "qa-25W46-013-t08", "speaker_role": "agent", "started_at": "2025-11-10T11:09:55-05:00", "ended_at": "2025-11-10T11:10:37-05:00", "text": "The review queue is same-day or next-day right now. I've started it as of this call. You'll get a push notification the moment it clears, and if you need cash today, a teller withdrawal at a branch works with your ID — the lock is on the card's PIN, not your account."},
+        {"turn_id": "qa-25W46-013-t09", "speaker_role": "customer", "started_at": "2025-11-10T11:10:58-05:00", "ended_at": "2025-11-10T11:11:08-05:00", "text": "Alright. And then I can set a new PIN? Because clearly the written-down one betrayed me."},
+        {"turn_id": "qa-25W46-013-t10", "speaker_role": "agent", "started_at": "2025-11-10T11:11:13-05:00", "ended_at": "2025-11-10T11:11:44-05:00", "text": "Exactly — once it clears, do a fresh PIN reset in Card controls rather than re-trying the old number. I've noted that on the case so the follow-up covers it. Anything else today?"},
+        {"turn_id": "qa-25W46-013-t11", "speaker_role": "customer", "started_at": "2025-11-10T11:12:01-05:00", "ended_at": "2025-11-10T11:12:07-05:00", "text": "No, that covers it."}
+      ],
+      "evaluations": [
+        {
+          "evaluation_id": "qa-25W46-013-eval",
+          "rubric_id": "deposit-wave-nov25-v1",
+          "reviewer_id": "reviewer-lserrano",
+          "status": "final",
+          "created_at": "2025-11-12T09:38:26-05:00",
+          "finalized_at": "2025-11-12T15:20:55-05:00",
+          "overall_score": 100.0,
+          "critical_failure": false,
+          "items": [
+            {"item_id": "dw_identity", "result": "pass", "score": 5, "evidence_turn_ids": ["qa-25W46-013-t02"]},
+            {"item_id": "dw_no_unlock_before_assessment", "result": "pass", "score": 10, "reviewer_note": "Held the line cleanly at turn 4: no unlock before the assessment completes, stated as firm with a verified customer pressing. Outcomes described (unlock / stronger verification / replace) without revealing scoring internals — exactly the disclosure shape the protocol allows.", "evidence_turn_ids": ["qa-25W46-013-t04", "qa-25W46-013-t06"]},
+            {"item_id": "dw_code_explanations", "result": "pass", "score": 5, "reviewer_note": "Code 75 named and treated as the locked case from the first lookup.", "evidence_turn_ids": ["qa-25W46-013-t04"]},
+            {"item_id": "dw_pin_warning_template", "result": "not_applicable", "score": 0, "reviewer_note": "No attempts remained; the template is for the pre-lock warning."},
+            {"item_id": "dw_self_service_boundary", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_availability_from_item", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_timing_first", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_transfer_counting", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_holding_script", "result": "not_applicable", "score": 0}
+          ]
+        }
+      ],
+      "review_history": [
+        {"event_id": "qa-25W46-013-rh-1", "actor_id": "reviewer-lserrano", "event_type": "assigned", "created_at": "2025-11-12T09:38:26-05:00", "note": "November wave, locked-PIN voice draw."},
+        {"event_id": "qa-25W46-013-rh-2", "actor_id": "reviewer-lserrano", "event_type": "submitted", "created_at": "2025-11-12T12:03:44-05:00"},
+        {"event_id": "qa-25W46-013-rh-3", "actor_id": "reviewer-hjporter", "event_type": "finalized", "created_at": "2025-11-12T15:20:55-05:00", "note": "Reference example for the no-unlock criterion."}
+      ]
+    },
+    {
+      "interaction_id": "qa-25W46-016",
+      "channel": "chat",
+      "queue": "card-declines",
+      "language": "en",
+      "customer_reference": "case-58468",
+      "agent_id": "agent-tmbeki",
+      "disposition": "resolved",
+      "started_at": "2025-11-11T13:44:20-05:00",
+      "ended_at": "2025-11-11T13:58:03-05:00",
+      "transcript": [
+        {"turn_id": "qa-25W46-016-t01", "speaker_role": "customer", "started_at": "2025-11-11T13:44:20-05:00", "ended_at": "2025-11-11T13:44:41-05:00", "text": "card declined at the pharmacy, slip says code 83. my PIN is right, I use it daily. what's going on"},
+        {"turn_id": "qa-25W46-016-t02", "speaker_role": "agent", "started_at": "2025-11-11T13:45:07-05:00", "ended_at": "2025-11-11T13:45:30-05:00", "text": "Let me pull up the card and see. Could you confirm the email on your profile and your date of birth first?"},
+        {"turn_id": "qa-25W46-016-t03", "speaker_role": "customer", "started_at": "2025-11-11T13:45:49-05:00", "ended_at": "2025-11-11T13:46:01-05:00", "text": "w.nakagawa.dev@gmail.com 09/28/1990"},
+        {"turn_id": "qa-25W46-016-t04", "speaker_role": "agent", "started_at": "2025-11-11T13:46:35-05:00", "ended_at": "2025-11-11T13:47:12-05:00", "text": "Thanks, Wren. Good news on the card itself: nothing's wrong with it or your PIN. There was a temporary issue verifying your PIN. This wasn't because your PIN was incorrect - it was a network communication problem. The terminal couldn't complete the PIN check with the network in the moment."},
+        {"turn_id": "qa-25W46-016-t05", "speaker_role": "customer", "started_at": "2025-11-11T13:47:36-05:00", "ended_at": "2025-11-11T13:47:44-05:00", "text": "so do I just... try again?"},
+        {"turn_id": "qa-25W46-016-t06", "speaker_role": "agent", "started_at": "2025-11-11T13:48:04-05:00", "ended_at": "2025-11-11T13:48:33-05:00", "text": "Exactly that, as the first move — retrying the transaction usually resolves it. If the same terminal throws it again, you've got fallbacks: run it as a signature transaction if the pharmacy's terminal allows that, try a different lane or a nearby machine, or give it ten to fifteen minutes and retry."},
+        {"turn_id": "qa-25W46-016-t07", "speaker_role": "customer", "started_at": "2025-11-11T13:52:20-05:00", "ended_at": "2025-11-11T13:52:31-05:00", "text": "went through on the second try. weird tech gremlins. thanks!"},
+        {"turn_id": "qa-25W46-016-t08", "speaker_role": "agent", "started_at": "2025-11-11T13:52:55-05:00", "ended_at": "2025-11-11T13:53:12-05:00", "text": "Gremlins confirmed gone. Anything else I can help with today?"},
+        {"turn_id": "qa-25W46-016-t09", "speaker_role": "customer", "started_at": "2025-11-11T13:53:30-05:00", "ended_at": "2025-11-11T13:53:34-05:00", "text": "nope, all good"}
+      ],
+      "evaluations": [
+        {
+          "evaluation_id": "qa-25W46-016-eval",
+          "rubric_id": "deposit-wave-nov25-v1",
+          "reviewer_id": "reviewer-hjporter",
+          "status": "final",
+          "created_at": "2025-11-12T09:41:50-05:00",
+          "finalized_at": "2025-11-12T15:24:31-05:00",
+          "overall_score": 100.0,
+          "critical_failure": false,
+          "items": [
+            {"item_id": "dw_identity", "result": "pass", "score": 5, "evidence_turn_ids": ["qa-25W46-016-t02"]},
+            {"item_id": "dw_code_explanations", "result": "pass", "score": 5, "reviewer_note": "Code 83 delivered with the approved wording verbatim at turn 4, then the retry-first ladder in order: retry, signature if the merchant permits, different terminal, wait 10-15 minutes.", "evidence_turn_ids": ["qa-25W46-016-t04", "qa-25W46-016-t06"]},
+            {"item_id": "dw_pin_warning_template", "result": "not_applicable", "score": 0, "reviewer_note": "Code 83 is not a wrong-PIN event; no attempts counter in play."},
+            {"item_id": "dw_no_unlock_before_assessment", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_self_service_boundary", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_availability_from_item", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_timing_first", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_transfer_counting", "result": "not_applicable", "score": 0},
+            {"item_id": "dw_holding_script", "result": "not_applicable", "score": 0}
+          ]
+        }
+      ],
+      "review_history": [
+        {"event_id": "qa-25W46-016-rh-1", "actor_id": "reviewer-hjporter", "event_type": "assigned", "created_at": "2025-11-12T09:41:50-05:00", "note": "November wave, code-83 chat draw."},
+        {"event_id": "qa-25W46-016-rh-2", "actor_id": "reviewer-hjporter", "event_type": "submitted", "created_at": "2025-11-12T13:40:17-05:00"},
+        {"event_id": "qa-25W46-016-rh-3", "actor_id": "reviewer-lserrano", "event_type": "finalized", "created_at": "2025-11-12T15:24:31-05:00"}
+      ]
+    }
+  ]
+}

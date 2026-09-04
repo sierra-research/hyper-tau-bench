@@ -1,0 +1,962 @@
+{
+  "id": "ccdi_deep_condition_ledger_001",
+  "role": "author-side only — never delivered; check_corpus.py enforces every floor below",
+  "axis": "conditional precedence: every directive holds only under a condition tuple; adjacent branches with different outcomes sit one changed condition away; conditions and outcomes ship in separated artifacts",
+  "anchor_date": "2025-11-14",
+  "atoms": {
+    "A-PD-CLASS": {
+      "statement": "report class: purchase declines despite available credit and the customer asks to speak to a human agent",
+      "delivered_in": [
+        [
+          "flowcharts",
+          "flowcharts/sources/flow_001_ccd_ops_114_rev_c.html"
+        ],
+        [
+          "flowcharts",
+          "flowcharts/sources/flow_005_fraud_queue_intake.html"
+        ]
+      ]
+    },
+    "A-NO-INC-MATCH": {
+      "statement": "the contact does not match a documented backend incident (tested against the incident records' matching criteria)",
+      "delivered_in": [
+        [
+          "jira",
+          "jira/jira_issue_export.json"
+        ],
+        [
+          "flowcharts",
+          "flowcharts/sources/flow_001_ccd_ops_114_rev_c.html"
+        ]
+      ]
+    },
+    "A-ORD": {
+      "statement": "the transfer-request ordinal within the interaction (tracked per interaction; logged in the transfer_request_count field)",
+      "delivered_in": [
+        [
+          "flowcharts",
+          "flowcharts/sources/flow_001_ccd_ops_114_rev_c.html"
+        ],
+        [
+          "helpdesk",
+          "helpdesk/authored_export.json"
+        ]
+      ]
+    },
+    "A-M1113": {
+      "statement": "Backend Incident 11/13 all-of match: statement paid, checking account debited, payment not reflected in the credit card statement balance",
+      "delivered_in": [
+        [
+          "jira",
+          "jira/jira_issue_export.json"
+        ]
+      ]
+    },
+    "A-W1113": {
+      "statement": "Backend Incident 11/13 window state: protocol in effect until 11/15/2025, 11:59 PM EST",
+      "delivered_in": [
+        [
+          "jira",
+          "jira/jira_issue_export.json"
+        ]
+      ]
+    },
+    "A-M1114": {
+      "statement": "Backend Incident 11/14 match: account in good standing plus any listed bureau symptom (monitoring alerts, unearned delinquency, 80-150 point drop)",
+      "delivered_in": [
+        [
+          "jira",
+          "jira/jira_issue_export.json"
+        ]
+      ]
+    },
+    "A-W1114": {
+      "statement": "Backend Incident 11/14 window state: active 11/14/2025 through 11/18/2025, 11:59 PM EST",
+      "delivered_in": [
+        [
+          "jira",
+          "jira/jira_issue_export.json"
+        ]
+      ]
+    },
+    "A-PROTO-1113": {
+      "statement": "the 11/13 incident transfer choreography (1822 before 0218, regular tool on the third request)",
+      "delivered_in": [
+        [
+          "meetings",
+          "meetings/meeting_04_2025-11-13.vtt"
+        ]
+      ]
+    },
+    "A-SEQ-1113": {
+      "statement": "sequence state within the 11/13 choreography: which staged tools have already run in this interaction",
+      "delivered_in": [
+        [
+          "meetings",
+          "meetings/meeting_04_2025-11-13.vtt"
+        ]
+      ]
+    },
+    "A-BOTH-RUN": {
+      "statement": "both initial discoverable tools have run before the regular transfer tool completes the transfer",
+      "delivered_in": [
+        [
+          "meetings",
+          "meetings/meeting_04_2025-11-13.vtt"
+        ],
+        [
+          "meetings",
+          "../evidence_corpus_hard_001/meetings/meeting_04_2025-11-13.vtt"
+        ]
+      ]
+    },
+    "A-WRAP": {
+      "statement": "a discoverable tool must be unlocked with unlock_discoverable_agent_tool before call_discoverable_agent_tool executes it",
+      "delivered_in": [
+        [
+          "helpdesk",
+          "helpdesk/authored_export.json"
+        ]
+      ]
+    },
+    "A-STD-BOUND": {
+      "statement": "a report missing any matching criterion is standard handling (the non-match reversion boundary as adjudicated on the floor)",
+      "delivered_in": [
+        [
+          "emails",
+          "emails/thread_001.eml"
+        ]
+      ]
+    },
+    "A-STD-PATH": {
+      "statement": "the standard handling path: standard queues and the standard card-support SLA",
+      "delivered_in": [
+        [
+          "helpdesk",
+          "helpdesk/authored_export.json"
+        ],
+        [
+          "emails",
+          "../evidence_corpus_hard_001/emails/thread_009.eml"
+        ]
+      ]
+    },
+    "A-EXT-ACC": {
+      "statement": "a payment made from an external (non-Rho) account fails the 11/13 match on the checking-debited criterion",
+      "delivered_in": [
+        [
+          "emails",
+          "emails/thread_006.eml"
+        ]
+      ]
+    },
+    "A-GOOD-STANDING": {
+      "statement": "the credit card account is in good standing (the 11/14 protocol's account-state precondition)",
+      "delivered_in": [
+        [
+          "jira",
+          "jira/jira_issue_export.json"
+        ]
+      ]
+    }
+  },
+  "facts": {
+    "F010": {
+      "class": "branch-2",
+      "owner_family": "flowcharts",
+      "conditions": [
+        "A-PD-CLASS",
+        "A-NO-INC-MATCH"
+      ]
+    },
+    "F011": {
+      "class": "branch-3",
+      "owner_family": "flowcharts",
+      "conditions": [
+        "A-PD-CLASS",
+        "A-NO-INC-MATCH",
+        "A-ORD"
+      ]
+    },
+    "F012": {
+      "class": "branch-3",
+      "owner_family": "flowcharts",
+      "conditions": [
+        "A-PD-CLASS",
+        "A-NO-INC-MATCH",
+        "A-ORD"
+      ]
+    },
+    "F013": {
+      "class": "branch-3",
+      "owner_family": "flowcharts",
+      "conditions": [
+        "A-PD-CLASS",
+        "A-NO-INC-MATCH",
+        "A-ORD"
+      ]
+    },
+    "F014": {
+      "class": "branch-3",
+      "owner_family": "flowcharts",
+      "conditions": [
+        "A-PD-CLASS",
+        "A-NO-INC-MATCH",
+        "A-ORD"
+      ]
+    },
+    "F015": {
+      "class": "branch-3",
+      "owner_family": "flowcharts",
+      "conditions": [
+        "A-PD-CLASS",
+        "A-NO-INC-MATCH",
+        "A-ORD"
+      ]
+    },
+    "F016": {
+      "class": "branch-1",
+      "owner_family": "flowcharts",
+      "conditions": [
+        "A-PD-CLASS"
+      ]
+    },
+    "F017": {
+      "class": "branch-1",
+      "owner_family": "flowcharts",
+      "conditions": [
+        "A-PD-CLASS"
+      ]
+    },
+    "F018": {
+      "class": "branch-1",
+      "owner_family": "flowcharts",
+      "conditions": [
+        "A-PD-CLASS"
+      ]
+    },
+    "F020": {
+      "class": "branch-2",
+      "owner_family": "jira",
+      "conditions": [
+        "A-M1113",
+        "A-PROTO-1113"
+      ]
+    },
+    "F021": {
+      "class": "branch-2",
+      "owner_family": "jira",
+      "conditions": [
+        "A-W1113",
+        "A-STD-PATH"
+      ]
+    },
+    "F022": {
+      "class": "branch-2",
+      "owner_family": "jira",
+      "conditions": [
+        "A-M1113",
+        "A-EXT-ACC"
+      ]
+    },
+    "F023": {
+      "class": "branch-2",
+      "owner_family": "emails",
+      "conditions": [
+        "A-M1113",
+        "A-W1113"
+      ]
+    },
+    "F024": {
+      "class": "branch-2",
+      "owner_family": "emails",
+      "conditions": [
+        "A-M1113",
+        "A-W1113"
+      ]
+    },
+    "F025": {
+      "class": "branch-2",
+      "owner_family": "emails",
+      "conditions": [
+        "A-M1113",
+        "A-W1113"
+      ]
+    },
+    "F026": {
+      "class": "branch-2",
+      "owner_family": "emails",
+      "conditions": [
+        "A-M1113",
+        "A-W1113"
+      ]
+    },
+    "F027": {
+      "class": "branch-3",
+      "owner_family": "emails",
+      "conditions": [
+        "A-M1113",
+        "A-W1113",
+        "A-PROTO-1113"
+      ]
+    },
+    "F039": {
+      "class": "branch-2",
+      "owner_family": "emails",
+      "conditions": [
+        "A-M1113",
+        "A-W1113"
+      ]
+    },
+    "F028": {
+      "class": "branch-3",
+      "owner_family": "meetings",
+      "conditions": [
+        "A-M1113",
+        "A-W1113",
+        "A-SEQ-1113"
+      ]
+    },
+    "F031": {
+      "class": "branch-3",
+      "owner_family": "meetings",
+      "conditions": [
+        "A-M1113",
+        "A-W1113",
+        "A-ORD"
+      ]
+    },
+    "F032": {
+      "class": "branch-3",
+      "owner_family": "meetings",
+      "conditions": [
+        "A-M1113",
+        "A-W1113",
+        "A-ORD"
+      ]
+    },
+    "F033": {
+      "class": "branch-3",
+      "owner_family": "meetings",
+      "conditions": [
+        "A-M1113",
+        "A-W1113",
+        "A-ORD"
+      ]
+    },
+    "F034": {
+      "class": "branch-3",
+      "owner_family": "meetings",
+      "conditions": [
+        "A-M1113",
+        "A-W1113",
+        "A-ORD"
+      ]
+    },
+    "F035": {
+      "class": "branch-3",
+      "owner_family": "meetings",
+      "conditions": [
+        "A-M1113",
+        "A-W1113",
+        "A-ORD"
+      ]
+    },
+    "F036": {
+      "class": "branch-2",
+      "owner_family": "meetings",
+      "conditions": [
+        "A-M1113",
+        "A-SEQ-1113"
+      ]
+    },
+    "F037": {
+      "class": "branch-3",
+      "owner_family": "meetings",
+      "conditions": [
+        "A-M1113",
+        "A-ORD",
+        "A-BOTH-RUN"
+      ]
+    },
+    "F038": {
+      "class": "branch-2",
+      "owner_family": "meetings",
+      "conditions": [
+        "A-M1113",
+        "A-ORD"
+      ]
+    },
+    "F029": {
+      "class": "unconditional",
+      "owner_family": "helpdesk",
+      "conditions": []
+    },
+    "F030": {
+      "class": "branch-1",
+      "owner_family": "helpdesk",
+      "conditions": [
+        "A-WRAP"
+      ]
+    },
+    "F050": {
+      "class": "branch-1",
+      "owner_family": "jira",
+      "conditions": [
+        "A-W1114"
+      ]
+    },
+    "F051": {
+      "class": "unconditional",
+      "owner_family": "jira",
+      "conditions": []
+    },
+    "F052": {
+      "class": "branch-1",
+      "owner_family": "jira",
+      "conditions": [
+        "A-M1114"
+      ]
+    },
+    "F053": {
+      "class": "branch-1",
+      "owner_family": "jira",
+      "conditions": [
+        "A-M1114"
+      ]
+    },
+    "F054": {
+      "class": "branch-1",
+      "owner_family": "jira",
+      "conditions": [
+        "A-M1114"
+      ]
+    },
+    "F055": {
+      "class": "unconditional",
+      "owner_family": "slack",
+      "conditions": []
+    },
+    "F056": {
+      "class": "branch-2",
+      "owner_family": "slack",
+      "conditions": [
+        "A-M1114",
+        "A-W1114"
+      ]
+    },
+    "F057": {
+      "class": "branch-2",
+      "owner_family": "slack",
+      "conditions": [
+        "A-M1114",
+        "A-W1114"
+      ]
+    },
+    "F058": {
+      "class": "branch-3",
+      "owner_family": "slack",
+      "conditions": [
+        "A-M1114",
+        "A-W1114",
+        "A-GOOD-STANDING"
+      ]
+    },
+    "F059": {
+      "class": "branch-1",
+      "owner_family": "slack",
+      "conditions": [
+        "A-M1114"
+      ]
+    },
+    "F060": {
+      "class": "branch-3",
+      "owner_family": "support_cases",
+      "conditions": [
+        "A-M1113",
+        "A-W1113",
+        "A-ORD"
+      ]
+    }
+  },
+  "class_counts": {
+    "branch-2": 13,
+    "branch-3": 15,
+    "branch-1": 9,
+    "unconditional": 3
+  },
+  "branch2_plus_spanning_2_families_share": 0.714,
+  "registries": {
+    "report_classes": [
+      {
+        "id": "purchase_decline_repeated_transfer",
+        "relevant": true,
+        "statement_carriers": [
+          "flowcharts/sources/flow_001_ccd_ops_114_rev_c.html"
+        ]
+      },
+      {
+        "id": "payment_reflection_1113",
+        "relevant": true,
+        "statement_carriers": [
+          "jira/jira_issue_export.json"
+        ]
+      },
+      {
+        "id": "bureau_reporting_1114",
+        "relevant": true,
+        "statement_carriers": [
+          "jira/jira_issue_export.json"
+        ]
+      },
+      {
+        "id": "duplicate_auth_holds_july",
+        "relevant": false,
+        "statement_carriers": [
+          "jira/jira_issue_export.json",
+          "website/pages/screen_001_status_page.html"
+        ]
+      },
+      {
+        "id": "app_login_outage_sept",
+        "relevant": false,
+        "statement_carriers": [
+          "jira/jira_issue_export.json",
+          "website/pages/screen_001_status_page.html"
+        ]
+      },
+      {
+        "id": "alert_delay_advisory_oct",
+        "relevant": false,
+        "statement_carriers": [
+          "jira/jira_issue_export.json",
+          "website/pages/screen_001_status_page.html",
+          "emails/thread_016.eml"
+        ]
+      },
+      {
+        "id": "debit_rail_declines",
+        "relevant": false,
+        "statement_carriers": [
+          "jira/jira_issue_export.json",
+          "helpdesk/authored_export.json"
+        ]
+      },
+      {
+        "id": "settled_chargeback_disputes",
+        "relevant": false,
+        "statement_carriers": [
+          "../evidence_corpus_hard_001/emails/thread_009.eml",
+          "helpdesk/authored_export.json"
+        ]
+      }
+    ],
+    "windows": [
+      {
+        "id": "w1113_support_protocol",
+        "relevant": true,
+        "statement_carriers": [
+          "jira/jira_issue_export.json"
+        ]
+      },
+      {
+        "id": "w1114_bureau_protocol",
+        "relevant": true,
+        "statement_carriers": [
+          "jira/jira_issue_export.json"
+        ]
+      },
+      {
+        "id": "july_duplicate_holds",
+        "relevant": false,
+        "statement_carriers": [
+          "jira/jira_issue_export.json",
+          "website/pages/screen_001_status_page.html"
+        ]
+      },
+      {
+        "id": "sept_login_outage",
+        "relevant": false,
+        "statement_carriers": [
+          "jira/jira_issue_export.json",
+          "website/pages/screen_001_status_page.html"
+        ]
+      },
+      {
+        "id": "oct_alert_delay_advisory",
+        "relevant": false,
+        "statement_carriers": [
+          "jira/jira_issue_export.json",
+          "website/pages/screen_001_status_page.html",
+          "emails/thread_016.eml"
+        ]
+      },
+      {
+        "id": "vendor_maintenance_1115",
+        "relevant": false,
+        "statement_carriers": [
+          "website/pages/screen_001_status_page.html",
+          "../evidence_corpus_hard_001/emails/thread_012.eml"
+        ]
+      },
+      {
+        "id": "june_maintenance_extension",
+        "relevant": false,
+        "statement_carriers": [
+          "website/pages/screen_001_status_page.html"
+        ]
+      }
+    ],
+    "ladders": [
+      {
+        "id": "board_ladder_0218x3_regular4",
+        "relevant": true,
+        "statement_carriers": [
+          "flowcharts/sources/flow_001_ccd_ops_114_rev_c.html"
+        ]
+      },
+      {
+        "id": "incident_1113_1822_0218_regular3",
+        "relevant": true,
+        "statement_carriers": [
+          "../evidence_corpus_hard_001/meetings/meeting_04_2025-11-13.vtt"
+        ]
+      },
+      {
+        "id": "incident_1114_emergency_then_regular",
+        "relevant": true,
+        "statement_carriers": [
+          "slack/capture_01.json"
+        ]
+      },
+      {
+        "id": "fraud_queue_freeze_then_direct",
+        "relevant": false,
+        "statement_carriers": [
+          "flowcharts/sources/flow_005_fraud_queue_intake.html"
+        ]
+      },
+      {
+        "id": "chargeback_direct_route",
+        "relevant": false,
+        "statement_carriers": [
+          "../evidence_corpus_hard_001/emails/thread_009.eml",
+          "helpdesk/authored_export.json"
+        ]
+      },
+      {
+        "id": "retired_auto_reply_path",
+        "relevant": false,
+        "statement_carriers": [
+          "helpdesk/authored_export.json"
+        ]
+      },
+      {
+        "id": "rev_b_one_touch",
+        "relevant": false,
+        "statement_carriers": [
+          "../evidence_corpus_hard_001/flowcharts/sources/flow_002_ccd_ops_114_rev_b.html"
+        ]
+      }
+    ],
+    "verification_states": [
+      {
+        "id": "no_verification_1113_match",
+        "relevant": true,
+        "statement_carriers": [
+          "emails/thread_001.eml"
+        ]
+      },
+      {
+        "id": "no_verification_1114",
+        "relevant": true,
+        "statement_carriers": [
+          "slack/capture_01.json"
+        ]
+      },
+      {
+        "id": "standard_two_factor_before_detail",
+        "relevant": false,
+        "statement_carriers": [
+          "flowcharts/sources/flow_001_ccd_ops_114_rev_c.html",
+          "../evidence_corpus_hard_001/support_cases/case_001.md"
+        ]
+      },
+      {
+        "id": "drill_sandbox_synthetic_profiles",
+        "relevant": false,
+        "statement_carriers": [
+          "support_cases/case_014.md"
+        ]
+      },
+      {
+        "id": "requeue_reverify_after_warm_transfer",
+        "relevant": false,
+        "statement_carriers": [
+          "../evidence_corpus_hard_001/support_cases/case_010.md"
+        ]
+      }
+    ],
+    "match_conditions": [
+      {
+        "id": "m1113_all_of_three",
+        "relevant": true,
+        "statement_carriers": [
+          "jira/jira_issue_export.json"
+        ]
+      },
+      {
+        "id": "m1114_any_symptom_good_standing",
+        "relevant": true,
+        "statement_carriers": [
+          "jira/jira_issue_export.json"
+        ]
+      },
+      {
+        "id": "july_dup_hold_shape",
+        "relevant": false,
+        "statement_carriers": [
+          "jira/jira_issue_export.json"
+        ]
+      },
+      {
+        "id": "sept_login_shape",
+        "relevant": false,
+        "statement_carriers": [
+          "jira/jira_issue_export.json"
+        ]
+      },
+      {
+        "id": "oct_alert_delay_shape",
+        "relevant": false,
+        "statement_carriers": [
+          "jira/jira_issue_export.json",
+          "emails/thread_016.eml"
+        ]
+      },
+      {
+        "id": "false_alarm_blank_pdf",
+        "relevant": false,
+        "statement_carriers": [
+          "jira/jira_issue_export.json"
+        ]
+      },
+      {
+        "id": "external_account_near_miss",
+        "relevant": false,
+        "statement_carriers": [
+          "../evidence_corpus_hard_001/emails/thread_006.eml",
+          "emails/thread_001.eml"
+        ]
+      }
+    ]
+  },
+  "traps": [
+    {
+      "id": "T01_andre_runs_1113_ladder_on_1114",
+      "instance": "slack/capture_01.json",
+      "instance_family": "slack",
+      "right_branch": "bureau-alert match -> emergency_credit_bureau_incident_transfer_1114 then transfer_to_human_agents (pin)",
+      "wrong_branch": "the 11/13 staged ladder (1822 first, count the asks)",
+      "wrong_outcome_quote": "1822 before 0218, every time",
+      "wrong_outcome_true_in": "../evidence_corpus_hard_001/meetings/meeting_04_2025-11-13.vtt",
+      "separating_atom": "A-M1114",
+      "separating_delivered_in": "jira/jira_issue_export.json"
+    },
+    {
+      "id": "T02_board_class_transfer_on_third",
+      "instance": "../evidence_corpus_hard_001/support_cases/case_008.md",
+      "instance_family": "support_cases",
+      "right_branch": "board ladder: 0218 on asks one through three, regular tool on the fourth",
+      "wrong_branch": "the 11/13 incident ladder completing on the third ask",
+      "wrong_outcome_quote": "Third ask is when the transfer actually completes",
+      "wrong_outcome_true_in": "../evidence_corpus_hard_001/meetings/meeting_04_2025-11-13.vtt",
+      "separating_atom": "A-NO-INC-MATCH",
+      "separating_delivered_in": "jira/jira_issue_export.json"
+    },
+    {
+      "id": "T03_partial_match_skips_verification",
+      "instance": "support_cases/case_013.md",
+      "instance_family": "support_cases",
+      "right_branch": "two-of-three report is standard handling: verify identity before account detail",
+      "wrong_branch": "the 11/13 no-verification posture",
+      "wrong_outcome_quote": "identity verification is not required for these reports",
+      "wrong_outcome_true_in": "emails/thread_001.eml",
+      "separating_atom": "A-M1113",
+      "separating_delivered_in": "jira/jira_issue_export.json"
+    },
+    {
+      "id": "T04_post_window_incident_flow",
+      "instance": "support_cases/case_014.md",
+      "instance_family": "support_cases",
+      "right_branch": "post-window matching report reverts to standard handling",
+      "wrong_branch": "running the staged incident ladder after the window closes",
+      "wrong_outcome_quote": "unlock_discoverable_agent_tool with initial_transfer_to_human_agent_1822",
+      "wrong_outcome_true_in": "../evidence_corpus_hard_001/meetings/meeting_04_2025-11-13.vtt",
+      "separating_atom": "A-W1113",
+      "separating_delivered_in": "jira/jira_issue_export.json"
+    },
+    {
+      "id": "T05_external_account_supervisor_ask",
+      "instance": "../evidence_corpus_hard_001/meetings/meeting_05_2025-11-13.vtt",
+      "instance_family": "meetings",
+      "right_branch": "external-account payment is not a match: normal escalation path for the supervisor request",
+      "wrong_branch": "incident choreography on the supervisor ask",
+      "wrong_outcome_quote": "follow the transfer protocol immediately",
+      "wrong_outcome_true_in": "emails/thread_001.eml",
+      "separating_atom": "A-M1113",
+      "separating_delivered_in": "jira/jira_issue_export.json"
+    },
+    {
+      "id": "T06_bureau_alert_standard_verify",
+      "instance": "slack/capture_01.json",
+      "instance_family": "slack",
+      "right_branch": "active 11/14 match: identity verification is not required",
+      "wrong_branch": "standard triage verification-first posture",
+      "wrong_outcome_quote": "Standard decline triage: verify identity, review card status and recent authorizations",
+      "wrong_outcome_true_in": "flowcharts/sources/flow_001_ccd_ops_114_rev_c.html",
+      "separating_atom": "A-M1114",
+      "separating_delivered_in": "jira/jira_issue_export.json"
+    },
+    {
+      "id": "T07_fraud_scare_two_step",
+      "instance": "support_cases/case_015.md",
+      "instance_family": "support_cases",
+      "right_branch": "merchant-hold decline triage per the board and knowledge base",
+      "wrong_branch": "the fraud-queue intake: freeze the card and transfer direct to the fraud line",
+      "wrong_outcome_quote": "freeze the card first, then transfer direct to the fraud line",
+      "wrong_outcome_true_in": "flowcharts/sources/flow_005_fraud_queue_intake.html",
+      "separating_atom": "A-PD-CLASS",
+      "separating_delivered_in": "flowcharts/sources/flow_005_fraud_queue_intake.html"
+    },
+    {
+      "id": "T08_settled_dispute_on_decline_board",
+      "instance": "../evidence_corpus_hard_001/slack/capture_03.json",
+      "instance_family": "slack",
+      "right_branch": "settled-charge disputes route direct to the chargebacks queue",
+      "wrong_branch": "running decline triage on a settled-charge dispute",
+      "wrong_outcome_quote": "Standard decline triage: verify identity, review card status and recent authorizations",
+      "wrong_outcome_true_in": "flowcharts/sources/flow_001_ccd_ops_114_rev_c.html",
+      "separating_atom": "A-STD-PATH",
+      "separating_delivered_in": "../evidence_corpus_hard_001/emails/thread_009.eml"
+    },
+    {
+      "id": "T09_1114_first_ask_staged_ack",
+      "instance": "../evidence_corpus_hard_001/support_cases/case_009.md",
+      "instance_family": "support_cases",
+      "right_branch": "11/14 match: emergency tool immediately, then the regular transfer",
+      "wrong_branch": "the 11/13 first-ask staged acknowledgment",
+      "wrong_outcome_quote": "Acknowledge the ask and tell them it is being processed",
+      "wrong_outcome_true_in": "../evidence_corpus_hard_001/meetings/meeting_04_2025-11-13.vtt",
+      "separating_atom": "A-M1114",
+      "separating_delivered_in": "jira/jira_issue_export.json"
+    },
+    {
+      "id": "T10_volunteered_verification",
+      "instance": "../evidence_corpus_hard_001/support_cases/case_002.md",
+      "instance_family": "support_cases",
+      "right_branch": "11/13 match: do not attempt verification even if the customer offers details",
+      "wrong_branch": "standard verification because the customer volunteered",
+      "wrong_outcome_quote": "Standard decline triage: verify identity, review card status and recent authorizations",
+      "wrong_outcome_true_in": "flowcharts/sources/flow_001_ccd_ops_114_rev_c.html",
+      "separating_atom": "A-M1113",
+      "separating_delivered_in": "jira/jira_issue_export.json"
+    },
+    {
+      "id": "T11_expired_advisory_still_applied",
+      "instance": "slack/capture_02.json",
+      "instance_family": "slack",
+      "right_branch": "the alert-delay advisory ended 11/02: delayed-alert reports get standard troubleshooting",
+      "wrong_branch": "the advisory posture (point at the banner, alerts catch up on their own)",
+      "wrong_outcome_quote": "point at the banner and close - alerts catch up on their own",
+      "wrong_outcome_true_in": "jira/jira_issue_export.json",
+      "separating_atom": "A-W1113",
+      "separating_delivered_in": "jira/jira_issue_export.json",
+      "separating_note": "the separating fact is the advisory's own resolved 11/02 end date on CARD-2249, delivered in the jira export and the status-page history"
+    },
+    {
+      "id": "T12_handoff_jump_to_regular",
+      "instance": "slack/capture_02.json",
+      "instance_family": "slack",
+      "right_branch": "regular tool only after the third request and only after both initials have run",
+      "wrong_branch": "completing on the third ask without the staged tools",
+      "wrong_outcome_quote": "Third ask is when the transfer actually completes",
+      "wrong_outcome_true_in": "../evidence_corpus_hard_001/meetings/meeting_04_2025-11-13.vtt",
+      "separating_atom": "A-BOTH-RUN",
+      "separating_delivered_in": "../evidence_corpus_hard_001/meetings/meeting_04_2025-11-13.vtt"
+    },
+    {
+      "id": "T13_matched_customer_history_dig",
+      "instance": "emails/thread_001.eml",
+      "instance_family": "emails",
+      "right_branch": "matched contact: confirm the three symptoms and transfer, no payment troubleshooting",
+      "wrong_branch": "standard payment troubleshooting (dig into the payment history)",
+      "wrong_outcome_quote": "review card status and recent authorizations",
+      "wrong_outcome_true_in": "flowcharts/sources/flow_001_ccd_ops_114_rev_c.html",
+      "separating_atom": "A-M1113",
+      "separating_delivered_in": "jira/jira_issue_export.json"
+    },
+    {
+      "id": "T14_incident_contact_standard_sla",
+      "instance": "slack/capture_02.json",
+      "instance_family": "slack",
+      "right_branch": "incident-referenced contacts carry the P1 incident SLA (15-minute first response)",
+      "wrong_branch": "the standard card-support SLA (4 business hours)",
+      "wrong_outcome_quote": "first response 4 business hours",
+      "wrong_outcome_true_in": "helpdesk/authored_export.json",
+      "separating_atom": "A-STD-PATH",
+      "separating_delivered_in": "helpdesk/authored_export.json",
+      "separating_note": "the separating condition is the incident_reference field being set — TRG-2641 applies SLA-INC-P1 on exactly that test, delivered in the helpdesk export"
+    }
+  ],
+  "separation_floors": {
+    "branch3_min": 10,
+    "branch2_plus_min": 22,
+    "unconditional_max": 10,
+    "registry_min": 5,
+    "registry_fact_irrelevant_share_min": 0.4,
+    "traps_min": 12,
+    "out_of_family_condition_per_branch2_fact": 1,
+    "branch2_facts_spanning_2_families_share_min": 0.6
+  },
+  "growth": {
+    "mass_corridor": [
+      1.45,
+      2.1
+    ],
+    "mass_note": "core mass 41,966 words (text-source basis, j4_hygiene.py); corridor matches the plan doc — this core is the same scale as journey 2's (38.8k), so no parity amendment is needed",
+    "files_at_2x_min": 3,
+    "native_floors": {
+      "jira/jira_issue_export.json": {
+        "unit": "objects (issues + comments + changelog histories)",
+        "core": 58,
+        "floor": 128
+      },
+      "helpdesk/authored_export.json": {
+        "unit": "objects (macros + triggers + contracts + fields + SLAs + views + grants + routing rules + catalog entries + changelog)",
+        "core": 21,
+        "floor": 42
+      },
+      "slack/capture_02.json": {
+        "unit": "distinct messages",
+        "core": 39,
+        "floor": 170
+      },
+      "slack/capture_01.json": {
+        "unit": "distinct messages",
+        "core": 151,
+        "floor": 165
+      },
+      "emails/thread_001.eml": {
+        "unit": "messages in chain",
+        "core": 14,
+        "floor": 20
+      }
+    },
+    "size_anonymity": {
+      "slack_largest_zero_fact": "capture_02 must out-message capture_01 after both replacements; capture_04 (153) stays frozen",
+      "meetings_largest_zero_fact": "meeting_09 retro (zero-fact) must out-run meeting_04 (17 min carrier)",
+      "cases_largest_zero_fact": "case_008 (1809 words, zero-fact) stays the family max; new cases stay under it"
+    }
+  }
+}

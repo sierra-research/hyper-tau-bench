@@ -1,0 +1,77 @@
+{
+ "section": "credit_limit_increases",
+ "pack_id": "banking_cli_client_overlay_pack_cs_001",
+ "bundle_id": "cli_evidence_corpus_hard_client_cs_001",
+ "bundle_description": "Card-servicing client fork of the CLI hard corpus. The desk's cooldown ruling exists in-world (pinned 2025-11-03, referenced everywhere) but the kit never prints its two sentences: the incident-audit slack pull stops before the pin, the tapes read dates off decision records instead of reciting the count, and the ordering decision note (CLIT-1203) and CLI Eligibility Checklist card v3 are cited but absent. The Client holds the cooldown gate and anchor, the submit-then-deny ordering resolution, and the two mid-checklist account-state blocks.",
+ "held_fact_ids": ["F022", "F023", "F040", "F044", "F045"],
+ "member_map": {
+  "cli_hard_slack_captures_001": "cli_cs_client_slack_captures_001",
+  "cli_hard_email_archive_001": "cli_cs_client_email_archive_001",
+  "cli_hard_working_sessions_001": "cli_cs_client_working_sessions_001",
+  "cli_hard_support_cases_carrier_001": "cli_cs_client_support_cases_carrier_001",
+  "cli_hard_support_cases_context_001": "cli_cs_client_support_cases_context_001",
+  "cli_hard_jira_export_001": "cli_cs_client_jira_export_001",
+  "cli_hard_ledger_export_001": "cli_cs_client_ledger_export_001"
+ },
+ "artifact_overrides": {
+  "capture_01.json": {"member": "cli_hard_slack_captures_001", "set_context_only": true},
+  "thread_001.eml": {"member": "cli_hard_email_archive_001"},
+  "thread_006.eml": {"member": "cli_hard_email_archive_001"},
+  "thread_009.eml": {"member": "cli_hard_email_archive_001"},
+  "thread_013.eml": {"member": "cli_hard_email_archive_001"},
+  "meeting_05_2025-11-05.vtt": {"member": "cli_hard_working_sessions_001"},
+  "meeting_07_2025-11-12.vtt": {"member": "cli_hard_working_sessions_001"},
+  "case_002.md": {"member": "cli_hard_support_cases_carrier_001"},
+  "case_005.md": {"member": "cli_hard_support_cases_context_001"},
+  "case_006.md": {"member": "cli_hard_support_cases_context_001"},
+  "case_009.md": {"member": "cli_hard_support_cases_context_001"},
+  "case_012.md": {"member": "cli_hard_support_cases_context_001"},
+  "jira_issue_export.json": {"member": "cli_hard_jira_export_001"},
+  "cli_request_ledger.json": {"member": "cli_hard_ledger_export_001"}
+ },
+ "client_knowledge": {
+  "id": "cli_cs_client_knowledge_001",
+  "representation": "client_knowledge",
+  "fact_ids": ["F022", "F023", "F040", "F044", "F045"],
+  "confirmable_fact_ids": ["F012", "F017", "F026", "F037", "F041", "F043", "F046", "F047"],
+  "discovery_tiers": {
+   "F022": "pointer",
+   "F023": "pointer",
+   "F040": "pointer",
+   "F044": "pointer",
+   "F045": "pointer"
+  }
+ },
+ "contested_fact_ids": {
+  "F022": [
+   {
+    "member_id": "cli_cs_client_slack_captures_001",
+    "reading": "a request is a request - denied or approved, any submission starts the tier clock (the back-office position, argued unrebutted in the incident thread)"
+   },
+   {
+    "member_id": "cli_cs_client_ledger_export_001",
+    "reading": "denied requests start nothing - the export shows a same-afternoon resubmission accepted two hours after a denial, which only reads cleanly if denials carry no clock"
+   }
+  ],
+  "F023": [
+   {
+    "member_id": "cli_cs_client_email_archive_001",
+    "reading": "the waiting period runs from the date of the decision letter, as the archived help-center revision told customers - and nothing citable says the desk now reads it differently"
+   },
+   {
+    "member_id": "cli_cs_client_ledger_export_001",
+    "reading": "the count anchors on the submission date of the prior approved request - the U-44278 row pair (approved 8/6, decided 8/7, next ask taken on the merits 11/5) is one day too early under a decision-date anchor"
+   }
+  ],
+  "F040": [
+   {
+    "member_id": "cli_cs_client_email_archive_001",
+    "reading": "screen first and coach - do not create a request you can already see failing (Hugo's runbook position in the cutover thread; the directive's wait-until-met language for unmet criteria reads the same way)"
+   },
+   {
+    "member_id": "cli_cs_client_ledger_export_001",
+    "reading": "every ask goes in as a formal record and the denial does the talking - the export is full of same-day submit-and-deny rows, including an 18-minute submit-to-denial turnaround"
+   }
+  ]
+ }
+}

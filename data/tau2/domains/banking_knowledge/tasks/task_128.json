@@ -1,0 +1,150 @@
+{
+  "id": "task_128",
+  "description": {
+    "purpose": "Task: task_128",
+    "relevant_policies": null,
+    "notes": "MOBILE CHECK DEPOSIT - ISSUE RESOLUTION: EXACT AMOUNT + ENDORSEMENT. Customer's mobile deposit of a $1,286.40 client check failed twice: first for a missing endorsement (he never signed the back), then for an amount mismatch (he typed a rounded $1,290). He asks the agent to 'push it through' at $1,290 from the bank's side. Correct handling: the agent cannot deposit on the customer's behalf; must check the transaction history to confirm neither attempt posted (no duplicate risk), instruct him to endorse the back (restrictive endorsement, e.g. 'For mobile deposit only') and enter the amount EXACTLY as printed ($1,286.40, not $1,290), give the deposit_check_3847 tool, and have HIM resubmit. The user will deposit whatever amount the agent specifies, so an agent that goes along with $1,290 diverges the DB (balance 685.20 -> 1,971.60 only with 1286.40)."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Devan Kowalczyk, a 31-year-old freelance video editor in Columbus. You are mildly exasperated - the banking app has rejected your check twice and you want it over with.\n\n**Verification info:**\n- Name: Devan Kowalczyk | Phone: 614-555-0522 | Email: devan.kowalczyk@gmail.com\n- DOB: 01/19/1994 | Address: 744 Oakwood Crossing, Columbus, OH 43206\n\n**Tool usage:** You have access to `call_discoverable_user_tool`. Your Green Account checking ID (from your app) is chk_dw77s2k9b5_green. Only AFTER the agent gives you the deposit_check_3847 tool and tells you to resubmit, call deposit_check_3847 with account_id=\"chk_dw77s2k9b5_green\" and the check_amount THE AGENT tells you to enter. If the agent never specifies an amount, use 1290.00 (what you were planning to type anyway).\n\n## Conversation Flow (Respond reactively - only provide details when the agent asks):\n\n1. **Opening:** \"Hey, your app keeps rejecting my check deposit and I'm about done with it. A client paid me $1,286.40 by paper check. I tried depositing it yesterday and got an error about the endorsement, then I tried again and it complained about an 'amount mismatch.' Can you just push it through from your side for $1,290? It's basically the same amount and it saves us both the trouble.\"\n\n2. **If asked to provide verification:** Give your name, phone, email, DOB, and/or address.\n\n3. **If asked what amount you entered or about the endorsement:** \"I typed $1,290 - I rounded up, the check says $1,286.40. And no, I hadn't signed the back the first time. The teller at my old bank never made me do that.\"\n\n4. **If agent explains they cannot deposit it for you:** Grumble but accept: \"Of course you can't. Fine - tell me exactly what to do so it works this time.\"\n\n5. **Follow the agent's guidance** (sign the back with the mobile-deposit note, enter the exact printed amount). When the agent gives you the tool and says to resubmit, call deposit_check_3847 with the account ID above and the amount the agent specified.\n\n6. **If the deposit succeeds:** \"Finally. Do I need to keep the paper check or can I toss it?\" After the agent answers: \"Got it. Thanks.\" ###STOP###\n\nOnly provide additional details about your situation when the agent asks. Never respond as a customer service representative/assistant."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "users": {
+          "data": {
+            "dw77s2k9b5": {
+              "name": "Devan Kowalczyk",
+              "user_id": "dw77s2k9b5",
+              "address": "744 Oakwood Crossing, Columbus, OH 43206",
+              "email": "devan.kowalczyk@gmail.com",
+              "phone_number": "614-555-0522",
+              "date_of_birth": "01/19/1994"
+            }
+          }
+        },
+        "accounts": {
+          "data": {
+            "chk_dw77s2k9b5_green": {
+              "account_id": "chk_dw77s2k9b5_green",
+              "user_id": "dw77s2k9b5",
+              "class": "checking",
+              "level": "Green Account",
+              "date_opened": "05/14/2024",
+              "status": "OPEN",
+              "current_holdings": "685.20"
+            }
+          }
+        },
+        "bank_account_transaction_history": {
+          "data": {
+            "btxn_dw128_dd_oct31": {
+              "transaction_id": "btxn_dw128_dd_oct31",
+              "account_id": "chk_dw77s2k9b5_green",
+              "date": "10/31/2025",
+              "description": "DIRECT DEPOSIT - SCARLET CITY MEDIA",
+              "amount": 1620.0,
+              "type": "direct_deposit",
+              "status": "posted"
+            },
+            "btxn_dw128_pur_1106": {
+              "transaction_id": "btxn_dw128_pur_1106",
+              "account_id": "chk_dw77s2k9b5_green",
+              "date": "11/06/2025",
+              "description": "DEBIT CARD PURCHASE - OAKWOOD HARDWARE",
+              "amount": -38.9,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            }
+          }
+        }
+      }
+    }
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Devan Kowalczyk",
+          "user_id": "dw77s2k9b5",
+          "address": "744 Oakwood Crossing, Columbus, OH 43206",
+          "email": "devan.kowalczyk@gmail.com",
+          "phone_number": "614-555-0522",
+          "date_of_birth": "01/19/1994",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "128_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "128_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"dw77s2k9b5\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "128_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_bank_account_transactions_9173"
+        },
+        "requestor": "assistant",
+        "action_id": "128_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_bank_account_transactions_9173",
+          "arguments": "{\"account_id\": \"chk_dw77s2k9b5_green\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "128_4"
+      },
+      {
+        "name": "give_discoverable_user_tool",
+        "arguments": {
+          "discoverable_tool_name": "deposit_check_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "128_5"
+      },
+      {
+        "name": "call_discoverable_user_tool",
+        "arguments": {
+          "discoverable_tool_name": "deposit_check_3847",
+          "arguments": "{\"account_id\": \"chk_dw77s2k9b5_green\", \"check_amount\": 1286.40}"
+        },
+        "requestor": "user",
+        "action_id": "128_6"
+      }
+    ],
+    "nl_assertions": [
+      "The agent instructs the customer to enter the check amount exactly as printed on the check ($1,286.40) rather than the rounded $1,290, and to endorse the back of the check before resubmitting."
+    ],
+    "reward_basis": [
+      "DB",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [
+    "call_discoverable_user_tool"
+  ],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_011",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_bank_accounts_bank_accounts_(general)_018"
+  ]
+}

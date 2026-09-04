@@ -1,0 +1,2576 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "Rho Support Admin",
+    "account": "rho-business-banking",
+    "workspace": "Business Deposits Support",
+    "environment": "production",
+    "exported_at": "2025-11-14T20:00:00Z",
+    "timezone": "America/New_York",
+    "export_version": "2025.11.14-rc1",
+    "requested_by": "rob.castellanos@rhobank.com"
+  },
+  "cover_email": "From: Ines Kowalczyk <ines.kowalczyk@rhobank.com>\nTo: Rob Castellanos <rob.castellanos@rhobank.com>\nCc: Priya Raman <priya.raman@rhobank.com>\nDate: Fri, 14 Nov 2025 15:04:52 -0500\nSubject: Business Deposits Support — production export, as requested\nMessage-ID: <20251114150452.8827.helpdesk-admin@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\n\nRob — attached is the production export you requested this afternoon for the\nBusiness Deposits Support workspace: macros, routing triggers, ticket fields,\npolicy contracts, SLA policies, and saved views, pulled at three o'clock. The\nversion stamp on every file should read 2025.11.14-rc1; if any file shows a\ndifferent stamp you have a partial pull, and I would rather cut you a fresh\none than have you reconcile mixed files by hand.\n\nFour notes for your records pass. First, the seven auto-suggest macros at the\nbottom of the macro file are the family we switched off on Monday 20 October\nunder CHG-1020-DEPOSITS-04. They stay disabled, and each one carries a\nsuperseded_by pointer to the desk macro that replaced it, so your enablement\nfile can follow the chain without guessing. The replacement macros do not\nanswer product questions in the body — they send agents to the published\npages, the dated campaign decks, and the current flowcharts, which was the\nwhole point of the change. Second, two of the retired records keep older\nrevisions that still quote figures from before the August repricing and the\nSeptember archive move. That is the history doing its job; please do not ask\nus to edit old revisions, and no retired body carries anything current.\nThird, the dormancy reactivation reply is still a draft pending sign-off, so\nagents cannot see it, and its wording may change. Fourth, the two tag-based\ntriggers at the bottom of the trigger file are retired and nothing should\nroute through them; if anything in the auto-suggest family reads enabled,\ncall me before you file the export anywhere.\n\nInes\nSupport Platform Administration\n",
+  "macros": [
+    {
+      "macro_id": "m_bd_statement_copy",
+      "name": "BD · statement copy request",
+      "description": "Handles a request for a past deposit-account statement.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-06-09T14:00:00Z",
+      "updated_at": "2025-11-12T20:05:11Z",
+      "usage_30d": 653,
+      "usage_90d": 1970,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_issue_family",
+          "value": "statement_request"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "Past statements for your business deposit accounts are under Documents in online banking. If you need a certified or mailed copy, I can put that request in for you from here."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_address_change",
+      "name": "BD · business address change",
+      "description": "Intake for a registered-address update on a business profile.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-06-09T14:10:00Z",
+      "updated_at": "2025-11-11T17:22:40Z",
+      "usage_30d": 402,
+      "usage_90d": 1217,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_issue_family",
+          "value": "address_change"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Verify the caller before any address edit; verification details never go in the ticket body."
+        },
+        {
+          "type": "set_public_reply",
+          "value": "I've noted your address update request. Once verification is complete, the change applies to statements and mailed notices for every account under your business profile."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_wire_recall_intake",
+      "name": "BD · outgoing wire recall intake",
+      "description": "Collects the details Payments Operations needs to attempt a recall.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-07-14T13:30:00Z",
+      "updated_at": "2025-11-06T19:41:07Z",
+      "usage_30d": 96,
+      "usage_90d": 299,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_issue_family",
+          "value": "wire_recall"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bd_wire_recall_stage",
+          "value": "requested"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Capture the amount, the date sent, and the receiving bank in the ticket fields. Payments Operations confirms recall timelines — do not quote one."
+        },
+        {
+          "type": "set_public_reply",
+          "value": "I've started a recall request on that wire. Payments Operations will confirm next steps and timing once the request is submitted on their side."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_dormancy_review",
+      "name": "BD · dormancy review routing",
+      "description": "Routes an inactive-account flag to Deposit Servicing.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-08-18T14:00:00Z",
+      "updated_at": "2025-11-04T16:12:33Z",
+      "usage_30d": 64,
+      "usage_90d": 203,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_issue_family",
+          "value": "dormancy_review"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Route to Deposit Servicing with the last-activity date. Reactivation wording is pending sign-off — do not improvise one."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_alerts_setup",
+      "name": "BD · balance and activity alerts",
+      "description": "Walks a customer through alert setup in online banking.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-06-09T14:20:00Z",
+      "updated_at": "2025-10-29T18:55:20Z",
+      "usage_30d": 233,
+      "usage_90d": 710,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_issue_family",
+          "value": "alerts_setup"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "Balance and activity alerts live under Alerts in online banking — you can set them per account and choose email or SMS delivery. I can walk you through it now if you'd like."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_silver_plus_payment_alerts",
+      "name": "BD · Silver Plus payment timing notifications",
+      "description": "Notification setup for a Silver Plus customer who makes time-sensitive payments.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-10-13T14:00:00Z",
+      "updated_at": "2025-11-08T16:21:47Z",
+      "usage_30d": 26,
+      "usage_90d": 29,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_issue_family",
+          "value": "alerts_setup"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bd_account_class",
+          "value": "silver_plus_saver"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "For a Silver Plus Saver, notifications can be enabled when frequent time-sensitive payments are anticipated, so same-day can be selected when it suits your cash flow. You'll find them in the notification settings in online banking, alongside the balance and activity alerts."
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Same-day availability and cutoffs are the transfer guide's rows (RB-ACH-05); confirm eligibility there before promising timing."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_emerald_balance_alerts",
+      "name": "BD · Emerald end-of-day balance alerts",
+      "description": "Alert setup that helps an Emerald customer hold the end-of-day minimum.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-09-08T13:45:00Z",
+      "updated_at": "2025-10-29T18:57:02Z",
+      "usage_30d": 24,
+      "usage_90d": 61,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_issue_family",
+          "value": "alerts_setup"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bd_account_class",
+          "value": "emerald_saver"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "On an Emerald Saver Account, balance alerts can help ensure the end-of-day balance does not fall below $1,000. Set the alert a little above that level in the notification settings and there's time to move funds the same day."
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "If the customer asks what a miss costs, the fee row is the schedule's (RB-SRF-01) — do not quote it from memory."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_access_issue",
+      "name": "BD · online banking access issue",
+      "description": "First response for a lockout or sign-in failure.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-06-09T14:30:00Z",
+      "updated_at": "2025-11-09T15:48:12Z",
+      "usage_30d": 187,
+      "usage_90d": 572,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_issue_family",
+          "value": "access_issue"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "Sorry you're locked out. I can send a reset link to the contact details we hold, or the business support line at 1-888-555-0192 can verify you by phone if that's faster."
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Never read security answers back to the caller."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_callback_confirm",
+      "name": "BD · callback details confirmed",
+      "description": "Records an agreed callback for an operations-owned follow-up.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-06-09T14:40:00Z",
+      "updated_at": "2025-10-22T17:30:09Z",
+      "usage_30d": 141,
+      "usage_90d": 434,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_callback_confirmed",
+          "value": "yes"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Log the agreed time window only; no authentication details in this note."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_savings_selection_pages",
+      "name": "BD · savings selection — pages first",
+      "description": "Selection questions answered from the published pages; replaced the auto-suggest push family.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-10-20T17:00:00Z",
+      "updated_at": "2025-11-12T21:15:33Z",
+      "usage_30d": 318,
+      "usage_90d": 965,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_issue_family",
+          "value": "savings_selection"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "Happy to help you choose between the business savings accounts. The published product pages and the business savings comparison page carry the current details for every account class — let's look at them together rather than work from memory."
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Pages first, always. If the customer references campaign material, check the dated deck with campaign ops before answering."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_rate_question_pages",
+      "name": "BD · savings rate or fee question",
+      "description": "Answers rate, minimum, and fee questions from the published page.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-10-20T17:05:00Z",
+      "updated_at": "2025-11-13T16:02:44Z",
+      "usage_30d": 289,
+      "usage_90d": 878,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_issue_family",
+          "value": "rate_question"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "Rates, minimums, and fees for our business savings accounts are on each account's published page, which is kept current — I'd rather check it with you than quote a figure from memory."
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "If the page and any other material disagree, set the source-conflict field and stop quoting either."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_bronze_card_example",
+      "name": "BD · Bronze card pairing worked example",
+      "description": "Worked annual-earnings illustration for a Bronze Saver customer pairing a Business Rewards Card.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-06T14:20:00Z",
+      "updated_at": "2025-11-10T15:38:24Z",
+      "usage_30d": 7,
+      "usage_90d": 7,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_issue_family",
+          "value": "rate_question"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bd_account_class",
+          "value": "bronze_saver"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "On a Business Bronze Saver, the base rate does the early work and an eligible Business Rewards Card adds its schedule boost on top. Two quick illustrations: a steady $10,000 average balance at the base rate earns about $200 over a full year, and on a steady $25,000 average balance the Business Gold Rewards Card pairing works out to about $537.50 over the same year. For any other balance, build the estimate the same way from the published schedules."
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Figures are built from the card bonus schedule rows (RB-CBS-02) against the base sheet, written up after the November 5 desk clinic on graded worked examples — the clinic's grading method is the one to follow if a member asks to see the arithmetic."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_promo_window_check",
+      "name": "BD · savings promotion window check",
+      "description": "Requests campaign-date verification without promising anything.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-10-20T17:10:00Z",
+      "updated_at": "2025-11-12T17:30:09Z",
+      "usage_30d": 122,
+      "usage_90d": 377,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_promo_check",
+          "value": "needed"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bd_issue_family",
+          "value": "promo_window"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Record the offer name and where the customer saw it. Campaign ops confirms windows and ordering from the dated final deck — never from a screenshot or a workshop board."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_promo_expired",
+      "name": "BD · expired savings offer acknowledgment",
+      "description": "Customer reply used after campaign ops confirms an offer ended.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-10-20T17:15:00Z",
+      "updated_at": "2025-11-13T14:05:11Z",
+      "usage_30d": 41,
+      "usage_90d": 134,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_promo_check",
+          "value": "expired_confirmed"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "The savings offer you're referencing is outside its published window, so it can't be applied to a new account now. I can walk you through what's currently available on the business savings side."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_opening_flow_route",
+      "name": "BD · savings account opening handoff",
+      "description": "Routes an opening request along the current opening flowchart.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-09-01T13:00:00Z",
+      "updated_at": "2025-11-10T18:26:37Z",
+      "usage_30d": 174,
+      "usage_90d": 533,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_issue_family",
+          "value": "account_opening"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bd_ops_route",
+          "value": "deposit_products"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Opening requests follow the current opening-sequence flowchart, including its eligibility checks — the chart is the record, not this macro."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_opening_console_entry",
+      "name": "BD · savings opening console entry",
+      "description": "Internal crib for the console call once opening checks have cleared.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-09-01T13:05:00Z",
+      "updated_at": "2025-11-10T18:29:41Z",
+      "usage_30d": 141,
+      "usage_90d": 428,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_issue_family",
+          "value": "account_opening"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bd_ops_route",
+          "value": "deposit_products"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Run the current opening flowchart's checks first — the chart is the record. Once they clear, the console call for the opening step is open_bank_account_4821(user_id, account_type, account_class); take account_type and account_class from the customer's confirmed selection and note the call on the ticket."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_funding_setup_route",
+      "name": "BD · opening deposit funding question",
+      "description": "Routes funding questions to the approved funding flowchart.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-09-01T13:10:00Z",
+      "updated_at": "2025-10-23T19:55:20Z",
+      "usage_30d": 88,
+      "usage_90d": 275,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_issue_family",
+          "value": "funding_setup"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Funding the opening deposit follows the approved funding flowchart. The deprecated working board is not a source; if a draft number surfaces, flag knowledge admin."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_transfer_console_entry",
+      "name": "BD · internal transfer console entry",
+      "description": "Internal crib for the console call behind a verified account-to-account move.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-09-01T13:15:00Z",
+      "updated_at": "2025-10-23T19:58:02Z",
+      "usage_30d": 57,
+      "usage_90d": 171,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_issue_family",
+          "value": "funding_setup"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bd_ops_route",
+          "value": "deposit_products"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "For a verified move between the customer's own accounts, the console call is transfer_funds_between_bank_accounts_7291(source_account_id, destination_account_id, amount). Read both account ids and the amount back to the customer before executing, and note the confirmation on the ticket."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_treasury_referral",
+      "name": "BD · treasury tier referral",
+      "description": "Routes Platinum Reserve and Diamond Vault questions to treasury.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-10-20T17:20:00Z",
+      "updated_at": "2025-11-07T21:02:44Z",
+      "usage_30d": 27,
+      "usage_90d": 92,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_ops_route",
+          "value": "treasury_desk"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "For the Platinum Reserve Account and the Diamond Vault Account, our treasury team walks qualified businesses through the details directly — I can set up that introduction. The published pages for both accounts carry the current terms if you'd like to read ahead."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_diamond_console",
+      "name": "BD · Diamond Vault fee summary and alerts",
+      "description": "Where a Diamond Vault customer confirms fee status and watches the balance.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-10-06T14:30:00Z",
+      "updated_at": "2025-11-07T21:05:12Z",
+      "usage_30d": 9,
+      "usage_90d": 13,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_account_class",
+          "value": "diamond_vault"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "For a Diamond Vault Account, current fee status can be confirmed in the account's fee summary at any time. Internal alerts can also be set to monitor when the available balance approaches the requirement, so your treasury team sees a dip coming before it lands."
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "The balance requirement itself is the schedule's row (RB-SRF-01); Diamond Vault relationship questions go to the treasury desk as usual."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_upgrade_review_pages",
+      "name": "BD · account class change question",
+      "description": "Answers move-between-accounts questions from the published pages.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-06T14:00:00Z",
+      "updated_at": "2025-11-11T20:33:26Z",
+      "usage_30d": 33,
+      "usage_90d": 110,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_issue_family",
+          "value": "upgrade_review"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "Whether a different savings account class fits better is answered from the published product pages — they carry the current guidance for moving between accounts. Let's check them against how you're using the account."
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "No separate upgrade board exists; the intake board was parked in November and the published pages control."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_silver_upgrade_request",
+      "name": "BD · Silver Saver to Silver Plus upgrade request",
+      "description": "Reply for a Silver Saver customer asking how to request the Silver Plus upgrade.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-06T14:05:00Z",
+      "updated_at": "2025-11-11T20:35:10Z",
+      "usage_30d": 21,
+      "usage_90d": 21,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_issue_family",
+          "value": "upgrade_review"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bd_account_class",
+          "value": "silver_saver"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "An upgrade from Silver Saver to Silver Plus Saver can be requested through online banking or by contacting support — whichever suits you. Before we submit anything, let's check the Silver Plus Saver requirements on its published page together so the move works for how you hold your balance."
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Confirm the customer can hold the Silver Plus Saver minimum before submitting — the figure is the schedule's row (RB-SRF-01), not one to quote from memory."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_silver_plus_console",
+      "name": "BD · Silver Plus console orientation",
+      "description": "Shows a Silver Plus customer where the tier, base APY, and card bonus display.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:20:00Z",
+      "updated_at": "2025-11-12T18:44:21Z",
+      "usage_30d": 47,
+      "usage_90d": 47,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_issue_family",
+          "value": "rate_question"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bd_account_class",
+          "value": "silver_plus_saver"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "In online banking, your Silver Plus Saver account details show the current balance tier, the base APY for that tier, and any relationship APY bonus applied. It's worth reviewing the current APY and bonus after any balance change or card status update, since either can change what applies."
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Tier rates and per-card bonus values live in the schedule rows (RB-SRF-01, RB-CBS-02); confirm from there, never from memory."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_source_conflict",
+      "name": "BD · page and materials conflict",
+      "description": "Captures a same-day disagreement between savings materials.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-09-01T13:20:00Z",
+      "updated_at": "2025-11-13T23:10:41Z",
+      "usage_30d": 12,
+      "usage_90d": 47,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_source_check",
+          "value": "conflict"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bd_ops_route",
+          "value": "deposit_products"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Include the account class, the material, the observed date and time, and what disagreed. Dana Okafor's team owns page fixes — same day."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_historical_capture",
+      "name": "BD · customer supplied historical capture",
+      "description": "Keeps an old screenshot with the ticket while the dated check runs.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-09-01T13:30:00Z",
+      "updated_at": "2025-11-05T15:12:58Z",
+      "usage_30d": 19,
+      "usage_90d": 68,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_source_check",
+          "value": "historical_capture"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Keep the customer's screenshot with the ticket and check what was live on the date they saw it. Archived and rejected captures carry their strips."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_fee_billing_route",
+      "name": "BD · deposit fee billing question",
+      "description": "Routes a billed-fee disagreement to pricing operations.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-08-18T14:10:00Z",
+      "updated_at": "2025-11-11T20:40:05Z",
+      "usage_30d": 36,
+      "usage_90d": 119,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_issue_family",
+          "value": "fee_billing"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bd_ops_route",
+          "value": "pricing_ops"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Statement date and billed amount exactly as shown. Pricing operations answers from the published fee schedule, not from memory."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_branch_handoff",
+      "name": "BD · branch-assisted request",
+      "description": "Records the branch context on a branch-originated ticket.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-07-14T13:40:00Z",
+      "updated_at": "2025-10-27T18:22:40Z",
+      "usage_30d": 58,
+      "usage_90d": 185,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bd_channel",
+          "value": "branch"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Note the branch and the staff member assisting; branch liaison owns the follow-up."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_dormancy_reactivation",
+      "name": "BD · dormancy reactivation reply",
+      "description": "Draft customer wording for reactivating a dormant account.",
+      "active": false,
+      "environment": "production",
+      "status": "draft",
+      "effective_at": "",
+      "updated_at": "2025-11-11T18:26:37Z",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_public_reply",
+          "value": "Good news — reactivating a dormant business savings account is straightforward, and I can start it here once we've verified you."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "Wording with Alicia Fontaine for sign-off; hidden from agents until it lands.",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_as_compare_push",
+      "name": "Auto-suggest · savings comparison push",
+      "description": "Former auto-suggested comparison reply, retained in the export only.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "effective_at": "2025-03-10T15:22:00Z",
+      "updated_at": "2025-10-20T16:05:07Z",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "m_bd_savings_selection_pages",
+      "steps": [
+        {
+          "type": "set_public_reply",
+          "value": "Rho Bank has a range of business savings options — the Business Bronze Saver, the Silver Saver Account and Silver Plus Saver, the Gold Saver Account and Gold Plus Saver, and specialist tiers beyond those. The business savings comparison page on our site shows the current details side by side, and I'm happy to go through it with you."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "Disabled 2025-10-20 under CHG-1020-DEPOSITS-04 with the rest of the savings auto-suggest family — agents consult the published pages; the pages-first selection macro replaced it.",
+      "revisions": [
+        {
+          "revision": "r1",
+          "revised_at": "2025-03-10T15:22:00Z",
+          "revised_by": "rob.castellanos@rhobank.com",
+          "note": "Created.",
+          "body": "We offer several business savings accounts. The comparison page on our site shows the details for each — happy to go through it with you."
+        },
+        {
+          "revision": "r2",
+          "revised_at": "2025-07-08T18:02:00Z",
+          "revised_by": "rob.castellanos@rhobank.com",
+          "note": "Named the account classes after desk feedback that the generic body read as a brush-off. Still points at the comparison page for every detail.",
+          "body": "Rho Bank has a range of business savings options — the Business Bronze Saver, the Silver Saver Account and Silver Plus Saver, the Gold Saver Account and Gold Plus Saver, and specialist tiers beyond those. The business savings comparison page on our site shows the current details side by side, and I'm happy to go through it with you."
+        }
+      ]
+    },
+    {
+      "macro_id": "m_bd_as_bronze_starter",
+      "name": "Auto-suggest · Bronze starter push",
+      "description": "Former auto-suggested starter-account reply, no longer in use.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "effective_at": "2025-03-10T15:40:00Z",
+      "updated_at": "2025-10-20T16:05:58Z",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "m_bd_savings_selection_pages",
+      "steps": [
+        {
+          "type": "set_public_reply",
+          "value": "Plenty of newer businesses start with the Business Bronze Saver. The current terms are on the published Business Bronze Saver pages — I can send you the link, or we can walk through them together right now."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "Part of the auto-suggest retirement, CHG-1020-DEPOSITS-04, executed 2025-10-20. Selection questions now go through the pages-first macro.",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_as_silver_family",
+      "name": "Auto-suggest · Silver family follow-up",
+      "description": "Former auto-suggested Silver comparison reply, retained for audit.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "effective_at": "2025-05-19T14:05:00Z",
+      "updated_at": "2025-10-20T16:06:41Z",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "m_bd_savings_selection_pages",
+      "steps": [
+        {
+          "type": "set_public_reply",
+          "value": "The Silver Saver Account and the Silver Plus Saver sit close together in the lineup, and which one fits depends on how the account will be used. Both published product pages carry the current details — they are worth reading side by side before you decide."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "Disabled 2025-10-20 (CHG-1020-DEPOSITS-04). Revision history kept — r2 carried a line that should never have shipped ahead of an approved page.",
+      "revisions": [
+        {
+          "revision": "r1",
+          "revised_at": "2025-05-19T14:05:00Z",
+          "revised_by": "rob.castellanos@rhobank.com",
+          "note": "Created.",
+          "body": "The Silver Saver Account and the Silver Plus Saver sit close together in the lineup, and which one fits depends on how the account will be used. Both published product pages carry the current details."
+        },
+        {
+          "revision": "r2",
+          "revised_at": "2025-09-30T16:11:37Z",
+          "revised_by": "jess.whitfield@rhobank.com",
+          "note": "Added a line ahead of the Silver Plus 'Preferred tier' pilot page that was in review at the time.",
+          "body": "The Silver Saver Account and the Silver Plus Saver sit close together in the lineup, and which one fits depends on how the account will be used. Both published product pages carry the current details. A Silver Plus 'Preferred tier' is also being piloted — I can ask the deposit team whether it applies to your business."
+        },
+        {
+          "revision": "r3",
+          "revised_at": "2025-10-07T14:38:02Z",
+          "revised_by": "rob.castellanos@rhobank.com",
+          "note": "Pilot line removed. Deposit pricing declined the pilot page on 10/06, and the line should never have shipped ahead of an approved page. Published Silver Plus pages are the record.",
+          "body": "The Silver Saver Account and the Silver Plus Saver sit close together in the lineup, and which one fits depends on how the account will be used. Both published product pages carry the current details — they are worth reading side by side before you decide."
+        }
+      ]
+    },
+    {
+      "macro_id": "m_bd_as_goldplus_rate",
+      "name": "Auto-suggest · Gold Plus rate push",
+      "description": "Former auto-suggested Gold Plus reply; launch-era history retained.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "effective_at": "2025-08-04T15:31:00Z",
+      "updated_at": "2025-10-20T16:07:29Z",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "m_bd_rate_question_pages",
+      "steps": [
+        {
+          "type": "set_public_reply",
+          "value": "For the Gold Plus Saver, the current rate, balance requirements, and fees are on the published Gold Plus Saver pages, which are kept up to date — I'd rather send you there than quote a figure that could be stale. Want the link?"
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "Disabled 2025-10-20 (CHG-1020-DEPOSITS-04). The r1 body below is launch-era history — it went stale at the 2025-08-15 repricing and was stripped the same day. Rate questions now go through the pages-first rate macro.",
+      "revisions": [
+        {
+          "revision": "r1",
+          "revised_at": "2025-08-04T15:31:00Z",
+          "revised_by": "jess.whitfield@rhobank.com",
+          "note": "Created for the Gold Plus Saver push while the launch-era page was live.",
+          "body": "Great timing — the Gold Plus Saver launched at 4.75% APY with a $30,000 minimum balance. I can send you the launch page with the full details."
+        },
+        {
+          "revision": "r2",
+          "revised_at": "2025-08-15T18:20:41Z",
+          "revised_by": "rob.castellanos@rhobank.com",
+          "note": "Gold Plus repriced this morning and this body went stale on the spot. Launch figures out; the published Gold Plus Saver pages carry the current terms. Same sweep checked every other savings macro for hard-coded figures.",
+          "body": "For the Gold Plus Saver, the current rate, balance requirements, and fees are on the published Gold Plus Saver pages, which are kept up to date — I'd rather send you there than quote a figure that could be stale. Want the link?"
+        }
+      ]
+    },
+    {
+      "macro_id": "m_bd_as_gold_rate",
+      "name": "Auto-suggest · Gold Saver rate push",
+      "description": "Former auto-suggested Gold Saver reply, no longer in use.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "effective_at": "2025-06-02T13:12:00Z",
+      "updated_at": "2025-10-20T16:08:14Z",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "m_bd_rate_question_pages",
+      "steps": [
+        {
+          "type": "set_public_reply",
+          "value": "Rate questions on the Gold Saver Account are best answered straight from the published Gold Saver pages — that is where the current structure lives. I can pull it up with you right now."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "Part of the auto-suggest retirement, CHG-1020-DEPOSITS-04, executed 2025-10-20.",
+      "revisions": []
+    },
+    {
+      "macro_id": "m_bd_as_treasury_invite",
+      "name": "Auto-suggest · treasury tier push",
+      "description": "Former auto-suggested treasury reply; invitational-era history retained.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "effective_at": "2025-06-16T17:48:00Z",
+      "updated_at": "2025-10-20T16:09:02Z",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "m_bd_treasury_referral",
+      "steps": [
+        {
+          "type": "set_public_reply",
+          "value": "For the Platinum Reserve Account and the Diamond Vault Account, our treasury team walks qualified businesses through the details directly, and I can set up that introduction. The published pages for both accounts carry the current terms if you would like to read ahead."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "Disabled 2025-10-20 (CHG-1020-DEPOSITS-04). The r2 body below is invitational-era history; it was stripped 2025-09-22, the day the old Diamond Vault page moved to the archive.",
+      "revisions": [
+        {
+          "revision": "r1",
+          "revised_at": "2025-06-16T17:48:00Z",
+          "revised_by": "rob.castellanos@rhobank.com",
+          "note": "Created as a plain referral to the treasury team.",
+          "body": "Our treasury team can walk you through the top-tier savings options directly — I can set up that introduction."
+        },
+        {
+          "revision": "r2",
+          "revised_at": "2025-09-05T14:52:00Z",
+          "revised_by": "rob.castellanos@rhobank.com",
+          "note": "Invitational copy added at the treasury desk's request.",
+          "body": "The Diamond Vault Account is currently by invitation: 6.0% APY with a $250,000 opening minimum for invited businesses. I can check whether your business has an invitation on file. The Platinum Reserve Account details are on its published page."
+        },
+        {
+          "revision": "r3",
+          "revised_at": "2025-09-22T17:05:19Z",
+          "revised_by": "rob.castellanos@rhobank.com",
+          "note": "The invitational-era Diamond Vault page moved to the archive today, and this body was quoting it. Invitational figures out — referral to the treasury team only, published pages for terms.",
+          "body": "For the Platinum Reserve Account and the Diamond Vault Account, our treasury team walks qualified businesses through the details directly, and I can set up that introduction. The published pages for both accounts carry the current terms if you would like to read ahead."
+        }
+      ]
+    },
+    {
+      "macro_id": "m_bd_as_promo_mention",
+      "name": "Auto-suggest · savings promotion mention",
+      "description": "Former auto-suggested promotion reply, retained in the export only.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "effective_at": "2025-10-13T14:26:00Z",
+      "updated_at": "2025-10-20T16:09:47Z",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "m_bd_promo_window_check",
+      "steps": [
+        {
+          "type": "set_public_reply",
+          "value": "We do have a business savings promotion running at the moment. Give me a moment to check the current campaign material so I get the details right for you."
+        }
+      ],
+      "tags": [
+        "business-deposits",
+        "savings-desk"
+      ],
+      "internal_notes": "Lived one week: created for the October cycle, disabled 2025-10-20 with the family (CHG-1020-DEPOSITS-04). Promotion questions route through the campaign-ops window check.",
+      "revisions": [
+        {
+          "revision": "r1",
+          "revised_at": "2025-10-13T14:26:00Z",
+          "revised_by": "jess.whitfield@rhobank.com",
+          "note": "Added for the October savings cycle.",
+          "body": "There's a limited-time promotion on business savings accounts right now — let me check the current campaign material for the details."
+        },
+        {
+          "revision": "r2",
+          "revised_at": "2025-10-15T15:52:26Z",
+          "revised_by": "rob.castellanos@rhobank.com",
+          "note": "Compliance pass: Alicia Fontaine flagged 'limited-time' in an auto-inserted reply; reworded. The campaign material remains the only source for terms.",
+          "body": "We do have a business savings promotion running at the moment. Give me a moment to check the current campaign material so I get the details right for you."
+        }
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "t_bd_source_conflict",
+      "name": "Savings source conflict",
+      "description": "Production routing rule for savings source conflict.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 10,
+      "effective_at": "2025-10-20T17:30:00Z",
+      "updated_at": "2025-11-12T18:40:00Z",
+      "usage_30d": 12,
+      "conditions": [
+        {
+          "field_key": "bd_source_check",
+          "operator": "is",
+          "value": "conflict"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bd_source_conflict"
+        },
+        {
+          "type": "assign_group",
+          "group": "Deposit Products Desk"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bd_wire_recall",
+      "name": "Outgoing wire recall",
+      "description": "Production routing rule for outgoing wire recall.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 15,
+      "effective_at": "2025-10-20T17:30:00Z",
+      "updated_at": "2025-11-12T18:40:00Z",
+      "usage_30d": 96,
+      "conditions": [
+        {
+          "field_key": "bd_issue_family",
+          "operator": "is",
+          "value": "wire_recall"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bd_wire_recall_intake"
+        },
+        {
+          "type": "assign_group",
+          "group": "Payments Operations"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bd_savings_selection",
+      "name": "Savings selection question",
+      "description": "Production routing rule for savings selection question.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 20,
+      "effective_at": "2025-10-20T17:30:00Z",
+      "updated_at": "2025-11-12T18:40:00Z",
+      "usage_30d": 318,
+      "conditions": [
+        {
+          "field_key": "bd_issue_family",
+          "operator": "is",
+          "value": "savings_selection"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bd_savings_selection_pages"
+        },
+        {
+          "type": "assign_group",
+          "group": "Deposit Products Desk"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bd_rate_question",
+      "name": "Savings rate or fee question",
+      "description": "Production routing rule for savings rate or fee question.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 25,
+      "effective_at": "2025-10-20T17:30:00Z",
+      "updated_at": "2025-11-12T18:40:00Z",
+      "usage_30d": 289,
+      "conditions": [
+        {
+          "field_key": "bd_issue_family",
+          "operator": "is",
+          "value": "rate_question"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bd_rate_question_pages"
+        },
+        {
+          "type": "assign_group",
+          "group": "Deposit Products Desk"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bd_promo_check",
+      "name": "Savings promotion window review",
+      "description": "Production routing rule for savings promotion window review.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 30,
+      "effective_at": "2025-10-20T17:30:00Z",
+      "updated_at": "2025-11-12T18:40:00Z",
+      "usage_30d": 122,
+      "conditions": [
+        {
+          "field_key": "bd_promo_check",
+          "operator": "is",
+          "value": "needed"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bd_promo_window_check"
+        },
+        {
+          "type": "assign_group",
+          "group": "Campaign Operations"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bd_opening",
+      "name": "Savings account opening handoff",
+      "description": "Production routing rule for savings account opening handoff.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 35,
+      "effective_at": "2025-10-20T17:30:00Z",
+      "updated_at": "2025-11-12T18:40:00Z",
+      "usage_30d": 174,
+      "conditions": [
+        {
+          "field_key": "bd_issue_family",
+          "operator": "is",
+          "value": "account_opening"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bd_opening_flow_route"
+        },
+        {
+          "type": "assign_group",
+          "group": "Deposit Products Desk"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bd_statement",
+      "name": "Statement copy request",
+      "description": "Production routing rule for statement copy request.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 40,
+      "effective_at": "2025-10-20T17:30:00Z",
+      "updated_at": "2025-11-12T18:40:00Z",
+      "usage_30d": 653,
+      "conditions": [
+        {
+          "field_key": "bd_issue_family",
+          "operator": "is",
+          "value": "statement_request"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bd_statement_copy"
+        },
+        {
+          "type": "assign_group",
+          "group": "Deposit Servicing"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bd_address",
+      "name": "Business address change",
+      "description": "Production routing rule for business address change.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 45,
+      "effective_at": "2025-10-20T17:30:00Z",
+      "updated_at": "2025-11-12T18:40:00Z",
+      "usage_30d": 402,
+      "conditions": [
+        {
+          "field_key": "bd_issue_family",
+          "operator": "is",
+          "value": "address_change"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bd_address_change"
+        },
+        {
+          "type": "assign_group",
+          "group": "Deposit Servicing"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bd_dormancy",
+      "name": "Dormancy review",
+      "description": "Production routing rule for dormancy review.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 50,
+      "effective_at": "2025-10-20T17:30:00Z",
+      "updated_at": "2025-11-12T18:40:00Z",
+      "usage_30d": 64,
+      "conditions": [
+        {
+          "field_key": "bd_issue_family",
+          "operator": "is",
+          "value": "dormancy_review"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bd_dormancy_review"
+        },
+        {
+          "type": "assign_group",
+          "group": "Deposit Servicing"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bd_alerts",
+      "name": "Alert setup help",
+      "description": "Production routing rule for alert setup help.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 55,
+      "effective_at": "2025-10-20T17:30:00Z",
+      "updated_at": "2025-11-12T18:40:00Z",
+      "usage_30d": 233,
+      "conditions": [
+        {
+          "field_key": "bd_issue_family",
+          "operator": "is",
+          "value": "alerts_setup"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bd_alerts_setup"
+        },
+        {
+          "type": "assign_group",
+          "group": "Deposit Servicing"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bd_branch_opening",
+      "name": "Branch-assisted opening",
+      "description": "Production routing rule for branch-assisted opening.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 75,
+      "effective_at": "2025-10-20T17:30:00Z",
+      "updated_at": "2025-11-12T18:40:00Z",
+      "usage_30d": 31,
+      "conditions": [
+        {
+          "field_key": "bd_channel",
+          "operator": "is",
+          "value": "branch"
+        },
+        {
+          "field_key": "bd_issue_family",
+          "operator": "is",
+          "value": "account_opening"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bd_branch_handoff"
+        },
+        {
+          "type": "assign_group",
+          "group": "Branch Liaison"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bd_upgrade_draft",
+      "name": "Account class change question",
+      "description": "Production routing rule for account class change question.",
+      "active": false,
+      "environment": "production",
+      "status": "draft",
+      "priority": 65,
+      "effective_at": "",
+      "updated_at": "2025-11-11T19:02:00Z",
+      "usage_30d": 0,
+      "conditions": [
+        {
+          "field_key": "bd_issue_family",
+          "operator": "is",
+          "value": "upgrade_review"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bd_upgrade_review_pages"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bd_as_savings_tags",
+      "name": "Auto-suggest savings tag route",
+      "description": "Production routing rule for auto-suggest savings tag route.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "priority": 200,
+      "effective_at": "",
+      "updated_at": "2025-10-20T16:12:00Z",
+      "usage_30d": 0,
+      "conditions": [
+        {
+          "system_field": "tags",
+          "operator": "includes",
+          "value": "savings-auto-suggest"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bd_as_compare_push"
+        }
+      ],
+      "superseded_by": "t_bd_savings_selection"
+    },
+    {
+      "trigger_id": "t_bd_as_promo_tags",
+      "name": "Auto-suggest promo tag route",
+      "description": "Production routing rule for auto-suggest promo tag route.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "priority": 210,
+      "effective_at": "",
+      "updated_at": "2025-10-20T16:12:00Z",
+      "usage_30d": 0,
+      "conditions": [
+        {
+          "system_field": "tags",
+          "operator": "includes",
+          "value": "savings-promo-suggest"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bd_as_promo_mention"
+        }
+      ],
+      "superseded_by": "t_bd_promo_check"
+    }
+  ],
+  "policy_contracts": [
+    {
+      "contract_id": "pc_bd_selection",
+      "name": "Savings selection answered from published pages",
+      "status": "published",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Deposit Products Desk",
+      "scope": [
+        "savings_selection",
+        "rate_question"
+      ],
+      "required_fields": [
+        "bd_issue_family",
+        "bd_account_class"
+      ],
+      "closed_world": true,
+      "effective_at": "2025-10-20T17:30:00Z",
+      "updated_at": "2025-11-13T16:02:44Z"
+    },
+    {
+      "contract_id": "pc_bd_promotions",
+      "name": "Savings promotion boundary",
+      "status": "published",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Campaign Operations",
+      "scope": [
+        "promo_window"
+      ],
+      "required_fields": [
+        "bd_promo_check",
+        "bd_issue_family"
+      ],
+      "closed_world": true,
+      "effective_at": "2025-10-20T17:35:00Z",
+      "updated_at": "2025-11-12T17:30:09Z"
+    },
+    {
+      "contract_id": "pc_bd_opening",
+      "name": "Account opening and funding handoff",
+      "status": "published",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Deposit Products Desk",
+      "scope": [
+        "account_opening",
+        "funding_setup"
+      ],
+      "required_fields": [
+        "bd_issue_family",
+        "bd_ops_route"
+      ],
+      "closed_world": true,
+      "effective_at": "2025-09-01T13:00:00Z",
+      "updated_at": "2025-11-10T18:26:37Z"
+    },
+    {
+      "contract_id": "pc_bd_payments",
+      "name": "Wire recall staging",
+      "status": "published",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Payments Operations",
+      "scope": [
+        "wire_recall"
+      ],
+      "required_fields": [
+        "bd_issue_family",
+        "bd_wire_recall_stage"
+      ],
+      "closed_world": true,
+      "effective_at": "2025-07-14T13:30:00Z",
+      "updated_at": "2025-11-06T19:41:07Z"
+    },
+    {
+      "contract_id": "pc_bd_servicing",
+      "name": "Deposit servicing requests",
+      "status": "published",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Deposit Servicing",
+      "scope": [
+        "statement_request",
+        "address_change",
+        "dormancy_review",
+        "alerts_setup"
+      ],
+      "required_fields": [
+        "bd_issue_family",
+        "bd_channel"
+      ],
+      "closed_world": true,
+      "effective_at": "2025-06-09T14:00:00Z",
+      "updated_at": "2025-11-12T20:05:11Z"
+    }
+  ],
+  "field_columns": [
+    "row_id",
+    "field_key",
+    "field_name",
+    "field_type",
+    "option_value",
+    "active",
+    "status",
+    "environment",
+    "updated_at"
+  ],
+  "fields": [
+    {
+      "row_id": "fd_001",
+      "field_key": "bd_issue_family",
+      "field_name": "Deposit issue",
+      "field_type": "dropdown",
+      "option_value": "statement_request",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_002",
+      "field_key": "bd_issue_family",
+      "field_name": "Deposit issue",
+      "field_type": "dropdown",
+      "option_value": "address_change",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_003",
+      "field_key": "bd_issue_family",
+      "field_name": "Deposit issue",
+      "field_type": "dropdown",
+      "option_value": "wire_recall",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_004",
+      "field_key": "bd_issue_family",
+      "field_name": "Deposit issue",
+      "field_type": "dropdown",
+      "option_value": "dormancy_review",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_005",
+      "field_key": "bd_issue_family",
+      "field_name": "Deposit issue",
+      "field_type": "dropdown",
+      "option_value": "alerts_setup",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_006",
+      "field_key": "bd_issue_family",
+      "field_name": "Deposit issue",
+      "field_type": "dropdown",
+      "option_value": "account_opening",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_007",
+      "field_key": "bd_issue_family",
+      "field_name": "Deposit issue",
+      "field_type": "dropdown",
+      "option_value": "funding_setup",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_008",
+      "field_key": "bd_issue_family",
+      "field_name": "Deposit issue",
+      "field_type": "dropdown",
+      "option_value": "promo_window",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_009",
+      "field_key": "bd_issue_family",
+      "field_name": "Deposit issue",
+      "field_type": "dropdown",
+      "option_value": "savings_selection",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_010",
+      "field_key": "bd_issue_family",
+      "field_name": "Deposit issue",
+      "field_type": "dropdown",
+      "option_value": "rate_question",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_011",
+      "field_key": "bd_issue_family",
+      "field_name": "Deposit issue",
+      "field_type": "dropdown",
+      "option_value": "upgrade_review",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_012",
+      "field_key": "bd_issue_family",
+      "field_name": "Deposit issue",
+      "field_type": "dropdown",
+      "option_value": "access_issue",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_013",
+      "field_key": "bd_issue_family",
+      "field_name": "Deposit issue",
+      "field_type": "dropdown",
+      "option_value": "source_conflict",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_014",
+      "field_key": "bd_issue_family",
+      "field_name": "Deposit issue",
+      "field_type": "dropdown",
+      "option_value": "fee_billing",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_015",
+      "field_key": "bd_account_class",
+      "field_name": "Savings account class",
+      "field_type": "dropdown",
+      "option_value": "bronze_saver",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_016",
+      "field_key": "bd_account_class",
+      "field_name": "Savings account class",
+      "field_type": "dropdown",
+      "option_value": "silver_saver",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_017",
+      "field_key": "bd_account_class",
+      "field_name": "Savings account class",
+      "field_type": "dropdown",
+      "option_value": "silver_plus_saver",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_018",
+      "field_key": "bd_account_class",
+      "field_name": "Savings account class",
+      "field_type": "dropdown",
+      "option_value": "gold_saver",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_019",
+      "field_key": "bd_account_class",
+      "field_name": "Savings account class",
+      "field_type": "dropdown",
+      "option_value": "gold_plus_saver",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_020",
+      "field_key": "bd_account_class",
+      "field_name": "Savings account class",
+      "field_type": "dropdown",
+      "option_value": "platinum_reserve",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_021",
+      "field_key": "bd_account_class",
+      "field_name": "Savings account class",
+      "field_type": "dropdown",
+      "option_value": "emerald_saver",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_022",
+      "field_key": "bd_account_class",
+      "field_name": "Savings account class",
+      "field_type": "dropdown",
+      "option_value": "diamond_vault",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_023",
+      "field_key": "bd_account_class",
+      "field_name": "Savings account class",
+      "field_type": "dropdown",
+      "option_value": "not_stated",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_024",
+      "field_key": "bd_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "deposit_products",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_025",
+      "field_key": "bd_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "pricing_ops",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_026",
+      "field_key": "bd_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "campaign_ops",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_027",
+      "field_key": "bd_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "payments_ops",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_028",
+      "field_key": "bd_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "treasury_desk",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_029",
+      "field_key": "bd_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "knowledge_admin",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_030",
+      "field_key": "bd_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "branch_liaison",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_031",
+      "field_key": "bd_promo_check",
+      "field_name": "Promotion check state",
+      "field_type": "dropdown",
+      "option_value": "needed",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_032",
+      "field_key": "bd_promo_check",
+      "field_name": "Promotion check state",
+      "field_type": "dropdown",
+      "option_value": "window_confirmed",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_033",
+      "field_key": "bd_promo_check",
+      "field_name": "Promotion check state",
+      "field_type": "dropdown",
+      "option_value": "expired_confirmed",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_034",
+      "field_key": "bd_promo_check",
+      "field_name": "Promotion check state",
+      "field_type": "dropdown",
+      "option_value": "not_showing",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_035",
+      "field_key": "bd_source_check",
+      "field_name": "Source check state",
+      "field_type": "dropdown",
+      "option_value": "required",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_036",
+      "field_key": "bd_source_check",
+      "field_name": "Source check state",
+      "field_type": "dropdown",
+      "option_value": "conflict",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_037",
+      "field_key": "bd_source_check",
+      "field_name": "Source check state",
+      "field_type": "dropdown",
+      "option_value": "historical_capture",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_038",
+      "field_key": "bd_source_check",
+      "field_name": "Source check state",
+      "field_type": "dropdown",
+      "option_value": "resolved",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_039",
+      "field_key": "bd_wire_recall_stage",
+      "field_name": "Wire recall stage",
+      "field_type": "dropdown",
+      "option_value": "requested",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_040",
+      "field_key": "bd_wire_recall_stage",
+      "field_name": "Wire recall stage",
+      "field_type": "dropdown",
+      "option_value": "submitted",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_041",
+      "field_key": "bd_wire_recall_stage",
+      "field_name": "Wire recall stage",
+      "field_type": "dropdown",
+      "option_value": "confirmed",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_042",
+      "field_key": "bd_wire_recall_stage",
+      "field_name": "Wire recall stage",
+      "field_type": "dropdown",
+      "option_value": "declined",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_043",
+      "field_key": "bd_channel",
+      "field_name": "Customer channel",
+      "field_type": "dropdown",
+      "option_value": "digital",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_044",
+      "field_key": "bd_channel",
+      "field_name": "Customer channel",
+      "field_type": "dropdown",
+      "option_value": "phone",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_045",
+      "field_key": "bd_channel",
+      "field_name": "Customer channel",
+      "field_type": "dropdown",
+      "option_value": "branch",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    },
+    {
+      "row_id": "fd_046",
+      "field_key": "bd_callback_confirmed",
+      "field_name": "Callback confirmed",
+      "field_type": "checkbox",
+      "option_value": "yes",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-10T21:00:00Z"
+    }
+  ],
+  "sla_policies": [
+    {
+      "policy_id": "sla_bd_source_conflict",
+      "name": "Savings source conflict",
+      "status": "active",
+      "environment": "production",
+      "priority": "high",
+      "calendar": "Deposit Products Ops",
+      "first_reply_minutes": 30,
+      "resolution_minutes": 240,
+      "conditions": [
+        {
+          "field_key": "bd_source_check",
+          "operator": "is",
+          "value": "conflict"
+        }
+      ]
+    },
+    {
+      "policy_id": "sla_bd_wire_recall",
+      "name": "Outgoing wire recall",
+      "status": "active",
+      "environment": "production",
+      "priority": "urgent",
+      "calendar": "Payments Operations",
+      "first_reply_minutes": 15,
+      "resolution_minutes": 120,
+      "conditions": [
+        {
+          "field_key": "bd_issue_family",
+          "operator": "is",
+          "value": "wire_recall"
+        }
+      ]
+    },
+    {
+      "policy_id": "sla_bd_promo_check",
+      "name": "Promotion window check",
+      "status": "active",
+      "environment": "production",
+      "priority": "normal",
+      "calendar": "Campaign Operations",
+      "first_reply_minutes": 120,
+      "resolution_minutes": 480,
+      "conditions": [
+        {
+          "field_key": "bd_promo_check",
+          "operator": "is",
+          "value": "needed"
+        }
+      ]
+    },
+    {
+      "policy_id": "sla_bd_selection",
+      "name": "Savings selection question",
+      "status": "active",
+      "environment": "production",
+      "priority": "normal",
+      "calendar": "Deposit Products Desk",
+      "first_reply_minutes": 60,
+      "resolution_minutes": 480,
+      "conditions": [
+        {
+          "field_key": "bd_issue_family",
+          "operator": "is",
+          "value": "savings_selection"
+        }
+      ]
+    },
+    {
+      "policy_id": "sla_bd_servicing",
+      "name": "Statement and servicing requests",
+      "status": "active",
+      "environment": "production",
+      "priority": "normal",
+      "calendar": "Deposit Servicing",
+      "first_reply_minutes": 240,
+      "resolution_minutes": 1440,
+      "conditions": [
+        {
+          "field_key": "bd_issue_family",
+          "operator": "is",
+          "value": "statement_request"
+        }
+      ]
+    },
+    {
+      "policy_id": "sla_bd_access",
+      "name": "Online banking access issue",
+      "status": "active",
+      "environment": "production",
+      "priority": "high",
+      "calendar": "Deposit Servicing",
+      "first_reply_minutes": 60,
+      "resolution_minutes": 240,
+      "conditions": [
+        {
+          "field_key": "bd_issue_family",
+          "operator": "is",
+          "value": "access_issue"
+        }
+      ]
+    },
+    {
+      "policy_id": "sla_bd_as_legacy",
+      "name": "Auto-suggest savings escalation",
+      "status": "retired",
+      "environment": "production",
+      "priority": "normal",
+      "calendar": "Deposit Products Ops",
+      "first_reply_minutes": 60,
+      "resolution_minutes": 240,
+      "conditions": [
+        {
+          "system_field": "tags",
+          "operator": "includes",
+          "value": "savings-auto-suggest"
+        }
+      ],
+      "superseded_by": "sla_bd_selection"
+    }
+  ],
+  "views": [
+    {
+      "view_id": "v_bd_promo_checks",
+      "name": "Promotion checks awaiting owner",
+      "status": "active",
+      "environment": "production",
+      "group": "Campaign Operations",
+      "order": 10,
+      "conditions": [
+        {
+          "field_key": "bd_promo_check",
+          "operator": "is",
+          "value": "needed"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "bd_issue_family",
+        "created_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_bd_selection_queue",
+      "name": "Savings selection questions",
+      "status": "active",
+      "environment": "production",
+      "group": "Deposit Products Desk",
+      "order": 20,
+      "conditions": [
+        {
+          "field_key": "bd_issue_family",
+          "operator": "is",
+          "value": "savings_selection"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "bd_account_class",
+        "created_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_bd_rate_questions",
+      "name": "Rate and fee questions",
+      "status": "active",
+      "environment": "production",
+      "group": "Deposit Products Desk",
+      "order": 30,
+      "conditions": [
+        {
+          "field_key": "bd_issue_family",
+          "operator": "is",
+          "value": "rate_question"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "bd_account_class",
+        "updated_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_bd_wire_recalls",
+      "name": "Wire recalls in flight",
+      "status": "active",
+      "environment": "production",
+      "group": "Payments Operations",
+      "order": 40,
+      "conditions": [
+        {
+          "field_key": "bd_issue_family",
+          "operator": "is",
+          "value": "wire_recall"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "bd_wire_recall_stage",
+        "created_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_bd_dormancy",
+      "name": "Dormancy reviews",
+      "status": "active",
+      "environment": "production",
+      "group": "Deposit Servicing",
+      "order": 50,
+      "conditions": [
+        {
+          "field_key": "bd_issue_family",
+          "operator": "is",
+          "value": "dormancy_review"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "organization",
+        "updated_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_bd_source_conflicts",
+      "name": "Savings source conflicts",
+      "status": "active",
+      "environment": "production",
+      "group": "Deposit Products Desk",
+      "order": 60,
+      "conditions": [
+        {
+          "field_key": "bd_source_check",
+          "operator": "is",
+          "value": "conflict"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "bd_account_class",
+        "updated_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_bd_treasury",
+      "name": "Treasury desk handoffs",
+      "status": "active",
+      "environment": "production",
+      "group": "Treasury Desk",
+      "order": 70,
+      "conditions": [
+        {
+          "field_key": "bd_ops_route",
+          "operator": "is",
+          "value": "treasury_desk"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "organization",
+        "created_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_bd_servicing_statements",
+      "name": "Statement requests open",
+      "status": "active",
+      "environment": "production",
+      "group": "Deposit Servicing",
+      "order": 80,
+      "conditions": [
+        {
+          "field_key": "bd_issue_family",
+          "operator": "is",
+          "value": "statement_request"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "bd_channel",
+        "created_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_bd_as_legacy",
+      "name": "Auto-suggest savings queue",
+      "status": "retired",
+      "environment": "production",
+      "group": "Deposit Products Desk",
+      "order": 900,
+      "conditions": [
+        {
+          "system_field": "tags",
+          "operator": "includes",
+          "value": "savings-auto-suggest"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "created_at",
+        "assignee"
+      ],
+      "superseded_by": "v_bd_selection_queue"
+    }
+  ]
+}

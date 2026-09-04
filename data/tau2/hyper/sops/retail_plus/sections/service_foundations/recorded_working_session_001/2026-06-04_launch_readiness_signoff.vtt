@@ -1,0 +1,1249 @@
+WEBVTT
+
+NOTE Cloud recording transcript
+NOTE Meeting: Customer Care launch readiness signoff
+NOTE Date: 2026-06-04
+
+1
+00:00:04.000 --> 00:00:12.727
+<v Priya Nair>Okay, hold that thought for a second—I want this next part captured cleanly. This
+
+2
+00:00:12.727 --> 00:00:21.454
+<v Priya Nair>is booked as the final signoff, but two people have hard stops and Jon is joining from the implementation
+
+3
+00:00:21.454 --> 00:00:30.182
+<v Priya Nair>room. Let's name the decisions we need before we disappear into dashboard screenshots and rollout logistics. That's my read of it, anyway—push back if
+
+4
+00:00:30.182 --> 00:00:38.909
+<v Priya Nair>the thread says otherwise.
+
+5
+00:00:40.909 --> 00:00:51.783
+<v Talia Brooks>Before we move off this slide, let me get the messy version on record. The open policy item is the transfer
+
+6
+00:00:51.783 --> 00:01:02.656
+<v Talia Brooks>boundary. We also need evidence that current configuration and API packages match the build, plus owners for monitoring, training questions, and anything deliberately deferred from launch.
+
+7
+00:01:02.656 --> 00:01:13.530
+<v Talia Brooks>Take that as context, not as a ruling on anything.
+
+8
+00:01:14.030 --> 00:01:23.186
+<v Marcus Reed>Please distinguish a launch blocker from an improvement we would like. A documentation typo, missing
+
+9
+00:01:23.186 --> 00:01:32.343
+<v Marcus Reed>test link, unresolved policy conflict, and unavailable on-call owner are not equivalent even if they all appear red on the
+
+10
+00:01:32.343 --> 00:01:41.499
+<v Marcus Reed>tracker. If I've garbled that, fix it in the notes rather than quietly.
+
+11
+00:01:43.999 --> 00:01:52.869
+<v Elena Park>Um, one more pass on this, because my notes disagree with the deck here. If the active trigger contradicts the approved direct-human-request
+
+12
+00:01:52.869 --> 00:02:01.740
+<v Elena Park>behavior, that is a blocker. If a dashboard label still says pilot cohort after
+
+13
+00:02:01.740 --> 00:02:10.610
+<v Elena Park>the cohort expands, it may be confusing but does not by itself change agent behavior. We can park the
+
+14
+00:02:10.610 --> 00:02:19.481
+<v Elena Park>rest of that for the follow-up doc.
+
+15
+00:02:26.481 --> 00:02:35.780
+<v Jon Bell>Can I flag something? It reads fine until you actually try to operate it. The room
+
+16
+00:02:35.780 --> 00:02:45.080
+<v Jon Bell>microphone is echoing through Jon's laptop, and the captions may duplicate a few words until he mutes. Leave enough of that
+
+17
+00:02:45.080 --> 00:02:54.380
+<v Jon Bell>in the transcript to explain the overlap rather than smoothing the first minutes into a script. None of that changes what we already signed off, to
+
+18
+00:02:54.380 --> 00:03:03.679
+<v Jon Bell>be clear.
+
+19
+00:03:05.679 --> 00:03:15.980
+<v Priya Nair>Let me take the concrete case instead of the tidy abstract one. I have written the agenda in chat: governing transfer decision, evidence
+
+20
+00:03:15.980 --> 00:03:26.282
+<v Priya Nair>reconciliation, operational readiness, go or no-go, and named follow-ups. Only explicit decisions in those areas
+
+21
+00:03:26.282 --> 00:03:36.583
+<v Priya Nair>can change the existing record. I'll drop the longer version in the channel after the call.
+
+22
+00:03:36.083 --> 00:03:45.812
+<v Jon Bell>We're recording. I have thirty minutes and a hard stop because the training office hours start right
+
+23
+00:03:45.812 --> 00:03:55.540
+<v Jon Bell>after. The build passed yesterday. This meeting is for the remaining Care decisions and launch blockers, not for reopening data architecture. If
+
+24
+00:03:55.540 --> 00:04:05.269
+<v Jon Bell>something is a post-launch idea, I'll put it in the follow-up column.
+
+25
+00:04:07.769 --> 00:04:16.544
+<v Jon Bell>The deployed candidate reports build 2026.06.04-rc3. I matched its contract checksum and automation export to the handoff files, but I want somebody else to
+
+26
+00:04:16.544 --> 00:04:25.319
+<v Jon Bell>trace the same path before we treat my screenshot as conclusive. Consider that logged; we don't
+
+27
+00:04:25.319 --> 00:04:34.094
+<v Jon Bell>need to resolve it this hour.
+
+28
+00:04:32.594 --> 00:04:42.895
+<v Elena Park>One thing for whoever scrubs this recording later, since context matters here. I verified the production-care audience, active
+
+29
+00:04:42.895 --> 00:04:53.197
+<v Elena Park>lifecycle markers, and referenced schema components. The saved examples are useful smoke tests, while the published contract and active configuration establish the supported
+
+30
+00:04:53.197 --> 00:05:03.498
+<v Elena Park>behavior and data surface. That's observation, not objection, for whoever reads this later.
+
+31
+00:05:03.498 --> 00:05:15.707
+<v Talia Brooks>I keep coming back to this line in my notes, so let me just say it. The staging admin route is also visible in the
+
+32
+00:05:15.707 --> 00:05:27.915
+<v Talia Brooks>export and has a newer timestamp. Newer does not mean governing: it is a different audience, and
+
+33
+00:05:27.915 --> 00:05:40.124
+<v Talia Brooks>the agent build has neither permission nor a documented reason to use it. Happy to be told I'm wrong about that part.
+
+34
+00:05:39.124 --> 00:05:49.425
+<v Marcus Reed>Wait, before the next agenda item, there's a wrinkle worth thirty seconds. The release candidate reads the current customer
+
+35
+00:05:49.425 --> 00:05:59.726
+<v Marcus Reed>projection and active helpdesk fields. A retired mobile example still exists for migration testing, but current care endpoints do not reference it and its
+
+36
+00:05:59.726 --> 00:06:10.027
+<v Marcus Reed>traffic flag is disabled. Anyway—that's the wrinkle. Back to the agenda.
+
+37
+00:06:10.027 --> 00:06:21.091
+<v Priya Nair>Let me read out what I actually wrote down and you can correct me. The checksum tool prints uppercase hex on Jon's machine and lowercase on
+
+38
+00:06:21.091 --> 00:06:32.156
+<v Priya Nair>mine. The bytes match, so casing in the terminal output is not a discrepancy and should not become
+
+39
+00:06:32.156 --> 00:06:43.220
+<v Priya Nair>a fake launch issue. I'd rather we hear it now than in a postmortem.
+
+40
+00:06:42.220 --> 00:06:51.758
+<v Jon Bell>So—and this is me thinking out loud, not drafting anything—here's my worry. We have independent confirmation that the candidate points
+
+41
+00:06:51.758 --> 00:07:01.296
+<v Jon Bell>at the intended published sources. Examples corroborate execution, and explicit lifecycle, environment, and audience markers determine which definitions govern. That one's for the minutes more
+
+42
+00:07:01.296 --> 00:07:10.834
+<v Jon Bell>than for a decision today.
+
+43
+00:07:10.334 --> 00:07:19.681
+<v Priya Nair>The remaining policy item is transfer. At intake Marcus suggested immediate transfer for every
+
+44
+00:07:19.681 --> 00:07:29.029
+<v Priya Nair>unsupported request. Data review separated decline-and-offer from the actual handoff. Today we need the conditions, and we need customer-facing
+
+45
+00:07:29.029 --> 00:07:38.376
+<v Priya Nair>wording. I also want to check that asking for a person is enough on its own.
+
+46
+00:07:44.376 --> 00:07:54.677
+<v Marcus Reed>The build currently has the broad fallback behind a feature flag. Unsupported request goes straight to transfer. Unknown handling also goes
+
+47
+00:07:54.677 --> 00:08:04.978
+<v Marcus Reed>to transfer. Explicit human request goes to transfer. It is simple, but in dry runs the first branch fired on customers who accepted the limitation and
+
+48
+00:08:04.978 --> 00:08:15.279
+<v Marcus Reed>were ready to choose a supported option.
+
+49
+00:08:14.779 --> 00:08:23.363
+<v Marcus Reed>Operations finished the supervisor brief, but the last office-hours session surfaced a recurring question: should
+
+50
+00:08:23.363 --> 00:08:31.948
+<v Marcus Reed>a human agent copy a workaround into the bot's record so the next automated session remembers it? Someone should own
+
+51
+00:08:31.948 --> 00:08:40.532
+<v Marcus Reed>that as an action item, not me deciding it here.
+
+52
+00:08:45.532 --> 00:08:54.402
+<v Priya Nair>Quick reality check from the operations side before we nod this through. No launch shortcut changes the reviewed record boundary. Human workflows
+
+53
+00:08:54.402 --> 00:09:03.273
+<v Priya Nair>may have their own governed systems, but the automated Care agent cannot read or
+
+54
+00:09:03.273 --> 00:09:12.144
+<v Priya Nair>write a field just because an operator found the context useful during training. If the recording is our memory,
+
+55
+00:09:12.144 --> 00:09:21.014
+<v Priya Nair>that caveat needed to be in it.
+
+56
+00:09:24.014 --> 00:09:35.841
+<v Talia Brooks>I promised someone I'd raise this while we're all in the same room. Let's not overstate
+
+57
+00:09:35.841 --> 00:09:47.669
+<v Talia Brooks>that as a universal ban on every human note in the company. The decision is scoped to what this agent may
+
+58
+00:09:47.669 --> 00:09:59.496
+<v Talia Brooks>treat as its operational customer record and what the documented Care tools expose. Um, I think that came out more dramatic than I meant it.
+
+59
+00:10:00.996 --> 00:10:12.060
+<v Elena Park>Sorry, my screen froze for a moment. Picking up where that left off. A supervisor can handle an exceptional situation through the approved
+
+60
+00:10:12.060 --> 00:10:23.124
+<v Elena Park>human process. That does not authorize adding a hidden customer preference or promised follow-up to
+
+61
+00:10:23.124 --> 00:10:34.188
+<v Elena Park>an undocumented pane for the agent to consume later. You can hold me to that phrasing; I wrote it down.
+
+62
+00:10:36.688 --> 00:10:46.798
+<v Jon Bell>Hang on, I want to disagree politely with the way that was phrased. Attendance was eighty-six percent,
+
+63
+00:10:46.798 --> 00:10:56.909
+<v Jon Bell>with the overnight team watching the recording tomorrow. That is a staffing follow-up, not evidence that policy waits for unanimous training attendance
+
+64
+00:10:56.909 --> 00:11:07.019
+<v Jon Bell>before it becomes effective. That's the whole tangent, and I already regret its length.
+
+65
+00:11:05.519 --> 00:11:15.629
+<v Marcus Reed>For the notes, because somebody will search this transcript for it later. I will add the scoped explanation to training: use the supported Care
+
+66
+00:11:15.629 --> 00:11:25.740
+<v Marcus Reed>record and escalate unsupported needs through the reviewed process. Do not turn a human workaround into
+
+67
+00:11:25.740 --> 00:11:35.850
+<v Marcus Reed>an undocumented machine memory. We don't need consensus on that today, just awareness.
+
+68
+00:11:34.850 --> 00:11:45.533
+<v Talia Brooks>That is the problem. Unsupported describes the requested action, not the customer's desired next step. The agent should
+
+69
+00:11:45.533 --> 00:11:56.215
+<v Talia Brooks>explain the limit. If the customer says okay and moves on, sending them to a queue is worse. If they want to escalate
+
+70
+00:11:56.215 --> 00:12:06.898
+<v Talia Brooks>after the explanation, then the handoff makes sense. Direct human request is a separate condition.
+
+71
+00:12:08.898 --> 00:12:17.292
+<v Priya Nair>So we are superseding immediate transfer for every unsupported request. Keep the data-review behavior: decline the workaround and offer a person. Transfer if the customer
+
+72
+00:12:17.292 --> 00:12:25.685
+<v Priya Nair>asks to escalate after hearing the limit. If they accept the limit, continue with supported help or
+
+73
+00:12:25.685 --> 00:12:34.079
+<v Priya Nair>end normally.
+
+74
+00:12:32.579 --> 00:12:43.834
+<v Elena Park>Let me play the skeptical reviewer for a minute on this one. Rollout is behind a percentage flag, and
+
+75
+00:12:43.834 --> 00:12:55.088
+<v Elena Park>the runbook currently calls that a policy safety valve. I think that wording is misleading because the flag controls exposure, not which rules apply
+
+76
+00:12:55.088 --> 00:13:06.343
+<v Elena Park>once a customer is in cohort. Read that as a yellow flag, not a red one.
+
+77
+00:13:11.343 --> 00:13:23.170
+<v Jon Bell>There's a version of this that goes wrong quietly, so let me spell it out. Correct. A smaller cohort limits blast radius and gives us observation
+
+78
+00:13:23.170 --> 00:13:34.998
+<v Jon Bell>time, but every enabled interaction must follow the same current contract and decisions. We cannot use a partial
+
+79
+00:13:34.998 --> 00:13:46.825
+<v Jon Bell>rollout to trial an unapproved record field or transfer exception. The doc version will be tighter, I promise.
+
+80
+00:13:49.325 --> 00:13:58.291
+<v Priya Nair>If we disable the cohort after an incident, that is an operational containment action. It does not automatically prove which
+
+81
+00:13:58.291 --> 00:14:07.256
+<v Priya Nair>policy was wrong, and the incident review may find configuration, integration, or monitoring failure instead. That squares with what the pilot data shows, for what
+
+82
+00:14:07.256 --> 00:14:16.222
+<v Priya Nair>it's worth.
+
+83
+00:14:15.722 --> 00:14:25.165
+<v Talia Brooks>I'll take the unpopular side of this for a second, just to test it.
+
+84
+00:14:25.165 --> 00:14:34.608
+<v Talia Brooks>Ten percent of eligible traffic can enter the launch experience while the rest stays on the prior supported path.
+
+85
+00:14:34.608 --> 00:14:44.050
+<v Talia Brooks>The flag assignment is not a customer attribute the agent should infer, store, or explain unless the product explicitly exposes it. If that contradicts
+
+86
+00:14:44.050 --> 00:14:53.493
+<v Talia Brooks>an earlier call, the dated notes win, not me.
+
+87
+00:14:56.993 --> 00:15:07.103
+<v Marcus Reed>Something from the pilot queue this morning is relevant right here. Marketing asked whether the cohort can align to a campaign
+
+88
+00:15:07.103 --> 00:15:17.214
+<v Marcus Reed>segment. That changes selection and measurement, so it belongs in a later experiment review rather than being decided during support launch signoff. I'm not asking for
+
+89
+00:15:17.214 --> 00:15:27.324
+<v Marcus Reed>a change, just for eyes open.
+
+90
+00:15:34.324 --> 00:15:44.053
+<v Elena Park>Uh, small detour, but it lands back on the agenda item, I promise. We will
+
+91
+00:15:44.053 --> 00:15:53.782
+<v Elena Park>describe the flag as rollout control, apply the same governing behavior to all enabled sessions, and treat disablement as containment
+
+92
+00:15:53.782 --> 00:16:03.511
+<v Elena Park>pending diagnosis—not as a silent policy supersession. Small point, but it will save an argument later.
+
+93
+00:16:08.511 --> 00:16:18.240
+<v Marcus Reed>I can change that branch today. Question on direct requests: customer says can a person look at this later. That might be
+
+94
+00:16:18.240 --> 00:16:27.968
+<v Marcus Reed>asking about review, not asking to transfer now. Are we allowed one clarification? I
+
+95
+00:16:27.968 --> 00:16:37.697
+<v Marcus Reed>don't want the assistant to seize on the word person and interrupt a different question.
+
+96
+00:16:41.197 --> 00:16:50.544
+<v Priya Nair>Yes, clarify genuinely ambiguous language. But if they say I want to speak to a person,
+
+97
+00:16:50.544 --> 00:16:59.892
+<v Priya Nair>get me a human, let me talk to someone—don't make them justify it and don't force another troubleshooting step. The request
+
+98
+00:16:59.892 --> 00:17:09.239
+<v Priya Nair>itself is enough. We are not optimizing containment over an explicit preference.
+
+99
+00:17:10.239 --> 00:17:19.205
+<v Talia Brooks>Two people pinged me about this exact point after the last call. Let's walk the direct request case slowly. The customer says they
+
+100
+00:17:19.205 --> 00:17:28.171
+<v Talia Brooks>want a person before describing the issue. Earlier drafts suggested one troubleshooting attempt first, and
+
+101
+00:17:28.171 --> 00:17:37.137
+<v Talia Brooks>the active helpdesk configuration no longer supports that detour.
+
+102
+00:17:38.137 --> 00:17:47.150
+<v Priya Nair>Let me try to say back what I think I just heard. A direct request for a
+
+103
+00:17:47.150 --> 00:17:56.164
+<v Priya Nair>human is sufficient. The agent should not bargain, interrogate the customer for a reason, or require a failed self-service step before honoring
+
+104
+00:17:56.164 --> 00:18:05.178
+<v Priya Nair>it. Operational routing can gather only what the approved transfer flow itself requires. That's
+
+105
+00:18:05.178 --> 00:18:14.191
+<v Priya Nair>the part I'd want a new hire to hear verbatim.
+
+106
+00:18:21.191 --> 00:18:30.920
+<v Marcus Reed>The deck makes this look settled, and I don't think it is yet. We still need to separate a literal request from a figure
+
+107
+00:18:30.920 --> 00:18:40.648
+<v Marcus Reed>of speech. I need a real person here is clear; this app is acting like it
+
+108
+00:18:40.648 --> 00:18:50.377
+<v Marcus Reed>needs a human may be commentary about the product rather than a request to transfer the speaker. Feel free to compress
+
+109
+00:18:50.377 --> 00:19:00.106
+<v Marcus Reed>that to one line in the summary.
+
+110
+00:19:00.606 --> 00:19:10.716
+<v Jon Bell>Here's where the training draft and the runbook quietly disagree. If intent is genuinely unclear, one brief clarification
+
+111
+00:19:10.716 --> 00:19:20.827
+<v Jon Bell>can establish whether they want transfer. Once they confirm they do, the transfer proceeds; clarification cannot become a retention script or a hidden
+
+112
+00:19:20.827 --> 00:19:30.937
+<v Jon Bell>eligibility screen. And yes, I hear how pedantic that sounds out loud.
+
+113
+00:19:33.937 --> 00:19:44.047
+<v Elena Park>I want to separate what we know from what we're assuming. One synthetic test customer repeats the phrase human agent because it appears in the
+
+114
+00:19:44.047 --> 00:19:54.158
+<v Elena Park>prompt metadata. We should exclude that contaminated run from evidence rather than treating prompt leakage as customer
+
+115
+00:19:54.158 --> 00:20:04.268
+<v Elena Park>demand. The QA cases will tell us if I'm overthinking it.
+
+116
+00:20:07.768 --> 00:20:18.069
+<v Talia Brooks>Bear with me, this one needs the long way around. The governing path is direct: recognize a clear human
+
+117
+00:20:18.069 --> 00:20:28.370
+<v Talia Brooks>request, clarify only authentic ambiguity, and initiate the approved transfer flow without forcing additional troubleshooting or justification.
+
+118
+00:20:35.370 --> 00:20:44.336
+<v Jon Bell>Does the agent finish a change already in preview before transferring? Say the customer confirmed an address update and then asks for a person while the
+
+119
+00:20:44.336 --> 00:20:53.302
+<v Jon Bell>tool is still open but not submitted. The launch runbook currently says complete in-progress work when safe. That
+
+120
+00:20:53.302 --> 00:21:02.268
+<v Jon Bell>wording is vague.
+
+121
+00:21:05.268 --> 00:21:15.378
+<v Talia Brooks>Do not take a new irreversible action after the transfer request unless the customer clearly asked for both and confirmed
+
+122
+00:21:15.378 --> 00:21:25.489
+<v Talia Brooks>the action. The direct request doesn't retroactively cancel a completed change, but it also isn't permission to submit a pending one. That example belongs in
+
+123
+00:21:25.489 --> 00:21:35.599
+<v Talia Brooks>QA; it does not create another transfer condition.
+
+124
+00:21:41.599 --> 00:21:49.229
+<v Jon Bell>You know the drill—I'm going to ask the annoying follow-up question. The contact-center dashboard
+
+125
+00:21:49.229 --> 00:21:56.860
+<v Jon Bell>shows an estimated twelve-minute wait during the afternoon peak. Does queue congestion change whether the agent transfers, or only
+
+126
+00:21:56.860 --> 00:22:04.490
+<v Jon Bell>the operational information available around the handoff?
+
+127
+00:22:09.490 --> 00:22:20.745
+<v Marcus Reed>This came out of the QA channel yesterday and it belongs here. Capacity cannot silently erase an approved transfer condition. If
+
+128
+00:22:20.745 --> 00:22:32.000
+<v Marcus Reed>the platform exposes a supported wait estimate or callback option, the agent may communicate it as designed, but it cannot invent availability or trap the customer
+
+129
+00:22:32.000 --> 00:22:43.255
+<v Marcus Reed>in automation. I'll stop there before I start designing in the meeting.
+
+130
+00:22:41.755 --> 00:22:52.819
+<v Priya Nair>Before anyone writes this into the notes, let me add a caveat. We have to
+
+131
+00:22:52.819 --> 00:23:03.884
+<v Priya Nair>avoid claiming this meeting defines every queue behavior. Exact routing destinations, supported notices, and current availability signals live in active
+
+132
+00:23:03.884 --> 00:23:14.948
+<v Priya Nair>configuration. Our decision is that operational pressure does not negate the transfer boundary. That's as far as my confidence goes on it, honestly.
+
+133
+00:23:15.448 --> 00:23:23.746
+<v Talia Brooks>I mean, the principle is easy; the Tuesday-afternoon version is not. A closed destination may cause the configured flow to offer another
+
+134
+00:23:23.746 --> 00:23:32.044
+<v Talia Brooks>supported path. That is different from the agent deciding on its own that the
+
+135
+00:23:32.044 --> 00:23:40.342
+<v Talia Brooks>customer is not allowed to request a person because the displayed queue is busy. Treat everything after my second
+
+136
+00:23:40.342 --> 00:23:48.640
+<v Talia Brooks>sentence as speculation.
+
+137
+00:23:50.140 --> 00:24:00.060
+<v Elena Park>Let me anchor this to the example that's already on screen. Forecasting wants the launch transcript
+
+138
+00:24:00.060 --> 00:24:09.979
+<v Elena Park>as evidence for next quarter's staffing model. It contains anecdotal wait discussion, not a representative demand forecast, so please point them
+
+139
+00:24:09.979 --> 00:24:19.899
+<v Elena Park>to the actual capacity dataset. It's a footnote, but footnotes are where we get burned.
+
+140
+00:24:19.399 --> 00:24:27.220
+<v Jon Bell>We will monitor queue impact and use configured alternatives where available. We will not reinterpret capacity metrics, screenshots, or temporary staffing constraints as
+
+141
+00:24:27.220 --> 00:24:35.042
+<v Jon Bell>authority to remove a customer's transfer path. If nobody objects, I'll carry that framing into
+
+142
+00:24:35.042 --> 00:24:42.863
+<v Jon Bell>the training draft.
+
+143
+00:24:45.863 --> 00:24:55.401
+<v Elena Park>And please don't use transfer as a hidden schema escape. A human may have different processes, but
+
+144
+00:24:55.401 --> 00:25:04.939
+<v Elena Park>the agent must not write a fake field before handing off. The architecture decisions remain as recorded. Sorry, my connection is unstable—if
+
+145
+00:25:04.939 --> 00:25:14.477
+<v Elena Park>I vanish, I agree with the three-condition structure Priya sent yesterday.
+
+146
+00:25:14.977 --> 00:25:24.133
+<v Marcus Reed>Let me read back the direct branch in plain language. When the customer clearly asks to talk to a person, transfer. Don't require a
+
+147
+00:25:24.133 --> 00:25:33.290
+<v Marcus Reed>reason, don't make them hear the automated answer first. Clarify only if it is genuinely unclear
+
+148
+00:25:33.290 --> 00:25:42.446
+<v Marcus Reed>whether they want a handoff. Is that current?
+
+149
+00:25:44.446 --> 00:25:54.557
+<v Priya Nair>From the implementation side, here's what that sentence turns into. The phrase genuinely unclear is the remaining edge.
+
+150
+00:25:54.557 --> 00:26:04.667
+<v Priya Nair>We mean uncertainty about correct handling after using the available grounded context, not ordinary inconvenience or the agent preferring that a person make
+
+151
+00:26:04.667 --> 00:26:14.778
+<v Priya Nair>every judgment. That's me done; I yield the floor and the screen.
+
+152
+00:26:16.278 --> 00:26:27.342
+<v Talia Brooks>One more voice in favor of slowing down on this specific point. Right. The agent first uses documented information and supported tools. If consequential handling
+
+153
+00:26:27.342 --> 00:26:38.406
+<v Talia Brooks>remains genuinely unresolved, transfer is safer than guessing. But a solvable supported request should not be handed
+
+154
+00:26:38.406 --> 00:26:49.470
+<v Talia Brooks>off merely because it has several steps. Somebody sanity-check that against the runbook when there's time.
+
+155
+00:26:53.470 --> 00:27:03.390
+<v Elena Park>Nor should unclear become a euphemism for unsupported storage. If the customer asks for something outside the record contract
+
+156
+00:27:03.390 --> 00:27:13.309
+<v Elena Park>and wants escalation, that has its own transfer path; the agent does not create a mystery field and call the schema uncertain. We've all
+
+157
+00:27:13.309 --> 00:27:23.229
+<v Elena Park>seen the version where that goes badly, so, noted.
+
+158
+00:27:25.729 --> 00:27:37.175
+<v Marcus Reed>I'd rather over-explain this now than re-litigate it after launch. Two current sources might yield unresolved handling after the agent verifies it is looking at the
+
+159
+00:27:37.175 --> 00:27:48.620
+<v Marcus Reed>correct customer and order. That is genuine uncertainty. A slow tool, long item list, or unfamiliar accent is
+
+160
+00:27:48.620 --> 00:28:00.066
+<v Marcus Reed>not itself evidence that policy is unclear. I mean, we survived worse in the last rollout.
+
+161
+00:28:05.066 --> 00:28:15.749
+<v Jon Bell>Stop me if this is already covered in the calibration doc. The reporting harness marks any transfer as incomplete resolution,
+
+162
+00:28:15.749 --> 00:28:26.431
+<v Jon Bell>which will make the raw containment score look worse. The quality report needs to recognize a correct transfer instead of rewarding unsupported automated completion. Put
+
+163
+00:28:26.431 --> 00:28:37.114
+<v Jon Bell>a pin in it; the owner can pull the pin later.
+
+164
+00:28:35.614 --> 00:28:46.487
+<v Priya Nair>Somebody asked me to say this part out loud rather than in the thread.
+
+165
+00:28:46.487 --> 00:28:57.361
+<v Priya Nair>We are keeping the uncertainty route narrow and evidence-based: exhaust supported grounded handling, do not guess when the consequential
+
+166
+00:28:57.361 --> 00:29:08.234
+<v Priya Nair>answer remains unclear, and record transfer as correct when that condition is met. That's the honest answer, even if it's not the satisfying one.
+
+167
+00:29:08.234 --> 00:29:21.682
+<v Priya Nair>Yes, that's current. Explicit request for a person is sufficient. The agent can acknowledge it and move to the handoff. Talia,
+
+168
+00:29:21.682 --> 00:29:35.131
+<v Priya Nair>please make sure the QA case includes a supported request where the agent knows the answer, so we prove it transfers anyway when the customer asks.
+
+169
+00:29:34.631 --> 00:29:44.169
+<v Talia Brooks>Will do. Now unsupported escalation. Sequence matters: explain the specific limit, offer a supported alternative
+
+170
+00:29:44.169 --> 00:29:53.708
+<v Talia Brooks>if one exists, and offer a person. If the customer accepts the answer, no transfer. If they say escalate it,
+
+171
+00:29:53.708 --> 00:30:03.246
+<v Talia Brooks>I still want a human, or let me talk to someone about that limitation, transfer.
+
+172
+00:30:07.246 --> 00:30:16.021
+<v Marcus Reed>There's a failure mode hiding in the happy path here. For unsupported requests, the transcripts need to show two separate ideas: the
+
+173
+00:30:16.021 --> 00:30:24.796
+<v Marcus Reed>agent cannot pretend the capability exists, and escalation occurs when the customer wants that
+
+174
+00:30:24.796 --> 00:30:33.571
+<v Marcus Reed>unsupported need taken further rather than automatically on every limitation.
+
+175
+00:30:33.571 --> 00:30:42.537
+<v Elena Park>Let me put a sharper edge on what was just said. That distinction prevents both invention
+
+176
+00:30:42.537 --> 00:30:51.502
+<v Elena Park>and reflexive transfer. The agent explains the supported boundary in grounded language; if the customer asks for escalation or the approved
+
+177
+00:30:51.502 --> 00:31:00.468
+<v Elena Park>flow calls for it, then it uses the transfer process.
+
+178
+00:30:59.468 --> 00:31:09.769
+<v Talia Brooks>The whiteboard version of this lost a nuance I want back. Do not promise that a human can satisfy the unsupported request. Transfer
+
+179
+00:31:09.769 --> 00:31:20.071
+<v Talia Brooks>offers human review or assistance, not a guarantee that policy, systems, or record structure will
+
+180
+00:31:20.071 --> 00:31:30.372
+<v Talia Brooks>change once another person joins. Nothing there blocks launch, in my view—it just needs a name.
+
+181
+00:31:29.372 --> 00:31:38.672
+<v Jon Bell>Right, so the part I can't get past is this. A customer asks the agent to store
+
+182
+00:31:38.672 --> 00:31:47.971
+<v Jon Bell>a preference that has no documented field. The agent does not hide it in another attribute. If the customer requests a person
+
+183
+00:31:47.971 --> 00:31:57.270
+<v Jon Bell>to discuss options, the agent can transfer without claiming the person will create the
+
+184
+00:31:57.270 --> 00:32:06.570
+<v Jon Bell>field. The recording can be the tiebreaker if we remember this differently.
+
+185
+00:32:09.570 --> 00:32:17.964
+<v Priya Nair>If we're keeping receipts, this is the moment to be precise. The backlog contains a feature request for a future preference object. Its product
+
+186
+00:32:17.964 --> 00:32:26.357
+<v Priya Nair>status is exploratory, so merely linking that ticket in meeting chat must not make the field
+
+187
+00:32:26.357 --> 00:32:34.751
+<v Priya Nair>appear current or promised.
+
+188
+00:32:34.251 --> 00:32:43.026
+<v Marcus Reed>I ran this by the support leads and their reaction was instructive. Launch behavior will state limitations honestly,
+
+189
+00:32:43.026 --> 00:32:51.801
+<v Marcus Reed>avoid invented capabilities, and honor an escalation request through the approved transfer route without guaranteeing the unsupported outcome. You know where to find
+
+190
+00:32:51.801 --> 00:33:00.576
+<v Marcus Reed>me if that lands wrong.
+
+191
+00:32:59.076 --> 00:33:11.094
+<v Marcus Reed>What about a customer who repeats the unsupported request without saying escalate? For example, no, just add the note. Do we interpret persistence as escalation,
+
+192
+00:33:11.094 --> 00:33:23.112
+<v Marcus Reed>or explain once more? I can imagine an endless loop if we demand one of three phrases.
+
+193
+00:33:27.112 --> 00:33:36.268
+<v Priya Nair>Use the conversation. If they continue pursuing the unsupported action after the limit and want somebody else to address
+
+194
+00:33:36.268 --> 00:33:45.425
+<v Priya Nair>it, that is escalation. We don't need a magic word. But mere disappointment—fine, that's frustrating—is not automatically a transfer. The intent to escalate the
+
+195
+00:33:45.425 --> 00:33:54.581
+<v Priya Nair>unsupported request is what matters.
+
+196
+00:33:57.581 --> 00:34:07.310
+<v Talia Brooks>Agreed. Current rule: after the agent explains an unsupported limit, transfer when the customer wants to escalate that request. This is narrower than transfer on first
+
+197
+00:34:07.310 --> 00:34:17.039
+<v Talia Brooks>detection. The evidence is the customer's response to the explanation, whether they use the word escalate or clearly
+
+198
+00:34:17.039 --> 00:34:26.768
+<v Talia Brooks>ask for another person to pursue it.
+
+199
+00:34:29.768 --> 00:34:40.832
+<v Elena Park>Not to be the process person, but the process matters here. Accessibility review asked whether the exact transfer notice can
+
+200
+00:34:40.832 --> 00:34:51.896
+<v Elena Park>be paraphrased for screen readers or voice. The string comes from active configuration, and the content must remain exact even when the channel renders it
+
+201
+00:34:51.896 --> 00:35:02.960
+<v Elena Park>differently. That's context for the next agenda item as much as this one.
+
+202
+00:35:01.460 --> 00:35:11.952
+<v Priya Nair>This is the item I starred in the pre-read, so here goes. We can
+
+203
+00:35:11.952 --> 00:35:22.444
+<v Priya Nair>support channel-appropriate delivery mechanics without editorially changing the configured notice. Text can be announced by assistive technology and voice
+
+204
+00:35:22.444 --> 00:35:32.936
+<v Priya Nair>can speak the same words; visual styling and audio prosody are presentation layers. Whoever writes the summary, please keep the hedge in.
+
+205
+00:35:34.436 --> 00:35:45.691
+<v Jon Bell>Give me a minute on this one; it's subtler than it looks. Be careful with punctuation normalization and extra lead-ins. A
+
+206
+00:35:45.691 --> 00:35:56.946
+<v Jon Bell>harmless conversational sentence before the notice may cause an exact-string check to fail or blur where the formal handoff begins, so the implementation needs a dedicated
+
+207
+00:35:56.946 --> 00:36:08.201
+<v Jon Bell>rendering path. I'll take the silence as thoughtful agreement rather than sleep.
+
+208
+00:36:14.201 --> 00:36:23.548
+<v Talia Brooks>Okay—last thing on this card before we move, I promise. The agent can explain the
+
+209
+00:36:23.548 --> 00:36:32.896
+<v Talia Brooks>next step before invoking transfer, then emit the configured notice as its own message. It should not insert an estimated
+
+210
+00:36:32.896 --> 00:36:42.243
+<v Talia Brooks>wait, queue name, or promise inside that fixed notice unless configuration defines such content.
+
+211
+00:36:43.243 --> 00:36:52.972
+<v Marcus Reed>The shortest honest version of my concern is this. Live captions in this meeting capitalize some names inconsistently. That is separate from
+
+212
+00:36:52.972 --> 00:37:02.700
+<v Marcus Reed>the product notice, whose exact content is tested from configuration rather than copied out
+
+213
+00:37:02.700 --> 00:37:12.429
+<v Marcus Reed>of this transcript. It's the kind of detail that only matters until it really matters.
+
+214
+00:37:14.929 --> 00:37:24.658
+<v Elena Park>Let me name the elephant so the recording has it. We will preserve the exact configured
+
+215
+00:37:24.658 --> 00:37:34.387
+<v Elena Park>transfer notice across channels and vary only the presentation mechanics that do not alter its words. Additional operational information stays separate
+
+216
+00:37:34.387 --> 00:37:44.116
+<v Elena Park>and must itself be supported. Let's let the example do the arguing for us.
+
+217
+00:37:46.116 --> 00:37:55.654
+<v Jon Bell>Third branch is unknown handling. The runbook says transfer when uncertain. That seems too broad; an agent can be uncertain because it failed
+
+218
+00:37:55.654 --> 00:38:05.192
+<v Jon Bell>to retrieve a record or because the page is slow. Are those transfer, retry, or
+
+219
+00:38:05.192 --> 00:38:14.730
+<v Jon Bell>incident? I don't want every tool timeout labeled a policy edge case.
+
+220
+00:38:14.730 --> 00:38:24.268
+<v Elena Park>A tool failure has its own operational handling. The policy branch is when the relevant facts are
+
+221
+00:38:24.268 --> 00:38:33.806
+<v Elena Park>clear but the documented rules do not determine what to do with that combination. Don't interpolate from neighboring cases. Also, don't call
+
+222
+00:38:33.806 --> 00:38:43.344
+<v Elena Park>a known but unpopular answer unclear just to avoid delivering it.
+
+223
+00:38:44.844 --> 00:38:54.191
+<v Marcus Reed>So the agent can ask clarifying questions first. If those answers place the case on a known path, follow it. If the facts are
+
+224
+00:38:54.191 --> 00:39:03.539
+<v Marcus Reed>established and there is genuinely no documented handling, transfer rather than guess. A difficult conversation, missing
+
+225
+00:39:03.539 --> 00:39:12.886
+<v Marcus Reed>metric, or slow interface does not by itself qualify.
+
+226
+00:39:15.386 --> 00:39:25.115
+<v Talia Brooks>Okay, hold that thought for a second—I want this next part captured cleanly. For the first week, dashboards
+
+227
+00:39:25.115 --> 00:39:34.844
+<v Talia Brooks>will show transfer rate, unsupported-request mentions, tool failures, confirmation defects, and sampled QA outcomes. Those are observability signals, not automatic instructions to rewrite
+
+228
+00:39:34.844 --> 00:39:44.573
+<v Talia Brooks>behavior mid-shift. End of sidebar—thank you for indulging the detour.
+
+229
+00:39:48.073 --> 00:40:00.091
+<v Jon Bell>Before we move off this slide, let me get the messy version on record. An alert can trigger investigation or flag containment. It cannot by
+
+230
+00:40:00.091 --> 00:40:12.109
+<v Jon Bell>itself establish that the underlying decision was wrong, because a rate change may come from traffic mix,
+
+231
+00:40:12.109 --> 00:40:24.127
+<v Jon Bell>a broken integration, instrumentation drift, or legitimate customer demand. That's my read of it, anyway—push back if the thread says otherwise.
+
+232
+00:40:25.127 --> 00:40:33.520
+<v Marcus Reed>We should preassign who can change configuration and require the normal review path. Otherwise a well-intentioned operator might disable
+
+233
+00:40:33.520 --> 00:40:41.914
+<v Marcus Reed>a trigger to improve a dashboard metric and create an undocumented contradiction with launch decisions. Take that as context, not as a ruling on
+
+234
+00:40:41.914 --> 00:40:50.307
+<v Marcus Reed>anything.
+
+235
+00:40:53.307 --> 00:41:05.134
+<v Elena Park>Um, one more pass on this, because my notes disagree with the deck here. If direct human requests increase transfer volume, the team examines samples and
+
+236
+00:41:05.134 --> 00:41:16.962
+<v Elena Park>capacity. It must not add a secret troubleshooting gate merely to push the graph down; any behavioral change
+
+237
+00:41:16.962 --> 00:41:28.789
+<v Elena Park>needs reviewed authority and traceable supersession. If I've garbled that, fix it in the notes rather than quietly.
+
+238
+00:41:31.289 --> 00:41:41.972
+<v Priya Nair>Can I flag something? It reads fine until you actually try to operate it. The containment dashboard refreshes every fifteen
+
+239
+00:41:41.972 --> 00:41:52.654
+<v Priya Nair>minutes, while the queue dashboard is closer to real time. That difference matters during incident response, but neither latency value is a customer-facing policy fact.
+
+240
+00:41:52.654 --> 00:42:03.337
+<v Priya Nair>We can park the rest of that for the follow-up doc.
+
+241
+00:42:05.837 --> 00:42:16.138
+<v Talia Brooks>Let me take the concrete case instead of the tidy abstract one. Monitoring will
+
+242
+00:42:16.138 --> 00:42:26.439
+<v Talia Brooks>create evidence and escalation, with named owners for investigation and controlled changes. Metrics inform decisions; they do not silently
+
+243
+00:42:26.439 --> 00:42:36.740
+<v Talia Brooks>become decisions or authorize operators to edit governing behavior. None of that changes what we already signed off, to be clear.
+
+244
+00:42:36.740 --> 00:42:48.758
+<v Talia Brooks>Yes. Marking current: transfer when an edge case has no clearly known handling under the documented policy. QA will include a
+
+245
+00:42:48.758 --> 00:43:00.776
+<v Talia Brooks>similar-looking case that is covered, so the agent has to read the rule rather than transfer whenever the scenario is unusual.
+
+246
+00:42:59.776 --> 00:43:07.979
+<v Priya Nair>That gives three conditions: direct human request; escalation of an unsupported request after explanation; and
+
+247
+00:43:07.979 --> 00:43:16.181
+<v Priya Nair>genuinely unclear handling. There isn't a fourth condition for customer anger, low confidence, or inconvenience. Those may occur alongside a
+
+248
+00:43:16.181 --> 00:43:24.384
+<v Priya Nair>condition, but they are not conditions by themselves.
+
+249
+00:43:23.384 --> 00:43:31.968
+<v Jon Bell>We still need the notice. The prototype says I'm connecting you now, and the training draft says a specialist will be with
+
+250
+00:43:31.968 --> 00:43:40.553
+<v Jon Bell>you shortly. Both imply timing or expertise we may not know. Legal comment says
+
+251
+00:43:40.553 --> 00:43:49.137
+<v Jon Bell>avoid a promise. Talia, did Compliance approve exact text?
+
+252
+00:43:49.137 --> 00:43:58.294
+<v Talia Brooks>They approved one sentence and asked us not to decorate it. The agent uses it for
+
+253
+00:43:58.294 --> 00:44:07.450
+<v Talia Brooks>each of the three branches. No estimated wait, no promise the person can override policy, no specialist label. Marcus, I'll paste
+
+254
+00:44:07.450 --> 00:44:16.607
+<v Talia Brooks>it in chat because the capitalization and punctuation need to survive.
+
+255
+00:44:20.607 --> 00:44:29.000
+<v Talia Brooks>The exact notice is: YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON. That is the whole notice. It can follow
+
+256
+00:44:29.000 --> 00:44:37.394
+<v Talia Brooks>a short acknowledgment of what the customer asked, but do not alter this sentence or
+
+257
+00:44:37.394 --> 00:44:45.787
+<v Talia Brooks>append an outcome promise to it.
+
+258
+00:44:48.287 --> 00:44:56.681
+<v Priya Nair>One thing for whoever scrubs this recording later, since context matters here. I am reading the go
+
+259
+00:44:56.681 --> 00:45:05.074
+<v Priya Nair>or no-go checklist item by item: current sources verified, launch candidate tested, governing transfer paths resolved, exact notice checked, monitoring owners named,
+
+260
+00:45:05.074 --> 00:45:13.468
+<v Priya Nair>and no open severity-one defects.
+
+261
+00:45:20.468 --> 00:45:28.861
+<v Jon Bell>Engineering is go for the staged cohort. The candidate hash matches, integration smoke tests pass, retired and admin surfaces are not referenced, and rollback
+
+262
+00:45:28.861 --> 00:45:37.255
+<v Jon Bell>can disable exposure without changing the stored customer contract. I'll drop the longer version in the
+
+263
+00:45:37.255 --> 00:45:45.648
+<v Jon Bell>channel after the call.
+
+264
+00:45:44.648 --> 00:45:53.232
+<v Elena Park>I keep coming back to this line in my notes, so let me just say it. QA is
+
+265
+00:45:53.232 --> 00:46:01.816
+<v Elena Park>go with one documentation follow-up, not a behavioral exception. The outdated screenshot in training must be replaced tomorrow, while the live configuration, test
+
+266
+00:46:01.816 --> 00:46:10.401
+<v Elena Park>evidence, and spoken decisions are internally consistent now. Consider that logged; we don't need to
+
+267
+00:46:10.401 --> 00:46:18.985
+<v Elena Park>resolve it this hour.
+
+268
+00:46:21.985 --> 00:46:33.240
+<v Talia Brooks>Wait, before the next agenda item, there's a wrinkle worth thirty seconds. The remaining low-severity issue is a dashboard label using the pilot name. It
+
+269
+00:46:33.240 --> 00:46:44.495
+<v Talia Brooks>does not affect routing, records, calculations, or confirmation. Its owner and due date are recorded so go
+
+270
+00:46:44.495 --> 00:46:55.750
+<v Talia Brooks>does not mean pretending the backlog is empty. That's observation, not objection, for whoever reads this later.
+
+271
+00:46:58.750 --> 00:47:10.005
+<v Marcus Reed>Let me read out what I actually wrote down and you can correct me. Legal's calendar response still says
+
+272
+00:47:10.005 --> 00:47:21.260
+<v Marcus Reed>tentative because the invite was moved, but their written approval is attached to the release record. Calendar attendance state is not the approval system
+
+273
+00:47:21.260 --> 00:47:32.515
+<v Marcus Reed>and should not reopen a closed review. Happy to be told I'm wrong about that part.
+
+274
+00:47:31.515 --> 00:47:41.053
+<v Priya Nair>So—and this is me thinking out loud, not drafting anything—here's my worry. All accountable owners state go for staged launch, with the scoped documentation and dashboard
+
+275
+00:47:41.053 --> 00:47:50.591
+<v Priya Nair>follow-ups recorded separately. No unresolved contradiction remains in the behavior, configuration, or data contract required for release. Anyway—that's
+
+276
+00:47:50.591 --> 00:48:00.129
+<v Priya Nair>the wrinkle. Back to the agenda.
+
+277
+00:48:02.129 --> 00:48:11.476
+<v Marcus Reed>Copied directly from chat. I will make it a fixed string, not generated text. [crosstalk] Jon, yes, localization is a
+
+278
+00:48:11.476 --> 00:48:20.824
+<v Marcus Reed>separate launch item; today's English configuration uses this exact version. We are not deciding translations in this meeting, and the assistant should not improvise them
+
+279
+00:48:20.824 --> 00:48:30.171
+<v Marcus Reed>from the English wording.
+
+280
+00:48:29.671 --> 00:48:39.400
+<v Elena Park>I'm back. I heard the last minute. No data objections. Quick reminder that transfer
+
+281
+00:48:39.400 --> 00:48:49.129
+<v Elena Park>does not grant new write access and doesn't change the closed schema. If the handoff fails technically, log the
+
+282
+00:48:49.129 --> 00:48:58.858
+<v Elena Park>incident; do not tell the customer the unsupported action was completed. [audio warble] I think that came through.
+
+283
+00:48:59.858 --> 00:49:13.306
+<v Priya Nair>It did. I am signing off the Care controls we carried across the series. The training deck can summarize them, but
+
+284
+00:49:13.306 --> 00:49:26.755
+<v Priya Nair>if the deck conflicts with these dated decisions, come back to the recordings and the implementation review. Jon, what is still open for launch versus later?
+
+285
+00:49:30.255 --> 00:49:39.412
+<v Jon Bell>Launch: Marcus changes the unsupported branch and fixed notice; Talia adds three QA cases; Elena
+
+286
+00:49:39.412 --> 00:49:48.568
+<v Jon Bell>reviews the diff. Later: recording retention, dashboard owner, translated notices, and reminder-feature discovery. Staffing office hours are confirmed for Friday,
+
+287
+00:49:48.568 --> 00:49:57.725
+<v Jon Bell>but that is logistics. None of those later items changes today's customer handling.
+
+288
+00:49:56.225 --> 00:50:04.428
+<v Priya Nair>Great. We have signoff. Please don't clean the transcript into something that erases the open questions—we need the history—but do use the
+
+289
+00:50:04.428 --> 00:50:12.630
+<v Priya Nair>current decisions in the build. Thanks, everyone. Jon, stay on for thirty seconds about
+
+290
+00:50:12.630 --> 00:50:20.833
+<v Priya Nair>the trainer invite; everyone else can drop.
+
+291
+00:50:20.333 --> 00:50:31.779
+<v Marcus Reed>Quick reality check from the operations side before we nod this through. Before the recording stops,
+
+292
+00:50:31.779 --> 00:50:43.224
+<v Marcus Reed>I want a final distinction between what is effective now and what is merely a post-launch idea. The backlog is long
+
+293
+00:50:43.224 --> 00:50:54.670
+<v Marcus Reed>enough that someone reading this transcript later could easily mistake enthusiasm for commitment. I'd rather we hear it now than in a postmortem.
+
+294
+00:50:58.670 --> 00:51:09.543
+<v Talia Brooks>I promised someone I'd raise this while we're all in the same room. Effective now are the decisions explicitly closed across the meeting
+
+295
+00:51:09.543 --> 00:51:20.417
+<v Talia Brooks>series and the active production configuration and contracts. Follow-up ideas remain proposals until they pass
+
+296
+00:51:20.417 --> 00:51:31.290
+<v Talia Brooks>their owning review and explicitly supersede something current. That one's for the minutes more than for a decision today.
+
+297
+00:51:31.790 --> 00:51:40.088
+<v Elena Park>Sorry, my screen froze for a moment. Picking up where that left off. That includes localization, callback
+
+298
+00:51:40.088 --> 00:51:48.386
+<v Elena Park>experiments, a future preference object, richer transfer estimates, dashboard changes, and alternate cohort logic. None is secretly approved because we discussed a
+
+299
+00:51:48.386 --> 00:51:56.685
+<v Elena Park>plausible use case or assigned research. Someone should own that as an action item,
+
+300
+00:51:56.685 --> 00:52:04.983
+<v Elena Park>not me deciding it here.
+
+301
+00:52:04.983 --> 00:52:14.283
+<v Jon Bell>Hang on, I want to disagree politely with the way that was phrased. If the preference object is later published, its contract can define
+
+302
+00:52:14.283 --> 00:52:23.582
+<v Jon Bell>the fields and lifecycle and a new decision can supersede today's closed record boundary. Until then,
+
+303
+00:52:23.582 --> 00:52:32.882
+<v Jon Bell>implementation must not anticipate it through a side table or repurposed field. If the recording is our memory, that caveat needed
+
+304
+00:52:32.882 --> 00:52:42.181
+<v Jon Bell>to be in it.
+
+305
+00:52:49.181 --> 00:52:58.194
+<v Priya Nair>For the notes, because somebody will search this transcript for it later. We are ending two minutes over
+
+306
+00:52:58.194 --> 00:53:07.208
+<v Priya Nair>because the release-room clock is fast and the transcript timer started before the agenda. Whoever files the recording, leave the timer alone —
+
+307
+00:53:07.208 --> 00:53:16.222
+<v Priya Nair>nobody needs the log trimmed to a neat sixty minutes. Um, I think that came
+
+308
+00:53:16.222 --> 00:53:25.235
+<v Priya Nair>out more dramatic than I meant it.
+
+309
+00:53:26.235 --> 00:53:37.490
+<v Marcus Reed>Let me play the skeptical reviewer for a minute on this one. I will circulate the dated decision registry, evidence links, owners, and proposal backlog
+
+310
+00:53:37.490 --> 00:53:48.745
+<v Marcus Reed>after this call. Launch proceeds on the current closed set, and any future change must be traceable
+
+311
+00:53:48.745 --> 00:54:00.000
+<v Marcus Reed>rather than inferred from conversational possibility. You can hold me to that phrasing; I wrote it down.

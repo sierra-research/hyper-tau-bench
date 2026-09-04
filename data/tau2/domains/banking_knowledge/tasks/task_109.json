@@ -1,0 +1,92 @@
+{
+  "id": "task_109",
+  "description": {
+    "purpose": "Task: task_109",
+    "relevant_policies": null,
+    "notes": null
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Margot Bellamy, a 36-year-old ceramicist from Denver, CO. You founded your pottery studio, \"Bellamy Clayworks\", in March 2019 - you're proud that it has survived six and a half years. Until now you've run everything through your personal Blue Account checking at Rho-Bank (about $4,250 in it), but your accountant insists you finally separate business and personal money. You're easygoing but decisive - you want ONE recommendation, not a comparison chart.\n\n**Your goal:** Get ONE recommendation for a business checking account that fits your needs, then open it. You are not moving any money today.\n\n**Verification info:**\n- Name: Margot Bellamy | Phone: 303-555-0419 | Email: margot.bellamy@gmail.com\n- DOB: 07/18/1989 | Address: 2847 Lavender Lane, Denver, CO 80202\n\n## Conversation Flow:\n\n1. **Opening:** \"Hi! I run a pottery studio here in Denver - been at it since 2019 - and my accountant is making me finally open a proper business checking account. I've looked at your website and there are way too many options. Can you just tell me which ONE fits my situation?\"\n\n2. **Provide verification info when asked:** Give your name, phone number, email, date of birth, and address.\n\n3. **Reveal your requirements organically when asked (not all at once):**\n   - **ATM rebates:** \"I sell at weekend markets all over the Front Range and I'm always pulling cash from whatever ATM is nearby. Those fees add up - I need at least $15 a month back in ATM fee rebates.\"\n   - **Overdraft:** \"Wholesale orders pay slowly and I've been burned before - I want zero overdraft fees. That one's non-negotiable.\"\n   - **Balance:** \"I can't promise to park $10,000 in there. If there's a minimum balance requirement it needs to be under ten grand.\"\n   - **Interest:** \"And I'd like the balance to earn at least 1% - even a checking account should pull its weight.\"\n\n4. **If asked when the business was formed / how old the company is:** \"March 2019 - six and a half years ago. We just celebrated.\"\n\n5. **If the agent gives you multiple options:** Push back: \"Please just pick the ONE you'd recommend for what I described. I trust you more than my own skimming.\"\n\n6. **When the agent recommends ONE account:** \"Sold. Let's open it.\" Accept whatever single account the agent recommends and proceed with opening it - you don't second-guess them.\n\n7. **If the agent asks about funding:** \"Not today - I'll move money over after my accountant tells me how much to seed it with.\"\n\n8. **After the account is opened:** \"Wonderful, thank you! That was easier than glazing day.\" ###STOP###\n\n**IMPORTANT BEHAVIORS:**\n- Do NOT suggest account names yourself - you don't know them.\n- You never quote bank policies or eligibility rules - you only know your own situation.\n- Mention the studio's age naturally (it's a point of pride), especially if asked anything about the business.\n\nYou are currently on the line with a customer support agent. Only provide additional details about your situation when the agent asks for them. Don't dump all your information at once. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": null,
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Margot Bellamy",
+          "user_id": "c7d8e9f0a1",
+          "address": "2847 Lavender Lane, Denver, CO 80202",
+          "email": "margot.bellamy@gmail.com",
+          "phone_number": "303-555-0419",
+          "date_of_birth": "07/18/1989",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "109_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "109_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"c7d8e9f0a1\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "109_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "open_bank_account_4821"
+        },
+        "requestor": "assistant",
+        "action_id": "109_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "open_bank_account_4821",
+          "arguments": "{\"user_id\": \"c7d8e9f0a1\", \"account_type\": \"business_checking\", \"account_class\": \"Lime Green\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "109_4"
+      }
+    ],
+    "reward_basis": [
+      "DB"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_003",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_bank_accounts_bank_accounts_(general)_013",
+    "doc_bank_accounts_bank_accounts_(general)_014",
+    "doc_business_checking_accounts_sky_blue_001",
+    "doc_business_checking_accounts_sky_blue_007",
+    "doc_business_checking_accounts_sky_blue_010",
+    "doc_business_checking_accounts_lime_green_001",
+    "doc_business_checking_accounts_lime_green_007",
+    "doc_business_checking_accounts_hunter_green_001",
+    "doc_business_checking_accounts_hunter_green_010",
+    "doc_business_checking_accounts_navy_blue_001",
+    "doc_business_checking_accounts_true_blue_001",
+    "doc_business_checking_accounts_world_blue_001",
+    "doc_business_checking_accounts_beige_001",
+    "doc_business_checking_accounts_cobalt_blue_001"
+  ]
+}

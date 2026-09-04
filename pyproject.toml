@@ -1,0 +1,118 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tau2"
+version = "1.0.1"
+description = "tau^tau-bench (Hyper-tau): evaluating agent-building agents, built on the tau^3-bench tool-agent-user framework"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+license = "MIT"
+authors = [
+    { name = "Quan Shi", email = "benshi@stanford.edu" },
+    { name = "Keshav Dhandhania" },
+    { name = "Karthik Narasimhan" },
+    { name = "Victor Barres" },
+]
+dependencies = [
+    "rich",
+    "tabulate>=0.9.0",
+    "fastapi>=0.115.11",
+    "uvicorn>=0.34.0",
+    "pandas>=2.2.3",
+    "psutil>=7.0.0",
+    "loguru>=0.7.3",
+    "docstring-parser>=0.16",
+    "litellm>=1.80.15,<1.82.7",
+    "tenacity>=9.0.0",
+    "deepdiff>=8.4.2",
+    "addict>=2.4.0",
+    "PyYAML>=6.0.2",
+    "toml>=0.10.2",
+    "python-dotenv>=1.0.0",
+    "typer>=0.12.5",
+    "requests>=2.31.0",
+    "numpy>=1.24.0",
+    "httpx>=0.24.0",
+    # The banking_knowledge inner loop (24 of the 53 release tasks) retrieves
+    # over the knowledge base with BM25 and OpenAI embeddings.
+    "rank-bm25>=0.2.2",
+    "openai>=1.0.0",
+]
+
+# Optional groups follow the tau^3-bench layout. No release task needs any of
+# them; `knowledge` is kept as an alias of the two core packages above so the
+# Make targets and docs that name it keep working.
+[project.optional-dependencies]
+voice = [
+    "elevenlabs>=1.54.0",
+    "deepgram-sdk>=3.7.3",
+    "websockets>=13.0",
+    "pyaudio>=0.2.14",
+    "jiwer>=3.0.0",
+    "scipy>=1.10.0",
+    "pydub>=0.25.0",
+    "tqdm>=4.0",
+    "aiohttp>=3.0",
+    "google-genai>=1.0.0",
+    "boto3>=1.35.0",
+    "aws-sdk-bedrock-runtime>=0.3.0",
+    "google-cloud-aiplatform>=1.38.0",
+    "google-auth>=2.23.0",
+    "livekit-agents>=1.5.0",
+    "livekit-plugins-deepgram>=1.5.0",
+    "livekit-plugins-openai>=1.5.0",
+]
+knowledge = [
+    "rank-bm25>=0.2.2",
+    "openai>=1.0.0",
+]
+gym = [
+    "gymnasium>=1.2.2",
+]
+dev = [
+    "pytest>=8.3.5",
+    "pytest-xdist>=3.5.0",
+    "ruff>=0.9.1",
+    "pre-commit>=4.0.0",
+    "pillow>=10.0",
+]
+all = [
+    "tau2[voice,knowledge,gym,dev]",
+]
+
+[tool.uv]
+# Keep the resolver on the openai release the benchmark was validated with.
+constraint-dependencies = ["openai<=2.20.0"]
+
+# Resolve against public PyPI regardless of any machine-level index override,
+# so uv.lock stays stable for every contributor.
+[[tool.uv.index]]
+url = "https://pypi.org/simple"
+default = true
+
+[project.urls]
+Homepage = "https://hyper.taubench.com/"
+Repository = "https://github.com/sierra-research/hyper-tau-bench"
+
+[project.scripts]
+tau2 = "tau2.cli:main"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::DeprecationWarning:litellm.*:",
+    "ignore:Pydantic serializer warnings:UserWarning:pydantic.*:",
+]
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+    "full_duplex_integration: marks tests as full-duplex integration tests requiring OpenAI Realtime API and TTS (deselect with '-m \"not full_duplex_integration\"')",
+]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+ignore = ["E501", "F541"]
+
+[tool.ruff]
+line-length = 88
+exclude = ["*.ipynb"]

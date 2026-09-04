@@ -1,0 +1,177 @@
+{
+  "workspace": "Northline Wireless",
+  "threads": [
+    {
+      "key": "wfc_lab_finding",
+      "category": "hard_arc_context",
+      "channel": "device-lab",
+      "started_at": "2026-07-08T10:05:00-07:00",
+      "arc": {"pattern": "A", "role": "supersession_event", "fact_id": "wifi_calling_blocking_disable_and_retry", "variant_value": "outdated article claim: the Wi-Fi Calling step only applies to older software"},
+      "messages": [
+        {"user": "jules", "text": "Lab result worth everyone's attention: we can reproduce picture messages hanging while Wi-Fi Calling is active on three CURRENT-firmware models. Outgoing MMS sits queued until Wi-Fi Calling goes off, then flushes immediately.", "reactions": [{"name": "eyes", "users": ["lee", "priya"]}]},
+        {"user": "lee", "text": "Confirming the Android side. Two of the three are this year's builds — nothing legacy about them. Repro is boring and reliable: WFC on, send photo, watch it queue; WFC off, it sends inside ten seconds."},
+        {"user": "priya", "text": "That collides with what the article says right now — the standing line is that the Wi-Fi Calling step is only for older software. If current builds do this, that paragraph is wrong as written."},
+        {"user": "jules", "text": "Which is why I'm raising it here rather than just filing the capture. The behavior didn't read like a fluke; it survived reboots and a SIM reseat on all three units."},
+        {"user": "samira", "text": "Do we have the model list and firmware versions written down somewhere more durable than this thread? Publishing will ask within minutes of seeing it.", "reactions": [{"name": "memo", "users": ["jules"]}]},
+        {"user": "jules", "text": "Lab notebook entry is complete with units, builds, and timings, filed under the July 8 session. Handing this to the content owners for the article decision — lab's job ends at the evidence."},
+        {"user": "priya", "text": "Taking it to the revision review. Until that lands, coaches should not be teaching the older-software-only version of the Wi-Fi Calling step.", "reactions": [{"name": "white_check_mark", "users": ["jules", "lee", "samira"]}]}
+      ]
+    },
+    {
+      "key": "history_box_note",
+      "category": "hard_arc_context",
+      "channel": "help-publishing",
+      "started_at": "2026-07-26T09:40:00-07:00",
+      "arc": {"pattern": "A", "role": "supersession_record", "fact_id": "wifi_calling_blocking_disable_and_retry"},
+      "messages": [
+        {"user": "tess", "text": "Post-publish cleanup on the picture-messages article: internal changelog is now up to date. The July 19 revision retired the old Wi-Fi Calling paragraph — the one that scoped the step to older software — and the current text runs the check regardless of build."},
+        {"user": "samira", "text": "For the changelog's provenance line, the retirement traces to the device-lab findings from July 8, right? I want the entry to point at the actual evidence, not just say updated per review."},
+        {"user": "tess", "text": "Correct, the July 8 lab session is cited in the changelog entry. Three current-firmware models holding MMS while Wi-Fi Calling was active — that's what killed the old paragraph."},
+        {"user": "maya", "text": "Good. To be precise for anyone reading later: the May revision's claim is retired, not merely reworded. The current article is the only live version of that step, and it carries the check for all models.", "reactions": [{"name": "white_check_mark", "users": ["tess", "samira"]}]},
+        {"user": "devon", "text": "Training materials were rebuilt off the July 19 text last week, so nothing in the classroom still teaches the old scoping. Closing my end of the checklist."}
+      ]
+    },
+    {
+      "key": "video_share_uat",
+      "category": "hard_arc_context",
+      "channel": "care-training",
+      "started_at": "2026-08-01T13:15:00-07:00",
+      "arc": {"pattern": "B", "role": "refutes_misreading", "fact_id": "any_working_data_speed_is_enough", "near_miss": "Video Share 4G requirement applied to picture messages"},
+      "messages": [
+        {"user": "devon", "text": "UAT question from this morning's cohort that I want settled on the record. A trainee handled a failed-photo scenario by telling the customer their connection needed to be 4G or better, citing the Video Share requirements page. Where did that come from and how do we kill it?"},
+        {"user": "tess", "text": "It comes from reading a real page for the wrong feature. The Video Share article genuinely requires 4G on both ends — for live video during calls. Its own scope box says in bold not to use it for picture or group messages."},
+        {"user": "priya", "text": "And on the messaging side, the July decision on the speed sentence settled exactly this trap: the picture-message check is about whether mobile data passes traffic at all, not about hitting a speed tier. That review is the governing record — the article language came out of it.", "reactions": [{"name": "link", "users": ["devon", "omar"]}]},
+        {"user": "omar", "text": "Frontline translation for the cohort: if data works, even badly, speed is not the reason a photo won't send. Chasing a faster connection for MMS burns the customer's time on a requirement that doesn't exist."},
+        {"user": "devon", "text": "That's the sentence I'll put on the slide, with the two pages side by side so they see the scope box with their own eyes. Fastest way to unlearn a page is to read its boundary aloud."},
+        {"user": "priya", "text": "Add the pointer to the July decision thread too. When someone asks why, the answer should be a dated record, not a trainer's memory.", "reactions": [{"name": "memo", "users": ["devon", "tess"]}]}
+      ]
+    },
+    {
+      "key": "data_first_coaching",
+      "category": "hard_arc_context",
+      "channel": "care-qa",
+      "started_at": "2026-08-03T11:20:00-07:00",
+      "arc": {"pattern": "B", "role": "refutes_misreading", "fact_id": "mms_requires_data_use_data_flow_then_retry", "case_ref": "chat case of 2026-08-02"},
+      "messages": [
+        {"user": "priya", "text": "Coaching item from yesterday's chat queue: customer reported picture messages failing AND mobile data fully dead, and the chat went straight to a technical transfer. Flagging it here because the reasoning — combined symptoms means deeper problem — sounds sensible and is exactly backwards."},
+        {"user": "omar", "text": "Backwards because the combination is the textbook entry, right? Photos ride on data; if data is down, the photos are a symptom, not a second fault."},
+        {"user": "priya", "text": "Precisely. The connectivity-check article lays out the sequence: get mobile data working through the data checks first, then retry the picture message. None of that happened — no allowance read, no data-toggle check, nothing. Several supported steps were still on the table when the handoff went out."},
+        {"user": "maya", "text": "Worth saying for the file: the transfer mechanics themselves were done properly — handoff recorded, correct wording. The miss is purely that the transfer wasn't earned yet.", "reactions": [{"name": "thumbsup", "users": ["priya", "rowan"]}]},
+        {"user": "rowan", "text": "I pulled the chat for the record. Total working time before the handoff decision was under two minutes, and the only diagnostic act was confirming plain texts still sent. That's the gap in one sentence."},
+        {"user": "omar", "text": "Adding this one to the new-hire packet next to the good catches. A wrong ending with a clear annotation teaches the boundary better than ten clean examples."},
+        {"user": "priya", "text": "Annotation is on the case file as of this morning, pointing back to this thread. Closing the item.", "reactions": [{"name": "white_check_mark", "users": ["omar", "maya", "rowan"]}]}
+      ]
+    },
+    {
+      "key": "loaner_returns",
+      "category": "asset_production",
+      "channel": "device-lab",
+      "started_at": "2026-07-27T15:44:00-07:00",
+      "messages": [
+        {"user": "jules", "text": "Loaner drawer audit complete. Three phones are out with no sheet entry — initials are on the whiteboard, and the drawer's honor system is officially on notice.", "reactions": [{"name": "joy", "users": ["lee", "priya", "samira"]}]}
+      ]
+    },
+    {
+      "key": "maintenance_window",
+      "category": "network_ops",
+      "channel": "network-ops",
+      "started_at": "2026-08-04T09:02:00-07:00",
+      "messages": [
+        {"user": "ana", "text": "Posting the approved maintenance window: two metro-east towers cycle Saturday Aug 9, 02:00 to 04:30 local. Voice unaffected; short data and messaging blips possible inside the window."},
+        {"user": "rowan", "text": "Will the status page carry it, or do frontline teams need a canned line for customers who call during the blip?"},
+        {"user": "ana", "text": "Status page entry goes live Thursday. No canned line needed — the entry is customer-readable and the window is off-peak."},
+        {"user": "omar", "text": "Good. Care leads are briefed to check the status page before chasing ghosts that weekend.", "reactions": [{"name": "thumbsup", "users": ["ana"]}]}
+      ]
+    },
+    {
+      "key": "search_synonyms",
+      "category": "content_ops",
+      "channel": "help-publishing",
+      "started_at": "2026-07-29T10:31:00-07:00",
+      "messages": [
+        {"user": "tess", "text": "Search-synonym batch for messaging is staged: pix, photo text, and picture text now resolve to the picture-messages article instead of the phone-gallery guide."},
+        {"user": "samira", "text": "Can we add mms settings lowercase as an exact phrase too? It currently ranks the eSIM page above the messaging guide, which is a strange journey."},
+        {"user": "devon", "text": "Seconded from the training side — that exact search comes up in class every cohort. Batch looks good otherwise; ship it.", "reactions": [{"name": "white_check_mark", "users": ["tess"]}]}
+      ]
+    },
+    {
+      "key": "alt_text_audit",
+      "category": "content_ops",
+      "channel": "content-ops",
+      "started_at": "2026-07-30T14:12:00-07:00",
+      "messages": [
+        {"user": "samira", "text": "Alt-text audit for the messaging figures is done: eleven images updated to describe the visible control state instead of the color of the toggle. Two figures had alt text referencing a menu name that changed in March."},
+        {"user": "maya", "text": "Thanks for catching the stale menu names — those propagate into screen-reader confusion faster than anything visual. Marking the audit closed.", "reactions": [{"name": "white_check_mark", "users": ["samira"]}]}
+      ]
+    },
+    {
+      "key": "quiz_dispute",
+      "category": "other_messaging",
+      "channel": "care-training",
+      "started_at": "2026-07-31T09:48:00-07:00",
+      "messages": [
+        {"user": "devon", "text": "Quiz item 14 in the messaging module is being disputed by half the cohort, and honestly they have a case: two of the answer options are both defensible depending on whether the phone in the stem has service."},
+        {"user": "priya", "text": "Reading it now. Agreed — the stem never says whether the status bar shows service, and that detail decides the branch. That's a broken item, not clever ambiguity."},
+        {"user": "omar", "text": "Fix the stem rather than accepting both answers. The whole point of the item is that the branch depends on that observation, so make the observation explicit."},
+        {"user": "devon", "text": "Stem updated with the status-bar detail and the item re-scored for this cohort. The two students who wrote paragraph-length objections get a shout-out for reading carefully.", "reactions": [{"name": "tada", "users": ["priya", "omar"]}]}
+      ]
+    },
+    {
+      "key": "thumbnail_moire",
+      "category": "asset_production",
+      "channel": "content-ops",
+      "started_at": "2026-08-02T11:26:00-07:00",
+      "messages": [
+        {"user": "samira", "text": "The new guide-thumbnail size is moiréing on four of the messaging figures — the fine screen stripes turn into rainbow soup at 150 pixels."},
+        {"user": "jules", "text": "That's the capture wallpaper interacting with the downscale. We can re-export those four from the originals with a cleaner filter instead of re-shooting."},
+        {"user": "tess", "text": "Re-export works for me if the full-size images stay byte-identical — only the thumbnails should change. The guides link the full images as the comparison source."},
+        {"user": "jules", "text": "Confirmed, full-size files untouched; only the derived thumbnails get the new filter. Running the four now."},
+        {"user": "samira", "text": "Re-exported set looks clean at every width I checked. Closing this before anyone suggests re-shooting the whole archive for aesthetics.", "reactions": [{"name": "joy", "users": ["jules", "tess"]}]}
+      ]
+    },
+    {
+      "key": "incident_retro",
+      "category": "network_ops",
+      "channel": "network-ops",
+      "started_at": "2026-07-30T16:05:00-07:00",
+      "messages": [
+        {"user": "ana", "text": "Quick retro on the July 29 messaging-center queue backlog, for the record. Outbound picture messages in the southwest region queued for roughly forty minutes starting 14:10; the queue drained on its own after the failover."},
+        {"user": "rowan", "text": "From the care side we saw a small bump in photo-delivery complaints in that window, all of which self-resolved. Did any customer-visible state need cleanup afterward?"},
+        {"user": "ana", "text": "None. Messages delivered late but delivered; no loss, no manual replays. Root cause was a failed health check taking one relay out of rotation longer than it should have."},
+        {"user": "lee", "text": "Is the health-check fix in this month's maintenance or next? Asking so the lab doesn't chase phantom repros if it recurs before the patch."},
+        {"user": "ana", "text": "This month — it rides the Aug 9 window. Until then a recurrence would look identical: delayed but successful delivery, southwest region only."},
+        {"user": "omar", "text": "Noting explicitly for anyone finding this later: transient infrastructure event, fully cleared, no change to care handling or to any troubleshooting sequence. Retro closed.", "reactions": [{"name": "white_check_mark", "users": ["ana", "rowan"]}]}
+      ]
+    },
+    {
+      "key": "capture_requests",
+      "category": "asset_production",
+      "channel": "device-lab",
+      "started_at": "2026-08-04T13:37:00-07:00",
+      "messages": [
+        {"user": "lee", "text": "August capture-batch queue is open. Current requests: busier-state variants for the settings archive — notification shades, low-battery banners, an active-download status bar — so the guides stop looking like showroom units."},
+        {"user": "jules", "text": "Adding the standing rules to the queue post: staged profile only, neutral wallpaper, and every capture readable at thumbnail size with the detail carried by the full image. Same paths and labels as the current archive so no guide text changes."},
+        {"user": "priya", "text": "QA will spot-check the batch against the guides before anything ships. Last batch was clean; keep the streak.", "reactions": [{"name": "camera_with_flash", "users": ["lee", "jules"]}]}
+      ]
+    },
+    {
+      "key": "emoji_rollout",
+      "category": "other_messaging",
+      "channel": "care-content",
+      "started_at": "2026-07-28T12:19:00-07:00",
+      "messages": [
+        {"user": "devon", "text": "Workspace admin note: the expanded reaction pack is live. The wrench and the magnifying glass are real now, so incident threads can stop repurposing the plug."},
+        {"user": "samira", "text": "The plug had a good run. Honoring its service with one final outing.", "reactions": [{"name": "electric_plug", "users": ["devon", "maya", "omar"]}]}
+      ]
+    },
+    {
+      "key": "onboarding_schedule",
+      "category": "other_messaging",
+      "channel": "care-training",
+      "started_at": "2026-08-05T08:55:00-07:00",
+      "messages": [
+        {"user": "tess", "text": "September onboarding cohort dates are locked: intake the 8th, systems week the 14th, first supervised queue time the 21st. Trainer assignments post Friday.", "reactions": [{"name": "memo", "users": ["devon"]}]}
+      ]
+    }
+  ]
+}

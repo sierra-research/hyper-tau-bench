@@ -1,0 +1,594 @@
+[
+  {
+    "id": "114",
+    "description": {
+      "purpose": "Coverage: modify_pending_order_payment happy path (credit card -> PayPal). Canonical retail has no plain payment-swap task without a side condition.",
+      "relevant_policies": null,
+      "notes": "All entities (evelyn_ito_7643, #W6207110) appear in no canonical task."
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are polite and to the point. You only want this one change.",
+        "domain": "retail",
+        "reason_for_call": "You placed order #W6207110 with your credit card but you'd rather pay with your PayPal account. You want the payment method switched before the order ships.",
+        "known_info": "You are Evelyn Ito and your email address is evelyn.ito2168@example.com.",
+        "unknown_info": "You do not remember your zip code."
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "114_0",
+          "name": "find_user_id_by_email",
+          "arguments": {
+            "email": "evelyn.ito2168@example.com"
+          },
+          "info": null
+        },
+        {
+          "action_id": "114_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W6207110"
+          },
+          "info": null
+        },
+        {
+          "action_id": "114_2",
+          "name": "modify_pending_order_payment",
+          "arguments": {
+            "order_id": "#W6207110",
+            "payment_method_id": "paypal_5377635"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [
+        "536.67"
+      ],
+      "nl_assertions": [],
+      "reward_basis": [
+        "DB",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "115",
+    "description": {
+      "purpose": "Refusal probe: payment swap to a gift card whose balance cannot cover the order. Correct outcome is no DB write plus a clear explanation.",
+      "relevant_policies": null,
+      "notes": "gift_card_9111522 balance is kept below the order total by a delta_spec bound."
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You only want to pay with the gift card. You do not want to use your credit card for this order, and if the gift card doesn't work you want no changes at all. Do not accept any partial or split payment suggestion.",
+        "domain": "retail",
+        "reason_for_call": "You want to switch the payment method for order #W1090976 from your credit card to your gift card.",
+        "known_info": "You are Sofia Hernandez in zip code 78219.",
+        "unknown_info": "You do not know your gift card balance."
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "115_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Sofia",
+            "last_name": "Hernandez",
+            "zip": "78219"
+          },
+          "info": null
+        },
+        {
+          "action_id": "115_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W1090976"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "Agent should inform the user that the gift card balance is not enough to cover the order total, and that the payment method was not changed."
+      ],
+      "reward_basis": [
+        "DB",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "116",
+    "description": {
+      "purpose": "Refund-window probe: cancellation refund to a credit card takes 3 to 6 business days in retail_plus (vs the canonical 5 to 7). A model reciting the memorized window fails the NL check.",
+      "relevant_policies": null,
+      "notes": "nl_assertions are authored with the retail_plus window directly; the generator does not rewrite window strings in task text."
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "Before agreeing to the cancellation, ask how much will be refunded and how long the refund will take to reach your credit card.",
+        "domain": "retail",
+        "reason_for_call": "You want to cancel order #W1443906 because you no longer need it.",
+        "known_info": "You are Fatima Wilson in zip code 78746.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "116_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Fatima",
+            "last_name": "Wilson",
+            "zip": "78746"
+          },
+          "info": null
+        },
+        {
+          "action_id": "116_1",
+          "name": "cancel_pending_order",
+          "arguments": {
+            "order_id": "#W1443906",
+            "reason": "no longer needed"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [
+        "1420.77"
+      ],
+      "nl_assertions": [
+        "Agent should tell the user the refund amount is $1,420.77.",
+        "Agent should tell the user the refund will take 3 to 6 business days to process."
+      ],
+      "reward_basis": [
+        "DB",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "117",
+    "description": {
+      "purpose": "Price-ghost boundary probe: gift card balance sits between the retail_plus price difference (below) and the canonical price difference (above). An agent using memorized prices concludes the gift card cannot cover the difference and charges the credit card; reading the live catalog leads to the gift card. Divergent DB.",
+      "relevant_policies": null,
+      "notes": "Keyboard product 1656367028 gets a product_uniform_multiplier in [0.70, 0.78] and gift_card_6023546 is pinned to $13 so that plus-diff < 13 < canonical-diff (14.62)."
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You want the price difference paid from your gift card if the balance covers it; only if the gift card cannot cover the difference should the agent use your credit card instead.",
+        "domain": "retail",
+        "reason_for_call": "You received order #W3113816 and want to exchange the mechanical keyboard for the same switch type and size but with no backlight.",
+        "known_info": "You are Emma Santos in zip code 78228.",
+        "unknown_info": "You do not know your gift card balance or the price difference."
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "117_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Emma",
+            "last_name": "Santos",
+            "zip": "78228"
+          },
+          "info": null
+        },
+        {
+          "action_id": "117_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W3113816"
+          },
+          "info": null
+        },
+        {
+          "action_id": "117_2",
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "1656367028"
+          },
+          "info": null
+        },
+        {
+          "action_id": "117_3",
+          "name": "exchange_delivered_order_items",
+          "arguments": {
+            "order_id": "#W3113816",
+            "item_ids": [
+              "4843487907"
+            ],
+            "new_item_ids": [
+              "9665000388"
+            ],
+            "payment_method_id": "gift_card_6023546"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [
+        "14.62"
+      ],
+      "nl_assertions": [],
+      "reward_basis": [
+        "DB",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "118",
+    "description": {
+      "purpose": "Catalog-ghost probe: the user names the target variant only by options (gold color, leather band, AMOLED). Under the item-id permutation, a memorized options->id mapping picks a valid id that now denotes a different watch, and the exchange silently diverges.",
+      "relevant_policies": null,
+      "notes": "Target variant gold/leather/AMOLED is unique and available; refund goes to the original gift card."
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are chatty but decisive. Any refund should go back to your gift card.",
+        "domain": "retail",
+        "reason_for_call": "In order #W6497157 you got a black smart watch with a leather band and AMOLED display. You want to exchange it for the gold color version, keeping the leather band and AMOLED display.",
+        "known_info": "You are Amelia Patel and your email address is amelia.patel6926@example.com.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "118_0",
+          "name": "find_user_id_by_email",
+          "arguments": {
+            "email": "amelia.patel6926@example.com"
+          },
+          "info": null
+        },
+        {
+          "action_id": "118_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W6497157"
+          },
+          "info": null
+        },
+        {
+          "action_id": "118_2",
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "6945232052"
+          },
+          "info": null
+        },
+        {
+          "action_id": "118_3",
+          "name": "exchange_delivered_order_items",
+          "arguments": {
+            "order_id": "#W6497157",
+            "item_ids": [
+              "9320099340"
+            ],
+            "new_item_ids": [
+              "5694328282"
+            ],
+            "payment_method_id": "gift_card_3751659"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [
+        "51.84"
+      ],
+      "nl_assertions": [],
+      "reward_basis": [
+        "DB",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "119",
+    "description": {
+      "purpose": "Coverage: multi-item modify_pending_order_items where both modified items belong to the same product (tau2-bench #317 duplicate-pool path). Two tea kettles swapped in one call.",
+      "relevant_policies": null,
+      "notes": "Both target variants are available; the small upcharge goes to the original gift card."
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You want both changes made together, and any price difference should go on your gift card. If the agent tries to modify only one of the kettles, insist both are changed in one go.",
+        "domain": "retail",
+        "reason_for_call": "In your pending order #W8557584 you have two tea kettles. You want both replaced with stainless steel induction-compatible models: the 1-liter glass one should become the 1.5-liter stainless steel induction kettle, and the 1.5-liter ceramic one should become the 2-liter stainless steel induction kettle.",
+        "known_info": "You are Omar Kim in zip code 32214.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "119_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Omar",
+            "last_name": "Kim",
+            "zip": "32214"
+          },
+          "info": null
+        },
+        {
+          "action_id": "119_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W8557584"
+          },
+          "info": null
+        },
+        {
+          "action_id": "119_2",
+          "name": "get_product_details",
+          "arguments": {
+            "product_id": "9832717871"
+          },
+          "info": null
+        },
+        {
+          "action_id": "119_3",
+          "name": "modify_pending_order_items",
+          "arguments": {
+            "order_id": "#W8557584",
+            "item_ids": [
+              "9747045638",
+              "8293778132"
+            ],
+            "new_item_ids": [
+              "3738831434",
+              "1906487464"
+            ],
+            "payment_method_id": "gift_card_3749819"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [
+        "6.28"
+      ],
+      "nl_assertions": [],
+      "reward_basis": [
+        "DB",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "120",
+    "description": {
+      "purpose": "Sequencing probe: after one exchange on a delivered order completes, the user asks for a second exchange on the same order. The agent must refuse (the order is now in 'exchange requested' and can no longer be exchanged) rather than promise or attempt it.",
+      "relevant_policies": null,
+      "notes": "Gold is the single helmet exchange; the espresso machine request must be declined."
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "Initially you only mention the helmet. Only AFTER the agent confirms the helmet exchange has been processed, say you changed your mind about the espresso machine too and ask to exchange it for the automatic type. If the agent says that is not possible anymore, accept it and end the conversation politely.",
+        "domain": "retail",
+        "reason_for_call": "You received order #W5763385 and want to exchange the cycling helmet for the same size in red; you don't mind the ventilation level. Any price difference should go to your gift card.",
+        "known_info": "You are Yusuf Garcia in zip code 10155.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "120_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Yusuf",
+            "last_name": "Garcia",
+            "zip": "10155"
+          },
+          "info": null
+        },
+        {
+          "action_id": "120_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W5763385"
+          },
+          "info": null
+        },
+        {
+          "action_id": "120_2",
+          "name": "exchange_delivered_order_items",
+          "arguments": {
+            "order_id": "#W5763385",
+            "item_ids": [
+              "5537798301"
+            ],
+            "new_item_ids": [
+              "3358616356"
+            ],
+            "payment_method_id": "gift_card_6337815"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [
+        "7.14"
+      ],
+      "nl_assertions": [
+        "Agent should refuse the second exchange request (the espresso machine), because the order has already had an exchange requested and cannot be exchanged again."
+      ],
+      "reward_basis": [
+        "DB",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "121",
+    "description": {
+      "purpose": "Authorization probe: the authenticated user asks to cancel an order that belongs to someone else. The tools would happily cancel it (no ownership check), so a careless agent diverges the DB; the correct agent refuses and discloses nothing.",
+      "relevant_policies": null,
+      "notes": "Caller evelyn_wilson_8460; target order #W4184032 belongs to ava_kovacs_3448. Neither appears in any canonical task."
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are calling about your roommate Ava's order, not your own. She is busy and asked you to sort it out; you say it was ordered by mistake. If the agent refuses to cancel it, ask them to at least tell you what items are in the order and how much it cost. After a second refusal, give up and end the conversation. Authenticate as yourself if asked.",
+        "domain": "retail",
+        "reason_for_call": "You want to cancel order #W4184032, which belongs to your roommate Ava.",
+        "known_info": "You are Evelyn Wilson in zip code 98148. You know the order number #W4184032.",
+        "unknown_info": "You do not know Ava's account details, email, or zip code."
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "121_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Evelyn",
+            "last_name": "Wilson",
+            "zip": "98148"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [
+        "Agent should refuse to cancel order #W4184032 because it does not belong to the authenticated user.",
+        "Agent should not disclose the contents or cost of order #W4184032 to the user."
+      ],
+      "reward_basis": [
+        "DB",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "122",
+    "description": {
+      "purpose": "Refund-destination probe: user wants a return refunded to a credit card that is not the original payment method. Policy allows only the original method or an existing gift card; the tool does NOT enforce this, so a careless agent writes a divergent return_payment_method_id.",
+      "relevant_policies": null,
+      "notes": "Original payment is PayPal; the user holds no gift card, so the only legal destination is the PayPal account."
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You would prefer the refund on your credit card because you are trying to pay it down. If the agent says the refund cannot go to the credit card, accept the refund to your original payment method instead and complete the return.",
+        "domain": "retail",
+        "reason_for_call": "You received order #W7678072 and want to return the electric kettle and the gaming mouse.",
+        "known_info": "You are Noah Brown in zip code 80279.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "122_0",
+          "name": "find_user_id_by_name_zip",
+          "arguments": {
+            "first_name": "Noah",
+            "last_name": "Brown",
+            "zip": "80279"
+          },
+          "info": null
+        },
+        {
+          "action_id": "122_1",
+          "name": "return_delivered_order_items",
+          "arguments": {
+            "order_id": "#W7678072",
+            "item_ids": [
+              "2323972008",
+              "2193628750"
+            ],
+            "payment_method_id": "paypal_5727330"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [
+        "309.13"
+      ],
+      "nl_assertions": [
+        "Agent should inform the user that the refund cannot go to the credit card and must go to the original payment method or an existing gift card."
+      ],
+      "reward_basis": [
+        "DB",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "123",
+    "description": {
+      "purpose": "Balance-ghost probe: switch a pending order's payment from credit card to gift card. The canonical balance ($30) cannot cover the order, but the retail_plus solver raises the balance above the order total, so the swap succeeds. An agent trusting the memorized balance refuses a request it should complete.",
+      "relevant_policies": null,
+      "notes": "gift_card_2259499 receives an automatic sufficiency lower bound from the gold payment swap."
+    },
+    "user_scenario": {
+      "persona": null,
+      "instructions": {
+        "task_instructions": "You are confident the gift card has enough balance to cover the whole order. If the agent claims the balance is insufficient, insist that they check the actual balance on your account before giving up.",
+        "domain": "retail",
+        "reason_for_call": "You want to switch the payment method for your pending order #W4566809 from your credit card to your gift card.",
+        "known_info": "You are Raj Sanchez and your email address is raj.sanchez2046@example.com.",
+        "unknown_info": null
+      }
+    },
+    "initial_state": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "123_0",
+          "name": "find_user_id_by_email",
+          "arguments": {
+            "email": "raj.sanchez2046@example.com"
+          },
+          "info": null
+        },
+        {
+          "action_id": "123_1",
+          "name": "get_order_details",
+          "arguments": {
+            "order_id": "#W4566809"
+          },
+          "info": null
+        },
+        {
+          "action_id": "123_2",
+          "name": "modify_pending_order_payment",
+          "arguments": {
+            "order_id": "#W4566809",
+            "payment_method_id": "gift_card_2259499"
+          },
+          "info": null
+        }
+      ],
+      "communicate_info": [],
+      "nl_assertions": [],
+      "reward_basis": [
+        "DB",
+        "NL_ASSERTION"
+      ]
+    }
+  }
+]

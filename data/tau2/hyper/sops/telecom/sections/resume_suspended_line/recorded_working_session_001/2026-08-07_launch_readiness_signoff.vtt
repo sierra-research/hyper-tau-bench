@@ -1,0 +1,853 @@
+WEBVTT
+
+NOTE Cloud recording transcript
+NOTE Meeting: Suspended line launch-readiness signoff
+NOTE Date: 2026-08-07
+
+1
+00:00:04.000 --> 00:00:05.250
+[recording starts; two participants are still joining]
+
+2
+00:00:04.950 --> 00:00:06.141
+<v Maya Chen>Happy Friday.
+
+3
+00:00:06.141 --> 00:00:17.458
+<v Maya Chen>Before the recap, quick human check: I am doing well, Tessa is joining release review in about twenty minutes,
+
+4
+00:00:17.458 --> 00:00:18.053
+<v Jonah Brooks>Mm-hm.
+
+5
+00:00:19.653 --> 00:00:25.014
+<v Maya Chen>and Jonah may need to leave for incident duty.
+
+6
+00:00:25.214 --> 00:00:31.170
+<v Maya Chen>Please flag a hard stop in chat rather than disappearing.
+
+7
+00:00:32.270 --> 00:00:42.990
+<v Maya Chen>Tuesday established that one bill may be Awaiting Payment and no second request is sent while it waits.
+
+8
+00:00:42.290 --> 00:00:42.886
+<v Jonah Brooks>Mm-hm.
+
+9
+00:00:45.086 --> 00:00:55.211
+<v Maya Chen>Wednesday established that a contract-ended suspension requires renewal or exception handling, is not resumed through ordinary troubleshooting,
+
+10
+00:00:55.211 --> 00:01:02.954
+<v Maya Chen>and leaves Care through the recorded transfer action followed by the exact notice.
+
+11
+00:01:03.354 --> 00:01:10.501
+<v Maya Chen>Those decisions remain current; today is not a vote to soften them.
+
+12
+00:01:10.901 --> 00:01:21.622
+<v Maya Chen>We need to resolve the Closed-line proposal carried from yesterday, exercise the complete artifact set against mixed scenarios,
+
+13
+00:01:23.222 --> 00:01:26.200
+<v Maya Chen>and record cross-functional launch signoff.
+
+14
+00:01:27.800 --> 00:01:31.374
+<v Maya Chen>Publishing is scheduled for tomorrow morning.
+
+15
+00:01:33.574 --> 00:01:41.316
+<v Maya Chen>If we discover a presentation defect, I can fix layout without changing meaning.
+
+16
+00:01:42.416 --> 00:01:48.968
+<v Maya Chen>If we discover a policy contradiction, we stop publication and reconvene.
+
+17
+00:01:49.668 --> 00:02:00.389
+<v Maya Chen>Priya owns final QA acceptance, and every functional owner needs to say whether they agree before we close.
+
+18
+00:01:59.689 --> 00:02:00.939
+[screen share reconnects]
+
+19
+00:02:00.939 --> 00:02:01.534
+<v Elena Ruiz>Right.
+
+20
+00:02:01.534 --> 00:02:12.851
+<v Elena Ruiz>A suspended line remains a line with a recorded restriction and potentially a supported path, depending on its cause.
+
+21
+00:02:15.051 --> 00:02:16.838
+<v Priya Shah>Sorry, go ahead.
+
+22
+00:02:18.438 --> 00:02:23.202
+<v Elena Ruiz>A closed line is a different lifecycle state.
+
+23
+00:02:25.402 --> 00:02:38.506
+<v Elena Ruiz>In our legacy materials, agents sometimes used restore service as an umbrella phrase and then treated Closed as an especially severe suspension.
+
+24
+00:02:38.506 --> 00:02:47.440
+<v Elena Ruiz>That language is dangerous because it invites the same Resume line control after different prerequisites.
+
+25
+00:02:48.540 --> 00:02:56.282
+<v Elena Ruiz>A customer may say I paid everything or I only closed it yesterday.
+
+26
+00:02:56.682 --> 00:03:09.786
+<v Elena Ruiz>Those facts can be relevant to a new service or account review, but they do not convert the line record from Closed
+
+27
+00:03:10.486 --> 00:03:13.464
+<v Elena Ruiz>into a resumable suspended line.
+
+28
+00:03:13.664 --> 00:03:20.811
+<v Elena Ruiz>Contract Operations also cannot tell Care to flip it back during troubleshooting.
+
+29
+00:03:20.811 --> 00:03:30.340
+<v Elena Ruiz>We need one concise customer-care boundary and then let other authorized workflows handle whatever comes next.
+
+30
+00:03:31.940 --> 00:03:39.683
+<v Elena Ruiz>This review is not defining a reopening product, number-recovery promise, or retention period.
+
+31
+00:03:41.283 --> 00:03:46.048
+<v Jonah Brooks>I traced the records behind the twenty-four-hour idea.
+
+32
+00:03:48.248 --> 00:04:00.755
+<v Jonah Brooks>The test database keeps a Closed line object, phone number, and previous service attributes for audit trails and repeatable test setups.
+
+33
+00:04:01.155 --> 00:04:01.751
+<v Priya Shah>Yeah.
+
+34
+00:04:02.851 --> 00:04:09.998
+<v Jonah Brooks>The generic action accepts a line identifier syntactically before downstream lifecycle validation.
+
+35
+00:04:09.998 --> 00:04:13.572
+<v Jonah Brooks>Neither behavior is a reopening contract.
+
+36
+00:04:13.972 --> 00:04:24.693
+<v Jonah Brooks>In production, closure can involve number inventory, provisioning teardown, final billing, and consent that the customer ended service.
+
+37
+00:04:26.293 --> 00:04:26.888
+<v Elena Ruiz>Okay.
+
+38
+00:04:26.188 --> 00:04:30.953
+<v Jonah Brooks>A recent timestamp does not reverse those effects.
+
+39
+00:04:32.053 --> 00:04:45.156
+<v Jonah Brooks>I also checked a line marked Suspended the day after a failed payment; that is not Closed and should not be routed
+
+40
+00:04:45.356 --> 00:04:50.121
+<v Jonah Brooks>by the proposal merely because it is recent.
+
+41
+00:04:51.721 --> 00:04:57.081
+<v Jonah Brooks>The agent must use the actual current lifecycle state.
+
+42
+00:04:58.181 --> 00:05:11.285
+<v Jonah Brooks>If Closed is visible, the suspended-line resume path lacks authority regardless of how much metadata remains on screen or how recently the
+
+43
+00:05:12.385 --> 00:05:13.576
+<v Jonah Brooks>record changed.
+
+44
+00:05:14.676 --> 00:05:27.779
+<v Jonah Brooks>The permissive pilot proposal was to let Care resume a Closed line if closure occurred within twenty-four hours and the phone number
+
+45
+00:05:28.479 --> 00:05:32.053
+<v Jonah Brooks>is still present on the account.
+
+46
+00:05:33.153 --> 00:05:33.748
+<v Maya Chen>Mm-hm.
+
+47
+00:05:35.348 --> 00:05:43.091
+<v Jonah Brooks>The operator would use Resume line, then open a follow-up case for cleanup.
+
+48
+00:05:43.091 --> 00:05:55.003
+<v Jonah Brooks>I traced where that came from: a test environment retained the line object after closure so engineers could inspect it.
+
+49
+00:05:56.603 --> 00:06:01.368
+<v Jonah Brooks>That retention was never a customer eligibility rule.
+
+50
+00:06:02.968 --> 00:06:14.880
+<v Jonah Brooks>Production lifecycle services may preserve identifiers for audit, and the generic action may still accept a syntactically valid line ID,
+
+51
+00:06:14.880 --> 00:06:19.645
+<v Jonah Brooks>but neither proves the line can be reopened.
+
+52
+00:06:21.845 --> 00:06:27.205
+<v Jonah Brooks>We should reject the proposal, including its twenty-four-hour number.
+
+53
+00:06:28.805 --> 00:06:41.313
+<v Jonah Brooks>For today's review, I want to keep the decision narrow: whether Care may use this suspended-line journey on a Closed record.
+
+54
+00:06:43.513 --> 00:06:50.064
+<v Jonah Brooks>New service, number recovery, and closure disputes keep their existing routes.
+
+55
+00:06:50.464 --> 00:06:51.060
+<v Priya Shah>Rejected.
+
+56
+00:06:53.260 --> 00:07:06.363
+<v Priya Shah>The twenty-four-hour story came from staging retention, not an approved reopening path, and keeping a record for audit does not grant mutation
+
+57
+00:07:06.763 --> 00:07:08.550
+<v Jonah Brooks>Sorry, go ahead.
+
+58
+00:07:08.550 --> 00:07:09.145
+<v Priya Shah>authority.
+
+59
+00:07:11.345 --> 00:07:20.279
+<v Priya Shah>I also reject a softer alternative that says Care should usually avoid reopening Closed lines.
+
+60
+00:07:20.279 --> 00:07:29.213
+<v Priya Shah>Usually implies exceptions the adviser can search for, and none are defined in this workflow.
+
+61
+00:07:29.913 --> 00:07:30.509
+<v Maya Chen>Right.
+
+62
+00:07:31.609 --> 00:07:39.947
+<v Priya Shah>The closed boundary must be categorical: Closed lines are not resumed through customer care.
+
+63
+00:07:39.947 --> 00:07:51.859
+<v Priya Shah>That sentence does not erase identity checks, honest explanations, or the ability to transfer when another documented route requires it.
+
+64
+00:07:51.859 --> 00:08:00.793
+<v Priya Shah>It simply prevents Care from using the suspended-line resume action on a Closed lifecycle state.
+
+65
+00:08:01.493 --> 00:08:12.810
+<v Priya Shah>We should not invent a closed-line transfer rule in this review, either; the shared out-of-scope handling applies when appropriate.
+
+66
+00:08:12.810 --> 00:08:16.979
+<v Priya Shah>We are not redesigning replacement-service handling here.
+
+67
+00:08:18.079 --> 00:08:22.844
+<v Priya Shah>Elena, does that preserve the distinction you need?
+
+68
+00:08:23.544 --> 00:08:30.691
+<v Maya Chen>Elena is nodding, and I want an audible answer for the transcript.
+
+69
+00:08:31.791 --> 00:08:34.173
+<v Maya Chen>[brief crosstalk] Great, yes.
+
+70
+00:08:36.373 --> 00:08:36.969
+<v Elena Ruiz>Yeah.
+
+71
+00:08:38.569 --> 00:08:45.121
+<v Maya Chen>Final current boundary: Closed lines are not resumed through customer care.
+
+72
+00:08:45.121 --> 00:08:58.224
+<v Maya Chen>Do not treat Closed as an overdue-bill suspension, do not run the contract-ended resumption discussion as if it could reactivate the record,
+
+73
+00:08:58.624 --> 00:09:06.962
+<v Maya Chen>and do not use the generic Resume line control because the identifier remains visible.
+
+74
+00:09:07.362 --> 00:09:20.465
+<v Maya Chen>If the customer asks what options exist after closure, the agent can explain only documented options and use the applicable supported route;
+
+75
+00:09:20.865 --> 00:09:27.417
+<v Maya Chen>it must not promise reopening or number recovery from this workflow.
+
+76
+00:09:28.517 --> 00:09:33.282
+<v Maya Chen>The twenty-four-hour proposal is rejected rather than deferred.
+
+77
+00:09:33.682 --> 00:09:44.403
+<v Maya Chen>Priya approves the categorical wording, Jonah confirms record retention is not eligibility, and Elena confirms the lifecycle distinction.
+
+78
+00:09:46.003 --> 00:09:52.554
+<v Maya Chen>That closes the fifth and final decision on the launch list.
+
+79
+00:09:54.154 --> 00:10:06.066
+<v Maya Chen>We still have time to walk QA examples and verify that none of the adjacent archive articles contradicts these decisions.
+
+80
+00:10:08.266 --> 00:10:12.435
+<v Priya Shah>My QA matrix has six useful scenarios.
+
+81
+00:10:12.635 --> 00:10:20.378
+<v Priya Shah>One: May Awaiting Payment and June Overdue; expected behavior is no second request.
+
+82
+00:10:21.478 --> 00:10:22.074
+<v Maya Chen>Mm-hm.
+
+83
+00:10:23.674 --> 00:10:33.799
+<v Priya Shah>Two: May Paid and June Overdue; June returns to ordinary validation and confirmation, not an automatic send.
+
+84
+00:10:34.199 --> 00:10:44.324
+<v Priya Shah>Three: Service Suspended, reason Contract ended, customer asks to reset network settings; expected explanation, no standard resumption,
+
+85
+00:10:44.324 --> 00:10:48.493
+<v Priya Shah>then the recorded handoff and exact notice.
+
+86
+00:10:50.093 --> 00:10:50.689
+<v Elena Ruiz>Yep.
+
+87
+00:10:51.089 --> 00:11:03.596
+<v Priya Shah>Four: the same contract state plus an unrelated old bill that is Paid; payment history does not remove the contract requirement.
+
+88
+00:11:03.596 --> 00:11:10.148
+<v Priya Shah>Five: Status Closed with a visible phone number; no resume action.
+
+89
+00:11:10.148 --> 00:11:20.869
+<v Priya Shah>Six: Status Suspended, reason Overdue balance; the billing procedure applies and the single-request rule still gates the send.
+
+90
+00:11:20.869 --> 00:11:28.612
+<v Priya Shah>I will write the customer lines the way people actually ask these questions.
+
+91
+00:11:28.612 --> 00:11:38.141
+<v Priya Shah>The reviewers should have to identify the state and outcome, not hunt for one memorized sentence.
+
+92
+00:11:38.341 --> 00:11:46.680
+<v Jonah Brooks>For the mixed contract-and-bill example, the line record must still supply one suspension reason.
+
+93
+00:11:47.780 --> 00:11:56.118
+<v Jonah Brooks>We should not teach the agent to invent two simultaneous causes from unrelated history.
+
+94
+00:11:56.318 --> 00:11:58.105
+<v Maya Chen>Sorry, go ahead.
+
+95
+00:11:58.505 --> 00:12:08.034
+<v Jonah Brooks>If the reason is Contract ended, the ended-contract route governs even if an old bill exists.
+
+96
+00:12:08.734 --> 00:12:19.455
+<v Jonah Brooks>If the reason is Overdue balance, the billing route governs, including the single awaiting request and all-overdue-paid checks.
+
+97
+00:12:21.055 --> 00:12:34.158
+<v Jonah Brooks>A customer can have a contract question while the recorded suspension cause is billing, but that does not let Care skip the
+
+98
+00:12:34.158 --> 00:12:35.350
+<v Jonah Brooks>bill prerequisite.
+
+99
+00:12:37.550 --> 00:12:42.910
+<v Jonah Brooks>Likewise, a paid balance does not create a renewal.
+
+100
+00:12:42.910 --> 00:12:56.013
+<v Jonah Brooks>This distinction is already compatible with the archive's first article, which tells the reader to inspect Service status and Suspension reason instead
+
+101
+00:12:56.013 --> 00:12:58.396
+<v Jonah Brooks>of guessing from symptoms.
+
+102
+00:12:59.096 --> 00:13:12.199
+<v Jonah Brooks>I will add a platform test where the selected line differs from the bill's account line so we also catch wrong-line mutations,
+
+103
+00:13:12.899 --> 00:13:21.833
+<v Jonah Brooks>but that is coverage for existing identification rules, not a new fact from this meeting.
+
+104
+00:13:23.433 --> 00:13:28.793
+<v Elena Ruiz>I repeated the search check with the final candidate.
+
+105
+00:13:29.493 --> 00:13:38.427
+<v Elena Ruiz>Searching payment brings up the four billing articles alongside AutoPay, receipts, arrangements, and transaction research.
+
+106
+00:13:38.827 --> 00:13:39.423
+<v Jonah Brooks>Yeah.
+
+107
+00:13:40.123 --> 00:13:52.630
+<v Elena Ruiz>Searching contract also brings up plan comparisons, renewal preparation, and the suspension-cause page, but none of those grants Care renewal authority.
+
+108
+00:13:54.830 --> 00:14:02.573
+<v Elena Ruiz>Searching closed does not expose a reopening article, which is what we want.
+
+109
+00:14:02.573 --> 00:14:13.294
+<v Elena Ruiz>The related links resolve to published pages, and the operational paragraphs remain readable when search scripts are disabled.
+
+110
+00:14:13.694 --> 00:14:14.290
+<v Maya Chen>Okay.
+
+111
+00:14:13.990 --> 00:14:22.924
+<v Elena Ruiz>One small problem: the Closed heading is below an old number-porting result in the ranking,
+
+112
+00:14:24.524 --> 00:14:32.266
+<v Elena Ruiz>so I asked Search Ops to pin the lifecycle page for that term.
+
+113
+00:14:32.966 --> 00:14:38.922
+<v Elena Ruiz>That is findability work, not permission to reopen a line.
+
+114
+00:14:39.122 --> 00:14:48.056
+<v Elena Ruiz>I found no duplicate page identifier and no contradictory grace period in the current set.
+
+115
+00:14:47.756 --> 00:14:49.006
+[brief silence while the account refreshes]
+
+116
+00:14:50.606 --> 00:14:54.776
+<v Elena Ruiz>I reviewed the neighboring content for consistency.
+
+117
+00:14:54.776 --> 00:15:00.732
+<v Elena Ruiz>AutoPay says enrollment does not itself pay an overdue bill.
+
+118
+00:15:01.132 --> 00:15:01.727
+<v Priya Shah>Mm-hm.
+
+119
+00:15:02.127 --> 00:15:07.488
+<v Elena Ruiz>Paperless billing says delivery preference does not change service.
+
+120
+00:15:07.488 --> 00:15:17.017
+<v Elena Ruiz>Device restart says it verifies or applies a completed carrier-side change but does not authorize one.
+
+121
+00:15:17.017 --> 00:15:25.356
+<v Elena Ruiz>The eSIM page says a profile replacement does not turn a restricted line active.
+
+122
+00:15:27.556 --> 00:15:32.916
+<v Elena Ruiz>The contract-preparation page avoids promising a renewal or exception.
+
+123
+00:15:34.016 --> 00:15:39.376
+<v Elena Ruiz>None of those pages tells Care to reopen Closed.
+
+124
+00:15:39.376 --> 00:15:51.884
+<v Elena Ruiz>The one place I want Maya to watch is the handoff-note article: its related link to the contract page is fine,
+
+125
+00:15:52.984 --> 00:16:01.322
+<v Elena Ruiz>but the sentence must stay clear that note quality does not determine transfer eligibility.
+
+126
+00:16:01.522 --> 00:16:04.500
+<v Elena Ruiz>The current source does that.
+
+127
+00:16:04.500 --> 00:16:17.008
+<v Elena Ruiz>I do not think we need a second closed-line article; it would give learners two places to maintain the same boundary.
+
+128
+00:16:17.008 --> 00:16:27.133
+<v Elena Ruiz>Keep the categorical handling in Friday's signed meeting notes and let the lifecycle article link to them.
+
+129
+00:16:27.133 --> 00:16:34.280
+<v Priya Shah>For calibration I am keeping the three reviews separate by decision date.
+
+130
+00:16:34.280 --> 00:16:45.001
+<v Priya Shah>Tuesday's request-state result stays current; Wednesday's contract decisions stay current; today closes the Closed-line proposal and launch acceptance.
+
+131
+00:16:44.301 --> 00:16:47.875
+<v Maya Chen>Hold on—are we deciding that now?
+
+132
+00:16:48.275 --> 00:17:01.378
+<v Priya Shah>I will run QA scenarios for each historical shortcut and an ordinary overdue suspension, so the strong prohibitions do not send every
+
+133
+00:17:03.578 --> 00:17:07.151
+<v Priya Shah>service case to a transfer unnecessarily.
+
+134
+00:17:08.751 --> 00:17:21.855
+<v Priya Shah>Release notes should link the dates and owners so a reviewer can trace the decisions without introducing a new summary that has
+
+135
+00:17:21.555 --> 00:17:22.150
+<v Elena Ruiz>Right.
+
+136
+00:17:21.450 --> 00:17:23.237
+<v Priya Shah>to be maintained.
+
+137
+00:17:24.337 --> 00:17:36.845
+<v Maya Chen>Open items: Jonah owns the dashboard label for rejected attempts; I own the narrow-screen related-link wrap; Priya owns six QA scenarios;
+
+138
+00:17:38.445 --> 00:17:43.805
+<v Maya Chen>Elena will verify the contract-operations destination label in production.
+
+139
+00:17:44.005 --> 00:17:44.601
+<v Jonah Brooks>Yeah.
+
+140
+00:17:45.701 --> 00:17:49.274
+<v Maya Chen>None of those reopens today's handling.
+
+141
+00:17:51.474 --> 00:18:03.386
+<v Maya Chen>We are also not defining payment-request cancellation, renewal pricing, exception eligibility, closed-number recovery, translated transfer notices, or a wait-time commitment.
+
+142
+00:18:03.386 --> 00:18:15.298
+<v Maya Chen>If one of those projects ships later, it needs its own review rather than a quiet edit to this page.
+
+143
+00:18:16.898 --> 00:18:21.067
+<v Maya Chen>Publishing is still tomorrow at nine-thirty Pacific.
+
+144
+00:18:21.067 --> 00:18:30.001
+<v Maya Chen>Hannah will preserve the rejected examples in the reviewer notes because they explain the traps,
+
+145
+00:18:30.001 --> 00:18:37.744
+<v Maya Chen>while the learner page will point to the current handling and its date.
+
+146
+00:18:38.844 --> 00:18:50.756
+<v Maya Chen>Does anyone see an unresolved statement that could be mistaken for permission to send, resume, reopen, or promise an exception?
+
+147
+00:18:50.756 --> 00:18:52.543
+<v Maya Chen>Rollout is straightforward.
+
+148
+00:18:53.643 --> 00:19:06.746
+<v Maya Chen>Care Enablement publishes the current knowledge pages tomorrow morning, then links these dated reviews from the internal reviewer page so people can
+
+149
+00:19:07.846 --> 00:19:11.420
+<v Jonah Brooks>Wait, which account is on screen?
+
+150
+00:19:10.720 --> 00:19:14.889
+<v Maya Chen>trace why the pilot shortcuts were rejected.
+
+151
+00:19:15.089 --> 00:19:25.810
+<v Maya Chen>We are not creating another summary page; that would give Search a fourth version of the same language.
+
+152
+00:19:28.010 --> 00:19:37.539
+<v Maya Chen>Jonah monitors request-action rejections, Elena monitors contract handoff destinations, and Priya owns the first-week QA sample.
+
+153
+00:19:37.739 --> 00:19:38.335
+<v Jonah Brooks>Yep.
+
+154
+00:19:38.335 --> 00:19:43.100
+<v Maya Chen>Tessa has the publish checklist and rollback contact.
+
+155
+00:19:43.100 --> 00:19:50.843
+<v Maya Chen>A dashboard anomaly or an office-hours comment does not silently change care handling.
+
+156
+00:19:51.043 --> 00:20:03.550
+<v Maya Chen>If a later project adds request cancellation, self-service renewal, or closed-line recovery, it needs a fresh review with the owning teams.
+
+157
+00:20:03.550 --> 00:20:14.867
+<v Maya Chen>Maya, I also need the regional office-hours link before noon; the calendar invite still points to last quarter's room.
+
+158
+00:20:17.067 --> 00:20:20.640
+<v Priya Shah>No unresolved permission from my side.
+
+159
+00:20:20.640 --> 00:20:29.574
+<v Priya Shah>Final recap in ordinary terms: only one bill can be Awaiting Payment for a customer,
+
+160
+00:20:29.274 --> 00:20:31.061
+<v Elena Ruiz>Sorry, go ahead.
+
+161
+00:20:31.261 --> 00:20:37.813
+<v Priya Shah>so Care does not send another request while one is waiting.
+
+162
+00:20:39.413 --> 00:20:47.751
+<v Priya Shah>An ended-contract suspension requires renewal or exception handling; standard troubleshooting does not resume it.
+
+163
+00:20:49.951 --> 00:21:03.054
+<v Priya Shah>Care records the ended-contract handoff with the console transfer or escalation control and only after that gives the exact required human-transfer notice.
+
+164
+00:21:04.654 --> 00:21:09.419
+<v Priya Shah>Closed lines are not resumed through customer care.
+
+165
+00:21:10.119 --> 00:21:19.649
+<v Priya Shah>The courtesy resume, parallel payment request, and twenty-four-hour reopening ideas were all rejected, not approved pilots.
+
+166
+00:21:20.349 --> 00:21:29.878
+<v Priya Shah>The published knowledge pages still carry the detailed overdue-balance steps, with their existing checks and confirmations.
+
+167
+00:21:30.978 --> 00:21:34.552
+<v Priya Shah>I approve this set for launch.
+
+168
+00:21:35.252 --> 00:21:47.759
+<v Priya Shah>Maya, please link each dated review from the release note and confirm the learner account can reach them before tomorrow's publish.
+
+169
+00:21:47.759 --> 00:22:00.863
+<v Priya Shah>Jonah, after the note is posted, please have one Boise adviser and one Phoenix instructor open each link and reply on the
+
+170
+00:22:02.463 --> 00:22:06.036
+<v Priya Shah>launch ticket with any permission mismatch.
+
+171
+00:22:07.136 --> 00:22:20.239
+<v Priya Shah>If a review opens the old draft first, capture the search result and route that separately to knowledge operations rather than changing
+
+172
+00:22:21.839 --> 00:22:23.626
+<v Priya Shah>the signed notes.
+
+173
+00:22:24.726 --> 00:22:27.109
+<v Jonah Brooks>Billing Platform signs off.
+
+174
+00:22:29.309 --> 00:22:40.029
+<v Jonah Brooks>I will restate my portion without the UI details: the account cannot carry two bills in Awaiting Payment,
+
+175
+00:22:40.229 --> 00:22:44.994
+<v Priya Shah>Right—the account state, not just the selected bill.
+
+176
+00:22:45.694 --> 00:22:52.246
+<v Jonah Brooks>and a second request is prohibited until the existing one resolves.
+
+177
+00:22:52.246 --> 00:22:56.415
+<v Jonah Brooks>The selected-row control is not an exception.
+
+178
+00:22:58.015 --> 00:23:11.118
+<v Jonah Brooks>I also agree that the generic resume action requires an eligible suspension state and must not be used for contract-ended or Closed
+
+179
+00:23:11.818 --> 00:23:12.414
+<v Elena Ruiz>Okay.
+
+180
+00:23:14.014 --> 00:23:16.396
+<v Jonah Brooks>states through this flow.
+
+181
+00:23:16.396 --> 00:23:25.330
+<v Jonah Brooks>I checked the delayed-event run again during Priya's recap; the backend rejection, returned bill state,
+
+182
+00:23:26.430 --> 00:23:34.173
+<v Jonah Brooks>and visible customer request all line up with the rule we approved Tuesday.
+
+183
+00:23:35.273 --> 00:23:38.847
+<v Jonah Brooks>I have no further policy changes.
+
+184
+00:23:39.547 --> 00:23:52.650
+<v Jonah Brooks>I do have a separate bug open for the misleading selected-row control, and I will link the failed run there after this
+
+185
+00:23:54.850 --> 00:23:55.445
+<v Jonah Brooks>call.
+
+186
+00:23:55.445 --> 00:24:04.975
+<v Jonah Brooks>If we are only discussing publishing mechanics, I may drop in a minute for incident review.
+
+187
+00:24:05.675 --> 00:24:09.248
+<v Elena Ruiz>Contract Operations signs off as well.
+
+188
+00:24:10.348 --> 00:24:20.474
+<v Elena Ruiz>The ended-contract rule is accurately represented: explain renewal or exception handling, do not resume through normal troubleshooting,
+
+189
+00:24:21.574 --> 00:24:22.169
+<v Maya Chen>Mm-hm.
+
+190
+00:24:22.169 --> 00:24:26.934
+<v Elena Ruiz>and route through the recorded human handoff sequence.
+
+191
+00:24:27.134 --> 00:24:30.112
+<v Elena Ruiz>No contract outcome is guaranteed.
+
+192
+00:24:30.312 --> 00:24:35.672
+<v Elena Ruiz>Closed remains distinct and cannot be resumed by Care.
+
+193
+00:24:36.072 --> 00:24:45.006
+<v Elena Ruiz>The examples did not create a hidden grace period, courtesy activation, or special exception vocabulary.
+
+194
+00:24:45.006 --> 00:24:57.514
+<v Elena Ruiz>For tomorrow's rollout, I will brief the receiving team that handoff notes may include the verified end date and customer intent,
+
+195
+00:24:59.114 --> 00:25:05.070
+<v Elena Ruiz>but they should not infer that Care promised a term.
+
+196
+00:25:06.170 --> 00:25:16.295
+<v Elena Ruiz>One logistics note: our office hours moved from two o'clock to two-thirty because of the provisioning review.
+
+197
+00:25:16.295 --> 00:25:18.678
+<v Elena Ruiz>That is scheduling only.
+
+198
+00:25:18.678 --> 00:25:29.994
+<v Elena Ruiz>[audio warble] If that clipped, the policy signoff was yes; the office-hour time has no effect on customer handling.
+
+199
+00:25:30.694 --> 00:25:31.290
+<v Maya Chen>Great.
+
+200
+00:25:31.990 --> 00:25:40.328
+<v Maya Chen>We have signoff from Billing Platform, Contract Operations, QA and Compliance, and Care Enablement.
+
+201
+00:25:39.628 --> 00:25:41.415
+<v Jonah Brooks>Sorry, go ahead.
+
+202
+00:25:41.615 --> 00:25:52.336
+<v Maya Chen>I will publish the knowledge pages tomorrow with the three dated meeting notes linked from the reviewer page.
+
+203
+00:25:53.936 --> 00:26:06.443
+<v Maya Chen>The billing articles carry the step-by-step work; these reviews settle the request, contract, transfer, and Closed boundaries that were still disputed.
+
+204
+00:26:07.543 --> 00:26:15.882
+<v Maya Chen>Hannah will run the link check from a learner account, not her admin login.
+
+205
+00:26:16.582 --> 00:26:17.177
+<v Jonah Brooks>Right.
+
+206
+00:26:18.277 --> 00:26:27.211
+<v Maya Chen>If that finds a layout defect, I can repair presentation without changing the approved words.
+
+207
+00:26:29.411 --> 00:26:37.154
+<v Maya Chen>If anyone finds a meaning change, we reconvene rather than editing around it.
+
+208
+00:26:37.354 --> 00:26:38.545
+<v Maya Chen>Thanks, everyone.
+
+209
+00:26:38.945 --> 00:26:40.732
+<v Maya Chen>Jonah can drop.
+
+210
+00:26:41.432 --> 00:26:52.153
+<v Maya Chen>Priya, please stay for one minute so we can verify the reviewer-folder permissions and the morning publish owner.
+
+211
+00:26:52.853 --> 00:26:58.213
+<v Maya Chen>Tessa, your release checklist is clear from my side.
+
+212
+00:26:58.213 --> 00:27:00.000
+<v Maya Chen>We are done.

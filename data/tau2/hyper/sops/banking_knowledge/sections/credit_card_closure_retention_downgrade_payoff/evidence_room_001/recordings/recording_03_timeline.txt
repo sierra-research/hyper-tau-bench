@@ -1,0 +1,11 @@
+Pay a card balance from checking
+Duration: 45 seconds
+
+00:00-00:07 · Payments module, pay-card-from-checking workspace. Checking CHK-2207-55 shows $1,240.55 available and card CC-8834-2846 shows $312.40 outstanding; the identity chip is green.
+00:07-00:15 · The Payoff steps table sits on the left, six rows with steps one through three already done and the Unlock pay_credit_card_from_checking_9182 row still pending, Call pay_credit_card_from_checking_9182 queued after it. The agent scrolls past the table to the payment form.
+00:15-00:20 · First attempt types 1500.00 into the amount field. Continue stays disabled with the note that the amount exceeds the card's outstanding balance — nothing runs.
+00:20-00:26 · Help under the amount field: the amount must be positive and can't exceed the checking balance ($1,240.55) or the card's outstanding balance ($312.40). Corrected to 312.40, the form comes alive.
+00:26-00:31 · The authorization row is ticked. Help text beside it: the account ids and user on the payment have to match the authenticated customer, and the amount has to be the one the customer authorized. Acting user USR-3118-42 matches the session badge.
+00:31-00:36 · With the action unlocked for this session, the call goes out through call_discoverable_agent_tool to pay_credit_card_from_checking_9182, the argument panel listing checking_account_id CHK-2207-55, credit_card_account_id CC-8834-2846, user_id USR-3118-42, and amount 312.40.
+00:36-00:41 · The transfer posts both sides at once: $312.40 debited from checking and the card balance reduced by the same amount.
+00:41-00:45 · The confirmation lists the new balances for both accounts — checking $928.15 and card $0.00 — with the Posted chip green and a matching activity entry.

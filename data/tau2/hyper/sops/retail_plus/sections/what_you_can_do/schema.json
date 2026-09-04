@@ -1,0 +1,170 @@
+{
+  "id": "retail_plus_what_you_can_do_policy_fact_schema_001",
+  "domain": "retail_plus",
+  "studio_hidden": true,
+  "section_id": "what_you_can_do",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/retail_plus_sop.md",
+    "heading": "## What you can do for customers"
+  },
+  "rendered_section_path": "tau2/hyper/sops/retail_plus/sections/what_you_can_do/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/what_you_can_do/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "response_phrasing_context": {
+    "selected_rule_ids": [
+      "never_say_unfortunately",
+      "max_one_apology_per_conversation",
+      "no_premature_outcome_language",
+      "identifier_minimization",
+      "avoid_repeated_openings",
+      "no_generic_service_invitations",
+      "no_support_deflection",
+      "customer_visible_failure_language",
+      "no_long_menu_dumps",
+      "match_warmth_to_outcome",
+      "no_first_person_cant",
+      "no_internal_tool_mentions",
+      "no_policy_jargon"
+    ],
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "The no_generic_service_invitations rule must still allow current-request procedural completeness checks required by one-shot item changes and exchanges.",
+      "Transfer language must use the exact SOP-mandated message even when other phrasing rules are active."
+    ],
+    "rules_path": "tau2/hyper/response_phrasing/retail_plus_response_phrasing.yaml"
+  },
+  "style_exemplar": {
+    "id": "customer_support_chat",
+    "path": "tau2/hyper/sops/retail_plus/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "scope checks before action",
+      "customer-visible denial of unsupported requests",
+      "complete recap and explicit confirmation before mutation"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/retail_plus_sop.md",
+      "src/tau2/domains/retail/data_model.py"
+    ],
+    "summary": "Authorized action scope must remain tied to exact order statuses and documented operations.",
+    "rules": [
+      "Processed orders are not eligible for cancellation, return, exchange, or modification.",
+      "Some actions are one-shot and require complete-list confirmation before submission."
+    ]
+  },
+  "facts": [
+    {
+      "id": "customer_information_lookup_allowed",
+      "category": "authorized_scope",
+      "statement": "After authentication, the agent may provide information about the customer's own profile, their orders, and products related to their orders.",
+      "canonical_source": "What you can do for customers"
+    },
+    {
+      "id": "pending_order_allowed_actions",
+      "category": "authorized_scope",
+      "statement": "On a pending order, the agent may cancel the order, change the shipping address, switch the payment method, or swap items for different variants.",
+      "canonical_source": "What you can do for customers"
+    },
+    {
+      "id": "delivered_order_allowed_actions",
+      "category": "authorized_scope",
+      "statement": "On a delivered order, the agent may process a return or process an exchange.",
+      "canonical_source": "What you can do for customers"
+    },
+    {
+      "id": "profile_default_address_allowed_action",
+      "category": "authorized_scope",
+      "statement": "On the customer's profile, the agent may update the default shipping address.",
+      "canonical_source": "What you can do for customers"
+    },
+    {
+      "id": "authorized_record_changes_closed_scope",
+      "category": "authorized_scope",
+      "statement": "The pending-order, delivered-order, and customer-profile default-address actions are the complete set of customer-record changes supported through this channel; this limit does not prohibit the allowed information lookups.",
+      "canonical_source": "What you can do for customers"
+    },
+    {
+      "id": "processed_orders_wait_until_delivered",
+      "category": "status_limits",
+      "statement": "A processed order is in the warehouse pipeline and cannot be changed, returned, or cancelled; the customer must wait until it is delivered before return or exchange options apply.",
+      "canonical_source": "What you can do for customers"
+    },
+    {
+      "id": "cancelled_orders_no_further_action",
+      "category": "status_limits",
+      "statement": "A cancelled order is finished and has no further action available.",
+      "canonical_source": "What you can do for customers"
+    },
+    {
+      "id": "unsupported_channel_actions_closed_set",
+      "category": "prohibited_actions",
+      "statement": "The agent cannot add a new payment method to the customer's account; the customer must add a new payment method themselves through the website. The agent also cannot change the email on file, change item quantity in an order, split shipments, or alter anything about an order that has already shipped.",
+      "canonical_source": "What you can do for customers"
+    },
+    {
+      "id": "explicit_confirmation_before_record_change",
+      "category": "confirmation",
+      "statement": "Before cancelling, modifying, returning, exchanging, or updating an address, the agent must say back exactly what will change, including the order, items, amounts, and payment method when relevant, then wait for an explicit yes or equivalent.",
+      "canonical_source": "What you can do for customers"
+    },
+    {
+      "id": "ambiguous_confirmation_not_enough",
+      "category": "confirmation",
+      "statement": "A vague response such as an unclear okay after many other topics is not enough confirmation for a record-changing action.",
+      "canonical_source": "What you can do for customers"
+    },
+    {
+      "id": "no_inventing_information",
+      "category": "conduct",
+      "statement": "The agent must use only what the customer says and what the records show, without speculating, recommending, editorializing, or inventing information.",
+      "canonical_source": "What you can do for customers"
+    },
+    {
+      "id": "one_shot_item_swap_and_exchange_complete_list",
+      "category": "one_shot_actions",
+      "statement": "Item swaps on pending orders and exchanges on delivered orders are one-shot actions for a given order: once submitted, the order is locked and the agent cannot make further changes to that order. Before submitting either action, the agent must double-check that the customer has provided the complete list of items they want changed; explicitly asking whether there are any additional items to swap is good practice.",
+      "canonical_source": "What you can do for customers"
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Pending, processed, delivered, and cancelled scope",
+      "included_fact_ids": [
+        "customer_information_lookup_allowed",
+        "pending_order_allowed_actions",
+        "delivered_order_allowed_actions",
+        "profile_default_address_allowed_action",
+        "authorized_record_changes_closed_scope",
+        "processed_orders_wait_until_delivered",
+        "cancelled_orders_no_further_action",
+        "unsupported_channel_actions_closed_set",
+        "no_inventing_information"
+      ],
+      "style_notes": [
+        "customer asks for several actions across statuses",
+        "agent routes each request to supported or unsupported handling"
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Explicit confirmation and one-shot completeness",
+      "included_fact_ids": [
+        "explicit_confirmation_before_record_change",
+        "ambiguous_confirmation_not_enough",
+        "one_shot_item_swap_and_exchange_complete_list"
+      ],
+      "style_notes": [
+        "agent recaps a specific mutation before acting",
+        "agent rejects ambiguous confirmation",
+        "agent asks the required completeness question for a one-shot item swap"
+      ]
+    }
+  ]
+}

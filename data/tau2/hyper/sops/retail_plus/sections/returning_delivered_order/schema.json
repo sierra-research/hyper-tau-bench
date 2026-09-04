@@ -1,0 +1,137 @@
+{
+  "id": "retail_plus_returning_delivered_order_policy_fact_schema_001",
+  "domain": "retail_plus",
+  "studio_hidden": true,
+  "section_id": "returning_delivered_order",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/retail_plus_sop.md",
+    "heading": "## Returning a delivered order"
+  },
+  "rendered_section_path": "tau2/hyper/sops/retail_plus/sections/returning_delivered_order/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/returning_delivered_order/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "response_phrasing_context": {
+    "selected_rule_ids": [
+      "never_say_unfortunately",
+      "max_one_apology_per_conversation",
+      "no_premature_outcome_language",
+      "identifier_minimization",
+      "avoid_repeated_openings",
+      "no_generic_service_invitations",
+      "no_support_deflection",
+      "customer_visible_failure_language",
+      "no_long_menu_dumps",
+      "match_warmth_to_outcome",
+      "no_first_person_cant",
+      "no_internal_tool_mentions",
+      "no_policy_jargon"
+    ],
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "The no_generic_service_invitations rule must still allow current-request procedural completeness checks required by one-shot item changes and exchanges.",
+      "Transfer language must use the exact SOP-mandated message even when other phrasing rules are active."
+    ],
+    "rules_path": "tau2/hyper/response_phrasing/retail_plus_response_phrasing.yaml"
+  },
+  "style_exemplar": {
+    "id": "customer_support_chat",
+    "path": "tau2/hyper/sops/retail_plus/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "delivered-order eligibility",
+      "refund destination selection",
+      "email instructions after submission"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/retail_plus_sop.md",
+      "src/tau2/domains/retail/data_model.py",
+      "src/tau2/domains/retail_plus/tools.py"
+    ],
+    "summary": "Return records must preserve the documented order-field shape.",
+    "rules": [
+      "Represent return_items in Support console notes as a list of selected order item_id strings, not item objects or natural-language descriptions.",
+      "Customer-facing Agent turns may use item names instead of internal item IDs unless exact disambiguation is needed."
+    ]
+  },
+  "facts": [
+    {
+      "id": "return_requires_delivered_order",
+      "category": "return_gate",
+      "statement": "Before starting a return, the agent must check the order's current status; only an order whose current status is delivered may enter the return flow.",
+      "canonical_source": "Returning a delivered order"
+    },
+    {
+      "id": "return_can_include_some_or_all_items",
+      "category": "return_items",
+      "statement": "For a delivered order, the customer can return some or all items in a single return request per order; once the return request is opened, items cannot be added to it.",
+      "canonical_source": "Returning a delivered order"
+    },
+    {
+      "id": "return_requires_order_id_and_item_list",
+      "category": "return_items",
+      "statement": "To start a return, the customer must confirm the order identifier and the exact list of items they want to send back.",
+      "canonical_source": "Returning a delivered order"
+    },
+    {
+      "id": "return_refund_destination_original_or_existing_gift_card",
+      "category": "refund_destination",
+      "statement": "A return refund can go only to the original payment method or to an existing gift card on the customer's profile; existing means the gift card was on the profile before the return request was opened, so a card added mid-conversation does not qualify.",
+      "canonical_source": "Returning a delivered order"
+    },
+    {
+      "id": "return_refund_destination_disallowed_options",
+      "category": "refund_destination",
+      "statement": "A return refund cannot go to a brand-new gift card, a different credit card, a PayPal account that was not used originally, or any other destination outside original payment method or existing gift card.",
+      "canonical_source": "Returning a delivered order"
+    },
+    {
+      "id": "return_requires_recap_confirmation_submit",
+      "category": "confirmation",
+      "statement": "Before submitting a return, the agent must recap the return and get confirmation.",
+      "canonical_source": "Returning a delivered order"
+    },
+    {
+      "id": "return_submission_sets_status_and_sends_email",
+      "category": "return_submission",
+      "statement": "Submitting a return changes the order status to return requested, and the customer receives an email with return shipping instructions; the agent does not handle the return shipping instructions and only kicks off the return process.",
+      "canonical_source": "Returning a delivered order"
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Partial return to existing gift card",
+      "included_fact_ids": [
+        "return_requires_delivered_order",
+        "return_can_include_some_or_all_items",
+        "return_requires_order_id_and_item_list",
+        "return_refund_destination_original_or_existing_gift_card",
+        "return_requires_recap_confirmation_submit",
+        "return_submission_sets_status_and_sends_email"
+      ],
+      "style_notes": [
+        "customer returns only one delivered item",
+        "refund goes to an existing gift card"
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Refund destination outside allowed set declined",
+      "included_fact_ids": [
+        "return_requires_delivered_order",
+        "return_refund_destination_original_or_existing_gift_card",
+        "return_refund_destination_disallowed_options"
+      ],
+      "style_notes": [
+        "customer asks for a different card and a brand-new gift card",
+        "agent narrows to the two allowed refund destinations"
+      ]
+    }
+  ]
+}

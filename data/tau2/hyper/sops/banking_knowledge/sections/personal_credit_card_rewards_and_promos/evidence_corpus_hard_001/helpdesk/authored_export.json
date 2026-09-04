@@ -1,0 +1,405 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "Rho Helpdesk",
+    "account": "rho-bank-consumer-and-business",
+    "workspace": "personal-card-rewards",
+    "environment": "production",
+    "exported_at": "2025-11-13T15:05:00-05:00",
+    "timezone": "America/New_York",
+    "export_version": "2025.46",
+    "requested_by": "dana.farrell@rho-bank.com"
+  },
+  "cover_email": "From: Helpdesk Administration <helpdesk-admin@rho-bank.com>\nTo: Dana Farrell <dana.farrell@rho-bank.com>\nDate: Thu, 13 Nov 2025 15:21:44 -0500\nSubject: personal-card-rewards workspace export (2025.46)\nMessage-ID: <hd-export-2025-46-pcrewards@rho-bank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nDana,\n\nAttached is the production export of the personal-card-rewards helpdesk workspace you requested for the enablement review. This is the full macro/trigger/field snapshot as of this afternoon; drafts and disabled objects are included with their status flags, so the retired points-display auto-responder pair from September is in there with its history intact.\n\nOne housekeeping note: the secure-message greeting macro is mid-edit (marked draft), so treat its copy as unsettled.\n\nHelpdesk Administration",
+  "macros": [
+    {
+      "macro_id": "MAC-4310",
+      "name": "Rewards question — general acknowledgement",
+      "description": "First-touch acknowledgement for personal-card rewards questions routed to the card-rewards queue.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2024-07-08",
+      "updated_at": "2025-10-14",
+      "usage_30d": 358,
+      "usage_90d": 1104,
+      "superseded_by": null,
+      "steps": [
+        "Set ticket type = rewards_question",
+        "Insert acknowledgement text (queue SLA phrasing)",
+        "Assign group = Card Rewards Tier 1"
+      ]
+    },
+    {
+      "macro_id": "MAC-4188",
+      "name": "Points display question — canned explanation (LEGACY)",
+      "description": "Auto-sent reply for missing-points and points-instead-of-cash-back tickets. The canned text told the customer the card uses a points program. Disabled 2025-09-29 with TRG-3907; retained for audit history.",
+      "active": false,
+      "environment": "production",
+      "status": "disabled_legacy",
+      "effective_at": "2024-11-06",
+      "updated_at": "2025-09-29",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "MAC-4321",
+      "steps": [
+        "Set ticket type = points_display_question",
+        "Insert canned points-program reply ('your card uses a points program' — retired wording)",
+        "Set status = solved-pending-close"
+      ]
+    },
+    {
+      "macro_id": "MAC-4321",
+      "name": "Points display question — agent handoff with KB pointer",
+      "description": "First-touch acknowledgement for points-display tickets; inserts the knowledge-base article pointer and assigns the ticket to an agent (no product-type explanation in the canned text).",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-09-29",
+      "updated_at": "2025-10-06",
+      "usage_30d": 149,
+      "usage_90d": 287,
+      "superseded_by": null,
+      "steps": [
+        "Set ticket type = points_display_question",
+        "Insert acknowledgement with KB article pointer (link placeholder)",
+        "Assign group = Card Rewards Tier 1"
+      ]
+    },
+    {
+      "macro_id": "MAC-4330",
+      "name": "Statement copy request",
+      "description": "Sends the statement-copy instructions and sets the document-request fields.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2024-03-11",
+      "updated_at": "2025-08-04",
+      "usage_30d": 88,
+      "usage_90d": 274,
+      "superseded_by": null,
+      "steps": [
+        "Set ticket type = document_request",
+        "Insert statement-copy instructions",
+        "Set status = pending-customer"
+      ]
+    },
+    {
+      "macro_id": "MAC-4342",
+      "name": "Promo question — campaign deck pointer",
+      "description": "Points customers asking about the current EcoCard campaign to the published offer materials; the reply carries the deck pointer placeholder and no term restatement.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-08-01",
+      "updated_at": "2025-11-13",
+      "usage_30d": 173,
+      "usage_90d": 486,
+      "superseded_by": null,
+      "steps": [
+        "Set ticket type = promo_question",
+        "Insert campaign reply (final terms deck pointer placeholder)",
+        "Set tag = promo"
+      ]
+    },
+    {
+      "macro_id": "MAC-4355",
+      "name": "Secure message greeting refresh (draft)",
+      "description": "Draft greeting refresh for secure-message replies; copy under review with the enablement team.",
+      "active": false,
+      "environment": "production",
+      "status": "draft",
+      "effective_at": null,
+      "updated_at": "2025-11-10",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": null,
+      "steps": [
+        "Insert greeting text (draft copy v1)",
+        "Set tag = secure-message"
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "TRG-4090",
+      "name": "Route rewards keywords to card-rewards queue",
+      "description": "Keyword and product-code routing into the Card Rewards Tier 1 group.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 4,
+      "effective_at": "2024-07-08",
+      "updated_at": "2025-10-14",
+      "usage_30d": 611,
+      "conditions": [
+        "channel is email OR webform",
+        "subject/body contains any: rewards, points, redemption, sustainability points",
+        "product_code starts with CARD-"
+      ],
+      "actions": [
+        "set group = Card Rewards Tier 1",
+        "set ticket type = rewards_question"
+      ]
+    },
+    {
+      "trigger_id": "TRG-3907",
+      "name": "Auto-reply: points display question (RETIRED)",
+      "description": "Fired MAC-4188 automatically on inbound points-display tickets and closed them without agent touch. Disabled 2025-09-29 following the platform status notice of 2025-09-26; retained for audit history.",
+      "active": false,
+      "environment": "production",
+      "status": "disabled_legacy",
+      "priority": 3,
+      "effective_at": "2024-11-06",
+      "updated_at": "2025-09-29",
+      "usage_30d": 0,
+      "conditions": [
+        "channel is email OR webform",
+        "subject/body contains any: missing points, points instead of cash back, where is my cash back"
+      ],
+      "actions": [
+        "apply macro MAC-4188",
+        "set status = solved-pending-close"
+      ]
+    },
+    {
+      "trigger_id": "TRG-4124",
+      "name": "Points display — route to agent with KB pointer",
+      "description": "Replacement routing for the retired auto-reply: no automatic explanation goes out; the ticket lands with a human agent and carries the knowledge-base pointer.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 3,
+      "effective_at": "2025-09-29",
+      "updated_at": "2025-10-06",
+      "usage_30d": 149,
+      "conditions": [
+        "channel is email OR webform",
+        "subject/body contains any: missing points, points instead of cash back, where is my cash back"
+      ],
+      "actions": [
+        "apply macro MAC-4321",
+        "set group = Card Rewards Tier 1"
+      ]
+    },
+    {
+      "trigger_id": "TRG-4120",
+      "name": "Escalate aged rewards tickets",
+      "description": "Escalates rewards tickets breaching 48 business hours without agent touch.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 6,
+      "effective_at": "2024-10-01",
+      "updated_at": "2025-06-17",
+      "usage_30d": 37,
+      "conditions": [
+        "ticket type = rewards_question OR points_display_question OR promo_question",
+        "hours since last agent update > 48 (business)"
+      ],
+      "actions": [
+        "set priority = high",
+        "notify group lead (card-rewards)"
+      ]
+    }
+  ],
+  "policy_contracts": [
+    {
+      "contract_id": "CON-0731",
+      "name": "personal-card-rewards workspace routing scope",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Helpdesk Administration",
+      "scope": "Ticket routing and macros for the personal-card-rewards workspace at this snapshot. Routing configuration only; card terms, earn rates, promotion terms, and redemption mechanics are owned by the published program guides, the Rewards Platform integration pack, the campaign deck, the rewards-operations boards, and the agent knowledge base.",
+      "required_fields": [
+        "ticket_type",
+        "group",
+        "status"
+      ],
+      "closed_world": false,
+      "effective_at": "2024-07-08",
+      "updated_at": "2025-10-14"
+    }
+  ],
+  "field_columns": [
+    "row_id",
+    "field_key",
+    "field_name",
+    "field_type",
+    "option_value",
+    "active",
+    "status",
+    "environment",
+    "updated_at"
+  ],
+  "fields": [
+    {
+      "row_id": "F-001",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "rewards_question",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-07-08"
+    },
+    {
+      "row_id": "F-002",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "points_display_question",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-09-29"
+    },
+    {
+      "row_id": "F-003",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "promo_question",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-08-01"
+    },
+    {
+      "row_id": "F-004",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "document_request",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-03-11"
+    },
+    {
+      "row_id": "F-005",
+      "field_key": "group",
+      "field_name": "Assignment group",
+      "field_type": "picklist",
+      "option_value": "Card Rewards Tier 1",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-07-08"
+    },
+    {
+      "row_id": "F-006",
+      "field_key": "group",
+      "field_name": "Assignment group",
+      "field_type": "picklist",
+      "option_value": "Card Services Tier 2",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-01-13"
+    },
+    {
+      "row_id": "F-007",
+      "field_key": "status",
+      "field_name": "Ticket status",
+      "field_type": "picklist",
+      "option_value": "pending-customer",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-03-11"
+    },
+    {
+      "row_id": "F-008",
+      "field_key": "status",
+      "field_name": "Ticket status",
+      "field_type": "picklist",
+      "option_value": "solved-pending-close",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-03-11"
+    },
+    {
+      "row_id": "F-009",
+      "field_key": "tag",
+      "field_name": "Tag",
+      "field_type": "tag",
+      "option_value": "promo",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-08-01"
+    },
+    {
+      "row_id": "F-010",
+      "field_key": "tag",
+      "field_name": "Tag",
+      "field_type": "tag",
+      "option_value": "points-display",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-09-29"
+    },
+    {
+      "row_id": "F-011",
+      "field_key": "tag",
+      "field_name": "Tag",
+      "field_type": "tag",
+      "option_value": "secure-message",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-11-10"
+    }
+  ],
+  "sla_policies": [
+    {
+      "name": "Card rewards — email first response",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "8 business hours first response",
+      "applies_to": "group = Card Rewards Tier 1",
+      "updated_at": "2025-02-03",
+      "policy_id": "SLA-310"
+    },
+    {
+      "name": "Card rewards — secure message update cadence",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "1 business day update cadence",
+      "applies_to": "ticket type in (rewards_question, points_display_question, promo_question)",
+      "updated_at": "2025-02-03",
+      "policy_id": "SLA-314"
+    }
+  ],
+  "views": [
+    {
+      "view_id": "VW-93",
+      "name": "Card rewards — open queue",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "group = Card Rewards Tier 1",
+        "status != solved-pending-close"
+      ],
+      "updated_at": "2025-10-06"
+    },
+    {
+      "view_id": "VW-95",
+      "name": "Points display — post-retirement watch",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "ticket type = points_display_question",
+        "created after 2025-09-29"
+      ],
+      "updated_at": "2025-09-29"
+    }
+  ]
+}

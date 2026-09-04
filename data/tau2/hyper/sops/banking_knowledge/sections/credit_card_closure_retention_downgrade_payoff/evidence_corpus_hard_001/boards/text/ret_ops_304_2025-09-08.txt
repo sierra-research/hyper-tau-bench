@@ -1,0 +1,35 @@
+RET-OPS-304 - rev B
+Retention Operations
+Owner: Silas Brandt
+2025-09-08
+REPLACEMENT-CHECK - pre-closure replacement order decision tree
+Legend: rounded box = process step / diamond = decision / green = start or finish / red = stop / amber box = hold / dashed box = reference note
+
+# Nodes
+Pre-closure replacement check: run get_pending_replacement_orders_5765 for the credit card account
+What does the orders collection hold?
+empty orders collection -> proceed with standard closure checks
+treat as pending replacement activity unless every order is clearly delivered or cancelled
+Every order clearly delivered or cancelled?
+all orders delivered or cancelled -> proceed
+any order pending or shipped -> blocked
+do not proceed with closure until delivered or cancelled
+inform the relevant team + monitor until delivery or confirmed cancellation
+note the check outcome in the case record and continue
+return to the closure flow - RET-OPS-301
+
+# Edges
+Pre-closure replacement check... -> What does the orders collection hold?
+What does the orders collection hold? -> empty orders collection -> proceed with standard closure checks [empty]
+What does the orders collection hold? -> treat as pending replacement activity unless every order is clearly delivered or cancelled [one or more orders]
+treat as pending replacement activity... -> Every order clearly delivered or cancelled?
+Every order clearly delivered or cancelled? -> all orders delivered or cancelled -> proceed [yes]
+Every order clearly delivered or cancelled? -> any order pending or shipped -> blocked [no]
+any order pending or shipped -> blocked -> do not proceed with closure until delivered or cancelled
+do not proceed with closure until delivered or cancelled -> inform the relevant team + monitor until delivery or confirmed cancellation
+inform the relevant team + monitor until delivery or confirmed cancellation -> Pre-closure replacement check... [after delivery or confirmed cancellation - re-run the check]
+empty orders collection -> proceed with standard closure checks -> note the check outcome in the case record and continue
+all orders delivered or cancelled -> proceed -> note the check outcome in the case record and continue
+note the check outcome in the case record and continue -> return to the closure flow - RET-OPS-301
+
+RET-OPS-304 rev B - Retention Operations - 1 of 1

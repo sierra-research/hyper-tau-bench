@@ -1,0 +1,56 @@
+{
+  "id": "task_138",
+  "description": {
+    "purpose": "Task: task_138",
+    "relevant_policies": null,
+    "notes": "Crypto-Cash Back redemption eligibility: customer reads their 2,750 reward points as being far above the 'minimum of 30' to redeem to crypto, but points convert at $0.01 each, so the balance is $27.50 — below the $30 minimum. Agent must explain the conversion and compute the exact additional spend needed ($125 at 2.0% = 250 points) rather than treating it as an app bug."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** Marcus Chen-Ramirez, a 36-year-old operations manager from Phoenix who trades a little crypto on the side. You're friendly but you get impatient when apps don't work.\n\n**Your situation:** You've had the Rho-Bank Crypto-Cash Back card since summer 2024. This morning you tried to redeem your rewards to your crypto wallet in the app and it says you're not eligible to redeem yet. You checked your rewards balance: it shows 2,750. You remember the minimum to redeem is 30, and 2,750 is obviously way more than 30, so you're convinced the app is glitching and you want it fixed.\n\nYour date of birth is 10/08/1989 and your phone number is 602-555-0831. Your address is 3892 Sunset Ridge Dr, Phoenix, AZ 85004 and your email is marcus.cr@outlook.com. Your user ID is h1i2j3k4l5. Do NOT volunteer any of this information unless specifically asked for it. Do not make up any information that you are not 100% certain of, such as any information about yourself that is not stated here.\n\n## How to Behave\n\n1. **Start naturally:** \"Hey, your app is blocking me from redeeming my rewards to crypto. I've got 2,750 in rewards and the minimum is supposed to be 30. Something is broken on your end — can you fix it?\"\n\n2. **Be cooperative with verification:** Provide your details when asked.\n\n3. **Push back once:** If the agent just tells you that you don't qualify without actually explaining the math, insist: \"2,750 is a lot more than 30 — explain to me how I'm not eligible.\"\n\n4. **Accept a real explanation:** If the agent clearly explains why your balance doesn't meet the redemption minimum, accept it and ask exactly how many more dollars of purchases you would need to put on the card to become eligible.\n\n5. **Take action when given the exact figure:** You're ordering some gear this week anyway, so if the agent gives you a specific dollar amount of additional spending needed, you'll just put exactly that amount on the card now. You have access to submit_transaction. Submit exactly ONE transaction with your user_id (h1i2j3k4l5), credit_card_type \"Crypto-Cash Back\", merchant_name \"Best Buy\", an amount exactly equal to the additional spending the agent specified, and category \"Shopping\".\n\n6. **Do NOT use submit_transaction** if the agent hasn't given you a specific dollar amount of additional spending, or if the agent tells you that you're already eligible.\n\n7. **If the agent agrees it's a bug** or can't explain and offers to transfer you to a human, accept the transfer and end the conversation.\n\n8. **Wrap up:** After submitting the purchase, ask the agent to confirm you'll be able to redeem once it posts, thank them, and end the conversation.\n\nYou are currently on the line with a customer support agent. Only provide additional details about your situation when the agent asks for them. Don't dump all your information at once. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": null,
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Marcus Chen-Ramirez",
+          "user_id": "h1i2j3k4l5",
+          "address": "3892 Sunset Ridge Dr, Phoenix, AZ 85004",
+          "email": "marcus.cr@outlook.com",
+          "phone_number": "602-555-0831",
+          "date_of_birth": "10/08/1989",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "138_0"
+      },
+      {
+        "name": "submit_transaction",
+        "arguments": {
+          "user_id": "h1i2j3k4l5",
+          "credit_card_type": "Crypto-Cash Back",
+          "merchant_name": "Best Buy",
+          "amount": 125,
+          "category": "Shopping"
+        },
+        "requestor": "user",
+        "action_id": "138_1"
+      }
+    ],
+    "communicate_info": [],
+    "reward_basis": [
+      "DB"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [
+    "submit_transaction"
+  ],
+  "required_documents": [
+    "doc_credit_cards_crypto-cash_back_001",
+    "doc_credit_cards_crypto-cash_back_002",
+    "doc_credit_cards_credit_cards_(general)_006"
+  ]
+}

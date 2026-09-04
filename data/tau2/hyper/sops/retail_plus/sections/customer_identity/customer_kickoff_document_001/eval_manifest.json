@@ -1,0 +1,103 @@
+{
+  "id": "retail_plus_customer_identity_discovery_intake_001",
+  "representation": "customer_kickoff_document",
+  "artifact_path": "tau2/hyper/sops/retail_plus/sections/customer_identity/customer_kickoff_document_001/northstar_identity_and_crm_readiness_intake.md",
+  "authoritative_facts": [
+    {
+      "id": "one_customer_per_conversation_own_profile_only",
+      "statement": "The agent can help one customer per conversation and cannot act on a friend's, spouse's, or other person's account, even if the caller has all order details.",
+      "evidence_locations": [
+        "Conversation and session model > Account boundary",
+        "Confirmed pilot decision register > ID-01 — Conversation account boundary"
+      ],
+      "scope_boundary": "The decision concerns whose profile may be served in one conversation; it does not define a future delegated-access model."
+    },
+    {
+      "id": "multiple_requests_same_customer_allowed",
+      "statement": "The same verified customer may make multiple requests in one conversation.",
+      "evidence_locations": [
+        "Conversation and session model > Request handling within a verified session",
+        "Confirmed pilot decision register > ID-02 — Multiple requests for one verified customer"
+      ],
+      "scope_boundary": "Multiple requests are permitted only for the same verified customer and do not permit switching profiles."
+    },
+    {
+      "id": "identify_customer_first_every_time",
+      "statement": "The first task in every conversation is to identify who the customer is.",
+      "evidence_locations": [
+        "Customer identification workflow > Entry requirement",
+        "Confirmed pilot decision register > ID-03 — Identification is the entry step"
+      ],
+      "scope_boundary": "The artifact establishes workflow order but does not prescribe exact greeting language."
+    },
+    {
+      "id": "lookup_by_account_id_email_or_name_zip",
+      "statement": "The customer can be found by unique account identifier, by email address, or by first name plus last name plus zip code.",
+      "evidence_locations": [
+        "Lookup configuration > Approved ways to find a customer profile",
+        "Confirmed pilot decision register > ID-04 — Supported lookup routes"
+      ],
+      "scope_boundary": "Phone number, order number, loyalty identifier, and other candidate fields are explicitly not approved lookup routes."
+    },
+    {
+      "id": "account_id_requires_email_or_name_zip_verification",
+      "statement": "Even when the customer provides an account identifier, the agent must verify it belongs to them by matching email or first name plus last name plus zip code.",
+      "evidence_locations": [
+        "Verification gate > Account-identifier result handling",
+        "Confirmed pilot decision register > ID-05 — Account-identifier ownership match"
+      ],
+      "scope_boundary": "The artifact establishes the match required for the account-identifier route and does not approve the proposed authentication alternatives."
+    },
+    {
+      "id": "pull_full_profile_after_verification",
+      "statement": "After verification, the agent pulls the full customer profile to see orders, addresses, and saved payment methods.",
+      "evidence_locations": [
+        "Profile access > Post-verification data load",
+        "Confirmed pilot decision register > ID-06 — Full profile follows verification"
+      ],
+      "scope_boundary": "The artifact establishes the access sequence and profile contents, not the unresolved response schema or data-minimization choices."
+    }
+  ],
+  "related_domain_facts": [
+    {
+      "section_id": "service_foundations",
+      "fact_id": "customer_profile_fields",
+      "relationship": "compatible_detail",
+      "notes": "The identity intake names the profile data loaded after verification; the service-foundations fact separately defines the customer-profile record."
+    },
+    {
+      "section_id": "service_foundations",
+      "fact_id": "order_records_owner",
+      "relationship": "compatible_boundary",
+      "notes": "The one-customer conversation boundary is consistent with orders belonging to one customer profile, but the intake does not define the order schema."
+    }
+  ],
+  "excluded_claims": [
+    "The artifact does not approve phone number, order number, loyalty identifier, shipping address alone, device data, or social handle as a customer lookup route.",
+    "The artifact does not define retry counts, lockouts, mismatch handling, transfer behavior, or customer-facing failure wording.",
+    "The artifact does not approve password reset, MFA changes, fraud investigation, guest support, household delegation, caregiver access, or business-account roles.",
+    "The artifact does not establish an API name, request schema, authentication mechanism, timeout, rate limit, or retention period.",
+    "The artifact does not prescribe exact greeting language or quality thresholds.",
+    "The artifact does not authorize any customer-record mutation."
+  ],
+  "non_policy_context": [
+    "Directional channel volumes and contact reasons",
+    "Incomplete pilot goals, dates, budgets, and success metrics",
+    "Candidate and rejected identity signals",
+    "System inventory, interface placeholders, and integration questions",
+    "Security, privacy, fraud, and data-minimization parking-lot items",
+    "Channel, language, accessibility, workforce, and measurement context",
+    "Stakeholder mapping, workshop notes, action items, and draft history"
+  ],
+  "distribution": {
+    "delivered_artifacts": [
+      "uploaded_materials/northstar_identity_and_crm_readiness_intake.md"
+    ],
+    "author_only_artifacts": [
+      "eval_manifest.json",
+      "schema fact assignments"
+    ],
+    "evidence_locations_per_fact": 2,
+    "notes": "The Developer receives the partially completed intake without fact ids, coverage labels, or this evaluation manifest. Only entries marked Confirmed pilot decision are authoritative."
+  }
+}

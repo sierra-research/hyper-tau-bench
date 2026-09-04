@@ -1,0 +1,115 @@
+{
+  "id": "telecom_restore_service_process_flowchart_001_segmented_journey",
+  "representation": "process_flowchart",
+  "context": "northline_care_enablement_restore_service_decision_charts",
+  "artifact_count": 3,
+  "author_source_artifact": "restore_service_flowcharts.html",
+  "generation": {
+    "generation_mode": "deterministic_html_svg",
+    "rendering_mode": "browser_full_page_screenshot_per_frame",
+    "renderer": "agent-browser, named session, light color scheme",
+    "viewport": {
+      "width": 1760,
+      "height": 1280
+    },
+    "purpose": "Use the maintained airline_plus and retail_plus process-map conventions: decision diamonds, labeled branches, terminal states, routed connectors, linked-evidence exits, and clearly scoped working-board distractors."
+  },
+  "artifacts": [
+    {
+      "frame": "01_signal_triage",
+      "source": "restore_service_flowcharts.html?frame=1",
+      "raster": "restore_service_flowchart_01_signal_triage.png",
+      "text_source": "restore_service_flowchart_01_signal_triage.txt",
+      "kit_filename": "restore_service_01_signal_triage.png",
+      "width": 1760,
+      "height": 1280,
+      "authoritative_fact_ids": [
+        "entry_no_service_or_cannot_connect",
+        "start_with_status_bar_check",
+        "connected_status_not_a_no_service_issue",
+        "no_service_check_cellular_network_status",
+        "airplane_mode_on_disable_and_recheck"
+      ],
+      "dependent_fact_ids": [
+        "check_sim_status_after_network_check",
+        "resolved_when_status_bar_connected"
+      ],
+      "grounded_distractors": [
+        "Context-only exits for slow or unavailable mobile data and failed MMS when cellular bars are present",
+        "A prior-reboot case note that explicitly does not replace the shown gates",
+        "A parked universal reboot-first proposal explicitly labeled not policy"
+      ]
+    },
+    {
+      "frame": "02_sim_apn",
+      "source": "restore_service_flowcharts.html?frame=2",
+      "raster": "restore_service_flowchart_02_sim_apn.png",
+      "text_source": "restore_service_flowchart_02_sim_apn.txt",
+      "kit_filename": "restore_service_02_sim_apn.png",
+      "width": 1760,
+      "height": 1280,
+      "authoritative_fact_ids": [
+        "check_sim_status_after_network_check"
+      ],
+      "dependent_fact_ids": [
+        "active_sim_no_service_check_apn_settings",
+        "incorrect_apn_reset_reboot_recheck",
+        "resolved_when_status_bar_connected"
+      ],
+      "grounded_distractors": [
+        "A prior-reboot history note that does not replace a decision gate",
+        "A factory-reset proposal explicitly parked outside the supported path"
+      ]
+    },
+    {
+      "frame": "03_carrier_side",
+      "source": "restore_service_flowcharts.html?frame=3",
+      "raster": "restore_service_flowchart_03_carrier_side.png",
+      "text_source": "restore_service_flowchart_03_carrier_side.txt",
+      "kit_filename": "restore_service_03_carrier_side.png",
+      "width": 1760,
+      "height": 1280,
+      "authoritative_fact_ids": [
+        "overdue_suspension_uses_resumption_flow",
+        "unresolved_service_after_supported_steps_transfers"
+      ],
+      "dependent_fact_ids": [
+        "resolved_when_status_bar_connected"
+      ],
+      "grounded_distractors": [
+        "A billing-history note separated from the current line-status decision",
+        "An automatic-resumption-on-payment-promise proposal explicitly parked as not policy"
+      ]
+    }
+  ],
+  "scope": "The three linked charts own the twelve non-APN Restore Service facts without overlap and visibly route the active-SIM branch into the companion screen recording.",
+  "excluded_claims": [
+    "Context-only adjacent journeys define Restore Service policy",
+    "Prior customer attempts permit the agent to skip a shown decision gate",
+    "Parked ideas define current supported steps",
+    "The charts define the APN correction sequence contained in the companion recording",
+    "The charts define detailed overdue-bill or ended-contract policy beyond routing to those workflows"
+  ],
+  "distribution": {
+    "expose_to_developer_agent": [
+      "restore_service_flowchart_01_signal_triage.png",
+      "restore_service_flowchart_02_sim_apn.png",
+      "restore_service_flowchart_03_carrier_side.png"
+    ],
+    "keep_author_side": [
+      "restore_service_flowcharts.html",
+      "restore_service_flowchart_01_signal_triage.txt",
+      "restore_service_flowchart_02_sim_apn.txt",
+      "restore_service_flowchart_03_carrier_side.txt",
+      "eval_manifest.json"
+    ]
+  },
+  "author_only_checks": {
+    "segmented_document": true,
+    "branch_labels_visible": true,
+    "decision_diamonds_visible": true,
+    "terminal_states_visible": true,
+    "full_resolution_reviewed": true,
+    "recording_reference_visible": true
+  }
+}

@@ -1,0 +1,1371 @@
+{
+  "id": "banking_credit_card_closure_retention_downgrade_payoff_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "credit_card_closure_retention_downgrade_payoff",
+  "display_name": "Credit-card closure, retention, downgrade, payoff, and statement-credit handling",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_closure_retention_downgrade_payoff/source.md",
+    "heading": "## Credit-card closure, retention, downgrade, payoff, and statement-credit handling"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_closure_retention_downgrade_payoff/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_closure_retention_downgrade_payoff/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_closure_retention_downgrade_payoff/evidence_room_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_closure_retention_downgrade_payoff/evidence_corpus_hard_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_closure_retention_downgrade_payoff/evidence_corpus_deep_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_closure_retention_downgrade_payoff/client_overlay_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_closure_retention_downgrade_payoff/client_overlay_card_servicing_001/transformation_pack.json"
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook requirements from shared context: verify identity before account-specific information, get explicit confirmation before account-modifying actions, and use the exact transfer message when a transfer is performed.",
+      "Support console turns may mention document ids, internal tool results, and eligibility checks; Agent turns should give the customer the customer-visible next step or outcome.",
+      "Do not transform concrete KB tables, thresholds, statuses, fees, amounts, or condition-specific outcomes into vague dependency statements."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "identity verification before account-specific details",
+      "explicit customer confirmation before account-modifying actions",
+      "plain-language customer-facing outcomes",
+      "support-console notes for internal KB/tool evidence"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_card_account_logistics_002.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_card_account_logistics_003.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_card_account_logistics_008.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_card_account_logistics_009.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_card_replacements_005.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_016.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_017.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_platinum_rewards_card_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_platinum_rewards_card_002.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_credit_cards_business_platinum_rewards_card_008.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_credit_cards_business_platinum_rewards_card_011.json"
+    ],
+    "summary": "Closure blockers, retention offers, downgrade eligibility, payoff from checking, statement-credit use, and annual-fee waiver/benefit constraints.",
+    "rules": [
+      "Preserve all values, tables, thresholds, statuses, fees, amounts, eligibility gates, tool/action names, and condition-to-outcome mappings from the source bundle.",
+      "Use the shared banking handbook for identity verification, explicit confirmation before account-modifying actions, discoverable-tool wrapper behavior, schema limits, and transfer wording.",
+      "Do not invent unsupported account fields, undocumented override mechanisms, undocumented tool names, or customer entitlements not present in the source bundle.",
+      "When a source document is internal, represent its internal checks in Support console turns or agent behavior rather than as exposed policy narration."
+    ],
+    "candidate": {
+      "id": "credit_card_closure_retention_downgrade_payoff",
+      "title": "Credit-card closure, retention, downgrade, payoff, and statement-credit handling",
+      "priority": 1,
+      "related_task_ids": [
+        "task_043",
+        "task_044",
+        "task_045",
+        "task_046",
+        "task_047",
+        "task_048",
+        "task_049"
+      ],
+      "recommended_case_count": 6,
+      "losslessness_risks": [
+        "Preserve pre-closure blocker ordering.",
+        "Preserve payoff and statement-credit tools as distinct actions.",
+        "Preserve downgrade and retention eligibility without making offers universal."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "credit_card_closure_retention_downgrade_payoff_journey",
+        "label": "Credit-card closure, retention, downgrade, payoff, and statement-credit handling",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "credit_card_closure_retention_downgrade_payoff_shared_rules",
+        "label": "Shared workflow rules",
+        "kind": "shared_reference",
+        "parent_id": "credit_card_closure_retention_downgrade_payoff_journey",
+        "order": 1,
+        "description": "Rules, prerequisites, and reference values used by more than one customer pathway in this journey.",
+        "fact_ids": [
+          "F002",
+          "F003",
+          "F004",
+          "F005",
+          "F006",
+          "F007",
+          "F008",
+          "F009",
+          "F010",
+          "F011",
+          "F012",
+          "F017",
+          "F021",
+          "F022",
+          "F023",
+          "F024",
+          "F032",
+          "F035",
+          "F036",
+          "F042",
+          "F043",
+          "F044",
+          "F045",
+          "F046",
+          "F047",
+          "F048",
+          "F049",
+          "F050",
+          "F051"
+        ]
+      },
+      {
+        "id": "credit_card_closure_retention_downgrade_payoff_path_a",
+        "label": "Close a Platinum Rewards account after annual-fee review",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_closure_retention_downgrade_payoff_journey",
+        "order": 2,
+        "description": "Policy path represented by case A.",
+        "fact_ids": [
+          "F025",
+          "F026"
+        ]
+      },
+      {
+        "id": "credit_card_closure_retention_downgrade_payoff_path_b",
+        "label": "Block closure while a dispute remains open",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_closure_retention_downgrade_payoff_journey",
+        "order": 3,
+        "description": "Policy path represented by case B.",
+        "fact_ids": [
+          "F013",
+          "F083",
+          "F084",
+          "F085",
+          "F086",
+          "F087",
+          "F088",
+          "F089",
+          "F090",
+          "F091",
+          "F092",
+          "F093",
+          "F094",
+          "F095",
+          "F096",
+          "F097"
+        ]
+      },
+      {
+        "id": "credit_card_closure_retention_downgrade_payoff_path_c",
+        "label": "Block closure while a replacement order remains pending",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_closure_retention_downgrade_payoff_journey",
+        "order": 4,
+        "description": "Policy path represented by case C.",
+        "fact_ids": [
+          "F014",
+          "F065",
+          "F066",
+          "F067",
+          "F068",
+          "F069",
+          "F070",
+          "F071",
+          "F072",
+          "F073",
+          "F074",
+          "F075",
+          "F076",
+          "F077",
+          "F078",
+          "F079",
+          "F080",
+          "F081",
+          "F082"
+        ]
+      },
+      {
+        "id": "credit_card_closure_retention_downgrade_payoff_path_d",
+        "label": "Close a recently opened account with an early-closure fee",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_closure_retention_downgrade_payoff_journey",
+        "order": 5,
+        "description": "Policy path represented by case D.",
+        "fact_ids": [
+          "F015"
+        ]
+      },
+      {
+        "id": "credit_card_closure_retention_downgrade_payoff_path_e",
+        "label": "Pay off the balance before closure",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_closure_retention_downgrade_payoff_journey",
+        "order": 6,
+        "description": "Policy path represented by case E.",
+        "fact_ids": [
+          "F016",
+          "F052",
+          "F053",
+          "F054",
+          "F055",
+          "F056",
+          "F057",
+          "F058",
+          "F059",
+          "F060",
+          "F061",
+          "F062",
+          "F063",
+          "F064"
+        ]
+      },
+      {
+        "id": "credit_card_closure_retention_downgrade_payoff_path_f",
+        "label": "Close after a previously recorded reason without retention",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_closure_retention_downgrade_payoff_journey",
+        "order": 7,
+        "description": "Policy path represented by case F.",
+        "fact_ids": [
+          "F018",
+          "F019",
+          "F020",
+          "F037"
+        ]
+      },
+      {
+        "id": "credit_card_closure_retention_downgrade_payoff_path_g",
+        "label": "Apply personal-card retention before closure",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_closure_retention_downgrade_payoff_journey",
+        "order": 8,
+        "description": "Policy path represented by case G.",
+        "fact_ids": [
+          "F027",
+          "F038",
+          "F040"
+        ]
+      },
+      {
+        "id": "credit_card_closure_retention_downgrade_payoff_path_h",
+        "label": "Downgrade a business card to avoid an annual fee",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_closure_retention_downgrade_payoff_journey",
+        "order": 9,
+        "description": "Policy path represented by case H.",
+        "fact_ids": [
+          "F039",
+          "F041"
+        ]
+      },
+      {
+        "id": "credit_card_closure_retention_downgrade_payoff_path_i",
+        "label": "Close a basic card after retention review",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_closure_retention_downgrade_payoff_journey",
+        "order": 10,
+        "description": "Policy path represented by case I.",
+        "fact_ids": [
+          "F028",
+          "F033"
+        ]
+      },
+      {
+        "id": "credit_card_closure_retention_downgrade_payoff_path_j",
+        "label": "Handle closure after a competing-card reason",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_closure_retention_downgrade_payoff_journey",
+        "order": 11,
+        "description": "Policy path represented by case J.",
+        "fact_ids": [
+          "F029",
+          "F034"
+        ]
+      },
+      {
+        "id": "credit_card_closure_retention_downgrade_payoff_path_k",
+        "label": "Handle closure after a rewards-value concern",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_closure_retention_downgrade_payoff_journey",
+        "order": 12,
+        "description": "Policy path represented by case K.",
+        "fact_ids": [
+          "F030"
+        ]
+      },
+      {
+        "id": "credit_card_closure_retention_downgrade_payoff_path_l",
+        "label": "Handle closure after a service complaint",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_closure_retention_downgrade_payoff_journey",
+        "order": 13,
+        "description": "Policy path represented by case L.",
+        "fact_ids": [
+          "F031",
+          "F098",
+          "F099",
+          "F100",
+          "F101",
+          "F102",
+          "F103",
+          "F104",
+          "F105"
+        ]
+      },
+      {
+        "id": "credit_card_closure_retention_downgrade_payoff_path_m",
+        "label": "Explain Platinum Rewards setup and limits",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_closure_retention_downgrade_payoff_journey",
+        "order": 14,
+        "description": "Policy path represented by case M.",
+        "fact_ids": [
+          "F106",
+          "F107",
+          "F108",
+          "F109",
+          "F110",
+          "F111",
+          "F112",
+          "F113",
+          "F114",
+          "F115",
+          "F116",
+          "F117",
+          "F118"
+        ]
+      },
+      {
+        "id": "credit_card_closure_retention_downgrade_payoff_path_n",
+        "label": "Explain Platinum Rewards cash back",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_closure_retention_downgrade_payoff_journey",
+        "order": 15,
+        "description": "Policy path represented by case N.",
+        "fact_ids": [
+          "F119",
+          "F120",
+          "F121",
+          "F122",
+          "F123",
+          "F124",
+          "F125",
+          "F126"
+        ]
+      },
+      {
+        "id": "credit_card_closure_retention_downgrade_payoff_path_o",
+        "label": "Explain Business Platinum benefits and fees",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_closure_retention_downgrade_payoff_journey",
+        "order": 16,
+        "description": "Policy path represented by case O.",
+        "fact_ids": [
+          "F127",
+          "F128",
+          "F129",
+          "F130",
+          "F131",
+          "F132",
+          "F133",
+          "F134",
+          "F135",
+          "F136",
+          "F137",
+          "F138",
+          "F139"
+        ]
+      },
+      {
+        "id": "credit_card_closure_retention_downgrade_payoff_path_p",
+        "label": "Explain the Business Platinum first-year fee waiver",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_closure_retention_downgrade_payoff_journey",
+        "order": 17,
+        "description": "Policy path represented by case P.",
+        "fact_ids": [
+          "F140",
+          "F141",
+          "F142",
+          "F143",
+          "F144",
+          "F145",
+          "F146"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "credit_card_closure_retention_downgrade_payoff_path_a",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_closure_retention_downgrade_payoff_shared_rules"
+      },
+      {
+        "source_id": "credit_card_closure_retention_downgrade_payoff_path_b",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_closure_retention_downgrade_payoff_shared_rules"
+      },
+      {
+        "source_id": "credit_card_closure_retention_downgrade_payoff_path_c",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_closure_retention_downgrade_payoff_shared_rules"
+      },
+      {
+        "source_id": "credit_card_closure_retention_downgrade_payoff_path_d",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_closure_retention_downgrade_payoff_shared_rules"
+      },
+      {
+        "source_id": "credit_card_closure_retention_downgrade_payoff_path_e",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_closure_retention_downgrade_payoff_shared_rules"
+      },
+      {
+        "source_id": "credit_card_closure_retention_downgrade_payoff_path_f",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_closure_retention_downgrade_payoff_shared_rules"
+      },
+      {
+        "source_id": "credit_card_closure_retention_downgrade_payoff_path_g",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_closure_retention_downgrade_payoff_shared_rules"
+      },
+      {
+        "source_id": "credit_card_closure_retention_downgrade_payoff_path_h",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_closure_retention_downgrade_payoff_shared_rules"
+      },
+      {
+        "source_id": "credit_card_closure_retention_downgrade_payoff_path_i",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_closure_retention_downgrade_payoff_shared_rules"
+      },
+      {
+        "source_id": "credit_card_closure_retention_downgrade_payoff_path_j",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_closure_retention_downgrade_payoff_shared_rules"
+      },
+      {
+        "source_id": "credit_card_closure_retention_downgrade_payoff_path_k",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_closure_retention_downgrade_payoff_shared_rules"
+      },
+      {
+        "source_id": "credit_card_closure_retention_downgrade_payoff_path_l",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_closure_retention_downgrade_payoff_shared_rules"
+      },
+      {
+        "source_id": "credit_card_closure_retention_downgrade_payoff_path_m",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_closure_retention_downgrade_payoff_shared_rules"
+      },
+      {
+        "source_id": "credit_card_closure_retention_downgrade_payoff_path_n",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_closure_retention_downgrade_payoff_shared_rules"
+      },
+      {
+        "source_id": "credit_card_closure_retention_downgrade_payoff_path_o",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_closure_retention_downgrade_payoff_shared_rules"
+      },
+      {
+        "source_id": "credit_card_closure_retention_downgrade_payoff_path_p",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_closure_retention_downgrade_payoff_shared_rules"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "F002",
+      "statement": "The internal closure process order is: verify the customer's identity using standard verification procedures, confirm all closure eligibility requirements are met, then use close_credit_card_account_7834 to process the closure."
+    },
+    {
+      "id": "F003",
+      "statement": "A credit card account is eligible for closure only if the outstanding balance is $0.00 dollars."
+    },
+    {
+      "id": "F004",
+      "statement": "A credit card account is eligible for closure only if there are no pending disputes; pending disputes allowed is No."
+    },
+    {
+      "id": "F005",
+      "statement": "A credit card account is eligible for closure only if the account age is at least 60 days."
+    },
+    {
+      "id": "F006",
+      "statement": "A credit card account is eligible for closure only if there are no pending replacement cards."
+    },
+    {
+      "id": "F007",
+      "statement": "close_credit_card_account_7834 requires credit_card_account_id, the unique identifier for the credit card account found in the customer's account profile or by looking up their credit card accounts, and user_id, which should match the authenticated user."
+    },
+    {
+      "id": "F008",
+      "statement": "After a credit card account is closed, the customer will receive a confirmation email and a final statement within several business days."
+    },
+    {
+      "id": "F009",
+      "statement": "When closure proceeds under the retention protocol, and after any credit card closure request if asked, the customer must be informed that unredeemed rewards can be redeemed for 45 days after submitting the closure request and are forfeited after that period."
+    },
+    {
+      "id": "F010",
+      "statement": "When closure proceeds under the retention protocol, and after any credit card closure request if asked about a recently posted annual fee, the customer must be advised that a full refund may be available if closure occurs within 37 days of the fee being charged."
+    },
+    {
+      "id": "F011",
+      "statement": "Before attempting retention, the agent must confirm that the customer is eligible to close the credit card account."
+    },
+    {
+      "id": "F012",
+      "statement": "Retention pre-closure eligibility checks must be performed in this order: 1. pending disputes, 2. no pending replacement cards, 3. minimum account age, 4. outstanding balance."
+    },
+    {
+      "id": "F013",
+      "statement": "In the retention pre-closure check, if the account has any active or pending transaction disputes, the agent must advise the customer to wait for resolution before closing."
+    },
+    {
+      "id": "F014",
+      "statement": "In the retention pre-closure check, if a replacement card has been ordered and has not yet been received or activated, closure cannot proceed."
+    },
+    {
+      "id": "F015",
+      "statement": "In the retention pre-closure check, if the account has not been open for at least 60 days, the agent must inform the customer that they cannot close yet."
+    },
+    {
+      "id": "F016",
+      "statement": "In the retention pre-closure check, if an outstanding balance remains, the customer must pay it off before closure."
+    },
+    {
+      "id": "F017",
+      "statement": "If any retention pre-closure eligibility requirement is not met, the agent must explain what must be resolved and must not proceed with retention offers."
+    },
+    {
+      "id": "F018",
+      "statement": "Before logging a closure reason or making retention offers, the agent must use get_closure_reason_history_8293 to determine whether the specific credit card account has any closure reason records within the past year."
+    },
+    {
+      "id": "F019",
+      "statement": "get_closure_reason_history_8293 requires credit_card_account_id, a string identifying the credit card account the customer wants to close."
+    },
+    {
+      "id": "F020",
+      "statement": "After closure eligibility is confirmed, if get_closure_reason_history_8293 finds closure reason records for the specific account within the past year, the agent must skip retention offers, inform the customer that the closure request will proceed, and move to Step 6."
+    },
+    {
+      "id": "F021",
+      "statement": "If retention proceeds after the prior-attempt check, the agent must ask the customer why they want to close the credit card account."
+    },
+    {
+      "id": "F022",
+      "statement": "After asking why the customer wants to close the account, the agent must log the reason using log_credit_card_closure_reason_4521."
+    },
+    {
+      "id": "F023",
+      "statement": "log_credit_card_closure_reason_4521 accepts only credit_card_account_id, user_id, and closure_reason; no additional parameters may be added."
+    },
+    {
+      "id": "F024",
+      "statement": "The closure_reason value for log_credit_card_closure_reason_4521 must be one of: annual_fee, not_using_card, found_better_card, unhappy_with_rewards, simplifying_finances, negative_experience, other."
+    },
+    {
+      "id": "F025",
+      "statement": "Within the retention protocol, after closure eligibility is confirmed and no prior closure reason records exist for the account within the past year, if the closure reason is annual_fee and the customer has been a customer for 2+ years, the agent must offer to waive the annual fee for one year as a loyalty benefit."
+    },
+    {
+      "id": "F026",
+      "statement": "The annual fee waiver is applied with apply_credit_card_account_flag_6147 using credit_card_account_id, user_id, flag_type set to annual_fee_waived, expiration_date set to a date one year from today in MM/DD/YYYY format, and reason set to loyalty_benefit."
+    },
+    {
+      "id": "F027",
+      "statement": "Within the retention protocol, after closure eligibility is confirmed and no prior closure reason records exist for the account within the past year, if the closure reason is annual_fee and the customer has been a customer for less than 2 years, the agent must offer a permanent downgrade to a no-annual-fee card while preserving account history."
+    },
+    {
+      "id": "F028",
+      "statement": "Within the retention protocol, after closure eligibility is confirmed and no prior closure reason records exist for the account within the past year, if the closure reason is not_using_card, the agent must remind the customer of benefits they may be missing and suggest setting up a recurring subscription to keep the card active."
+    },
+    {
+      "id": "F029",
+      "statement": "Within the retention protocol, after closure eligibility is confirmed and no prior closure reason records exist for the account within the past year, if the closure reason is found_better_card, the agent must ask what features attracted the customer, and if Rho-Bank offers a card with similar or better benefits, offer to help the customer apply instead of closing the current account."
+    },
+    {
+      "id": "F030",
+      "statement": "Within the retention protocol, after closure eligibility is confirmed and no prior closure reason records exist for the account within the past year, if the closure reason is unhappy_with_rewards, the agent must check enrollment in available bonus categories and suggest ways to maximize rewards based on spending patterns."
+    },
+    {
+      "id": "F031",
+      "statement": "Within the retention protocol, after closure eligibility is confirmed and no prior closure reason records exist for the account within the past year, if the closure reason is negative_experience, the agent must apologize, gather details, escalate to a supervisor if warranted, and consider offering a modest goodwill credit for service-related complaints."
+    },
+    {
+      "id": "F032",
+      "statement": "Within the retention protocol, after closure eligibility is confirmed, no prior closure reason records exist for the account within the past year, the closure reason is asked and logged, the concern is addressed, and the customer still wants to close, the agent must make one retention offer based on the card tier."
+    },
+    {
+      "id": "F033",
+      "statement": "For entry-tier cards, the retention offer is 500 bonus points or a $5 statement credit."
+    },
+    {
+      "id": "F034",
+      "statement": "For mid-tier cards, the retention offer is 2,000 bonus points or a $20 statement credit."
+    },
+    {
+      "id": "F035",
+      "statement": "For premium and above cards, the retention offer is 5,000 bonus points or a $50 statement credit."
+    },
+    {
+      "id": "F036",
+      "statement": "If the customer declines a retention offer, the agent must thank them for being a Rho-Bank customer, proceed with closure, and not apply pressure."
+    },
+    {
+      "id": "F037",
+      "statement": "After closure eligibility is confirmed, if the customer was ineligible for retention due to prior closure reason records within the past year, the agent must thank them for being a Rho-Bank customer, proceed with closure, and not apply pressure."
+    },
+    {
+      "id": "F038",
+      "statement": "A downgrade must be offered in the retention-protocol scenario only after closure eligibility is confirmed, no prior closure reason records exist for the account within the past year, the customer wants to close due to annual fee concerns, and the customer has been a customer for less than 2 years."
+    },
+    {
+      "id": "F039",
+      "statement": "A downgrade must be offered when the customer explicitly asks to downgrade to avoid annual fees."
+    },
+    {
+      "id": "F040",
+      "statement": "The available no-annual-fee downgrade option for personal cards is Bronze Rewards Card."
+    },
+    {
+      "id": "F041",
+      "statement": "The available no-annual-fee downgrade option for business cards is Business Bronze Rewards Card."
+    },
+    {
+      "id": "F042",
+      "statement": "Customers may only downgrade within the same category: personal to personal or business to business."
+    },
+    {
+      "id": "F043",
+      "statement": "The ordered downgrade process is: verify the customer's identity, confirm that the customer wants to proceed and understands benefit changes, inform the customer that account history and credit line are preserved while rewards rates and benefits change to the new tier, then process the downgrade using downgrade_credit_card_3847."
+    },
+    {
+      "id": "F044",
+      "statement": "The downgrade process requires confirming that the customer wants to proceed and understands benefit changes."
+    },
+    {
+      "id": "F045",
+      "statement": "Before processing a downgrade, the agent must inform the customer that account history and credit line will be preserved and rewards rates and benefits will change to match the new tier."
+    },
+    {
+      "id": "F046",
+      "statement": "The downgrade process is completed using downgrade_credit_card_3847."
+    },
+    {
+      "id": "F047",
+      "statement": "downgrade_credit_card_3847 requires credit_card_account_id, user_id, and target_card_type; target_card_type must be Bronze Rewards Card for a personal downgrade or Business Bronze Rewards Card for a business downgrade."
+    },
+    {
+      "id": "F048",
+      "statement": "During a downgrade, the credit limit, account number, and account history are preserved."
+    },
+    {
+      "id": "F049",
+      "statement": "During a downgrade, unredeemed rewards points transfer at the same value."
+    },
+    {
+      "id": "F050",
+      "statement": "A downgrade takes effect immediately, and the customer continues using the existing physical card until the new card arrives, typically within several business days."
+    },
+    {
+      "id": "F051",
+      "statement": "If an annual fee was paid recently before a downgrade, the customer may be eligible for a prorated refund."
+    },
+    {
+      "id": "F052",
+      "statement": "When a customer needs to pay off their credit card balance using funds from their Rho-Bank checking account, the agent can process the payment directly."
+    },
+    {
+      "id": "F053",
+      "statement": "Processing a payoff from checking requires verifying the customer's identity using standard procedures."
+    },
+    {
+      "id": "F054",
+      "statement": "Processing a payoff from checking requires confirming that the customer has a Rho-Bank checking account with sufficient funds to cover the payment amount."
+    },
+    {
+      "id": "F055",
+      "statement": "Processing a payoff from checking requires looking up both the checking account and the credit card account to obtain account IDs and verify balances."
+    },
+    {
+      "id": "F056",
+      "statement": "The payoff-from-checking process order is: verify identity, look up the checking account to confirm sufficient funds, look up the credit card account to confirm the outstanding balance, confirm the payment amount with the customer and obtain authorization to transfer, unlock pay_credit_card_from_checking_9182, then call pay_credit_card_from_checking_9182."
+    },
+    {
+      "id": "F057",
+      "statement": "Before using pay_credit_card_from_checking_9182, the agent must confirm the payment amount with the customer and obtain authorization to transfer."
+    },
+    {
+      "id": "F058",
+      "statement": "The agent must use unlock_discoverable_agent_tool to enable pay_credit_card_from_checking_9182 for the session before calling the payoff tool."
+    },
+    {
+      "id": "F059",
+      "statement": "After unlocking pay_credit_card_from_checking_9182, the agent must call it using call_discoverable_agent_tool with the required arguments."
+    },
+    {
+      "id": "F060",
+      "statement": "pay_credit_card_from_checking_9182 requires user_id, checking_account_id, credit_card_account_id, and amount."
+    },
+    {
+      "id": "F061",
+      "statement": "The amount for pay_credit_card_from_checking_9182 must be positive and cannot exceed the checking account balance or the credit card outstanding balance."
+    },
+    {
+      "id": "F062",
+      "statement": "When calling pay_credit_card_from_checking_9182, the account IDs and user_id must match the authenticated customer and the amount must be authorized."
+    },
+    {
+      "id": "F063",
+      "statement": "pay_credit_card_from_checking_9182 debits the specified amount from the checking account and reduces the credit card balance by the same amount."
+    },
+    {
+      "id": "F064",
+      "statement": "The confirmation for pay_credit_card_from_checking_9182 includes the new balances for both the checking account and the credit card account."
+    },
+    {
+      "id": "F065",
+      "statement": "To check whether a credit card account has pending replacement card orders, the agent must use get_pending_replacement_orders_5765 with credit_card_account_id."
+    },
+    {
+      "id": "F066",
+      "statement": "Prerequisites for get_pending_replacement_orders_5765 are having the correct credit_card_account_id, permission to use the tool, and authentication to the internal environment where the tool is available."
+    },
+    {
+      "id": "F067",
+      "statement": "The get_pending_replacement_orders_5765 procedure is to locate the credit_card_account_id, invoke the tool with that parameter, review the response for outstanding replacement card orders, and document the result in the customer's case notes before proceeding with account closure steps."
+    },
+    {
+      "id": "F068",
+      "statement": "A successful get_pending_replacement_orders_5765 response contains orders as a collection of replacement order records or an empty collection if none are pending."
+    },
+    {
+      "id": "F069",
+      "statement": "Typical replacement order record fields are order_id, status, created_at, latest_event_at, and optional notes; example statuses are pending, shipped, delivered, and cancelled."
+    },
+    {
+      "id": "F070",
+      "statement": "If get_pending_replacement_orders_5765 returns an empty orders collection, there are no pending orders and the agent may proceed with standard account closure checks."
+    },
+    {
+      "id": "F071",
+      "statement": "If get_pending_replacement_orders_5765 returns one or more orders, the account must be treated as having pending replacement activity unless every order is clearly delivered or cancelled."
+    },
+    {
+      "id": "F072",
+      "statement": "If a replacement order blocks closure, the agent must not proceed with account closure until the replacement is delivered or the order is cancelled."
+    },
+    {
+      "id": "F073",
+      "statement": "For mixed replacement order statuses, if any order is in a non-final state such as pending or shipped, the account is blocked from closure."
+    },
+    {
+      "id": "F074",
+      "statement": "For mixed replacement order statuses, if all orders are final statuses of delivered or cancelled, the agent may proceed with standard closure checks."
+    },
+    {
+      "id": "F075",
+      "statement": "If replacement orders are pending, the agent must inform the relevant team that the account cannot be closed and must monitor until delivery or confirm cancellation of the order."
+    },
+    {
+      "id": "F076",
+      "statement": "If no replacement orders are pending, the agent must note the check outcome in the case record and continue with the closure process."
+    },
+    {
+      "id": "F077",
+      "statement": "If get_pending_replacement_orders_5765 has an invalid credit_card_account_id, the agent must re-verify that the identifier is account-level rather than card-level and confirm the identifier format and source."
+    },
+    {
+      "id": "F078",
+      "statement": "If get_pending_replacement_orders_5765 has a permission or access denied issue, the agent must ensure their role has access to run the tool and re-authenticate if the session may have expired."
+    },
+    {
+      "id": "F079",
+      "statement": "If get_pending_replacement_orders_5765 returns an empty or ambiguous response, the agent must retry the call and, if ambiguity persists, escalate to the support engineering queue with the call context and credit_card_account_id."
+    },
+    {
+      "id": "F080",
+      "statement": "The agent must run the pending replacement order check immediately before initiating any account closure workflow."
+    },
+    {
+      "id": "F081",
+      "statement": "Best practice is to record the timestamp and outcome of the pending replacement order check in the customer record."
+    },
+    {
+      "id": "F082",
+      "statement": "If multiple replacement orders appear, the agent must review each status and proceed only when all orders are delivered or cancelled."
+    },
+    {
+      "id": "F083",
+      "statement": "get_user_dispute_history_7291 retrieves a user's credit card dispute history, including dispute dates, statuses, and transaction details."
+    },
+    {
+      "id": "F084",
+      "statement": "Use get_user_dispute_history_7291 when a consolidated list of all credit card disputes filed by a specific user is needed, when reviewing current status or historical progression of a user's disputes, or when transaction-level context for each dispute is needed."
+    },
+    {
+      "id": "F085",
+      "statement": "get_user_dispute_history_7291 requires user_id, the user's canonical internal identifier; the agent should ensure the user_id is correct and current before making the call."
+    },
+    {
+      "id": "F086",
+      "statement": "The get_user_dispute_history_7291 procedure is to obtain the user_id, invoke the tool with user_id, and review the returned list of disputes and associated transaction details."
+    },
+    {
+      "id": "F087",
+      "statement": "The expected output of get_user_dispute_history_7291 is a list of dispute records for the specified user."
+    },
+    {
+      "id": "F088",
+      "statement": "Each dispute record from get_user_dispute_history_7291 includes dispute identifiers and metadata: dispute_id, dispute_date, status such as open, under_review, or closed, and last_updated_at."
+    },
+    {
+      "id": "F089",
+      "statement": "Each dispute record from get_user_dispute_history_7291 includes transaction details: transaction_id, transaction_date, merchant_name, amount, currency, and card_last4."
+    },
+    {
+      "id": "F090",
+      "statement": "Each dispute record from get_user_dispute_history_7291 may include additional dispute context if available: reason_code, outcome, and notes or internal comments."
+    },
+    {
+      "id": "F091",
+      "statement": "When interpreting get_user_dispute_history_7291 results, the agent must verify the list is complete for the queried user_id, use dispute_date and last_updated_at to understand timeline and recency, use status to determine whether action is needed, and review transaction details to confirm disputed transaction context."
+    },
+    {
+      "id": "F092",
+      "statement": "If get_user_dispute_history_7291 returns an empty result set, the user has not filed any credit card disputes or the user_id is incorrect; the agent must confirm the user_id and try again."
+    },
+    {
+      "id": "F093",
+      "statement": "If get_user_dispute_history_7291 has a permission or access error, the agent must ensure they have the necessary internal privileges to view dispute histories."
+    },
+    {
+      "id": "F094",
+      "statement": "If get_user_dispute_history_7291 has an invalid or malformed user_id, the agent must validate the user_id format and reissue the request."
+    },
+    {
+      "id": "F095",
+      "statement": "If get_user_dispute_history_7291 returns partial or truncated data, the agent must retry the call and, if the issue persists, capture the request context and escalate through internal support channels."
+    },
+    {
+      "id": "F096",
+      "statement": "get_user_dispute_history_7291 returns only credit card disputes associated with the specified user_id."
+    },
+    {
+      "id": "F097",
+      "statement": "User data from get_user_dispute_history_7291 must always be handled in accordance with internal data handling and privacy requirements."
+    },
+    {
+      "id": "F098",
+      "statement": "When an agent needs to apply a statement credit for goodwill adjustments, promotional credits, fee reversals, or other account credits, the agent must use apply_statement_credit_8472."
+    },
+    {
+      "id": "F099",
+      "statement": "Before calling apply_statement_credit_8472, the agent must unlock the tool using unlock_discoverable_agent_tool, then call it using call_discoverable_agent_tool with the tool name and a JSON string containing all required arguments."
+    },
+    {
+      "id": "F100",
+      "statement": "The statement credit process is: unlock apply_statement_credit_8472, prepare the arguments JSON with all required fields exactly as specified, call apply_statement_credit_8472 using call_discoverable_agent_tool with the JSON string, and confirm the result."
+    },
+    {
+      "id": "F101",
+      "statement": "apply_statement_credit_8472 requires user_id, the customer's unique user identifier in the system."
+    },
+    {
+      "id": "F102",
+      "statement": "apply_statement_credit_8472 requires credit_card_account_id, the credit card account ID to apply the credit to, which can be found by calling get_credit_card_accounts_by_user."
+    },
+    {
+      "id": "F103",
+      "statement": "apply_statement_credit_8472 requires amount, a positive number in dollars, such as 25.00 for a $25 credit."
+    },
+    {
+      "id": "F104",
+      "statement": "apply_statement_credit_8472 requires reason exactly one of: goodwill_adjustment for a one-time courtesy credit for customer satisfaction, promotional_credit for a promotional offer or campaign, annual_fee_reversal for reversal of an annual fee charge, late_fee_reversal for reversal of a late payment fee, interest_charge_reversal for reversal of interest charges, dispute_resolution for credit issued as part of dispute resolution, price_match for a price match guarantee, retention_offer for credit offered to retain a customer, error_correction to correct a billing error, or other for reasons not covered above."
+    },
+    {
+      "id": "F105",
+      "statement": "After apply_statement_credit_8472 is called, the agent must verify that the credit appears as a negative transaction in the customer's credit card transaction history and reduces the statement balance."
+    },
+    {
+      "id": "F106",
+      "statement": "For the Platinum Rewards Card, the customer should activate the card as soon as it arrives and add it to a digital wallet for immediate use."
+    },
+    {
+      "id": "F107",
+      "statement": "For the Platinum Rewards Card, the customer should set up account alerts for transactions, payments, and unusual activity."
+    },
+    {
+      "id": "F108",
+      "statement": "For the Platinum Rewards Card, the purchase APR is 16.99% variable, and the customer should review it in account details before the first transaction."
+    },
+    {
+      "id": "F109",
+      "statement": "For the Platinum Rewards Card, typical approved credit limits range from $25,000 to $150,000, and the exact limit appears in the approval details."
+    },
+    {
+      "id": "F110",
+      "statement": "For the Platinum Rewards Card, autopay options are minimum due, statement balance, or custom amount, and choosing an autopay option helps avoid interest and fees."
+    },
+    {
+      "id": "F111",
+      "statement": "For the Platinum Rewards Card, the minimum monthly payment is 2.5% of the outstanding balance."
+    },
+    {
+      "id": "F112",
+      "statement": "For the Platinum Rewards Card, a late payment triggers a fee of $32.50, and the customer should set due-date reminders to stay on track."
+    },
+    {
+      "id": "F113",
+      "statement": "For the Platinum Rewards Card, the annual fee is $200.00."
+    },
+    {
+      "id": "F114",
+      "statement": "For the Platinum Rewards Card, the foreign transaction fee is 0% on international purchases."
+    },
+    {
+      "id": "F115",
+      "statement": "For the Platinum Rewards Card, free virtual cards are included and can be used to protect the primary card number for online purchases."
+    },
+    {
+      "id": "F116",
+      "statement": "For the Platinum Rewards Card, virtual card management is available in the account, including creating, pausing, or deleting virtual card numbers."
+    },
+    {
+      "id": "F117",
+      "statement": "For the Platinum Rewards Card first-purchases checklist, the customer should confirm billing address and contact details are current, enroll in alerts and autopay, add the card to frequently used merchants and services, and use virtual cards for new online merchants to reduce exposure."
+    },
+    {
+      "id": "F118",
+      "statement": "For the Platinum Rewards Card, if the customer is still applying, the minimum credit score required is $750."
+    },
+    {
+      "id": "F119",
+      "statement": "For the Platinum Rewards Card rewards rules, the customer earns 10.0% cash back on all eligible purchases."
+    },
+    {
+      "id": "F120",
+      "statement": "For the Platinum Rewards Card rewards rules, returns or credits reduce previously earned rewards on a per-transaction basis."
+    },
+    {
+      "id": "F121",
+      "statement": "For the Platinum Rewards Card rewards rules, eligible transactions are point-of-sale and online purchases posted to the account."
+    },
+    {
+      "id": "F122",
+      "statement": "For the Platinum Rewards Card rewards rules, cash advances, balance transfers, fees, interest, and other cash-equivalent transactions are not eligible."
+    },
+    {
+      "id": "F123",
+      "statement": "For the Platinum Rewards Card rewards rules, rewards accrue when transactions post to the account and typically become available after the purchase posts and clears any return window."
+    },
+    {
+      "id": "F124",
+      "statement": "For the Platinum Rewards Card rewards rules, the customer can redeem once the available rewards balance reaches at least $15."
+    },
+    {
+      "id": "F125",
+      "statement": "For the Platinum Rewards Card rewards rules, common redemption options include statement credits or other available channels in the account dashboard."
+    },
+    {
+      "id": "F126",
+      "statement": "For the Platinum Rewards Card rewards rules, tips to maximize earnings are using the card for everyday spend to capture 10.0% on all categories, setting the card as the default payment at frequently used merchants, and considering net rewards after the $200.00 annual fee when planning large purchases."
+    },
+    {
+      "id": "F127",
+      "statement": "For the Business Platinum Rewards Card, the standard annual fee is $450.00."
+    },
+    {
+      "id": "F128",
+      "statement": "For the Business Platinum Rewards Card, the first-year promotional annual fee is 0."
+    },
+    {
+      "id": "F129",
+      "statement": "For the Business Platinum Rewards Card, airport lounge visits are unlimited."
+    },
+    {
+      "id": "F130",
+      "statement": "For the Business Platinum Rewards Card, annual travel credits are $400."
+    },
+    {
+      "id": "F131",
+      "statement": "For the Business Platinum Rewards Card, the travel insurance maximum per trip is $62,500."
+    },
+    {
+      "id": "F132",
+      "statement": "For the Business Platinum Rewards Card, the purchase protection maximum per claim is $17,500."
+    },
+    {
+      "id": "F133",
+      "statement": "For the Business Platinum Rewards Card, the foreign transaction fee on international purchases is 0%."
+    },
+    {
+      "id": "F134",
+      "statement": "For the Business Platinum Rewards Card, a dedicated account manager is assigned."
+    },
+    {
+      "id": "F135",
+      "statement": "For the Business Platinum Rewards Card, the annual fee is billed to the account and renews automatically unless the account is closed before renewal."
+    },
+    {
+      "id": "F136",
+      "statement": "For the Business Platinum Rewards Card, if the promotional first-year fee applies, the first statement will reflect 0 for that period."
+    },
+    {
+      "id": "F137",
+      "statement": "For the Business Platinum Rewards Card, the customer should enroll eligible travel services early to use $400."
+    },
+    {
+      "id": "F138",
+      "statement": "For the Business Platinum Rewards Card, the customer should add traveler and loyalty details to streamline lounge access and insurance eligibility."
+    },
+    {
+      "id": "F139",
+      "statement": "For the Business Platinum Rewards Card, the customer should use the card for covered purchases to activate benefits tied to $17,500 and $62,500."
+    },
+    {
+      "id": "F140",
+      "statement": "For the Business Platinum Rewards Card new customer first-year fee waiver, the offer start date is 2025-11-01."
+    },
+    {
+      "id": "F141",
+      "statement": "For the Business Platinum Rewards Card new customer first-year fee waiver, the offer end date is 2026-02-28."
+    },
+    {
+      "id": "F142",
+      "statement": "For the Business Platinum Rewards Card new customer first-year fee waiver, the first-year annual fee for new customers is 0, and after the first year the standard annual fee applies: $450.00."
+    },
+    {
+      "id": "F143",
+      "statement": "For the Business Platinum Rewards Card new customer first-year fee waiver, the fee waiver is reflected on the account during the first year of membership only for new customers opening new accounts within the promotion dates, and the account must remain open and in good standing to retain the waived first-year fee."
+    },
+    {
+      "id": "F144",
+      "statement": "For the Business Platinum Rewards Card new customer first-year fee waiver, if the customer upgrades or changes products during the promotional period, the waiver continues only if the account remains eligible."
+    },
+    {
+      "id": "F145",
+      "statement": "The Business Platinum Rewards Card new customer first-year fee waiver is for new customers only and applies to new accounts opened within the promotion window."
+    },
+    {
+      "id": "F146",
+      "statement": "To retain the Business Platinum Rewards Card waived first-year fee, the account must remain open and in good standing."
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "description": "Eligible closure request for a premium-or-above card where the customer cites annual_fee, has been a customer for 2+ years, has no blockers, has no prior closure reason record in the past year, receives the one-year annual fee waiver offer, still wants to close, receives the premium retention offer, declines it, and closure proceeds with required reminders and closure tooling.",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F021",
+        "F022",
+        "F023",
+        "F024",
+        "F025",
+        "F026",
+        "F032",
+        "F035",
+        "F036"
+      ]
+    },
+    {
+      "id": "B",
+      "description": "Closure request blocked at the first retention pre-closure check because dispute history shows an active or pending credit card dispute; case records include the dispute-history tool procedure, output interpretation, troubleshooting, and privacy handling.",
+      "included_fact_ids": [
+        "F004",
+        "F011",
+        "F012",
+        "F013",
+        "F017",
+        "F083",
+        "F084",
+        "F085",
+        "F086",
+        "F087",
+        "F088",
+        "F089",
+        "F090",
+        "F091",
+        "F092",
+        "F093",
+        "F094",
+        "F095",
+        "F096",
+        "F097"
+      ]
+    },
+    {
+      "id": "C",
+      "description": "Closure request blocked at the second retention pre-closure check because pending replacement card activity is found; case records include pending-replacement tool prerequisites, response statuses, mixed-status handling, required notes, best practices, and troubleshooting.",
+      "included_fact_ids": [
+        "F006",
+        "F012",
+        "F014",
+        "F017",
+        "F065",
+        "F066",
+        "F067",
+        "F068",
+        "F069",
+        "F070",
+        "F071",
+        "F072",
+        "F073",
+        "F074",
+        "F075",
+        "F076",
+        "F077",
+        "F078",
+        "F079",
+        "F080",
+        "F081",
+        "F082"
+      ]
+    },
+    {
+      "id": "D",
+      "description": "Closure request blocked at the third retention pre-closure check because the credit card account has been open for less than 60 days; the case demonstrates that retention offers are not made when this blocker is present.",
+      "included_fact_ids": [
+        "F005",
+        "F012",
+        "F015",
+        "F017"
+      ]
+    },
+    {
+      "id": "E",
+      "description": "Closure request reaches the fourth retention pre-closure check with an outstanding balance; customer uses a Rho-Bank checking account with sufficient funds to make an authorized credit card payment through the distinct payoff-from-checking discoverable tool.",
+      "included_fact_ids": [
+        "F003",
+        "F012",
+        "F016",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F057",
+        "F058",
+        "F059",
+        "F060",
+        "F061",
+        "F062",
+        "F063",
+        "F064"
+      ]
+    },
+    {
+      "id": "F",
+      "description": "Eligible closure request where get_closure_reason_history_8293 finds a prior closure reason record for the same credit card account within the past year; retention is skipped and the case proceeds directly to closure without pressure.",
+      "included_fact_ids": [
+        "F002",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F018",
+        "F019",
+        "F020",
+        "F037"
+      ]
+    },
+    {
+      "id": "G",
+      "description": "Annual-fee closure concern where the customer has been a customer for less than 2 years and holds a personal card; the case demonstrates the downgrade offer to the personal no-annual-fee Bronze Rewards Card and all downgrade disclosures and tooling.",
+      "included_fact_ids": [
+        "F027",
+        "F038",
+        "F040",
+        "F042",
+        "F043",
+        "F044",
+        "F045",
+        "F046",
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051"
+      ]
+    },
+    {
+      "id": "H",
+      "description": "Customer explicitly asks to downgrade a business credit card to avoid annual fees; the case demonstrates same-category business downgrade eligibility, Business Bronze Rewards Card target type, and all downgrade disclosures and tooling.",
+      "included_fact_ids": [
+        "F039",
+        "F041",
+        "F042",
+        "F043",
+        "F044",
+        "F045",
+        "F046",
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051"
+      ]
+    },
+    {
+      "id": "I",
+      "description": "Eligible closure request where the logged reason is not_using_card; the case demonstrates the tailored usage-retention response and an entry-tier retention offer after the customer still wants to close.",
+      "included_fact_ids": [
+        "F021",
+        "F022",
+        "F023",
+        "F024",
+        "F028",
+        "F032",
+        "F033",
+        "F036"
+      ]
+    },
+    {
+      "id": "J",
+      "description": "Eligible closure request where the logged reason is found_better_card; the case demonstrates asking about attractive features, conditionally offering help applying for a similar-or-better Rho-Bank card, and a mid-tier retention offer if the customer still wants to close.",
+      "included_fact_ids": [
+        "F029",
+        "F032",
+        "F034",
+        "F036"
+      ]
+    },
+    {
+      "id": "K",
+      "description": "Eligible closure request where the logged reason is unhappy_with_rewards; the case demonstrates checking bonus-category enrollment, giving rewards-maximization guidance, and a premium-and-above retention offer if the customer still wants to close.",
+      "included_fact_ids": [
+        "F030",
+        "F032",
+        "F035",
+        "F036"
+      ]
+    },
+    {
+      "id": "L",
+      "description": "Eligible closure or retention case where the logged reason is negative_experience and the service-related complaint warrants consideration of a goodwill statement credit; the case demonstrates the statement-credit discoverable tool as distinct from the payoff tool and includes all reason-enum constraints.",
+      "included_fact_ids": [
+        "F031",
+        "F098",
+        "F099",
+        "F100",
+        "F101",
+        "F102",
+        "F103",
+        "F104",
+        "F105"
+      ]
+    },
+    {
+      "id": "M",
+      "description": "Platinum Rewards Card informational case covering activation, setup, APR, limits, payments, fees, virtual cards, first-purchase checklist, and minimum credit score requirement.",
+      "included_fact_ids": [
+        "F106",
+        "F107",
+        "F108",
+        "F109",
+        "F110",
+        "F111",
+        "F112",
+        "F113",
+        "F114",
+        "F115",
+        "F116",
+        "F117",
+        "F118"
+      ]
+    },
+    {
+      "id": "N",
+      "description": "Platinum Rewards Card rewards informational case covering eligible earning rate, reductions for returns or credits, excluded transactions, posting timeline, redemption threshold, redemption options, and earnings tips.",
+      "included_fact_ids": [
+        "F119",
+        "F120",
+        "F121",
+        "F122",
+        "F123",
+        "F124",
+        "F125",
+        "F126"
+      ]
+    },
+    {
+      "id": "O",
+      "description": "Business Platinum Rewards Card informational case covering standard and promotional annual fee structure, premium perks, automatic renewal unless closed before renewal, first statement promotional fee handling, and perk-use guidance.",
+      "included_fact_ids": [
+        "F127",
+        "F128",
+        "F129",
+        "F130",
+        "F131",
+        "F132",
+        "F133",
+        "F134",
+        "F135",
+        "F136",
+        "F137",
+        "F138",
+        "F139"
+      ]
+    },
+    {
+      "id": "P",
+      "description": "Business Platinum Rewards Card new-customer first-year fee waiver case covering promotion dates, first-year and post-first-year fees, new-customer and new-account eligibility, product-change constraint, and good-standing requirement.",
+      "included_fact_ids": [
+        "F140",
+        "F141",
+        "F142",
+        "F143",
+        "F144",
+        "F145",
+        "F146"
+      ]
+    }
+  ]
+}

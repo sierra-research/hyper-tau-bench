@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1760">
+<title>Business savings eligibility - working board</title><style>
+*{box-sizing:border-box} html,body{margin:0;width:1760px;height:1280px;overflow:hidden}
+body{background:#e9edf0;color:#172431;font-family:Arial,Helvetica,sans-serif}
+.sheet{position:relative;width:1712px;height:1232px;margin:24px;background:#fff;border:1px solid #9ba7b1}
+.frame-label{position:absolute;left:-1px;top:-1px;background:#18232d;color:#fff;padding:7px 16px;font-size:12px;font-weight:800;letter-spacing:.3px}
+header{height:154px;margin:0 38px;border-bottom:2px solid #243746;padding:37px 0 18px;display:flex;justify-content:space-between;align-items:flex-start}
+.eyebrow{font-size:13px;font-weight:800;color:#5a6874;letter-spacing:.6px;margin-bottom:10px}
+h1{font-size:36px;line-height:1.06;margin:0 0 10px;letter-spacing:-.4px} .subtitle{font-size:14px;color:#5f6e79}
+.header-meta{display:flex;gap:12px;align-items:flex-start}
+.version{border:1px solid #b6c0c8;padding:10px 13px;font-size:11px;color:#52606b;line-height:1.35}
+.diagram{position:absolute;left:38px;top:174px;width:1636px;height:690px}
+.phase{position:absolute;border:1px solid #9da8b2;background:#fbfcfd;z-index:0}
+.phase.retired-zone{border-style:dashed;background:repeating-linear-gradient(135deg,#fbfaf7,#fbfaf7 12px,#f3f0e8 12px,#f3f0e8 24px)}
+.phase.current-zone{background:#f7fbf8;border-color:#84a98f}
+.phase>span{position:absolute;left:-1px;top:-21px;height:21px;background:#505b65;color:white;padding:5px 10px;font-size:10px;font-weight:800;letter-spacing:.3px}
+.phase.retired-zone>span{background:#8e6d19} .phase.current-zone>span{background:#207044}
+svg{position:absolute;inset:0;width:1636px;height:690px;z-index:1;overflow:visible}
+path{fill:none;stroke:#205d8f;stroke-width:2.2;marker-end:url(#arrow)}
+path.loop{stroke:#8b98a4;stroke-dasharray:6 5;marker-end:url(#arrow-gray)}
+path.reject{stroke:#b74242;stroke-dasharray:5 4;marker-end:url(#arrow-red)}
+path.history-edge{stroke:#9c8242;stroke-dasharray:4 5;marker-end:url(#arrow-gold)}
+.node{position:absolute;z-index:3;border:1.5px solid #1f2a33;background:white;padding:10px 12px;display:flex;flex-direction:column;justify-content:center;text-align:center;font-size:11px;line-height:1.25}
+.node small{display:block;margin-bottom:5px;color:#26618b;font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase}
+.node strong{font-size:12px;line-height:1.2} .node p{margin:5px 0 0;color:#4e5b65;font-size:10px;line-height:1.25}
+.node.start{border-color:#2f8c4a;background:#eef8ef;border-radius:28px}
+.node.terminal{border-radius:28px;background:#f1f5f7}
+.node.stop{border-color:#c83e3e;background:#fff1ef;border-radius:5px}
+.node.system{border-color:#6e8ca4;background:#edf5fb;text-align:left;font-family:"Courier New",monospace;overflow-wrap:anywhere}
+.node.system strong{font-size:11px;overflow-wrap:anywhere}
+.node.dialogue{background:#f5f0ff;border-color:#7c68a7;border-radius:5px 5px 20px 5px}
+.node.handoff{background:#eef7f1;border-color:#418357;border-radius:4px}
+.node.retired{border-style:dashed;border-color:#9e8a61;background:#f7f4ec;color:#685f50}
+.node.rejected{border:2px solid #bf3838;background:#fff0f0;color:#7b2525}
+.node.decision{padding:0;border:none;background:transparent;transform:rotate(45deg)}
+.node.decision:before{content:"";position:absolute;inset:0;border:1.5px solid #347447;background:#fbfffb}
+.node.decision.reject-decision:before{border-color:#be3b3b;background:#fff7f7}
+.decision-content{position:absolute;inset:15px;z-index:1;transform:rotate(-45deg);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.decision-content small{margin:0 0 4px} .decision-content strong{font-size:11px;line-height:1.08} .decision-content p{font-size:8px;line-height:1.12;margin:3px 0 0}
+.edge-label{position:absolute;z-index:4;background:#fff;padding:1px 4px;color:#315a78;font-size:9px;font-weight:800}
+.sticky{position:absolute;z-index:5;padding:10px 11px;box-shadow:0 2px 5px #0003;transform:rotate(-.7deg);font-size:9.5px;line-height:1.3}
+.sticky.yellow{background:#fff098} .sticky.green{background:#c8f2d2} .sticky.blue{background:#cce5fa} .sticky.red{background:#ffd1d1}
+.sticky b{font-size:9.5px} .sticky p{margin:5px 0 7px} .sticky em{display:block;text-align:right;font-size:8px;color:#59636a}
+.control-definitions{position:absolute;left:38px;right:38px;bottom:34px;height:300px;border:1px solid #8d9aa4;background:#fafbfc;padding:26px 16px 12px}
+.control-definitions h2,.history h2{position:absolute;left:-1px;top:-21px;margin:0;background:#18232d;color:white;padding:5px 12px;font-size:10px;letter-spacing:.3px}
+.control-definitions>div{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 12px;align-content:start;height:100%}
+.control-definitions article{border-left:3px solid #2975a6;padding:5px 8px;display:grid;grid-template-columns:38px 1fr;gap:7px;align-content:start}
+.control-definitions article b{font-size:10px;color:#225a81} .control-definitions article p{font-size:9.5px;line-height:1.25;margin:0;color:#37434c}
+.history{position:absolute;left:38px;right:38px;bottom:34px;height:240px;border:1px solid #9a8c67;background:#fbfaf7;padding:20px 14px}
+.history article{position:absolute;top:27px;height:184px;border:1px dashed #9b8f72;background:#f6f3ec;padding:11px}
+.history article b{display:inline-block;background:#496578;color:#fff;padding:4px 7px;font-size:9px;letter-spacing:.3px}
+.history article.history-current b{background:#207044}
+.history article small{float:right;color:#6d6558;font-size:9px;padding-top:4px} .history article p{font-size:9.5px;line-height:1.35;color:#5b554c}
+.watermark{position:absolute;right:42px;bottom:12px;color:#8a949b;font-size:9px}
+</style></head><body><main class="sheet"><div class="frame-label">FRAME 4 · WORKING BOARD SAV-ELG-02</div>
+<header><div><div class="eyebrow">RHO BANK · DEPOSIT PRODUCTS · SAVINGS OPERATIONS</div><h1>Business savings eligibility - working board</h1><div class="subtitle">Working-session map of the savings eligibility screen; the gate lines drawn here are discussion values from the walkthrough sessions.</div></div>
+<div class="header-meta"><div class="version">Owner: Process Operations working group · T. Nguyen<br>Updated: 2025-10-24<br>Ref: SAV-ELG-02 · v0.6</div></div></header>
+<section class="diagram"><section class='phase ' style='left:12px;top:48px;width:760px;height:600px'><span>WALKTHROUGH</span></section><section class='phase ' style='left:792px;top:48px;width:832px;height:600px'><span>GATES UNDER DISCUSSION</span></section><svg viewBox="0 0 1636 690" aria-hidden="true"><defs>
+<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#205d8f"/></marker>
+<marker id="arrow-gray" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#8b98a4"/></marker>
+<marker id="arrow-red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#b74242"/></marker>
+<marker id="arrow-gold" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#9c8242"/></marker></defs><path class='flow' d='M225 149 H270'/><path class='flow' d='M365 197 V240 H100 V435'/><path class='flow' d='M250 515 V520'/><path class='flow' d='M460 151 H510'/><path class='flow' d='M720 151 H820'/><path class='flow' d='M950 155 H1020'/><path class='flow' d='M1150 155 H1220'/><path class='flow' d='M1350 155 H1420'/><path class='flow' d='M885 220 V340'/><path class='flow' d='M1085 220 V290 H960 V340'/><path class='flow' d='M1285 220 V300 H1000 V340'/><path class='flow' d='M1550 155 H1590 V300 H1055 V340'/><path class='flow' d='M1485 220 V340'/><path class='loop' d='M1250 520 V430 H1345'/></svg><span class='edge-label' style='left:958px;top:138px'>OK</span><span class='edge-label' style='left:1158px;top:138px'>OK</span><span class='edge-label' style='left:893px;top:270px'>NO</span><span class='edge-label' style='left:1092px;top:262px'>SHORT</span><span class='edge-label' style='left:1292px;top:262px'>LIGHT</span><span class='edge-label' style='left:1560px;top:230px'>OVER</span><span class='edge-label' style='left:1493px;top:270px'>CLEAR</span><article id='start' class='node start' style='left:40px;top:110px;width:185px;height:78px'><strong>Eligibility walkthrough</strong><p>Savings desk working session</p></article><article id='caller' class='node dialogue' style='left:270px;top:105px;width:190px;height:92px'><strong>Confirm the caller</strong><p>Method not pinned down yet</p></article><article id='pull' class='node system' style='left:510px;top:102px;width:210px;height:98px'><small>TOOLING TBD</small><strong>PULL THE ACCOUNT LIST</strong><p>TODO - confirm which read returns tenure and balance in one call</p></article><article id='has-checking' class='node decision' style='left:820px;top:90px;width:130px;height:130px'><div class='decision-content'><strong>Business checking on file?</strong><p>gate A · discussion value</p></div></article><article id='tenure' class='node decision' style='left:1020px;top:90px;width:130px;height:130px'><div class='decision-content'><strong>Open at least 21 days?</strong><p>gate B · tenure line</p></div></article><article id='balance' class='node decision' style='left:1220px;top:90px;width:130px;height:130px'><div class='decision-content'><strong>Balance at least $2,000?</strong><p>gate C · balance line</p></div></article><article id='count' class='node decision' style='left:1420px;top:90px;width:130px;height:130px'><div class='decision-content'><strong>Under the savings-account cap?</strong><p>gate D · threshold TBD</p></div></article><article id='park' class='node terminal' style='left:860px;top:340px;width:220px;height:84px'><strong>Park the request</strong><p>Customer wording unwritten</p></article><article id='looks-eligible' class='node terminal' style='left:1280px;top:340px;width:250px;height:90px'><strong>Looks eligible</strong><p>Hand to the opening walkthrough</p></article><article id='todo-negative' class='node system' style='left:1100px;top:520px;width:300px;height:90px'><small>STUB</small><strong>OPEN ITEM - RELATIONSHIP SCREEN</strong><p>Do we screen the rest of the relationship here? Parked for the next session</p></article><article id='notes-capture' class='node system' style='left:60px;top:435px;width:230px;height:80px'><small>STUB</small><strong>CALLER NOTES</strong><p>Session habit - paste what the caller says into the intake note before any gate runs</p></article><article id='open-questions' class='node system' style='left:200px;top:520px;width:320px;height:90px'><small>STUB</small><strong>OPEN QUESTIONS FOR REVIEW</strong><p>Which gate order is cheapest on one lookup? Does the count check need its own read?</p></article><aside class='sticky green' style='left:60px;top:300px;width:190px'><b>TODO</b><p>Caller-confirmation method is a placeholder - borrow from the deposit desk script once ops signs it.</p><em>T.N. · 10/24</em></aside><aside class='sticky yellow' style='left:300px;top:300px;width:240px'><b>WHERE DID 21 COME FROM?</b><p>Carried over from the checking promo screen. Pricing wants to sanity-check the tenure line against real funding behavior before anything ships.</p><em>savings desk workshop · 10/03</em></aside><aside class='sticky blue' style='left:300px;top:470px;width:240px'><b>BALANCE LINE</b><p>The $2,000 figure is a working number from the same screen; nobody has defended it yet.</p><em>M. Bell scribbled this · 10/24</em></aside><aside class='sticky red' style='left:620px;top:430px;width:220px'><b>CAP STILL UNNUMBERED</b><p>Product owes us the savings-account cap before gate D means anything.</p><em>working session · 10/24</em></aside></section>
+<section class='history'><h2>WORKSHOP RECORD</h2><article class='' style='left:20px;width:300px'><b>CONCEPT</b><small>2025-09-12</small><p>Sketch a one-screen eligibility walk for the savings desk.</p></article><article class='' style='left:340px;width:300px'><b>WORKSHOP</b><small>2025-10-03</small><p>Walk the draft gates against five sample business relationships.</p></article><article class='' style='left:660px;width:300px'><b>OPEN QUESTIONS</b><small>2025-10-24</small><p>Tenure and balance lines flagged for a pricing sanity check; the account cap is still unnumbered.</p></article><article class='' style='left:980px;width:570px'><b>RECORDS HANDOFF</b><small>2025-11-14</small><p>Diagram reference registered as SAV-ELG-02 in the deposit operating records index.</p></article></section><div class="watermark">Internal working material · not customer-facing · SAV-ELG-02 · v0.6</div></main></body></html>

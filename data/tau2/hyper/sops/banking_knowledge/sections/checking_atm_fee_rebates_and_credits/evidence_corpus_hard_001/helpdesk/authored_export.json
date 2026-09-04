@@ -1,0 +1,473 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "Rho Helpdesk",
+    "account": "rho-bank-consumer-and-business",
+    "workspace": "deposit-servicing",
+    "environment": "production",
+    "exported_at": "2025-11-12T11:20:00-05:00",
+    "timezone": "America/New_York",
+    "export_version": "2025.46",
+    "requested_by": "darnell.reeves@rhobank.com"
+  },
+  "cover_email": "From: Helpdesk Administration <helpdesk-admin@rhobank.com>\nTo: Darnell Reeves <darnell.reeves@rhobank.com>\nDate: Wed, 12 Nov 2025 11:34:52 -0500\nSubject: deposit-servicing workspace export (2025.46)\nMessage-ID: <hd-export-2025-46-depositservicing@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nDarnell,\n\nHere is the production snapshot of the deposit-servicing workspace you asked for before the enablement refresh — macros, triggers, guards, fields, SLAs, and views, complete as of late this morning. Disabled and draft objects ship with their status flags rather than being filtered, so the old batch-credit pair will be in the macro list; it has been off since late October and stays in the export for history.\n\nStill open on our side: the locator feedback follow-up macro is mid-edit (flagged draft), and the retired batch group is still visible in the group picklist until the next field-cleanup pass runs. If the enablement material references either, worth a caveat.\n\nShout if you want the same cut for the card workspaces.\n\nHelpdesk Administration",
+  "macros": [
+    {
+      "macro_id": "MAC-5210",
+      "name": "Checking credit — apply via integration action",
+      "description": "Applies a checking-account credit through the deposits integration action apply_checking_account_credit_5829, which adds a credit transaction to a checking account. Eligibility, circumstance, and amount policy live in the operations records; this macro is the application step only.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-06-30",
+      "updated_at": "2025-10-28",
+      "usage_30d": 118,
+      "usage_90d": 384,
+      "superseded_by": null,
+      "steps": [
+        "Set ticket type = checking_credit_request",
+        "Invoke integration action apply_checking_account_credit_5829 with account_id (the checking account ID to credit), amount, and credit_type",
+        "Attach the case reference and correction worksheet to the ticket",
+        "Verify the expected outcome: a credit transaction is added to the checking account and the account balance is updated",
+        "Set status = solved-pending-close"
+      ]
+    },
+    {
+      "macro_id": "MAC-4988",
+      "name": "Checking credit — batch apply, second credit same interaction (LEGACY)",
+      "description": "Legacy two-step flow that applied a second credit to the same checking account within a single interaction. Disabled 2025-10-28 with TRG-4055; retained for audit history.",
+      "active": false,
+      "environment": "production",
+      "status": "disabled_legacy",
+      "effective_at": "2025-06-30",
+      "updated_at": "2025-10-28",
+      "usage_30d": 0,
+      "usage_90d": 7,
+      "superseded_by": "MAC-5210",
+      "steps": [
+        "Set ticket type = checking_credit_request",
+        "Invoke integration action apply_checking_account_credit_5829 (first correction)",
+        "Invoke integration action apply_checking_account_credit_5829 (second correction, same interaction — retired behavior)",
+        "Set status = solved-pending-close"
+      ]
+    },
+    {
+      "macro_id": "MAC-5103",
+      "name": "Address change — verified request",
+      "description": "Applies a verified mailing-address change and sends the confirmation reply with the effective-date wording branch staff reuse in secure messages.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2024-05-13",
+      "updated_at": "2025-08-11",
+      "usage_30d": 236,
+      "usage_90d": 705,
+      "superseded_by": null,
+      "steps": [
+        "Set ticket type = address_change",
+        "Update the profile mailing address via the profile-update integration action",
+        "Insert address-change confirmation reply (effective-date wording)",
+        "Set status = solved-pending-close"
+      ]
+    },
+    {
+      "macro_id": "MAC-5150",
+      "name": "Debit card reissue — lost or damaged",
+      "description": "Orders a replacement debit card and sets the delivery-tracking fields.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2024-09-22",
+      "updated_at": "2025-10-06",
+      "usage_30d": 174,
+      "usage_90d": 512,
+      "superseded_by": null,
+      "steps": [
+        "Set ticket type = card_reissue",
+        "Order replacement via the card-services integration action",
+        "Insert reissue reply with delivery placeholder",
+        "Set tag = reissue",
+        "Set status = pending-customer"
+      ]
+    },
+    {
+      "macro_id": "MAC-5131",
+      "name": "ATM receipt / statement copy request",
+      "description": "Long-form instructions for pulling ATM receipts and statement copies, including the mail-request fallback for accounts without digital documents. Kept long because branch staff paste it into secure messages verbatim.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2024-03-04",
+      "updated_at": "2025-07-21",
+      "usage_30d": 19,
+      "usage_90d": 64,
+      "superseded_by": null,
+      "steps": [
+        "Set ticket type = document_request",
+        "Insert receipt/statement copy instructions (digital path plus mail-request fallback)",
+        "Set status = pending-customer"
+      ]
+    },
+    {
+      "macro_id": "MAC-5230",
+      "name": "Locator feedback follow-up (draft)",
+      "description": "Draft reply for customers reporting stale ATM locator entries; copy waiting on the vendor-fix timeline before it goes live.",
+      "active": false,
+      "environment": "production",
+      "status": "draft",
+      "effective_at": null,
+      "updated_at": "2025-11-06",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": null,
+      "steps": [
+        "Insert locator feedback acknowledgement (draft copy v3)",
+        "Set tag = atm-locator"
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "TRG-4102",
+      "name": "Guard: credit amount must be positive",
+      "description": "Validation guard on the checking-credit integration action; blocks submissions that fail the amount contract.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 2,
+      "effective_at": "2025-06-30",
+      "updated_at": "2025-06-30",
+      "usage_30d": 6,
+      "conditions": [
+        "integration action = apply_checking_account_credit_5829 submitted",
+        "amount <= 0"
+      ],
+      "actions": [
+        "reject submission — the amount must be a positive dollar amount greater than 0",
+        "notify submitting agent with the validation message"
+      ]
+    },
+    {
+      "trigger_id": "TRG-4055",
+      "name": "Enable second credit step (RETIRED)",
+      "description": "Permitted MAC-4988's second apply_checking_account_credit_5829 submission within the same interaction. Disabled 2025-10-28 together with MAC-4988; retained for audit history.",
+      "active": false,
+      "environment": "production",
+      "status": "disabled_legacy",
+      "priority": 3,
+      "effective_at": "2025-06-30",
+      "updated_at": "2025-10-28",
+      "usage_30d": 0,
+      "conditions": [
+        "macro = MAC-4988 invoked",
+        "prior apply_checking_account_credit_5829 submission exists on the interaction"
+      ],
+      "actions": [
+        "permit second submission on the same interaction (retired behavior)",
+        "set tag = credit-review"
+      ]
+    },
+    {
+      "trigger_id": "TRG-4110",
+      "name": "Route ATM fee keywords to Deposit Servicing",
+      "description": "Keyword routing into the Deposit Servicing Tier 1 group for ATM fee, rebate, and credit contacts.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 4,
+      "effective_at": "2024-11-18",
+      "updated_at": "2025-09-15",
+      "usage_30d": 547,
+      "conditions": [
+        "channel is email OR webform",
+        "subject/body contains any: ATM fee, out-of-network, rebate, fee credit"
+      ],
+      "actions": [
+        "set group = Deposit Servicing Tier 1",
+        "set ticket type = atm_fee_complaint"
+      ]
+    },
+    {
+      "trigger_id": "TRG-4133",
+      "name": "Escalate aged checking-credit tickets",
+      "description": "Escalates checking-credit tickets breaching 24 business hours without agent touch.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 6,
+      "effective_at": "2025-02-10",
+      "updated_at": "2025-06-30",
+      "usage_30d": 33,
+      "conditions": [
+        "ticket type = checking_credit_request",
+        "hours since last agent update > 24 (business)"
+      ],
+      "actions": [
+        "set priority = high",
+        "notify group lead (deposit-servicing)"
+      ]
+    },
+    {
+      "trigger_id": "TRG-4140",
+      "name": "Tag card reissue by delivery method",
+      "description": "Applies delivery tags to reissue tickets so the views split standard from expedited shipping.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 8,
+      "effective_at": "2025-01-27",
+      "updated_at": "2025-10-06",
+      "usage_30d": 168,
+      "conditions": [
+        "ticket type = card_reissue"
+      ],
+      "actions": [
+        "set tag = reissue",
+        "set tag by delivery-method field"
+      ]
+    }
+  ],
+  "policy_contracts": [
+    {
+      "contract_id": "CON-0721",
+      "name": "deposit-servicing workspace configuration scope",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Helpdesk Administration",
+      "scope": "Ticket routing, macros, and integration-action guards for the deposit-servicing workspace at this snapshot. Configuration only; fee schedules, rebate program terms, credit-eligibility policy, and interaction-level operating rules are owned by the published product pages, the dated program-operations announcements, and the operations records.",
+      "required_fields": [
+        "ticket_type",
+        "group",
+        "status"
+      ],
+      "closed_world": false,
+      "effective_at": "2025-06-30",
+      "updated_at": "2025-10-28"
+    }
+  ],
+  "field_columns": [
+    "row_id",
+    "field_key",
+    "field_name",
+    "field_type",
+    "option_value",
+    "active",
+    "status",
+    "environment",
+    "updated_at"
+  ],
+  "fields": [
+    {
+      "row_id": "F-001",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "atm_fee_complaint",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-18"
+    },
+    {
+      "row_id": "F-002",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "checking_credit_request",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-06-30"
+    },
+    {
+      "row_id": "F-003",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "address_change",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-05-13"
+    },
+    {
+      "row_id": "F-004",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "card_reissue",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-09-22"
+    },
+    {
+      "row_id": "F-005",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "document_request",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-03-04"
+    },
+    {
+      "row_id": "F-006",
+      "field_key": "credit_type",
+      "field_name": "Credit type (integration action parameter)",
+      "field_type": "picklist",
+      "option_value": "rebate_credit",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-06-30"
+    },
+    {
+      "row_id": "F-007",
+      "field_key": "credit_type",
+      "field_name": "Credit type (integration action parameter)",
+      "field_type": "picklist",
+      "option_value": "fee_refund",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-06-30"
+    },
+    {
+      "row_id": "F-008",
+      "field_key": "group",
+      "field_name": "Assignment group",
+      "field_type": "picklist",
+      "option_value": "Deposit Servicing Tier 1",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-18"
+    },
+    {
+      "row_id": "F-009",
+      "field_key": "group",
+      "field_name": "Assignment group",
+      "field_type": "picklist",
+      "option_value": "Deposits Platform",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-010",
+      "field_key": "group",
+      "field_name": "Assignment group",
+      "field_type": "picklist",
+      "option_value": "Checking Credits Batch",
+      "active": false,
+      "status": "retired",
+      "environment": "production",
+      "updated_at": "2025-10-28"
+    },
+    {
+      "row_id": "F-011",
+      "field_key": "status",
+      "field_name": "Ticket status",
+      "field_type": "picklist",
+      "option_value": "pending-customer",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-03-04"
+    },
+    {
+      "row_id": "F-012",
+      "field_key": "status",
+      "field_name": "Ticket status",
+      "field_type": "picklist",
+      "option_value": "solved-pending-close",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-03-04"
+    },
+    {
+      "row_id": "F-013",
+      "field_key": "tag",
+      "field_name": "Tag",
+      "field_type": "tag",
+      "option_value": "atm-locator",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-20"
+    },
+    {
+      "row_id": "F-014",
+      "field_key": "tag",
+      "field_name": "Tag",
+      "field_type": "tag",
+      "option_value": "credit-review",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-06-30"
+    },
+    {
+      "row_id": "F-015",
+      "field_key": "tag",
+      "field_name": "Tag",
+      "field_type": "tag",
+      "option_value": "reissue",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-01-27"
+    }
+  ],
+  "sla_policies": [
+    {
+      "name": "Deposit servicing — email first response",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "8 business hours first response",
+      "applies_to": "group = Deposit Servicing Tier 1",
+      "updated_at": "2025-04-07",
+      "policy_id": "SLA-344"
+    },
+    {
+      "name": "Deposit servicing — secure message update cadence",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "1 business day update cadence",
+      "applies_to": "ticket type in (atm_fee_complaint, checking_credit_request)",
+      "updated_at": "2025-04-07",
+      "policy_id": "SLA-347"
+    }
+  ],
+  "views": [
+    {
+      "view_id": "VW-92",
+      "name": "Deposit servicing — open queue",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "group = Deposit Servicing Tier 1",
+        "status != solved-pending-close"
+      ],
+      "updated_at": "2025-09-29"
+    },
+    {
+      "view_id": "VW-96",
+      "name": "Checking credit requests — pending review",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "ticket type = checking_credit_request",
+        "tag = credit-review"
+      ],
+      "updated_at": "2025-09-29"
+    }
+  ]
+}

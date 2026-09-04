@@ -1,0 +1,133 @@
+{
+  "id": "task_124",
+  "description": {
+    "purpose": "Task: task_124",
+    "relevant_policies": null,
+    "notes": "MINOR REFERRAL - LIGHT GREEN GUARDIAN EXCEPTION OVERRIDES BONUS MAXIMIZATION. Customer wants the biggest referral bonus for referring her 16-year-old niece Zainab (about $400 of babysitting savings; the niece's mother/guardian is involved; different address). The general rule requires the referred person to be 18 or older, EXCEPT the Light Green Account, which allows minors with a guardian. So despite higher bonuses elsewhere (Purple $45, which the customer explicitly asks about), the ONLY permissible referral is Light Green ($15; referred person deposits $100+ within 90 days - $400 qualifies; referrer tenure 14 days - customer has ~5 months; annual cap 3 - customer has used 1). Rolling window is clear (last referral 09/02). Golden: exactly one submit_referral with account_type 'Light Green Account'. The user submits whatever account the agent recommends, so recommending Purple (or any adult account) diverges the DB and fails."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Adaeze Nwachukwu, a 37-year-old nurse practitioner in Houston. Practical and warm; you want the best bonus, but you'll take what's actually allowed.\n\n**Verification info:**\n- Name: Adaeze Nwachukwu | Phone: 832-555-0561 | Email: adaeze.nwachukwu@gmail.com\n- DOB: 12/05/1987 | Address: 10419 Braesridge Drive, Houston, TX 77071\n\n**Tool usage:** You have access to `submit_referral`. Use it AFTER the agent recommends which account to use. Call it with your user_id (ao81w5n9e3) and the exact account_type the agent recommends. IMPORTANT: The account_type must exactly match one of these personal checking values (always include the word \"Account\"): Blue Account, Bluest Account, Purple Account, Dark Green Account, Light Blue Account, Light Green Account, Green Account, Green Fee-Free Account, Gold Years Account, Evergreen Account.\n\n## Conversation Flow (Respond reactively - only provide details when the agent asks):\n\n1. **Opening:** \"Hi! My niece Zainab has saved up about $400 from babysitting, and my sister - her mom - wants to get her set up with a real bank account. They asked me for a referral since I already bank with you. A friend of mine got $45 for referring someone to the Purple account, so ideally I'd love whichever referral pays me the most. What are my options?\"\n\n2. **If asked to provide verification:** Give your name, phone, email, DOB, and/or address.\n\n3. **If asked about your niece's age:** \"She's 16. Her mom would be on the account with her - she's fully involved.\"\n\n4. **If asked about their address:** \"They live across town, definitely not my address.\"\n\n5. **If asked whether the niece has banked with Rho-Bank before:** \"No, this would be her first bank account anywhere.\"\n\n6. **If asked about your referral history:** \"Two this year - one back in August for the teen account, for my friend's daughter, and one in early September for the Purple account.\"\n\n7. **If agent explains that referred customers must be 18+ except the Light Green Account with a guardian:** \"Oh - so the teen account is the ONLY one that works for her? A smaller bonus than I hoped, but it's better than nothing. Let's do that one.\"\n\n8. **If agent recommends a specific account:** \"Okay, submitting it now.\" Then use submit_referral with user_id=\"ao81w5n9e3\" and the exact account_type the agent recommended - whatever it is, even if it's not the Light Green Account.\n\n9. **After submitting:** \"Thank you! Zainab will be thrilled.\" ###STOP###\n\nOnly provide additional details about your situation when the agent asks. Never respond as a customer service representative/assistant."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "users": {
+          "data": {
+            "ao81w5n9e3": {
+              "name": "Adaeze Nwachukwu",
+              "user_id": "ao81w5n9e3",
+              "address": "10419 Braesridge Drive, Houston, TX 77071",
+              "email": "adaeze.nwachukwu@gmail.com",
+              "phone_number": "832-555-0561",
+              "date_of_birth": "12/05/1987"
+            }
+          }
+        },
+        "accounts": {
+          "data": {
+            "chk_ao81w5n9e3_purple": {
+              "account_id": "chk_ao81w5n9e3_purple",
+              "user_id": "ao81w5n9e3",
+              "class": "checking",
+              "level": "Purple Account",
+              "date_opened": "06/05/2025",
+              "status": "OPEN",
+              "current_holdings": "5100.00"
+            }
+          }
+        },
+        "referrals": {
+          "data": {
+            "ref_ao124_lightgreen_001": {
+              "referral_id": "ref_ao124_lightgreen_001",
+              "referrer_id": "ao81w5n9e3",
+              "referred_account_type": "Light Green Account",
+              "referral_status": "COMPLETE",
+              "date": "08/14/2025"
+            },
+            "ref_ao124_purple_001": {
+              "referral_id": "ref_ao124_purple_001",
+              "referrer_id": "ao81w5n9e3",
+              "referred_account_type": "Purple Account",
+              "referral_status": "COMPLETE",
+              "date": "09/02/2025"
+            }
+          }
+        }
+      }
+    }
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Adaeze Nwachukwu",
+          "user_id": "ao81w5n9e3",
+          "address": "10419 Braesridge Drive, Houston, TX 77071",
+          "email": "adaeze.nwachukwu@gmail.com",
+          "phone_number": "832-555-0561",
+          "date_of_birth": "12/05/1987",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "124_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "124_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"ao81w5n9e3\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "124_2"
+      },
+      {
+        "name": "get_referrals_by_user",
+        "arguments": {
+          "user_id": "ao81w5n9e3"
+        },
+        "requestor": "assistant",
+        "action_id": "124_3"
+      },
+      {
+        "name": "submit_referral",
+        "arguments": {
+          "user_id": "ao81w5n9e3",
+          "account_type": "Light Green Account"
+        },
+        "requestor": "user",
+        "action_id": "124_4"
+      }
+    ],
+    "nl_assertions": [
+      "The agent recommends the Light Green Account because it is the only referral program that allows referring a minor (with a guardian), rather than recommending a higher-bonus account for the 16-year-old niece."
+    ],
+    "reward_basis": [
+      "DB",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [
+    "call_discoverable_user_tool",
+    "submit_referral"
+  ],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_047",
+    "doc_bank_accounts_bank_accounts_(general)_048",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_checking_accounts_light_green_account_001",
+    "doc_checking_accounts_light_green_account_002",
+    "doc_checking_accounts_purple_account_011"
+  ]
+}

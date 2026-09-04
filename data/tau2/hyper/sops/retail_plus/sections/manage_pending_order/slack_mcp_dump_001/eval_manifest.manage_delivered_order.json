@@ -1,0 +1,273 @@
+{
+  "id": "retail_beacon_slack_mcp_dump_001_manage_delivered_order",
+  "representation": "slack_mcp_dump",
+  "section_id": "manage_delivered_order",
+  "scoped_from": "eval_manifest.json",
+  "artifacts": [
+    {
+      "filename": "beacon_servicing_slack_mcp_capture.json",
+      "authoritative_fact_ids": [
+        "exchange_refund_destination_any_saved_payment_method",
+        "return_refund_destination_disallowed_options",
+        "return_refund_destination_original_or_existing_gift_card"
+      ]
+    }
+  ],
+  "tool_call_count": 76,
+  "thread_count": 67,
+  "message_count": 460,
+  "current_evidence_phrases": {
+    "exchange_refund_destination_any_saved_payment_method": "can land on any payment method already saved on the profile, original or not, and the method picked is recorded on the exchange at submission; it does not change after that",
+    "return_refund_destination_disallowed_options": "no new gift cards, no different card, and no PayPal that was not on the order",
+    "return_refund_destination_original_or_existing_gift_card": "lands on the original payment method or a gift card already saved on the profile \u2014 already saved meaning the card was on the profile before the return request was opened; a card added mid-conversation does not qualify"
+  },
+  "current_claim_occurrences": {
+    "exchange_refund_destination_any_saved_payment_method": 3,
+    "return_refund_destination_disallowed_options": 3,
+    "return_refund_destination_original_or_existing_gift_card": 3
+  },
+  "historical_claim_occurrences": {
+    "send the refund wherever the customer points": 3,
+    "refunds go back to the original payment method, full stop": 3,
+    "a mailed check when the original card is dead": 3,
+    "original method only while we work the fallback": 3
+  },
+  "decision_history": [
+    {
+      "arc_id": "refund_destinations",
+      "decision_id": "RD1",
+      "thread_key": "decision_rd1_discretion",
+      "thread_ts": "1770926520.850802",
+      "channel_id": "C09BCPAY02",
+      "channel_name": "beacon-payments-risk",
+      "decision_timestamp": "2026-02-12T20:02:00Z",
+      "status": "superseded",
+      "summary": "Pilot month: refunds may go to any saved instrument the customer picks, with weekly risk review.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1770928142.378940"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1770930361.223343"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1770932775.621022"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1770926520.850802"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1770935516.278036"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "send the refund wherever the customer points",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_rd1_rerouting",
+        "thread_ts": "1772548380.263460",
+        "timestamp": "2026-03-03T14:33:00Z",
+        "trigger_summary": "Tuesday reviews surfaced six refunds redirected to instruments that never touched the order."
+      }
+    },
+    {
+      "arc_id": "refund_destinations",
+      "decision_id": "RD2",
+      "thread_key": "decision_rd2_original_only",
+      "thread_ts": "1772742420.375571",
+      "channel_id": "C09BCPAY02",
+      "channel_name": "beacon-payments-risk",
+      "decision_timestamp": "2026-03-05T20:27:00Z",
+      "status": "superseded",
+      "summary": "Refunds restricted to the original payment method only.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1772744313.328530"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1772746897.160191"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1772748360.598990"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1772742420.375571"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1772753191.804195"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "refunds go back to the original payment method, full stop",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_rd2_dead_cards",
+        "thread_ts": "1774274280.464787",
+        "timestamp": "2026-03-23T13:58:00Z",
+        "trigger_summary": "Dead-instrument refunds bounced with no agent fallback, 23 cases in one week."
+      }
+    },
+    {
+      "arc_id": "refund_destinations",
+      "decision_id": "RD3",
+      "thread_key": "decision_rd3_checks",
+      "thread_ts": "1774552740.673208",
+      "channel_id": "C09BCPAY02",
+      "channel_name": "beacon-payments-risk",
+      "decision_timestamp": "2026-03-26T19:19:00Z",
+      "status": "superseded",
+      "summary": "Dead-card refunds switch to mailed checks from a weekly finance batch.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1774554818.657963"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1774557300.404101"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1774559666.199976"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1774552740.673208"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1774563780.725869"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "a mailed check when the original card is dead",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_rd3_check_fraud",
+        "thread_ts": "1776086040.996516",
+        "timestamp": "2026-04-13T13:14:00Z",
+        "trigger_summary": "Two check washes, one undeliverable, 14x unit cost, and month-end batch collisions."
+      }
+    },
+    {
+      "arc_id": "refund_destinations",
+      "decision_id": "RD4",
+      "thread_key": "decision_rd4_interim",
+      "thread_ts": "1776367980.009606",
+      "channel_id": "C09BCPAY02",
+      "channel_name": "beacon-payments-risk",
+      "decision_timestamp": "2026-04-16T19:33:00Z",
+      "status": "superseded",
+      "summary": "Checks withdrawn; original method only while a store-side fallback is designed, dead-card refunds hold in a queue.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1776369726.059225"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1776372168.401787"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1776374611.142829"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1776367980.009606"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1776377836.284010"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "original method only while we work the fallback",
+      "reopened_by": {
+        "mode": "inline_successor_root",
+        "trigger_summary": "The two-week store-side fallback review returned with controls that passed."
+      }
+    },
+    {
+      "arc_id": "refund_destinations",
+      "decision_id": "RD5",
+      "thread_key": "decision_rd5_final",
+      "thread_ts": "1777903980.242466",
+      "channel_id": "C09BCPAY02",
+      "channel_name": "beacon-payments-risk",
+      "decision_timestamp": "2026-05-04T14:13:00Z",
+      "status": "final_current",
+      "summary": "Return refunds land on the original payment method or a gift card already saved on the profile; no new gift cards, different cards, or off-order PayPal; exchange cash-outs are exempt \u2014 any saved payment method the customer picks.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1777906094.847367"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1777908509.644179"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1777910850.266287"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1777903980.242466"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1777914663.715379"
+        }
+      ],
+      "authoritative_fact_ids": [
+        "return_refund_destination_original_or_existing_gift_card",
+        "return_refund_destination_disallowed_options",
+        "exchange_refund_destination_any_saved_payment_method"
+      ],
+      "evidence_phrases": {
+        "return_refund_destination_original_or_existing_gift_card": "lands on the original payment method or a gift card already saved on the profile \u2014 already saved meaning the card was on the profile before the return request was opened; a card added mid-conversation does not qualify",
+        "return_refund_destination_disallowed_options": "no new gift cards, no different card, and no PayPal that was not on the order",
+        "exchange_refund_destination_any_saved_payment_method": "can land on any payment method already saved on the profile, original or not, and the method picked is recorded on the exchange at submission; it does not change after that"
+      }
+    }
+  ],
+  "notes": [
+    "Section-scoped view of eval_manifest.json; the delivered capture is shared by three retail sections."
+  ]
+}

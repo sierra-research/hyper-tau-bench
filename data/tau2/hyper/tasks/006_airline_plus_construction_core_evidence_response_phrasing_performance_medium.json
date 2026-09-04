@@ -1,0 +1,245 @@
+{
+  "id": "006_airline_plus_construction_core_evidence_response_phrasing_performance_medium",
+  "source_domain": "airline_plus",
+  "task_type": "construction",
+  "task_description": "Build the complete airline+ customer service domain from scratch as two customer journeys: book travel and manage an existing reservation. Customer identity is a shared prerequisite. Relevant channel boundaries are embedded inside each journey; flight and cabin changes, baggage and passenger servicing, cancellation, refunds, and disruption compensation are branches of the manage-reservation journey. The evidence is distributed across the airline+ process map, screenshots, website archive, discovery intake, exported email threads, Slack decision history, operations deck, and support records.",
+  "sop_variant_manifest_path": "tau2/hyper/sops/airline_plus/variants/core_evidence_bundle_001.json",
+  "response_phrasing_rules_path": "tau2/hyper/response_phrasing/airline_plus_response_phrasing.yaml",
+  "composition_pipeline": [
+    {
+      "stage": "response_phrasing",
+      "selected_rule_ids": [
+        "never_say_unfortunately",
+        "max_one_apology_per_conversation",
+        "no_premature_outcome_language",
+        "identifier_minimization",
+        "avoid_repeated_openings",
+        "no_generic_service_invitations",
+        "customer_visible_failure_language",
+        "no_long_menu_dumps",
+        "match_warmth_to_outcome",
+        "no_internal_tool_or_source_language"
+      ]
+    },
+    {
+      "stage": "information_distribution",
+      "variant_manifest_path": "tau2/hyper/sops/airline_plus/variants/core_evidence_bundle_001.json",
+      "transformed_sections": [
+        "booking_flight",
+        "manage_existing_reservation"
+      ]
+    }
+  ],
+  "test_task_ids": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "30",
+    "31",
+    "32",
+    "33",
+    "34",
+    "35",
+    "36",
+    "37",
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
+    "50",
+    "51",
+    "52",
+    "53",
+    "54",
+    "55",
+    "56",
+    "57",
+    "58",
+    "59",
+    "60",
+    "61",
+    "62",
+    "63",
+    "64",
+    "65",
+    "66"
+  ],
+  "interaction_mode": "sandbox",
+  "client_api_mode": "rest",
+  "sandbox_config": {
+    "max_time_seconds": 28800,
+    "command_timeout": 120,
+    "docker_image": "tau2-construction-runtime:contract-v7",
+    "docker_memory": "4g",
+    "docker_cpus": 2
+  },
+  "performance_profile": {
+    "medium": {
+      "budget": 0.061,
+      "models": [
+        "gpt-5.6-sol",
+        {
+          "model": "anthropic/claude-opus-5",
+          "constraints": {},
+          "credit_rates": {
+            "input_per_million": 3.0,
+            "output_per_million": 15.0,
+            "rate_card_date": "2026-08-23",
+            "pricing_basis": "capability_bucket_median_list_price"
+          }
+        },
+        "google/gemini-3.1-pro-preview",
+        "moonshotai/kimi-k3",
+        "deepseek/deepseek-v4-flash",
+        {
+          "model": "gpt-5.6-terra",
+          "constraints": {
+            "reasoning_effort": "none"
+          }
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "constraints": {
+            "reasoning_effort": "none"
+          }
+        },
+        {
+          "model": "anthropic/claude-haiku-4-5",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          },
+          "credit_rates": {
+            "input_per_million": 0.25,
+            "output_per_million": 1.6,
+            "rate_card_date": "2026-08-23",
+            "pricing_basis": "capability_bucket_median_list_price"
+          }
+        },
+        {
+          "model": "google/gemini-3-flash-preview",
+          "constraints": {
+            "reasoning_effort": "minimal"
+          }
+        },
+        {
+          "model": "qwen/qwen3.8-27b",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          }
+        },
+        {
+          "model": "google/gemma-4-31b-it",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "effort": "low"
+              }
+            }
+          }
+        },
+        {
+          "model": "gpt-5.4-nano",
+          "constraints": {
+            "reasoning_effort": "none"
+          }
+        },
+        "qwen/qwen3-30b-a3b-instruct-2507",
+        {
+          "model": "google/gemma-4-26b-a4b-it",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          }
+        },
+        "gpt-4.1-mini",
+        {
+          "model": "moonshotai/kimi-k2.6",
+          "constraints": {
+            "extra_body": {
+              "thinking": {
+                "type": "disabled"
+              }
+            }
+          }
+        },
+        "gpt-4o-mini",
+        {
+          "model": "anthropic/claude-sonnet-5",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          },
+          "credit_rates": {
+            "input_per_million": 0.5,
+            "output_per_million": 3.2,
+            "rate_card_date": "2026-08-23",
+            "pricing_basis": "capability_bucket_median_list_price"
+          }
+        },
+        {
+          "model": "gpt-5-mini",
+          "constraints": {
+            "reasoning_effort": "low"
+          }
+        },
+        {
+          "model": "google/gemini-3.1-flash-lite",
+          "constraints": {
+            "reasoning_effort": "minimal"
+          }
+        }
+      ]
+    }
+  },
+  "user_llm": "gpt-5.5",
+  "user_reasoning_effort": "none"
+}

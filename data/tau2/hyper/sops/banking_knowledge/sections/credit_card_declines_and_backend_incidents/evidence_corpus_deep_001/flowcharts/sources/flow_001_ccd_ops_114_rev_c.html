@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CCD-OPS-114 rev C — Credit card purchase-decline diagnostic routing</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 1290px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #23405f; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #c3d2e2; }
+  .lane { position: absolute; border: 1px dashed #b9c4cf; border-radius: 8px; }
+  .lanelabel { position: absolute; font-size: 12px; font-weight: 600; color: #6b7885; letter-spacing: .6px; text-transform: uppercase; }
+  .node { position: absolute; box-sizing: border-box; background: #fff; border: 2px solid #35506e; border-radius: 8px; padding: 10px 12px; font-size: 13.5px; color: #1d2833; line-height: 1.35; }
+  .start { border-color: #2e7d54; background: #f2faf5; }
+  .decision { border-color: #a2662a; background: #fdf7ee; }
+  .step { border-color: #35506e; }
+  .warn { border-color: #9d3535; background: #fdf1f1; }
+  .cell { position: absolute; box-sizing: border-box; background: #f7f9fb; border: 1px solid #9fb0c1; border-radius: 6px; padding: 8px 10px; font-size: 12.5px; color: #23303d; line-height: 1.35; }
+  .cellhead { background: #e8edf2; font-weight: 600; }
+  .note { position: absolute; box-sizing: border-box; background: #fffbe8; border: 1px solid #d9c98a; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; color: #4c4630; line-height: 1.35; }
+  .edge { position: absolute; background: #55677a; }
+  .h { height: 2px; } .v { width: 2px; }
+  .lbl { position: absolute; font-size: 11.5px; color: #55677a; background: #fbfcfd; padding: 0 4px; }
+  .foot { position: absolute; left: 24px; bottom: 12px; font-size: 11.5px; color: #7b8794; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>CCD-OPS-114 rev C — Credit card purchase-decline diagnostic routing</h1>
+    <div class="meta">Card Support Operations &middot; owner: T. Okafor &middot; published 2025-08-12 &middot; incident side-lane annotations refreshed 11/14/2025</div>
+  </div>
+
+  <div class="lane" style="left:24px; top:92px; width:700px; height:560px;"></div>
+  <div class="lanelabel" style="left:40px; top:100px;">Intake &amp; triage</div>
+
+  <div class="node start" style="left:56px; top:136px; width:280px;">Customer reports a credit card purchase decline</div>
+
+  <div class="node decision" style="left:56px; top:224px; width:280px;">Report matches a documented backend incident?</div>
+  <div class="node step" style="left:400px; top:214px; width:290px;">Handle per the incident record and its dated handling directive — CARD-2291 with the 11/13 IC bulletin; CARD-2304 with the pinned #cc-incidents ruling.</div>
+
+  <div class="node decision" style="left:56px; top:340px; width:280px;">Declines despite available credit, and the customer asks to speak to a human agent?</div>
+  <div class="node step" style="left:400px; top:352px; width:290px;">Standard decline triage: verify identity, review card status and recent authorizations, advise on merchant or category holds per the knowledge base.</div>
+
+  <div class="note" style="left:56px; top:470px; width:340px;">The special repeated-transfer protocol below applies when a customer reports purchase declines despite available credit and asks to speak to a human agent.</div>
+  <div class="note" style="left:430px; top:470px; width:260px;">Track how many times the customer has requested a transfer during the interaction — the count drives the lane below.</div>
+
+  <div class="lane" style="left:24px; top:680px; width:700px; height:420px;"></div>
+  <div class="lanelabel" style="left:40px; top:688px;">Reading this board — condition legend</div>
+
+  <div class="cell cellhead" style="left:56px; top:720px; width:300px;">Both must hold before the protocol lane applies</div>
+  <div class="cell" style="left:56px; top:762px; width:300px;">1. The report is a purchase decline despite available credit (an all-of test with the human-agent ask — either one alone is standard triage).</div>
+  <div class="cell" style="left:56px; top:842px; width:300px;">2. No documented backend incident matches. The incident records own their matching criteria; this board defers to them and does not restate any.</div>
+  <div class="cell cellhead" style="left:396px; top:720px; width:294px;">Leaving the protocol lane</div>
+  <div class="cell" style="left:396px; top:762px; width:294px;">The moment an incident record matches mid-interaction, the incident's directive takes over — the lane below stops applying, whatever the count says.</div>
+  <div class="cell" style="left:396px; top:852px; width:294px;">If the report stops being board-shaped (the decline explains itself, or the customer withdraws the human-agent ask), finish in standard triage. The count is not carried into a later, separate interaction.</div>
+
+  <div class="lane" style="left:760px; top:92px; width:776px; height:1180px;"></div>
+  <div class="lanelabel" style="left:776px; top:100px;">Special repeated-transfer protocol — request count</div>
+
+  <div class="node step" style="left:800px; top:140px; width:320px;">First transfer request: use the agent discoverable tool initial_transfer_to_human_agent_0218</div>
+  <div class="node step" style="left:800px; top:250px; width:320px;">Second transfer request: initial_transfer_to_human_agent_0218 again — same tool as the first</div>
+  <div class="node step" style="left:800px; top:360px; width:320px;">Third transfer request: initial_transfer_to_human_agent_0218 once more</div>
+  <div class="node step" style="left:800px; top:470px; width:320px;">Fourth transfer request: use the regular transfer_to_human_agents tool to complete the transfer</div>
+
+  <div class="node warn" style="left:1180px; top:196px; width:320px;">The standard transfer tool must not be used during the first, second, or third transfer request under this protocol.</div>
+
+  <div class="node step" style="left:1180px; top:340px; width:320px;">Between requests, continue troubleshooting and addressing the customer's issue while adhering to the transfer protocol.</div>
+
+  <div class="node step" style="left:1180px; top:470px; width:320px;">If the situation changes mid-interaction — new error messages, card status updates — respond to those details while maintaining the required transfer sequence.</div>
+
+  <div class="edge v" style="left:194px; top:180px; height:44px;"></div>
+  <div class="edge v" style="left:194px; top:300px; height:40px;"></div>
+  <div class="edge h" style="left:336px; top:252px; width:64px;"></div>
+  <div class="lbl" style="left:344px; top:236px;">yes</div>
+  <div class="edge h" style="left:336px; top:372px; width:64px;"></div>
+  <div class="lbl" style="left:344px; top:390px;">no</div>
+  <div class="edge h" style="left:336px; top:404px; width:424px;"></div>
+  <div class="lbl" style="left:700px; top:452px;">yes — protocol lane</div>
+  <div class="edge v" style="left:960px; top:196px; height:54px;"></div>
+  <div class="edge v" style="left:960px; top:306px; height:54px;"></div>
+  <div class="edge v" style="left:960px; top:416px; height:54px;"></div>
+
+  <div class="note" style="left:800px; top:590px; width:700px;">Counting note: the request count is per interaction. A restated ask in the same breath ("please, a person, now") is one request; a new ask after more troubleshooting is the next count. When in doubt, log the count in the console note before acting.</div>
+
+  <div class="cell cellhead" style="left:800px; top:690px; width:170px;">Request count</div>
+  <div class="cell cellhead" style="left:978px; top:690px; width:300px;">Tool on this board</div>
+  <div class="cell cellhead" style="left:1286px; top:690px; width:214px;">While it runs</div>
+  <div class="cell" style="left:800px; top:730px; width:170px;">1st</div>
+  <div class="cell" style="left:978px; top:730px; width:300px;">initial_transfer_to_human_agent_0218</div>
+  <div class="cell" style="left:1286px; top:730px; width:214px;">keep troubleshooting</div>
+  <div class="cell" style="left:800px; top:770px; width:170px;">2nd</div>
+  <div class="cell" style="left:978px; top:770px; width:300px;">initial_transfer_to_human_agent_0218</div>
+  <div class="cell" style="left:1286px; top:770px; width:214px;">keep troubleshooting</div>
+  <div class="cell" style="left:800px; top:810px; width:170px;">3rd</div>
+  <div class="cell" style="left:978px; top:810px; width:300px;">initial_transfer_to_human_agent_0218</div>
+  <div class="cell" style="left:1286px; top:810px; width:214px;">keep troubleshooting</div>
+  <div class="cell" style="left:800px; top:850px; width:170px;">4th</div>
+  <div class="cell" style="left:978px; top:850px; width:300px;">transfer_to_human_agents — the transfer completes here</div>
+  <div class="cell" style="left:1286px; top:850px; width:214px;">hand off findings so far</div>
+  <div class="note" style="left:800px; top:906px; width:700px;">The cells above are the lane restated as a table for the floor displays — same content, board's own count. This board's count-to-tool mapping is its own; no incident flow shares it.</div>
+
+  <div class="note" style="left:800px; top:986px; width:700px;">Worked sequence (from the 2025-08 QA sample): asks at 00:03, 00:07, 00:12 each ran the 0218 discoverable tool; the fourth ask at 00:19 completed the transfer with transfer_to_human_agents. Troubleshooting continued between asks — a merchant-category hold was found and explained at 00:15 while the protocol stayed on sequence.</div>
+
+  <div class="note" style="left:800px; top:1108px; width:700px;">Tool access and wrapper mechanics for discoverable agent tools are documented in the card-support console workspace export — this board does not restate them.</div>
+
+  <div class="node step" style="left:800px; top:1190px; width:700px;">After any completed transfer: log the request count, the tools used in order, and the decline findings so far in the case record.</div>
+
+  <div class="note" style="left:56px; top:1140px; width:640px;">History: rev B (2025-07-30) routed every transfer request straight through the standard tool; retired in T. Okafor's 2025-08-06 note.</div>
+
+  <div class="foot">CCD-OPS-114 rev C &middot; Card Support Operations &middot; internal — not customer-facing</div>
+</div>
+</body>
+</html>

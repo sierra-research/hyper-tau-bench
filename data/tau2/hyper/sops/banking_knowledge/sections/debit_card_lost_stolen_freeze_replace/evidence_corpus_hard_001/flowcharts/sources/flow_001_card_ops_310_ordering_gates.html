@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1760">
+<title>Ordering a debit card - eligibility gates</title><style>
+*{box-sizing:border-box} html,body{margin:0;width:1760px;height:1280px;overflow:hidden}
+body{background:#e9edf0;color:#172431;font-family:Arial,Helvetica,sans-serif}
+.sheet{position:relative;width:1712px;height:1232px;margin:24px;background:#fff;border:1px solid #9ba7b1}
+.frame-label{position:absolute;left:-1px;top:-1px;background:#18232d;color:#fff;padding:7px 16px;font-size:12px;font-weight:800;letter-spacing:.3px}
+header{height:154px;margin:0 38px;border-bottom:2px solid #243746;padding:37px 0 18px;display:flex;justify-content:space-between;align-items:flex-start}
+.eyebrow{font-size:13px;font-weight:800;color:#5a6874;letter-spacing:.6px;margin-bottom:10px}
+h1{font-size:36px;line-height:1.06;margin:0 0 10px;letter-spacing:-.4px} .subtitle{font-size:14px;color:#5f6e79}
+.header-meta{display:flex;gap:12px;align-items:flex-start}
+.version{border:1px solid #b6c0c8;padding:10px 13px;font-size:11px;color:#52606b;line-height:1.35}
+.diagram{position:absolute;left:38px;top:174px;width:1636px;height:700px}
+.phase{position:absolute;border:1px solid #9da8b2;background:#fbfcfd;z-index:0}
+.phase.current-zone{background:#f7fbf8;border-color:#84a98f}
+.phase>span{position:absolute;left:-1px;top:-21px;height:21px;background:#505b65;color:white;padding:5px 10px;font-size:10px;font-weight:800;letter-spacing:.3px}
+.phase.current-zone>span{background:#207044}
+svg{position:absolute;inset:0;width:1636px;height:700px;z-index:1;overflow:visible}
+path{fill:none;stroke:#205d8f;stroke-width:2.2;marker-end:url(#arrow)}
+path.loop{stroke:#8b98a4;stroke-dasharray:6 5;marker-end:url(#arrow-gray)}
+path.reject{stroke:#b74242;stroke-dasharray:5 4;marker-end:url(#arrow-red)}
+.node{position:absolute;z-index:3;border:1.5px solid #1f2a33;background:white;padding:10px 12px;display:flex;flex-direction:column;justify-content:center;text-align:center;font-size:11px;line-height:1.25}
+.node small{display:block;margin-bottom:5px;color:#26618b;font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase}
+.node strong{font-size:12px;line-height:1.2} .node p{margin:5px 0 0;color:#4e5b65;font-size:10px;line-height:1.25}
+.node.start{border-color:#2f8c4a;background:#eef8ef;border-radius:28px}
+.node.terminal{border-radius:28px;background:#f1f5f7}
+.node.stop{border-color:#c83e3e;background:#fff1ef;border-radius:5px}
+.node.system{border-color:#6e8ca4;background:#edf5fb;text-align:left;font-family:"Courier New",monospace;overflow-wrap:anywhere}
+.node.system strong{font-size:11px;overflow-wrap:anywhere}
+.node.dialogue{background:#f5f0ff;border-color:#7c68a7;border-radius:5px 5px 20px 5px}
+.node.decision{padding:0;border:none;background:transparent;transform:rotate(45deg)}
+.node.decision:before{content:"";position:absolute;inset:0;border:1.5px solid #347447;background:#fbfffb}
+.decision-content{position:absolute;inset:15px;z-index:1;transform:rotate(-45deg);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.decision-content small{margin:0 0 4px} .decision-content strong{font-size:11px;line-height:1.08} .decision-content p{font-size:8px;line-height:1.12;margin:3px 0 0}
+.edge-label{position:absolute;z-index:4;background:#fff;padding:1px 4px;color:#315a78;font-size:9px;font-weight:800}
+.sticky{position:absolute;z-index:5;padding:10px 11px;box-shadow:0 2px 5px #0003;transform:rotate(-.7deg);font-size:9.5px;line-height:1.3}
+.sticky.yellow{background:#fff098} .sticky.green{background:#c8f2d2} .sticky.blue{background:#cce5fa}
+.sticky b{font-size:9.5px} .sticky p{margin:5px 0 7px} .sticky em{display:block;text-align:right;font-size:8px;color:#59636a}
+.gate-notes{position:absolute;left:38px;right:38px;bottom:34px;height:290px;border:1px solid #8d9aa4;background:#fafbfc;padding:26px 16px 12px}
+.gate-notes h2{position:absolute;left:-1px;top:-21px;margin:0;background:#18232d;color:white;padding:5px 12px;font-size:10px;letter-spacing:.3px}
+.gate-notes>div{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 12px;align-content:start;height:100%}
+.gate-notes article{border-left:3px solid #2975a6;padding:5px 8px;display:grid;grid-template-columns:52px 1fr;gap:7px;align-content:start}
+.gate-notes article b{font-size:10px;color:#225a81} .gate-notes article p{font-size:9.5px;line-height:1.25;margin:0;color:#37434c}
+.watermark{position:absolute;right:42px;bottom:12px;color:#8a949b;font-size:9px}
+</style></head><body><main class="sheet"><div class="frame-label">CARD OPS · ORDERING</div>
+<header><div><div class="eyebrow">RHO BANK · CARD OPERATIONS · DEBIT CARD DESK</div><h1>Ordering a debit card - eligibility gates</h1><div class="subtitle">Eight gates run in order off the account and customer lookups. Every gate is checked before the order is placed; the first unmet gate stops the order.</div></div>
+<div class="header-meta"><div class="version">Owner: Bettina Sandoval · Card Operations<br>Issued: 2025-08-11<br>Ref: CARD-OPS-310 · v2.1</div></div></header>
+<section class="diagram"><section class='phase' style='left:12px;top:48px;width:1612px;height:160px'><span>REQUEST · IDENTITY · LOOKUP</span></section><section class='phase current-zone' style='left:12px;top:238px;width:1612px;height:330px'><span>ELIGIBILITY GATES - RUN IN ORDER</span></section><section class='phase' style='left:12px;top:598px;width:1612px;height:90px'><span>OUTCOMES</span></section><svg viewBox="0 0 1636 700" aria-hidden="true"><defs>
+<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#205d8f"/></marker>
+<marker id="arrow-gray" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#8b98a4"/></marker>
+<marker id="arrow-red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#b74242"/></marker></defs>
+<path class='flow' d='M245 128 H300'/>
+<path class='flow' d='M470 128 H520'/>
+<path class='flow' d='M850 128 H900'/>
+<path class='reject' d='M385 170 V186 H520'/>
+<path class='flow' d='M1050 175 V236 H150 V270'/>
+<path class='flow' d='M215 335 H265'/>
+<path class='flow' d='M420 335 H470'/>
+<path class='flow' d='M625 335 H675'/>
+<path class='flow' d='M830 335 H880'/>
+<path class='flow' d='M1010 400 V430 H960 V465'/>
+<path class='flow' d='M830 530 H780'/>
+<path class='flow' d='M625 530 H575'/>
+<path class='flow' d='M420 530 H370'/>
+<path class='flow' d='M165 530 V620'/>
+<path class='reject' d='M150 400 V415 H1260 V620'/>
+<path class='reject' d='M355 400 V415'/>
+<path class='reject' d='M560 400 V415'/>
+<path class='reject' d='M765 400 V415'/>
+<path class='reject' d='M970 400 V415'/>
+<path class='reject' d='M900 560 V590 H1260 V620'/>
+<path class='reject' d='M695 560 V590 H1260 V620'/>
+<path class='reject' d='M490 560 V590 H1260 V620'/>
+<path class='reject' d='M285 560 V590 H1260 V620'/>
+</svg>
+<span class='edge-label' style='left:408px;top:190px'>NOT VERIFIED</span><span class='edge-label' style='left:478px;top:110px'>VERIFIED</span><span class='edge-label' style='left:790px;top:172px'>ACCOUNT + CUSTOMER RECORD</span>
+<span class='edge-label' style='left:225px;top:318px'>PASS</span><span class='edge-label' style='left:430px;top:318px'>PASS</span><span class='edge-label' style='left:635px;top:318px'>PASS</span><span class='edge-label' style='left:840px;top:318px'>PASS</span>
+<span class='edge-label' style='left:965px;top:436px'>PASS</span><span class='edge-label' style='left:786px;top:513px'>PASS</span><span class='edge-label' style='left:581px;top:513px'>PASS</span><span class='edge-label' style='left:376px;top:513px'>PASS</span>
+<span class='edge-label' style='left:172px;top:585px'>ALL 8 PASS</span>
+<span class='edge-label' style='left:158px;top:404px'>FAIL</span><span class='edge-label' style='left:363px;top:404px'>FAIL</span><span class='edge-label' style='left:568px;top:404px'>FAIL</span><span class='edge-label' style='left:773px;top:404px'>FAIL</span><span class='edge-label' style='left:978px;top:404px'>FAIL</span>
+<span class='edge-label' style='left:906px;top:566px'>FAIL</span><span class='edge-label' style='left:701px;top:566px'>FAIL</span><span class='edge-label' style='left:496px;top:566px'>FAIL</span><span class='edge-label' style='left:291px;top:566px'>FAIL</span>
+<article class='node start' style='left:45px;top:95px;width:200px;height:66px'><strong>Debit card order request</strong><p>New card or additional card for a checking account</p></article>
+<article class='node decision' style='left:300px;top:85px;width:120px;height:120px'><div class='decision-content'><strong>Customer verified?</strong><p>no gate runs without it</p></div></article>
+<article class='node stop' style='left:520px;top:170px;width:210px;height:52px'><strong>STOP - verify first</strong><p>Complete identity verification, then re-enter at the lookup.</p></article>
+<article class='node system' style='left:520px;top:88px;width:330px;height:76px'><small>READ</small><strong>Account + card lookup</strong><p>Account type, status, date opened, balance · debit_cards rows for the account · customer date_of_birth and address on file</p></article>
+<article class='node dialogue' style='left:900px;top:88px;width:300px;height:76px'><strong>SET EXPECTATIONS</strong><p>Quote delivery speeds and any design fee from the published fee page before running the gates.</p></article>
+<article class='node decision' style='left:90px;top:270px;width:120px;height:120px'><div class='decision-content'><strong>Checking account?</strong><p>gate 1 · account_type = checking, personal or business</p></div></article>
+<article class='node decision' style='left:295px;top:270px;width:120px;height:120px'><div class='decision-content'><strong>Status OPEN?</strong><p>gate 2</p></div></article>
+<article class='node decision' style='left:500px;top:270px;width:120px;height:120px'><div class='decision-content'><strong>Open 3+ business days?</strong><p>gate 3 · weekends excluded</p></div></article>
+<article class='node decision' style='left:705px;top:270px;width:120px;height:120px'><div class='decision-content'><strong>At most 1 active card?</strong><p>gate 4 · more than 1 active card on the account fails</p></div></article>
+<article class='node decision' style='left:910px;top:270px;width:120px;height:120px'><div class='decision-content'><strong>Balance $25 or more?</strong><p>gate 5 · covers potential fees</p></div></article>
+<article class='node decision' style='left:840px;top:465px;width:120px;height:120px'><div class='decision-content'><strong>Customer 18 or older?</strong><p>gate 6 · verified on date_of_birth</p></div></article>
+<article class='node decision' style='left:635px;top:465px;width:120px;height:120px'><div class='decision-content'><strong>No PENDING order?</strong><p>gate 7 · check debit_cards for PENDING</p></div></article>
+<article class='node decision' style='left:430px;top:465px;width:120px;height:120px'><div class='decision-content'><strong>Valid US address on file?</strong><p>gate 8 · standard ordering</p></div></article>
+<article class='node terminal' style='left:105px;top:465px;width:220px;height:120px'><strong>PLACE THE ORDER</strong><p>order_debit_card_5739 · quote the exact fees before placing · confirmation and tracking to the verified email</p></article>
+<article class='node terminal' style='left:60px;top:620px;width:240px;height:60px'><strong>ORDER PLACED</strong><p>Card ships PENDING; activation is a separate contact</p></article>
+<article class='node stop' style='left:1090px;top:620px;width:340px;height:60px'><strong>NOT ELIGIBLE - DO NOT ORDER</strong><p>Tell the customer which gate failed and what resolves it.</p></article>
+<aside class='sticky yellow' style='left:1250px;top:250px;width:280px'><b>SAVINGS ASKS</b><p>A debit card can be ordered only for a checking account. Savings accounts are not eligible for debit cards - offer the ATM card page instead of running the gates.</p><em>B. Sandoval · Card Ops · 08/11</em></aside>
+<aside class='sticky blue' style='left:1250px;top:370px;width:280px'><b>CARD ALREADY ON THE ACCOUNT?</b><p>An existing ACTIVE card stays active until the new card is activated. That note is about ACTIVE cards only - a PENDING, FROZEN, CLOSED, or otherwise blocked card is not usable and doesn't come back to life while the new one ships.</p><em>T. Kubiak asked, B.S. answered · 09/02</em></aside>
+<aside class='sticky green' style='left:1250px;top:508px;width:280px'><b>TRAVELERS</b><p>Gate 8 is the standard ordering procedure - international shipping is not available under it. Emergency replacement while traveling runs on the Purple Account travel program, not this board.</p><em>J. Ostrowski · 11/06</em></aside>
+</section>
+<section class='gate-notes'><h2>GATE NOTES</h2><div>
+<article><b>G-310.1</b><p>Eligible account_type is checking, personal or business. A debit card linked to a bank account can be ordered only for a checking account; savings accounts are not eligible.</p></article>
+<article><b>G-310.2</b><p>Account status must be OPEN at order time. RESTRICTED, FROZEN, and CLOSED accounts do not pass, whatever the reason code says.</p></article>
+<article><b>G-310.3</b><p>The account must have been open for at least 3 business days, excluding weekends. Opened Thursday, orderable Tuesday.</p></article>
+<article><b>G-310.4</b><p>A customer cannot have more than 1 active debit card per checking account. The gate reads current ACTIVE rows, not lifetime history.</p></article>
+<article><b>G-310.5</b><p>Minimum balance of $25 to cover potential fees. The gate reads the balance at order time; it is not a hold.</p></article>
+<article><b>G-310.6</b><p>The customer must be at least 18 years old, verified using date_of_birth on the customer record - never taken verbally.</p></article>
+<article><b>G-310.7</b><p>No pending debit card order for the same account. Check the debit_cards table for a PENDING row before placing a new order.</p></article>
+<article><b>G-310.8</b><p>The address on file must be a valid US domestic address; international shipping is not available under the standard ordering procedure.</p></article>
+<article><b>G-310.9</b><p>Fee quoting at the SET EXPECTATIONS step follows the published fee page for new orders and the entitlement workbook for replacements; this board does not carry fee amounts.</p></article>
+</div></section><div class="watermark">Internal working material · not customer-facing · CARD-OPS-310 · v2.1</div></main></body></html>

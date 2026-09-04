@@ -1,0 +1,27 @@
+RHO BANK RETENTION OPERATIONS - JOB AID
+PRE-CLOSURE REPLACEMENT CARD CHECK
+Rev B | 2025-10-20 | Retention Operations with Learning & Development
+
+PURPOSE
+Confirm whether a credit card account has replacement card orders still open before closure work begins. To check for pending replacement card orders, use get_pending_replacement_orders_5765 with credit_card_account_id.
+
+WHEN
+Run this check immediately before initiating any account closure workflow.
+
+PREREQUISITES
+You need the correct credit_card_account_id, permission to use the tool, and authentication to the internal environment where the tool is available.
+
+PROCEDURE
+  1. Locate the credit_card_account_id for the account under review.
+  2. Invoke get_pending_replacement_orders_5765 with that parameter.
+  3. Review the response for outstanding replacement card orders.
+  4. Document the result in the customer's case notes before proceeding with account closure steps.
+
+MULTIPLE ORDERS
+If multiple replacement orders appear, review each order's status and proceed only when all orders are delivered or cancelled.
+
+RECORD IT
+Record the timestamp and outcome of the check in the customer record.
+
+Record shapes and error handling live in contract pack CP-CARD-7.
+Retention Operations | Rev B 2025-10-20

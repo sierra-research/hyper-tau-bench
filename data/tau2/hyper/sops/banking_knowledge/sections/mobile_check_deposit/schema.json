@@ -1,0 +1,339 @@
+{
+  "id": "banking_mobile_check_deposit_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "mobile_check_deposit",
+  "display_name": "Mobile check deposit procedure and issue resolution",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/mobile_check_deposit/source.md",
+    "heading": "## Mobile check deposit procedure and issue resolution"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/mobile_check_deposit/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/mobile_check_deposit/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/mobile_check_deposit/evidence_corpus_hard_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/mobile_check_deposit/evidence_corpus_deep_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/mobile_check_deposit/client_overlay_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/mobile_check_deposit/client_overlay_deposit_services_001/transformation_pack.json"
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "The customer, not the agent, must call deposit_check_3847 and complete the mobile-app flow.",
+      "Preserve the exact tool name and its account_id and check_amount arguments.",
+      "Support console turns may record validation and availability state; Agent turns should give the relevant next action."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "clear user-owned action boundaries",
+      "ordered mobile-deposit guidance",
+      "condition-specific issue resolution"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_011.json"
+    ],
+    "summary": "Customer-owned mobile check deposit initiation, photo and endorsement requirements, availability timing, and issue-resolution branches.",
+    "rules": [
+      "Give the customer access to deposit_check_3847; never call it or complete the deposit on the customer's behalf.",
+      "Preserve the ordered app steps, photo requirements, funds-availability caveats, and every issue-to-resolution mapping.",
+      "The tool arguments are account_id for the destination account and check_amount for the USD check amount."
+    ],
+    "candidate": {
+      "id": "mobile_check_deposit",
+      "title": "Mobile check deposit procedure and issue resolution",
+      "priority": 1,
+      "related_task_ids": [
+        "task_055",
+        "task_057",
+        "task_061"
+      ],
+      "recommended_case_count": 2,
+      "losslessness_risks": [
+        "Do not let the agent call the customer-owned deposit tool.",
+        "Do not collapse the front-photo and back-photo requirements.",
+        "Keep the image, endorsement, amount, duplicate, and unsupported-item resolution branches distinct.",
+        "Do not promise 1-2-business-day availability for a deposit under extended review."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "mobile_check_deposit_journey",
+        "label": "Mobile check deposit procedure and issue resolution",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "mobile_check_deposit_shared_rules",
+        "label": "Shared workflow rules",
+        "kind": "shared_reference",
+        "parent_id": "mobile_check_deposit_journey",
+        "order": 1,
+        "description": "Rules, prerequisites, and reference values used by more than one customer pathway in this journey.",
+        "fact_ids": [
+          "F006",
+          "F007",
+          "F008",
+          "F030",
+          "F031"
+        ]
+      },
+      {
+        "id": "mobile_check_deposit_path_a",
+        "label": "Customer initiates and completes a mobile check deposit",
+        "kind": "scenario_branch",
+        "parent_id": "mobile_check_deposit_journey",
+        "order": 2,
+        "description": "Policy path represented by case A.",
+        "fact_ids": [
+          "F002",
+          "F003",
+          "F004",
+          "F005",
+          "F009",
+          "F010",
+          "F011",
+          "F012",
+          "F013",
+          "F014",
+          "F015",
+          "F016",
+          "F017",
+          "F018",
+          "F019",
+          "F020",
+          "F021",
+          "F022",
+          "F023"
+        ]
+      },
+      {
+        "id": "mobile_check_deposit_path_b",
+        "label": "Mobile check availability and issue-resolution branches",
+        "kind": "scenario_branch",
+        "parent_id": "mobile_check_deposit_journey",
+        "order": 3,
+        "description": "Policy path represented by case B.",
+        "fact_ids": [
+          "F024",
+          "F025",
+          "F026",
+          "F027",
+          "F028",
+          "F029"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "mobile_check_deposit_path_a",
+        "type": "uses_shared_rules",
+        "target_id": "mobile_check_deposit_shared_rules"
+      },
+      {
+        "source_id": "mobile_check_deposit_path_b",
+        "type": "uses_shared_rules",
+        "target_id": "mobile_check_deposit_shared_rules"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "F002",
+      "statement": "A customer can deposit a check into a checking or savings account through mobile check deposit."
+    },
+    {
+      "id": "F003",
+      "statement": "To help initiate a mobile check deposit, the agent gives the customer access to deposit_check_3847."
+    },
+    {
+      "id": "F004",
+      "statement": "The customer calls deposit_check_3847(account_id, check_amount), where account_id is the destination-account ID and check_amount is the check amount in USD."
+    },
+    {
+      "id": "F005",
+      "statement": "The customer photographs the front and back of the check through the mobile banking app."
+    },
+    {
+      "id": "F006",
+      "statement": "Mobile check deposit funds availability depends on both the account type and deposit amount."
+    },
+    {
+      "id": "F007",
+      "statement": "Standard mobile check deposits are typically available within 1-2 business days."
+    },
+    {
+      "id": "F008",
+      "statement": "The agent cannot deposit a check for the customer; the customer must call the tool and complete the mobile-app deposit flow."
+    },
+    {
+      "id": "F009",
+      "statement": "Before mobile deposit, confirm the check is payable to the account owner or owners and is not altered or damaged."
+    },
+    {
+      "id": "F010",
+      "statement": "Before mobile deposit, endorse the back and include any required restrictive endorsement, such as 'For mobile deposit only.'"
+    },
+    {
+      "id": "F011",
+      "statement": "Before mobile deposit, confirm the check date and numeric and written amounts match."
+    },
+    {
+      "id": "F012",
+      "statement": "The first mobile-deposit app step is to open the Rho-Bank mobile app and sign in."
+    },
+    {
+      "id": "F013",
+      "statement": "After signing in, select the checking or savings destination account."
+    },
+    {
+      "id": "F014",
+      "statement": "After selecting the destination account, choose Mobile Check Deposit."
+    },
+    {
+      "id": "F015",
+      "statement": "Enter the check amount exactly as printed."
+    },
+    {
+      "id": "F016",
+      "statement": "The check-front photo must show all four corners without shadows or glare."
+    },
+    {
+      "id": "F017",
+      "statement": "The check-back photo must show the endorsement clearly and include all four corners."
+    },
+    {
+      "id": "F018",
+      "statement": "Before submitting, review the deposit details and confirm the destination account."
+    },
+    {
+      "id": "F019",
+      "statement": "After submission, keep the paper check securely until the deposit posts, then destroy it."
+    },
+    {
+      "id": "F020",
+      "statement": "For mobile-deposit photos, place the check on a dark, flat background with good, even lighting."
+    },
+    {
+      "id": "F021",
+      "statement": "Turn off flash if it causes glare, and avoid shadows and folded check edges."
+    },
+    {
+      "id": "F022",
+      "statement": "Align the check within the on-screen guidelines and tap the screen to refocus when needed."
+    },
+    {
+      "id": "F023",
+      "statement": "Before submission, confirm the entered amount matches the check's printed amount."
+    },
+    {
+      "id": "F024",
+      "statement": "A deposit may undergo extended review; after submission, the app shows the expected availability date."
+    },
+    {
+      "id": "F025",
+      "statement": "For an image-quality error, retake the photos with better lighting and all corners visible."
+    },
+    {
+      "id": "F026",
+      "statement": "For a missing endorsement, sign the back, include the required restrictive wording, and resubmit."
+    },
+    {
+      "id": "F027",
+      "statement": "For an amount mismatch, edit the entered amount to exactly match the check and resubmit."
+    },
+    {
+      "id": "F028",
+      "statement": "For a duplicate-deposit warning, do not try to redeposit; if the warning appears erroneous, contact support through the app."
+    },
+    {
+      "id": "F029",
+      "statement": "An altered, incomplete, or otherwise unsupported check is ineligible for mobile deposit; use a different check that meets eligibility requirements."
+    },
+    {
+      "id": "F030",
+      "statement": "After submission, monitor deposit updates and availability in the app's transaction history."
+    },
+    {
+      "id": "F031",
+      "statement": "Retain the paper check until the deposit is both posted and available, then securely destroy it."
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Customer initiates and completes a mobile check deposit",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F017",
+        "F018",
+        "F019",
+        "F020",
+        "F021",
+        "F022",
+        "F023",
+        "F030",
+        "F031"
+      ],
+      "case_spec": "A customer asks the agent to deposit a check. Preserve the user-owned tool boundary, exact tool arguments, prechecks, ordered app flow, separate front/back photo requirements, submission review, and check-retention steps."
+    },
+    {
+      "id": "B",
+      "title": "Mobile check availability and issue-resolution branches",
+      "included_fact_ids": [
+        "F006",
+        "F007",
+        "F008",
+        "F024",
+        "F025",
+        "F026",
+        "F027",
+        "F028",
+        "F029",
+        "F030",
+        "F031"
+      ],
+      "case_spec": "A customer asks about availability and several mobile-deposit errors. Keep standard timing separate from extended review, and preserve each image, endorsement, amount, duplicate, and unsupported-item resolution."
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "id": "telecom_restore_data_abroad_jira_client_core_rewrites_authored",
+  "note": "Hand-authored client-overlay rewrites of core snapshot issues (the 24 issues frozen at sections/restore_data_abroad/jira_issue_export_001/jira_issue_export.json). generate_export_client.py applies these as body-level replacements: summaries and descriptions replace the field wholesale, comment bodies replace by comment id with authors and timestamps untouched. Edit prose here, never in the generated export. Unlisted issues and unlisted comments are carried over byte-identical from the core snapshot.",
+  "issues": {
+    "ROAM-119": {
+      "description": "Finance asked whether assisted activation should carry a one-time fee. This predates the Travel Care workstream and is retained for decision history.\n\nBackground\nThe request came out of the May cost-to-serve review after the team saw a seasonal increase in assisted travel contacts. Finance asked for an estimate of revenue, disclosure overhead, refund volume, and the likely effect on repeat contacts before anyone changed customer-facing copy.\n\nDecision record\nBilling Operations could support a one-time adjustment, but tax treatment differed by market and Care had no reliable way to distinguish an activation request from troubleshooting. Steering rejected the fee on May 13. No console, macro, or policy change should be inferred from this spike; ROAM-251 records the replacement operating decision."
+    },
+    "ROAM-143": {
+      "comment_bodies": {
+        "21086": "Privacy review is complete: location, border, and registration signals may support aggregate operations, but none can substitute for an affirmative customer instruction. The recovery map's working-model panel draws the phone setting and the carrier allowance as two separate layers, and neither moves without the customer. Please do not reuse the prototype's 'eligible for automatic enablement' label in later designs."
+      }
+    },
+    "ROAM-187": {
+      "description": "Pilot opening the subscriber record before any device checks. The calibration group found this added handle time and obscured common phone-side causes.\n\nPilot design\nThe calibration group tested an account-first intake with twelve moderated travel-data contacts across single-line and multi-line accounts. Reviewers captured handle time, incorrect-line risk, and whether the sequence helped agents explain what they were checking.\n\nResult\nEight contacts were resolved at the phone-setting layer, so opening the subscriber record first added navigation without improving diagnosis. On multi-line accounts it also encouraged agents to narrate details for the wrong line. Decision Map v3 supersedes this experiment and keeps device-side checks ahead of the carrier-side work in ROAM-248.",
+      "comment_bodies": {
+        "21127": "Training can preserve the useful part of the pilot: agents should say what they are checking and why before anything on the account is opened. We should not preserve the account-first sequence itself.",
+        "21128": "Decision Map v3 now reflects the calibrated order and ROAM-248 owns the carrier-side entry. I am resolving this experiment as superseded so it remains searchable without competing with the released process."
+      }
+    },
+    "ROAM-201": {
+      "description": "Draft copy treated continued troubleshooting as permission to update the line. Compliance review did not approve that interpretation.\n\nReview scope\nContent Design asked Compliance to review whether conversational phrases such as 'we'll fix that now' could authorize a line-side roaming change. The review covered assisted messaging, voice transcripts, console audit events, and the recovery path when a customer gives an ambiguous answer.\n\nOutcome\nCompliance rejected implied consent. A conversational continuation is not an authorization the audit event can record, and the recovery path for an ambiguous answer belongs to the released interaction rather than to draft copy. This ticket is retained as rejected history; ROAM-251 owns the current wording and console sequence.",
+      "comment_bodies": {
+        "21162": "Please make sure QA can tell the explanation, the customer's response, and the mutation event apart in the audit trail.",
+        "21164": "The transcript sample contains several answers such as 'if that is what it takes' and 'I guess so.' Those are not consistent enough to drive an account mutation, and wording that loose is not something an audit event can point at.",
+        "21165": "Content has split the experience into explanation, confirmation, and completion text. The copy gives the agent a neutral way to continue the conversation whatever the customer decides, without suggesting that service cannot be discussed unless the customer agrees."
+      }
+    },
+    "ROAM-225": {
+      "comment_bodies": {
+        "21207": "I added newly-enabled and delayed-propagation fixtures to ROAM-271. The observed retest is the input the audit reads, not the console response."
+      }
+    },
+    "ROAM-233": {
+      "description": "Coordinate care enablement, console controls, QA, and Help Center dependencies for Roaming Recovery Decision Map v3.\n\nDelivery scope\nThis epic coordinates the two decision-map images, Care console controls, launch QA, facilitator training, and the Help Center dependency for the August travel-care release. The linked stories remain the source for their own implementation and approval details.\n\nRelease conditions\nThe rollout requires the approved explanation and update interaction, an observed retest after any allowance change, and a green ten-fixture regression run. Localization, partner incidents, travel offers, and queue staffing are tracked nearby but do not change the recovery decision gates.",
+      "comment_bodies": {
+        "21249": "Launch review is complete. Any post-release wording fix that leaves the gates unchanged can ship through the training overlay; changes to the console interaction, the mutation handling, or the observed retest must reopen their owning stories and this epic."
+      }
+    },
+    "ROAM-248": {
+      "summary": "Bring the carrier roaming allowance read into the care console",
+      "description": "Implement the carrier-side entry from Roaming Recovery Decision Map v3. The map hands off after the phone-side check; the console must surface the carrier roaming allowance during the contact. Related Help article: NW-TRAVEL-4022.\n\nUser problem\nWhen the phone-side roaming check has not restored reliable data, the agent has no view of the carrier-side allowance state and cannot tell whether carrier-side work is needed at all. Decision Map v3 enters this story only at that point.\n\nAcceptance criteria\nSurface the allowance read in the care console review state; pass the read result to the controls owned by ROAM-251; and write the read to the audit event. QA must cover an allowance that is off and one that is on.",
+      "comment_bodies": {
+        "21282": "Console read is live in staging; the allowance value renders next to the plan panel with the same refresh cadence.",
+        "21283": "Approved for the August care rollout: the allowance read ships with the map's carrier-side entry, and the update control stays on ROAM-251.",
+        "21285": "Question from the facilitator walkthrough: when an account has several active lines, where does the allowance read land? I want the training note to say it plainly.",
+        "21286": "On the enterprise side this question doesn't come up — the fleet roaming console shows allowances account-wide, so there is no line selection step; consumer lines are handled by care.",
+        "21287": "Closing the consumer half of the walkthrough question: care identifies the affected line first, then reads that line's carrier roaming allowance — the read lands per line, never account-level. The training note now says exactly that, and QA's three-line fixture walks it with an allowance that was off and one that was on.",
+        "21288": "The console copy for the read tested well: it names what the value means — the carrier roaming allowance for data abroad — without reading unrelated account details.",
+        "21289": "Release evidence is attached to build 2026.08.3. The read result is preserved across the handoff to ROAM-251 and ROAM-264, so neither story performs its own second lookup."
+      }
+    },
+    "ROAM-251": {
+      "summary": "Finalize the customer explanation and carrier update flow",
+      "description": "Replace ROAM-119 and ROAM-201 with the approved customer explanation and carrier update flow. This story follows the allowance read in ROAM-248.\n\nCustomer experience\nThis story replaces the rejected fee and implied-consent proposals with the launch-approved carrier-side interaction. It follows the allowance read in ROAM-248 and applies only when the line's carrier roaming allowance is off.\n\nAcceptance criteria\nExplain that roaming must be enabled for data abroad. Update only the selected line, and record the prior value, new value, operator, and confirmation reference on the audit event.",
+      "comment_bodies": {
+        "21321": "Current customer explanation: roaming must be enabled on the affected line for data abroad.",
+        "21322": "Legal and Billing join Thursday's launch review for the wording. Please attach the replay outcomes from the June compliance review to the agenda.",
+        "21323": "The map enters this story only after ROAM-248 hands over the selected line; nothing here changes the phone-side steps.",
+        "21326": "Implementation follow-up: the console presents the explanation text ahead of the update control and writes the selected line, prior value, new value, and operator to the event log. The layout matched the compliance walkthrough.",
+        "21327": "The final prompt tested well in moderated review; participants understood what was being asked without extra account details being read out. The released string catalog owns the exact wording, referenced by key rather than pasted into tickets.",
+        "21328": "Compliance replayed affirmative, negative, hesitant, interrupted, and corrected responses against the released build and attached the outcomes to the review record. We did not approve silence, continued troubleshooting, or a prior travel preference as authorization.",
+        "21329": "Billing reviewed the released script against the account event stream for the launch sample and signed off. One caution from the review: the script should not drift into promises about usage or plan terms, which stay governed by the plan.",
+        "21330": "Production telemetry for the launch sample is clean, and the event includes the selected line and prior value, which also lets us verify that repeat contacts do not issue a redundant write."
+      }
+    },
+    "ROAM-264": {
+      "summary": "Require observed speed test after carrier-side changes",
+      "description": "Close the verification gap identified in ROAM-225. This applies after an allowance change made during the contact; the observed result is what the outcomes map routes on.\n\nVerification gap\nA successful allowance read or write confirms only the carrier control path. It does not prove that the device has re-registered or that the customer can use data on the partner network. This story closes the shortcut documented and rejected in ROAM-225.\n\nAcceptance criteria\nAfter enabling the allowance during a contact, ask the customer to rerun the speed test before routing or closing the case. Route an excellent observed result to closure per the outcomes map.",
+      "comment_bodies": {
+        "21362": "Before sign-off, please link the delayed-propagation trace to this story. That is the failure mode that distinguishes it from ROAM-225.",
+        "21363": "After enabling the allowance, ask the customer to rerun the speed test before routing or closing the case. Console success on the write is not the outcome.",
+        "21364": "QA passed on newly-enabled and delayed-propagation fixtures.",
+        "21366": "The delayed-propagation fixture was important: the console returned success while the first device request still had no usable result. Keeping the observed retest after the allowance change gave the map one consistent routing input instead of a special branch based only on console state.",
+        "21368": "Network review supports the retest after an allowance change. A successful write is not synchronous with partner propagation, so the customer's own rerun is the result worth routing on.",
+        "21369": "Training will avoid quoting a numeric speed threshold. Agents record the result shown by the supported test and route it on the outcomes map; they do not invent an outcome from console latency.",
+        "21370": "Release 2026.08.3 is active for Care and the outcomes map's entry panel links to this story. No exception was approved for short contacts or a successful console write."
+      }
+    },
+    "ROAM-271": {
+      "description": "Regression audit for Decision Map v3 and ROAM-248/251/264. Includes newly-enabled, delayed-propagation, slow-data, and unavailable-data outcomes.\n\nTest plan\nRun the release candidate through ten fixtures spanning both phone platforms, three partner regions, newly-enabled allowances, and delayed propagation. Record both the console audit event and the customer-observed outcome.\n\nExit criteria\nNo fixture may skip the explanation or the observed retest after the allowance update. Copy-only mismatches can be corrected in the training overlay if they do not alter a decision gate; workflow failures block ROAM-233.",
+      "comment_bodies": {
+        "21401": "Fixture note: the unavailable-with-both-layers fixture anchors its expected disposition on Recovery Map v4, appendix B — the write-up for the both-layers-on dead end.",
+        "21404": "Run summary: newly-enabled lines reached the observed-result gate after the update, the delayed-propagation fixture held until the customer's rerun showed a usable result, and excellent results closed. The partner-incident fixture remained context and did not create a shortcut.",
+        "21406": "The final evidence bundle contains the interaction trace, confirmation event where applicable, allowance response, observed speed-test category, and resulting map node for each fixture. Reviewers can reconstruct the entire branch without relying on screenshots.",
+        "21409": "I reviewed the green run against the epic exit criteria. Ten of ten fixtures preserve consent and observed verification. This test ticket can close with the evidence bundle retained for launch audit.",
+        "21408": "The wording mismatch was an older training-overlay sentence that implied the line update always happens. It now says the update applies only when the allowance is off; no process-map or console code changed."
+      }
+    }
+  }
+}

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1760">
+<title>Merchant-category exclusion review - intake study</title><style>
+*{box-sizing:border-box} html,body{margin:0;width:1760px;height:1280px;overflow:hidden}
+body{background:#e9edf0;color:#172431;font-family:Arial,Helvetica,sans-serif}
+.sheet{position:relative;width:1712px;height:1232px;margin:24px;background:#fff;border:1px solid #9ba7b1}
+.frame-label{position:absolute;left:-1px;top:-1px;background:#18232d;color:#fff;padding:7px 16px;font-size:12px;font-weight:800;letter-spacing:.3px}
+header{height:154px;margin:0 38px;border-bottom:2px solid #243746;padding:37px 0 18px;display:flex;justify-content:space-between;align-items:flex-start}
+.eyebrow{font-size:13px;font-weight:800;color:#5a6874;letter-spacing:.6px;margin-bottom:10px}
+h1{font-size:36px;line-height:1.06;margin:0 0 10px;letter-spacing:-.4px} .subtitle{font-size:14px;color:#5f6e79}
+.header-meta{display:flex;gap:12px;align-items:flex-start}
+.version{border:1px solid #b6c0c8;padding:10px 13px;font-size:11px;color:#52606b;line-height:1.35}
+.diagram{position:absolute;left:38px;top:174px;width:1636px;height:790px}
+.phase{position:absolute;border:1px solid #9da8b2;background:#fbfcfd;z-index:0}
+.phase.retired-zone{border-style:dashed;background:repeating-linear-gradient(135deg,#fbfaf7,#fbfaf7 12px,#f3f0e8 12px,#f3f0e8 24px)}
+.phase.current-zone{background:#f7fbf8;border-color:#84a98f}
+.phase>span{position:absolute;left:-1px;top:-21px;height:21px;background:#505b65;color:white;padding:5px 10px;font-size:10px;font-weight:800;letter-spacing:.3px}
+.phase.retired-zone>span{background:#8e6d19} .phase.current-zone>span{background:#207044}
+svg{position:absolute;inset:0;width:1636px;height:790px;z-index:1;overflow:visible}
+path{fill:none;stroke:#205d8f;stroke-width:2.2;marker-end:url(#arrow)}
+path.loop{stroke:#8b98a4;stroke-dasharray:6 5;marker-end:url(#arrow-gray)}
+path.reject{stroke:#b74242;stroke-dasharray:5 4;marker-end:url(#arrow-red)}
+path.history-edge{stroke:#9c8242;stroke-dasharray:4 5;marker-end:url(#arrow-gold)}
+.node{position:absolute;z-index:3;border:1.5px solid #1f2a33;background:white;padding:10px 12px;display:flex;flex-direction:column;justify-content:center;text-align:center;font-size:11px;line-height:1.25}
+.node small{display:block;margin-bottom:5px;color:#26618b;font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase}
+.node strong{font-size:12px;line-height:1.2} .node p{margin:5px 0 0;color:#4e5b65;font-size:10px;line-height:1.25}
+.node.start{border-color:#2f8c4a;background:#eef8ef;border-radius:28px}
+.node.terminal{border-radius:28px;background:#f1f5f7}
+.node.stop{border-color:#c83e3e;background:#fff1ef;border-radius:5px}
+.node.system{border-color:#6e8ca4;background:#edf5fb;text-align:left;font-family:"Courier New",monospace;overflow-wrap:anywhere}
+.node.system strong{font-size:11px;overflow-wrap:anywhere}
+.node.dialogue{background:#f5f0ff;border-color:#7c68a7;border-radius:5px 5px 20px 5px}
+.node.handoff{background:#eef7f1;border-color:#418357;border-radius:4px}
+.node.retired{border-style:dashed;border-color:#9e8a61;background:#f7f4ec;color:#685f50}
+.node.rejected{border:2px solid #bf3838;background:#fff0f0;color:#7b2525}
+.node.decision{padding:0;border:none;background:transparent;transform:rotate(45deg)}
+.node.decision:before{content:"";position:absolute;inset:0;border:1.5px solid #347447;background:#fbfffb}
+.node.decision.reject-decision:before{border-color:#be3b3b;background:#fff7f7}
+.decision-content{position:absolute;inset:15px;z-index:1;transform:rotate(-45deg);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.decision-content small{margin:0 0 4px} .decision-content strong{font-size:11px;line-height:1.08} .decision-content p{font-size:8px;line-height:1.12;margin:3px 0 0}
+.edge-label{position:absolute;z-index:4;background:#fff;padding:1px 4px;color:#315a78;font-size:9px;font-weight:800}
+.sticky{position:absolute;z-index:5;padding:10px 11px;box-shadow:0 2px 5px #0003;transform:rotate(-.7deg);font-size:9.5px;line-height:1.3}
+.sticky.yellow{background:#fff098} .sticky.green{background:#c8f2d2} .sticky.blue{background:#cce5fa} .sticky.red{background:#ffd1d1}
+.sticky b{font-size:9.5px} .sticky p{margin:5px 0 7px} .sticky em{display:block;text-align:right;font-size:8px;color:#59636a}
+.control-definitions{position:absolute;left:38px;right:38px;bottom:34px;height:222px;border:1px solid #8d9aa4;background:#fafbfc;padding:26px 16px 12px}
+.control-definitions h2,.history h2{position:absolute;left:-1px;top:-21px;margin:0;background:#18232d;color:white;padding:5px 12px;font-size:10px;letter-spacing:.3px}
+.control-definitions>div{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 12px;height:100%}
+.control-definitions article{border-left:3px solid #2975a6;padding:5px 8px;display:grid;grid-template-columns:38px 1fr;gap:7px;align-content:start}
+.control-definitions article b{font-size:10px;color:#225a81} .control-definitions article p{font-size:9.5px;line-height:1.25;margin:0;color:#37434c}
+.history{position:absolute;left:38px;right:38px;bottom:34px;height:222px;border:1px solid #9a8c67;background:#fbfaf7;padding:20px 14px}
+.history article{position:absolute;top:27px;height:166px;border:1px dashed #9b8f72;background:#f6f3ec;padding:11px}
+.history article b{display:inline-block;background:#496578;color:#fff;padding:4px 7px;font-size:9px;letter-spacing:.3px}
+.history article.history-current b{background:#207044}
+.history article small{float:right;color:#6d6558;font-size:9px;padding-top:4px} .history article p{font-size:9.5px;line-height:1.35;color:#5b554c}
+.watermark{position:absolute;right:42px;bottom:12px;color:#8a949b;font-size:9px}
+</style></head><body><main class="sheet"><div class="frame-label">FRAME 6 · EXCLUSION REVIEW INTAKE STUDY</div>
+<header><div><div class="eyebrow">RHO BANK · BUSINESS CARD OPERATIONS</div><h1>Merchant-category exclusion review - intake study</h1><div class="subtitle">Working-session intake map for exclusion-change requests: one queue, an evidence package, and response targets still open.</div></div>
+<div class="header-meta"><div class="version">Owner: Card Products / Underwriting Operations<br>Updated: 2025-11-14<br>Ref: CC-EXC-03 · v0.3</div></div></header>
+<section class="diagram"><section class='phase ' style='left:12px;top:48px;width:540px;height:532px'><span>REQUEST INTAKE</span></section><section class='phase ' style='left:580px;top:48px;width:600px;height:532px'><span>EVIDENCE + ROUTING</span></section><section class='phase ' style='left:1210px;top:48px;width:414px;height:532px'><span>RESPONSE TARGETS (TBD)</span></section><svg viewBox="0 0 1636 790" aria-hidden="true"><defs>
+<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#205d8f"/></marker>
+<marker id="arrow-gray" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#8b98a4"/></marker>
+<marker id="arrow-red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#b74242"/></marker>
+<marker id="arrow-gold" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#9c8242"/></marker></defs><path class='flow' d='M220 151 H255'/><path class='flow' d='M387 154 H406 V106 H430'/><path class='flow' d='M387 154 H408 V200 H430'/><path class='flow' d='M321 220 V294 H430'/><path class='flow' d='M600 106 H625 V200 H660'/><path class='flow' d='M600 200 H660'/><path class='flow' d='M600 294 H635 V200 H660'/><path class='flow' d='M860 200 H900'/><path class='flow' d='M1010 254 V330'/><path class='flow' d='M944 396 H890'/><path class='loop' d='M795 352 V248'/><path class='flow' d='M1076 396 H1150'/><path class='flow' d='M1255 440 V540'/><path class='loop' d='M860 180 H1400'/><path class='loop' d='M1360 390 H1495 V324'/></svg><span class='edge-label' style='left:392px;top:92px'>ADD</span><span class='edge-label' style='left:392px;top:182px'>REMOVE</span><span class='edge-label' style='left:330px;top:258px'>RECODE</span><span class='edge-label' style='left:898px;top:378px'>NO</span><span class='edge-label' style='left:803px;top:300px'>RESUBMITTED</span><span class='edge-label' style='left:1084px;top:378px'>YES</span><span class='edge-label' style='left:1170px;top:162px'>TRIAGE SLA</span><span class='edge-label' style='left:1380px;top:372px'>DECISION SLA</span><article id='request' class='node start' style='left:40px;top:112px;width:180px;height:78px'><strong>Exclusion review request received</strong><p>Merchant team or internal escalation</p></article><article id='type' class='node decision' style='left:255px;top:88px;width:132px;height:132px'><div class='decision-content'><strong>Request type?</strong><p>add · remove · recode question</p></div></article><article id='add' class='node dialogue' style='left:430px;top:70px;width:170px;height:72px'><strong>Add merchant to exclusions</strong><p>earn-rate impact expected</p></article><article id='remove' class='node dialogue' style='left:430px;top:164px;width:170px;height:72px'><strong>Remove merchant from exclusions</strong><p>sponsor named on request</p></article><article id='recode' class='node dialogue' style='left:430px;top:258px;width:170px;height:72px'><strong>Category recode question</strong><p>merchant coding dispute</p></article><article id='queue' class='node handoff' style='left:660px;top:152px;width:200px;height:96px'><strong>EXCLUSION REVIEW QUEUE</strong><p>Single intake queue · weekly triage</p></article><article id='evidence' class='node system' style='left:900px;top:146px;width:220px;height:108px'><small>evidence package</small><strong>EVIDENCE REQUIREMENTS</strong><p>Merchant category codes · processing samples · earn-rate impact estimate</p></article><article id='evidence-ok' class='node decision' style='left:944px;top:330px;width:132px;height:132px'><div class='decision-content'><strong>Evidence complete?</strong><p>all three items</p></div></article><article id='return' class='node handoff' style='left:700px;top:352px;width:190px;height:84px'><strong>Return to requester</strong><p>Gap list attached; request holds in the queue</p></article><article id='route' class='node handoff' style='left:1150px;top:340px;width:210px;height:100px'><strong>Route to Legal + Card Products</strong><p>Joint review · decision owner TBD</p></article><article id='decision-recorded' class='node terminal' style='left:1180px;top:540px;width:200px;height:72px'><strong>Decision recorded to request</strong><p>Requester notified · target TBD</p></article><article id='sla-triage' class='node system' style='left:1400px;top:120px;width:190px;height:84px'><small>sla</small><strong>TRIAGE TARGET</strong><p>TBD - pending queue ownership</p></article><article id='sla-decision' class='node system' style='left:1400px;top:240px;width:190px;height:84px'><small>sla</small><strong>DECISION TARGET</strong><p>TBD - pending staffing review</p></article><aside class='sticky yellow' style='left:60px;top:360px;width:250px'><b>STILL SKETCHING</b><p>Queue ownership and both response targets are placeholders until staffing is agreed.</p><em>Card Products working session · 10/16</em></aside><aside class='sticky blue' style='left:1395px;top:430px;width:210px'><b>EVIDENCE FIRST</b><p>A request without processing samples cannot be triaged; the recode-question path may need a lighter track.</p><em>H. Weiss · Legal</em></aside></section>
+<section class='history'><h2>INTAKE RECORD</h2><article class='' style='left:20px;width:300px'><b>CONCEPT</b><small>2025-09-30</small><p>Collect exclusion-change requests into one intake instead of ad hoc email threads.</p></article><article class='' style='left:340px;width:300px'><b>WORKSHOP</b><small>2025-10-16</small><p>Draft the queue, the evidence package, and the joint routing.</p></article><article class='' style='left:660px;width:300px'><b>STAFFING QUESTION</b><small>2025-10-27</small><p>Response targets left TBD pending queue ownership.</p></article><article class='' style='left:980px;width:570px'><b>RECORDS HANDOFF</b><small>2025-11-14</small><p>Diagram reference registered as CC-EXC-03 in the card operating records index.</p></article></section><div class="watermark">Internal working material · not customer-facing · CC-EXC-03 · v0.3</div></main></body></html>

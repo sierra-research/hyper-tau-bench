@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Job Aid - Dispute History Lookup</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Trebuchet MS',Tahoma,sans-serif;color:#22303a;background:#fff;
+     width:816px;margin:0 auto;padding:46px 64px}
+.brand{font-size:10.5px;letter-spacing:2.2px;color:#2e6e4e;font-weight:bold}
+h1{font-size:24px;color:#1d3a2c;margin:6px 0 2px}
+.rev{font-size:11.5px;color:#5a6a62;border-bottom:2px solid #2e6e4e;padding-bottom:10px;
+     margin-bottom:16px}
+.box{border:1.5px solid #2e6e4e;background:#f2f8f4;padding:11px 15px;margin-bottom:13px}
+.box h2,.sec h2{font-size:11px;letter-spacing:1.6px;color:#2e6e4e;margin-bottom:5px}
+.box p,.sec p,.sec li{font-size:12.5px;line-height:1.55}
+.sec{margin-bottom:13px}
+.when{border-left:4px solid #b98a2f;background:#fbf6ea;padding:9px 14px;margin-bottom:13px}
+.when h2{color:#8a6721}
+ol,ul{margin-left:22px}
+ol li,ul li{margin-bottom:4px}
+.rec{border:1.5px dashed #2e6e4e;padding:10px 15px;margin-bottom:14px}
+.defer{font-size:11.5px;color:#5a6a62;font-style:italic;margin-top:4px}
+.foot{border-top:2px solid #2e6e4e;margin-top:18px;padding-top:7px;font-size:11px;
+      color:#5a6a62;display:flex;justify-content:space-between}
+</style></head><body>
+<div class="brand">RHO BANK RETENTION OPERATIONS - JOB AID</div>
+<h1>DISPUTE HISTORY LOOKUP</h1>
+<div class="rev">Rev A | 2025-10-13 | Retention Operations with Learning &amp; Development</div>
+
+<div class="box"><h2>PURPOSE</h2>
+<p>get_user_dispute_history_7291 retrieves a user's credit card dispute history, including
+dispute dates, statuses, and transaction details.</p></div>
+
+<div class="when"><h2>WHEN</h2>
+<ul>
+<li>You need a consolidated list of all credit card disputes filed by a specific user.</li>
+<li>You are reviewing the current status or historical progression of a user's disputes.</li>
+<li>You need transaction-level context for each dispute.</li>
+</ul></div>
+
+<div class="sec"><h2>PREREQUISITES</h2>
+<p>The tool requires user_id, the user's canonical internal identifier. Make sure the user_id
+is correct and current before making the call.</p></div>
+
+<div class="sec"><h2>PROCEDURE</h2>
+<ol>
+<li>Obtain the user_id.</li>
+<li>Invoke get_user_dispute_history_7291 with user_id.</li>
+<li>Review the returned list of disputes and associated transaction details.</li>
+</ol></div>
+
+<div class="sec"><h2>READING THE RESULTS</h2>
+<ul>
+<li>Verify the list is complete for the queried user_id.</li>
+<li>Use dispute_date and last_updated_at to understand timeline and recency.</li>
+<li>Use status to determine whether action is needed.</li>
+<li>Review transaction details to confirm the disputed transaction context.</li>
+</ul></div>
+
+<div class="sec"><h2>WORKED READ - THREE DISPUTES RETURN</h2>
+<p>A lookup returns three disputes. The newest row shows a closed status; an older dispute, filed in the spring, still shows open. The read is the whole list, not the newest row: the open spring dispute is the one that matters. A list is only as settled as its least-final entry.</p></div>
+
+<div class="sec"><h2>WORKED READ - ONE DISPUTE, RECENTLY MOVED</h2>
+<p>A lookup returns a single dispute whose record moved this week. Read the date fields together: the dispute itself is months old and only the movement is new. Describe what moved from the dates on the screen, not from memory.</p></div>
+
+<div class="sec"><h2>IF THE RESULT LOOKS WRONG</h2>
+<ul>
+<li>Empty result while the customer describes a dispute: do not treat the empty list as an answer yet</li>
+<li>the handling row for an empty result is printed on the pack card; follow the card.</li>
+<li>Any error string: the pack card prints an error table with a handling row per string. Open the card and follow its row.</li>
+</ul></div>
+
+<div class="sec"><h2>SCOPE</h2>
+<p>The tool returns only credit card disputes associated with the specified user_id.</p></div>
+
+<div class="rec"><h2>RECORD IT</h2>
+<p>Note in the case record that the history was reviewed and which disputes, if any, remain
+open.</p></div>
+
+<div class="sec"><h2>PRIVACY</h2>
+<p>Always handle user data from this tool in accordance with internal data handling and
+privacy requirements.</p></div>
+
+<div class="sec"><h2>WHEN TO OPEN THE PACK CARD</h2>
+<p>Open contract pack CP-CARD-7 whenever the question is about the record itself: the shape of a returned record, a field's exact name, or what an error string means. This aid covers how the desk runs the lookup; the pack card covers what the tool returns. If you are copying field names off this page, you are on the wrong page - the card prints those at the record level. </p></div>
+
+<div class="defer">Record shapes and error handling live in contract pack CP-CARD-7.</div>
+<div class="foot"><div>Retention Operations</div><div>Rev A 2025-10-13</div></div>
+</body></html>

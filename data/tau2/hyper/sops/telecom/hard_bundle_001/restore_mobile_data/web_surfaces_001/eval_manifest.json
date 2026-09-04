@@ -1,0 +1,64 @@
+{
+  "id": "telecom_restore_mobile_data_web_surfaces_hard_additions_001",
+  "representation": "website_screenshot",
+  "artifact_count": 3,
+  "core_manifest": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+  "description": "Hard-bundle additions to the mobile-data web surface. All three are context-only: no page or card owns a fact. Authority stays with the frozen core carriers described in the core manifest.",
+  "artifacts": [
+    {
+      "source": "help-mobile-data-triage.html",
+      "raster": "help-mobile-data-triage.png",
+      "surface": "public_help_center",
+      "reference_id": "NW-DATA-2160",
+      "role": "utility_chooser",
+      "authoritative_fact_ids": [],
+      "linked_route_fact_ids": [],
+      "arc": {
+        "pattern": "F",
+        "echoes_fact_ids": ["abroad_customer_use_roaming_flow", "speed_test_blocked_use_service_flow"],
+        "notes": "Public chooser launched 2026-07-28 (email_thread_31). Asks the travel question first, mirroring the quick-route chart's Decision B; explicit scope box says the page routes and decides nothing."
+      }
+    },
+    {
+      "source": "console-line-usage-headroom.html",
+      "raster": "console-line-usage-headroom.png",
+      "surface": "signed_in_support_console",
+      "reference_id": "CARE-758",
+      "role": "console_context",
+      "authoritative_fact_ids": [],
+      "linked_route_fact_ids": [],
+      "arc": {
+        "pattern": "F",
+        "echoes_fact_ids": ["check_usage_against_plan_limit"],
+        "notes": "A second allowance card whose record shows plan allowance and prior refuel as separate rows with headroom remaining — corroborates the plus-refueled comparison without repeating CARE-701's decision wording."
+      }
+    },
+    {
+      "source": "console-correction-pending.html",
+      "raster": "console-correction-pending.png",
+      "surface": "signed_in_support_console",
+      "reference_id": "CARE-763",
+      "role": "console_context",
+      "authoritative_fact_ids": [],
+      "linked_route_fact_ids": [],
+      "arc": {
+        "pattern": "F",
+        "echoes_fact_ids": ["rerun_speed_test_after_carrier_correction"],
+        "notes": "A correction still in Processing state — shows the verification checkpoint waiting on posting completion, the complement of CARE-706's completed state."
+      }
+    }
+  ],
+  "distribution": {
+    "expose_to_developer_agent": [
+      "help-mobile-data-triage.png",
+      "console-line-usage-headroom.png",
+      "console-correction-pending.png"
+    ],
+    "keep_author_side": [
+      "help-mobile-data-triage.html",
+      "console-line-usage-headroom.html",
+      "console-correction-pending.html",
+      "eval_manifest.json"
+    ]
+  }
+}

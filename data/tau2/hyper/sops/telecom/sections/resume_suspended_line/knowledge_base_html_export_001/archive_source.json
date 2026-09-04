@@ -1,0 +1,548 @@
+{
+  "archive": {
+    "title": "Northline Care Knowledge",
+    "subtitle": "Offline support archive · Billing, service, plans, and devices",
+    "exported_at": "2026-08-08 09:30 PT",
+    "release": "Care reference 2026.08",
+    "notice": "Published articles are operating references for Northline customer care. Drafts and archived pages are excluded from this export."
+  },
+  "articles": [
+    {
+      "article_id": "NW-BILL-8100",
+      "area": "Billing & service",
+      "title": "Read the suspension reason before choosing a recovery path",
+      "summary": "Use the line record to distinguish a billing suspension from a contract-status suspension.",
+      "updated": "2026-08-08",
+      "read_time": "5 min",
+      "body": [
+        "After the customer and affected line are identified, open the line record and read both Service status and Suspension reason. A Suspended service state can have more than one cause, so the status alone does not select the recovery path.",
+        "An overdue bill can cause a line to be suspended. A line can also be suspended because its contract ended. Keep those causes separate: the billing path is based on bill records, while a contract-status case follows the current contract handling decision.",
+        "Example record: line CARE-741, (206) 555-0105, shows Service: Suspended and Reason: Overdue balance. The Resume control may remain locked while the qualifying conditions are unresolved. This record view is a routing signal, not proof that a phone setting is broken.",
+        "Do not infer the reason from what the customer remembers paying, a device symptom, or the absence of signal bars. The line record is the source for the carrier-side suspension reason."
+      ],
+      "related": ["NW-BILL-8112", "NW-SVC-4140", "NW-ACCT-2018"]
+    },
+    {
+      "article_id": "NW-BILL-8112",
+      "area": "Billing & service",
+      "title": "Clear an overdue balance before service resumption",
+      "summary": "Review recent bills, validate the selected record, and obtain confirmation before sending a payment request.",
+      "updated": "2026-08-08",
+      "read_time": "8 min",
+      "body": [
+        "Use this procedure only when the identified line's Suspension reason is Overdue balance. Begin by checking the customer's recent bills. Locate every bill whose current status is Overdue; do not use a remembered invoice date or the largest balance as a substitute for the status shown in the bill record.",
+        "Before using Send payment request, independently verify that the selected bill is still Overdue. The action sends a request but does not perform the eligibility check for you. A Paid bill, or a bill in any other non-overdue state, must not be selected merely because it appears in recent history.",
+        "Tell the customer the amount due for the verified overdue bill. Then ask whether they want you to send that payment request. Sending the request changes the billing workflow, so a description of the amount is not itself permission to continue.",
+        "After the customer clearly confirms, send the payment request for that verified overdue bill. Wait for the action result before directing the customer to their phone; do not claim that a request is available until the record shows the send succeeded.",
+        "If the action is unavailable or returns an error, leave the bill state unchanged, explain that the request was not sent, and use the current billing-request troubleshooting reference. Do not turn an unsuccessful action into a completed-payment claim."
+      ],
+      "related": ["NW-BILL-8124", "NW-BILL-8172", "NW-BILL-8210"]
+    },
+    {
+      "article_id": "NW-BILL-8124",
+      "area": "Billing & service",
+      "title": "Guide the customer through a phone payment and verify the result",
+      "summary": "A sent request is completed on the customer's phone; care verifies the resulting bill state.",
+      "updated": "2026-08-08",
+      "read_time": "7 min",
+      "body": [
+        "Once the payment-request action succeeds, ask the customer to check the payment request on their phone. The customer's phone is where the sent request is presented; do not ask them to search device network settings or assume that sending the request also paid the bill.",
+        "If the customer accepts the request, have them make the payment from the phone. Let the customer complete that interaction and say when it is finished. Customer care does not enter the customer's payment response on their behalf.",
+        "After the customer reports completion, refresh the bill record and confirm that the bill status is Paid. A customer saying that they tapped a button is not enough to skip the record check, and a sent request is not equivalent to a paid bill.",
+        "Review the customer's bills again and confirm that all overdue bills are paid before any line-resumption action. If even one bill remains Overdue, stop the resumption path and address the remaining overdue record; do not resume service while an overdue balance remains."
+      ],
+      "related": ["NW-BILL-8112", "NW-BILL-8136", "NW-BILL-8196"]
+    },
+    {
+      "article_id": "NW-BILL-8136",
+      "area": "Billing & service",
+      "title": "Resume an eligible line and complete the phone check",
+      "summary": "Confirm with the customer, resume the affected line, then verify service after a reboot.",
+      "updated": "2026-08-08",
+      "read_time": "6 min",
+      "body": [
+        "Reach this step only after the bill review confirms that every overdue bill is Paid and the affected line is eligible for resumption. Explain that the next action resumes the identified line, and ask the customer to confirm before you use the Resume line control.",
+        "After the customer confirms, resume the affected line. Wait for the carrier-side action result and refresh the line record. Do not apply the action to a different line on a multi-line account, and do not describe the service as active before the result is returned.",
+        "When the line is resumed, ask the customer to reboot the phone. After it restarts, have them check the status bar for service. The reboot applies the pending carrier-side change and starts a fresh network search; the status-bar check is the final customer-visible verification.",
+        "If service does not appear after the completed reboot and status-bar check, keep the verified billing result intact and move to the published no-service diagnostic path. Do not send another payment request solely because radio service needs separate troubleshooting."
+      ],
+      "related": ["NW-SVC-4140", "NW-DEV-6120", "NW-BILL-8124"]
+    },
+    {
+      "article_id": "NW-BILL-8148",
+      "area": "Billing & service",
+      "title": "Understand bill status labels",
+      "summary": "A field guide to the billing states displayed in Care Console.",
+      "updated": "2026-07-29",
+      "read_time": "4 min",
+      "body": [
+        "Read the current Status column rather than inferring state from an amount or due date. Recent bills remain in history after payment, and the same invoice may appear in search results while its status changes.",
+        "Use status labels exactly as displayed when explaining a record. If an unfamiliar label appears after a platform release, consult the release note or Billing Operations instead of mapping it to the nearest familiar label.",
+        "This article is a terminology reference. The task-specific article controls whether a status can be used for a payment request, adjustment, receipt, or service workflow."
+      ],
+      "related": ["NW-BILL-8112", "NW-BILL-8196"]
+    },
+    {
+      "article_id": "NW-BILL-8160",
+      "area": "Billing & service",
+      "title": "Explain a posted payment versus a pending bank authorization",
+      "summary": "Set expectations without treating a bank-side hold as a completed Northline payment.",
+      "updated": "2026-07-18",
+      "read_time": "5 min",
+      "body": [
+        "A bank authorization can appear before Northline's bill record changes. Explain what the customer reports and what the Northline record currently shows without promising a settlement time that is not displayed.",
+        "Refresh the bill record before making a carrier-side decision. Screenshots from a banking app can help describe the customer's report, but they do not replace the status in Care Console.",
+        "For duplicate charges, reversals, or a payment that remains missing after the documented window, follow the transaction-research article rather than changing bill status manually."
+      ],
+      "related": ["NW-BILL-8196", "NW-BILL-8256"]
+    },
+    {
+      "article_id": "NW-BILL-8172",
+      "area": "Billing & service",
+      "title": "Troubleshoot an unavailable payment-request control",
+      "summary": "Gather the current bill and request states before deciding whether to retry or escalate.",
+      "updated": "2026-08-01",
+      "read_time": "6 min",
+      "body": [
+        "If Send payment request is unavailable, refresh the account and record the selected bill's current status, any request status displayed, and the exact control message. Do not repeatedly press the control or select a different bill to work around the message.",
+        "Check the Billing Platform status notice for an active incident. When no incident is posted, use the current scope decision for request-state constraints and route unexplained control failures through Billing Operations.",
+        "This troubleshooting page does not itself authorize a request, a payment, or service resumption. Return to the applicable published procedure after the control issue is resolved."
+      ],
+      "related": ["NW-BILL-8112", "NW-OPS-9012"]
+    },
+    {
+      "article_id": "NW-BILL-8184",
+      "area": "Billing & service",
+      "title": "Set up paperless billing preferences",
+      "summary": "Change future statement delivery without changing the balance or service state.",
+      "updated": "2026-06-22",
+      "read_time": "3 min",
+      "body": [
+        "Paperless billing controls how future statements are delivered. It does not cancel an existing balance, change a bill's status, or restore a suspended line.",
+        "Open Billing preferences, explain the destination address shown, and confirm before saving a delivery-method change. Send a verification message when the workflow requires one.",
+        "A customer may still download prior statements after changing delivery preferences. Use the statement-history article for receipt and PDF questions."
+      ],
+      "related": ["NW-BILL-8232", "NW-ACCT-2054"]
+    },
+    {
+      "article_id": "NW-BILL-8196",
+      "area": "Billing & service",
+      "title": "Find receipts and payment history",
+      "summary": "Locate completed transactions without altering billing records.",
+      "updated": "2026-06-30",
+      "read_time": "4 min",
+      "body": [
+        "Use Payment history to locate completed transactions by date and amount. A receipt is evidence for a recorded transaction; generating or downloading one does not change the related bill.",
+        "If the customer needs a copy, describe the delivery destination before sending it. Verify that contact information is current when the receipt workflow uses an account address.",
+        "When the requested transaction is absent, do not create a receipt placeholder. Use transaction research with the customer's reported date and amount."
+      ],
+      "related": ["NW-BILL-8160", "NW-BILL-8232"]
+    },
+    {
+      "article_id": "NW-BILL-8210",
+      "area": "Billing & service",
+      "title": "Discuss a payment arrangement",
+      "summary": "Explain available arrangement information without representing it as immediate payment.",
+      "updated": "2026-07-11",
+      "read_time": "6 min",
+      "body": [
+        "A payment arrangement is distinct from a completed payment and from a sent payment request. Read the offers and dates shown for the account; do not invent eligibility or promise that an offer will remain available.",
+        "Explain what the selected arrangement changes before asking the customer to accept it. If the account has no available offer, state that result and follow the escalation guidance shown in the arrangement tool.",
+        "Do not use an arrangement discussion as evidence that an overdue bill is Paid. Any service workflow must rely on the actual bill and line states displayed afterward."
+      ],
+      "related": ["NW-BILL-8112", "NW-BILL-8148"]
+    },
+    {
+      "article_id": "NW-BILL-8220",
+      "area": "Billing & service",
+      "title": "Update AutoPay enrollment",
+      "summary": "Manage future scheduled payments while preserving current bill-state checks.",
+      "updated": "2026-06-14",
+      "read_time": "5 min",
+      "body": [
+        "AutoPay enrollment affects eligible future payments. Turning it on does not by itself pay a currently overdue bill, and turning it off does not reverse a completed payment.",
+        "Explain the payment method and effective billing cycle displayed in the enrollment panel. Ask for confirmation before saving the change.",
+        "For a current balance, use the bill's displayed status and the applicable payment procedure. Do not assume AutoPay will resolve a service restriction immediately."
+      ],
+      "related": ["NW-BILL-8112", "NW-BILL-8268"]
+    },
+    {
+      "article_id": "NW-BILL-8232",
+      "area": "Billing & service",
+      "title": "Download a statement PDF",
+      "summary": "Help customers retrieve an existing statement from history.",
+      "updated": "2026-05-26",
+      "read_time": "3 min",
+      "body": [
+        "Open Statement history and select the requested billing period. Confirm the account and date before describing or sending the document.",
+        "A statement is a historical document and may show values that later changed. Use current account fields for present eligibility or service decisions.",
+        "If the file fails to open, try the documented download troubleshooting steps; do not recreate the statement from copied line items."
+      ],
+      "related": ["NW-BILL-8184", "NW-BILL-8196"]
+    },
+    {
+      "article_id": "NW-BILL-8244",
+      "area": "Billing & service",
+      "title": "Review taxes and regulatory fees",
+      "summary": "Explain statement line items using the published fee descriptions.",
+      "updated": "2026-05-09",
+      "read_time": "5 min",
+      "body": [
+        "Match each questioned amount to the description and jurisdiction shown on the statement. Explain the displayed calculation without assigning a legal characterization that is absent from the reference.",
+        "A tax or fee question does not change whether a bill is currently due. Keep explanation, dispute, and payment workflows separate.",
+        "Escalate a suspected calculation defect with the statement period, jurisdiction, and line item rather than promising an adjustment."
+      ],
+      "related": ["NW-BILL-8232", "NW-BILL-8256"]
+    },
+    {
+      "article_id": "NW-BILL-8256",
+      "area": "Billing & service",
+      "title": "Research a duplicate card charge",
+      "summary": "Compare transaction records before opening a billing investigation.",
+      "updated": "2026-07-03",
+      "read_time": "6 min",
+      "body": [
+        "Compare the dates, amounts, payment identifiers, and status of each reported transaction. Two bank entries can represent an authorization and a posted payment rather than two completed charges.",
+        "When the Northline history shows two completed transactions, use the billing investigation control and give the customer the resulting case reference. Do not edit a bill or promise a refund date.",
+        "Keep any service-state decision grounded in the current bill record while the investigation is open."
+      ],
+      "related": ["NW-BILL-8160", "NW-BILL-8196"]
+    },
+    {
+      "article_id": "NW-BILL-8268",
+      "area": "Billing & service",
+      "title": "Replace an expired payment method",
+      "summary": "Update a stored method without claiming a bill has been paid.",
+      "updated": "2026-06-07",
+      "read_time": "4 min",
+      "body": [
+        "Use Payment methods to replace an expired card or bank record. Never ask the customer to state a complete card number in chat or copy sensitive values into care notes.",
+        "Explain the method label and where it will be used, then confirm before saving. The save result establishes only that the method changed.",
+        "If a bill still needs payment, return to the applicable payment workflow and verify the resulting bill state separately."
+      ],
+      "related": ["NW-BILL-8220", "NW-ACCT-2054"]
+    },
+    {
+      "article_id": "NW-SVC-4104",
+      "area": "Network & service",
+      "title": "Start a no-service report",
+      "summary": "Separate carrier-side line state from phone-side radio troubleshooting.",
+      "updated": "2026-08-06",
+      "read_time": "5 min",
+      "body": [
+        "Identify the affected line, listen to the customer's symptom, and check the line's carrier-side status before changing phone settings. A suspended line follows suspension handling rather than ordinary radio troubleshooting.",
+        "For an active line, continue with outage, airplane-mode, SIM, and network-registration checks in the published order. Record results as observations instead of guessing at a cause.",
+        "If a carrier-side change is completed during another workflow, finish its required phone verification before opening a second action path."
+      ],
+      "related": ["NW-SVC-4140", "NW-BILL-8100"]
+    },
+    {
+      "article_id": "NW-SVC-4140",
+      "area": "Network & service",
+      "title": "Reboot and check network registration",
+      "summary": "Use a restart when a carrier-side change needs to be applied on the phone.",
+      "updated": "2026-08-05",
+      "read_time": "4 min",
+      "body": [
+        "A reboot causes the phone to apply pending carrier-side changes and begin a new network search. Let the phone complete shutdown and startup before evaluating the result.",
+        "After startup, ask what appears in the status bar. Service bars, carrier name, emergency-only text, and no-service text are observations that determine the next diagnostic step.",
+        "Do not substitute toggling an unrelated setting for a required reboot. Preserve the preceding workflow's completion criteria."
+      ],
+      "related": ["NW-SVC-4104", "NW-DEV-6120"]
+    },
+    {
+      "article_id": "NW-SVC-4176",
+      "area": "Network & service",
+      "title": "Check the outage board",
+      "summary": "Use the published incident state for location-wide service reports.",
+      "updated": "2026-07-25",
+      "read_time": "3 min",
+      "body": [
+        "Search the outage board with the service location displayed on the account. A broad incident can explain an active line's loss of service, but it does not change the line's billing or contract state.",
+        "Give only the restoration estimate displayed in the incident record. If no estimate is present, say that rather than calculating one from a prior incident.",
+        "Continue account-specific checks when the board shows no relevant incident."
+      ],
+      "related": ["NW-SVC-4104", "NW-OPS-9012"]
+    },
+    {
+      "article_id": "NW-SVC-4208",
+      "area": "Network & service",
+      "title": "Handle emergency-calls-only status",
+      "summary": "Capture the precise phone display before selecting a diagnostic branch.",
+      "updated": "2026-07-20",
+      "read_time": "4 min",
+      "body": [
+        "Ask the customer to read the status-bar text and confirm whether ordinary calling and data are unavailable. Emergency-calls-only is a phone observation, not a billing status.",
+        "Check the carrier-side line state, outage board, and SIM state before editing network configuration. If the line is suspended, use the suspension reason to route the case.",
+        "Keep emergency-service disclaimers concise and do not advise test calls to emergency numbers."
+      ],
+      "related": ["NW-SVC-4104", "NW-SIM-5200"]
+    },
+    {
+      "article_id": "NW-DATA-4300",
+      "area": "Mobile data",
+      "title": "Separate mobile-data allowance from line suspension",
+      "summary": "Do not use data-refuel controls for a carrier-side service suspension.",
+      "updated": "2026-08-06",
+      "read_time": "5 min",
+      "body": [
+        "A data allowance and a line service state are different records. Review both when the customer describes slow or unavailable data.",
+        "If Service is Suspended and the line record gives a suspension reason, route through that cause. A data refuel does not unlock a suspended line and an allowance display does not override the service state.",
+        "For an active line with exhausted allowance, use the current refuel article and its own confirmation rules."
+      ],
+      "related": ["NW-BILL-8100", "NW-DATA-4332"]
+    },
+    {
+      "article_id": "NW-DATA-4332",
+      "area": "Mobile data",
+      "title": "Review current-cycle data usage",
+      "summary": "Explain the meter, reset date, and line assignment shown in the account.",
+      "updated": "2026-07-31",
+      "read_time": "4 min",
+      "body": [
+        "Open the identified line's usage panel and read the current-cycle values. Confirm the reset date before comparing customer estimates to the meter.",
+        "Usage may post after the phone session that generated it. Explain the displayed update time and avoid presenting the meter as a real-time packet counter.",
+        "If the line is not active, resolve its carrier-side state before treating usage as a device-configuration problem."
+      ],
+      "related": ["NW-DATA-4300", "NW-DATA-4364"]
+    },
+    {
+      "article_id": "NW-DATA-4364",
+      "area": "Mobile data",
+      "title": "Check hotspot eligibility",
+      "summary": "Use plan records before troubleshooting tethering settings.",
+      "updated": "2026-06-18",
+      "read_time": "4 min",
+      "body": [
+        "Confirm the selected line and read the plan's hotspot field. Device menus can display a hotspot option even when the current plan does not include service.",
+        "When eligibility is present, follow the device-specific tethering checks. Do not modify general mobile-data settings solely to make the hotspot toggle appear.",
+        "Plan changes and service-state changes have separate confirmation and verification steps."
+      ],
+      "related": ["NW-PLAN-7100", "NW-DEV-6148"]
+    },
+    {
+      "article_id": "NW-SIM-5200",
+      "area": "SIM & eSIM",
+      "title": "Read SIM status before reseating a card",
+      "summary": "Distinguish an unseated SIM from a carrier-side line restriction.",
+      "updated": "2026-08-02",
+      "read_time": "5 min",
+      "body": [
+        "Check the line record and phone-reported SIM state before asking the customer to remove hardware. A suspended carrier-side line and a missing SIM can both produce service loss, but they require different actions.",
+        "If the physical SIM is not detected and the line is otherwise eligible, use the device guide for safe power-down and reseating. For eSIM, use profile diagnostics instead of physical-card instructions.",
+        "After any approved SIM action, complete the documented reboot and status check."
+      ],
+      "related": ["NW-SVC-4104", "NW-SIM-5232"]
+    },
+    {
+      "article_id": "NW-SIM-5232",
+      "area": "SIM & eSIM",
+      "title": "Replace an eSIM profile",
+      "summary": "Use the activation workflow only after account and device eligibility are established.",
+      "updated": "2026-06-28",
+      "read_time": "7 min",
+      "body": [
+        "Verify the affected line, device identifier, and eSIM capability before creating a replacement profile. Explain that activation can temporarily interrupt service.",
+        "A profile replacement does not change a suspended, closed, or otherwise restricted carrier-side line into an active one. Resolve the account state through its own workflow.",
+        "After activation, reboot the phone and verify that the expected line appears in cellular settings and the status bar."
+      ],
+      "related": ["NW-SIM-5200", "NW-DEV-6120"]
+    },
+    {
+      "article_id": "NW-DEV-6100",
+      "area": "Devices",
+      "title": "Confirm airplane mode is off",
+      "summary": "Use the visible phone control as one step in active-line troubleshooting.",
+      "updated": "2026-07-27",
+      "read_time": "3 min",
+      "body": [
+        "Ask the customer to open quick settings and describe the airplane control. If it is on, ask them to turn it off and wait for the phone to search for the network.",
+        "Airplane mode is a phone-side state. It does not explain or clear a carrier-side suspension shown in Care Console.",
+        "Continue with the current no-service decision tree if the active line still has no network after the control is off."
+      ],
+      "related": ["NW-SVC-4104", "NW-DEV-6120"]
+    },
+    {
+      "article_id": "NW-DEV-6120",
+      "area": "Devices",
+      "title": "Perform a controlled phone restart",
+      "summary": "Give model-neutral reboot instructions and wait for startup.",
+      "updated": "2026-07-12",
+      "read_time": "3 min",
+      "body": [
+        "Ask the customer to save in-progress work, then use the normal power menu to restart. If the phone uses a different button combination, follow the manufacturer's on-device prompt rather than guessing.",
+        "Wait for the lock screen and status bar to return. Capture the observed service state before deciding whether another step is required.",
+        "Restarting does not authorize or complete a carrier-side account change; it verifies or applies a change already made through the proper workflow."
+      ],
+      "related": ["NW-SVC-4140", "NW-DEV-6100"]
+    },
+    {
+      "article_id": "NW-DEV-6148",
+      "area": "Devices",
+      "title": "Reset network settings: impact and cautions",
+      "summary": "Use the reset only when the current diagnostic path explicitly calls for it.",
+      "updated": "2026-05-30",
+      "read_time": "6 min",
+      "body": [
+        "A network-settings reset can remove saved Wi-Fi networks, paired connections, and customized cellular settings. Explain the expected impact before asking the customer to proceed.",
+        "Do not use the reset as a shortcut for a suspended line, an account restriction, or an unresolved outage. Those conditions are outside the reset's purpose.",
+        "After a permitted reset, restart the phone and recheck the specific symptom that led to the step."
+      ],
+      "related": ["NW-SVC-4104", "NW-DATA-4300"]
+    },
+    {
+      "article_id": "NW-PLAN-7100",
+      "area": "Plans & contracts",
+      "title": "Compare current plan features",
+      "summary": "Use the plan catalog for feature questions without changing service.",
+      "updated": "2026-07-23",
+      "read_time": "5 min",
+      "body": [
+        "Open the customer's current plan and the published comparison catalog. Describe included features, limits, and displayed pricing for the selected line.",
+        "A comparison is informational. If the customer wants a plan change, use the change workflow, explain the exact effect, and obtain confirmation before submission.",
+        "Do not use a plan comparison to override the contract or service state shown on the line record."
+      ],
+      "related": ["NW-DATA-4364", "NW-PLAN-7132"]
+    },
+    {
+      "article_id": "NW-PLAN-7132",
+      "area": "Plans & contracts",
+      "title": "Prepare for a contract renewal conversation",
+      "summary": "Collect the contract record and available offers before involving the contract team.",
+      "updated": "2026-08-07",
+      "read_time": "5 min",
+      "body": [
+        "Read the contract status, end date, line, and offers displayed in the account. Do not promise a particular renewal term or exception before the responsible team reviews the record.",
+        "Explain what information will accompany a handoff and keep troubleshooting observations separate from contract eligibility. A device restart does not alter a contract record.",
+        "Current launch boundaries for contract-state suspensions were finalized in the dated decision series and apply alongside this preparation reference."
+      ],
+      "related": ["NW-BILL-8100", "NW-PLAN-7100"]
+    },
+    {
+      "article_id": "NW-PLAN-7164",
+      "area": "Plans & contracts",
+      "title": "Review device-financing status",
+      "summary": "Distinguish installment records from wireless service bills.",
+      "updated": "2026-06-11",
+      "read_time": "4 min",
+      "body": [
+        "Device financing and wireless service charges may appear together on a statement but retain separate record identifiers. Use the financing panel for payoff and installment questions.",
+        "Do not treat a device payoff quote as a paid service bill or as permission to change a line. Explain the amount and expiration shown for the quote.",
+        "Route disputes through the financing workflow with the device and agreement identifiers."
+      ],
+      "related": ["NW-BILL-8148", "NW-PLAN-7100"]
+    },
+    {
+      "article_id": "NW-ACCT-2018",
+      "area": "Accounts",
+      "title": "Choose the affected line on a multi-line account",
+      "summary": "Anchor every service action to the exact phone number and line record.",
+      "updated": "2026-08-03",
+      "read_time": "4 min",
+      "body": [
+        "After identifying the customer, confirm which phone number has the problem and open that line. Read the line identifier and phone number back when similar device names could cause confusion.",
+        "Bills can be account-level while service actions are line-specific. Recheck the selected line before any carrier-side change.",
+        "If the customer names another person on the account, continue to use the verified account and authorization rules before discussing that line's private details."
+      ],
+      "related": ["NW-BILL-8100", "NW-ACCT-2054"]
+    },
+    {
+      "article_id": "NW-ACCT-2054",
+      "area": "Accounts",
+      "title": "Update a billing email address",
+      "summary": "Change contact delivery details without altering service eligibility.",
+      "updated": "2026-06-25",
+      "read_time": "4 min",
+      "body": [
+        "Verify the customer and explain which messages use the billing email. Recap the new address and obtain confirmation before saving the account change.",
+        "An email update does not change a bill status, payment method, contract, or line service state. Return to the relevant workflow for those requests.",
+        "If the verification message does not arrive, check spelling and the notification log before resending."
+      ],
+      "related": ["NW-BILL-8184", "NW-ACCT-2018"]
+    },
+    {
+      "article_id": "NW-ROAM-7300",
+      "area": "Travel & roaming",
+      "title": "Check roaming entitlement before device settings",
+      "summary": "Use the line's plan and travel record to select a roaming path.",
+      "updated": "2026-07-16",
+      "read_time": "5 min",
+      "body": [
+        "Identify the traveling line and review its roaming entitlement, destination, and active travel products. A visible roaming toggle does not establish plan eligibility.",
+        "If the line is suspended, route through the carrier-side reason before troubleshooting roaming registration. Do not sell or activate a travel product as a workaround for suspension.",
+        "For an eligible active line, continue with partner-network and device roaming checks."
+      ],
+      "related": ["NW-PLAN-7100", "NW-SVC-4104"]
+    },
+    {
+      "article_id": "NW-MSG-7400",
+      "area": "Messaging",
+      "title": "Start an MMS picture-message check",
+      "summary": "Confirm line state, mobile data, and message symptoms before editing settings.",
+      "updated": "2026-07-28",
+      "read_time": "5 min",
+      "body": [
+        "Ask whether text-only messages work and whether picture messages fail to send, receive, or both. Check the line service state before opening device messaging settings.",
+        "MMS may depend on mobile data even when Wi-Fi is connected. Follow the published MMS decision tree for an active line; a suspended line follows its carrier-side route.",
+        "Do not reset all network settings until the decision tree reaches that step and its impact has been explained."
+      ],
+      "related": ["NW-DATA-4300", "NW-DEV-6148"]
+    },
+    {
+      "article_id": "NW-VM-7500",
+      "area": "Calling & voicemail",
+      "title": "Reset a voicemail PIN",
+      "summary": "Use the voicemail control for an active eligible line.",
+      "updated": "2026-05-17",
+      "read_time": "4 min",
+      "body": [
+        "Verify the customer and affected line before using the voicemail PIN control. Explain that the reset affects voicemail access, not the phone unlock code or SIM PIN.",
+        "Wait for the reset result, then have the customer test voicemail from the affected phone. Do not expose a generated secret in notes.",
+        "If the line is not active, resolve its carrier-side state before treating voicemail access as an isolated feature problem."
+      ],
+      "related": ["NW-ACCT-2018", "NW-SVC-4104"]
+    },
+    {
+      "article_id": "NW-SEC-7600",
+      "area": "Security",
+      "title": "Handle a locked SIM PIN",
+      "summary": "Protect the remaining attempts and use the documented unlock record.",
+      "updated": "2026-07-08",
+      "read_time": "6 min",
+      "body": [
+        "Ask what the phone displays and do not encourage guesses. Repeated incorrect entries can exhaust remaining attempts and require a different recovery route.",
+        "After account verification, use the documented SIM-security information for the affected line. Keep a SIM PIN issue separate from a carrier-side service suspension.",
+        "When the unlock succeeds, restart the phone and check registration. When it does not, preserve the exact error for the SIM replacement workflow."
+      ],
+      "related": ["NW-SIM-5200", "NW-DEV-6120"]
+    },
+    {
+      "article_id": "NW-OPS-9012",
+      "area": "Care operations",
+      "title": "Read platform incident notices",
+      "summary": "Use incident records to distinguish a product outage from an account-specific result.",
+      "updated": "2026-08-04",
+      "read_time": "4 min",
+      "body": [
+        "Check the service name, affected functions, start time, and current status in the incident notice. A posted incident can explain a failed control but does not make the requested account change complete.",
+        "Tell the customer only the workaround or estimate published in the notice. Keep the case open when the original customer outcome still needs verification.",
+        "When the incident clears, refresh the underlying record before retrying the documented action."
+      ],
+      "related": ["NW-BILL-8172", "NW-SVC-4176"]
+    },
+    {
+      "article_id": "NW-OPS-9044",
+      "area": "Care operations",
+      "title": "Write a useful handoff note",
+      "summary": "Capture verified facts and completed work without predicting the next team's decision.",
+      "updated": "2026-07-14",
+      "read_time": "5 min",
+      "body": [
+        "Record the customer request, verified account and line, relevant current states, actions already completed, and their results. Separate what the customer reported from what Care Console showed.",
+        "Do not state that the receiving team approved an outcome unless that result already exists in the record. Include unresolved questions so the customer is not asked to repeat the entire history.",
+        "Use the workflow-specific transfer control and customer notice from the governing procedure. This article governs note quality, not transfer eligibility."
+      ],
+      "related": ["NW-PLAN-7132", "NW-OPS-9012"]
+    }
+  ]
+}

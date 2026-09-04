@@ -1,0 +1,1399 @@
+{
+  "id": "banking_checking_atm_fee_rebates_and_credits_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "checking_atm_fee_rebates_and_credits",
+  "display_name": "Checking-account ATM fees, rebates, and fee credits",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/checking_atm_fee_rebates_and_credits/source.md",
+    "heading": "## Checking-account ATM fees, rebates, and fee credits"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/checking_atm_fee_rebates_and_credits/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/checking_atm_fee_rebates_and_credits/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook requirements from shared context: verify identity before account-specific information, get explicit confirmation before account-modifying actions, and use the exact transfer message when a transfer is performed.",
+      "Support console turns may mention document ids, internal tool results, and eligibility checks; Agent turns should give the customer the customer-visible next step or outcome.",
+      "Do not transform concrete KB tables, thresholds, statuses, fees, amounts, or condition-specific outcomes into vague dependency statements."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "identity verification before account-specific details",
+      "explicit customer confirmation before account-modifying actions",
+      "plain-language customer-facing outcomes",
+      "support-console notes for internal KB/tool evidence"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_009.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_017.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_blue_account_012.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_green_account_(checking)_012.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_bluest_account_007.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_bluest_account_010.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_purple_account_004.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_purple_account_010.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_purple_account_012.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_light_blue_account_006.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_light_green_account_013.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_evergreen_account_008.json"
+    ],
+    "summary": "Investigating ATM-fee complaints, checking product-specific fee/rebate rules, and applying credits or explaining ineligibility.",
+    "rules": [
+      "Preserve all values, tables, thresholds, statuses, fees, amounts, eligibility gates, tool/action names, and condition-to-outcome mappings from the source bundle.",
+      "Use the shared banking handbook for identity verification, explicit confirmation before account-modifying actions, discoverable-tool wrapper behavior, schema limits, and transfer wording.",
+      "Do not invent unsupported account fields, undocumented override mechanisms, undocumented tool names, or customer entitlements not present in the source bundle.",
+      "When a source document is internal, represent its internal checks in Support console turns or agent behavior rather than as exposed policy narration."
+    ],
+    "candidate": {
+      "id": "checking_atm_fee_rebates_and_credits",
+      "title": "Checking-account ATM fees, rebates, and fee credits",
+      "priority": 2,
+      "related_task_ids": [
+        "task_072",
+        "task_073",
+        "task_074",
+        "task_089"
+      ],
+      "recommended_case_count": 5,
+      "losslessness_risks": [
+        "Preserve product-specific domestic, international, foreign, and out-of-network fee rules.",
+        "Preserve when a fee credit is allowed versus when the customer is ineligible.",
+        "Do not collapse all ATM-fee handling into a generic refund policy."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "checking_atm_fee_rebates_and_credits_journey",
+        "label": "Checking-account ATM fees, rebates, and fee credits",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "checking_atm_fee_rebates_and_credits_shared_rules",
+        "label": "Shared workflow rules",
+        "kind": "shared_reference",
+        "parent_id": "checking_atm_fee_rebates_and_credits_journey",
+        "order": 1,
+        "description": "Rules, prerequisites, and reference values used by more than one customer pathway in this journey.",
+        "fact_ids": [
+          "F007",
+          "F008",
+          "F019",
+          "F020",
+          "F021",
+          "F022",
+          "F023",
+          "F024",
+          "F025",
+          "F026",
+          "F027",
+          "F028",
+          "F029",
+          "F030",
+          "F031",
+          "F032",
+          "F033",
+          "F061",
+          "F062",
+          "F063",
+          "F064",
+          "F065",
+          "F066",
+          "F093",
+          "F094",
+          "F095",
+          "F096",
+          "F097",
+          "F098",
+          "F099"
+        ]
+      },
+      {
+        "id": "checking_atm_fee_rebates_and_credits_path_a",
+        "label": "Investigate and correct a checking ATM fee",
+        "kind": "scenario_branch",
+        "parent_id": "checking_atm_fee_rebates_and_credits_journey",
+        "order": 2,
+        "description": "Policy path represented by case A.",
+        "fact_ids": [
+          "F003",
+          "F004",
+          "F005",
+          "F006"
+        ]
+      },
+      {
+        "id": "checking_atm_fee_rebates_and_credits_path_b",
+        "label": "Correct a missing Bluest ATM rebate",
+        "kind": "scenario_branch",
+        "parent_id": "checking_atm_fee_rebates_and_credits_journey",
+        "order": 3,
+        "description": "Policy path represented by case B.",
+        "fact_ids": [
+          "F009",
+          "F010",
+          "F011",
+          "F012",
+          "F017"
+        ]
+      },
+      {
+        "id": "checking_atm_fee_rebates_and_credits_path_c",
+        "label": "Correct mischarged Purple Account ATM fees",
+        "kind": "scenario_branch",
+        "parent_id": "checking_atm_fee_rebates_and_credits_journey",
+        "order": 4,
+        "description": "Policy path represented by case C.",
+        "fact_ids": [
+          "F013",
+          "F014",
+          "F015",
+          "F016",
+          "F018"
+        ]
+      },
+      {
+        "id": "checking_atm_fee_rebates_and_credits_path_d",
+        "label": "Explain Blue Account foreign ATM fees",
+        "kind": "scenario_branch",
+        "parent_id": "checking_atm_fee_rebates_and_credits_journey",
+        "order": 5,
+        "description": "Policy path represented by case D.",
+        "fact_ids": [
+          "F034",
+          "F035",
+          "F036",
+          "F037",
+          "F038",
+          "F039",
+          "F040",
+          "F041",
+          "F042",
+          "F043",
+          "F044",
+          "F045",
+          "F046"
+        ]
+      },
+      {
+        "id": "checking_atm_fee_rebates_and_credits_path_e",
+        "label": "Explain Green Account foreign ATM fees and limits",
+        "kind": "scenario_branch",
+        "parent_id": "checking_atm_fee_rebates_and_credits_journey",
+        "order": 6,
+        "description": "Policy path represented by case E.",
+        "fact_ids": [
+          "F047",
+          "F048",
+          "F049",
+          "F050",
+          "F051",
+          "F052",
+          "F053",
+          "F054",
+          "F055",
+          "F056",
+          "F057",
+          "F058",
+          "F059",
+          "F060"
+        ]
+      },
+      {
+        "id": "checking_atm_fee_rebates_and_credits_path_f",
+        "label": "Explain Bluest out-of-network ATM fees",
+        "kind": "scenario_branch",
+        "parent_id": "checking_atm_fee_rebates_and_credits_journey",
+        "order": 7,
+        "description": "Policy path represented by case F.",
+        "fact_ids": [
+          "F067",
+          "F068",
+          "F069",
+          "F070",
+          "F071",
+          "F072",
+          "F073",
+          "F074",
+          "F075",
+          "F076",
+          "F077",
+          "F078"
+        ]
+      },
+      {
+        "id": "checking_atm_fee_rebates_and_credits_path_g",
+        "label": "Explain Purple Account worldwide ATM rebates",
+        "kind": "scenario_branch",
+        "parent_id": "checking_atm_fee_rebates_and_credits_journey",
+        "order": 8,
+        "description": "Policy path represented by case G.",
+        "fact_ids": [
+          "F079",
+          "F080",
+          "F081",
+          "F082",
+          "F083",
+          "F084",
+          "F085",
+          "F086",
+          "F087",
+          "F088",
+          "F089",
+          "F090",
+          "F091",
+          "F092"
+        ]
+      },
+      {
+        "id": "checking_atm_fee_rebates_and_credits_path_h",
+        "label": "Explain Purple Account out-of-network ATM fees",
+        "kind": "scenario_branch",
+        "parent_id": "checking_atm_fee_rebates_and_credits_journey",
+        "order": 9,
+        "description": "Policy path represented by case H.",
+        "fact_ids": [
+          "F100",
+          "F101",
+          "F102",
+          "F103",
+          "F104"
+        ]
+      },
+      {
+        "id": "checking_atm_fee_rebates_and_credits_path_i",
+        "label": "Explain Light Blue foreign ATM allowances",
+        "kind": "scenario_branch",
+        "parent_id": "checking_atm_fee_rebates_and_credits_journey",
+        "order": 10,
+        "description": "Policy path represented by case I.",
+        "fact_ids": [
+          "F105",
+          "F106",
+          "F107",
+          "F108",
+          "F109",
+          "F110",
+          "F111",
+          "F112",
+          "F113",
+          "F114",
+          "F115",
+          "F116"
+        ]
+      },
+      {
+        "id": "checking_atm_fee_rebates_and_credits_path_j",
+        "label": "Explain Light Green foreign ATM fees",
+        "kind": "scenario_branch",
+        "parent_id": "checking_atm_fee_rebates_and_credits_journey",
+        "order": 11,
+        "description": "Policy path represented by case J.",
+        "fact_ids": [
+          "F117",
+          "F118",
+          "F119",
+          "F120",
+          "F121",
+          "F122",
+          "F123",
+          "F124",
+          "F125",
+          "F126",
+          "F127",
+          "F128",
+          "F129",
+          "F130",
+          "F131",
+          "F132",
+          "F133"
+        ]
+      },
+      {
+        "id": "checking_atm_fee_rebates_and_credits_path_k",
+        "label": "Explain Evergreen out-of-network ATM fees",
+        "kind": "scenario_branch",
+        "parent_id": "checking_atm_fee_rebates_and_credits_journey",
+        "order": 12,
+        "description": "Policy path represented by case K.",
+        "fact_ids": [
+          "F134",
+          "F135",
+          "F136",
+          "F137",
+          "F138",
+          "F139",
+          "F140",
+          "F141",
+          "F142",
+          "F143",
+          "F144",
+          "F145",
+          "F146",
+          "F147"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "checking_atm_fee_rebates_and_credits_path_a",
+        "type": "uses_shared_rules",
+        "target_id": "checking_atm_fee_rebates_and_credits_shared_rules"
+      },
+      {
+        "source_id": "checking_atm_fee_rebates_and_credits_path_b",
+        "type": "uses_shared_rules",
+        "target_id": "checking_atm_fee_rebates_and_credits_shared_rules"
+      },
+      {
+        "source_id": "checking_atm_fee_rebates_and_credits_path_c",
+        "type": "uses_shared_rules",
+        "target_id": "checking_atm_fee_rebates_and_credits_shared_rules"
+      },
+      {
+        "source_id": "checking_atm_fee_rebates_and_credits_path_d",
+        "type": "uses_shared_rules",
+        "target_id": "checking_atm_fee_rebates_and_credits_shared_rules"
+      },
+      {
+        "source_id": "checking_atm_fee_rebates_and_credits_path_e",
+        "type": "uses_shared_rules",
+        "target_id": "checking_atm_fee_rebates_and_credits_shared_rules"
+      },
+      {
+        "source_id": "checking_atm_fee_rebates_and_credits_path_f",
+        "type": "uses_shared_rules",
+        "target_id": "checking_atm_fee_rebates_and_credits_shared_rules"
+      },
+      {
+        "source_id": "checking_atm_fee_rebates_and_credits_path_g",
+        "type": "uses_shared_rules",
+        "target_id": "checking_atm_fee_rebates_and_credits_shared_rules"
+      },
+      {
+        "source_id": "checking_atm_fee_rebates_and_credits_path_h",
+        "type": "uses_shared_rules",
+        "target_id": "checking_atm_fee_rebates_and_credits_shared_rules"
+      },
+      {
+        "source_id": "checking_atm_fee_rebates_and_credits_path_i",
+        "type": "uses_shared_rules",
+        "target_id": "checking_atm_fee_rebates_and_credits_shared_rules"
+      },
+      {
+        "source_id": "checking_atm_fee_rebates_and_credits_path_j",
+        "type": "uses_shared_rules",
+        "target_id": "checking_atm_fee_rebates_and_credits_shared_rules"
+      },
+      {
+        "source_id": "checking_atm_fee_rebates_and_credits_path_k",
+        "type": "uses_shared_rules",
+        "target_id": "checking_atm_fee_rebates_and_credits_shared_rules"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "F003",
+      "statement": "Use get_all_user_accounts_by_user_id_3847 to retrieve a customer's bank accounts, including checking and savings accounts.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_009"
+    },
+    {
+      "id": "F004",
+      "statement": "get_all_user_accounts_by_user_id_3847 requires the customer's user_id.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_009"
+    },
+    {
+      "id": "F005",
+      "statement": "get_all_user_accounts_by_user_id_3847 returns account_id, account_type, account_class, status, balance, and date_opened.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_009"
+    },
+    {
+      "id": "F006",
+      "statement": "get_all_user_accounts_by_user_id_3847 is used for checking eligibility requirements for opening new accounts, including existing account status, balances, account tenure, and number of accounts; verifying pre-closure requirements when closing accounts; and looking up account details for customer service inquiries.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_009"
+    },
+    {
+      "id": "F007",
+      "statement": "Credits may only be applied to checking accounts; savings accounts and other account types are not eligible for these credits.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F008",
+      "statement": "The apply_checking_account_credit_5829 tool is used to add a credit transaction to a checking account.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F009",
+      "statement": "An agent may apply a credit for a missing rebate only if the rebate should have been applied, has not yet been applied, and the customer meets all eligibility requirements for that rebate.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F010",
+      "statement": "Before applying a missing-rebate credit, the agent must verify the customer is eligible for the rebate based on documented rebate policies.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F011",
+      "statement": "Before applying a missing-rebate credit, the agent must check the account's transaction history to confirm the rebate has not already been applied.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F012",
+      "statement": "Before applying a missing-rebate credit, the agent must ensure the rebate amount matches what is specified in the applicable rebate policy.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F013",
+      "statement": "If fees on the customer's account do not match the correct amounts per the documented fee schedule, the agent must identify all fee discrepancies and apply a credit for the net correction.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F014",
+      "statement": "Before applying a fee-mischarge credit, the agent must review the account terms and documented fee structures to identify all fees that differ from what should have been charged.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F015",
+      "statement": "Before applying a fee-mischarge credit, the agent must check the transaction history to confirm each fee discrepancy.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F016",
+      "statement": "Before applying a fee-mischarge credit, the agent must ensure the credit amount reflects the net correction across all identified fee discrepancies.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F017",
+      "statement": "Use credit_type rebate_credit for rebates that should have been applied but were missing.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F018",
+      "statement": "Use credit_type fee_refund for refunding fees that were incorrectly charged.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F019",
+      "statement": "The credit procedure requires verifying the customer's identity and account ownership before applying the credit.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F020",
+      "statement": "The credit procedure requires confirming the account is a checking account before applying the credit.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F021",
+      "statement": "The credit procedure requires verifying the customer meets one of the eligible credit circumstances before applying the credit.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F022",
+      "statement": "The credit procedure requires calculating the correct credit amount based on the rebate policy or fee that was overcharged.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F023",
+      "statement": "After the required credit checks are complete, use apply_checking_account_credit_5829 to apply the credit.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F024",
+      "statement": "After a credit is applied, inform the customer of the applied credit and the new account balance.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F025",
+      "statement": "For internal agent tool usage, apply_checking_account_credit_5829 takes account_id, amount, and credit_type parameters; account_id must be the checking account ID to credit.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F026",
+      "statement": "The amount parameter for apply_checking_account_credit_5829 must be a positive dollar amount greater than 0.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F027",
+      "statement": "The expected outcome of apply_checking_account_credit_5829 is that it adds a credit transaction to the checking account and updates the account balance.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F028",
+      "statement": "apply_checking_account_credit_5829 may only be called once per checking account per customer interaction.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F029",
+      "statement": "After a credit is applied to a checking account, the system enforces a 14-day cooldown period before another credit can be applied to that same account.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F030",
+      "statement": "If multiple corrections are needed for the same checking account, including both fee refunds and missing rebates, combine them into one credit for the total amount and use the credit_type that applies to the majority of the corrections.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F031",
+      "statement": "Credits may only be applied for missing rebates or fee mischarges; do not apply credits for any other reason without supervisor approval.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F032",
+      "statement": "The reason for a credit must always be documented by selecting the appropriate credit_type.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F033",
+      "statement": "The credit amount must match the exact rebate or fee amount and must not be rounded or estimated.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_017"
+    },
+    {
+      "id": "F034",
+      "statement": "For Blue Account ATM withdrawals made in a foreign currency, the fee is the greater of 3% of the withdrawal amount or $5.00 per withdrawal.",
+      "source_doc": "doc_checking_accounts_blue_account_012"
+    },
+    {
+      "id": "F035",
+      "statement": "For Blue Account foreign-currency ATM withdrawals, the fee is calculated on the U.S. dollar equivalent of the cash dispensed and is applied per transaction.",
+      "source_doc": "doc_checking_accounts_blue_account_012"
+    },
+    {
+      "id": "F036",
+      "statement": "The Blue Account debit card daily ATM withdrawal limit is $500 and applies to all domestic and international ATM withdrawals combined within a 24-hour period.",
+      "source_doc": "doc_checking_accounts_blue_account_012"
+    },
+    {
+      "id": "F037",
+      "statement": "For a Blue Account foreign-currency ATM withdrawal with a $40 U.S. dollar equivalent, 3% is $1.20, the $5.00 minimum applies, and the fee charged is $5.00.",
+      "source_doc": "doc_checking_accounts_blue_account_012"
+    },
+    {
+      "id": "F038",
+      "statement": "For a Blue Account foreign-currency ATM withdrawal with a $200 U.S. dollar equivalent, 3% is $6.00, the $5.00 minimum does not apply, and the fee charged is $6.00.",
+      "source_doc": "doc_checking_accounts_blue_account_012"
+    },
+    {
+      "id": "F039",
+      "statement": "For a Blue Account foreign-currency ATM withdrawal with a $1,000 U.S. dollar equivalent, 3% is $30.00, the $5.00 minimum does not apply, and the fee charged is $30.00.",
+      "source_doc": "doc_checking_accounts_blue_account_012"
+    },
+    {
+      "id": "F040",
+      "statement": "A Blue Account international ATM withdrawal fee posts when the withdrawal settles and appears as a separate line item on account history and the statement.",
+      "source_doc": "doc_checking_accounts_blue_account_012"
+    },
+    {
+      "id": "F041",
+      "statement": "For Blue Account international ATM withdrawals, ATM owner or network fees are separate third-party fees and are in addition to Rho-Bank's fee.",
+      "source_doc": "doc_checking_accounts_blue_account_012"
+    },
+    {
+      "id": "F042",
+      "statement": "Because the Blue Account has a $5.00 minimum international ATM withdrawal fee per transaction, making fewer larger withdrawals can reduce total fees compared with multiple small withdrawals.",
+      "source_doc": "doc_checking_accounts_blue_account_012"
+    },
+    {
+      "id": "F043",
+      "statement": "For Blue Account international ATM use, choosing to be charged in the local currency rather than converting at the terminal generally helps avoid extra conversion costs set by the ATM provider.",
+      "source_doc": "doc_checking_accounts_blue_account_012"
+    },
+    {
+      "id": "F044",
+      "statement": "For Blue Account international ATM use, verify the total amount before confirming the withdrawal and save the receipt.",
+      "source_doc": "doc_checking_accounts_blue_account_012"
+    },
+    {
+      "id": "F045",
+      "statement": "For Blue Account international ATM use, if the ATM displays an additional operator-fee message, the customer can cancel and try another nearby bank-operated machine to potentially avoid or reduce those charges.",
+      "source_doc": "doc_checking_accounts_blue_account_012"
+    },
+    {
+      "id": "F046",
+      "statement": "For Blue Account international ATM use, if a transaction is declined after cash is not dispensed, do not retry repeatedly at the same machine; locate a different ATM.",
+      "source_doc": "doc_checking_accounts_blue_account_012"
+    },
+    {
+      "id": "F047",
+      "statement": "For Green Account checking, a foreign ATM withdrawal fee is charged for each successful cash withdrawal made in a foreign currency.",
+      "source_doc": "doc_checking_accounts_green_account_(checking)_012"
+    },
+    {
+      "id": "F048",
+      "statement": "For Green Account checking, the foreign ATM withdrawal fee is assessed per transaction.",
+      "source_doc": "doc_checking_accounts_green_account_(checking)_012"
+    },
+    {
+      "id": "F049",
+      "statement": "The Green Account checking debit card daily ATM withdrawal limit is $600 and applies to all domestic and foreign ATM withdrawals combined within a 24-hour period.",
+      "source_doc": "doc_checking_accounts_green_account_(checking)_012"
+    },
+    {
+      "id": "F050",
+      "statement": "For Green Account checking, the foreign ATM withdrawal fee is the greater of 3% of the withdrawal amount calculated on the U.S. dollar equivalent or $5.00.",
+      "source_doc": "doc_checking_accounts_green_account_(checking)_012"
+    },
+    {
+      "id": "F051",
+      "statement": "For Green Account checking, the foreign ATM withdrawal fee is determined using the U.S. dollar value of the cash dispensed at settlement and posts as a separate line item.",
+      "source_doc": "doc_checking_accounts_green_account_(checking)_012"
+    },
+    {
+      "id": "F052",
+      "statement": "To estimate a Green Account checking foreign ATM withdrawal fee, convert the withdrawal amount to its U.S. dollar equivalent, multiply that amount by 3%, compare the result to $5.00, and use the higher amount.",
+      "source_doc": "doc_checking_accounts_green_account_(checking)_012"
+    },
+    {
+      "id": "F053",
+      "statement": "For a Green Account checking foreign ATM withdrawal of $20 U.S. dollar equivalent, 3% is $0.60 and the fee charged is $5.00 because the minimum applies.",
+      "source_doc": "doc_checking_accounts_green_account_(checking)_012"
+    },
+    {
+      "id": "F054",
+      "statement": "For a Green Account checking foreign ATM withdrawal of $100 U.S. dollar equivalent, 3% is $3.00 and the fee charged is $5.00 because the minimum applies.",
+      "source_doc": "doc_checking_accounts_green_account_(checking)_012"
+    },
+    {
+      "id": "F055",
+      "statement": "For a Green Account checking foreign ATM withdrawal of $150 U.S. dollar equivalent, 3% is $4.50 and the fee charged is $5.00 because the minimum applies.",
+      "source_doc": "doc_checking_accounts_green_account_(checking)_012"
+    },
+    {
+      "id": "F056",
+      "statement": "For a Green Account checking foreign ATM withdrawal of $200 U.S. dollar equivalent, 3% is $6.00 and the fee charged is $6.00.",
+      "source_doc": "doc_checking_accounts_green_account_(checking)_012"
+    },
+    {
+      "id": "F057",
+      "statement": "For a Green Account checking foreign ATM withdrawal of $400 U.S. dollar equivalent, 3% is $12.00 and the fee charged is $12.00.",
+      "source_doc": "doc_checking_accounts_green_account_(checking)_012"
+    },
+    {
+      "id": "F058",
+      "statement": "For Green Account checking foreign ATM withdrawals, when the percentage calculation is less than $5.00, the minimum fee applies.",
+      "source_doc": "doc_checking_accounts_green_account_(checking)_012"
+    },
+    {
+      "id": "F059",
+      "statement": "For Green Account checking, the foreign ATM withdrawal fee posts when the ATM transaction settles and appears as a separate line on account activity and the statement.",
+      "source_doc": "doc_checking_accounts_green_account_(checking)_012"
+    },
+    {
+      "id": "F060",
+      "statement": "For Green Account checking foreign ATM withdrawals, ATM owners or operators may impose separate fees that may appear as additional line items.",
+      "source_doc": "doc_checking_accounts_green_account_(checking)_012"
+    },
+    {
+      "id": "F061",
+      "statement": "The Bluest Account debit card daily ATM withdrawal limit is $1,500 and applies to all ATM withdrawals within a 24-hour period.",
+      "source_doc": "doc_checking_accounts_bluest_account_007"
+    },
+    {
+      "id": "F062",
+      "statement": "Bluest Account customers are eligible for ATM fee rebates up to $50 per month.",
+      "source_doc": "doc_checking_accounts_bluest_account_007"
+    },
+    {
+      "id": "F063",
+      "statement": "Bluest Account ATM fee rebates are credited until the monthly maximum of $50 is reached.",
+      "source_doc": "doc_checking_accounts_bluest_account_007"
+    },
+    {
+      "id": "F064",
+      "statement": "If aggregate Bluest Account ATM fees exceed $50 in a month, the excess will not be rebated.",
+      "source_doc": "doc_checking_accounts_bluest_account_007"
+    },
+    {
+      "id": "F065",
+      "statement": "Bluest Account customers should keep track of cumulative ATM fees during the month to stay within the $50 rebate cap.",
+      "source_doc": "doc_checking_accounts_bluest_account_007"
+    },
+    {
+      "id": "F066",
+      "statement": "Bluest Account customers should consider using fee-free ATMs once they approach the monthly ATM fee rebate cap.",
+      "source_doc": "doc_checking_accounts_bluest_account_007"
+    },
+    {
+      "id": "F067",
+      "statement": "For Bluest Account, an out-of-network ATM fee is charged when the customer withdraws cash from an ATM that is not part of Rho-Bank's network.",
+      "source_doc": "doc_checking_accounts_bluest_account_010"
+    },
+    {
+      "id": "F068",
+      "statement": "For Bluest Account, the out-of-network ATM fee is assessed per withdrawal, and multiple withdrawals each incur a separate fee.",
+      "source_doc": "doc_checking_accounts_bluest_account_010"
+    },
+    {
+      "id": "F069",
+      "statement": "For Bluest Account, any surcharge displayed by the ATM operator is in addition to Rho-Bank's out-of-network ATM fee and is not controlled by Rho-Bank.",
+      "source_doc": "doc_checking_accounts_bluest_account_010"
+    },
+    {
+      "id": "F070",
+      "statement": "For Bluest Account, a cash withdrawal at an out-of-network ATM has a Rho-Bank fee of $2.00 per withdrawal.",
+      "source_doc": "doc_checking_accounts_bluest_account_010"
+    },
+    {
+      "id": "F071",
+      "statement": "For Bluest Account, the out-of-network ATM fee is added to the total cost of the withdrawal and posts as a separate line item on account activity.",
+      "source_doc": "doc_checking_accounts_bluest_account_010"
+    },
+    {
+      "id": "F072",
+      "statement": "For Bluest Account, the out-of-network ATM fee description typically references \"ATM\" or \"Out-of-network ATM\" along with the $2.00 fee amount.",
+      "source_doc": "doc_checking_accounts_bluest_account_010"
+    },
+    {
+      "id": "F073",
+      "statement": "For Bluest Account, if the ATM operator adds a surcharge, it usually appears as part of the withdrawal amount on the receipt and may appear as a separate charge or be included in the withdrawal total depending on the operator's processing.",
+      "source_doc": "doc_checking_accounts_bluest_account_010"
+    },
+    {
+      "id": "F074",
+      "statement": "Bluest Account customers can avoid the $2.00 out-of-network ATM fee by using in-network ATMs whenever possible.",
+      "source_doc": "doc_checking_accounts_bluest_account_010"
+    },
+    {
+      "id": "F075",
+      "statement": "Bluest Account customers who must use an out-of-network ATM should consolidate cash needs into a single withdrawal to avoid paying the fee multiple times.",
+      "source_doc": "doc_checking_accounts_bluest_account_010"
+    },
+    {
+      "id": "F076",
+      "statement": "Bluest Account customers should review the ATM screen for additional operator surcharges before confirming the withdrawal and can cancel and try a different ATM if the surcharge is high.",
+      "source_doc": "doc_checking_accounts_bluest_account_010"
+    },
+    {
+      "id": "F077",
+      "statement": "For Bluest Account, a single cash withdrawal from an out-of-network ATM incurs a $2.00 Rho-Bank fee plus any ATM operator surcharge.",
+      "source_doc": "doc_checking_accounts_bluest_account_010"
+    },
+    {
+      "id": "F078",
+      "statement": "For Bluest Account, two separate withdrawals at out-of-network ATMs result in two $2.00 Rho-Bank fees, in addition to any operator surcharges.",
+      "source_doc": "doc_checking_accounts_bluest_account_010"
+    },
+    {
+      "id": "F079",
+      "statement": "The Purple Account debit card daily ATM withdrawal limit is $1,000 and applies to all ATM withdrawals worldwide within a 24-hour period.",
+      "source_doc": "doc_checking_accounts_purple_account_004"
+    },
+    {
+      "id": "F080",
+      "statement": "Purple Account customers are eligible for refunds of ATM operator fees up to a monthly cap of $30.",
+      "source_doc": "doc_checking_accounts_purple_account_004"
+    },
+    {
+      "id": "F081",
+      "statement": "Purple Account ATM rebates apply after eligible ATM fees post to the account and are credited up to the monthly cap.",
+      "source_doc": "doc_checking_accounts_purple_account_004"
+    },
+    {
+      "id": "F082",
+      "statement": "When withdrawing cash abroad with a Purple Account, choose the checking account option on the ATM when prompted.",
+      "source_doc": "doc_checking_accounts_purple_account_004"
+    },
+    {
+      "id": "F083",
+      "statement": "Purple Account customers should retain the ATM receipt if it shows a surcharge to help with any rebate review.",
+      "source_doc": "doc_checking_accounts_purple_account_004"
+    },
+    {
+      "id": "F084",
+      "statement": "Purple Account customers withdrawing cash abroad should avoid optional dynamic currency conversion at the ATM if they prefer to be billed in the local currency.",
+      "source_doc": "doc_checking_accounts_purple_account_004"
+    },
+    {
+      "id": "F085",
+      "statement": "For a Purple Account missing rebate concern, troubleshoot by verifying whether monthly total rebates have reached $30 and confirming that the charge was coded as an ATM operator fee.",
+      "source_doc": "doc_checking_accounts_purple_account_004"
+    },
+    {
+      "id": "F086",
+      "statement": "A common reason a Purple Account ATM fee is not rebated is that the monthly rebate cap of $30 has been reached; additional ATM operator fees in the same month are not rebated.",
+      "source_doc": "doc_checking_accounts_purple_account_010"
+    },
+    {
+      "id": "F087",
+      "statement": "A common reason a Purple Account ATM fee is not rebated is that the charge was not coded as an ATM operator fee by the merchant or network.",
+      "source_doc": "doc_checking_accounts_purple_account_010"
+    },
+    {
+      "id": "F088",
+      "statement": "A common reason a Purple Account ATM fee is not rebated is that the transaction posted outside the eligible rebate window.",
+      "source_doc": "doc_checking_accounts_purple_account_010"
+    },
+    {
+      "id": "F089",
+      "statement": "A common reason a Purple Account ATM fee is not rebated is that the withdrawal occurred at a location or terminal type not eligible for rebates.",
+      "source_doc": "doc_checking_accounts_purple_account_010"
+    },
+    {
+      "id": "F090",
+      "statement": "For a Purple Account ATM rebate concern, review the statement to total rebates already received this month and compare the total to $30.",
+      "source_doc": "doc_checking_accounts_purple_account_010"
+    },
+    {
+      "id": "F091",
+      "statement": "For a Purple Account ATM rebate concern, confirm the charge is labeled as an ATM operator fee and keep the receipt.",
+      "source_doc": "doc_checking_accounts_purple_account_010"
+    },
+    {
+      "id": "F092",
+      "statement": "If a Purple Account customer still believes a rebate is due, they should contact support and include the date, location, and a copy of the receipt showing the surcharge.",
+      "source_doc": "doc_checking_accounts_purple_account_010"
+    },
+    {
+      "id": "F093",
+      "statement": "For Purple Account, a $2.50 fee is charged per cash withdrawal made at an out-of-network ATM.",
+      "source_doc": "doc_checking_accounts_purple_account_012"
+    },
+    {
+      "id": "F094",
+      "statement": "For Purple Account, the out-of-network ATM fee applies to withdrawals made at ATMs that are not in Rho-Bank's ATM network.",
+      "source_doc": "doc_checking_accounts_purple_account_012"
+    },
+    {
+      "id": "F095",
+      "statement": "For Purple Account, the out-of-network ATM fee is assessed per withdrawal, and multiple withdrawals in the same day each incur a separate $2.50 fee.",
+      "source_doc": "doc_checking_accounts_purple_account_012"
+    },
+    {
+      "id": "F096",
+      "statement": "For Purple Account, the $2.50 out-of-network ATM fee is separate from any surcharge charged by the ATM owner or operator.",
+      "source_doc": "doc_checking_accounts_purple_account_012"
+    },
+    {
+      "id": "F097",
+      "statement": "For Purple Account, the out-of-network ATM fee posts as a separate line item associated with the out-of-network ATM withdrawal.",
+      "source_doc": "doc_checking_accounts_purple_account_012"
+    },
+    {
+      "id": "F098",
+      "statement": "For Purple Account, the posting date of the out-of-network ATM fee may differ from the date the ATM was used depending on when the transaction settles.",
+      "source_doc": "doc_checking_accounts_purple_account_012"
+    },
+    {
+      "id": "F099",
+      "statement": "For Purple Account, three separate cash withdrawals at out-of-network ATMs in one day result in total Rho-Bank fees of 3 x $2.50.",
+      "source_doc": "doc_checking_accounts_purple_account_012"
+    },
+    {
+      "id": "F100",
+      "statement": "For Purple Account, the ATM owner or operator may display and charge its own surcharge before the transaction is completed, and the customer can cancel at that prompt to avoid the operator's surcharge.",
+      "source_doc": "doc_checking_accounts_purple_account_012"
+    },
+    {
+      "id": "F101",
+      "statement": "For Purple Account, operator surcharges are set by the ATM owner and are in addition to Rho-Bank's $2.50 out-of-network ATM fee.",
+      "source_doc": "doc_checking_accounts_purple_account_012"
+    },
+    {
+      "id": "F102",
+      "statement": "Purple Account customers should use in-network ATMs whenever possible to minimize fees.",
+      "source_doc": "doc_checking_accounts_purple_account_012"
+    },
+    {
+      "id": "F103",
+      "statement": "Purple Account customers who must use an out-of-network ATM should consider making a single larger withdrawal rather than multiple smaller ones to reduce the number of per-withdrawal fees.",
+      "source_doc": "doc_checking_accounts_purple_account_012"
+    },
+    {
+      "id": "F104",
+      "statement": "Purple Account customers should review on-screen ATM disclosures before confirming the transaction to see any operator surcharge.",
+      "source_doc": "doc_checking_accounts_purple_account_012"
+    },
+    {
+      "id": "F105",
+      "statement": "Light Blue Account customers receive 2 free foreign ATM cash withdrawals each month.",
+      "source_doc": "doc_checking_accounts_light_blue_account_006"
+    },
+    {
+      "id": "F106",
+      "statement": "For Light Blue Account, the free foreign ATM cash withdrawal allowance applies on a per-withdrawal basis, and each foreign ATM cash withdrawal counts as one use of the allowance.",
+      "source_doc": "doc_checking_accounts_light_blue_account_006"
+    },
+    {
+      "id": "F107",
+      "statement": "For Light Blue Account, unused free foreign ATM withdrawals do not roll over to future months.",
+      "source_doc": "doc_checking_accounts_light_blue_account_006"
+    },
+    {
+      "id": "F108",
+      "statement": "For Light Blue Account, after the customer uses all 2 free foreign ATM withdrawals in a month, each additional foreign ATM withdrawal is charged a $4.00 fee.",
+      "source_doc": "doc_checking_accounts_light_blue_account_006"
+    },
+    {
+      "id": "F109",
+      "statement": "For Light Blue Account, the $4.00 fee is charged per additional foreign ATM withdrawal for the remainder of that month after the free allowance is used.",
+      "source_doc": "doc_checking_accounts_light_blue_account_006"
+    },
+    {
+      "id": "F110",
+      "statement": "For Light Blue Account, up to 2 foreign ATM withdrawals in a single month have a Rho-Bank fee of $0 per withdrawal.",
+      "source_doc": "doc_checking_accounts_light_blue_account_006"
+    },
+    {
+      "id": "F111",
+      "statement": "For Light Blue Account, each foreign ATM withdrawal beyond 2 in a single month has a Rho-Bank fee of $4.00 per withdrawal.",
+      "source_doc": "doc_checking_accounts_light_blue_account_006"
+    },
+    {
+      "id": "F112",
+      "statement": "For Light Blue Account, 1 foreign ATM withdrawal in a month has no Rho-Bank fee.",
+      "source_doc": "doc_checking_accounts_light_blue_account_006"
+    },
+    {
+      "id": "F113",
+      "statement": "For Light Blue Account, 2 foreign ATM withdrawals in a month have no Rho-Bank fee.",
+      "source_doc": "doc_checking_accounts_light_blue_account_006"
+    },
+    {
+      "id": "F114",
+      "statement": "For Light Blue Account, 5 foreign ATM withdrawals in a month means the first 2 are free and the remaining 3 are charged $4.00 each, for total bank fees of 3 x $4.00.",
+      "source_doc": "doc_checking_accounts_light_blue_account_006"
+    },
+    {
+      "id": "F115",
+      "statement": "For Light Blue Account foreign ATM withdrawals, ATM owner or operator fees are separate third-party fees and may be charged in addition to any Rho-Bank fee.",
+      "source_doc": "doc_checking_accounts_light_blue_account_006"
+    },
+    {
+      "id": "F116",
+      "statement": "For Light Blue Account, the foreign ATM withdrawal fee applies regardless of the amount withdrawn in each transaction.",
+      "source_doc": "doc_checking_accounts_light_blue_account_006"
+    },
+    {
+      "id": "F117",
+      "statement": "For Light Green accounts, foreign ATM withdrawal fees are flat per withdrawal and depend on the amount taken out in a single transaction.",
+      "source_doc": "doc_checking_accounts_light_green_account_013"
+    },
+    {
+      "id": "F118",
+      "statement": "For Light Green accounts, a single foreign ATM withdrawal up to and including $100 has a $2.00 fee per withdrawal.",
+      "source_doc": "doc_checking_accounts_light_green_account_013"
+    },
+    {
+      "id": "F119",
+      "statement": "For Light Green accounts, a single foreign ATM withdrawal of more than $100 and up to and including $300 has a $3.50 fee per withdrawal.",
+      "source_doc": "doc_checking_accounts_light_green_account_013"
+    },
+    {
+      "id": "F120",
+      "statement": "For Light Green accounts, a single foreign ATM withdrawal above $300 has a $5.00 fee per withdrawal.",
+      "source_doc": "doc_checking_accounts_light_green_account_013"
+    },
+    {
+      "id": "F121",
+      "statement": "For Light Green accounts, the fee is determined by the amount dispensed in each single withdrawal.",
+      "source_doc": "doc_checking_accounts_light_green_account_013"
+    },
+    {
+      "id": "F122",
+      "statement": "For Light Green accounts, the foreign ATM withdrawal fee is charged by Rho-Bank and is separate from any fee an ATM operator may charge.",
+      "source_doc": "doc_checking_accounts_light_green_account_013"
+    },
+    {
+      "id": "F123",
+      "statement": "For Light Green accounts, each successful foreign ATM cash withdrawal is assessed one fee based on the amount withdrawn in that transaction.",
+      "source_doc": "doc_checking_accounts_light_green_account_013"
+    },
+    {
+      "id": "F124",
+      "statement": "For Light Green accounts, amounts exactly at a fee threshold are charged the lower tier's fee.",
+      "source_doc": "doc_checking_accounts_light_green_account_013"
+    },
+    {
+      "id": "F125",
+      "statement": "For Light Green accounts, a foreign ATM withdrawal of exactly $100 is charged $2.00.",
+      "source_doc": "doc_checking_accounts_light_green_account_013"
+    },
+    {
+      "id": "F126",
+      "statement": "For Light Green accounts, a foreign ATM withdrawal of exactly $300 is charged $3.50.",
+      "source_doc": "doc_checking_accounts_light_green_account_013"
+    },
+    {
+      "id": "F127",
+      "statement": "For Light Green accounts, multiple withdrawals in the same day each incur their own fee based on their individual amounts.",
+      "source_doc": "doc_checking_accounts_light_green_account_013"
+    },
+    {
+      "id": "F128",
+      "statement": "For Light Green accounts, a $60 foreign ATM withdrawal has a $2.00 fee.",
+      "source_doc": "doc_checking_accounts_light_green_account_013"
+    },
+    {
+      "id": "F129",
+      "statement": "For Light Green accounts, a $150 foreign ATM withdrawal has a $3.50 fee.",
+      "source_doc": "doc_checking_accounts_light_green_account_013"
+    },
+    {
+      "id": "F130",
+      "statement": "For Light Green accounts, a $350 foreign ATM withdrawal has a $5.00 fee.",
+      "source_doc": "doc_checking_accounts_light_green_account_013"
+    },
+    {
+      "id": "F131",
+      "statement": "For Light Green accounts, two $90 withdrawals would cost 2 x $2.00, while one $180 withdrawal would cost $3.50.",
+      "source_doc": "doc_checking_accounts_light_green_account_013"
+    },
+    {
+      "id": "F132",
+      "statement": "For Light Green accounts, two $200 withdrawals would cost 2 x $3.50, while one $400 withdrawal would cost $5.00.",
+      "source_doc": "doc_checking_accounts_light_green_account_013"
+    },
+    {
+      "id": "F133",
+      "statement": "Light Green account customers should plan cash needs ahead so they can make fewer larger withdrawals instead of several smaller ones that add multiple fees.",
+      "source_doc": "doc_checking_accounts_light_green_account_013"
+    },
+    {
+      "id": "F134",
+      "statement": "For Evergreen Account, an out-of-network ATM fee is charged when the customer withdraws cash from an ATM that is not in Rho's network.",
+      "source_doc": "doc_checking_accounts_evergreen_account_008"
+    },
+    {
+      "id": "F135",
+      "statement": "For Evergreen Account, the out-of-network ATM fee is assessed per withdrawal transaction.",
+      "source_doc": "doc_checking_accounts_evergreen_account_008"
+    },
+    {
+      "id": "F136",
+      "statement": "For Evergreen Account, the out-of-network ATM fee percentage is 1% of the withdrawal amount.",
+      "source_doc": "doc_checking_accounts_evergreen_account_008"
+    },
+    {
+      "id": "F137",
+      "statement": "For Evergreen Account, the out-of-network ATM fee maximum is $2.50 per withdrawal.",
+      "source_doc": "doc_checking_accounts_evergreen_account_008"
+    },
+    {
+      "id": "F138",
+      "statement": "For Evergreen Account, the out-of-network ATM fee percentage is applied to the cash dispensed amount, and if the percentage-based fee exceeds $2.50, the fee is capped at $2.50.",
+      "source_doc": "doc_checking_accounts_evergreen_account_008"
+    },
+    {
+      "id": "F139",
+      "statement": "For Evergreen Account, a $40 cash withdrawal has a 1% fee of $0.40, the cap is not reached, and the total out-of-network fee is $0.40.",
+      "source_doc": "doc_checking_accounts_evergreen_account_008"
+    },
+    {
+      "id": "F140",
+      "statement": "For Evergreen Account, a $250 cash withdrawal has a 1% fee of $2.50, equals the cap, and the total out-of-network fee is $2.50.",
+      "source_doc": "doc_checking_accounts_evergreen_account_008"
+    },
+    {
+      "id": "F141",
+      "statement": "For Evergreen Account, a $600 cash withdrawal has a 1% fee of $6.00, is capped at $2.50, and the total out-of-network fee is $2.50.",
+      "source_doc": "doc_checking_accounts_evergreen_account_008"
+    },
+    {
+      "id": "F142",
+      "statement": "For Evergreen Account, the out-of-network ATM fee is deducted from the account in addition to the cash withdrawn.",
+      "source_doc": "doc_checking_accounts_evergreen_account_008"
+    },
+    {
+      "id": "F143",
+      "statement": "For Evergreen Account, the customer will see a separate line item for the out-of-network ATM fee on transaction history, reflecting the amount calculated using 1% and the $2.50 cap.",
+      "source_doc": "doc_checking_accounts_evergreen_account_008"
+    },
+    {
+      "id": "F144",
+      "statement": "For Evergreen Account, an ATM operator surcharge is separate from Rho's out-of-network fee and is not subject to the $2.50 cap.",
+      "source_doc": "doc_checking_accounts_evergreen_account_008"
+    },
+    {
+      "id": "F145",
+      "statement": "For Evergreen Account, multiple withdrawals in the same day each incur a separate out-of-network ATM fee calculated individually using 1% and capped at $2.50 per withdrawal.",
+      "source_doc": "doc_checking_accounts_evergreen_account_008"
+    },
+    {
+      "id": "F146",
+      "statement": "Evergreen Account customers can reduce or avoid the out-of-network ATM fee by using in-network ATMs.",
+      "source_doc": "doc_checking_accounts_evergreen_account_008"
+    },
+    {
+      "id": "F147",
+      "statement": "Evergreen Account customers needing a larger amount of cash should consider a single withdrawal rather than multiple smaller withdrawals to avoid multiple per-withdrawal fees.",
+      "source_doc": "doc_checking_accounts_evergreen_account_008"
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "summary": "General ATM-fee complaint intake requiring shared banking controls and account lookup.",
+      "included_fact_ids": [
+        "F003",
+        "F004",
+        "F005",
+        "F006"
+      ]
+    },
+    {
+      "id": "B",
+      "summary": "Missing Bluest Account ATM rebate that qualifies for a rebate_credit after eligibility, transaction-history, exact-amount, confirmation, and cooldown checks.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F017",
+        "F019",
+        "F020",
+        "F021",
+        "F022",
+        "F023",
+        "F024",
+        "F025",
+        "F026",
+        "F027",
+        "F028",
+        "F029",
+        "F030",
+        "F031",
+        "F032",
+        "F033",
+        "F061",
+        "F062",
+        "F063",
+        "F064",
+        "F065",
+        "F066"
+      ]
+    },
+    {
+      "id": "C",
+      "summary": "Checking-account ATM fee mischarge requiring identification of all fee discrepancies and one net fee_refund credit.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F018",
+        "F019",
+        "F020",
+        "F021",
+        "F022",
+        "F023",
+        "F024",
+        "F025",
+        "F026",
+        "F027",
+        "F028",
+        "F029",
+        "F030",
+        "F031",
+        "F032",
+        "F033",
+        "F093",
+        "F094",
+        "F095",
+        "F096",
+        "F097",
+        "F098",
+        "F099"
+      ]
+    },
+    {
+      "id": "D",
+      "summary": "Blue Account international foreign-currency ATM fee complaint involving the 3% versus $5.00 minimum rule, examples, posting, third-party fees, daily limit, and usage guidance.",
+      "included_fact_ids": [
+        "F034",
+        "F035",
+        "F036",
+        "F037",
+        "F038",
+        "F039",
+        "F040",
+        "F041",
+        "F042",
+        "F043",
+        "F044",
+        "F045",
+        "F046"
+      ]
+    },
+    {
+      "id": "E",
+      "summary": "Green Account checking foreign-currency ATM fee complaint involving the 3% versus $5.00 minimum rule, estimate method, examples, posting, operator fees, and daily limit.",
+      "included_fact_ids": [
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F057",
+        "F058",
+        "F059",
+        "F060"
+      ]
+    },
+    {
+      "id": "F",
+      "summary": "Bluest Account out-of-network ATM fee and monthly rebate-cap explanation, including operator surcharges and ways to minimize charges.",
+      "included_fact_ids": [
+        "F061",
+        "F062",
+        "F063",
+        "F064",
+        "F065",
+        "F066",
+        "F067",
+        "F068",
+        "F069",
+        "F070",
+        "F071",
+        "F072",
+        "F073",
+        "F074",
+        "F075",
+        "F076",
+        "F077",
+        "F078"
+      ]
+    },
+    {
+      "id": "G",
+      "summary": "Purple Account ATM operator fee rebate review or denial due to cap, coding, posting window, or ineligible location or terminal type.",
+      "included_fact_ids": [
+        "F079",
+        "F080",
+        "F081",
+        "F082",
+        "F083",
+        "F084",
+        "F085",
+        "F086",
+        "F087",
+        "F088",
+        "F089",
+        "F090",
+        "F091",
+        "F092"
+      ]
+    },
+    {
+      "id": "H",
+      "summary": "Purple Account out-of-network ATM fee explanation involving the $2.50 per-withdrawal rule, settlement timing, operator surcharge, and fee-minimization guidance.",
+      "included_fact_ids": [
+        "F093",
+        "F094",
+        "F095",
+        "F096",
+        "F097",
+        "F098",
+        "F099",
+        "F100",
+        "F101",
+        "F102",
+        "F103",
+        "F104"
+      ]
+    },
+    {
+      "id": "I",
+      "summary": "Light Blue Account monthly foreign ATM withdrawal allowance case showing free-withdrawal counts, no rollover, post-allowance $4.00 fees, examples, and third-party fees.",
+      "included_fact_ids": [
+        "F105",
+        "F106",
+        "F107",
+        "F108",
+        "F109",
+        "F110",
+        "F111",
+        "F112",
+        "F113",
+        "F114",
+        "F115",
+        "F116"
+      ]
+    },
+    {
+      "id": "J",
+      "summary": "Light Green account tiered foreign ATM fee case showing amount thresholds, exact-threshold handling, same-day multiple withdrawals, examples, and consolidation guidance.",
+      "included_fact_ids": [
+        "F117",
+        "F118",
+        "F119",
+        "F120",
+        "F121",
+        "F122",
+        "F123",
+        "F124",
+        "F125",
+        "F126",
+        "F127",
+        "F128",
+        "F129",
+        "F130",
+        "F131",
+        "F132",
+        "F133"
+      ]
+    },
+    {
+      "id": "K",
+      "summary": "Evergreen Account out-of-network ATM fee case involving the 1% fee, $2.50 cap, examples, separate line item, operator surcharge, same-day multiple withdrawals, and avoidance guidance.",
+      "included_fact_ids": [
+        "F134",
+        "F135",
+        "F136",
+        "F137",
+        "F138",
+        "F139",
+        "F140",
+        "F141",
+        "F142",
+        "F143",
+        "F144",
+        "F145",
+        "F146",
+        "F147"
+      ]
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/checking_atm_fee_rebates_and_credits/evidence_corpus_hard_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/checking_atm_fee_rebates_and_credits/evidence_corpus_deep_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/checking_atm_fee_rebates_and_credits/client_overlay_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/checking_atm_fee_rebates_and_credits/client_overlay_deposit_services_001/transformation_pack.json"
+    }
+  ]
+}

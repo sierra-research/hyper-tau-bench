@@ -1,0 +1,245 @@
+{
+  "id": "042_banking_knowledge_construction_client_api_card_servicing",
+  "source_domain": "banking_knowledge",
+  "task_type": "construction",
+  "task_description": "Build a Banking Knowledge customer service agent scoped to the card-servicing journey (credit card transaction disputes, credit limit increases, declines and backend incidents, card replacements, account services, and closure/retention/downgrade/payoff) against a client-owned REST API. The initial OpenAPI document exposes baseline operations; retrieved procedures and evidence document additional directly callable operations.",
+  "sop_variant_manifest_path": "tau2/hyper/sops/banking_knowledge/variants/core_evidence_bundle_001.json",
+  "knowledge_base_path": "tau2/domains/banking_knowledge/documents",
+  "knowledge_base_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_009.json",
+    "doc_business_credit_cards_business_platinum_rewards_card_001.json",
+    "doc_business_credit_cards_business_platinum_rewards_card_002.json",
+    "doc_business_credit_cards_business_platinum_rewards_card_008.json",
+    "doc_business_credit_cards_business_platinum_rewards_card_011.json",
+    "doc_credit_cards_credit_card_account_logistics_002.json",
+    "doc_credit_cards_credit_card_account_logistics_003.json",
+    "doc_credit_cards_credit_card_account_logistics_004.json",
+    "doc_credit_cards_credit_card_account_logistics_005.json",
+    "doc_credit_cards_credit_card_account_logistics_006.json",
+    "doc_credit_cards_credit_card_account_logistics_007.json",
+    "doc_credit_cards_credit_card_account_logistics_008.json",
+    "doc_credit_cards_credit_card_account_logistics_009.json",
+    "doc_credit_cards_credit_card_replacements_001.json",
+    "doc_credit_cards_credit_card_replacements_002.json",
+    "doc_credit_cards_credit_card_replacements_003.json",
+    "doc_credit_cards_credit_card_replacements_004.json",
+    "doc_credit_cards_credit_card_replacements_005.json",
+    "doc_credit_cards_credit_cards_(general)_010.json",
+    "doc_credit_cards_credit_cards_(general)_011.json",
+    "doc_credit_cards_credit_cards_(general)_012.json",
+    "doc_credit_cards_credit_cards_(general)_013.json",
+    "doc_credit_cards_credit_cards_(general)_014.json",
+    "doc_credit_cards_credit_cards_(general)_015.json",
+    "doc_credit_cards_credit_cards_(general)_016.json",
+    "doc_credit_cards_credit_cards_(general)_017.json",
+    "doc_credit_cards_ecocard_008.json",
+    "doc_credit_cards_gold_rewards_card_002.json",
+    "doc_credit_cards_platinum_rewards_card_001.json",
+    "doc_credit_cards_platinum_rewards_card_002.json",
+    "doc_credit_cards_silver_rewards_card_001.json",
+    "doc_credit_cards_silver_rewards_card_002.json"
+  ],
+  "composition_pipeline": [
+    {
+      "stage": "information_distribution",
+      "variant_manifest_path": "tau2/hyper/sops/banking_knowledge/variants/core_evidence_bundle_001.json",
+      "transformed_sections": [
+        "credit_card_transaction_disputes",
+        "credit_limit_increases",
+        "credit_card_declines_and_backend_incidents",
+        "credit_card_replacements",
+        "personal_credit_card_account_services",
+        "credit_card_closure_retention_downgrade_payoff"
+      ]
+    }
+  ],
+  "test_task_ids": [
+    "task_031",
+    "task_036",
+    "task_037",
+    "task_038",
+    "task_039",
+    "task_040",
+    "task_041",
+    "task_043",
+    "task_044",
+    "task_045",
+    "task_046",
+    "task_047",
+    "task_048",
+    "task_049",
+    "task_050",
+    "task_051",
+    "task_052",
+    "task_053",
+    "task_054",
+    "task_129",
+    "task_130",
+    "task_131",
+    "task_132",
+    "task_133",
+    "task_134",
+    "task_135",
+    "task_136"
+  ],
+  "test_task_ids_note": "Relative to the card_servicing subdomain's 30-task partition, task_032/033/035 are omitted: their ACTION-basis golden actions name the unlock/call_discoverable_agent_tool wrappers, which client_api_mode=rest removes.",
+  "interaction_mode": "sandbox",
+  "client_api_mode": "rest",
+  "sandbox_config": {
+    "max_time_seconds": 28800,
+    "command_timeout": 120,
+    "docker_image": "tau2-construction-runtime:contract-v7",
+    "docker_memory": "4g",
+    "docker_cpus": "2"
+  },
+  "performance_profile": {
+    "easy": {
+      "budget": 1.3,
+      "models": [
+        "gpt-5.6-sol",
+        {
+          "model": "anthropic/claude-opus-5",
+          "constraints": {},
+          "credit_rates": {
+            "input_per_million": 3.0,
+            "output_per_million": 15.0,
+            "rate_card_date": "2026-08-23",
+            "pricing_basis": "capability_bucket_median_list_price"
+          }
+        },
+        "google/gemini-3.1-pro-preview",
+        "moonshotai/kimi-k3",
+        "deepseek/deepseek-v4-flash",
+        {
+          "model": "gpt-5.6-terra",
+          "constraints": {
+            "reasoning_effort": "none"
+          }
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "constraints": {
+            "reasoning_effort": "none"
+          }
+        },
+        {
+          "model": "anthropic/claude-haiku-4-5",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          },
+          "credit_rates": {
+            "input_per_million": 0.25,
+            "output_per_million": 1.6,
+            "rate_card_date": "2026-08-23",
+            "pricing_basis": "capability_bucket_median_list_price"
+          }
+        },
+        {
+          "model": "google/gemini-3-flash-preview",
+          "constraints": {
+            "reasoning_effort": "minimal"
+          }
+        },
+        {
+          "model": "qwen/qwen3.8-27b",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          }
+        },
+        {
+          "model": "google/gemma-4-31b-it",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "effort": "low"
+              }
+            }
+          }
+        },
+        {
+          "model": "gpt-5.4-nano",
+          "constraints": {
+            "reasoning_effort": "none"
+          }
+        },
+        "qwen/qwen3-30b-a3b-instruct-2507",
+        {
+          "model": "google/gemma-4-26b-a4b-it",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          }
+        },
+        "gpt-4.1-mini",
+        {
+          "model": "moonshotai/kimi-k2.6",
+          "constraints": {
+            "extra_body": {
+              "thinking": {
+                "type": "disabled"
+              }
+            }
+          }
+        },
+        "gpt-4o-mini",
+        {
+          "model": "anthropic/claude-sonnet-5",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          },
+          "credit_rates": {
+            "input_per_million": 0.5,
+            "output_per_million": 3.2,
+            "rate_card_date": "2026-08-23",
+            "pricing_basis": "capability_bucket_median_list_price"
+          }
+        },
+        {
+          "model": "gpt-5-mini",
+          "constraints": {
+            "reasoning_effort": "low"
+          }
+        },
+        {
+          "model": "google/gemini-3.1-flash-lite",
+          "constraints": {
+            "reasoning_effort": "minimal"
+          }
+        },
+        {
+          "model": "qwen/qwen3.6-27b",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          }
+        },
+        {
+          "model": "stepfun/step-3.7-flash",
+          "constraints": {
+            "reasoning_effort": "medium"
+          }
+        }
+      ]
+    }
+  },
+  "user_llm": "gpt-5.5",
+  "user_reasoning_effort": "none"
+}

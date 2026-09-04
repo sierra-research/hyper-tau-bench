@@ -1,0 +1,106 @@
+{
+  "id": "task_106",
+  "description": {
+    "purpose": "Task: task_106",
+    "relevant_policies": null,
+    "notes": null
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Wei Chen, a 46-year-old trade consultant from Boston, MA. You run a one-man firm called \"Chen Trade Advisory\" that helps small importers with customs paperwork. You bank with Rho-Bank: a personal Green Account checking and a Cobalt Blue business checking with about $7,200 in it. You're efficient and a little impatient - you already know exactly what you want because your bookkeeper told you.\n\n**Your goal:** Open a \"Business Bronze Saver Account\" (that exact account - your bookkeeper recommended it because it has no minimum and no monthly fee). Do NOT fund it today: a large client payment lands next week and you'll fund the account from that.\n\n**Verification info:**\n- Name: Wei Chen | Phone: 617-555-0834 | Email: wei.chen.boston@gmail.com\n- DOB: 04/17/1979 | Address: 88 Harbor View Court, Boston, MA 02110\n\n## Conversation Flow:\n\n1. **Opening:** \"Hi, this should be quick. My bookkeeper told me to open the Business Bronze Saver Account for my consulting firm - no minimum, no monthly fee, that's the one I want. Can you open it for me now?\"\n\n2. **Provide verification info when asked:** Give your name, phone number, email, date of birth, and address.\n\n3. **If the agent tries to discuss other savings options or upsell:** Decline: \"No thanks - my bookkeeper already did the homework. Bronze Saver, please.\"\n\n4. **When the agent asks whether you want to fund the account now / transfer an opening deposit:** Decline clearly: \"No, don't move anything today. I've got a big client payment landing next week - I'll fund it from that.\"\n\n5. **If the agent explains any funding deadline or conditions:** Acknowledge it: \"Understood, noted. The payment lands well before then.\"\n\n6. **After the account is opened and funding is settled:** \"Great, that's everything. Thanks!\" ###STOP###\n\n**IMPORTANT BEHAVIORS:**\n- You know the account NAME (from your bookkeeper) but nothing about Rho-Bank's internal procedures - never quote bank policy.\n- Do not agree to any transfer today, even a small one.\n- Stay polite but keep the call moving.\n\nYou are currently on the line with a customer support agent. Only provide additional details about your situation when the agent asks for them. Don't dump all your information at once. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "accounts": {
+          "data": {
+            "chk_76ad9cc60e": {
+              "account_id": "chk_76ad9cc60e",
+              "user_id": "76ad9cc60e",
+              "class": "checking",
+              "level": "Green Account",
+              "date_opened": "08/20/2022",
+              "status": "OPEN",
+              "current_holdings": "5100.00"
+            },
+            "biz_chk_76ad9cc60e": {
+              "account_id": "biz_chk_76ad9cc60e",
+              "user_id": "76ad9cc60e",
+              "class": "business_checking",
+              "level": "Cobalt Blue",
+              "date_opened": "04/12/2025",
+              "status": "OPEN",
+              "current_holdings": "7200.00"
+            }
+          }
+        }
+      },
+      "user_data": null
+    },
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Wei Chen",
+          "user_id": "76ad9cc60e",
+          "address": "88 Harbor View Court, Boston, MA 02110",
+          "email": "wei.chen.boston@gmail.com",
+          "phone_number": "617-555-0834",
+          "date_of_birth": "04/17/1979",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "106_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "106_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"76ad9cc60e\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "106_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "open_bank_account_4821"
+        },
+        "requestor": "assistant",
+        "action_id": "106_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "open_bank_account_4821",
+          "arguments": "{\"user_id\": \"76ad9cc60e\", \"account_type\": \"business_savings\", \"account_class\": \"Bronze Saver Account\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "106_4"
+      }
+    ],
+    "communicate_info": null,
+    "reward_basis": [
+      "DB"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_004",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_business_savings_accounts_bronze_saver_account_001"
+  ]
+}

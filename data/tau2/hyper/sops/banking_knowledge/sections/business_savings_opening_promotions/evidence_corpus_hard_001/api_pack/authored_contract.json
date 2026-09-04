@@ -1,0 +1,536 @@
+{
+  "format": "api_contract_pack_v1",
+  "release": {
+    "contract_id": "CONTRACT-DEPOSIT-3847-V7",
+    "environment": "production",
+    "status": "published",
+    "current": true,
+    "effective_at": "2025-09-17T09:00:00-04:00",
+    "snapshot_at": "2025-10-02T10:15:00-04:00",
+    "superseded_by": null
+  },
+  "cover_email": "From: Dario Lenz <dario.lenz@rho-bank.com>\nTo: Business Savings Desk Support <business-savings-desk@rho-bank.com>\nCc: Maya Chen <maya.chen@rho-bank.com>\nDate: Fri, 03 Oct 2025 09:40:12 -0400\nSubject: deposit-lookup suite contract pack v7 (production) - savings desk copy\nMessage-ID: <bc550e2edea9f6@rho-bank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nTeam,\n\nPer Maya's ask, here is the business desk's copy of the v7 deposit-lookup contract pack, cut from the production gateway definition. Same release the deposit desk has been on since September - nothing business-specific about the envelopes; the account lookup answers business checking profiles the same way it answers everything else.\n\nThe pack is the contract - what the services take and what they return. Board copy and desk procedure stay on your side of the line; when one of your boards needs the field contract, point it at this pack rather than restating rows.\n\nDario",
+  "openapi": {
+    "openapi": "3.1.0",
+    "info": {
+      "title": "Deposit Services — deposit-lookup suite",
+      "version": "7.0.0",
+      "description": "Contract for the Rho Bank deposit-lookup suite: the account lookup and the transactions read, as the production gateway defines them. Record semantics and worked examples live in the record contract notes shipped with this pack.",
+      "x-contract-id": "CONTRACT-DEPOSIT-3847-V7",
+      "x-contract-status": "published",
+      "x-environment": "production",
+      "x-effective-at": "2025-09-17T09:00:00-04:00",
+      "x-superseded-by": null,
+      "x-source-of-truth": "Rho Bank internal API gateway, deposit-services namespace"
+    },
+    "servers": [
+      {
+        "url": "https://gateway.internal.rho-bank.com/deposit-services/v1",
+        "description": "Internal production gateway. Reachable only from the internal environment; callers must hold an authenticated internal-environment session."
+      }
+    ],
+    "paths": {
+      "/accounts/by-user": {
+        "get": {
+          "operationId": "get_all_user_accounts_by_user_id_3847",
+          "summary": "List a customer's bank accounts",
+          "description": "Use get_all_user_accounts_by_user_id_3847 to retrieve the bank accounts, including checkings and savings, for a customer. One customer per call; the response carries one record per account with the fields described in the record contract notes.",
+          "parameters": [
+            {
+              "name": "user_id",
+              "in": "query",
+              "required": true,
+              "description": "The customer's user identifier (profile-level, RB-prefixed). Account ids do not resolve here.",
+              "schema": {
+                "type": "string",
+                "pattern": "^RB-[0-9]{7}$"
+              }
+            }
+          ],
+          "security": [
+            {
+              "internalSso": [
+                "deposit-services.accounts.read"
+              ]
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success. The body echoes the user_id and carries accounts as a collection of account records; an empty collection means the profile has no open accounts and is itself a successful response, not an error.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserAccountsResponse"
+                  },
+                  "examples": {
+                    "mixed_profile": {
+                      "summary": "Customer holding checking and savings",
+                      "value": {
+                        "user_id": "RB-9990417",
+                        "accounts": [
+                          {
+                            "account_id": "RBA-99-30112",
+                            "account_type": "checking",
+                            "account_class": "Blue Account",
+                            "status": "open",
+                            "balance": 2418.66,
+                            "date_opened": "2023-04-17"
+                          },
+                          {
+                            "account_id": "RBA-99-30546",
+                            "account_type": "savings",
+                            "account_class": "Silver Plus Account",
+                            "status": "open",
+                            "balance": 7315.42,
+                            "date_opened": "2025-02-03"
+                          }
+                        ]
+                      }
+                    },
+                    "no_open_accounts": {
+                      "summary": "Profile with no open accounts (successful empty collection)",
+                      "value": {
+                        "user_id": "RB-9990002",
+                        "accounts": []
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "INVALID_USER_ID — the identifier did not resolve to a customer profile. See the error-behavior table."
+            },
+            "401": {
+              "description": "UNAUTHENTICATED — no valid internal-environment session. See the error-behavior table."
+            },
+            "403": {
+              "description": "PERMISSION_DENIED — the caller's role lacks deposit-services.accounts.read. See the error-behavior table."
+            },
+            "504": {
+              "description": "UPSTREAM_TIMEOUT — the accounts store did not answer in time. See the error-behavior table."
+            }
+          }
+        }
+      },
+      "/accounts/transactions": {
+        "get": {
+          "operationId": "get_bank_account_transactions_9173",
+          "summary": "List transactions for a bank account",
+          "description": "Use get_bank_account_transactions_9173 to retrieve the transaction history for a customer's bank account (checking or savings). One account per call. Transactions are returned in reverse chronological order, most recent first.",
+          "parameters": [
+            {
+              "name": "account_id",
+              "in": "query",
+              "required": true,
+              "description": "The bank account to read. Use the account_id values the account lookup returns; profile-level ids do not resolve here.",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "security": [
+            {
+              "internalSso": [
+                "deposit-services.transactions.read"
+              ]
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success. The body echoes the account_id and carries transactions as a collection of transaction records; an account with no activity returns an empty collection.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/TransactionsResponse"
+                  },
+                  "examples": {
+                    "checking_fixture": {
+                      "summary": "Recent activity on a checking account",
+                      "value": {
+                        "account_id": "RBA-99-30112",
+                        "transactions": [
+                          {
+                            "transaction_id": "TXN-99-114208",
+                            "account_id": "RBA-99-30112",
+                            "date": "09/12/2025",
+                            "description": "ACH TRANSFER IN - SANDBOX PAYROLL",
+                            "amount": 1893.71,
+                            "type": "ach_transfer_in",
+                            "status": "posted"
+                          },
+                          {
+                            "transaction_id": "TXN-99-114102",
+                            "account_id": "RBA-99-30112",
+                            "date": "09/10/2025",
+                            "description": "ATM WITHDRAWAL - BRANCH LOBBY 04",
+                            "amount": -60,
+                            "type": "atm_withdrawal",
+                            "status": "posted"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "INVALID_ACCOUNT_ID — the identifier did not resolve to a bank account. See the error-behavior table."
+            },
+            "401": {
+              "description": "UNAUTHENTICATED — no valid internal-environment session. See the error-behavior table."
+            },
+            "403": {
+              "description": "PERMISSION_DENIED — the caller's role lacks deposit-services.transactions.read. See the error-behavior table."
+            },
+            "504": {
+              "description": "UPSTREAM_TIMEOUT — the transactions store did not answer in time. See the error-behavior table."
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "UserAccountsResponse": {
+          "type": "object",
+          "required": [
+            "user_id",
+            "accounts"
+          ],
+          "properties": {
+            "user_id": {
+              "type": "string"
+            },
+            "accounts": {
+              "type": "array",
+              "description": "Collection of account records for the customer. Empty when the profile has no open accounts.",
+              "items": {
+                "$ref": "#/components/schemas/AccountRecord"
+              }
+            }
+          }
+        },
+        "AccountRecord": {
+          "type": "object",
+          "required": [
+            "account_id",
+            "account_type",
+            "account_class",
+            "status",
+            "balance",
+            "date_opened"
+          ],
+          "properties": {
+            "account_id": {
+              "type": "string",
+              "description": "The account's platform identifier; account-scoped tools take this value."
+            },
+            "account_type": {
+              "type": "string",
+              "enum": [
+                "checking",
+                "savings"
+              ],
+              "description": "Which side of the deposit book the record sits on."
+            },
+            "account_class": {
+              "type": "string",
+              "description": "The configured product class label, echoed exactly as the platform holds it."
+            },
+            "status": {
+              "type": "string",
+              "description": "The account's standing as the platform reports it."
+            },
+            "balance": {
+              "type": "number",
+              "description": "Point-in-time balance in USD at read time."
+            },
+            "date_opened": {
+              "type": "string",
+              "format": "date",
+              "description": "The date the account was opened."
+            }
+          }
+        },
+        "TransactionsResponse": {
+          "type": "object",
+          "required": [
+            "account_id",
+            "transactions"
+          ],
+          "properties": {
+            "account_id": {
+              "type": "string"
+            },
+            "transactions": {
+              "type": "array",
+              "description": "Collection of transaction records for the account, most recent first. Empty when the account has no activity.",
+              "items": {
+                "$ref": "#/components/schemas/TransactionRecord"
+              }
+            }
+          }
+        },
+        "TransactionRecord": {
+          "type": "object",
+          "required": [
+            "transaction_id",
+            "account_id",
+            "date",
+            "description",
+            "amount",
+            "type",
+            "status"
+          ],
+          "properties": {
+            "transaction_id": {
+              "type": "string"
+            },
+            "account_id": {
+              "type": "string"
+            },
+            "date": {
+              "type": "string",
+              "description": "Transaction date, MM/DD/YYYY."
+            },
+            "description": {
+              "type": "string"
+            },
+            "amount": {
+              "type": "number",
+              "description": "Signed USD amount: credits positive, debits negative."
+            },
+            "type": {
+              "type": "string",
+              "description": "Platform transaction-type label; the vocabulary is open-ended (deposits, card activity, transfers, fees, interest and rebate credits) and grows with the platform."
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "posted",
+                "pending"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "postman_collection": {
+    "info": {
+      "_postman_id": "3e8a5c17-92b4-4f6d-8a05-c1d47e29b6f3",
+      "name": "Deposit Services — deposit-lookup suite (3847/9173) v7",
+      "description": "Requests against the internal production gateway. Set the {{gateway}} variable and sign on through the internal SSO helper before running anything; unauthenticated calls return 401 by design.",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+      {
+        "key": "gateway",
+        "value": "https://gateway.internal.rho-bank.com/deposit-services/v1"
+      }
+    ],
+    "item": [
+      {
+        "name": "Accounts by user — mixed profile",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "url": {
+            "raw": "{{gateway}}/accounts/by-user?user_id=RB-9990417",
+            "host": [
+              "{{gateway}}"
+            ],
+            "path": [
+              "accounts",
+              "by-user"
+            ],
+            "query": [
+              {
+                "key": "user_id",
+                "value": "RB-9990417"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "Accounts by user — no open accounts (empty collection)",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "url": {
+            "raw": "{{gateway}}/accounts/by-user?user_id=RB-9990002",
+            "host": [
+              "{{gateway}}"
+            ],
+            "path": [
+              "accounts",
+              "by-user"
+            ],
+            "query": [
+              {
+                "key": "user_id",
+                "value": "RB-9990002"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "Transactions — checking account fixture",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "url": {
+            "raw": "{{gateway}}/accounts/transactions?account_id=RBA-99-30112",
+            "host": [
+              "{{gateway}}"
+            ],
+            "path": [
+              "accounts",
+              "transactions"
+            ],
+            "query": [
+              {
+                "key": "account_id",
+                "value": "RBA-99-30112"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "Account id passed to the user lookup — expect 400",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "url": {
+            "raw": "{{gateway}}/accounts/by-user?user_id=RBA-99-30112",
+            "host": [
+              "{{gateway}}"
+            ],
+            "path": [
+              "accounts",
+              "by-user"
+            ],
+            "query": [
+              {
+                "key": "user_id",
+                "value": "RBA-99-30112"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "error_behavior_columns": [
+    "rule_id",
+    "status",
+    "environment",
+    "audience",
+    "http_status",
+    "condition",
+    "response_code",
+    "notes",
+    "updated_at",
+    "superseded_by"
+  ],
+  "error_behavior": [
+    {
+      "rule_id": "ERR-3847-400",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 400,
+      "condition": "user_id does not resolve to a customer profile (wrong format, an account-level identifier, or an unknown profile)",
+      "response_code": "INVALID_USER_ID",
+      "notes": "The identifier is validated before the accounts store is touched; nothing is queried on a 400. Re-verified at the v4 scope expansion; validation unchanged.",
+      "updated_at": "2025-03-10T09:00:00-04:00",
+      "superseded_by": null
+    },
+    {
+      "rule_id": "ERR-3847-504",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 504,
+      "condition": "the accounts store does not answer within the gateway deadline",
+      "response_code": "UPSTREAM_TIMEOUT",
+      "notes": "A timeout says nothing about what the profile holds; it is not the same thing as the successful empty collection, which is a 200.",
+      "updated_at": "2025-07-28T09:00:00-04:00",
+      "superseded_by": null
+    },
+    {
+      "rule_id": "ERR-9173-400",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 400,
+      "condition": "account_id does not resolve to a bank account",
+      "response_code": "INVALID_ACCOUNT_ID",
+      "notes": "Use the account_id values the account lookup returns; profile-level ids do not resolve here.",
+      "updated_at": "2024-06-11T09:00:00-04:00",
+      "superseded_by": null
+    },
+    {
+      "rule_id": "ERR-9173-504",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 504,
+      "condition": "the transactions store does not answer within the gateway deadline",
+      "response_code": "UPSTREAM_TIMEOUT",
+      "notes": "Retry once the store settles; the transactions read is idempotent.",
+      "updated_at": "2025-07-28T09:00:00-04:00",
+      "superseded_by": null
+    },
+    {
+      "rule_id": "ERR-SUITE-401",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 401,
+      "condition": "no valid internal-environment session accompanies a call to either suite tool",
+      "response_code": "UNAUTHENTICATED",
+      "notes": "Session lifetime is owned by the gateway; the tools never extend it. Re-authenticate and retry.",
+      "updated_at": "2024-10-08T09:00:00-04:00",
+      "superseded_by": null
+    },
+    {
+      "rule_id": "ERR-SUITE-403",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 403,
+      "condition": "the authenticated caller's role lacks the deposit-services read grant for the tool called",
+      "response_code": "PERMISSION_DENIED",
+      "notes": "Role grants are provisioned per support role; missing and suspended grants return the same code.",
+      "updated_at": "2024-06-11T09:00:00-04:00",
+      "superseded_by": null
+    }
+  ],
+  "record_contract_notes": "# Deposit-lookup suite — record contract notes\n\nContract: `CONTRACT-DEPOSIT-3847-V7`\nEnvironment: production · Status: published · Effective 2025-09-17\nOwner: Deposit Platform Engineering (Dario Lenz)\n\nTwo tools ship under this contract: the account lookup and the transactions read. Both live on the internal gateway; calls need an authenticated internal-environment session and the deposit-services read roles. The pack documents what the services take and return — what any desk does with an answer belongs to that desk's own procedures.\n\n## get_all_user_accounts_by_user_id_3847\n\n### Purpose\n\nUse get_all_user_accounts_by_user_id_3847 to retrieve a customer's checking and savings bank accounts. The lookup requires the customer's `user_id`; one customer per call, and everything the customer holds comes back in one response.\n\n### When to use\n\nThe gateway catalog publishes a usage note with the contract, and desk tooling inherits it as written:\n\n- The lookup is essential for checking opening-eligibility requirements, pre-closure requirements when closing accounts, and account details for customer service inquiries, including existing account status, balances, account tenure, and number of accounts.\n\n### Response contract\n\nThe lookup requires the customer's `user_id` and returns `account_id`, `account_type`, `account_class`, `status`, `balance`, and `date_opened` for each account record in the `accounts` collection; one customer per call.\n\n| Field | Notes |\n|---|---|\n| `account_id` | the account's own identifier — the value account-scoped tools expect |\n| `account_type` | `checking` or `savings`; which side of the deposit book the record sits on |\n| `account_class` | the configured product class label, echoed exactly as the platform holds it |\n| `status` | the account's standing as the platform reports it |\n| `balance` | point-in-time balance in USD at read time |\n| `date_opened` | the date the account was opened |\n\nWorked example:\n\n```json\n{\n  \"user_id\": \"RB-9990417\",\n  \"accounts\": [\n    { \"account_id\": \"RBA-99-30112\", \"account_type\": \"checking\", \"account_class\": \"Blue Account\", \"status\": \"open\", \"balance\": 2418.66, \"date_opened\": \"2023-04-17\" },\n    { \"account_id\": \"RBA-99-30546\", \"account_type\": \"savings\", \"account_class\": \"Silver Plus Account\", \"status\": \"open\", \"balance\": 7315.42, \"date_opened\": \"2025-02-03\" }\n  ]\n}\n```\n\n#### The empty case\n\n```json\n{ \"user_id\": \"RB-9990002\", \"accounts\": [] }\n```\n\nAn empty `accounts` collection under a 200 is the real answer for a profile with no open accounts. It is not an error, and retrying it will not produce a different one.\n\n## get_bank_account_transactions_9173\n\n### Purpose\n\nUse get_bank_account_transactions_9173 to retrieve the transaction history for a customer's bank account — checking or savings, one account per call. It takes the `account_id` the account lookup returns and answers in reverse chronological order, most recent first.\n\n### Response contract\n\nA successful response echoes the `account_id` and carries `transactions` as a collection of transaction records: `transaction_id`, `account_id`, `date` (MM/DD/YYYY), `description`, a signed `amount` in USD (credits positive, debits negative), the platform's `type` label, and a `status` of `posted` or `pending`. The `type` vocabulary is open-ended by design — deposits, card activity, transfers, fees, interest and rebate credits — and grows with the platform.\n\n```json\n{\n  \"account_id\": \"RBA-99-30112\",\n  \"transactions\": [\n    { \"transaction_id\": \"TXN-99-114208\", \"account_id\": \"RBA-99-30112\", \"date\": \"09/12/2025\", \"description\": \"ACH TRANSFER IN - SANDBOX PAYROLL\", \"amount\": 1893.71, \"type\": \"ach_transfer_in\", \"status\": \"posted\" },\n    { \"transaction_id\": \"TXN-99-114102\", \"account_id\": \"RBA-99-30112\", \"date\": \"09/10/2025\", \"description\": \"ATM WITHDRAWAL - BRANCH LOBBY 04\", \"amount\": -60, \"type\": \"atm_withdrawal\", \"status\": \"posted\" }\n  ]\n}\n```\n\n## Boundaries\n\nThe contract documents what the suite returns, not what any team should do with it. Eligibility policy, denial handling, and funding mechanics live with the owning desks' boards and procedures. Example values in this pack are sandbox fixtures (the RB-999 / RBA-99 range), not production records.\n\n## Changelog\n\n- **v7 (2025-09-17)** — reissued against the September gateway definition refresh; worked examples re-cut from the sandbox range; no envelope changes.\n- **v6 (2025-07-28)** — documented the gateway deadline (504) rows for both stores; clarified that an empty `accounts` collection is a success.\n- **v5 (2025-05-19)** — Postman collection re-wired for the consolidated gateway variables.\n- **v4 (2025-03-10)** — account lookup scope expanded: the lookup now returns the customer's checking accounts and savings accounts together, and the record contract adds `account_type` and `account_class` to carry the split. CONTRACT-DEPOSIT-3847-V1, the pack that documented the original checking-only lookup, was retired on 2025-03-10; the old definition stays callable for legacy jobs, so anything still pinned there keeps checking-only answers until it is repointed.\n- **v3 (2025-01-21)** — transactions record contract: documented `posted` versus `pending`.\n- **v2 (2024-10-08)** — clarified session-expiry (401) behavior; documented the sandbox variables.\n- **v1 (2024-06-11)** — first published pack for the deposit-lookup suite.\n"
+}

@@ -1,0 +1,474 @@
+{
+  "id": "airline_modification_slack_mcp_dump_001",
+  "representation": "slack_mcp_dump",
+  "artifacts": [
+    {
+      "filename": "reservation_servicing_slack_mcp_capture.json",
+      "authoritative_fact_ids": [
+        "passenger_name_or_dob_can_be_updated",
+        "passenger_count_cannot_change",
+        "supervisor_cannot_change_passenger_count"
+      ]
+    }
+  ],
+  "tool_call_count": 22,
+  "thread_count": 20,
+  "message_count": 155,
+  "current_evidence_phrases": {
+    "passenger_name_or_dob_can_be_updated": "may update an existing passenger's name or date of birth",
+    "passenger_count_cannot_change": "passenger count on an existing reservation cannot be changed",
+    "supervisor_cannot_change_passenger_count": "A supervisor cannot change that passenger count either"
+  },
+  "current_claim_occurrences": {
+    "passenger_name_or_dob_can_be_updated": 3,
+    "passenger_count_cannot_change": 3,
+    "supervisor_cannot_change_passenger_count": 3
+  },
+  "historical_claim_occurrences": {
+    "no passenger fields will be editable": 3,
+    "Minor spelling corrections to an existing passenger name are allowed": 3,
+    "Supervisors may add or remove passengers before check-in": 3,
+    "Passenger additions are prohibited, while ordinary removals remain allowed": 3,
+    "A supervisor may remove one passenger only when that traveler is a confirmed duplicate": 2
+  },
+  "decision_history": [
+    {
+      "decision_id": "D1",
+      "thread_key": "decision_1_view_only",
+      "thread_ts": "1700157840.715480",
+      "channel_id": "C08ATRSV01",
+      "channel_name": "proj-atlas-reservations",
+      "decision_timestamp": "2023-11-16T18:04:00Z",
+      "status": "superseded",
+      "summary": "All passenger fields remain view-only.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U07RINAP",
+          "display_name": "Rina Mehta",
+          "message_ts": "1700157840.715480"
+        },
+        {
+          "user_id": "U07THEOM",
+          "display_name": "Theo Beaumont",
+          "message_ts": "1700159522.945044"
+        },
+        {
+          "user_id": "U07MARCUSB",
+          "display_name": "Marcus Bell",
+          "message_ts": "1700161025.904928"
+        },
+        {
+          "user_id": "U07PRIYAN",
+          "display_name": "Priya Nair",
+          "message_ts": "1700162536.514831"
+        },
+        {
+          "user_id": "U07ELENAM",
+          "display_name": "Elena Marquez",
+          "message_ts": "1700165031.956143"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "no passenger fields will be editable",
+      "reopened_by": {
+        "thread_key": "reopen_1_contact_volume",
+        "thread_ts": "1700684160.748122",
+        "timestamp": "2023-11-22T20:16:00Z",
+        "trigger_summary": "Correction transfers were much more common than discovery estimated."
+      }
+    },
+    {
+      "decision_id": "D2",
+      "thread_key": "decision_2_limited_corrections",
+      "thread_ts": "1701453120.266565",
+      "channel_id": "C08ATRSV01",
+      "channel_name": "proj-atlas-reservations",
+      "decision_timestamp": "2023-12-01T17:52:00Z",
+      "status": "superseded",
+      "summary": "Allow minor name spelling corrections and pre-check-in removal; keep date of birth locked.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U07RINAP",
+          "display_name": "Rina Mehta",
+          "message_ts": "1701453120.266565"
+        },
+        {
+          "user_id": "U07THEOM",
+          "display_name": "Theo Beaumont",
+          "message_ts": "1701454179.650542"
+        },
+        {
+          "user_id": "U07MARCUSB",
+          "display_name": "Marcus Bell",
+          "message_ts": "1701455885.072203"
+        },
+        {
+          "user_id": "U07PRIYAN",
+          "display_name": "Priya Nair",
+          "message_ts": "1701457380.192727"
+        },
+        {
+          "user_id": "U07ELENAM",
+          "display_name": "Elena Marquez",
+          "message_ts": "1701458997.431812"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "Minor spelling corrections to an existing passenger name are allowed",
+      "reopened_by": {
+        "thread_key": "reopen_2_identity_findings",
+        "thread_ts": "1701890640.116425",
+        "timestamp": "2023-12-06T19:24:00Z",
+        "trigger_summary": "Counsel confirmed verified birth-date corrections were permissible, and Engineering found a supervisor-scoped traveler operation."
+      }
+    },
+    {
+      "decision_id": "D3",
+      "thread_key": "decision_3_supervisor_count",
+      "thread_ts": "1702405080.107605",
+      "channel_id": "C08ATRSV01",
+      "channel_name": "proj-atlas-reservations",
+      "decision_timestamp": "2023-12-12T18:18:00Z",
+      "status": "superseded",
+      "summary": "Allow verified name/DOB corrections and supervisor additions or removals before check-in.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U07RINAP",
+          "display_name": "Rina Mehta",
+          "message_ts": "1702405080.107605"
+        },
+        {
+          "user_id": "U07THEOM",
+          "display_name": "Theo Beaumont",
+          "message_ts": "1702406139.482989"
+        },
+        {
+          "user_id": "U07MARCUSB",
+          "display_name": "Marcus Bell",
+          "message_ts": "1702408153.899110"
+        },
+        {
+          "user_id": "U07PRIYAN",
+          "display_name": "Priya Nair",
+          "message_ts": "1702409790.186266"
+        },
+        {
+          "user_id": "U07ELENAM",
+          "display_name": "Elena Marquez",
+          "message_ts": "1702411055.598457"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "Supervisors may add or remove passengers before check-in",
+      "reopened_by": {
+        "thread_key": "reopen_3_inventory_defect",
+        "thread_ts": "1703102880.021425",
+        "timestamp": "2023-12-20T20:08:00Z",
+        "trigger_summary": "A non-atomic inventory update made passenger additions appear successful before a later rejection."
+      }
+    },
+    {
+      "decision_id": "D4",
+      "thread_key": "decision_4_removal_only",
+      "thread_ts": "1703270760.386986",
+      "channel_id": "C08ATRSV01",
+      "channel_name": "proj-atlas-reservations",
+      "decision_timestamp": "2023-12-22T18:46:00Z",
+      "status": "superseded",
+      "summary": "Keep verified name/DOB corrections and ordinary removals, but prohibit passenger additions.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U07RINAP",
+          "display_name": "Rina Mehta",
+          "message_ts": "1703270760.386986"
+        },
+        {
+          "user_id": "U07THEOM",
+          "display_name": "Theo Beaumont",
+          "message_ts": "1703272293.305161"
+        },
+        {
+          "user_id": "U07MARCUSB",
+          "display_name": "Marcus Bell",
+          "message_ts": "1703274005.076231"
+        },
+        {
+          "user_id": "U07PRIYAN",
+          "display_name": "Priya Nair",
+          "message_ts": "1703276319.261065"
+        },
+        {
+          "user_id": "U07ELENAM",
+          "display_name": "Elena Marquez",
+          "message_ts": "1703278820.896576"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "Passenger additions are prohibited, while ordinary removals remain allowed",
+      "reopened_by": {
+        "thread_key": "reopen_4_ancillary_defect",
+        "thread_ts": "1703705520.146259",
+        "timestamp": "2023-12-27T19:32:00Z",
+        "trigger_summary": "Ordinary removal could orphan traveler-linked ancillary records."
+      }
+    },
+    {
+      "decision_id": "D5",
+      "thread_key": "decision_5_duplicate_exception",
+      "thread_ts": "1704306120.434632",
+      "channel_id": "C08ATUAT02",
+      "channel_name": "proj-atlas-uat",
+      "decision_timestamp": "2024-01-03T18:22:00Z",
+      "status": "superseded",
+      "summary": "Prohibit general count changes but allow a supervisor to remove a confirmed duplicate.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U07RINAP",
+          "display_name": "Rina Mehta",
+          "message_ts": "1704306120.434632"
+        },
+        {
+          "user_id": "U07THEOM",
+          "display_name": "Theo Beaumont",
+          "message_ts": "1704306827.400664"
+        },
+        {
+          "user_id": "U07MARCUSB",
+          "display_name": "Marcus Bell",
+          "message_ts": "1704307680.447589"
+        },
+        {
+          "user_id": "U07PRIYAN",
+          "display_name": "Priya Nair",
+          "message_ts": "1704308757.151825"
+        },
+        {
+          "user_id": "U07ELENAM",
+          "display_name": "Elena Marquez",
+          "message_ts": "1704310794.174376"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "A supervisor may remove one passenger only when that traveler is a confirmed duplicate",
+      "reopened_by": {
+        "thread_key": "reopen_5_audit_replay",
+        "thread_ts": "1704913080.542726",
+        "timestamp": "2024-01-10T18:58:00Z",
+        "trigger_summary": "The durable audit event could not distinguish the approved duplicate exception from a prohibited ordinary count decrease."
+      }
+    },
+    {
+      "decision_id": "D6",
+      "thread_key": "decision_6_final",
+      "thread_ts": "1705088160.388240",
+      "channel_id": "C08ATRSV01",
+      "channel_name": "proj-atlas-reservations",
+      "decision_timestamp": "2024-01-12T19:36:00Z",
+      "status": "final_current",
+      "summary": "Final passenger-servicing boundary.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U07RINAP",
+          "display_name": "Rina Mehta",
+          "message_ts": "1705088160.388240"
+        },
+        {
+          "user_id": "U07THEOM",
+          "display_name": "Theo Beaumont",
+          "message_ts": "1705089621.759491"
+        },
+        {
+          "user_id": "U07MARCUSB",
+          "display_name": "Marcus Bell",
+          "message_ts": "1705090857.197181"
+        },
+        {
+          "user_id": "U07PRIYAN",
+          "display_name": "Priya Nair",
+          "message_ts": "1705092754.049578"
+        },
+        {
+          "user_id": "U07ELENAM",
+          "display_name": "Elena Marquez",
+          "message_ts": "1705093954.669243"
+        }
+      ],
+      "authoritative_fact_ids": [
+        "passenger_name_or_dob_can_be_updated",
+        "passenger_count_cannot_change",
+        "supervisor_cannot_change_passenger_count"
+      ],
+      "evidence_phrases": {
+        "passenger_name_or_dob_can_be_updated": "may update an existing passenger's name or date of birth",
+        "passenger_count_cannot_change": "passenger count on an existing reservation cannot be changed",
+        "supervisor_cannot_change_passenger_count": "A supervisor cannot change that passenger count either"
+      }
+    }
+  ],
+  "thread_plan": [
+    {
+      "ordinal": 1,
+      "thread_key": "kickoff_owners",
+      "classification": "distractor",
+      "decision_id": null,
+      "reopens_decision_key": null
+    },
+    {
+      "ordinal": 2,
+      "thread_key": "weekly_cadence",
+      "classification": "distractor",
+      "decision_id": null,
+      "reopens_decision_key": null
+    },
+    {
+      "ordinal": 3,
+      "thread_key": "initial_options",
+      "classification": "deliberation",
+      "decision_id": null,
+      "reopens_decision_key": null
+    },
+    {
+      "ordinal": 4,
+      "thread_key": "decision_1_view_only",
+      "classification": "decision",
+      "decision_id": "D1",
+      "reopens_decision_key": null
+    },
+    {
+      "ordinal": 5,
+      "thread_key": "reopen_1_contact_volume",
+      "classification": "reopening",
+      "decision_id": null,
+      "reopens_decision_key": "decision_1_view_only"
+    },
+    {
+      "ordinal": 6,
+      "thread_key": "uat_access",
+      "classification": "distractor",
+      "decision_id": null,
+      "reopens_decision_key": null
+    },
+    {
+      "ordinal": 7,
+      "thread_key": "correction_copy_review",
+      "classification": "distractor",
+      "decision_id": null,
+      "reopens_decision_key": null
+    },
+    {
+      "ordinal": 8,
+      "thread_key": "decision_2_limited_corrections",
+      "classification": "decision",
+      "decision_id": "D2",
+      "reopens_decision_key": null
+    },
+    {
+      "ordinal": 9,
+      "thread_key": "reopen_2_identity_findings",
+      "classification": "reopening",
+      "decision_id": null,
+      "reopens_decision_key": "decision_2_limited_corrections"
+    },
+    {
+      "ordinal": 10,
+      "thread_key": "reservation_api_review",
+      "classification": "deliberation",
+      "decision_id": null,
+      "reopens_decision_key": null
+    },
+    {
+      "ordinal": 11,
+      "thread_key": "decision_3_supervisor_count",
+      "classification": "decision",
+      "decision_id": "D3",
+      "reopens_decision_key": null
+    },
+    {
+      "ordinal": 12,
+      "thread_key": "dashboard_colors",
+      "classification": "distractor",
+      "decision_id": null,
+      "reopens_decision_key": null
+    },
+    {
+      "ordinal": 13,
+      "thread_key": "reopen_3_inventory_defect",
+      "classification": "reopening",
+      "decision_id": null,
+      "reopens_decision_key": "decision_3_supervisor_count"
+    },
+    {
+      "ordinal": 14,
+      "thread_key": "decision_4_removal_only",
+      "classification": "decision",
+      "decision_id": "D4",
+      "reopens_decision_key": null
+    },
+    {
+      "ordinal": 15,
+      "thread_key": "reopen_4_ancillary_defect",
+      "classification": "reopening",
+      "decision_id": null,
+      "reopens_decision_key": "decision_4_removal_only"
+    },
+    {
+      "ordinal": 16,
+      "thread_key": "duplicate_exception_review",
+      "classification": "deliberation",
+      "decision_id": null,
+      "reopens_decision_key": null
+    },
+    {
+      "ordinal": 17,
+      "thread_key": "decision_5_duplicate_exception",
+      "classification": "decision",
+      "decision_id": "D5",
+      "reopens_decision_key": null
+    },
+    {
+      "ordinal": 18,
+      "thread_key": "launch_screenshots",
+      "classification": "distractor",
+      "decision_id": null,
+      "reopens_decision_key": null
+    },
+    {
+      "ordinal": 19,
+      "thread_key": "reopen_5_audit_replay",
+      "classification": "reopening",
+      "decision_id": null,
+      "reopens_decision_key": "decision_5_duplicate_exception"
+    },
+    {
+      "ordinal": 20,
+      "thread_key": "decision_6_final",
+      "classification": "decision",
+      "decision_id": "D6",
+      "reopens_decision_key": null
+    }
+  ],
+  "distribution": {
+    "current_decision_threads": 1,
+    "superseded_decision_threads": 5,
+    "reopening_threads": 5,
+    "deliberation_threads": 3,
+    "distractor_only_threads": 6,
+    "delivered_artifacts": [
+      "uploaded_materials/ (generic pooled workspace_export*.json name)"
+    ],
+    "author_only_files": [
+      "generate.py",
+      "authored_threads.json",
+      "eval_manifest.json",
+      "README.md",
+      "realism_review_prompt.md"
+    ]
+  },
+  "notes": [
+    "Search and history calls naturally repeat root messages; exact occurrence counts are audited.",
+    "Every decision was explicitly approved by Product, Operations, Engineering, Compliance, and QA.",
+    "Each obsolete decision was later reopened by a separate thread containing new evidence.",
+    "Only the final decision carries authoritative_fact_ids.",
+    "The delivered artifact does not expose author-side decision status or fact mappings."
+  ]
+}

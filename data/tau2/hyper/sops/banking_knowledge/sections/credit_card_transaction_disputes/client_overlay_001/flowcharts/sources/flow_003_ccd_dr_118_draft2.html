@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CCD-DR-118 — Fraud dispute → replacement card lane (working draft 2)</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 1180px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #5a6b7d; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #d5dde5; }
+  .lane { position: absolute; border: 1px dashed #b9c4cf; border-radius: 8px; }
+  .lanelabel { position: absolute; font-size: 12px; font-weight: 600; color: #6b7885; letter-spacing: .6px; text-transform: uppercase; }
+  .node { position: absolute; box-sizing: border-box; background: #fff; border: 2px solid #35506e; border-radius: 8px; padding: 10px 12px; font-size: 13.5px; color: #1d2833; line-height: 1.35; }
+  .start { border-color: #2e7d54; background: #f2faf5; }
+  .decision { border-color: #a2662a; background: #fdf7ee; }
+  .step { border-color: #35506e; }
+  .good { border-color: #2e7d54; background: #f2faf5; }
+  .note { position: absolute; box-sizing: border-box; background: #fffbe8; border: 1px solid #d9c98a; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; color: #4c4630; line-height: 1.35; }
+  .draftmark { position: absolute; box-sizing: border-box; border: 1px solid #b9c4cf; background: #f2f5f8; border-radius: 6px; padding: 8px 11px; font-size: 12px; color: #5a6b7d; }
+  .edge { position: absolute; background: #55677a; }
+  .h { height: 2px; } .v { width: 2px; }
+  .lbl { position: absolute; font-size: 11.5px; color: #55677a; background: #fbfcfd; padding: 0 4px; }
+  .foot { position: absolute; left: 24px; bottom: 12px; font-size: 11.5px; color: #7b8794; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>CCD-DR-118 — Fraud dispute &rarr; replacement card lane (working draft 2)</h1>
+    <div class="meta">Dispute Operations &amp; Card Servicing &middot; working copy circulated for comment 2025-08-08 &middot; not published</div>
+  </div>
+
+  <div class="draftmark" style="left:24px; top:80px; width:520px;">Draft circulation copy &mdash; comments to the review thread. Open items: intake column question set; whether the eligibility lookup can run in parallel with the shipping conversation.</div>
+
+  <div class="lane" style="left:24px; top:140px; width:700px; height:960px;"></div>
+  <div class="lanelabel" style="left:40px; top:148px;">Intake column (one pass for any dispute reason)</div>
+
+  <div class="node start" style="left:56px; top:188px; width:300px;">Customer reports a bad charge and the card needs to go</div>
+
+  <div class="node step" style="left:56px; top:280px; width:300px;">Verify identity and pull up the account</div>
+
+  <div class="node step" style="left:56px; top:364px; width:300px;">Gather the filing interview in one pass: transaction, purchase date, dispute reason, resolution requested, contact details off the profile</div>
+
+  <div class="node step" style="left:56px; top:500px; width:300px;">File the dispute with card_action cancel_and_reissue</div>
+
+  <div class="node step" style="left:56px; top:588px; width:300px;">Hand off to the replacement column &rarr;</div>
+
+  <div class="edge v" style="left:206px; top:244px; height:36px;"></div>
+  <div class="edge v" style="left:206px; top:328px; height:36px;"></div>
+  <div class="edge v" style="left:206px; top:464px; height:36px;"></div>
+  <div class="edge v" style="left:206px; top:552px; height:36px;"></div>
+
+  <div class="note" style="left:56px; top:680px; width:620px;">Draft rationale for the one-pass interview: the fraud path never needs the merchant conversation, so the column keeps the question set lean and identical for every reason &mdash; fewer branches for new agents to memorize.</div>
+
+  <div class="lane" style="left:760px; top:140px; width:776px; height:960px;"></div>
+  <div class="lanelabel" style="left:776px; top:148px;">Replacement column</div>
+
+  <div class="node step" style="left:792px; top:188px; width:330px;">Take the shipping address &mdash; whatever address the customer states is the ship-to</div>
+
+  <div class="node step" style="left:792px; top:288px; width:330px;">Record the replacement reason (six-value list)</div>
+
+  <div class="node step" style="left:792px; top:376px; width:330px;">Shipping conversation &mdash; ask expedited yes/no on every order, advise the tier fee</div>
+
+  <div class="node decision" style="left:792px; top:472px; width:330px;">Eligibility lookup in the knowledge base (order relative to shipping conversation: open item)</div>
+
+  <div class="node good" style="left:792px; top:592px; width:330px;">Order via the console macro; confirm delivery window; document</div>
+
+  <div class="edge v" style="left:957px; top:252px; height:36px;"></div>
+  <div class="edge v" style="left:957px; top:340px; height:36px;"></div>
+  <div class="edge v" style="left:957px; top:436px; height:36px;"></div>
+  <div class="edge v" style="left:957px; top:556px; height:36px;"></div>
+
+  <div class="note" style="left:792px; top:700px; width:700px;">Draft note: fee amounts to be linked once the customer-facing page settles; tool argument list stays with the console workspace either way.</div>
+
+  <div class="foot">CCD-DR-118 working draft 2 &middot; circulation copy &middot; internal — not customer-facing</div>
+</div>
+</body>
+</html>

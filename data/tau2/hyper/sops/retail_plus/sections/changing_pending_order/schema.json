@@ -1,0 +1,235 @@
+{
+  "id": "retail_plus_changing_pending_order_policy_fact_schema_001",
+  "domain": "retail_plus",
+  "studio_hidden": true,
+  "section_id": "changing_pending_order",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/retail_plus_sop.md",
+    "heading": "## Changing a pending order"
+  },
+  "rendered_section_path": "tau2/hyper/sops/retail_plus/sections/changing_pending_order/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/changing_pending_order/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "response_phrasing_context": {
+    "selected_rule_ids": [
+      "never_say_unfortunately",
+      "max_one_apology_per_conversation",
+      "no_premature_outcome_language",
+      "identifier_minimization",
+      "avoid_repeated_openings",
+      "no_generic_service_invitations",
+      "no_support_deflection",
+      "customer_visible_failure_language",
+      "no_long_menu_dumps",
+      "match_warmth_to_outcome",
+      "no_first_person_cant",
+      "no_internal_tool_mentions",
+      "no_policy_jargon"
+    ],
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "The no_generic_service_invitations rule must still allow current-request procedural completeness checks required by one-shot item changes and exchanges.",
+      "Transfer language must use the exact SOP-mandated message even when other phrasing rules are active."
+    ],
+    "rules_path": "tau2/hyper/response_phrasing/retail_plus_response_phrasing.yaml"
+  },
+  "style_exemplar": {
+    "id": "customer_support_chat",
+    "path": "tau2/hyper/sops/retail_plus/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "pending-order status checks",
+      "address, payment, and item-change examples",
+      "one-shot item-swap completeness checks",
+      "single payment method for differences"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/retail_plus_sop.md",
+      "src/tau2/domains/retail_plus/tools.py"
+    ],
+    "summary": "Pending-order modifications are limited to three change types and preserve documented order schema.",
+    "rules": [
+      "Do not invent quantity changes, split shipments, email changes, or modification audit fields.",
+      "Item changes replace variants in place and add payment-history entries only."
+    ]
+  },
+  "facts": [
+    {
+      "id": "pending_status_required_for_any_order_change",
+      "category": "pending_change_gate",
+      "statement": "Before any pending-order change, the agent must confirm the order status is pending.",
+      "canonical_source": "Changing a pending order"
+    },
+    {
+      "id": "pending_order_three_change_types_only",
+      "category": "pending_change_scope",
+      "statement": "Exactly three things can be changed on a pending order: shipping address, payment method, and specific items in the order.",
+      "canonical_source": "Changing a pending order"
+    },
+    {
+      "id": "pending_order_other_changes_unsupported",
+      "category": "pending_change_scope",
+      "statement": "Pending-order quantity changes, split shipments, order email changes, and any other changes outside shipping address, payment method, or specific items are unsupported and should be declined with transfer offered if needed.",
+      "canonical_source": "Changing a pending order"
+    },
+    {
+      "id": "address_change_read_back_confirm_update",
+      "category": "address_change",
+      "statement": "For a pending-order shipping address change, the customer gives the new address, the agent reads it back, gets confirmation, then updates it.",
+      "canonical_source": "Address change"
+    },
+    {
+      "id": "address_change_status_pending_no_money_moves",
+      "category": "address_change",
+      "statement": "A pending-order shipping address change leaves the order status pending and does not move money.",
+      "canonical_source": "Address change"
+    },
+    {
+      "id": "payment_change_saved_different_single_method",
+      "category": "payment_change",
+      "statement": "A pending-order payment method change must use one different payment method already saved on the customer's profile; splitting across methods is not allowed.",
+      "canonical_source": "Payment method change"
+    },
+    {
+      "id": "payment_change_gift_card_covers_entire_total",
+      "category": "payment_change",
+      "statement": "If the new payment method is a gift card, it must have enough balance to cover the entire order total.",
+      "canonical_source": "Payment method change"
+    },
+    {
+      "id": "payment_change_refund_original_full_amount",
+      "category": "payment_change",
+      "statement": "When a payment method swap succeeds, the original payment method is refunded for the full order amount.",
+      "canonical_source": "Payment method change"
+    },
+    {
+      "id": "payment_change_refund_timelines",
+      "category": "payment_change",
+      "statement": "Gift card refunds from a payment swap are immediate, while credit card and PayPal refunds take 3 to 6 business days.",
+      "canonical_source": "Payment method change"
+    },
+    {
+      "id": "payment_change_status_stays_pending",
+      "category": "payment_change",
+      "statement": "A pending-order payment method swap leaves the order status pending.",
+      "canonical_source": "Payment method change"
+    },
+    {
+      "id": "item_change_same_product_different_variant",
+      "category": "item_change",
+      "statement": "For each item in a pending order, the customer may swap to a different variant of the same product type; cross-product swaps are not allowed.",
+      "canonical_source": "Item change"
+    },
+    {
+      "id": "item_change_new_variant_available",
+      "category": "item_change",
+      "statement": "A new variant used for an item change must currently be available.",
+      "canonical_source": "Item change"
+    },
+    {
+      "id": "item_change_single_difference_payment_method",
+      "category": "item_change",
+      "statement": "For an item change, the customer provides one payment method to handle the price difference, whether that difference is a charge or a refund.",
+      "canonical_source": "Item change"
+    },
+    {
+      "id": "item_change_gift_card_covers_price_increase",
+      "category": "item_change",
+      "statement": "If the item-change price goes up and the customer chooses a gift card, that gift card must have enough balance to cover the full difference.",
+      "canonical_source": "Item change"
+    },
+    {
+      "id": "item_change_one_shot_locks_order",
+      "category": "item_change",
+      "statement": "An item change is one-shot for the order; after submission the status becomes pending (items modified), and the order cannot be modified or cancelled again.",
+      "canonical_source": "Item change"
+    },
+    {
+      "id": "item_change_complete_list_before_submit",
+      "category": "item_change",
+      "statement": "Before submitting an item change, the agent must confirm the complete list of items the customer wants changed, end the pre-submission recap by asking whether the customer wants to change anything else before submission, and wait for the customer's response before submitting.",
+      "canonical_source": "Item change"
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Address change keeps order pending",
+      "included_fact_ids": [
+        "pending_status_required_for_any_order_change",
+        "pending_order_three_change_types_only",
+        "address_change_read_back_confirm_update",
+        "address_change_status_pending_no_money_moves"
+      ],
+      "style_notes": [
+        "customer gives a replacement shipping address",
+        "agent reads it back and confirms before updating"
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Saved payment method swap with gift-card balance gate",
+      "included_fact_ids": [
+        "pending_status_required_for_any_order_change",
+        "payment_change_saved_different_single_method",
+        "payment_change_gift_card_covers_entire_total",
+        "payment_change_refund_original_full_amount",
+        "payment_change_refund_timelines",
+        "payment_change_status_stays_pending"
+      ],
+      "style_notes": [
+        "customer first chooses an underfunded gift card",
+        "agent switches to a different saved method and explains refund timing"
+      ]
+    },
+    {
+      "id": "C",
+      "title": "Unsupported pending-order edits declined",
+      "included_fact_ids": [
+        "pending_status_required_for_any_order_change",
+        "pending_order_three_change_types_only",
+        "pending_order_other_changes_unsupported"
+      ],
+      "style_notes": [
+        "customer asks for quantity, split-shipment, and email changes",
+        "agent narrows the supported change set and offers transfer if needed"
+      ]
+    },
+    {
+      "id": "D",
+      "title": "Same-product available variant swap with price increase",
+      "included_fact_ids": [
+        "pending_status_required_for_any_order_change",
+        "item_change_same_product_different_variant",
+        "item_change_new_variant_available",
+        "item_change_single_difference_payment_method",
+        "item_change_gift_card_covers_price_increase",
+        "item_change_one_shot_locks_order",
+        "item_change_complete_list_before_submit"
+      ],
+      "style_notes": [
+        "customer tries a cross-product swap before choosing a valid available variant",
+        "agent uses one payment method for the price difference",
+        "agent recaps the complete item-change list, asks the required anything-else-before-submission question, and waits before submitting",
+        "order status becomes pending (items modified) after the item change is submitted"
+      ]
+    },
+    {
+      "id": "E",
+      "title": "Post-item-change order is locked",
+      "included_fact_ids": [
+        "item_change_one_shot_locks_order"
+      ],
+      "style_notes": [
+        "order is already pending (items modified)",
+        "agent denies a second item change and cancellation"
+      ]
+    }
+  ]
+}

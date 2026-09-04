@@ -1,0 +1,1315 @@
+{
+  "id": "telecom_restore_mobile_data_policy_fact_schema_001",
+  "domain": "telecom",
+  "display_name": "Restore mobile data",
+  "global_rules_path": "tau2/hyper/sops/telecom/global_rules.json",
+  "section_id": "restore_mobile_data",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/telecom_sop.md",
+    "heading": "## Unavailable Or Slow Mobile Data"
+  },
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": [
+      {
+        "section_id": "customer_identity",
+        "fact_ids": [
+          "identify_customer_before_technical_support",
+          "phone_side_troubleshooting_can_begin_first",
+          "phone_side_checks_available_before_account",
+          "device_side_uses_symptom_and_phone_checks",
+          "open_account_for_carrier_side_information",
+          "carrier_side_workflow_examples",
+          "lookup_account_or_line_by_phone_number",
+          "phone_lookup_covers_contact_and_line_numbers",
+          "lookup_account_by_customer_id",
+          "lookup_account_by_name_requires_dob",
+          "dob_required_for_verification"
+        ],
+        "relationship": "global_prerequisite",
+        "description": "Mobile-data troubleshooting starts phone-side and opens the account record only to read the line's data usage and plan limit."
+      },
+      {
+        "section_id": "service_foundations",
+        "fact_ids": [
+          "can_guide_customer_side_phone_actions",
+          "can_guide_customer_side_checks",
+          "can_look_up_account_and_records",
+          "data_blocked_at_or_above_limit_plus_refueled",
+          "speed_test_fails_without_mobile_data",
+          "speed_scale_by_network_generation",
+          "data_saver_and_poor_vpn_degrade_speed",
+          "poor_vpn_slow_case_resolved_by_disconnect",
+          "phone_checks_show_device_side_state",
+          "affected_line_is_number_being_troubleshot",
+          "customer_records_contents",
+          "records_are_source_of_truth_for_account_decisions",
+          "ground_responses_in_customer_reports_records_and_phone_checks",
+          "responses_concise_accurate_no_speculation",
+          "one_customer_care_action_at_a_time",
+          "wait_for_result_before_next_step",
+          "close_case_only_after_final_check_shows_resolved",
+          "transfer_triggers_out_of_scope_or_policy_step",
+          "handoff_recorded_via_console_control",
+          "transfer_notice_exact_text",
+          "transfer_action_exact_name_for_every_handoff",
+          "work_relevant_steps_before_technical_transfer",
+          "setting_toggle_reports_new_state"
+        ],
+        "relationship": "shared_reference",
+        "description": "Mobile-data work uses the shared speed-test semantics, data-availability arithmetic, phone-check model, and pacing controls."
+      },
+      {
+        "section_id": "restore_service",
+        "fact_ids": [
+          "entry_no_service_or_cannot_connect"
+        ],
+        "relationship": "workflow_handoff",
+        "description": "A speed test that cannot run because there is no cellular service routes into the no-service journey first."
+      },
+      {
+        "section_id": "restore_data_abroad",
+        "fact_ids": [
+          "applies_to_abroad_customer_with_bad_data",
+          "working_but_slow_returns_to_slow_data_steps",
+          "unavailable_with_both_layers_on_returns_to_mobile_data_settings"
+        ],
+        "relationship": "workflow_handoff",
+        "description": "A customer traveling outside the home coverage area routes into the roaming journey, then returns to the matching mobile-data branch if roaming checks do not fully resolve the complaint."
+      },
+      {
+        "section_id": "refuel_data",
+        "fact_ids": [
+          "exhausted_data_blocks_data_despite_signal"
+        ],
+        "relationship": "workflow_handoff",
+        "description": "A line at or above its data allowance routes into the data-refueling journey."
+      },
+      {
+        "section_id": "change_plan",
+        "fact_ids": [
+          "gather_and_present_available_plans"
+        ],
+        "relationship": "workflow_handoff",
+        "description": "A customer who chooses a plan with more data routes into the plan-change journey."
+      }
+    ]
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "restore_mobile_data",
+        "label": "Restore mobile data",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "data_entry",
+        "label": "Route data complaints with working service",
+        "kind": "entry_conditions",
+        "parent_id": "restore_mobile_data",
+        "order": 1,
+        "fact_ids": [
+          "entry_service_present_data_bad"
+        ]
+      },
+      {
+        "id": "initial_speed_test",
+        "label": "Run a speed test",
+        "kind": "step",
+        "parent_id": "restore_mobile_data",
+        "order": 2,
+        "fact_ids": [
+          "start_with_speed_test"
+        ]
+      },
+      {
+        "id": "workflow_routing",
+        "label": "Route to the no-service or roaming workflow",
+        "kind": "decision",
+        "parent_id": "restore_mobile_data",
+        "order": 3,
+        "fact_ids": [
+          "speed_test_blocked_use_service_flow",
+          "abroad_customer_use_roaming_flow"
+        ]
+      },
+      {
+        "id": "mobile_data_toggle",
+        "label": "Check that mobile data is enabled",
+        "kind": "step",
+        "parent_id": "restore_mobile_data",
+        "order": 4,
+        "fact_ids": [
+          "check_mobile_data_enabled",
+          "mobile_data_off_enable_and_rerun"
+        ]
+      },
+      {
+        "id": "data_allowance_check",
+        "label": "Check usage against the plan limit",
+        "kind": "blocking_gate",
+        "parent_id": "restore_mobile_data",
+        "order": 5,
+        "fact_ids": [
+          "check_usage_against_plan_limit"
+        ]
+      },
+      {
+        "id": "exhausted_usage_resolution",
+        "label": "Resolve exhausted usage or hand off",
+        "kind": "decision",
+        "parent_id": "restore_mobile_data",
+        "order": 6,
+        "fact_ids": [
+          "exhausted_data_offer_plan_change_or_refuel",
+          "rerun_speed_test_after_carrier_correction",
+          "unavailable_after_carrier_correction_transfers",
+          "exhausted_data_without_supported_correction_transfers"
+        ]
+      },
+      {
+        "id": "available_usage_verification",
+        "label": "Verify unavailable data when usage remains",
+        "kind": "verification_gate",
+        "parent_id": "restore_mobile_data",
+        "order": 7,
+        "fact_ids": [
+          "not_exhausted_rerun_speed_test",
+          "not_exhausted_still_unavailable_transfers"
+        ]
+      },
+      {
+        "id": "data_saver_step",
+        "label": "Turn off Data Saver for slow data",
+        "kind": "step",
+        "parent_id": "restore_mobile_data",
+        "order": 8,
+        "fact_ids": [
+          "data_saver_slow_complaint_disable_and_rerun"
+        ]
+      },
+      {
+        "id": "network_mode_step",
+        "label": "Switch to the preferred 4G/5G mode",
+        "kind": "step",
+        "parent_id": "restore_mobile_data",
+        "order": 9,
+        "fact_ids": [
+          "network_mode_limited_switch_and_rerun"
+        ]
+      },
+      {
+        "id": "vpn_step",
+        "label": "Disconnect a poor VPN",
+        "kind": "step",
+        "parent_id": "restore_mobile_data",
+        "order": 10,
+        "fact_ids": [
+          "poor_vpn_disconnect_and_rerun"
+        ]
+      },
+      {
+        "id": "unresolved_slow_data_transfer",
+        "label": "Hand off slow data that remains below excellent",
+        "kind": "escalation",
+        "parent_id": "restore_mobile_data",
+        "order": 11,
+        "fact_ids": [
+          "slow_data_below_excellent_after_steps_transfers"
+        ]
+      },
+      {
+        "id": "data_resolution",
+        "label": "Verify an excellent speed test",
+        "kind": "verification_gate",
+        "parent_id": "restore_mobile_data",
+        "order": 12,
+        "fact_ids": [
+          "resolved_when_excellent_and_unblocked"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "workflow_routing",
+        "type": "uses_result_from",
+        "target_id": "initial_speed_test"
+      },
+      {
+        "source_id": "mobile_data_toggle",
+        "type": "evaluated_after",
+        "target_id": "workflow_routing"
+      },
+      {
+        "source_id": "data_allowance_check",
+        "type": "evaluated_after",
+        "target_id": "mobile_data_toggle"
+      },
+      {
+        "source_id": "exhausted_usage_resolution",
+        "type": "uses_result_from",
+        "target_id": "data_allowance_check"
+      },
+      {
+        "source_id": "available_usage_verification",
+        "type": "uses_result_from",
+        "target_id": "data_allowance_check"
+      },
+      {
+        "source_id": "data_saver_step",
+        "type": "evaluated_after",
+        "target_id": "exhausted_usage_resolution"
+      },
+      {
+        "source_id": "data_saver_step",
+        "type": "evaluated_after",
+        "target_id": "available_usage_verification"
+      },
+      {
+        "source_id": "network_mode_step",
+        "type": "evaluated_after",
+        "target_id": "data_saver_step"
+      },
+      {
+        "source_id": "vpn_step",
+        "type": "evaluated_after",
+        "target_id": "network_mode_step"
+      },
+      {
+        "source_id": "unresolved_slow_data_transfer",
+        "type": "evaluated_after",
+        "target_id": "vpn_step"
+      },
+      {
+        "source_id": "data_resolution",
+        "type": "uses_result_from",
+        "target_id": "vpn_step"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "entry_service_present_data_bad",
+      "category": "entry_conditions",
+      "statement": "The mobile-data workflow applies when the customer has cellular service but mobile internet is not working, is intermittent, or is slower than excellent."
+    },
+    {
+      "id": "start_with_speed_test",
+      "category": "device_side",
+      "statement": "Start by asking the customer to run a speed test."
+    },
+    {
+      "id": "speed_test_blocked_use_service_flow",
+      "category": "workflow_routing",
+      "statement": "If the speed test cannot run because there is no cellular service, use the no-service workflow first."
+    },
+    {
+      "id": "abroad_customer_use_roaming_flow",
+      "category": "workflow_routing",
+      "statement": "Ask whether the customer is traveling outside the home coverage area; if the customer is abroad, use the roaming workflow."
+    },
+    {
+      "id": "check_mobile_data_enabled",
+      "category": "device_side",
+      "statement": "After the speed-test and routing checks, ask the customer to check whether mobile data is enabled."
+    },
+    {
+      "id": "mobile_data_off_enable_and_rerun",
+      "category": "device_side",
+      "statement": "If mobile data is off, ask the customer to turn it on and rerun the speed test; if data is still unavailable, continue to the carrier-side usage check."
+    },
+    {
+      "id": "check_usage_against_plan_limit",
+      "category": "carrier_side",
+      "statement": "If mobile data is still unavailable after the mobile-data setting check, identify the affected line and check carrier-side data usage against the plan limit plus any previously refueled data."
+    },
+    {
+      "id": "exhausted_data_offer_plan_change_or_refuel",
+      "category": "workflow_routing",
+      "statement": "If used data is at or above the plan limit plus any previously refueled data, mobile data is blocked; offer the policy-supported choice of changing to a plan with more data or using the data-refueling workflow."
+    },
+    {
+      "id": "rerun_speed_test_after_carrier_correction",
+      "category": "verification",
+      "statement": "After the customer-selected plan change or data refuel is completed, ask the customer to rerun the speed test."
+    },
+    {
+      "id": "unavailable_after_carrier_correction_transfers",
+      "category": "escalations",
+      "statement": "If mobile data is still unavailable after the selected carrier-side correction, record the handoff with the transfer or escalation control, then give the customer the required transfer message."
+    },
+    {
+      "id": "exhausted_data_without_supported_correction_transfers",
+      "category": "escalations",
+      "statement": "If usage is exhausted and no supported plan change or data refuel can be completed, or the customer declines both options, record the handoff with the transfer or escalation control, then give the customer the required transfer message."
+    },
+    {
+      "id": "not_exhausted_rerun_speed_test",
+      "category": "verification",
+      "statement": "If carrier-side usage is not exhausted, ask the customer to rerun the speed test."
+    },
+    {
+      "id": "not_exhausted_still_unavailable_transfers",
+      "category": "escalations",
+      "statement": "If carrier-side usage is not exhausted and mobile data is still unavailable after the speed-test check, record the handoff with the transfer or escalation control, then give the customer the required transfer message."
+    },
+    {
+      "id": "data_saver_slow_complaint_disable_and_rerun",
+      "category": "device_side",
+      "statement": "If Data Saver or Low Data Mode is on and the complaint is slow data, ask the customer to turn it off and rerun the speed test."
+    },
+    {
+      "id": "network_mode_limited_switch_and_rerun",
+      "category": "device_side",
+      "statement": "Ask the customer to check network mode; if it is limited to 2G or 3G, ask them to switch to the preferred 4G/5G mode and rerun the speed test."
+    },
+    {
+      "id": "poor_vpn_disconnect_and_rerun",
+      "category": "device_side",
+      "statement": "Ask the customer to check VPN status; if a VPN is connected and performance is poor, ask them to disconnect it and rerun the speed test."
+    },
+    {
+      "id": "slow_data_below_excellent_after_steps_transfers",
+      "category": "escalations",
+      "statement": "If all relevant slow-data steps are complete and the speed test is still below excellent, record the handoff with the transfer or escalation control, then give the customer the required transfer message."
+    },
+    {
+      "id": "resolved_when_excellent_and_unblocked",
+      "category": "resolution",
+      "statement": "The mobile data case is resolved when the speed test returns excellent and no remaining required carrier-side condition is blocking data."
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/telecom/hard_bundle_001/restore_mobile_data_transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/telecom/client_overlay_001/restore_mobile_data_client_transformation_pack.json"
+    }
+  ],
+  "transformations": [
+    {
+      "id": "telecom_restore_mobile_data_explicit_rules",
+      "representation": "explicit_rules"
+    },
+    {
+      "id": "telecom_restore_mobile_data_web_surfaces",
+      "representation": "website_screenshot",
+      "stub_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/bundles/restore_mobile_data_multisurface_archive/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-fix-unavailable-or-slow-mobile-data.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-fix-unavailable-or-slow-mobile-data.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-DATA-2101",
+          "artifact_ref": "NW-DATA-2101",
+          "surface": "public_help_center",
+          "included_fact_ids": [
+            "entry_service_present_data_bad",
+            "start_with_speed_test",
+            "resolved_when_excellent_and_unblocked"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-find-mobile-data-settings.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-find-mobile-data-settings.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-DEVICE-5088",
+          "artifact_ref": "NW-DEVICE-5088",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-understand-speed-test-results.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-understand-speed-test-results.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-DATA-2107",
+          "artifact_ref": "NW-DATA-2107",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-check-a-coverage-map.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-check-a-coverage-map.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-NET-3014",
+          "artifact_ref": "NW-NET-3014",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-mobile-data-while-traveling.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-mobile-data-while-traveling.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-TRAVEL-4022",
+          "artifact_ref": "NW-TRAVEL-4022",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-manage-data-saver.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-manage-data-saver.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-DEVICE-5092",
+          "artifact_ref": "NW-DEVICE-5092",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-vpn-and-private-relay.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-vpn-and-private-relay.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-SEC-6018",
+          "artifact_ref": "NW-SEC-6018",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-choose-a-network-mode.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-choose-a-network-mode.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-DEVICE-5104",
+          "artifact_ref": "NW-DEVICE-5104",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-view-account-data-usage.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-view-account-data-usage.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-ACCOUNT-7041",
+          "artifact_ref": "NW-ACCOUNT-7041",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-set-data-usage-alerts.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-set-data-usage-alerts.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-ACCOUNT-7046",
+          "artifact_ref": "NW-ACCOUNT-7046",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-mobile-hotspot-help.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-mobile-hotspot-help.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-DATA-2120",
+          "artifact_ref": "NW-DATA-2120",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-wifi-connection-help.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-wifi-connection-help.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-WIFI-1180",
+          "artifact_ref": "NW-WIFI-1180",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-manage-app-data-access.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-manage-app-data-access.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-DEVICE-5117",
+          "artifact_ref": "NW-DEVICE-5117",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-dual-sim-data-line.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-dual-sim-data-line.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-SIM-8052",
+          "artifact_ref": "NW-SIM-8052",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-install-esim.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-install-esim.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-SIM-8060",
+          "artifact_ref": "NW-SIM-8060",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-carrier-settings-update.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-carrier-settings-update.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-DEVICE-5133",
+          "artifact_ref": "NW-DEVICE-5133",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-understand-signal-icons.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-understand-signal-icons.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-NET-3031",
+          "artifact_ref": "NW-NET-3031",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-airplane-mode-basics.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-airplane-mode-basics.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-DEVICE-5141",
+          "artifact_ref": "NW-DEVICE-5141",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-update-phone-software.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-update-phone-software.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-DEVICE-5154",
+          "artifact_ref": "NW-DEVICE-5154",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-reduce-background-data.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-reduce-background-data.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-DATA-2148",
+          "artifact_ref": "NW-DATA-2148",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-streaming-quality-settings.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-streaming-quality-settings.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-DATA-2155",
+          "artifact_ref": "NW-DATA-2155",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-network-maintenance-status.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-network-maintenance-status.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-NET-3050",
+          "artifact_ref": "NW-NET-3050",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-search-mobile-data-results.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-search-mobile-data-results.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-SEARCH-0091",
+          "artifact_ref": "NW-SEARCH-0091",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-mobile-data-support.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/help-mobile-data-support.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "NW-DATA-2000",
+          "artifact_ref": "NW-DATA-2000",
+          "surface": "public_help_center",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/console-line-usage-exhausted.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/console-line-usage-exhausted.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "CARE-701",
+          "artifact_ref": "CARE-701",
+          "surface": "signed_in_support_console",
+          "included_fact_ids": [
+            "check_usage_against_plan_limit",
+            "exhausted_data_offer_plan_change_or_refuel"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/console-carrier-correction-complete.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/console-carrier-correction-complete.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "CARE-706",
+          "artifact_ref": "CARE-706",
+          "surface": "signed_in_support_console",
+          "included_fact_ids": [
+            "rerun_speed_test_after_carrier_correction"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/console-line-usage-available.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/console-line-usage-available.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "CARE-711",
+          "artifact_ref": "CARE-711",
+          "surface": "signed_in_support_console",
+          "included_fact_ids": [
+            "not_exhausted_rerun_speed_test"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/console-roaming-entitlement.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/console-roaming-entitlement.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "CARE-718",
+          "artifact_ref": "CARE-718",
+          "surface": "signed_in_support_console",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/console-hotspot-entitlement.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/console-hotspot-entitlement.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "CARE-724",
+          "artifact_ref": "CARE-724",
+          "surface": "signed_in_support_console",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/console-plan-comparison.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/console-plan-comparison.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "CARE-729",
+          "artifact_ref": "CARE-729",
+          "surface": "signed_in_support_console",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/console-billing-overview.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/console-billing-overview.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "CARE-735",
+          "artifact_ref": "CARE-735",
+          "surface": "signed_in_support_console",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/console-suspended-line.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/console-suspended-line.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "CARE-741",
+          "artifact_ref": "CARE-741",
+          "surface": "signed_in_support_console",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/console-usage-alerts.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/console-usage-alerts.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "CARE-748",
+          "artifact_ref": "CARE-748",
+          "surface": "signed_in_support_console",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/console-usage-history.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/console-usage-history.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/web_surfaces_001_dense/eval_manifest.json",
+          "reference_id": "CARE-752",
+          "artifact_ref": "CARE-752",
+          "surface": "signed_in_support_console",
+          "included_fact_ids": []
+        }
+      ]
+    },
+    {
+      "id": "telecom_restore_mobile_data_device_capture_selection",
+      "representation": "device_ui_screenshot",
+      "stub_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/bundles/restore_mobile_data_multisurface_archive/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_005.png",
+          "text_source_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_005.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/eval_manifest.json",
+          "platform": "android",
+          "reference_id": "samsung_mobile_data_off",
+          "artifact_ref": "samsung_mobile_data_off",
+          "kit_filename": "device_capture_005.png",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_006.png",
+          "text_source_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_006.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/eval_manifest.json",
+          "platform": "ios",
+          "reference_id": "iphone_low_data_mode",
+          "artifact_ref": "iphone_low_data_mode",
+          "kit_filename": "device_capture_006.png",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_007.png",
+          "text_source_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_007.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/eval_manifest.json",
+          "platform": "android",
+          "reference_id": "samsung_network_mode_3g_2g",
+          "artifact_ref": "samsung_network_mode_3g_2g",
+          "kit_filename": "device_capture_007.png",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_008.png",
+          "text_source_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_008.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/eval_manifest.json",
+          "platform": "ios",
+          "reference_id": "iphone_vpn_connected",
+          "artifact_ref": "iphone_vpn_connected",
+          "kit_filename": "device_capture_008.png",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_009.png",
+          "text_source_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_009.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/eval_manifest.json",
+          "platform": "android",
+          "reference_id": "samsung_mobile_network_normal",
+          "artifact_ref": "samsung_mobile_network_normal",
+          "kit_filename": "device_capture_009.png",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_010.png",
+          "text_source_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_010.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/eval_manifest.json",
+          "platform": "android",
+          "reference_id": "samsung_network_mode_auto",
+          "artifact_ref": "samsung_network_mode_auto",
+          "kit_filename": "device_capture_010.png",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_011.png",
+          "text_source_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_011.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/eval_manifest.json",
+          "platform": "android",
+          "reference_id": "samsung_apn_list",
+          "artifact_ref": "samsung_apn_list",
+          "kit_filename": "device_capture_011.png",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_012.png",
+          "text_source_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_012.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/eval_manifest.json",
+          "platform": "ios",
+          "reference_id": "iphone_carrier_update",
+          "artifact_ref": "iphone_carrier_update",
+          "kit_filename": "device_capture_012.png",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_025.png",
+          "text_source_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_025.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/eval_manifest.json",
+          "platform": "ios",
+          "reference_id": "iphone_data_mode_standard",
+          "artifact_ref": "iphone_data_mode_standard",
+          "kit_filename": "device_capture_025.png",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_026.png",
+          "text_source_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_026.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/eval_manifest.json",
+          "platform": "ios",
+          "reference_id": "iphone_vpn_disconnected",
+          "artifact_ref": "iphone_vpn_disconnected",
+          "kit_filename": "device_capture_026.png",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_027.png",
+          "text_source_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_027.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/eval_manifest.json",
+          "platform": "android",
+          "reference_id": "samsung_speed_test_no_result",
+          "artifact_ref": "samsung_speed_test_no_result",
+          "kit_filename": "device_capture_027.png",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_028.png",
+          "text_source_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_028.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/eval_manifest.json",
+          "platform": "android",
+          "reference_id": "samsung_speed_test_slow",
+          "artifact_ref": "samsung_speed_test_slow",
+          "kit_filename": "device_capture_028.png",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_029.png",
+          "text_source_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_029.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/eval_manifest.json",
+          "platform": "ios",
+          "reference_id": "iphone_speed_test_excellent",
+          "artifact_ref": "iphone_speed_test_excellent",
+          "kit_filename": "device_capture_029.png",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_030.png",
+          "text_source_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_030.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/eval_manifest.json",
+          "platform": "android",
+          "reference_id": "samsung_airplane_mode_on",
+          "artifact_ref": "samsung_airplane_mode_on",
+          "kit_filename": "device_capture_030.png",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_031.png",
+          "text_source_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_031.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/eval_manifest.json",
+          "platform": "ios",
+          "reference_id": "iphone_no_service",
+          "artifact_ref": "iphone_no_service",
+          "kit_filename": "device_capture_031.png",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_032.png",
+          "text_source_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_032.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/eval_manifest.json",
+          "platform": "android",
+          "reference_id": "samsung_travel_roaming_on",
+          "artifact_ref": "samsung_travel_roaming_on",
+          "kit_filename": "device_capture_032.png",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_033.png",
+          "text_source_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_033.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/eval_manifest.json",
+          "platform": "ios",
+          "reference_id": "iphone_personal_hotspot_on",
+          "artifact_ref": "iphone_personal_hotspot_on",
+          "kit_filename": "device_capture_033.png",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_034.png",
+          "text_source_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_034.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/eval_manifest.json",
+          "platform": "ios",
+          "reference_id": "iphone_per_app_cellular",
+          "artifact_ref": "iphone_per_app_cellular",
+          "kit_filename": "device_capture_034.png",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_035.png",
+          "text_source_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_035.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/eval_manifest.json",
+          "platform": "android",
+          "reference_id": "samsung_dual_sim_data_line",
+          "artifact_ref": "samsung_dual_sim_data_line",
+          "kit_filename": "device_capture_035.png",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_036.png",
+          "text_source_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/device_capture_036.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/shared/device_capture_archive_001/eval_manifest.json",
+          "platform": "android",
+          "reference_id": "samsung_mobile_usage",
+          "artifact_ref": "samsung_mobile_usage",
+          "kit_filename": "device_capture_036.png",
+          "included_fact_ids": []
+        }
+      ]
+    },
+    {
+      "id": "telecom_restore_mobile_data_email_archive",
+      "representation": "email_thread_archive",
+      "stub_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/bundles/restore_mobile_data_multisurface_archive/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/eval_manifest.json",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_01.eml",
+          "kit_filename": "email_thread_01.eml",
+          "reference_id": "email_thread_01.eml",
+          "artifact_ref": "email_thread_01.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_02.eml",
+          "kit_filename": "email_thread_02.eml",
+          "reference_id": "email_thread_02.eml",
+          "artifact_ref": "email_thread_02.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_03.eml",
+          "kit_filename": "email_thread_03.eml",
+          "reference_id": "email_thread_03.eml",
+          "artifact_ref": "email_thread_03.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_04.eml",
+          "kit_filename": "email_thread_04.eml",
+          "reference_id": "email_thread_04.eml",
+          "artifact_ref": "email_thread_04.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_05.eml",
+          "kit_filename": "email_thread_05.eml",
+          "reference_id": "email_thread_05.eml",
+          "artifact_ref": "email_thread_05.eml",
+          "included_fact_ids": [
+            "unavailable_after_carrier_correction_transfers"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_06.eml",
+          "kit_filename": "email_thread_06.eml",
+          "reference_id": "email_thread_06.eml",
+          "artifact_ref": "email_thread_06.eml",
+          "included_fact_ids": [
+            "exhausted_data_without_supported_correction_transfers"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_07.eml",
+          "kit_filename": "email_thread_07.eml",
+          "reference_id": "email_thread_07.eml",
+          "artifact_ref": "email_thread_07.eml",
+          "included_fact_ids": [
+            "not_exhausted_still_unavailable_transfers"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_08.eml",
+          "kit_filename": "email_thread_08.eml",
+          "reference_id": "email_thread_08.eml",
+          "artifact_ref": "email_thread_08.eml",
+          "included_fact_ids": [
+            "slow_data_below_excellent_after_steps_transfers"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_09.eml",
+          "kit_filename": "email_thread_09.eml",
+          "reference_id": "email_thread_09.eml",
+          "artifact_ref": "email_thread_09.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_10.eml",
+          "kit_filename": "email_thread_10.eml",
+          "reference_id": "email_thread_10.eml",
+          "artifact_ref": "email_thread_10.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_11.eml",
+          "kit_filename": "email_thread_11.eml",
+          "reference_id": "email_thread_11.eml",
+          "artifact_ref": "email_thread_11.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_12.eml",
+          "kit_filename": "email_thread_12.eml",
+          "reference_id": "email_thread_12.eml",
+          "artifact_ref": "email_thread_12.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_13.eml",
+          "kit_filename": "email_thread_13.eml",
+          "reference_id": "email_thread_13.eml",
+          "artifact_ref": "email_thread_13.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_14.eml",
+          "kit_filename": "email_thread_14.eml",
+          "reference_id": "email_thread_14.eml",
+          "artifact_ref": "email_thread_14.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_15.eml",
+          "kit_filename": "email_thread_15.eml",
+          "reference_id": "email_thread_15.eml",
+          "artifact_ref": "email_thread_15.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_16.eml",
+          "kit_filename": "email_thread_16.eml",
+          "reference_id": "email_thread_16.eml",
+          "artifact_ref": "email_thread_16.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_17.eml",
+          "kit_filename": "email_thread_17.eml",
+          "reference_id": "email_thread_17.eml",
+          "artifact_ref": "email_thread_17.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_18.eml",
+          "kit_filename": "email_thread_18.eml",
+          "reference_id": "email_thread_18.eml",
+          "artifact_ref": "email_thread_18.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_19.eml",
+          "kit_filename": "email_thread_19.eml",
+          "reference_id": "email_thread_19.eml",
+          "artifact_ref": "email_thread_19.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_20.eml",
+          "kit_filename": "email_thread_20.eml",
+          "reference_id": "email_thread_20.eml",
+          "artifact_ref": "email_thread_20.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_21.eml",
+          "kit_filename": "email_thread_21.eml",
+          "reference_id": "email_thread_21.eml",
+          "artifact_ref": "email_thread_21.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_22.eml",
+          "kit_filename": "email_thread_22.eml",
+          "reference_id": "email_thread_22.eml",
+          "artifact_ref": "email_thread_22.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_23.eml",
+          "kit_filename": "email_thread_23.eml",
+          "reference_id": "email_thread_23.eml",
+          "artifact_ref": "email_thread_23.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/email_thread_archive_001_dense/email_thread_24.eml",
+          "kit_filename": "email_thread_24.eml",
+          "reference_id": "email_thread_24.eml",
+          "artifact_ref": "email_thread_24.eml",
+          "included_fact_ids": []
+        }
+      ]
+    },
+    {
+      "id": "telecom_restore_mobile_data_scoped_routing_chart",
+      "representation": "process_flowchart",
+      "stub_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/bundles/restore_mobile_data_multisurface_archive/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/process_flowchart_002_scoped_routing/mobile_data_quick_route.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/process_flowchart_002_scoped_routing/mobile_data_quick_route.txt",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/process_flowchart_002_scoped_routing/eval_manifest.json",
+          "kit_filename": "process_map_01.png",
+          "reference_id": "mobile-data-quick-route",
+          "artifact_ref": "mobile-data-quick-route",
+          "included_fact_ids": [
+            "speed_test_blocked_use_service_flow",
+            "abroad_customer_use_roaming_flow"
+          ]
+        }
+      ]
+    }
+  ],
+  "transformation_bundles": [
+    {
+      "id": "restore_mobile_data_multisurface_archive",
+      "description": "A 79-artifact Restore Mobile Data corpus: public Help Center pages, signed-in care-console views, a 20-image selection from the shared telecom phone archive, RFC-style email decision histories, and one deliberately scoped routing chart. Five device-setting facts require linked multi-hop evidence; four terminal handoff decisions live only in current email threads with superseded alternatives.",
+      "stub_path": "tau2/hyper/sops/telecom/sections/restore_mobile_data/bundles/restore_mobile_data_multisurface_archive/stub.md",
+      "fact_ids": [
+        "abroad_customer_use_roaming_flow",
+        "check_mobile_data_enabled",
+        "check_usage_against_plan_limit",
+        "data_saver_slow_complaint_disable_and_rerun",
+        "entry_service_present_data_bad",
+        "exhausted_data_offer_plan_change_or_refuel",
+        "exhausted_data_without_supported_correction_transfers",
+        "mobile_data_off_enable_and_rerun",
+        "network_mode_limited_switch_and_rerun",
+        "not_exhausted_rerun_speed_test",
+        "not_exhausted_still_unavailable_transfers",
+        "poor_vpn_disconnect_and_rerun",
+        "rerun_speed_test_after_carrier_correction",
+        "resolved_when_excellent_and_unblocked",
+        "slow_data_below_excellent_after_steps_transfers",
+        "speed_test_blocked_use_service_flow",
+        "start_with_speed_test",
+        "unavailable_after_carrier_correction_transfers"
+      ],
+      "members": [
+        {
+          "transformation_id": "telecom_restore_mobile_data_web_surfaces",
+          "authoritative_fact_ids": [
+            "check_usage_against_plan_limit",
+            "entry_service_present_data_bad",
+            "exhausted_data_offer_plan_change_or_refuel",
+            "not_exhausted_rerun_speed_test",
+            "rerun_speed_test_after_carrier_correction",
+            "resolved_when_excellent_and_unblocked",
+            "start_with_speed_test"
+          ],
+          "primary": true,
+          "depends_on_fact_ids": [
+            "abroad_customer_use_roaming_flow",
+            "check_mobile_data_enabled",
+            "data_saver_slow_complaint_disable_and_rerun",
+            "exhausted_data_without_supported_correction_transfers",
+            "mobile_data_off_enable_and_rerun",
+            "network_mode_limited_switch_and_rerun",
+            "not_exhausted_still_unavailable_transfers",
+            "poor_vpn_disconnect_and_rerun",
+            "slow_data_below_excellent_after_steps_transfers",
+            "speed_test_blocked_use_service_flow",
+            "unavailable_after_carrier_correction_transfers"
+          ]
+        },
+        {
+          "transformation_id": "telecom_restore_mobile_data_device_capture_selection",
+          "authoritative_fact_ids": []
+        },
+        {
+          "transformation_id": "telecom_restore_mobile_data_email_archive",
+          "authoritative_fact_ids": [
+            "unavailable_after_carrier_correction_transfers",
+            "exhausted_data_without_supported_correction_transfers",
+            "not_exhausted_still_unavailable_transfers",
+            "slow_data_below_excellent_after_steps_transfers"
+          ],
+          "depends_on_fact_ids": [
+            "rerun_speed_test_after_carrier_correction",
+            "not_exhausted_rerun_speed_test",
+            "data_saver_slow_complaint_disable_and_rerun",
+            "network_mode_limited_switch_and_rerun",
+            "poor_vpn_disconnect_and_rerun"
+          ]
+        },
+        {
+          "transformation_id": "telecom_restore_mobile_data_scoped_routing_chart",
+          "authoritative_fact_ids": [
+            "speed_test_blocked_use_service_flow",
+            "abroad_customer_use_roaming_flow"
+          ],
+          "depends_on_fact_ids": [
+            "start_with_speed_test"
+          ]
+        }
+      ],
+      "evidence_routes": [
+        {
+          "id": "help_via_device_guide_to_samsung_mobile_data_off",
+          "authoritative_fact_ids": [
+            "check_mobile_data_enabled",
+            "mobile_data_off_enable_and_rerun"
+          ],
+          "hops": [
+            {
+              "transformation_id": "telecom_restore_mobile_data_web_surfaces",
+              "artifact_ref": "NW-DATA-2101"
+            },
+            {
+              "transformation_id": "telecom_restore_mobile_data_web_surfaces",
+              "artifact_ref": "NW-DEVICE-5088"
+            },
+            {
+              "transformation_id": "telecom_restore_mobile_data_device_capture_selection",
+              "artifact_ref": "samsung_mobile_data_off"
+            }
+          ],
+          "evidence_text": "After the speed-test and routing checks, ask the customer to check whether mobile data is enabled. If mobile data is off, ask the customer to turn it on and rerun the speed test; if data is still unavailable, continue to the carrier-side usage check.",
+          "plausibility": "A public troubleshooting hub links to a device guide with small previews; selecting Enlarge image opens one readable raw capture from a larger device archive.",
+          "scope_cue": "NW-DATA-2101 names the relevant section of NW-DEVICE-5088; that section resolves samsung_mobile_data_off.",
+          "forbidden_inference": "Do not treat unlinked controls, nearby Help pages, ordinary phone states, or local usage counters as another supported instruction."
+        },
+        {
+          "id": "help_via_device_guide_to_iphone_low_data_mode",
+          "authoritative_fact_ids": [
+            "data_saver_slow_complaint_disable_and_rerun"
+          ],
+          "hops": [
+            {
+              "transformation_id": "telecom_restore_mobile_data_web_surfaces",
+              "artifact_ref": "NW-DATA-2101"
+            },
+            {
+              "transformation_id": "telecom_restore_mobile_data_web_surfaces",
+              "artifact_ref": "NW-DEVICE-5088"
+            },
+            {
+              "transformation_id": "telecom_restore_mobile_data_device_capture_selection",
+              "artifact_ref": "iphone_low_data_mode"
+            }
+          ],
+          "evidence_text": "If Data Saver or Low Data Mode is on and the complaint is slow data, ask the customer to turn it off and rerun the speed test.",
+          "plausibility": "A public troubleshooting hub links to a device guide with small previews; selecting Enlarge image opens one readable raw capture from a larger device archive.",
+          "scope_cue": "NW-DATA-2101 names the relevant section of NW-DEVICE-5088; that section resolves iphone_low_data_mode.",
+          "forbidden_inference": "Do not treat unlinked controls, nearby Help pages, ordinary phone states, or local usage counters as another supported instruction."
+        },
+        {
+          "id": "help_via_device_guide_to_samsung_network_mode_3g_2g",
+          "authoritative_fact_ids": [
+            "network_mode_limited_switch_and_rerun"
+          ],
+          "hops": [
+            {
+              "transformation_id": "telecom_restore_mobile_data_web_surfaces",
+              "artifact_ref": "NW-DATA-2101"
+            },
+            {
+              "transformation_id": "telecom_restore_mobile_data_web_surfaces",
+              "artifact_ref": "NW-DEVICE-5088"
+            },
+            {
+              "transformation_id": "telecom_restore_mobile_data_device_capture_selection",
+              "artifact_ref": "samsung_network_mode_3g_2g"
+            }
+          ],
+          "evidence_text": "Ask the customer to check network mode; if it is limited to 2G or 3G, ask them to switch to the preferred 4G/5G mode and rerun the speed test.",
+          "plausibility": "A public troubleshooting hub links to a device guide with small previews; selecting Enlarge image opens one readable raw capture from a larger device archive.",
+          "scope_cue": "NW-DATA-2101 names the relevant section of NW-DEVICE-5088; that section resolves samsung_network_mode_3g_2g.",
+          "forbidden_inference": "Do not treat unlinked controls, nearby Help pages, ordinary phone states, or local usage counters as another supported instruction."
+        },
+        {
+          "id": "help_via_device_guide_to_iphone_vpn_connected",
+          "authoritative_fact_ids": [
+            "poor_vpn_disconnect_and_rerun"
+          ],
+          "hops": [
+            {
+              "transformation_id": "telecom_restore_mobile_data_web_surfaces",
+              "artifact_ref": "NW-DATA-2101"
+            },
+            {
+              "transformation_id": "telecom_restore_mobile_data_web_surfaces",
+              "artifact_ref": "NW-DEVICE-5088"
+            },
+            {
+              "transformation_id": "telecom_restore_mobile_data_device_capture_selection",
+              "artifact_ref": "iphone_vpn_connected"
+            }
+          ],
+          "evidence_text": "Ask the customer to check VPN status; if a VPN is connected and performance is poor, ask them to disconnect it and rerun the speed test.",
+          "plausibility": "A public troubleshooting hub links to a device guide with small previews; selecting Enlarge image opens one readable raw capture from a larger device archive.",
+          "scope_cue": "NW-DATA-2101 names the relevant section of NW-DEVICE-5088; that section resolves iphone_vpn_connected.",
+          "forbidden_inference": "Do not treat unlinked controls, nearby Help pages, ordinary phone states, or local usage counters as another supported instruction."
+        }
+      ]
+    }
+  ]
+}

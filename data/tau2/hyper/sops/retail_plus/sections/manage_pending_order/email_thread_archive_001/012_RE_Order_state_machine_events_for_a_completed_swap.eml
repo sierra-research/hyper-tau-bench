@@ -1,0 +1,101 @@
+From: Mia Tran <mia.tran@northstaroutfitters.com>
+To: Sanjay Rao <sanjay.rao@northstaroutfitters.com>
+Cc: Evan Kessler <evan.kessler@northstaroutfitters.com>,
+ Priya Shah <priya.shah@northstaroutfitters.com>
+Date: Tue, 12 May 2026 10:14:47 -0400
+Subject: RE: Order state machine events for a completed swap
+Message-ID: <dd62fc91fb80.2b009570@mail.northstaroutfitters.com>
+In-Reply-To: <af39d4f1f915.02b6e29f@mail.northstaroutfitters.com>
+References: <cec965753947.a2235f83@mail.northstaroutfitters.com>
+ <fe225bc3a2bd.25c572a1@mail.northstaroutfitters.com>
+ <e8149de72904.e2684754@mail.northstaroutfitters.com>
+ <fd56f82d978c.4b6fb18d@mail.northstaroutfitters.com>
+ <af39d4f1f915.02b6e29f@mail.northstaroutfitters.com>
+Thread-Topic: Order state machine events for a completed swap
+Thread-Index: AQTBOXlZNFGhSNrsrPXTido5EBbvbA==
+Accept-Language: en-US
+X-Auto-Response-Suppress: All
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Explainer written and linked from the funnel page. Closing.
+
+-----Original Message-----
+From: Priya Shah <priya.shah@northstaroutfitters.com>
+Sent: Tuesday, May 12, 2026 8:49 AM UTC-04:00
+To: Mia Tran <mia.tran@northstaroutfitters.com>
+Cc: Sanjay Rao <sanjay.rao@northstaroutfitters.com>; Evan Kessler <evan.kessl=
+er@northstaroutfitters.com>
+Subject: RE: Order state machine events for a completed swap
+Message-ID: <af39d4f1f915.02b6e29f@mail.northstaroutfitters.com>
+In-Reply-To: <fd56f82d978c.4b6fb18d@mail.northstaroutfitters.com>
+References: <cec965753947.a2235f83@mail.northstaroutfitters.com> <fe225bc3a2b=
+d.25c572a1@mail.northstaroutfitters.com> <e8149de72904.e2684754@mail.northsta=
+routfitters.com> <fd56f82d978c.4b6fb18d@mail.northstaroutfitters.com>
+
+No bug filed. I'll have analytics annotate the funnel so the next person read=
+s the annotation instead of reopening this. Can someone own a one-paragraph e=
+xplainer for the dashboard wiki?
+
+-----Original Message-----
+From: Sanjay Rao <sanjay.rao@northstaroutfitters.com>
+Sent: Monday, May 11, 2026 3:36 PM UTC-04:00
+To: Mia Tran <mia.tran@northstaroutfitters.com>
+Cc: Evan Kessler <evan.kessler@northstaroutfitters.com>; Priya Shah <priya.sh=
+ah@northstaroutfitters.com>
+Subject: RE: Order state machine events for a completed swap
+Message-ID: <fd56f82d978c.4b6fb18d@mail.northstaroutfitters.com>
+In-Reply-To: <e8149de72904.e2684754@mail.northstaroutfitters.com>
+References: <cec965753947.a2235f83@mail.northstaroutfitters.com> <fe225bc3a2b=
+d.25c572a1@mail.northstaroutfitters.com> <e8149de72904.e2684754@mail.northsta=
+routfitters.com>
+
+Confirming from risk: this was reviewed when swaps launched. Status quo is de=
+liberate, documented, and load-bearing per Evan. Please do not file the bug.
+
+-----Original Message-----
+From: Evan Kessler <evan.kessler@northstaroutfitters.com>
+Sent: Monday, May 11, 2026 1:17 PM UTC-04:00
+To: Mia Tran <mia.tran@northstaroutfitters.com>
+Cc: Sanjay Rao <sanjay.rao@northstaroutfitters.com>; Priya Shah <priya.shah@n=
+orthstaroutfitters.com>
+Subject: RE: Order state machine events for a completed swap
+Message-ID: <e8149de72904.e2684754@mail.northstaroutfitters.com>
+In-Reply-To: <fe225bc3a2bd.25c572a1@mail.northstaroutfitters.com>
+References: <cec965753947.a2235f83@mail.northstaroutfitters.com> <fe225bc3a2b=
+d.25c572a1@mail.northstaroutfitters.com>
+
+Accounting depends on that, for the record: the swap legs post against a pend=
+ing order, and fulfillment picking it up later is a separate lifecycle event.=
+ If a swap ever started emitting status transitions our revenue timing would =
+wobble.
+
+-----Original Message-----
+From: Mia Tran <mia.tran@northstaroutfitters.com>
+Sent: Monday, May 11, 2026 10:41 AM UTC-04:00
+To: Sanjay Rao <sanjay.rao@northstaroutfitters.com>
+Cc: Evan Kessler <evan.kessler@northstaroutfitters.com>; Priya Shah <priya.sh=
+ah@northstaroutfitters.com>
+Subject: RE: Order state machine events for a completed swap
+Message-ID: <fe225bc3a2bd.25c572a1@mail.northstaroutfitters.com>
+In-Reply-To: <cec965753947.a2235f83@mail.northstaroutfitters.com>
+References: <cec965753947.a2235f83@mail.northstaroutfitters.com>
+
+Not a bug. A payment method change is money movement, not order progression =
+=E2=80=94 a completed swap leaves the order sitting in pending, exactly where=
+ it was. The state machine emits nothing because nothing about the order's st=
+ate changed. The dashboard gap is the correct picture.
+
+-----Original Message-----
+From: Priya Shah <priya.shah@northstaroutfitters.com>
+Sent: Monday, May 11, 2026 9:23 AM UTC-04:00
+To: Mia Tran <mia.tran@northstaroutfitters.com>
+Cc: Sanjay Rao <sanjay.rao@northstaroutfitters.com>; Evan Kessler <evan.kessl=
+er@northstaroutfitters.com>
+Subject: Order state machine events for a completed swap
+Message-ID: <cec965753947.a2235f83@mail.northstaroutfitters.com>
+
+Analytics found orders with a payment swap showing no status event at all in =
+the funnel dashboard and asked whether events are being dropped. Before I fil=
+e a bug =E2=80=94 is that a bug?

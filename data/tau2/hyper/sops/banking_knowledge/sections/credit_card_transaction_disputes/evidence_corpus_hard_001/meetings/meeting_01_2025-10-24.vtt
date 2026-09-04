@@ -1,0 +1,172 @@
+WEBVTT
+
+00:00:03.804 --> 00:00:22.917
+<v Desmond Chen>Recording is on and this goes to the training library, so for whoever finds this later: this is the dispute intake calibration from October twenty-fourth. In the room: Monica, Jerome, Talia, Omar, Bree, and Sandra from QA is in the back with her clipboard, which should worry you slightly.
+
+00:00:27.489 --> 00:00:50.226
+<v Desmond Chen>Why we are here. You all read Priya's directive from Wednesday. The October review pulled a sample of our intakes and found two habits: reason codes typed in freehand instead of picked from the list, and the merchant question simply not asked. Both are interview failures, not tool failures, so today we fix the interview.
+
+00:00:55.913 --> 00:01:17.406
+<v Desmond Chen>Ground rule one. I am not teaching the tool call today. Everything we collect ends up in file_credit_card_transaction_dispute_4829, but the unlock dance, the wrapper, the exact argument strings - that lives in the filing macro in the console workspace, and the macro is better at remembering it than you are. Today is what you ask the customer, and how you map what they say.
+
+00:01:22.850 --> 00:01:41.239
+<v Desmond Chen>Ground rule two. Eligibility for provisional credit is Tuesday's session, not this one. Today you collect honestly; Tuesday we decide honestly. If you conflate the two you will start bending the interview to reach the answer you already want, and that is precisely the October disease.
+
+00:01:46.671 --> 00:02:04.315
+<v Sandra Liu>One thing from QA before Des starts. The calls we keep in the gold library are kept because the interview was done right, not because the customer was happy. A perfect intake with a grumpy customer beats a charmed customer and a half-empty filing, every time.
+
+00:02:09.958 --> 00:02:28.520
+<v Desmond Chen>Thank you. Format: I play the customer, you take turns playing you. I will be difficult in exactly the ways real customers are difficult. Monica, you drew the short straw. My scenario: I am Mr. Alvarez, I have a garden-center charge showing up twice on my card. Go.
+
+00:02:33.161 --> 00:02:48.874
+<v Monica Reyes>Thanks for calling Rho Bank, this is Monica. I am sorry about the double charge, let us get that sorted. First I need to verify your identity, and then I will pull up the account and the transaction itself so we are looking at the same thing.
+
+00:02:53.407 --> 00:03:11.028
+<v Desmond Chen>Good, and notice she did verification first even though I opened with the whole story. Sympathy does not skip verification. Fine, Mr. Alvarez is verified, the account is open, the transaction is on the screen. Monica, what do you actually need out of my mouth now?
+
+00:03:16.585 --> 00:03:34.271
+<v Monica Reyes>The story, in order. When was the purchase made, when did you notice the problem, whether you have talked to the garden center about it, what reason we are filing under, and what outcome you want. Plus the contact details I confirm off the profile rather than ask cold.
+
+00:03:39.907 --> 00:03:58.421
+<v Desmond Chen>That is the skeleton. Let us slow down on the two dates because October got them tangled. The purchase date is a matter of record - it is the date the disputed transaction occurred, and the filing wants it as month, day, year, the MM/DD/YYYY shape, same as everything else in that macro.
+
+00:04:03.960 --> 00:04:24.187
+<v Desmond Chen>The noticed date is different. It is not on any statement. You have to ask the user when they noticed the issue, and what they say is the answer - the issue_noticed_date. My double charge posted in September; if I only spotted it going over my statement on Tuesday, then Tuesday is the noticed date.
+
+00:04:29.834 --> 00:04:44.309
+<v Omar Haddad>Honest question. If the customer is vague - "I don't know, sometime last week" - can we just put the statement close date instead? It feels more defensible than a shrug.
+
+00:04:49.947 --> 00:05:09.310
+<v Desmond Chen>No, because it is not the same fact. The statement date is when the paper existed; the noticed date is when the human noticed. Help them anchor it - "was it before or after the weekend" works wonders - but the answer comes from the customer. You ask when they noticed, you record what they tell you.
+
+00:05:14.844 --> 00:05:31.376
+<v Desmond Chen>Next, the question October skipped forty-one times, and I want it burned in. Monica, I am Mr. Alvarez, I have just finished telling you my tale of the two garden-center charges, and I am mid-rant about modern payment systems. Ask it.
+
+00:05:36.921 --> 00:05:50.284
+<v Monica Reyes>Mr. Alvarez, before I file this - have you already tried to resolve this with the garden center directly? A call, an email, going back to the store, anything like that?
+
+00:05:55.822 --> 00:06:15.147
+<v Desmond Chen>That is the question. It has a home in the filing: contacted_merchant, and it is a boolean. You ask whether the user tried to resolve the issue with the merchant first, and you pass true or false. Not blank, not probably, not "he mentioned emailing someone." Asked, answered, recorded.
+
+00:06:20.792 --> 00:06:33.910
+<v Jerome Watts>Pushback, because I know I have done this. If the customer already told me the whole saga of arguing with the merchant, asking again feels robotic. Can I infer it from the story?
+
+00:06:39.454 --> 00:06:58.917
+<v Desmond Chen>You can use the story - "it sounds like you already went back and forth with them, is that right?" counts as asking, because the customer confirms it. What you cannot do is fill the box from your own impression without the customer ever hearing the question. Half of October's skips were exactly that inference, and a chunk were wrong.
+
+00:07:04.462 --> 00:07:20.185
+<v Desmond Chen>And the answer changes real outcomes downstream, which is Tuesday's topic, so treat it with respect. Right. Reason codes. Talia, same scenario, the garden center charged Mr. Alvarez twice. What are you filing this dispute under?
+
+00:07:25.734 --> 00:07:35.267
+<v Talia Brooks>I would write it up as, you know, double charge at merchant, and put the details of both transactions in the description.
+
+00:07:40.813 --> 00:07:59.938
+<v Desmond Chen>And that right there is the other October habit. "Double charge at merchant" is a lovely description and a useless value. The dispute reason is not prose. The value must be selected exactly from a fixed list, and you ask the customer to pick the one that fits - you read them the road, they choose the lane.
+
+00:08:05.482 --> 00:08:24.126
+<v Desmond Chen>So let us read the list, all seven, with what each one means. Write these down; I will pause. First: unauthorized_fraudulent_charge - a charge that was not authorized or is fraudulent. Somebody used the card who was not allowed to. That one is its own animal for reasons Tuesday will make painful.
+
+00:08:29.663 --> 00:08:48.907
+<v Desmond Chen>Second: duplicate_charge - the same charge appearing multiple times. Mr. Alvarez and his garden center live here. Third: incorrect_amount - an amount charged that differs from expected. The menu said one price, the card was charged another. One transaction, wrong number on it.
+
+00:08:54.442 --> 00:09:14.586
+<v Desmond Chen>Fourth: goods_services_not_received - never receiving what was paid for. The bookcase that never arrives. Fifth: goods_services_not_as_described - receiving an item or service that differs from description. It arrived and it is wrong. Received-but-wrong and never-received are different codes; do not let a sad story blur them.
+
+00:09:20.124 --> 00:09:39.867
+<v Desmond Chen>Sixth: canceled_subscription_still_charging - a subscription that was cancelled but charges continue. The gym that will not let go. Seventh: refund_never_processed - a merchant-promised refund that was never applied. They said the money was coming back and it never came. That is the whole list. Seven lanes, no shoulder.
+
+00:09:45.410 --> 00:10:01.632
+<v Bree Nakamura>What about the genuinely ambiguous ones? Customer says the resort charged a different amount than quoted and also she never got the spa credit they promised. I can hear incorrect_amount and refund_never_processed in the same breath.
+
+00:10:07.171 --> 00:10:26.104
+<v Desmond Chen>Good ear, and the answer is: the customer picks the lane. You lay out the two codes that could fit, in plain words, and ask which one is the heart of the complaint. What you do not do is pick for her because one code feels stronger, and you especially do not pick with Tuesday's checklist in your head.
+
+00:10:31.749 --> 00:10:46.183
+<v Desmond Chen>Sandra, from the QA seat - when you graded October's freetext filings, what did it actually break downstream? Give them the view from the autopsy table.
+
+00:10:51.720 --> 00:11:09.554
+<v Sandra Liu>Two things. Investigations start by routing on the code, so a freetexted code is a dispute that sits in a queue until a human re-reads it. And when the review sampled eligibility decisions, the freetext cases were the ones nobody could reconstruct - you cannot audit a judgment about a code that does not exist.
+
+00:11:15.191 --> 00:11:32.925
+<v Desmond Chen>Thank you. Resolution next, because October's habit was assuming everybody wants all their money back. They usually do. Usually is not always. You ask the user what resolution they want, and this one is also a pick-from-the-list, three values, here they are.
+
+00:11:38.463 --> 00:11:58.190
+<v Desmond Chen>full_refund - a complete refund of the transaction amount. partial_refund - a partial amount comes back, not the whole charge. reversal_of_charge - a charge reversal or chargeback, unwinding the transaction through the network rather than the merchant handing money back. Three doors. The customer walks through one.
+
+00:12:03.735 --> 00:12:20.267
+<v Desmond Chen>And partial_refund drags a friend with it. Bree, roleplay: I am now Mrs. Okafor. The caterer billed me for the full event but the dessert course never showed up. I do not want it all back, that would be dishonest, I just want the desserts off my bill. File me.
+
+00:12:25.813 --> 00:12:41.437
+<v Bree Nakamura>So that is a partial refund. Mrs. Okafor, what amount would make this right - just the dessert portion? Say that is ninety dollars of the six hundred - I will put the dispute in requesting that ninety back specifically.
+
+00:12:46.982 --> 00:13:05.926
+<v Desmond Chen>Exactly right, and hear what she did: she asked for the number. partial_refund_amount is an optional field on the filing, and it is required only when resolution_requested is partial_refund. It carries the dollar amount for the partial refund. Any other resolution, you leave it alone entirely - empty, not zero.
+
+00:13:11.470 --> 00:13:24.933
+<v Talia Brooks>Wait, not zero? I think I have been putting zero in optional number fields for years, on the theory that empty fields look like forgotten fields.
+
+00:13:30.478 --> 00:13:49.101
+<v Desmond Chen>A zero there says the customer asked for zero dollars back, which is nonsense, and nonsense in a filing is what review teams write reports about. Optional means the field has a job only in one situation. partial_refund asked for: number goes in. Anything else: it stays out. That habit is free; build it today.
+
+00:13:54.649 --> 00:14:11.783
+<v Desmond Chen>Last stretch, and it is the one with the sharpest edge: what happens to the plastic. Every filing says what the card does next, the card_action, and there are exactly two values. Omar, guess them before I say them, and guess when each applies.
+
+00:14:17.328 --> 00:14:32.451
+<v Omar Haddad>keep_active and cancel_and_reissue, I have seen those in the macro. And my guess is keep_active unless it is fraud, and cancel_and_reissue means we already ordered the new card, like the order has to exist first.
+
+00:14:38.096 --> 00:14:56.630
+<v Desmond Chen>Half right, and the wrong half is the dangerous half. keep_active: use it when the user wants to continue using their current card. A duplicate charge at a garden center does not require killing the plastic. Mr. Alvarez keeps his card, his autopays keep working, life goes on. That part you had.
+
+00:15:02.166 --> 00:15:23.694
+<v Desmond Chen>But cancel_and_reissue does not wait for an order to exist. Use cancel_and_reissue when the card is being cancelled and a replacement issued, whether the replacement was already ordered via order_replacement_credit_card_7291 or the cancellation is happening as part of the dispute itself. Two roads, same value. The filing does not care which road you took.
+
+00:15:29.239 --> 00:15:44.652
+<v Omar Haddad>Huh. So if the customer decides mid-dispute-call that the card should die, I do not have to detour into the replacement flow first just to make the filing true? The filing itself can be the cancellation?
+
+00:15:50.199 --> 00:16:08.322
+<v Desmond Chen>Correct. Sometimes the replacement order happened an hour ago on a different contact; sometimes the customer decides right now, on this call, and the cancellation happens as part of the dispute. Either way the card is being cancelled and a replacement issued, so the value is cancel_and_reissue. The order-first version is folklore. Retire it.
+
+00:16:13.868 --> 00:16:29.383
+<v Monica Reyes>And the fraud connection - if they picked unauthorized_fraudulent_charge, do we force cancel_and_reissue? It feels negligent to file a fraud dispute and leave the card alive.
+
+00:16:34.921 --> 00:16:53.554
+<v Desmond Chen>Strong recommendation, not a forced value - you tell them plainly why leaving a compromised card active is a bad idea, and nearly everyone agrees. The conduct around fraud cards, the replacement lane, the shipping conversation - that is all drawn on the replacement board and drilled in its own recording. Today just map the answer to the value honestly.
+
+00:16:59.099 --> 00:17:15.021
+<v Desmond Chen>Now the boring fields, briefly, because boring is where typos live. Full name, user id, phone, email, home address - the filing wants all of them, as the customer's registered details. Confirm them off the profile out loud; do not retype from memory. The macro lists every one.
+
+00:17:20.566 --> 00:17:36.089
+<v Desmond Chen>And the card digits: the filing wants the last four digits of the card the disputed transaction sits under. If there is any doubt which card that is, resolve the doubt before you file, not after. The retrieval tool and its exact shape - console macro, again. Not today's lesson.
+
+00:17:41.634 --> 00:17:57.867
+<v Jerome Watts>Process question. When all of it is collected - the dates, the code, the resolution, the merchant answer, the card action - is there an order the interview has to run in? Some of my calls arrive with the story already told sideways.
+
+00:18:03.404 --> 00:18:22.128
+<v Desmond Chen>The interview order is yours; customers do not follow scripts and neither should you, rigidly. What is not yours is completeness. Before you file, every one of those answers exists and the customer actually said the ones that are theirs to say. If the story arrived sideways, straighten it with a readback at the end.
+
+00:18:27.663 --> 00:18:43.877
+<v Desmond Chen>The readback is my favorite free trick, actually. "Let me make sure I have this right" and then the whole filing in one breath, dates and code and resolution included. Customers correct you instantly and cheerfully. It converts your half-heard answers into confirmed ones in thirty seconds.
+
+00:18:49.421 --> 00:19:07.245
+<v Desmond Chen>Full dress rehearsal to close. Talia, you get the hard customer. I am Mr. Deng. A streaming service I cancelled in the spring has billed me every month since, I am furious, I have already emailed them twice with no answer, and I want every penny since spring. Go, top to bottom.
+
+00:19:12.790 --> 00:19:28.103
+<v Talia Brooks>Mr. Deng, I am sorry - let us fix it properly. First, verification. Done. Now, I see the recurring charge here. When was the most recent charge made, and separately - when did you first notice these were still going through?
+
+00:19:33.640 --> 00:19:48.564
+<v Talia Brooks>You emailed them twice with no reply - so yes, you did try to resolve it with the merchant first, I am recording that. For the dispute reason, hearing your story, the lane that fits is canceled_subscription_still_charging - a subscription that was cancelled but charges continue. Agreed?
+
+00:19:54.109 --> 00:20:09.933
+<v Talia Brooks>And for the outcome, you want the charges since the cancellation back. If that is every disputed penny of it, I will put it in as full_refund. Your card itself - the subscription is dead but the card is fine, so unless you feel otherwise, you keep using your current card and I file it keep_active.
+
+00:20:15.470 --> 00:20:33.404
+<v Desmond Chen>Stop there - that was clean. Notice everything that just happened: both dates, asked separately. Merchant contact, confirmed from the story out loud, recorded true. The code, read with its meaning and agreed to, not assumed. The resolution, the customer's words mapped to a value. The card action, offered, not imposed.
+
+00:20:38.949 --> 00:20:53.583
+<v Desmond Chen>The one thing she left unsaid, correctly, is whether Mr. Deng gets money fronted while the investigation runs. That determination happens on every dispute - Priya's directive is unambiguous - but the yes-or-no machinery is Tuesday's hour, and I will see every one of you there.
+
+00:20:59.130 --> 00:21:14.043
+<v Sandra Liu>Closing note from QA. Starting next month the library gets refreshed with calls kept from this floor - the walkthroughs and the full intakes done right. If your call shows up there, that is the compliment. Do the interview the way it happened in this room and it will.
+
+00:21:19.588 --> 00:21:34.101
+<v Desmond Chen>Homework: the macro walkthrough in the console workspace, ten minutes, before Tuesday. Bring one real intake from your own queue that you would file differently after today, and be ready to say why. Recording off in three, two, one.

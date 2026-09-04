@@ -1,0 +1,1071 @@
+{
+  "format": "api_contract_pack_v1",
+  "release": {
+    "contract_id": "CONTRACT-CARE-V3",
+    "environment": "production",
+    "status": "published",
+    "current": true,
+    "effective_at": "2026-06-12T09:00:00-04:00",
+    "snapshot_at": "2026-06-12T16:00:00-04:00",
+    "superseded_by": null
+  },
+  "cover_email": "From: Priya Shah <priya.shah@northstaroutfitters.com>\nTo: Care Platform Handoff <care-platform@northstaroutfitters.com>\nDate: Fri, 12 Jun 2026 16:00:00 -0400\nSubject: Published v3 customer/order record contract handoff\n\nAttached is the 16:00 production handoff for CONTRACT-CARE-V3. For current care\nrecord behavior, use the published production schemas in openapi.yaml together\nwith record_contract_notes.md. The Postman collection is illustrative. We left\nretired v2, draft, and internal-admin material in the export because migration\nand reconciliation teams still use those references; their lifecycle and\naudience markers are not optional.\n",
+  "openapi": {
+    "openapi": "3.1.0",
+    "info": {
+      "title": "NorthStar Retail Care Record API",
+      "version": "3.4.0",
+      "description": "Published production read contract for customer and order records. Deprecated and internal projections are retained for migration context only.",
+      "x-contract-id": "CONTRACT-CARE-V3",
+      "x-contract-status": "published",
+      "x-environment": "production",
+      "x-effective-at": "2026-06-12T09:00:00-04:00",
+      "x-superseded-by": null,
+      "x-source-of-truth": true
+    },
+    "servers": [
+      {
+        "url": "https://api.northstaroutfitters.com/care/v3"
+      }
+    ],
+    "paths": {
+      "/users/{user_id}": {
+        "get": {
+          "operationId": "getUserRecord",
+          "summary": "Read the current customer record",
+          "parameters": [
+            {
+              "name": "user_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Current production customer record",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/orders/{order_id}": {
+        "get": {
+          "operationId": "getOrderRecord",
+          "summary": "Read the current order record",
+          "parameters": [
+            {
+              "name": "order_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Current production order record",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/migration/v2/customers/{customer_id}": {
+        "get": {
+          "operationId": "getRetiredCustomerProjection",
+          "deprecated": true,
+          "x-lifecycle": "retired",
+          "x-traffic-enabled": false,
+          "summary": "Retired v2 mobile projection",
+          "parameters": [
+            {
+              "name": "customer_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Retired mobile projection",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/DeprecatedCustomerV2"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/internal/admin/ledger/{order_id}": {
+        "get": {
+          "operationId": "getAdminLedgerProjection",
+          "x-audience": "internal_admin",
+          "x-care-agent-access": false,
+          "summary": "Finance-only reconciliation projection",
+          "parameters": [
+            {
+              "name": "order_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Internal finance-only projection",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/InternalAdminLedgerProjection"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Money": {
+          "x-evidence-id": "SCHEMA-MONEY-V3",
+          "type": "number",
+          "multipleOf": 0.01,
+          "description": "A NorthStar record monetary value. JSON numeric rendering does not preserve insignificant trailing zeroes.",
+          "x-northstar-storage": {
+            "precision": "cent",
+            "maximum-fractional-decimal-digits": 2,
+            "round-arithmetic-before-write": true,
+            "reject-float-artifacts": true,
+            "json-trailing-zeroes-required": false
+          },
+          "examples": [
+            12,
+            12.5,
+            12.55
+          ]
+        },
+        "UserName": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "first_name",
+            "last_name"
+          ],
+          "properties": {
+            "first_name": {
+              "type": "string"
+            },
+            "last_name": {
+              "type": "string"
+            }
+          }
+        },
+        "Address": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "address1",
+            "address2",
+            "city",
+            "country",
+            "state",
+            "zip"
+          ],
+          "properties": {
+            "address1": {
+              "type": "string"
+            },
+            "address2": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "zip": {
+              "type": "string"
+            }
+          }
+        },
+        "CreditCard": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source",
+            "id",
+            "brand",
+            "last_four"
+          ],
+          "properties": {
+            "source": {
+              "const": "credit_card"
+            },
+            "id": {
+              "type": "string"
+            },
+            "brand": {
+              "type": "string"
+            },
+            "last_four": {
+              "type": "string"
+            }
+          }
+        },
+        "PayPal": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source",
+            "id"
+          ],
+          "properties": {
+            "source": {
+              "const": "paypal"
+            },
+            "id": {
+              "type": "string"
+            }
+          }
+        },
+        "GiftCard": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source",
+            "id",
+            "balance"
+          ],
+          "properties": {
+            "source": {
+              "const": "gift_card"
+            },
+            "id": {
+              "type": "string"
+            },
+            "balance": {
+              "$ref": "#/components/schemas/Money"
+            }
+          }
+        },
+        "PaymentMethod": {
+          "oneOf": [
+            {
+              "$ref": "#/components/schemas/CreditCard"
+            },
+            {
+              "$ref": "#/components/schemas/PayPal"
+            },
+            {
+              "$ref": "#/components/schemas/GiftCard"
+            }
+          ],
+          "discriminator": {
+            "propertyName": "source"
+          }
+        },
+        "User": {
+          "x-evidence-id": "SCHEMA-USER-V3",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "user_id",
+            "name",
+            "email",
+            "address",
+            "payment_methods",
+            "orders"
+          ],
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "readOnly": true
+            },
+            "name": {
+              "$ref": "#/components/schemas/UserName"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "address": {
+              "$ref": "#/components/schemas/Address",
+              "description": "The customer's default shipping address."
+            },
+            "payment_methods": {
+              "type": "object",
+              "description": "Saved payment methods indexed by payment-method ID. The published customer record imposes no maximum entry count.",
+              "additionalProperties": {
+                "$ref": "#/components/schemas/PaymentMethod"
+              },
+              "x-northstar-cardinality": {
+                "minimum": 0,
+                "maximum": null,
+                "meaning": "unbounded"
+              }
+            },
+            "orders": {
+              "type": "array",
+              "readOnly": true,
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "Fulfillment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "tracking_id",
+            "item_ids"
+          ],
+          "properties": {
+            "tracking_id": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "item_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "OrderItem": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "product_id",
+            "item_id",
+            "price",
+            "options"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "product_id": {
+              "type": "string"
+            },
+            "item_id": {
+              "type": "string"
+            },
+            "price": {
+              "$ref": "#/components/schemas/Money"
+            },
+            "options": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "PaymentHistoryEntry": {
+          "x-evidence-id": "SCHEMA-PAYMENT-HISTORY-V3",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "transaction_type",
+            "amount",
+            "payment_method_id"
+          ],
+          "properties": {
+            "transaction_type": {
+              "type": "string",
+              "enum": [
+                "payment",
+                "refund"
+              ]
+            },
+            "amount": {
+              "$ref": "#/components/schemas/Money"
+            },
+            "payment_method_id": {
+              "type": "string"
+            }
+          }
+        },
+        "Order": {
+          "x-evidence-id": "SCHEMA-ORDER-V3",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "order_id",
+            "user_id",
+            "address",
+            "items",
+            "status",
+            "fulfillments",
+            "payment_history"
+          ],
+          "properties": {
+            "order_id": {
+              "type": "string",
+              "readOnly": true
+            },
+            "user_id": {
+              "type": "string",
+              "readOnly": true,
+              "description": "The customer profile that owns this order."
+            },
+            "address": {
+              "$ref": "#/components/schemas/Address"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/OrderItem"
+              }
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "processed",
+                "pending",
+                "pending (items modified)",
+                "delivered",
+                "cancelled",
+                "exchange requested",
+                "return requested"
+              ]
+            },
+            "fulfillments": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Fulfillment"
+              }
+            },
+            "payment_history": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/PaymentHistoryEntry"
+              },
+              "description": "Payments and refunds for this order. Entries contain only transaction_type, amount, and payment_method_id."
+            },
+            "cancel_reason": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "exchange_items": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "exchange_new_items": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "exchange_payment_method_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "exchange_price_difference": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Money"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "return_items": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "return_payment_method_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "DeprecatedCustomerV2": {
+          "x-evidence-id": "SCHEMA-CUSTOMER-V2-RETIRED",
+          "deprecated": true,
+          "x-lifecycle": "retired",
+          "x-retired-at": "2026-01-20T00:00:00-05:00",
+          "description": "Historical mobile-client projection. It is not a current care record contract.",
+          "type": "object",
+          "properties": {
+            "customer_id": {
+              "type": "string"
+            },
+            "cards": {
+              "type": "array",
+              "maxItems": 5,
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "InternalAdminLedgerProjection": {
+          "x-evidence-id": "SCHEMA-ADMIN-LEDGER",
+          "x-audience": "internal_admin",
+          "x-authority": "non-care projection",
+          "description": "Finance reconciliation projection. Not a customer or order record schema.",
+          "type": "object",
+          "properties": {
+            "order_id": {
+              "type": "string"
+            },
+            "settlement_batch": {
+              "type": "string"
+            },
+            "settled_amount_minor_units": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    }
+  },
+  "postman_collection": {
+    "info": {
+      "_postman_id": "northstar-care-record-contract-2026-06-12",
+      "name": "NorthStar Care record handoff",
+      "description": "Saved calls are illustrative. openapi.yaml and record_contract_notes.md are the normative current sources.",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+      {
+        "key": "baseUrl",
+        "value": "https://api.northstaroutfitters.com/care/v3"
+      }
+    ],
+    "item": [
+      {
+        "name": "Current customer record",
+        "id": "POSTMAN-USER-READ",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=current. Examples are non-normative."
+        },
+        "response": [
+          {
+            "name": "Current customer record response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "current"
+              }
+            ],
+            "body": "{\n  \"user_id\": \"demo-user-017\",\n  \"name\": {\n    \"first_name\": \"Avery\",\n    \"last_name\": \"Morgan\"\n  },\n  \"email\": \"avery.morgan@outlook.com\",\n  \"address\": {\n    \"address1\": \"21 Example Way\",\n    \"address2\": \"\",\n    \"city\": \"Portland\",\n    \"country\": \"US\",\n    \"state\": \"OR\",\n    \"zip\": \"97205\"\n  },\n  \"payment_methods\": {\n    \"card-demo-1\": {\n      \"source\": \"credit_card\",\n      \"id\": \"card-demo-1\",\n      \"brand\": \"visa\",\n      \"last_four\": \"4242\"\n    },\n    \"paypal-demo-2\": {\n      \"source\": \"paypal\",\n      \"id\": \"paypal-demo-2\"\n    },\n    \"gift-demo-3\": {\n      \"source\": \"gift_card\",\n      \"id\": \"gift-demo-3\",\n      \"balance\": 25.5\n    },\n    \"card-demo-4\": {\n      \"source\": \"credit_card\",\n      \"id\": \"card-demo-4\",\n      \"brand\": \"mastercard\",\n      \"last_four\": \"0051\"\n    },\n    \"gift-demo-5\": {\n      \"source\": \"gift_card\",\n      \"id\": \"gift-demo-5\",\n      \"balance\": 7\n    },\n    \"paypal-demo-6\": {\n      \"source\": \"paypal\",\n      \"id\": \"paypal-demo-6\"\n    }\n  },\n  \"orders\": [\n    \"order-demo-083\"\n  ]\n}"
+          }
+        ]
+      },
+      {
+        "name": "Current customer with six saved methods",
+        "id": "POSTMAN-USER-MANY-METHODS",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=current. Examples are non-normative."
+        },
+        "response": [
+          {
+            "name": "Current customer with six saved methods response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "current"
+              }
+            ],
+            "body": "{\n  \"user_id\": \"demo-user-017\",\n  \"name\": {\n    \"first_name\": \"Avery\",\n    \"last_name\": \"Morgan\"\n  },\n  \"email\": \"avery.morgan@outlook.com\",\n  \"address\": {\n    \"address1\": \"21 Example Way\",\n    \"address2\": \"\",\n    \"city\": \"Portland\",\n    \"country\": \"US\",\n    \"state\": \"OR\",\n    \"zip\": \"97205\"\n  },\n  \"payment_methods\": {\n    \"card-demo-1\": {\n      \"source\": \"credit_card\",\n      \"id\": \"card-demo-1\",\n      \"brand\": \"visa\",\n      \"last_four\": \"4242\"\n    },\n    \"paypal-demo-2\": {\n      \"source\": \"paypal\",\n      \"id\": \"paypal-demo-2\"\n    },\n    \"gift-demo-3\": {\n      \"source\": \"gift_card\",\n      \"id\": \"gift-demo-3\",\n      \"balance\": 25.5\n    },\n    \"card-demo-4\": {\n      \"source\": \"credit_card\",\n      \"id\": \"card-demo-4\",\n      \"brand\": \"mastercard\",\n      \"last_four\": \"0051\"\n    },\n    \"gift-demo-5\": {\n      \"source\": \"gift_card\",\n      \"id\": \"gift-demo-5\",\n      \"balance\": 7\n    },\n    \"paypal-demo-6\": {\n      \"source\": \"paypal\",\n      \"id\": \"paypal-demo-6\"\n    }\n  },\n  \"orders\": [\n    \"order-demo-083\"\n  ]\n}"
+          }
+        ]
+      },
+      {
+        "name": "Current order record",
+        "id": "POSTMAN-ORDER-READ",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=current. Examples are non-normative."
+        },
+        "response": [
+          {
+            "name": "Current order record response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "current"
+              }
+            ],
+            "body": "{\n  \"order_id\": \"order-demo-083\",\n  \"user_id\": \"demo-user-017\",\n  \"address\": {\n    \"address1\": \"21 Example Way\",\n    \"address2\": \"\",\n    \"city\": \"Portland\",\n    \"country\": \"US\",\n    \"state\": \"OR\",\n    \"zip\": \"97205\"\n  },\n  \"items\": [\n    {\n      \"name\": \"Desk organizer\",\n      \"product_id\": \"product-demo-12\",\n      \"item_id\": \"item-demo-44\",\n      \"price\": 31.5,\n      \"options\": {\n        \"color\": \"walnut\"\n      }\n    }\n  ],\n  \"status\": \"delivered\",\n  \"fulfillments\": [\n    {\n      \"tracking_id\": [\n        \"track-demo-7\"\n      ],\n      \"item_ids\": [\n        \"item-demo-44\"\n      ]\n    }\n  ],\n  \"payment_history\": [\n    {\n      \"transaction_type\": \"payment\",\n      \"amount\": 31.5,\n      \"payment_method_id\": \"card-demo-1\"\n    },\n    {\n      \"transaction_type\": \"refund\",\n      \"amount\": 4.25,\n      \"payment_method_id\": \"card-demo-1\"\n    }\n  ],\n  \"cancel_reason\": null,\n  \"exchange_items\": null,\n  \"exchange_new_items\": null,\n  \"exchange_payment_method_id\": null,\n  \"exchange_price_difference\": null,\n  \"return_items\": null,\n  \"return_payment_method_id\": null\n}"
+          }
+        ]
+      },
+      {
+        "name": "Valid money renderings",
+        "id": "POSTMAN-MONEY-VALID",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=current. Examples are non-normative."
+        },
+        "response": [
+          {
+            "name": "Valid money renderings response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "current"
+              }
+            ],
+            "body": "{\n  \"accepted\": [\n    12,\n    12.5,\n    12.55\n  ]\n}"
+          }
+        ]
+      },
+      {
+        "name": "Arithmetic persistence vectors",
+        "id": "POSTMAN-MONEY-ROUNDING",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=current. Examples are non-normative."
+        },
+        "response": [
+          {
+            "name": "Arithmetic persistence vectors response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "current"
+              }
+            ],
+            "body": "{\n  \"stored\": [\n    19.9,\n    3.33,\n    0.01\n  ]\n}"
+          }
+        ]
+      },
+      {
+        "name": "Float-artifact rejection capture",
+        "id": "POSTMAN-MONEY-FLOAT-REJECT",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=current. Examples are non-normative."
+        },
+        "response": [
+          {
+            "name": "Float-artifact rejection capture response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "current"
+              }
+            ],
+            "body": "{\n  \"submitted\": 0.30000000000000004,\n  \"result\": \"schema validation failed\"\n}"
+          }
+        ]
+      },
+      {
+        "name": "Retired mobile customer projection",
+        "id": "POSTMAN-V2-RETIRED",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=retired. Examples are non-normative."
+        },
+        "response": [
+          {
+            "name": "Retired mobile customer projection response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "retired"
+              }
+            ],
+            "body": "{\n  \"customer_id\": \"legacy-demo\",\n  \"cards\": [\n    \"a\",\n    \"b\",\n    \"c\",\n    \"d\",\n    \"e\"\n  ]\n}"
+          }
+        ]
+      },
+      {
+        "name": "Finance ledger projection",
+        "id": "POSTMAN-ADMIN-LEDGER",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=internal-admin. Examples are non-normative."
+        },
+        "response": [
+          {
+            "name": "Finance ledger projection response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "internal-admin"
+              }
+            ],
+            "body": "{\n  \"order_id\": \"order-demo-083\",\n  \"settlement_batch\": \"batch-demo\",\n  \"settled_amount_minor_units\": 3150\n}"
+          }
+        ]
+      },
+      {
+        "name": "Draft loyalty envelope",
+        "id": "POSTMAN-DRAFT-LOYALTY",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=draft. Examples are non-normative."
+        },
+        "response": [
+          {
+            "name": "Draft loyalty envelope response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "draft"
+              }
+            ],
+            "body": "{\n  \"tier\": \"TBD\",\n  \"points\": 120\n}"
+          }
+        ]
+      },
+      {
+        "name": "Abandoned pagination experiment",
+        "id": "POSTMAN-DRAFT-PAGING",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=draft. Examples are non-normative."
+        },
+        "response": [
+          {
+            "name": "Abandoned pagination experiment response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "draft"
+              }
+            ],
+            "body": "{\n  \"cursor\": \"unused-demo\",\n  \"page_size\": 200\n}"
+          }
+        ]
+      }
+    ]
+  },
+  "error_behavior_columns": [
+    "rule_id",
+    "status",
+    "environment",
+    "audience",
+    "http_status",
+    "condition",
+    "response_code",
+    "notes",
+    "updated_at",
+    "superseded_by"
+  ],
+  "error_behavior": [
+    {
+      "rule_id": "ERR-1001",
+      "status": "published",
+      "environment": "production",
+      "audience": "care",
+      "http_status": "401",
+      "condition": "Missing or invalid service credential",
+      "response_code": "authentication_failed",
+      "notes": "Transport control; not a customer-care policy",
+      "updated_at": "2026-06-01T09:00:00-05:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "ERR-1002",
+      "status": "published",
+      "environment": "production",
+      "audience": "care",
+      "http_status": "404",
+      "condition": "Requested record identifier is absent",
+      "response_code": "record_not_found",
+      "notes": "Lookup response; does not define record shape",
+      "updated_at": "2026-05-01T09:00:00-05:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "ERR-1003",
+      "status": "published",
+      "environment": "production",
+      "audience": "care",
+      "http_status": "422",
+      "condition": "Payload does not match the published schema",
+      "response_code": "schema_validation_failed",
+      "notes": "Schema is authoritative; this row is only an index",
+      "updated_at": "2026-04-01T09:00:00-05:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "ERR-1004",
+      "status": "published",
+      "environment": "production",
+      "audience": "care",
+      "http_status": "429",
+      "condition": "Client transport quota exceeded",
+      "response_code": "rate_limited",
+      "notes": "Transport control; retry metadata is in the response",
+      "updated_at": "2026-03-01T09:00:00-05:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "ERR-1005",
+      "status": "published",
+      "environment": "production",
+      "audience": "care",
+      "http_status": "503",
+      "condition": "Record service dependency unavailable",
+      "response_code": "dependency_unavailable",
+      "notes": "Availability response; not a servicing rule",
+      "updated_at": "2026-02-01T09:00:00-05:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "ERR-1006",
+      "status": "published",
+      "environment": "production",
+      "audience": "care",
+      "http_status": "409",
+      "condition": "Conditional read version does not match",
+      "response_code": "version_conflict",
+      "notes": "Caching/transport response",
+      "updated_at": "2026-01-01T09:00:00-05:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "ERR-0901",
+      "status": "retired",
+      "environment": "production",
+      "audience": "mobile-v2",
+      "http_status": "422",
+      "condition": "More than five legacy card tokens",
+      "response_code": "legacy_card_limit",
+      "notes": "Retired with the v2 mobile projection",
+      "updated_at": "2026-01-01T09:00:00-05:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "ERR-0902",
+      "status": "retired",
+      "environment": "production",
+      "audience": "mobile-v2",
+      "http_status": "400",
+      "condition": "Customer envelope used user_id",
+      "response_code": "legacy_identifier_mismatch",
+      "notes": "Historical naming rule; not current",
+      "updated_at": "2026-01-01T09:00:00-05:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "ERR-0903",
+      "status": "retired",
+      "environment": "staging",
+      "audience": "mobile-v2",
+      "http_status": "409",
+      "condition": "Legacy wallet replay conflict",
+      "response_code": "wallet_replay_conflict",
+      "notes": "Disabled migration rehearsal",
+      "updated_at": "2026-01-01T09:00:00-05:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "ERR-D101",
+      "status": "draft",
+      "environment": "sandbox",
+      "audience": "loyalty",
+      "http_status": "422",
+      "condition": "Tier value missing",
+      "response_code": "loyalty_tier_missing",
+      "notes": "Zero-traffic draft; loyalty is outside this contract",
+      "updated_at": "2026-01-01T09:00:00-05:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "ERR-D102",
+      "status": "draft",
+      "environment": "sandbox",
+      "audience": "search",
+      "http_status": "400",
+      "condition": "Experimental cursor malformed",
+      "response_code": "draft_cursor_invalid",
+      "notes": "Abandoned pagination experiment",
+      "updated_at": "2026-01-01T09:00:00-05:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "ERR-D103",
+      "status": "draft",
+      "environment": "sandbox",
+      "audience": "admin",
+      "http_status": "403",
+      "condition": "Finance role absent",
+      "response_code": "draft_admin_scope",
+      "notes": "Unreleased admin gateway test",
+      "updated_at": "2026-01-01T09:00:00-05:00",
+      "superseded_by": ""
+    }
+  ],
+  "record_contract_notes": "# NorthStar Retail care-record contract notes\n\nContract: `CONTRACT-CARE-V3`  \nEnvironment: production  \nStatus: published and current  \nEffective: 2026-06-12 09:00 ET  \nSuperseded by: none\n\n## How to read this handoff\n\nFor current customer and order records, `openapi.yaml` and this note are the\nnormative sources. Saved Postman responses demonstrate concrete payloads but do\nnot make a behavior universal. `error_behavior.csv` is an operational index,\nnot a substitute for the schemas. Material marked retired, draft, sandbox, or\ninternal-admin is non-authoritative for the current care record.\n\n## Customer and order record boundaries\n\nThe current `User` record stores the customer's name, email, default shipping\naddress, saved payment methods, user identifier, and order references. The\ncurrent `Order` record stores `user_id` as the customer profile that owns the\norder. Its `payment_history` is an array of entries with exactly three fields:\n`transaction_type` (`payment` or `refund`), `amount`, and `payment_method_id`.\nThere is no transaction timestamp in this record contract.\n\n## Saved payment-method cardinality\n\n`User.payment_methods` is an ID-keyed map of credit cards, PayPal accounts, and\ngift cards. The current production contract places no maximum on the number of\nsaved entries. The five-card cap visible in the retired v2 mobile projection\ndoes not apply to this record.\n\n## Stored-money invariant\n\nEvery monetary value written to a NorthStar record\u2014prices, gift-card balances,\npayments, refunds, exchange differences, and modification differences\u2014uses\ncent precision, with no more than two fractional decimal digits. Values with\nbinary floating-point artifacts are rejected rather than stored. The wire type\nis a JSON number: insignificant trailing zeroes are not required, so `12`,\n`12.5`, and `12.50` can denote valid cent-precision values.\n\nThe finance-only ledger projection exposes minor units for reconciliation. It\nis not the care customer/order record representation and does not replace the\n`Money` schema.\n\n## Arithmetic before persistence\n\nAny arithmetic result for a price, gift-card balance, payment, refund, exchange\ndifference, or modification difference is rounded to two decimal places before\nthe result is stored. This release does not define a tie-breaking algorithm;\nnone should be inferred from the small set of saved examples.\n"
+}

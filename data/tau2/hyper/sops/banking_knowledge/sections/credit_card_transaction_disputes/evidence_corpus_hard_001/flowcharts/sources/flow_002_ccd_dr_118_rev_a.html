@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CCD-DR-118 rev A — Fraud dispute → replacement card lane</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 1420px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #23405f; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #c3d2e2; }
+  .lane { position: absolute; border: 1px dashed #b9c4cf; border-radius: 8px; }
+  .lanelabel { position: absolute; font-size: 12px; font-weight: 600; color: #6b7885; letter-spacing: .6px; text-transform: uppercase; }
+  .node { position: absolute; box-sizing: border-box; background: #fff; border: 2px solid #35506e; border-radius: 8px; padding: 10px 12px; font-size: 13.5px; color: #1d2833; line-height: 1.35; }
+  .start { border-color: #2e7d54; background: #f2faf5; }
+  .decision { border-color: #a2662a; background: #fdf7ee; }
+  .step { border-color: #35506e; }
+  .warn { border-color: #9d3535; background: #fdf1f1; }
+  .good { border-color: #2e7d54; background: #f2faf5; }
+  .note { position: absolute; box-sizing: border-box; background: #fffbe8; border: 1px solid #d9c98a; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; color: #4c4630; line-height: 1.35; }
+  .edge { position: absolute; background: #55677a; }
+  .h { height: 2px; } .v { width: 2px; }
+  .lbl { position: absolute; font-size: 11.5px; color: #55677a; background: #fbfcfd; padding: 0 4px; }
+  .foot { position: absolute; left: 24px; bottom: 12px; font-size: 11.5px; color: #7b8794; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>CCD-DR-118 rev A — Fraud dispute &rarr; replacement card lane</h1>
+    <div class="meta">Dispute Operations &amp; Card Servicing &middot; published 2025-08-14 &middot; the pre-order gate is the board of record for replacement-card ordering</div>
+  </div>
+
+  <div class="lane" style="left:24px; top:92px; width:740px; height:1240px;"></div>
+  <div class="lanelabel" style="left:40px; top:100px;">Pre-order gate — every step, in order, before any tool activity</div>
+
+  <div class="node start" style="left:56px; top:140px; width:320px;">Replacement card needed &mdash; on its own, or because a dispute is cancelling the card</div>
+
+  <div class="node step" style="left:56px; top:232px; width:320px;">Step 1 &mdash; Verify the customer's identity using standard verification procedures. No verification, no order &mdash; regardless of how the contact arrived.</div>
+
+  <div class="node step" style="left:56px; top:344px; width:320px;">Step 2 &mdash; Look up the customer's credit card account. Work from the account record on screen, not from what the customer reads out.</div>
+
+  <div class="node step" style="left:56px; top:452px; width:320px;">Step 3 &mdash; Confirm the shipping address with the customer. The address may be primary or alternate and must include any unit or suite information.</div>
+
+  <div class="node step" style="left:56px; top:568px; width:320px;">Step 4 &mdash; Ask for the replacement reason and record exactly one of: fraud_suspected, lost, stolen, damaged, expired, or other.</div>
+
+  <div class="node step" style="left:56px; top:676px; width:320px;">Step 5 &mdash; Ask whether the customer wants expedited shipping and advise on possible fees by tier according to the shipping selection rules (fee amounts: published fees &amp; delivery page &mdash; quote the page, not memory).</div>
+
+  <div class="node decision" style="left:56px; top:812px; width:320px;">Step 6 &mdash; Confirm eligibility for replacement in the knowledge base before proceeding. The gate closes here if the answer is no.</div>
+
+  <div class="node good" style="left:56px; top:936px; width:320px;">Eligible &mdash; proceed to the order call. Tool wrapper and argument list: console macro (dispute-desk workspace).</div>
+
+  <div class="node step" style="left:56px; top:1040px; width:320px;">Step 8 &mdash; After submission: confirm the delivery window, set expectations, and document. Post-order conduct and customer-facing terms: training library and the published help pages.</div>
+
+  <div class="node warn" style="left:440px; top:812px; width:300px;">Not eligible &mdash; the agent must not unlock or call the replacement-card tool unless the customer is eligible for replacement. Explain next steps per the knowledge base, document, and close the gate.</div>
+
+  <div class="edge v" style="left:216px; top:196px; height:36px;"></div>
+  <div class="edge v" style="left:216px; top:308px; height:36px;"></div>
+  <div class="lbl" style="left:224px; top:314px;">verified</div>
+  <div class="edge v" style="left:216px; top:416px; height:36px;"></div>
+  <div class="edge v" style="left:216px; top:532px; height:36px;"></div>
+  <div class="lbl" style="left:224px; top:538px;">confirmed</div>
+  <div class="edge v" style="left:216px; top:640px; height:36px;"></div>
+  <div class="lbl" style="left:224px; top:646px;">recorded</div>
+  <div class="edge v" style="left:216px; top:776px; height:36px;"></div>
+  <div class="edge v" style="left:216px; top:900px; height:36px;"></div>
+  <div class="lbl" style="left:224px; top:906px;">eligible</div>
+  <div class="edge v" style="left:216px; top:1000px; height:40px;"></div>
+  <div class="edge h" style="left:376px; top:860px; width:64px;"></div>
+  <div class="lbl" style="left:380px; top:844px;">not eligible</div>
+
+  <div class="lane" style="left:800px; top:92px; width:736px; height:1240px;"></div>
+  <div class="lanelabel" style="left:816px; top:100px;">Dispute interlock &amp; deference panel</div>
+
+  <div class="node step" style="left:832px; top:140px; width:670px;">Dispute interlock. When the replacement rides a dispute (compromised card, fraud filing), the dispute intake is its own complete interview &mdash; run it per the intake calibration recording and the console filing macro. The filing's card_action ties the two workflows together; the lane never shortcuts the intake.</div>
+
+  <div class="note" style="left:832px; top:300px; width:670px;">Reason discipline (Step 4). The six values are the whole list; &ldquo;other&rdquo; is a real value, not a shrug &mdash; put the specifics in the order notes. The reason drives conduct downstream (fraud and stolen carry extra duties &mdash; drilled in the kept fraud-duties call in the training library, not on this board).</div>
+
+  <div class="note" style="left:832px; top:452px; width:670px;">Shipping conversation (Step 5). This board owns the ask-and-advise step only. Fee amounts and delivery windows are customer-facing terms &mdash; they live on the published fees &amp; delivery page, and agents quote the page. Consent capture for any applicable fee is an order argument (console macro reference).</div>
+
+  <div class="note" style="left:832px; top:604px; width:670px;">Eligibility check (Step 6). The knowledge base owns replacement eligibility; this board owns only the sequencing rule that the check happens before, never after, the tool. If the knowledge base and a colleague's memory disagree, the knowledge base wins and the desk channel hears about it.</div>
+
+  <div class="note" style="left:832px; top:756px; width:670px;">Ordering conduct beyond the gate &mdash; argument-by-argument &mdash; is the console macro's job (dispute-desk workspace, replace_7291 field reference). This board is the sequence spine only; it does not restate tool mechanics.</div>
+
+  <div class="node step" style="left:832px; top:900px; width:670px;">Documentation. Every gate outcome &mdash; ordered, or closed as not eligible &mdash; is documented in the case record with the reason recorded at Step 4. An undocumented gate is an unfinished gate.</div>
+
+  <div class="note" style="left:832px; top:1020px; width:670px;">History: working draft 2 of this board (circulated 2025-08-08) was withdrawn 2025-08-11 &mdash; the dated review thread is the record; the draft copy lives in the design-history folder. Rev A published 2025-08-14 is the board of record.</div>
+
+  <div class="foot">CCD-DR-118 rev A &middot; Dispute Operations &amp; Card Servicing &middot; internal — not customer-facing</div>
+</div>
+</body>
+</html>

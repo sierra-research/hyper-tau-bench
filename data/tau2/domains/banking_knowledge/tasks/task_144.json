@@ -1,0 +1,379 @@
+{
+  "id": "task_144",
+  "description": {
+    "purpose": "Task: task_144",
+    "relevant_policies": null,
+    "notes": "REG E LIABILITY TIERS + 60-DAY FILING WINDOW REFUSAL + THIRD-PARTY ATM AFFIDAVIT. Customer Marisol Vega brings three issues: (1) Unauthorized $186.50 online charge (LUMISKIN COSMETICS ONLINE, 11/10) on her Blue card, discovered 11/13 - reported within 2 business days, so liability tier is $50: file card_not_present_fraud with customer_max_liability_amount 50, provisional credit eligible, card_action close_and_reissue, then CLOSE the Blue card (fraud_suspected) and order a replacement (MID tier, STANDARD $0, CLASSIC $0). (2) Old unauthorized $64.99 charge (GADGETPRO ONLINE STORE, 08/30 - 76 days old) found during a statement review - MUST NOT be filed: pre-filing requirement limits disputes to transactions within 60 days (not env-enforced; the tool would accept it). The user gladly accepts if the agent offers to file it anyway - catches bulldozers via the DB check (extra dispute record). (3) Third-party ATM (QUIKCASH) shorted her $300 of a $400 withdrawal on 11/12 (noticed immediately, $50 tier): file atm_cash_discrepancy on the Green Fee-Free card, disputed_amount 300, keep_active; the disputed amount exceeds $200, so the ATM affidavit disclosure is mandated (emailed, 10 business days to sign/return, non-return may deny the claim). COMMUNICATE: ['$50','60 days'] per the inform-liability-exposure-before-proceeding mandate. Cards: dbc_mv71b4e8d2_blue (7415, Blue/MID), dbc_mv71b4e8d2_gff (3390, Green Fee-Free/ENTRY)."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Marisol Vega, a 37-year-old dental office manager living in San Diego, California. You're friendly but thorough - you reconcile your accounts monthly and you came prepared with notes.\n\n**Your situation:** You have three problems across your two Rho-Bank debit cards. On your Blue Account card there are TWO charges you never made: one recent, one from the end of August that you only just found while going back through old statements last night. And on Tuesday a gas-station ATM shorted you cash on your Green Fee-Free card.\n\n**Verification info:**\n- Name: Marisol Vega | Phone: 619-555-0871 | Email: marisol.vega@sdsmiles.com\n- DOB: 05/09/1988 | Address: 3762 Juniper Street, San Diego, CA 92104\n\n## Conversation Flow (Respond reactively - only provide details when the agent asks about each topic):\n\n1. **Opening:** \"Hi, I've got three problems I need help with. There are two charges on my Blue Account debit card that I never made - one from this week and one from back in August that I just found. And on Tuesday an ATM shorted me $300 in cash on my Green Fee-Free card.\"\n\n2. **Provide verification when asked:** Give your name, phone number, email, date of birth, and address.\n\n3. **For the recent unauthorized charge (Blue card):**\n   - \"There's a charge from November 10th - LumiSkin Cosmetics Online, $186.50. I've never heard of them, never shopped there.\"\n   - Discovery date: \"I spotted it yesterday, November 13th, when I was checking the app.\"\n   - If asked whether you have the card: \"Yes, the card's right here in my wallet.\"\n   - If asked about your PIN: \"No, no one has my PIN. This was an online charge anyway.\"\n   - If asked about contacting the merchant: \"No - I've never heard of them, it's clearly fraud.\"\n   - If asked about a police report: \"No, I haven't filed one.\"\n   - If asked about a written statement: \"Yes, absolutely - you can use this conversation as my written statement.\"\n   - If the agent says the card should be closed and replaced: \"Okay, if that's the safe thing to do. Standard shipping and the regular card design are fine. Ship it to my address on file.\"\n\n4. **For the old unauthorized charge (Blue card):**\n   - \"The other one is from August 30th - GadgetPro Online Store, $64.99. Same thing, I never bought that.\"\n   - Discovery date: \"Last night, November 13th. I was doing a deep clean of my statements going back through the summer.\"\n   - **If the agent says this one is too old to dispute:** Be disappointed but accept it: \"Ugh, seriously? So I'm just out that money because I found it too late? ... Okay, I understand. Lesson learned about checking statements.\"\n   - **If the agent offers to file it anyway:** Accept happily: \"Oh really? Great, yes, please file that one too!\"\n\n5. **For the ATM shortage (Green Fee-Free card):**\n   - \"On Tuesday the 12th I took out cash at the QuikCash ATM at the gas station on El Cajon Boulevard. I asked for $400 and it only spit out $100. The receipt says $400 even.\"\n   - If asked whether it's a Rho-Bank ATM: \"No, it's one of those independent QuikCash machines at a gas station.\"\n   - Discovery: \"I noticed right there at the machine - I counted it twice.\"\n   - If asked about the card or PIN: \"I have the card, and nobody has my PIN.\"\n   - If asked about contacting anyone: \"No, who would I even call for an ATM? That's why I'm calling you.\"\n   - If asked about a written statement: \"Yes, same as before - use this conversation.\"\n   - **If the agent mentions an affidavit:** \"Okay - email it over and I'll sign it. How long do I have to send it back?\"\n\n6. **If the agent asks about existing disputes:** \"No, I've never filed a dispute before.\"\n\n7. **If the agent explains liability rules or amounts:** \"Okay, that's good to know. Thanks for explaining.\"\n\n8. **After everything is handled:** \"Thank you, that's everything on my list. Have a good one!\" ###STOP###\n\nOnly provide additional details about your situation when the agent asks for them. Don't dump all your information at once. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "users": {
+          "data": {
+            "mv71b4e8d2": {
+              "name": "Marisol Vega",
+              "user_id": "mv71b4e8d2",
+              "address": "3762 Juniper Street, San Diego, CA 92104",
+              "email": "marisol.vega@sdsmiles.com",
+              "phone_number": "619-555-0871",
+              "date_of_birth": "05/09/1988"
+            }
+          }
+        },
+        "accounts": {
+          "data": {
+            "chk_mv71b4e8d2_blue": {
+              "account_id": "chk_mv71b4e8d2_blue",
+              "user_id": "mv71b4e8d2",
+              "class": "checking",
+              "level": "Blue Account",
+              "date_opened": "02/14/2022",
+              "status": "OPEN",
+              "current_holdings": "5820.00"
+            },
+            "chk_mv71b4e8d2_gff": {
+              "account_id": "chk_mv71b4e8d2_gff",
+              "user_id": "mv71b4e8d2",
+              "class": "checking",
+              "level": "Green Fee-Free Account",
+              "date_opened": "04/03/2023",
+              "status": "OPEN",
+              "current_holdings": "1940.00"
+            }
+          }
+        },
+        "debit_cards": {
+          "data": {
+            "dbc_mv71b4e8d2_blue": {
+              "card_id": "dbc_mv71b4e8d2_blue",
+              "account_id": "chk_mv71b4e8d2_blue",
+              "user_id": "mv71b4e8d2",
+              "cardholder_name": "MARISOL VEGA",
+              "last_4_digits": "7415",
+              "cvv": "263",
+              "status": "ACTIVE",
+              "issue_date": "02/20/2022",
+              "expiration_date": "02/28/2026",
+              "issue_reason": "new_account"
+            },
+            "dbc_mv71b4e8d2_gff": {
+              "card_id": "dbc_mv71b4e8d2_gff",
+              "account_id": "chk_mv71b4e8d2_gff",
+              "user_id": "mv71b4e8d2",
+              "cardholder_name": "MARISOL VEGA",
+              "last_4_digits": "3390",
+              "cvv": "941",
+              "status": "ACTIVE",
+              "issue_date": "04/08/2023",
+              "expiration_date": "04/30/2027",
+              "issue_reason": "new_account"
+            }
+          }
+        },
+        "bank_account_transaction_history": {
+          "data": {
+            "btxn_a41c7f20d9e3": {
+              "transaction_id": "btxn_a41c7f20d9e3",
+              "account_id": "chk_mv71b4e8d2_blue",
+              "date": "08/30/2025",
+              "description": "GADGETPRO ONLINE STORE",
+              "amount": -64.99,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            },
+            "btxn_7e2d90c5f1b8": {
+              "transaction_id": "btxn_7e2d90c5f1b8",
+              "account_id": "chk_mv71b4e8d2_blue",
+              "date": "10/28/2025",
+              "description": "TRADER JOES #55 SAN DIEGO CA",
+              "amount": -62.18,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            },
+            "btxn_3c58ba71e604": {
+              "transaction_id": "btxn_3c58ba71e604",
+              "account_id": "chk_mv71b4e8d2_blue",
+              "date": "11/02/2025",
+              "description": "SHELL OIL 5748 SAN DIEGO CA",
+              "amount": -41.3,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            },
+            "btxn_f906d14ab27c": {
+              "transaction_id": "btxn_f906d14ab27c",
+              "account_id": "chk_mv71b4e8d2_blue",
+              "date": "11/05/2025",
+              "description": "DIRECT DEPOSIT - SD SMILES DENTAL",
+              "amount": 2140.0,
+              "type": "direct_deposit",
+              "status": "posted"
+            },
+            "btxn_b8d3e6f4a012": {
+              "transaction_id": "btxn_b8d3e6f4a012",
+              "account_id": "chk_mv71b4e8d2_blue",
+              "date": "11/08/2025",
+              "description": "VONS #2213 SAN DIEGO CA",
+              "amount": -88.74,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            },
+            "btxn_09fa5c27db64": {
+              "transaction_id": "btxn_09fa5c27db64",
+              "account_id": "chk_mv71b4e8d2_blue",
+              "date": "11/10/2025",
+              "description": "LUMISKIN COSMETICS ONLINE",
+              "amount": -186.5,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            },
+            "btxn_64e17b09c8d5": {
+              "transaction_id": "btxn_64e17b09c8d5",
+              "account_id": "chk_mv71b4e8d2_blue",
+              "date": "11/12/2025",
+              "description": "STARBUCKS #10428 SAN DIEGO CA",
+              "amount": -6.85,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            },
+            "btxn_21c69d84fe03": {
+              "transaction_id": "btxn_21c69d84fe03",
+              "account_id": "chk_mv71b4e8d2_gff",
+              "date": "11/01/2025",
+              "description": "NETFLIX SUBSCRIPTION",
+              "amount": -15.99,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            },
+            "btxn_d57a08e3b691": {
+              "transaction_id": "btxn_d57a08e3b691",
+              "account_id": "chk_mv71b4e8d2_gff",
+              "date": "11/07/2025",
+              "description": "RALPHS #211 SAN DIEGO CA",
+              "amount": -54.23,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            },
+            "btxn_e0b94f6c25a7": {
+              "transaction_id": "btxn_e0b94f6c25a7",
+              "account_id": "chk_mv71b4e8d2_gff",
+              "date": "11/12/2025",
+              "description": "ATM WITHDRAWAL - QUIKCASH ATM #2214 SAN DIEGO CA",
+              "amount": -400.0,
+              "type": "atm_withdrawal",
+              "status": "posted"
+            },
+            "btxn_48f2c1a7d590": {
+              "transaction_id": "btxn_48f2c1a7d590",
+              "account_id": "chk_mv71b4e8d2_gff",
+              "date": "11/13/2025",
+              "description": "CHIPOTLE #1509 SAN DIEGO CA",
+              "amount": -12.9,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            }
+          }
+        }
+      },
+      "user_data": null
+    },
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Marisol Vega",
+          "user_id": "mv71b4e8d2",
+          "address": "3762 Juniper Street, San Diego, CA 92104",
+          "email": "marisol.vega@sdsmiles.com",
+          "phone_number": "619-555-0871",
+          "date_of_birth": "05/09/1988",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "144_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "144_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"mv71b4e8d2\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "144_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_debit_cards_by_account_id_7823"
+        },
+        "requestor": "assistant",
+        "action_id": "144_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_debit_cards_by_account_id_7823",
+          "arguments": "{\"account_id\": \"chk_mv71b4e8d2_blue\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "144_4"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_debit_cards_by_account_id_7823",
+          "arguments": "{\"account_id\": \"chk_mv71b4e8d2_gff\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "144_5"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_bank_account_transactions_9173"
+        },
+        "requestor": "assistant",
+        "action_id": "144_6"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_bank_account_transactions_9173",
+          "arguments": "{\"account_id\": \"chk_mv71b4e8d2_blue\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "144_7"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_bank_account_transactions_9173",
+          "arguments": "{\"account_id\": \"chk_mv71b4e8d2_gff\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "144_8"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_debit_dispute_status_7483"
+        },
+        "requestor": "assistant",
+        "action_id": "144_9"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_debit_dispute_status_7483",
+          "arguments": "{\"user_id\": \"mv71b4e8d2\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "144_10"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "file_debit_card_transaction_dispute_6281"
+        },
+        "requestor": "assistant",
+        "action_id": "144_11"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "file_debit_card_transaction_dispute_6281",
+          "arguments": "{\"transaction_id\": \"btxn_09fa5c27db64\", \"account_id\": \"chk_mv71b4e8d2_blue\", \"card_id\": \"dbc_mv71b4e8d2_blue\", \"user_id\": \"mv71b4e8d2\", \"dispute_category\": \"card_not_present_fraud\", \"transaction_date\": \"11/10/2025\", \"discovery_date\": \"11/13/2025\", \"disputed_amount\": 186.50, \"transaction_type\": \"online_purchase\", \"card_in_possession\": true, \"pin_compromised\": \"no\", \"contacted_merchant\": false, \"police_report_filed\": false, \"written_statement_provided\": true, \"provisional_credit_eligible\": true, \"customer_max_liability_amount\": 50, \"card_action\": \"close_and_reissue\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "144_12"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "file_debit_card_transaction_dispute_6281",
+          "arguments": "{\"transaction_id\": \"btxn_e0b94f6c25a7\", \"account_id\": \"chk_mv71b4e8d2_gff\", \"card_id\": \"dbc_mv71b4e8d2_gff\", \"user_id\": \"mv71b4e8d2\", \"dispute_category\": \"atm_cash_discrepancy\", \"transaction_date\": \"11/12/2025\", \"discovery_date\": \"11/12/2025\", \"disputed_amount\": 300, \"transaction_type\": \"atm_withdrawal\", \"card_in_possession\": true, \"pin_compromised\": \"no\", \"contacted_merchant\": false, \"police_report_filed\": false, \"written_statement_provided\": true, \"provisional_credit_eligible\": true, \"customer_max_liability_amount\": 50, \"card_action\": \"keep_active\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "144_13"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "close_debit_card_4721"
+        },
+        "requestor": "assistant",
+        "action_id": "144_14"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "close_debit_card_4721",
+          "arguments": "{\"card_id\": \"dbc_mv71b4e8d2_blue\", \"reason\": \"fraud_suspected\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "144_15"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "order_debit_card_5739"
+        },
+        "requestor": "assistant",
+        "action_id": "144_16"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "order_debit_card_5739",
+          "arguments": "{\"account_id\": \"chk_mv71b4e8d2_blue\", \"user_id\": \"mv71b4e8d2\", \"delivery_option\": \"STANDARD\", \"delivery_fee\": 0, \"card_design\": \"CLASSIC\", \"design_fee\": 0, \"shipping_address\": \"3762 Juniper Street, San Diego, CA 92104\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "144_17"
+      }
+    ],
+    "communicate_info": [
+      "$50",
+      "60 days"
+    ],
+    "nl_assertions": [
+      "The agent declines to file a dispute for the August 30 GadgetPro charge because it is more than 60 days old, and informs the customer that they may not recover those funds.",
+      "The agent informs the customer that an affidavit will be emailed to them for the ATM dispute, that it must be signed and returned within 10 business days, and that failing to return it may result in denial of the claim."
+    ],
+    "reward_basis": [
+      "DB",
+      "COMMUNICATE",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_005",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_bank_accounts_bank_accounts_(general)_018",
+    "doc_bank_accounts_bank_accounts_(general)_025",
+    "doc_bank_accounts_bank_accounts_(general)_028",
+    "doc_bank_accounts_bank_accounts_(general)_029",
+    "doc_bank_accounts_bank_accounts_(general)_031",
+    "doc_bank_accounts_bank_accounts_(general)_032",
+    "doc_bank_accounts_bank_accounts_(general)_033",
+    "doc_bank_accounts_bank_accounts_(general)_035",
+    "doc_bank_accounts_bank_accounts_(general)_036",
+    "doc_bank_accounts_bank_accounts_(general)_037"
+  ]
+}

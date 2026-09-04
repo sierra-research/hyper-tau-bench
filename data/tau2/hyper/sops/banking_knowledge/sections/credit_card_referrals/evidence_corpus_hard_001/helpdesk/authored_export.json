@@ -1,0 +1,235 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "Rho Helpdesk",
+    "account": "rho-bank-consumer-and-business",
+    "workspace": "card-services-console",
+    "environment": "production",
+    "exported_at": "2025-11-11T10:40:00-05:00",
+    "timezone": "America/New_York",
+    "export_version": "2025.46",
+    "requested_by": "shreya.banerjee@rhobank.com"
+  },
+  "cover_email": "From: Helpdesk Administration <helpdesk-admin@rhobank.com>\nTo: Shreya Banerjee <shreya.banerjee@rhobank.com>\nDate: Tue, 11 Nov 2025 10:47:31 -0500\nSubject: card-services-console referral queue export (2025.46)\nMessage-ID: <hd-export-2025-46-referrals@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nShreya,\n\nProduction export of the referral-queue slice of the card-services-console workspace, current as of 10:40 today - macros, triggers, contracts, fields, SLAs, and views. Per your note, this is the snapshot for the Q4 retro packet; nothing here was modified for the export.\n\nAutomated reply - file a HELPDESK-ADMIN ticket for corrections.\n",
+  "macros": [
+    {
+      "macro_id": "MAC-REF-201",
+      "name": "Referral status inquiry - close-out",
+      "description": "Wrap-up scaffold for status-meaning contacts; keeps case notes pointing at the in-app legend instead of paraphrasing it.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-10-21T15:12:00-04:00",
+      "updated_at": "2025-10-21T15:12:00-04:00",
+      "usage_30d": 412,
+      "usage_90d": 655,
+      "superseded_by": null,
+      "steps": [
+        "Direct the customer to the in-app status legend (tap the chip on the referral row)",
+        "Do not paraphrase status meanings into the case - reference the legend",
+        "Insert note template: dashboard synced Y/N / row(s) discussed / legend opened on call Y/N",
+        "Set referral_case_type status_inquiry"
+      ]
+    },
+    {
+      "macro_id": "MAC-REF-207",
+      "name": "Referral link guidance - wrap-up note",
+      "description": "Required wrap-up fields whenever link guidance occurred or was declined on a contact.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-10-28T11:36:00-04:00",
+      "updated_at": "2025-10-28T11:36:00-04:00",
+      "usage_30d": 388,
+      "usage_90d": 541,
+      "superseded_by": null,
+      "steps": [
+        "Program checked: record the KB article or page reference used",
+        "Customer expectations reviewed: matched / clarified / unresolved",
+        "Guidance outcome: provided / declined / n-a",
+        "Sources read on call: list, with revision dates",
+        "Reminder delivered: Y/N",
+        "Set referral_case_type link_guidance or denial_conversation"
+      ]
+    },
+    {
+      "macro_id": "MAC-REF-212",
+      "name": "Business referral - route to desk",
+      "description": "Warm-transfer scaffold for business program questions reaching the consumer queue.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-09-16T14:05:00-04:00",
+      "updated_at": "2025-09-16T14:05:00-04:00",
+      "usage_30d": 61,
+      "usage_90d": 240,
+      "superseded_by": null,
+      "steps": [
+        "Holding line: 'business referral terms come from your business banking team in writing - let me get you to them so you hear it from the source'",
+        "Warm transfer to the business banking desk with verification context attached",
+        "Set referral_case_type business_routing"
+      ]
+    },
+    {
+      "macro_id": "MAC-REF-219",
+      "name": "Link generation error - active incident",
+      "description": "Holding language for link-tool errors; usable only while an incident banner is active for link generation.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-11-05T10:31:00-05:00",
+      "updated_at": "2025-11-05T10:31:00-05:00",
+      "usage_30d": 26,
+      "usage_90d": 26,
+      "superseded_by": null,
+      "steps": [
+        "Line: 'the link tool is having a temporary problem on our side; your existing referrals show normally on your dashboard - retry this afternoon'",
+        "Note attempt timestamps and any error string the customer reports",
+        "Set referral_case_type incident"
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "TRG-REF-44",
+      "name": "Referral keyword routing",
+      "description": "Routes referral-keyword contacts to the card-referrals queue unclassified.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 30,
+      "effective_at": "2025-09-08T09:20:00-04:00",
+      "updated_at": "2025-09-08T09:20:00-04:00",
+      "usage_30d": 1874,
+      "conditions": [
+        "subject or body contains any: referral, refer a friend, referral link, referral bonus"
+      ],
+      "actions": [
+        "assign queue card-referrals",
+        "set referral_case_type unclassified"
+      ]
+    },
+    {
+      "trigger_id": "TRG-REF-45",
+      "name": "Business referral escalation path",
+      "description": "Suggests the desk-routing macro when a business relationship account asks about business card referrals.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 20,
+      "effective_at": "2025-09-16T14:11:00-04:00",
+      "updated_at": "2025-09-16T14:11:00-04:00",
+      "usage_30d": 48,
+      "conditions": [
+        "queue is card-referrals",
+        "account flags contain business_relationship",
+        "body contains any: Business Gold, Silver Zoom, business referral"
+      ],
+      "actions": [
+        "suggest macro MAC-REF-212",
+        "add tag biz-routing"
+      ]
+    },
+    {
+      "trigger_id": "TRG-REF-47",
+      "name": "Incident banner - linkgen",
+      "description": "Surfaces the incident macro while a link-generation incident banner is active.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 10,
+      "effective_at": "2025-11-05T09:58:00-05:00",
+      "updated_at": "2025-11-05T09:58:00-05:00",
+      "usage_30d": 31,
+      "conditions": [
+        "ops banner linkgen-incident is active",
+        "body contains any: error, something went wrong, LINKGEN"
+      ],
+      "actions": [
+        "suggest macro MAC-REF-219",
+        "add tag incident-1105"
+      ]
+    }
+  ],
+  "policy_contracts": [
+    {
+      "contract_id": "CON-REFQA-4",
+      "name": "QA kept-call nomination - referral queue",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "card-services-qa",
+      "scope": "Nomination workflow that feeds the referral queue's kept-call review. Covers the console checkbox and the QA view only; what QA keeps is decided in the norming sessions, not by this workflow.",
+      "required_fields": [
+        "qa_kept_call",
+        "cross_reference_case"
+      ],
+      "closed_world": false,
+      "wrapper_rule": "An agent nominates a recording by setting qa_kept_call on the case; the nomination surfaces it in the QA candidates view for the next norming session. Nomination is not ratification - QA records its own outcomes, and the console never marks a call as kept on the agent's say-so.",
+      "effective_at": "2025-10-21T15:12:00-04:00",
+      "updated_at": "2025-10-21T15:12:00-04:00"
+    }
+  ],
+  "field_columns": ["row_id", "field_key", "field_name", "field_type", "option_value", "option_description", "active", "status", "environment", "updated_at"],
+  "fields": [
+    {"row_id": "FLD-520", "field_key": "referral_case_type", "field_name": "Referral case type", "field_type": "dropdown", "option_value": "status_inquiry", "option_description": "Customer asking what a dashboard status means or when it changes", "active": true, "status": "current", "environment": "production", "updated_at": "2025-09-08T09:20:00-04:00"},
+    {"row_id": "FLD-521", "field_key": "referral_case_type", "field_name": "Referral case type", "field_type": "dropdown", "option_value": "link_guidance", "option_description": "Customer walked through generating or sharing a referral link", "active": true, "status": "current", "environment": "production", "updated_at": "2025-09-08T09:20:00-04:00"},
+    {"row_id": "FLD-522", "field_key": "referral_case_type", "field_name": "Referral case type", "field_type": "dropdown", "option_value": "denial_conversation", "option_description": "Link guidance declined on this contact after screening", "active": true, "status": "current", "environment": "production", "updated_at": "2025-10-28T11:36:00-04:00"},
+    {"row_id": "FLD-523", "field_key": "referral_case_type", "field_name": "Referral case type", "field_type": "dropdown", "option_value": "business_routing", "option_description": "Business program question routed to the business banking desk", "active": true, "status": "current", "environment": "production", "updated_at": "2025-09-16T14:05:00-04:00"},
+    {"row_id": "FLD-524", "field_key": "referral_case_type", "field_name": "Referral case type", "field_type": "dropdown", "option_value": "incident", "option_description": "Contact attributable to an active tooling incident banner", "active": true, "status": "current", "environment": "production", "updated_at": "2025-11-05T10:31:00-05:00"},
+    {"row_id": "FLD-525", "field_key": "referral_case_type", "field_name": "Referral case type", "field_type": "dropdown", "option_value": "feedback", "option_description": "Program feedback or complaint logged without an account action", "active": true, "status": "current", "environment": "production", "updated_at": "2025-09-08T09:20:00-04:00"},
+    {"row_id": "FLD-526", "field_key": "referral_case_type", "field_name": "Referral case type", "field_type": "dropdown", "option_value": "unclassified", "option_description": "Default set by the routing trigger until an agent classifies", "active": true, "status": "current", "environment": "production", "updated_at": "2025-09-08T09:20:00-04:00"},
+    {"row_id": "FLD-530", "field_key": "program_card_name", "field_name": "Program card name", "field_type": "text", "option_value": "", "option_description": "Exact card name the contact concerned, as the customer would type it", "active": true, "status": "current", "environment": "production", "updated_at": "2025-09-08T09:20:00-04:00"},
+    {"row_id": "FLD-531", "field_key": "sources_read_on_call", "field_name": "Sources read on call", "field_type": "multiline", "option_value": "", "option_description": "Documents or pages read to the customer, with revision dates", "active": true, "status": "current", "environment": "production", "updated_at": "2025-10-28T11:36:00-04:00"},
+    {"row_id": "FLD-532", "field_key": "qa_kept_call", "field_name": "QA kept-call candidate", "field_type": "checkbox", "option_value": "", "option_description": "Nominates the recording for the QA norming review", "active": true, "status": "current", "environment": "production", "updated_at": "2025-10-21T15:12:00-04:00"},
+    {"row_id": "FLD-533", "field_key": "cross_reference_case", "field_name": "Cross-reference case", "field_type": "text", "option_value": "", "option_description": "Related case id when a contact continues an earlier one", "active": true, "status": "current", "environment": "production", "updated_at": "2025-09-16T14:05:00-04:00"}
+  ],
+  "sla_policies": [
+    {
+      "policy_id": "SLA-REF-STD",
+      "name": "Referral queue - standard",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "first response 30 minutes; resolution within 24 hours",
+      "applies_to": "card-referrals queue cases without the incident type",
+      "updated_at": "2025-09-08T09:20:00-04:00"
+    },
+    {
+      "policy_id": "SLA-REF-INC",
+      "name": "Referral queue - incident tagged",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "first response 10 minutes; resolution within 8 hours",
+      "applies_to": "card-referrals queue cases with referral_case_type incident",
+      "updated_at": "2025-11-05T10:31:00-05:00"
+    }
+  ],
+  "views": [
+    {
+      "view_id": "VIEW-REF-OPEN",
+      "name": "Referrals - open by age",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "queue card-referrals",
+        "status < solved",
+        "sort created ascending"
+      ],
+      "updated_at": "2025-09-08T09:20:00-04:00"
+    },
+    {
+      "view_id": "VIEW-REF-QA",
+      "name": "Referrals - QA kept-call candidates",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "qa_kept_call is checked",
+        "created within 30 days",
+        "sort created descending"
+      ],
+      "updated_at": "2025-10-21T15:12:00-04:00"
+    }
+  ]
+}

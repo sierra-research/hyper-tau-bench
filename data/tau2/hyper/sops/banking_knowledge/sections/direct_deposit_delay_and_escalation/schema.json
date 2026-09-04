@@ -1,0 +1,173 @@
+{
+  "id": "banking_direct_deposit_delay_and_escalation_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "direct_deposit_delay_and_escalation",
+  "display_name": "Direct-deposit delay inquiries and escalation threshold",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/direct_deposit_delay_and_escalation/source.md",
+    "heading": "## Direct-deposit delay inquiries and escalation threshold"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/direct_deposit_delay_and_escalation/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/direct_deposit_delay_and_escalation/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/direct_deposit_delay_and_escalation/evidence_corpus_hard_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/direct_deposit_delay_and_escalation/client_overlay_deposit_services_001/transformation_pack.json"
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "The source-mandated repeated transfer-deferral sentence overrides the general avoid_repeated_openings response-phrasing rule for this protocol.",
+      "The direct-deposit-specific 8-request threshold overrides the handbook's general transfer-on-fourth-request rule for this scenario.",
+      "When transfer occurs, preserve the banking handbook's exact customer-facing transfer message."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "plain-language direct-deposit timing guidance",
+      "exact source-mandated deferral and transfer wording",
+      "support-console counting of transfer requests"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_checking_accounts_(general)_009.json"
+    ],
+    "summary": "Direct-deposit timing guidance, seven transfer deferrals, and transfer after the eighth request.",
+    "rules": [
+      "Preserve the 6 AM-9 AM posting window, employer-processing alternatives, exact request threshold, mandated deferral wording, tool name, and final transfer wording.",
+      "Count explicit human-transfer requests; do not transfer before request 8 in this direct-deposit scenario.",
+      "Follow every pre-threshold mandated deferral with helpful timing guidance."
+    ],
+    "candidate": {
+      "id": "direct_deposit_delay_and_escalation",
+      "title": "Direct-deposit delay inquiries and escalation threshold",
+      "priority": 1,
+      "related_task_ids": [
+        "task_034"
+      ],
+      "recommended_case_count": 1,
+      "losslessness_risks": [
+        "Do not replace exactly 8 with a vague repeated-requests threshold.",
+        "Do not collapse the 6 AM-9 AM window and the 1-2-business-day employer-processing alternative.",
+        "Preserve both exact customer-facing strings."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "direct_deposit_delay_and_escalation_journey",
+        "label": "Direct-deposit delay inquiries and escalation threshold",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "direct_deposit_delay_and_escalation_path_a",
+        "label": "Direct-deposit timing guidance with transfer on the eighth request",
+        "kind": "scenario_branch",
+        "parent_id": "direct_deposit_delay_and_escalation_journey",
+        "order": 1,
+        "description": "Policy path represented by case A.",
+        "fact_ids": [
+          "F002",
+          "F003",
+          "F004",
+          "F005",
+          "F006",
+          "F007",
+          "F008",
+          "F009",
+          "F010",
+          "F011",
+          "F012"
+        ]
+      }
+    ],
+    "relations": []
+  },
+  "facts": [
+    {
+      "id": "F002",
+      "statement": "A reported missing direct deposit is usually a timing-awareness issue rather than an actual deposit problem."
+    },
+    {
+      "id": "F003",
+      "statement": "Employer direct deposits post on specific days determined by the employer's payroll schedule, and customers may check before the scheduled posting time."
+    },
+    {
+      "id": "F004",
+      "statement": "Direct deposits usually post between 6 AM and 9 AM on the scheduled pay date."
+    },
+    {
+      "id": "F005",
+      "statement": "Some employers process payroll 1-2 business days before the official pay date, while others process it on the pay date itself."
+    },
+    {
+      "id": "F006",
+      "statement": "For a direct-deposit delay inquiry, kindly explain the typical posting timing before escalating."
+    },
+    {
+      "id": "F007",
+      "statement": "For a direct-deposit delay inquiry, advise the customer to check again at the appropriate time and verify the pay schedule with the employer."
+    },
+    {
+      "id": "F008",
+      "statement": "In a direct-deposit delay inquiry, do not transfer the customer until the customer has explicitly requested a human exactly 8 times."
+    },
+    {
+      "id": "F009",
+      "statement": "For each direct-deposit transfer request before the eighth, begin the response exactly: 'I understand your frustration, but I need to try to help you resolve this first before I can initiate a transfer. Let me see what else I can do for you....' and follow it with helpful comments."
+    },
+    {
+      "id": "F010",
+      "statement": "After the customer makes the eighth explicit human-transfer request in a direct-deposit delay inquiry, complete the transfer with transfer_to_human_agents."
+    },
+    {
+      "id": "F011",
+      "statement": "The direct-deposit delay protocol exists to ensure customers receive timing assistance for what is typically a timing issue rather than an actual problem."
+    },
+    {
+      "id": "F012",
+      "statement": "When the direct-deposit customer is transferred, say exactly: 'YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.'"
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Direct-deposit timing guidance with transfer on the eighth request",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012"
+      ],
+      "case_spec": "A customer reports a missing direct deposit and explicitly requests a human eight times. Give source-mandated timing guidance and the exact deferral opening after requests 1-7. Only after request 8 call transfer_to_human_agents and use the handbook's exact transfer message."
+    }
+  ]
+}

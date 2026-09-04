@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>RB-CR-114</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,Helvetica,sans-serif;color:#20242a;background:#fff;
+     width:816px;margin:0 auto;padding:48px 58px}
+.ctl{border:1.5px solid #2b3a4a;margin-bottom:20px}
+.ctl .band{background:#2b3a4a;color:#fff;padding:7px 14px;font-size:11px;letter-spacing:2px}
+.ctl .ttl{padding:12px 14px 4px;font-size:21px;font-weight:bold;color:#1c2b3a}
+.ctl table{width:100%;border-collapse:collapse;margin-top:8px}
+.ctl td{border-top:1px solid #c9d1d9;padding:5px 14px;font-size:11.5px}
+.ctl td.k{width:130px;color:#57646f;text-transform:uppercase;letter-spacing:.8px;font-size:10px}
+h2{font-size:12.5px;letter-spacing:1.2px;color:#1c2b3a;border-bottom:2px solid #2b3a4a;
+   padding-bottom:3px;margin:18px 0 7px}
+p{font-size:12.5px;line-height:1.6;margin-bottom:6px}
+.item{font-size:12.5px;line-height:1.6;margin:0 0 4px 22px;text-indent:-22px;padding-left:22px}
+.item b{font-weight:bold}
+.ref{font-size:12px;font-weight:bold;color:#1c2b3a;margin-top:4px}
+.foot{display:flex;justify-content:space-between;border-top:2px solid #2b3a4a;
+      margin-top:30px;padding-top:8px;font-size:11px;color:#4a5560}
+</style></head><body>
+<div class="ctl">
+<div class="band">RHO BANK RETENTION OPERATIONS</div>
+<div class="ttl">CLOSURE &amp; RETENTION RUNBOOK</div>
+<table>
+<tr><td class="k">Document</td><td>Controlled Document RB-CR-114</td></tr>
+<tr><td class="k">Owner</td><td>Marta Villanueva, Retention Operations</td></tr>
+<tr><td class="k">Issued</td><td>2025-10-06</td></tr>
+<tr><td class="k">Amendments</td><td>Amendments are recorded in Amendments Log AL-CR-114.</td></tr>
+</table>
+</div>
+
+<h2>1. PURPOSE AND SCOPE</h2>
+<p>This runbook governs servicing work on credit card closure requests, retention handling,
+downgrades, and the account credits that support them. It applies to all Retention Operations
+agents. Call sequencing is worked from the desk boards (RET-OPS-301 through RET-OPS-304); the
+standing servicing rules are kept here.</p>
+
+<h2>2. CLOSURE ELIGIBILITY</h2>
+<p>An account must pass every check below before closure is initiated. Run the checks in the
+order desk board RET-OPS-301 presents them.</p>
+<p class="item"><b>2.1 Balance.</b> Balance disposition at closure is worked per the current desk ruling - see the closures clinic notes. Do not improvise it from this page.</p>
+<p class="item"><b>2.2 Disputes.</b> Confirm there are no pending disputes on the account; pending disputes allowed is No.</p>
+<p class="item"><b>2.3 Account age.</b> Confirm the account has been open at least 60 days.</p>
+<p class="item"><b>2.4 Replacement cards.</b> Confirm there are no pending replacement cards on the account.</p>
+<p>Do not initiate closure while any check fails.</p>
+
+<h2>3. POST-CLOSURE COMMUNICATIONS</h2>
+<p>Set expectations before wrap-up: the customer will receive a confirmation email and a final
+statement within several business days. Confirm the email address on file.</p>
+
+<h2>4. REDEMPTION AND REFUND WINDOWS</h2>
+<p>When closure proceeds under the retention protocol, and after any closure request if the
+customer asks, cover the rewards-redemption window and, where an annual fee posted recently,
+the annual-fee refund window.</p>
+<p>The rewards-redemption and annual-fee refund windows are maintained in the amendments log.</p>
+<p>Quote both windows from the latest dated entry.</p>
+<p class="ref">Ref: Amendments Log AL-CR-114</p>
+
+<h2>5. DOWNGRADE EFFECTS</h2>
+<p>Explain the effects before processing a downgrade.</p>
+<p class="item"><b>5.1</b> The credit limit, account number, and account history are preserved.</p>
+<p class="item"><b>5.2</b> Unredeemed rewards points transfer at the same value.</p>
+<p class="item"><b>5.3</b> A downgrade takes effect immediately; the customer continues using the existing physical card until the new card arrives, typically within several business days.</p>
+<p class="item"><b>5.4</b> If an annual fee was paid recently before the downgrade, the customer may be eligible for a prorated refund.</p>
+
+<h2>6. STATEMENT CREDITS</h2>
+<p>When a statement credit is needed for goodwill adjustments, promotional credits, fee
+reversals, or other account credits, use apply_statement_credit_8472.</p>
+<p>Parameter signatures for the tool are published in contract pack CP-CARD-7.</p>
+
+<h2>7. VERIFICATION</h2>
+<p>After apply_statement_credit_8472 is called, verify the credit appears as a negative
+transaction in the customer's credit card transaction history and reduces the statement
+balance.</p>
+
+<div class="foot"><div>RB-CR-114 | Issued 2025-10-06</div>
+<div>Retention Operations | Page 1 of 1</div></div>
+</body></html>

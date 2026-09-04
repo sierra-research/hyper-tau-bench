@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SAV-OPS-201 rev B — Personal Savings Opening — Eligibility Gates</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 1060px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #4a5568; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #cdd6e0; }
+  .node { position: absolute; width: 300px; box-sizing: border-box; border: 2px solid #4a5b6d; border-radius: 6px; background: #fff; padding: 10px 12px; font-size: 13px; line-height: 1.35; color: #1d2733; }
+  .node .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding: 1px 6px; border-radius: 3px; margin-bottom: 6px; }
+  .entry { border-color: #1d6a44; } .entry .tag { background: #d9efe3; color: #17573a; }
+  .read { border-color: #2b5f8f; } .read .tag { background: #dcebf7; color: #234d73; }
+  .work { border-color: #4a5b6d; } .work .tag { background: #e6ebf0; color: #3a4a5a; }
+  .terminal { border-color: #1d6a44; background: #f2faf5; } .terminal .tag { background: #d9efe3; color: #17573a; }
+  .decision { position: absolute; width: 300px; box-sizing: border-box; }
+  .decision .diamond { width: 280px; height: 132px; margin: 0 auto; background: #fff8e8; border: 2px solid #b08a1f; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 8px 16px; box-sizing: border-box; font-size: 12.5px; text-align: center; color: #4b3d10; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+  svg.edges { position: absolute; left: 0; top: 0; width: 1560px; height: 1060px; pointer-events: none; }
+  svg.edges path { stroke: #51606f; stroke-width: 2; fill: none; marker-end: url(#arr201); }
+  .edge-label { position: absolute; font-size: 11px; font-weight: 600; color: #38424d; background: #fbfcfdcc; padding: 0 4px; border-radius: 2px; }
+  .sticky { position: absolute; width: 280px; box-sizing: border-box; padding: 10px 12px; font-size: 12px; line-height: 1.35; box-shadow: 2px 3px 6px rgba(0,0,0,0.12); }
+  .sticky.yellow { background: #fdf3c0; }
+  .control-definitions { position: absolute; left: 24px; top: 810px; width: 1512px; box-sizing: border-box; border: 2px solid #4a5568; background: #f4f8fc; border-radius: 6px; padding: 14px 18px; }
+  .control-definitions h2 { margin: 0 0 8px; font-size: 14px; letter-spacing: 0.4px; color: #4a5568; }
+  .control-definitions dl { margin: 0; font-size: 12.5px; line-height: 1.45; color: #1d2733; }
+  .control-definitions dt { font-weight: 700; margin-top: 7px; }
+  .control-definitions dd { margin: 1px 0 0 14px; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>Personal Savings Opening — Eligibility Gates</h1>
+    <div class="meta">SAV-OPS-201 rev B &nbsp;·&nbsp; Approved 2025-09-25 (M. Osei, Deposit Desk) &nbsp;·&nbsp; Mandatory pre-opening check for every personal savings opening</div>
+  </div>
+
+  <svg class="edges" viewBox="0 0 1560 1060">
+    <defs><marker id="arr201" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#51606f"></path></marker></defs>
+    <!-- entry -> gate1 -->
+    <path d="M 190 224 L 190 276"></path>
+    <!-- gate1 -> gate2 -->
+    <path d="M 190 384 L 190 456"></path>
+    <!-- gate2 -> gate3 -->
+    <path d="M 190 564 L 190 636"></path>
+    <!-- gate3 -> gate4 (across) -->
+    <path d="M 340 692 L 444 692"></path>
+    <!-- gate4 -> gate5 (up) -->
+    <path d="M 598 636 L 598 568"></path>
+    <!-- gate5 -> gate6 (up) -->
+    <path d="M 598 456 L 598 388"></path>
+    <!-- gate6 -> decision (across) -->
+    <path d="M 748 330 L 820 330 L 820 366 L 894 366"></path>
+    <!-- decision yes -> eligible terminal -->
+    <path d="M 1048 432 L 1048 556"></path>
+    <!-- decision no -> stop terminal -->
+    <path d="M 1198 366 L 1380 366 L 1380 556"></path>
+  </svg>
+
+  <span class="edge-label" style="left:1058px;top:478px">yes — every item confirmed</span>
+  <span class="edge-label" style="left:1212px;top:342px">no — an item is unmet</span>
+
+  <article class="node entry" style="left:40px;top:100px"><span class="tag">ENTRY — MANDATE</span>
+    This board is the internal opening-personal-savings procedure: it applies to
+    opening personal savings accounts, every product, every channel. Work the six
+    gates in order before anything is opened — the eligibility checklist below is
+    the pre-opening check.
+  </article>
+
+  <article class="node read" style="left:40px;top:280px"><span class="tag">GATE 1 — VERIFIED</span>
+    The customer must be verified before any personal savings opening proceeds.
+    Confirm verification status on the profile before running any other gate.
+  </article>
+
+  <article class="node read" style="left:40px;top:460px"><span class="tag">GATE 2 — CHECKING RELATIONSHIP</span>
+    The customer must already have at least one active Rho-Bank checking account.
+    Accounts held at external banks do not satisfy this gate.
+  </article>
+
+  <article class="node read" style="left:40px;top:640px"><span class="tag">GATE 3 — CHECKING TENURE</span>
+    The customer's checking account tenure must be at least 14 days. Count from
+    the checking account's open date through the day of opening.
+  </article>
+
+  <article class="node read" style="left:448px;top:640px"><span class="tag">GATE 4 — ACCOUNT COUNT</span>
+    The customer currently holds fewer than 5 personal savings accounts. Count
+    every open personal savings account on the profile before opening another.
+  </article>
+
+  <article class="node read" style="left:448px;top:460px"><span class="tag">GATE 5 — COLLECTIONS</span>
+    The customer must have no accounts in collections. Collections activity
+    anywhere on the profile holds the opening.
+  </article>
+
+  <article class="node read" style="left:448px;top:280px"><span class="tag">GATE 6 — NEGATIVE BALANCES</span>
+    The customer must have no negative balances. A negative balance on any
+    account holds the opening.
+  </article>
+
+  <div class="decision" style="left:898px;top:300px"><div class="diamond">Every eligibility checklist item confirmed?</div></div>
+
+  <article class="node terminal" style="left:898px;top:560px"><span class="tag">TERMINAL — ELIGIBLE TO OPEN</span>
+    All six gates confirmed. Continue on SAV-OPS-202 (current revision), the
+    opening-sequence board.
+  </article>
+
+  <article class="node work" style="left:1230px;top:560px"><span class="tag">TERMINAL — STOP</span>
+    Do not proceed with opening a personal savings account if any eligibility
+    checklist item is not met. Tell the customer which gate failed and what would
+    clear it.
+  </article>
+
+  <aside class="sticky yellow" style="left:1230px;top:100px;width:300px">
+    <strong>Requirements — as published (customer eligibility page, excerpt):</strong>
+    "To open an additional personal savings account, the customer must hold an
+    active Rho-Bank checking account, must keep every account in good standing,
+    and cannot have more than 5 personal savings accounts."
+  </aside>
+
+  <div class="control-definitions">
+    <h2>LEGEND — READING THIS BOARD</h2>
+    <dl>
+      <dt>Requirements excerpt vs. eligibility checklist</dt>
+      <dd>The pinned excerpt reproduces the customer-facing requirements page word
+      for word. Where the requirements page and the eligibility checklist phrase
+      the account-count limit differently, the checklist phrasing is the operative
+      pre-opening check — run gate 4 as printed above, not the excerpt's summary.</dd>
+      <dt>Gate order and the stop rule</dt>
+      <dd>Gates run in order, and every gate is confirmed on the day of opening;
+      any gate that cannot be confirmed routes to the stop terminal.</dd>
+      <dt>Account and status lookups</dt>
+      <dd>Profile lookups behind gates 2 through 6 run through the developer
+      portal's account-services pack; this board does not restate contracts.</dd>
+    </dl>
+  </div>
+</div>
+</body>
+</html>

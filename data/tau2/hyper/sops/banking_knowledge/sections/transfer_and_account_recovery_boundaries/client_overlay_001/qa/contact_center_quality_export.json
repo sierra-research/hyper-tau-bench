@@ -1,0 +1,481 @@
+{
+  "export_format": "contact_center_qa_export_v1",
+  "exported_at": "2025-10-31T16:30:00-07:00",
+  "source_system": {
+    "name": "Rho Evaluate",
+    "environment": "production"
+  },
+  "interaction_count": 10,
+  "evaluation_count": 10,
+  "users": [
+    {"user_id": "agent-jpruitt", "display_name": "Jordan Pruitt", "role": "agent"},
+    {"user_id": "agent-kmabry", "display_name": "Keisha Mabry", "role": "agent"},
+    {"user_id": "agent-fortega", "display_name": "Felix Ortega", "role": "agent"},
+    {"user_id": "agent-avu", "display_name": "Anh Vu", "role": "agent"},
+    {"user_id": "agent-mbell", "display_name": "Marcus Bell", "role": "agent"},
+    {"user_id": "agent-twhitcomb", "display_name": "Tara Whitcomb", "role": "agent"},
+    {"user_id": "reviewer-ihalvorsen", "display_name": "Ingrid Halvorsen", "role": "qa_lead"},
+    {"user_id": "reviewer-dwhitfield", "display_name": "Dana Whitfield", "role": "reviewer"},
+    {"user_id": "reviewer-rcalderon", "display_name": "Rob Calderon", "role": "reviewer"}
+  ],
+  "rubrics": [
+    {
+      "rubric_id": "transfer-disposition-v1",
+      "name": "Transfer disposition review",
+      "version": "1.0",
+      "status": "published",
+      "items": [
+        {"item_id": "tier_selection", "title": "Reason comes from the highest applicable tier", "max_score": 5, "critical": false},
+        {"item_id": "code_condition_match", "title": "Selected code's documented condition matches the contact", "max_score": 5, "critical": false},
+        {"item_id": "transfer_message_exact", "title": "Delivers the exact transfer line before the handoff", "max_score": 5, "critical": false},
+        {"item_id": "summary_quality", "title": "Transfer summary is specific enough to act on", "max_score": 5, "critical": false},
+        {"item_id": "conduct_and_verification", "title": "Verification order and conduct standards met", "max_score": 5, "critical": false}
+      ]
+    },
+    {
+      "rubric_id": "handoff-experience-v0",
+      "name": "Handoff experience review",
+      "version": "0.9",
+      "status": "retired",
+      "items": [
+        {"item_id": "handoff_satisfaction", "title": "Customer expresses satisfaction with the handoff", "max_score": 10, "critical": false}
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "interaction_id": "qa-25Q4-001",
+      "channel": "voice",
+      "queue": "Support Core",
+      "language": "en-US",
+      "customer_reference": "customer-30541",
+      "agent_id": "agent-kmabry",
+      "disposition": "transferred",
+      "started_at": "2025-09-09T10:04:00-07:00",
+      "ended_at": "2025-09-09T10:06:40-07:00",
+      "transcript": [
+        {"turn_id": "qa-25Q4-001-turn-01", "speaker_role": "customer", "started_at": "2025-09-09T10:04:09-07:00", "ended_at": "2025-09-09T10:04:31-07:00", "text": "Hi, there are three charges on my checking card from last night that I did not make. Two at a gas station in Reno and one online. I have never been to Reno."},
+        {"turn_id": "qa-25Q4-001-turn-02", "speaker_role": "agent", "started_at": "2025-09-09T10:04:36-07:00", "ended_at": "2025-09-09T10:04:58-07:00", "text": "I'm sorry you're dealing with that — let's get it looked at right away. To pull up your profile, could you give me the email address on the account and your date of birth?"},
+        {"turn_id": "qa-25Q4-001-turn-03", "speaker_role": "customer", "started_at": "2025-09-09T10:05:03-07:00", "ended_at": "2025-09-09T10:05:16-07:00", "text": "It's m.osterberg at my usual mail, and March 9, 1981."},
+        {"turn_id": "qa-25Q4-001-turn-04", "speaker_role": "agent", "started_at": "2025-09-09T10:05:22-07:00", "ended_at": "2025-09-09T10:05:57-07:00", "text": "Thank you, that matches and you're verified. I can see the three card transactions from last night. Activity you didn't authorize goes to our fraud specialists rather than this line, so the next step is connecting you with one now. Is there anything you'd like noted on the record before I do that?"},
+        {"turn_id": "qa-25Q4-001-turn-05", "speaker_role": "customer", "started_at": "2025-09-09T10:06:01-07:00", "ended_at": "2025-09-09T10:06:08-07:00", "text": "No, just please make it stop."},
+        {"turn_id": "qa-25Q4-001-turn-06", "speaker_role": "agent", "started_at": "2025-09-09T10:06:12-07:00", "ended_at": "2025-09-09T10:06:24-07:00", "text": "Understood. YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON."}
+      ],
+      "evaluations": [
+        {
+          "evaluation_id": "qa-25Q4-001-eval",
+          "rubric_id": "transfer-disposition-v1",
+          "reviewer_id": "reviewer-dwhitfield",
+          "status": "final",
+          "created_at": "2025-10-13T09:12:44-07:00",
+          "finalized_at": "2025-10-15T11:03:20-07:00",
+          "overall_score": 100.0,
+          "critical_failure": false,
+          "items": [
+            {"item_id": "tier_selection", "result": "pass", "score": 5, "reviewer_note": "Straight to the top of the ladder, no detour through the caller's mood.", "evidence_turn_ids": ["qa-25Q4-001-turn-04"]},
+            {"item_id": "code_condition_match", "result": "pass", "score": 5, "reviewer_note": "fraud_or_security_concern covers fraud, identity theft, unauthorized transactions, or security concerns requiring specialist handling — three card charges the customer never made sits squarely inside it.", "evidence_turn_ids": ["qa-25Q4-001-turn-01"]},
+            {"item_id": "transfer_message_exact", "result": "pass", "score": 5, "reviewer_note": "Line delivered word for word before the handoff.", "evidence_turn_ids": ["qa-25Q4-001-turn-06"]},
+            {"item_id": "summary_quality", "result": "pass", "score": 5, "reviewer_note": "Summary names the three transactions, the merchants, and the customer's travel statement.", "evidence_turn_ids": ["qa-25Q4-001-turn-04"]},
+            {"item_id": "conduct_and_verification", "result": "pass", "score": 5, "reviewer_note": "Two factors collected before any account detail moved.", "evidence_turn_ids": ["qa-25Q4-001-turn-02"]}
+          ]
+        }
+      ],
+      "review_history": [
+        {"event_id": "qa-25Q4-001-rh-1", "actor_id": "reviewer-dwhitfield", "event_type": "assigned", "created_at": "2025-10-13T09:12:44-07:00", "note": "Q4 disposition sample, voice draw."},
+        {"event_id": "qa-25Q4-001-rh-2", "actor_id": "reviewer-dwhitfield", "event_type": "submitted", "created_at": "2025-10-14T15:41:09-07:00"},
+        {"event_id": "qa-25Q4-001-rh-3", "actor_id": "reviewer-ihalvorsen", "event_type": "finalized", "created_at": "2025-10-15T11:03:20-07:00", "note": "Kept for the exemplar set."}
+      ]
+    },
+    {
+      "interaction_id": "qa-25Q4-002",
+      "channel": "chat",
+      "queue": "Support Core",
+      "language": "en-US",
+      "customer_reference": "customer-27186",
+      "agent_id": "agent-jpruitt",
+      "disposition": "transferred",
+      "started_at": "2025-09-12T14:22:00-07:00",
+      "ended_at": "2025-09-12T14:31:30-07:00",
+      "transcript": [
+        {"turn_id": "qa-25Q4-002-turn-01", "speaker_role": "customer", "started_at": "2025-09-12T14:22:41-07:00", "ended_at": "2025-09-12T14:22:41-07:00", "text": "I want to close my checking account. I've already moved my direct deposit to my credit union."},
+        {"turn_id": "qa-25Q4-002-turn-02", "speaker_role": "agent", "started_at": "2025-09-12T14:23:30-07:00", "ended_at": "2025-09-12T14:23:30-07:00", "text": "I can get that moving for you. First, to verify the account, could you send the email address you use with us along with your date of birth?"},
+        {"turn_id": "qa-25Q4-002-turn-03", "speaker_role": "customer", "started_at": "2025-09-12T14:25:12-07:00", "ended_at": "2025-09-12T14:25:12-07:00", "text": "renata.j@ the mail you have, 07/22/1990. And to be clear, I'm not asking about pausing it — close it fully please."},
+        {"turn_id": "qa-25Q4-002-turn-04", "speaker_role": "agent", "started_at": "2025-09-12T14:26:05-07:00", "ended_at": "2025-09-12T14:26:05-07:00", "text": "You're verified, thank you. Closures are completed with one of our account specialists so the remaining balance and any linked services are handled in one pass — I'll connect you now with everything you've told me on the record."},
+        {"turn_id": "qa-25Q4-002-turn-05", "speaker_role": "customer", "started_at": "2025-09-12T14:27:20-07:00", "ended_at": "2025-09-12T14:27:20-07:00", "text": "ok thanks"},
+        {"turn_id": "qa-25Q4-002-turn-06", "speaker_role": "agent", "started_at": "2025-09-12T14:27:55-07:00", "ended_at": "2025-09-12T14:27:55-07:00", "text": "YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON."}
+      ],
+      "evaluations": [
+        {
+          "evaluation_id": "qa-25Q4-002-eval",
+          "rubric_id": "transfer-disposition-v1",
+          "reviewer_id": "reviewer-rcalderon",
+          "status": "final",
+          "created_at": "2025-10-13T10:02:18-07:00",
+          "finalized_at": "2025-10-16T09:44:51-07:00",
+          "overall_score": 96.0,
+          "critical_failure": false,
+          "items": [
+            {"item_id": "tier_selection", "result": "pass", "score": 5, "reviewer_note": "Top tier taken even though the customer was perfectly calm — the ladder is about the scenario, not the temperature.", "evidence_turn_ids": ["qa-25Q4-002-turn-01"]},
+            {"item_id": "code_condition_match", "result": "pass", "score": 5, "reviewer_note": "account_closure_request is for a customer explicitly requesting to close their account, and this one even repeated it — close it fully, no pause.", "evidence_turn_ids": ["qa-25Q4-002-turn-01", "qa-25Q4-002-turn-03"]},
+            {"item_id": "transfer_message_exact", "result": "pass", "score": 5, "reviewer_note": "Exact line, no paraphrase.", "evidence_turn_ids": ["qa-25Q4-002-turn-06"]},
+            {"item_id": "summary_quality", "result": "pass", "score": 4, "reviewer_note": "Summary carries the closure ask and the direct-deposit note; the credit-union destination would have saved the specialist a question.", "evidence_turn_ids": ["qa-25Q4-002-turn-04"]},
+            {"item_id": "conduct_and_verification", "result": "pass", "score": 5, "reviewer_note": "Verified before any account discussion.", "evidence_turn_ids": ["qa-25Q4-002-turn-02"]}
+          ]
+        }
+      ],
+      "review_history": [
+        {"event_id": "qa-25Q4-002-rh-1", "actor_id": "reviewer-rcalderon", "event_type": "assigned", "created_at": "2025-10-13T10:02:18-07:00", "note": "Q4 disposition sample, chat draw."},
+        {"event_id": "qa-25Q4-002-rh-2", "actor_id": "reviewer-rcalderon", "event_type": "submitted", "created_at": "2025-10-15T16:20:33-07:00"},
+        {"event_id": "qa-25Q4-002-rh-3", "actor_id": "reviewer-ihalvorsen", "event_type": "finalized", "created_at": "2025-10-16T09:44:51-07:00"}
+      ]
+    },
+    {
+      "interaction_id": "qa-25Q4-003",
+      "channel": "voice",
+      "queue": "Support Core",
+      "language": "en-US",
+      "customer_reference": "customer-33472",
+      "agent_id": "agent-avu",
+      "disposition": "transferred",
+      "started_at": "2025-09-16T09:31:00-07:00",
+      "ended_at": "2025-09-16T09:35:10-07:00",
+      "transcript": [
+        {"turn_id": "qa-25Q4-003-turn-01", "speaker_role": "customer", "started_at": "2025-09-16T09:31:07-07:00", "ended_at": "2025-09-16T09:31:26-07:00", "text": "Hello — I'm calling about my father's account. He passed away two weeks ago and I'm trying to find out what my family needs to do."},
+        {"turn_id": "qa-25Q4-003-turn-02", "speaker_role": "agent", "started_at": "2025-09-16T09:31:31-07:00", "ended_at": "2025-09-16T09:31:52-07:00", "text": "I'm very sorry for your loss. We have a team that handles exactly this, and they'll walk you through the documents step by step. May I take your name so the specialist knows who they're speaking with?"},
+        {"turn_id": "qa-25Q4-003-turn-03", "speaker_role": "customer", "started_at": "2025-09-16T09:31:56-07:00", "ended_at": "2025-09-16T09:32:04-07:00", "text": "Claire Dujardin. His name was Henri."},
+        {"turn_id": "qa-25Q4-003-turn-04", "speaker_role": "agent", "started_at": "2025-09-16T09:32:09-07:00", "ended_at": "2025-09-16T09:32:34-07:00", "text": "Thank you, Claire. I won't ask you to repeat the details twice — I've noted that you're reporting the passing of an account holder and that the family needs guidance on the estate steps. I'll bring the specialist in now."},
+        {"turn_id": "qa-25Q4-003-turn-05", "speaker_role": "customer", "started_at": "2025-09-16T09:32:38-07:00", "ended_at": "2025-09-16T09:32:42-07:00", "text": "I appreciate that."},
+        {"turn_id": "qa-25Q4-003-turn-06", "speaker_role": "agent", "started_at": "2025-09-16T09:32:46-07:00", "ended_at": "2025-09-16T09:32:58-07:00", "text": "Of course. YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON."}
+      ],
+      "evaluations": [
+        {
+          "evaluation_id": "qa-25Q4-003-eval",
+          "rubric_id": "transfer-disposition-v1",
+          "reviewer_id": "reviewer-dwhitfield",
+          "status": "final",
+          "created_at": "2025-10-14T13:27:40-07:00",
+          "finalized_at": "2025-10-16T10:12:05-07:00",
+          "overall_score": 100.0,
+          "critical_failure": false,
+          "items": [
+            {"item_id": "tier_selection", "result": "pass", "score": 5, "reviewer_note": "Tier 1 without hesitation.", "evidence_turn_ids": ["qa-25Q4-003-turn-02"]},
+            {"item_id": "code_condition_match", "result": "pass", "score": 5, "reviewer_note": "deceased_account_holder is the code when the customer needs to report a deceased account holder or handle estate matters — this call is both at once.", "evidence_turn_ids": ["qa-25Q4-003-turn-01"]},
+            {"item_id": "transfer_message_exact", "result": "pass", "score": 5, "reviewer_note": "Exact line delivered, gently framed around it.", "evidence_turn_ids": ["qa-25Q4-003-turn-06"]},
+            {"item_id": "summary_quality", "result": "pass", "score": 5, "reviewer_note": "Summary spares the caller a repeat — names, relationship, and the estate-guidance ask all present.", "evidence_turn_ids": ["qa-25Q4-003-turn-04"]},
+            {"item_id": "conduct_and_verification", "result": "pass", "score": 5, "reviewer_note": "No account specifics disclosed to the caller; identity handling appropriate for a third-party report of this kind.", "evidence_turn_ids": ["qa-25Q4-003-turn-04"]}
+          ]
+        }
+      ],
+      "review_history": [
+        {"event_id": "qa-25Q4-003-rh-1", "actor_id": "reviewer-dwhitfield", "event_type": "assigned", "created_at": "2025-10-14T13:27:40-07:00"},
+        {"event_id": "qa-25Q4-003-rh-2", "actor_id": "reviewer-dwhitfield", "event_type": "submitted", "created_at": "2025-10-15T17:02:26-07:00"},
+        {"event_id": "qa-25Q4-003-rh-3", "actor_id": "reviewer-ihalvorsen", "event_type": "finalized", "created_at": "2025-10-16T10:12:05-07:00", "note": "Kept — the tone is the training point as much as the code."}
+      ]
+    },
+    {
+      "interaction_id": "qa-25Q4-004",
+      "channel": "chat",
+      "queue": "Support Core",
+      "language": "en-US",
+      "customer_reference": "customer-29840",
+      "agent_id": "agent-twhitcomb",
+      "disposition": "transferred",
+      "started_at": "2025-09-19T11:08:00-07:00",
+      "ended_at": "2025-09-19T11:17:45-07:00",
+      "transcript": [
+        {"turn_id": "qa-25Q4-004-turn-01", "speaker_role": "customer", "started_at": "2025-09-19T11:08:52-07:00", "ended_at": "2025-09-19T11:08:52-07:00", "text": "I got a letter saying my wages are being garnished and money will come out of my checking account. I don't understand any of this. Case number on the letter is 25-CV-4417."},
+        {"turn_id": "qa-25Q4-004-turn-02", "speaker_role": "agent", "started_at": "2025-09-19T11:09:47-07:00", "ended_at": "2025-09-19T11:09:47-07:00", "text": "That's an unsettling letter to open, and I'll make sure you end up with the right people. To look at anything on the account, may I have your email address on file and your date of birth?"},
+        {"turn_id": "qa-25Q4-004-turn-03", "speaker_role": "customer", "started_at": "2025-09-19T11:11:03-07:00", "ended_at": "2025-09-19T11:11:03-07:00", "text": "sure, dmarsh@ my provider, 11/02/1975"},
+        {"turn_id": "qa-25Q4-004-turn-04", "speaker_role": "agent", "started_at": "2025-09-19T11:12:10-07:00", "ended_at": "2025-09-19T11:12:10-07:00", "text": "Verified, thank you. A court-ordered garnishment is handled by our legal processing team — they read the order itself and can tell you exactly what applies to your account. I'm going to connect you to them with the case number you gave me."},
+        {"turn_id": "qa-25Q4-004-turn-05", "speaker_role": "customer", "started_at": "2025-09-19T11:13:28-07:00", "ended_at": "2025-09-19T11:13:28-07:00", "text": "Will they be able to tell me how much? Nobody tells me anything."},
+        {"turn_id": "qa-25Q4-004-turn-06", "speaker_role": "agent", "started_at": "2025-09-19T11:14:15-07:00", "ended_at": "2025-09-19T11:14:15-07:00", "text": "They're the team that can read the order and answer that from the document itself. YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON."}
+      ],
+      "evaluations": [
+        {
+          "evaluation_id": "qa-25Q4-004-eval",
+          "rubric_id": "transfer-disposition-v1",
+          "reviewer_id": "reviewer-rcalderon",
+          "status": "final",
+          "created_at": "2025-10-14T14:05:12-07:00",
+          "finalized_at": "2025-10-17T08:55:37-07:00",
+          "overall_score": 96.0,
+          "critical_failure": false,
+          "items": [
+            {"item_id": "tier_selection", "result": "pass", "score": 5, "reviewer_note": "Confused and anxious customer, and the code still comes off the top tier — right call.", "evidence_turn_ids": ["qa-25Q4-004-turn-01"]},
+            {"item_id": "code_condition_match", "result": "pass", "score": 5, "reviewer_note": "legal_or_regulatory_matter takes a subpoena, court order, garnishment, or compliance-related inquiry; a wage garnishment with a case number is the textbook middle of that list.", "evidence_turn_ids": ["qa-25Q4-004-turn-01"]},
+            {"item_id": "transfer_message_exact", "result": "pass", "score": 5, "reviewer_note": "Exact line present.", "evidence_turn_ids": ["qa-25Q4-004-turn-06"]},
+            {"item_id": "summary_quality", "result": "pass", "score": 5, "reviewer_note": "Case number carried forward — that is what the legal team needs first.", "evidence_turn_ids": ["qa-25Q4-004-turn-04"]},
+            {"item_id": "conduct_and_verification", "result": "pass", "score": 4, "reviewer_note": "Verification done before account talk; the promise about what legal can disclose runs slightly ahead of what we know, though it was framed as their call.", "evidence_turn_ids": ["qa-25Q4-004-turn-02", "qa-25Q4-004-turn-06"]}
+          ]
+        }
+      ],
+      "review_history": [
+        {"event_id": "qa-25Q4-004-rh-1", "actor_id": "reviewer-rcalderon", "event_type": "assigned", "created_at": "2025-10-14T14:05:12-07:00"},
+        {"event_id": "qa-25Q4-004-rh-2", "actor_id": "reviewer-rcalderon", "event_type": "submitted", "created_at": "2025-10-16T15:12:58-07:00"},
+        {"event_id": "qa-25Q4-004-rh-3", "actor_id": "reviewer-ihalvorsen", "event_type": "calibrated", "created_at": "2025-10-16T17:41:26-07:00", "note": "Policy unclear on the disclosure-promise deduction — sent to calibration."},
+        {"event_id": "qa-25Q4-004-rh-4", "actor_id": "reviewer-ihalvorsen", "event_type": "finalized", "created_at": "2025-10-17T08:55:37-07:00", "note": "Calibration round held the one-point deduction; 96 stands."}
+      ]
+    },
+    {
+      "interaction_id": "qa-25Q4-005",
+      "channel": "voice",
+      "queue": "Support Core",
+      "language": "en-US",
+      "customer_reference": "customer-31207",
+      "agent_id": "agent-mbell",
+      "disposition": "transferred",
+      "started_at": "2025-09-23T15:47:00-07:00",
+      "ended_at": "2025-09-23T15:52:20-07:00",
+      "transcript": [
+        {"turn_id": "qa-25Q4-005-turn-01", "speaker_role": "customer", "started_at": "2025-09-23T15:47:11-07:00", "ended_at": "2025-09-23T15:47:38-07:00", "text": "My ex-husband emptied the joint savings on Friday. The divorce isn't final and my lawyer says that account is frozen assets. I want the money back and I want him off the account."},
+        {"turn_id": "qa-25Q4-005-turn-02", "speaker_role": "agent", "started_at": "2025-09-23T15:47:44-07:00", "ended_at": "2025-09-23T15:48:06-07:00", "text": "I hear you, and I want to get this in front of the right team quickly. To open the profile, could you give me the email address on the account and your date of birth?"},
+        {"turn_id": "qa-25Q4-005-turn-03", "speaker_role": "customer", "started_at": "2025-09-23T15:48:10-07:00", "ended_at": "2025-09-23T15:48:22-07:00", "text": "s.calloway, and June 30, 1984."},
+        {"turn_id": "qa-25Q4-005-turn-04", "speaker_role": "agent", "started_at": "2025-09-23T15:48:28-07:00", "ended_at": "2025-09-23T15:49:04-07:00", "text": "Thank you, you're verified. Because this is a dispute between two owners on a joint account, it has to be worked by a specialist who can look at the ownership records and whatever your attorney has filed — that's not something I can adjudicate from this desk. I'm going to connect you with that team now, with the withdrawal date and your attorney note on the record."},
+        {"turn_id": "qa-25Q4-005-turn-05", "speaker_role": "customer", "started_at": "2025-09-23T15:49:09-07:00", "ended_at": "2025-09-23T15:49:15-07:00", "text": "Fine. How long is the wait?"},
+        {"turn_id": "qa-25Q4-005-turn-06", "speaker_role": "agent", "started_at": "2025-09-23T15:49:20-07:00", "ended_at": "2025-09-23T15:49:34-07:00", "text": "A few minutes at this hour. YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON."}
+      ],
+      "evaluations": [
+        {
+          "evaluation_id": "qa-25Q4-005-eval",
+          "rubric_id": "transfer-disposition-v1",
+          "reviewer_id": "reviewer-dwhitfield",
+          "status": "final",
+          "created_at": "2025-10-15T09:38:26-07:00",
+          "finalized_at": "2025-10-17T14:21:49-07:00",
+          "overall_score": 96.0,
+          "critical_failure": false,
+          "items": [
+            {"item_id": "tier_selection", "result": "pass", "score": 5, "reviewer_note": "Angry caller, top-tier scenario, top-tier code. This is the pattern the September misses kept getting backwards.", "evidence_turn_ids": ["qa-25Q4-005-turn-01"]},
+            {"item_id": "code_condition_match", "result": "pass", "score": 5, "reviewer_note": "A two-owner fight over a joint balance with counsel involved sits at the dead center of account_ownership_dispute — nobody reads that code without this contact inside it. The code's outer edge is a different story: half the review bench files failed-verification specialist sends under it too, and that argument is still running. Not this contact's problem.", "evidence_turn_ids": ["qa-25Q4-005-turn-01"]},
+            {"item_id": "transfer_message_exact", "result": "pass", "score": 5, "reviewer_note": "Exact line present after the wait-time answer.", "evidence_turn_ids": ["qa-25Q4-005-turn-06"]},
+            {"item_id": "summary_quality", "result": "pass", "score": 4, "reviewer_note": "Withdrawal date and attorney context carried; the co-owner's name was available and would have helped.", "evidence_turn_ids": ["qa-25Q4-005-turn-04"]},
+            {"item_id": "conduct_and_verification", "result": "pass", "score": 5, "reviewer_note": "Verified first, no balance figures disclosed on a contested account.", "evidence_turn_ids": ["qa-25Q4-005-turn-02", "qa-25Q4-005-turn-04"]}
+          ]
+        }
+      ],
+      "review_history": [
+        {"event_id": "qa-25Q4-005-rh-1", "actor_id": "reviewer-dwhitfield", "event_type": "assigned", "created_at": "2025-10-15T09:38:26-07:00"},
+        {"event_id": "qa-25Q4-005-rh-2", "actor_id": "reviewer-dwhitfield", "event_type": "submitted", "created_at": "2025-10-16T16:44:12-07:00"},
+        {"event_id": "qa-25Q4-005-rh-3", "actor_id": "reviewer-ihalvorsen", "event_type": "finalized", "created_at": "2025-10-17T14:21:49-07:00", "note": "Pairing this one with the October miss in the calibration deck."}
+      ]
+    },
+    {
+      "interaction_id": "qa-25Q4-006",
+      "channel": "chat",
+      "queue": "Support Core",
+      "language": "en-US",
+      "customer_reference": "customer-28653",
+      "agent_id": "agent-fortega",
+      "disposition": "transferred",
+      "started_at": "2025-09-26T10:53:00-07:00",
+      "ended_at": "2025-09-26T11:04:10-07:00",
+      "transcript": [
+        {"turn_id": "qa-25Q4-006-turn-01", "speaker_role": "customer", "started_at": "2025-09-26T10:53:36-07:00", "ended_at": "2025-09-26T10:53:36-07:00", "text": "My last three statements all show a $14.99 charge from a streaming service I cancelled in June. I have the cancellation email. Also my September statement shows the same gym charge twice."},
+        {"turn_id": "qa-25Q4-006-turn-02", "speaker_role": "agent", "started_at": "2025-09-26T10:54:31-07:00", "ended_at": "2025-09-26T10:54:31-07:00", "text": "Thanks for laying that out so clearly — recurring charges plus a possible statement error is worth a proper review. Could you verify with the email on the account and your date of birth?"},
+        {"turn_id": "qa-25Q4-006-turn-03", "speaker_role": "customer", "started_at": "2025-09-26T10:56:02-07:00", "ended_at": "2025-09-26T10:56:02-07:00", "text": "t.okonkwo@ usual domain, 02/14/1988"},
+        {"turn_id": "qa-25Q4-006-turn-04", "speaker_role": "agent", "started_at": "2025-09-26T10:57:14-07:00", "ended_at": "2025-09-26T10:57:14-07:00", "text": "Verified — thank you. I can see both patterns you describe. Multi-month recurring charges and a doubled statement line need our billing dispute specialists, who can work all four charges as one case and handle any reversals that come out of it. Shall I connect you now?"},
+        {"turn_id": "qa-25Q4-006-turn-05", "speaker_role": "customer", "started_at": "2025-09-26T10:58:40-07:00", "ended_at": "2025-09-26T10:58:40-07:00", "text": "Yes please. Do I need to send the cancellation email somewhere?"},
+        {"turn_id": "qa-25Q4-006-turn-06", "speaker_role": "agent", "started_at": "2025-09-26T10:59:22-07:00", "ended_at": "2025-09-26T10:59:22-07:00", "text": "Hold onto it — the specialist will tell you exactly where to send it once the case is open. YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON."}
+      ],
+      "evaluations": [
+        {
+          "evaluation_id": "qa-25Q4-006-eval",
+          "rubric_id": "transfer-disposition-v1",
+          "reviewer_id": "reviewer-rcalderon",
+          "status": "final",
+          "created_at": "2025-10-15T10:14:55-07:00",
+          "finalized_at": "2025-10-20T09:31:16-07:00",
+          "overall_score": 100.0,
+          "critical_failure": false,
+          "items": [
+            {"item_id": "tier_selection", "result": "pass", "score": 5, "reviewer_note": "No shortcut to a disposition code for a patient customer — the scenario decides.", "evidence_turn_ids": ["qa-25Q4-006-turn-01"]},
+            {"item_id": "code_condition_match", "result": "not_applicable", "score": 0, "reviewer_note": "Policy unclear — sent to calibration. Whether a multi-month recurring charge stacked on a doubled statement line has one owning code on the board is the question this row raised; holding the condition score until the calibration round answers it."},
+            {"item_id": "transfer_message_exact", "result": "pass", "score": 5, "reviewer_note": "Exact line closes the chat.", "evidence_turn_ids": ["qa-25Q4-006-turn-06"]},
+            {"item_id": "summary_quality", "result": "pass", "score": 5, "reviewer_note": "All four charges enumerated with months; evidence-in-hand noted.", "evidence_turn_ids": ["qa-25Q4-006-turn-04"]},
+            {"item_id": "conduct_and_verification", "result": "pass", "score": 5, "reviewer_note": "Verified before reading transactions back; no outcome promised beyond what the specialist owns.", "evidence_turn_ids": ["qa-25Q4-006-turn-02", "qa-25Q4-006-turn-04"]}
+          ]
+        }
+      ],
+      "review_history": [
+        {"event_id": "qa-25Q4-006-rh-1", "actor_id": "reviewer-rcalderon", "event_type": "assigned", "created_at": "2025-10-15T10:14:55-07:00"},
+        {"event_id": "qa-25Q4-006-rh-2", "actor_id": "reviewer-rcalderon", "event_type": "submitted", "created_at": "2025-10-17T11:26:40-07:00"},
+        {"event_id": "qa-25Q4-006-rh-3", "actor_id": "reviewer-ihalvorsen", "event_type": "calibrated", "created_at": "2025-10-18T10:07:02-07:00", "note": "Used in the reviewer calibration round; scores held."},
+        {"event_id": "qa-25Q4-006-rh-4", "actor_id": "reviewer-ihalvorsen", "event_type": "finalized", "created_at": "2025-10-20T09:31:16-07:00"}
+      ]
+    },
+    {
+      "interaction_id": "qa-25Q4-007",
+      "channel": "voice",
+      "queue": "Support Core",
+      "language": "en-US",
+      "customer_reference": "customer-30988",
+      "agent_id": "agent-kmabry",
+      "disposition": "transferred",
+      "started_at": "2025-09-30T13:12:00-07:00",
+      "ended_at": "2025-09-30T13:16:50-07:00",
+      "transcript": [
+        {"turn_id": "qa-25Q4-007-turn-01", "speaker_role": "customer", "started_at": "2025-09-30T13:12:08-07:00", "ended_at": "2025-09-30T13:12:24-07:00", "text": "You people are useless. Third call this week. Fix the app or I swear I'm coming down there and someone's going to regret it."},
+        {"turn_id": "qa-25Q4-007-turn-02", "speaker_role": "agent", "started_at": "2025-09-30T13:12:29-07:00", "ended_at": "2025-09-30T13:12:47-07:00", "text": "I want to help you with the app issue, and I'll ask that we keep this conversation respectful so I can do that. Could you tell me what the app shows when you try to sign in?"},
+        {"turn_id": "qa-25Q4-007-turn-03", "speaker_role": "customer", "started_at": "2025-09-30T13:12:51-07:00", "ended_at": "2025-09-30T13:13:07-07:00", "text": "Don't you tell me how to talk, sweetheart. You're a moron and your bank is a scam. Maybe I'll wait outside your office."},
+        {"turn_id": "qa-25Q4-007-turn-04", "speaker_role": "agent", "started_at": "2025-09-30T13:13:12-07:00", "ended_at": "2025-09-30T13:13:36-07:00", "text": "I'm not able to continue the call on those terms. I'm moving you to a specialist team now. YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON."}
+      ],
+      "evaluations": [
+        {
+          "evaluation_id": "qa-25Q4-007-eval",
+          "rubric_id": "transfer-disposition-v1",
+          "reviewer_id": "reviewer-dwhitfield",
+          "status": "final",
+          "created_at": "2025-10-16T11:22:31-07:00",
+          "finalized_at": "2025-10-20T15:48:22-07:00",
+          "overall_score": 100.0,
+          "critical_failure": false,
+          "items": [
+            {"item_id": "tier_selection", "result": "pass", "score": 5, "reviewer_note": "Easy to read this as a frustration call — it isn't, and the agent didn't.", "evidence_turn_ids": ["qa-25Q4-007-turn-03"]},
+            {"item_id": "code_condition_match", "result": "pass", "score": 5, "reviewer_note": "abusive_customer_behavior applies when the customer is being abusive, threatening, or using inappropriate language — the threat to wait outside the office settles it on its own.", "evidence_turn_ids": ["qa-25Q4-007-turn-03"]},
+            {"item_id": "transfer_message_exact", "result": "pass", "score": 5, "reviewer_note": "Exact line delivered even under fire.", "evidence_turn_ids": ["qa-25Q4-007-turn-04"]},
+            {"item_id": "summary_quality", "result": "pass", "score": 5, "reviewer_note": "Summary quotes the threat verbatim, which is what the receiving team needs.", "evidence_turn_ids": ["qa-25Q4-007-turn-04"]},
+            {"item_id": "conduct_and_verification", "result": "pass", "score": 5, "reviewer_note": "One boundary statement, one chance offered, no escalation in tone. No account data touched.", "evidence_turn_ids": ["qa-25Q4-007-turn-02"]}
+          ]
+        }
+      ],
+      "review_history": [
+        {"event_id": "qa-25Q4-007-rh-1", "actor_id": "reviewer-dwhitfield", "event_type": "assigned", "created_at": "2025-10-16T11:22:31-07:00"},
+        {"event_id": "qa-25Q4-007-rh-2", "actor_id": "reviewer-dwhitfield", "event_type": "submitted", "created_at": "2025-10-17T14:53:44-07:00"},
+        {"event_id": "qa-25Q4-007-rh-3", "actor_id": "reviewer-ihalvorsen", "event_type": "finalized", "created_at": "2025-10-20T15:48:22-07:00"}
+      ]
+    },
+    {
+      "interaction_id": "qa-25Q4-008",
+      "channel": "voice",
+      "queue": "Support Core",
+      "language": "en-US",
+      "customer_reference": "customer-26414",
+      "agent_id": "agent-avu",
+      "disposition": "transferred",
+      "started_at": "2025-10-02T09:58:00-07:00",
+      "ended_at": "2025-10-02T10:03:30-07:00",
+      "transcript": [
+        {"turn_id": "qa-25Q4-008-turn-01", "speaker_role": "third_party", "started_at": "2025-10-02T09:58:10-07:00", "ended_at": "2025-10-02T09:58:34-07:00", "text": "Good morning, my name is Ruth Aldana, I'm an attorney with Aldana and Pierce. I hold power of attorney for your customer Edwin Sorrell and I need to discuss activity on his checking account."},
+        {"turn_id": "qa-25Q4-008-turn-02", "speaker_role": "agent", "started_at": "2025-10-02T09:58:39-07:00", "ended_at": "2025-10-02T09:59:03-07:00", "text": "Thank you for identifying yourself, Ms. Aldana. Requests made under a power of attorney are handled by a team that verifies the authorization document before any account information moves. I'm not able to discuss the account at this desk."},
+        {"turn_id": "qa-25Q4-008-turn-03", "speaker_role": "third_party", "started_at": "2025-10-02T09:59:07-07:00", "ended_at": "2025-10-02T09:59:19-07:00", "text": "That's fine — I've been through this with other banks. What do you need from me?"},
+        {"turn_id": "qa-25Q4-008-turn-04", "speaker_role": "customer", "started_at": "2025-10-02T09:59:23-07:00", "ended_at": "2025-10-02T09:59:31-07:00", "text": "This is Edwin — I'm on the line as well. Ruth speaks for me on this."},
+        {"turn_id": "qa-25Q4-008-turn-05", "speaker_role": "agent", "started_at": "2025-10-02T09:59:36-07:00", "ended_at": "2025-10-02T09:59:58-07:00", "text": "Thank you both. The specialist team will take the document details directly so you only go through it once. I'll connect you now and note that counsel is calling under a POA with the account holder present."},
+        {"turn_id": "qa-25Q4-008-turn-06", "speaker_role": "third_party", "started_at": "2025-10-02T10:00:02-07:00", "ended_at": "2025-10-02T10:00:06-07:00", "text": "Go ahead."},
+        {"turn_id": "qa-25Q4-008-turn-07", "speaker_role": "agent", "started_at": "2025-10-02T10:00:10-07:00", "ended_at": "2025-10-02T10:00:22-07:00", "text": "Connecting you now. YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON."}
+      ],
+      "evaluations": [
+        {
+          "evaluation_id": "qa-25Q4-008-eval",
+          "rubric_id": "transfer-disposition-v1",
+          "reviewer_id": "reviewer-rcalderon",
+          "status": "final",
+          "created_at": "2025-10-16T13:40:19-07:00",
+          "finalized_at": "2025-10-21T10:18:44-07:00",
+          "overall_score": 100.0,
+          "critical_failure": false,
+          "items": [
+            {"item_id": "tier_selection", "result": "pass", "score": 5, "reviewer_note": "Polite professional caller, still a top-tier scenario.", "evidence_turn_ids": ["qa-25Q4-008-turn-01"]},
+            {"item_id": "code_condition_match", "result": "pass", "score": 5, "reviewer_note": "third_party_inquiry covers an attorney, power of attorney, or authorized representative inquiry requiring verification — this caller is the first two in one sentence.", "evidence_turn_ids": ["qa-25Q4-008-turn-01"]},
+            {"item_id": "transfer_message_exact", "result": "pass", "score": 5, "reviewer_note": "Exact line present.", "evidence_turn_ids": ["qa-25Q4-008-turn-07"]},
+            {"item_id": "summary_quality", "result": "pass", "score": 5, "reviewer_note": "Firm name, claimed authority, account holder presence — all in the summary.", "evidence_turn_ids": ["qa-25Q4-008-turn-05"]},
+            {"item_id": "conduct_and_verification", "result": "pass", "score": 5, "reviewer_note": "Nothing disclosed before the POA verification that the specialist team owns — exactly the line to hold.", "evidence_turn_ids": ["qa-25Q4-008-turn-02"]}
+          ]
+        }
+      ],
+      "review_history": [
+        {"event_id": "qa-25Q4-008-rh-1", "actor_id": "reviewer-rcalderon", "event_type": "assigned", "created_at": "2025-10-16T13:40:19-07:00"},
+        {"event_id": "qa-25Q4-008-rh-2", "actor_id": "reviewer-rcalderon", "event_type": "submitted", "created_at": "2025-10-20T09:02:57-07:00"},
+        {"event_id": "qa-25Q4-008-rh-3", "actor_id": "reviewer-ihalvorsen", "event_type": "finalized", "created_at": "2025-10-21T10:18:44-07:00"}
+      ]
+    },
+    {
+      "interaction_id": "qa-25Q4-009",
+      "channel": "chat",
+      "queue": "Support Core",
+      "language": "en-US",
+      "customer_reference": "customer-32750",
+      "agent_id": "agent-twhitcomb",
+      "disposition": "transferred",
+      "started_at": "2025-10-06T16:05:00-07:00",
+      "ended_at": "2025-10-06T16:16:20-07:00",
+      "transcript": [
+        {"turn_id": "qa-25Q4-009-turn-01", "speaker_role": "customer", "started_at": "2025-10-06T16:05:44-07:00", "ended_at": "2025-10-06T16:05:44-07:00", "text": "My landlord wants a signed letter from the bank on your letterhead confirming I've held an account for 5+ years and my rent has cleared every month, in a specific template his lawyer sent. Can you fill it in and sign it while we chat?"},
+        {"turn_id": "qa-25Q4-009-turn-02", "speaker_role": "agent", "started_at": "2025-10-06T16:06:50-07:00", "ended_at": "2025-10-06T16:06:50-07:00", "text": "That's a specific ask — let me make sure I get you to the right answer rather than a fast no. Could you verify with the email on your account and your date of birth first?"},
+        {"turn_id": "qa-25Q4-009-turn-03", "speaker_role": "customer", "started_at": "2025-10-06T16:08:12-07:00", "ended_at": "2025-10-06T16:08:12-07:00", "text": "p.velez@ the one you have, 09/17/1993. The template is two pages, I can paste it."},
+        {"turn_id": "qa-25Q4-009-turn-04", "speaker_role": "agent", "started_at": "2025-10-06T16:09:31-07:00", "ended_at": "2025-10-06T16:09:31-07:00", "text": "You're verified, thanks. Signing a third party's legal template isn't something chat support can do — and I don't want to guess at whether our letters team can match your landlord's format. The people who handle account verification letters can look at the template and tell you what we can produce. I'll pass along the request, the five-year tenure ask, and the rent-history piece so you don't retype it."},
+        {"turn_id": "qa-25Q4-009-turn-05", "speaker_role": "customer", "started_at": "2025-10-06T16:11:02-07:00", "ended_at": "2025-10-06T16:11:02-07:00", "text": "OK. He needs it by the 15th."},
+        {"turn_id": "qa-25Q4-009-turn-06", "speaker_role": "agent", "started_at": "2025-10-06T16:11:48-07:00", "ended_at": "2025-10-06T16:11:48-07:00", "text": "Noted with the deadline. YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON."}
+      ],
+      "evaluations": [
+        {
+          "evaluation_id": "qa-25Q4-009-eval",
+          "rubric_id": "transfer-disposition-v1",
+          "reviewer_id": "reviewer-dwhitfield",
+          "status": "final",
+          "created_at": "2025-10-17T09:26:08-07:00",
+          "finalized_at": "2025-10-24T11:37:29-07:00",
+          "overall_score": 100.0,
+          "critical_failure": false,
+          "items": [
+            {"item_id": "tier_selection", "result": "pass", "score": 5, "reviewer_note": "Walked the whole ladder and nothing listed fits — a custom third-party letter template isn't a listed operational scenario, isn't a knowledge gap on our side, and the customer is calm. Bottom of the ladder is correct here.", "evidence_turn_ids": ["qa-25Q4-009-turn-01"]},
+            {"item_id": "code_condition_match", "result": "pass", "score": 5, "reviewer_note": "Catch-all used the way it should be: rare, and only after the listed reasons are actually exhausted.", "evidence_turn_ids": ["qa-25Q4-009-turn-04"]},
+            {"item_id": "transfer_message_exact", "result": "pass", "score": 5, "reviewer_note": "Exact line present.", "evidence_turn_ids": ["qa-25Q4-009-turn-06"]},
+            {"item_id": "summary_quality", "result": "pass", "score": 5, "reviewer_note": "The summary is a small essay — template origin, tenure claim, rent-history ask, the deadline — and that is precisely what a catch-all transfer owes the next person.", "evidence_turn_ids": ["qa-25Q4-009-turn-04", "qa-25Q4-009-turn-06"]},
+            {"item_id": "conduct_and_verification", "result": "pass", "score": 5, "reviewer_note": "Verified before discussing anything account-adjacent; no commitment made on the letter's feasibility.", "evidence_turn_ids": ["qa-25Q4-009-turn-02", "qa-25Q4-009-turn-04"]}
+          ]
+        }
+      ],
+      "review_history": [
+        {"event_id": "qa-25Q4-009-rh-1", "actor_id": "reviewer-dwhitfield", "event_type": "assigned", "created_at": "2025-10-17T09:26:08-07:00"},
+        {"event_id": "qa-25Q4-009-rh-2", "actor_id": "reviewer-dwhitfield", "event_type": "submitted", "created_at": "2025-10-20T15:55:41-07:00"},
+        {"event_id": "qa-25Q4-009-rh-3", "actor_id": "reviewer-ihalvorsen", "event_type": "returned", "created_at": "2025-10-21T09:14:33-07:00", "note": "Check the second rung again — couldn't the letters team make this a capability gap?"},
+        {"event_id": "qa-25Q4-009-rh-4", "actor_id": "reviewer-dwhitfield", "event_type": "submitted", "created_at": "2025-10-22T10:41:15-07:00", "note": "Held my scores: the agent could and did find the letters team, so nothing failed on our side — the request itself has no listed reason."},
+        {"event_id": "qa-25Q4-009-rh-5", "actor_id": "reviewer-ihalvorsen", "event_type": "finalized", "created_at": "2025-10-24T11:37:29-07:00", "note": "Agreed on reread. Keeping the return visible for the calibration file."}
+      ]
+    },
+    {
+      "interaction_id": "qa-25Q4-010",
+      "channel": "voice",
+      "queue": "Support Core",
+      "language": "en-US",
+      "customer_reference": "customer-25901",
+      "agent_id": "agent-mbell",
+      "disposition": "transferred",
+      "started_at": "2025-10-08T11:41:00-07:00",
+      "ended_at": "2025-10-08T11:46:15-07:00",
+      "transcript": [
+        {"turn_id": "qa-25Q4-010-turn-01", "speaker_role": "customer", "started_at": "2025-10-08T11:41:12-07:00", "ended_at": "2025-10-08T11:41:39-07:00", "text": "There's a nine hundred dollar withdrawal on my account from Saturday and I was at my daughter's wedding all day! Nobody at this bank picks up, I've been on hold twice, this is insane!"},
+        {"turn_id": "qa-25Q4-010-turn-02", "speaker_role": "agent", "started_at": "2025-10-08T11:41:44-07:00", "ended_at": "2025-10-08T11:42:03-07:00", "text": "I'm sorry about the hold times, truly. Let's verify you first so I can look — could I have the email on the account and your date of birth?"},
+        {"turn_id": "qa-25Q4-010-turn-03", "speaker_role": "customer", "started_at": "2025-10-08T11:42:08-07:00", "ended_at": "2025-10-08T11:42:21-07:00", "text": "g.tanaka, April 3rd, 1969. Nine hundred dollars! I want someone who can actually do something!"},
+        {"turn_id": "qa-25Q4-010-turn-04", "speaker_role": "agent", "started_at": "2025-10-08T11:42:27-07:00", "ended_at": "2025-10-08T11:42:54-07:00", "text": "You're verified, and I can see the withdrawal you mean. I completely understand you're upset, and you've asked for someone senior — I'm going to get you to a human colleague right now so you're not waiting any longer."},
+        {"turn_id": "qa-25Q4-010-turn-05", "speaker_role": "customer", "started_at": "2025-10-08T11:42:58-07:00", "ended_at": "2025-10-08T11:43:04-07:00", "text": "Finally. Yes. Someone real."},
+        {"turn_id": "qa-25Q4-010-turn-06", "speaker_role": "agent", "started_at": "2025-10-08T11:43:08-07:00", "ended_at": "2025-10-08T11:43:20-07:00", "text": "One moment. YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON."}
+      ],
+      "evaluations": [
+        {
+          "evaluation_id": "qa-25Q4-010-eval",
+          "rubric_id": "transfer-disposition-v1",
+          "reviewer_id": "reviewer-rcalderon",
+          "status": "final",
+          "created_at": "2025-10-17T10:52:30-07:00",
+          "finalized_at": "2025-10-21T16:09:53-07:00",
+          "overall_score": 52.0,
+          "critical_failure": false,
+          "items": [
+            {"item_id": "tier_selection", "result": "fail", "score": 0, "reviewer_note": "A withdrawal the customer says they didn't make was on the table from the first sentence, and the coding followed the shouting instead. Walk XFER-OPS-101 rev B from the top: the ladder stops at the first tier with a fit, and it fits at the top here.", "evidence_turn_ids": ["qa-25Q4-010-turn-01"]},
+            {"item_id": "code_condition_match", "result": "fail", "score": 1, "reviewer_note": "customer_frustrated_demands_human describes general frustration with no operational scenario attached. The frustration here has a very specific cause sitting in the transaction list.", "evidence_turn_ids": ["qa-25Q4-010-turn-01", "qa-25Q4-010-turn-04"]},
+            {"item_id": "transfer_message_exact", "result": "pass", "score": 5, "reviewer_note": "Exact line delivered.", "evidence_turn_ids": ["qa-25Q4-010-turn-06"]},
+            {"item_id": "summary_quality", "result": "pass", "score": 3, "reviewer_note": "Summary says the customer is upset and wants a human; the $900 Saturday withdrawal — the actual case — appears only in passing.", "evidence_turn_ids": ["qa-25Q4-010-turn-04"]},
+            {"item_id": "conduct_and_verification", "result": "pass", "score": 4, "reviewer_note": "Verification order fine; empathy fine. The miss is classification, not conduct.", "evidence_turn_ids": ["qa-25Q4-010-turn-02"]}
+          ]
+        }
+      ],
+      "review_history": [
+        {"event_id": "qa-25Q4-010-rh-1", "actor_id": "reviewer-rcalderon", "event_type": "assigned", "created_at": "2025-10-17T10:52:30-07:00"},
+        {"event_id": "qa-25Q4-010-rh-2", "actor_id": "reviewer-rcalderon", "event_type": "submitted", "created_at": "2025-10-20T14:36:02-07:00"},
+        {"event_id": "qa-25Q4-010-rh-3", "actor_id": "reviewer-ihalvorsen", "event_type": "calibrated", "created_at": "2025-10-21T09:47:11-07:00", "note": "Adding this one to the norming follow-up set — it is the September pattern surviving into October."},
+        {"event_id": "qa-25Q4-010-rh-4", "actor_id": "reviewer-ihalvorsen", "event_type": "finalized", "created_at": "2025-10-21T16:09:53-07:00"}
+      ]
+    }
+  ]
+}

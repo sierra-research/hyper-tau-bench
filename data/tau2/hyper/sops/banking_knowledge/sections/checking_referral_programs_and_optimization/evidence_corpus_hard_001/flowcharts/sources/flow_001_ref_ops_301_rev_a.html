@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>REF-OPS-301 rev A — Checking referral eligibility screening</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 1300px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #4a5568; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #cdd6e0; }
+  .node { position: absolute; width: 300px; box-sizing: border-box; border: 2px solid #4a5b6d; border-radius: 6px; background: #fff; padding: 10px 12px; font-size: 13px; line-height: 1.35; color: #1d2733; }
+  .node .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding: 1px 6px; border-radius: 3px; margin-bottom: 6px; }
+  .entry { border-color: #1d6a44; } .entry .tag { background: #d9efe3; color: #17573a; }
+  .read { border-color: #2b5f8f; } .read .tag { background: #dcebf7; color: #234d73; }
+  .work { border-color: #4a5b6d; } .work .tag { background: #e6ebf0; color: #3a4a5a; }
+  .queue { border-color: #8a2f3c; } .queue .tag { background: #f6dde1; color: #6e2530; }
+  .terminal { border-color: #1d6a44; background: #f2faf5; } .terminal .tag { background: #d9efe3; color: #17573a; }
+  .terminal.declined { border-color: #8a5a2f; background: #faf6f0; } .terminal.declined .tag { background: #f1e5d5; color: #6e4a25; }
+  .decision { position: absolute; width: 300px; box-sizing: border-box; }
+  .decision .diamond { width: 280px; height: 132px; margin: 0 auto; background: #fff8e8; border: 2px solid #b08a1f; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 8px 16px; box-sizing: border-box; font-size: 12.5px; text-align: center; color: #4b3d10; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+  svg.edges { position: absolute; left: 0; top: 0; width: 1560px; height: 1300px; pointer-events: none; }
+  svg.edges path { stroke: #51606f; stroke-width: 2; fill: none; marker-end: url(#arrowa); }
+  .edge-label { position: absolute; font-size: 11px; font-weight: 600; color: #38424d; background: #fbfcfdcc; padding: 0 4px; border-radius: 2px; }
+  .sticky { position: absolute; width: 260px; box-sizing: border-box; padding: 10px 12px; font-size: 12px; line-height: 1.35; box-shadow: 2px 3px 6px rgba(0,0,0,0.12); }
+  .sticky.yellow { background: #fdf3c0; } .sticky.pink { background: #fbdce4; }
+  .control-definitions { position: absolute; left: 24px; top: 1128px; width: 1512px; box-sizing: border-box; border: 2px solid #4a5568; background: #f4f8fc; border-radius: 6px; padding: 14px 18px; }
+  .control-definitions h2 { margin: 0 0 8px; font-size: 14px; letter-spacing: 0.4px; color: #4a5568; }
+  .control-definitions dl { margin: 0; font-size: 12.5px; line-height: 1.45; color: #1d2733; }
+  .control-definitions dt { font-weight: 700; font-family: "Consolas", monospace; margin-top: 7px; }
+  .control-definitions dd { margin: 1px 0 0 14px; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>Checking referral — eligibility screening flow</h1>
+    <div class="meta">REF-OPS-301 rev A &nbsp;·&nbsp; Owner: D. Whitfield, Referral Desk Operations &nbsp;·&nbsp; Updated 2025-08-21 &nbsp;·&nbsp; Applies to: consumer checking referral eligibility screening</div>
+  </div>
+
+  <svg class="edges" viewBox="0 0 1560 1300">
+    <defs><marker id="arrowa" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#51606f"></path></marker></defs>
+    <!-- entry -> read profile -->
+    <path d="M 190 190 L 190 250"></path>
+    <!-- read -> D1 tenure -->
+    <path d="M 190 386 L 190 448"></path>
+    <!-- D1 no -> explain tenure -->
+    <path d="M 190 584 L 190 648"></path>
+    <!-- explain -> declined screening -->
+    <path d="M 190 762 L 190 822"></path>
+    <!-- D1 yes -> D2 window -->
+    <path d="M 340 516 L 400 516 L 400 166 L 448 166"></path>
+    <!-- D2 yes (cap reached) -> stop node -->
+    <path d="M 598 234 L 598 322"></path>
+    <!-- stop -> declined window -->
+    <path d="M 598 452 L 598 512"></path>
+    <!-- D2 no -> D3 address -->
+    <path d="M 748 166 L 898 166"></path>
+    <!-- D3 yes -> risk queue -->
+    <path d="M 1048 234 L 1048 322"></path>
+    <!-- risk queue -> pending review -->
+    <path d="M 1048 438 L 1048 512"></path>
+    <!-- D3 no -> D4 referred new (routed over the top band) -->
+    <path d="M 1048 96 L 1048 78 L 1388 78 L 1388 92"></path>
+    <!-- D4 no -> explain new-customer -->
+    <path d="M 1388 234 L 1388 322"></path>
+    <!-- explain -> declined referred -->
+    <path d="M 1388 452 L 1388 512"></path>
+    <!-- D4 yes -> proceed (drop down and left) -->
+    <path d="M 1488 166 L 1520 166 L 1520 760 L 1198 760"></path>
+    <!-- proceed -> complete -->
+    <path d="M 1048 830 L 1048 892"></path>
+  </svg>
+
+  <span class="edge-label" style="left:130px;top:606px">no — under threshold</span>
+  <span class="edge-label" style="left:352px;top:492px">yes — threshold met</span>
+  <span class="edge-label" style="left:606px;top:262px">yes — cap reached</span>
+  <span class="edge-label" style="left:790px;top:142px">no — inside allowance</span>
+  <span class="edge-label" style="left:1056px;top:262px">yes — same address</span>
+  <span class="edge-label" style="left:1140px;top:84px">no — different addresses</span>
+  <span class="edge-label" style="left:1396px;top:262px">no — existing / recent relationship</span>
+  <span class="edge-label" style="left:1330px;top:700px">yes — new to the bank</span>
+
+  <article class="node entry" style="left:40px;top:100px"><span class="tag">ENTRY</span>
+    Customer asks to submit a referral or requests referral terms (call or secure message). Agent opens the screening checklist.
+  </article>
+
+  <article class="node read" style="left:40px;top:264px"><span class="tag">READ — PROFILE</span>
+    Look up the referrer profile: account open dates, standing flags, and recent referral bonus history with timestamps.
+  </article>
+
+  <div class="decision" style="left:40px;top:448px"><div class="diamond">Referrer meets the tenure threshold for the product being recommended?</div></div>
+
+  <article class="node work" style="left:40px;top:648px"><span class="tag">EXPLAIN &amp; LOG</span>
+    Explain the tenure requirement for that product and log the screening outcome on the case.
+  </article>
+
+  <article class="node terminal declined" style="left:40px;top:826px"><span class="tag">TERMINAL — DECLINED (SCREENING)</span>
+    Referral not submitted; customer told what would change the outcome.
+  </article>
+
+  <div class="decision" style="left:448px;top:98px"><div class="diamond">2 referral bonuses already received in the past 7 days?</div></div>
+
+  <article class="node work" style="left:448px;top:326px"><span class="tag">STOP — WINDOW CAP</span>
+    Window cap reached: a new referral auto-denies if submitted. Advise waiting until the oldest bonus ages out; no resubmission inside the window.
+  </article>
+
+  <article class="node terminal declined" style="left:448px;top:516px"><span class="tag">TERMINAL — DECLINED (WINDOW CAP)</span>
+    Screening stops; nothing submitted against the cap.
+  </article>
+
+  <div class="decision" style="left:898px;top:98px"><div class="diamond">Referrer and referred person share a registered address?</div></div>
+
+  <article class="node queue" style="left:898px;top:326px"><span class="tag">QUEUE — RISK REVIEW</span>
+    Route to the referral-abuse review queue (risk, H. Alvarez's team) with both profiles attached. Do not submit while the review is open.
+  </article>
+
+  <article class="node terminal declined" style="left:898px;top:516px"><span class="tag">TERMINAL — PENDING RISK REVIEW</span>
+    Case parked with risk; customer told to expect a follow-up.
+  </article>
+
+  <div class="decision" style="left:1238px;top:98px"><div class="diamond">Referred person new to Rho Bank? (no existing or recently closed relationship — lookback per current terms)</div></div>
+
+  <article class="node work" style="left:1238px;top:326px"><span class="tag">EXPLAIN &amp; LOG</span>
+    Explain the new-customer requirement; offer to re-check once the lookback clears.
+  </article>
+
+  <article class="node terminal declined" style="left:1238px;top:516px"><span class="tag">TERMINAL — DECLINED (REFERRED INELIGIBLE)</span>
+    Referral not submitted; outcome logged.
+  </article>
+
+  <article class="node work" style="left:898px;top:724px"><span class="tag">PROCEED — SEND REFERRAL</span>
+    Walk the customer through sending their referral link and log the screening outcome on the customer record.
+  </article>
+
+  <article class="node terminal" style="left:898px;top:896px"><span class="tag">TERMINAL — COMPLETE</span>
+    Screening passed; referral sent and logged.
+  </article>
+
+  <aside class="sticky yellow" style="left:60px;top:1000px">
+    Branch order still debated — risk wants the address check before the window check; the desk wants fewer profile reads per call. Decide at design review.
+  </aside>
+  <aside class="sticky pink" style="left:352px;top:1000px">
+    Window box values copied from the FAQ page, 2025-08-21.
+  </aside>
+  <aside class="sticky yellow" style="left:644px;top:1000px">
+    Same-address routing assumes the abuse queue keeps taking referral cases after the Q4 reshuffle — check with risk.
+  </aside>
+
+  <section class="control-definitions">
+    <h2>CONTROL DEFINITIONS</h2>
+    <dl>
+      <dt>referrer profile lookup</dt>
+      <dd>Customer profile read: account open dates, standing flags, and referral bonus history with timestamps. Read-only.</dd>
+      <dt>screening outcome log</dt>
+      <dd>Case-record write capturing the checklist result and the branch taken. Written on every terminal, including declines.</dd>
+      <dt>referral-abuse review queue</dt>
+      <dd>Risk-owned manual queue for same-address and pattern flags. Screening never overrides an open review.</dd>
+    </dl>
+  </section>
+</div>
+</body>
+</html>

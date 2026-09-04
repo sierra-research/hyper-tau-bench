@@ -1,0 +1,2415 @@
+{
+  "id": "ccref_join_ledger_deep_001",
+  "author_side_only": true,
+  "design_contract": "docs/banking-hard-card-referrals-plan.md",
+  "axis": "referential depth: answers live at the end of keyed lookups and cross-artifact joins; history stays flat, nothing delivered is false, mis-joins produce wrong answers from true rows",
+  "vocabulary_ban_reminder": "delivered files never say join/registry/key chain/certify/near-miss/mis-join/binding/lookup chain; in-world words are directory, row, code, record",
+  "key_classes": {
+    "program_code": {
+      "grammar": "REFP-<AAA> (card desk) / REFC-<AAA> (checking desk, other world)",
+      "binding_registry": "helpdesk authored_export program_directory contract table (code, card_name, governing_record, governing_date, window_at_cut)",
+      "keys": {
+        "REFP-SLR": {
+          "fact_relevant": true,
+          "note": "Silver Rewards; governing record = Margo Hale go-live 2025-10-30 (thread_001)"
+        },
+        "REFP-ECO": {
+          "fact_relevant": true,
+          "note": "EcoCard; governing record = go-live 2025-10-30 (thread_002)"
+        },
+        "REFP-PLT": {
+          "fact_relevant": true,
+          "note": "Platinum Rewards; governing record = page rev 2025-06-30"
+        },
+        "REFP-BGD": {
+          "fact_relevant": true,
+          "note": "Business Gold; governing record = terms v3 FINAL 2025-08-26; window closed 2025-09-15"
+        },
+        "REFP-SLZ": {
+          "fact_relevant": true,
+          "note": "Silver Zoom; governing record = terms v2 FINAL 2025-09-24; window closed 2025-10-01"
+        },
+        "REFP-GRC": {
+          "fact_relevant": false,
+          "note": "Gold Rewards Card row (the kept-call card); values live on its card page, no section fact keys through it"
+        },
+        "REFC-BLU": {
+          "fact_relevant": false,
+          "note": "checking desk's Blue Essentials code, quoted cross-desk and rerouted"
+        },
+        "REFC-GDY": {
+          "fact_relevant": false,
+          "note": "checking desk's Gold Years code (capture_04 near-miss)"
+        }
+      },
+      "near_miss_pairs": [
+        [
+          "REFP-SLR",
+          "REFP-SLZ"
+        ],
+        [
+          "REFP-SLR",
+          "REFC-BLU"
+        ],
+        [
+          "REFP-BGD",
+          "REFP-SLZ"
+        ]
+      ],
+      "trap_names": "the two Silvers; card desk vs checking desk prefixes"
+    },
+    "referral_status": {
+      "grammar": "dashboard labels (plain words; excluded from participation anonymity)",
+      "binding_registry": "device screens own the semantics; deep views/digests key rows by label",
+      "keys": {
+        "COMPLETE": {
+          "fact_relevant": true,
+          "note": "F002"
+        },
+        "IN_PROGRESS": {
+          "fact_relevant": true,
+          "note": "F003"
+        },
+        "NO_PROGRESS": {
+          "fact_relevant": true,
+          "note": "F004; also the F032 creation status"
+        },
+        "APPLIED": {
+          "fact_relevant": true,
+          "note": "F005; the 3.9 label"
+        },
+        "REJECTED": {
+          "fact_relevant": true,
+          "note": "F006"
+        },
+        "ERROR": {
+          "fact_relevant": true,
+          "note": "F007"
+        },
+        "WAITING": {
+          "fact_relevant": false,
+          "note": "retired 3.8 label; appears only in dated-before-11-03 rows and the 3.8 capture"
+        }
+      },
+      "near_miss_pairs": [
+        [
+          "WAITING",
+          "APPLIED"
+        ],
+        [
+          "REJECTED",
+          "ERROR"
+        ]
+      ]
+    },
+    "denial_reason_code": {
+      "grammar": "RD-<TOKEN> console denial reasons (FLD-534 allowed values)",
+      "binding_registry": "helpdesk FLD-534 denial_reason field values table",
+      "keys": {
+        "RD-ROLL7": {
+          "fact_relevant": true,
+          "note": "rolling 7-day cap denial; the F028 anticipated auto-reject"
+        },
+        "RD-NOPRG": {
+          "fact_relevant": true,
+          "note": "no documented program for the card (F026)"
+        },
+        "RD-TERMS": {
+          "fact_relevant": true,
+          "note": "claimed terms do not match a documented program (F025/F027)"
+        },
+        "RD-SELF": {
+          "fact_relevant": false,
+          "note": "self-referral denials (BG/Platinum conduct rows exist without keying facts)"
+        },
+        "RD-DUP": {
+          "fact_relevant": false,
+          "note": "duplicate application denials"
+        },
+        "RD-ROLL9": {
+          "fact_relevant": false,
+          "note": "the checking desk's 9-day code; quoted cross-desk in thread_022 and rerouted"
+        }
+      },
+      "near_miss_pairs": [
+        [
+          "RD-ROLL7",
+          "RD-ROLL9"
+        ]
+      ]
+    },
+    "referral_record_id": {
+      "grammar": "RFL-<YYMM>-<NNNN>",
+      "binding_registry": "monthly link-ops digests (thread_019 October, thread_020 November); case consoles echo",
+      "keys": {
+        "RFL-2510-0912": {
+          "fact_relevant": false,
+          "note": "October digest row, COMPLETE"
+        },
+        "RFL-2510-0947": {
+          "fact_relevant": false,
+          "note": "October digest row, WAITING at cut (pre-3.9 label)"
+        },
+        "RFL-2510-1004": {
+          "fact_relevant": false,
+          "note": "October digest row, NO_PROGRESS"
+        },
+        "RFL-2510-1058": {
+          "fact_relevant": false,
+          "note": "October digest row, the case_010 saga's record"
+        },
+        "RFL-2511-0233": {
+          "fact_relevant": true,
+          "note": "November row read in m09; the F020 tracking walk"
+        },
+        "RFL-2511-0290": {
+          "fact_relevant": false,
+          "note": "November digest row, IN_PROGRESS"
+        },
+        "RFL-2511-0341": {
+          "fact_relevant": true,
+          "note": "the F032 creation-status walk (created 11-06, NO_PROGRESS)"
+        },
+        "RFL-2511-0384": {
+          "fact_relevant": false,
+          "note": "November digest row, APPLIED"
+        },
+        "RFL-2511-0438": {
+          "fact_relevant": true,
+          "note": "the SZ clawback record behind PYB-2025-W44 (F083)"
+        },
+        "RFL-2511-0483": {
+          "fact_relevant": false,
+          "note": "transposed sibling of 0438; ERROR row in the same digest"
+        },
+        "RFL-2511-0512": {
+          "fact_relevant": false,
+          "note": "November digest row, REJECTED (RD-ROLL7)"
+        },
+        "RFL-2511-0559": {
+          "fact_relevant": false,
+          "note": "November digest row, COMPLETE"
+        },
+        "RFL-2509-0781": {
+          "fact_relevant": false,
+          "note": "September stragglers referenced in the attribution saga (thread_023)"
+        },
+        "RFL-2509-0844": {
+          "fact_relevant": false,
+          "note": "attribution saga counterpart row"
+        },
+        "RFL-2510-0870": {
+          "fact_relevant": false,
+          "note": "case_016 closed-program walk record (follow-up contact by the core case_013 customer)"
+        },
+        "RFL-2511-0602": {
+          "fact_relevant": false,
+          "note": "capture_02 verification thread row"
+        }
+      },
+      "near_miss_pairs": [
+        [
+          "RFL-2511-0438",
+          "RFL-2511-0483"
+        ]
+      ]
+    },
+    "payout_batch_id": {
+      "grammar": "PYB-<YYYY>-W<NN> (ISO week issuance batches)",
+      "binding_registry": "payout digest (thread_020) + November ops review (meeting_09)",
+      "keys": {
+        "PYB-2025-W40": {
+          "fact_relevant": false,
+          "note": "early-October batch"
+        },
+        "PYB-2025-W41": {
+          "fact_relevant": false,
+          "note": "October batch"
+        },
+        "PYB-2025-W44": {
+          "fact_relevant": true,
+          "note": "carries the SZ clawback reversal row (F083)"
+        },
+        "PYB-2025-W45": {
+          "fact_relevant": true,
+          "note": "the cadence instantiation batch read in m09 (F048)"
+        },
+        "PYB-2025-W46": {
+          "fact_relevant": false,
+          "note": "pending at the 11-13 cut"
+        },
+        "PYB-2025-W38": {
+          "fact_relevant": false,
+          "note": "September batch named in the attribution saga"
+        }
+      },
+      "near_miss_pairs": [
+        [
+          "PYB-2025-W44",
+          "PYB-2025-W45"
+        ]
+      ]
+    },
+    "helpdesk_object_id": {
+      "grammar": "extend the core export's series (MAC-REF-2xx, TRG-REF-nn, VIEW-REF-*, FLD-5nn, CON-*, SLA-REF-*)",
+      "binding_registry": "the export itself + its dated change_log",
+      "keys": {
+        "CON-REFOPS-2": {
+          "fact_relevant": true,
+          "note": "get_referral_link arg contract: card_name byte-matches the directory column (F029/F030/F031)"
+        },
+        "FLD-534": {
+          "fact_relevant": true,
+          "note": "denial_reason field; allowed values are the RD-* rows"
+        },
+        "MAC-REF-219": {
+          "fact_relevant": false,
+          "note": "core incident macro (LINKGEN-503), cited by capture_02 and the change log"
+        },
+        "MAC-REF-224": {
+          "fact_relevant": true,
+          "note": "weekly-limit reminder macro: points at the calibration tape, quotes nothing (F034 echo)"
+        },
+        "MAC-REF-231": {
+          "fact_relevant": false,
+          "note": "closed-program pointer macro (directory row + terms doc by name)"
+        },
+        "MAC-REF-238": {
+          "fact_relevant": false,
+          "note": "status-question pointer macro (legend screen by reference id)"
+        },
+        "MAC-REF-245": {
+          "fact_relevant": false,
+          "note": "cross-desk reroute macro (checking programs)"
+        },
+        "TRG-REF-52": {
+          "fact_relevant": false,
+          "note": "tags incoming referral-status mail by program code"
+        },
+        "TRG-REF-55": {
+          "fact_relevant": false,
+          "note": "routes RD-NOPRG denials to the review view"
+        },
+        "TRG-REF-58": {
+          "fact_relevant": false,
+          "note": "flags WAITING-labeled rows in imports dated after 2025-11-03"
+        },
+        "VIEW-REF-STATUS": {
+          "fact_relevant": false,
+          "note": "open items grouped by referral_status"
+        },
+        "VIEW-REF-PROG": {
+          "fact_relevant": false,
+          "note": "open items grouped by program code"
+        },
+        "VIEW-REF-NOV": {
+          "fact_relevant": false,
+          "note": "November review queue (m09 reads it)"
+        },
+        "SLA-REF-BIZ": {
+          "fact_relevant": false,
+          "note": "business-desk handoff clock"
+        },
+        "FLD-539": {
+          "fact_relevant": false,
+          "note": "program_code field on referral tickets"
+        },
+        "FLD-540": {
+          "fact_relevant": false,
+          "note": "payout_batch reference field"
+        }
+      },
+      "near_miss_pairs": [
+        [
+          "MAC-REF-219",
+          "MAC-REF-224"
+        ]
+      ]
+    },
+    "board_node_id": {
+      "grammar": "LNK/N01..N09 (flow_004 link-ops escalation board nodes; bare chips on the board, full-form cites elsewhere)",
+      "binding_registry": "flow_004 board (image) + text-native cites in capture_02 and thread_021",
+      "keys": {
+        "LNK/N03": {
+          "fact_relevant": false,
+          "note": "program lookup (directory row)"
+        },
+        "LNK/N04": {
+          "fact_relevant": false,
+          "note": "tool-contract check (CON-REFOPS-2)"
+        },
+        "LNK/N05": {
+          "fact_relevant": false,
+          "note": "denial-reason capture (FLD-534)"
+        },
+        "LNK/N06": {
+          "fact_relevant": false,
+          "note": "incident escalation (MAC-REF-219 path)"
+        }
+      },
+      "near_miss_pairs": [
+        [
+          "LNK/N04",
+          "LNK/N05"
+        ]
+      ]
+    }
+  },
+  "floors": {
+    "certify_2_plus_min": 24,
+    "certify_3_min": 6,
+    "locate_only_max": 24,
+    "near_miss_per_registry_min": 1,
+    "key_reuse_min": 2,
+    "distinct_keys_min": 60,
+    "fact_irrelevant_key_share_min": 0.45,
+    "cross_family_fact_share_min": 0.55
+  },
+  "class_counts": {
+    "certify-1": [
+      "F002",
+      "F003",
+      "F004",
+      "F018",
+      "F019",
+      "F021",
+      "F022",
+      "F024",
+      "F025",
+      "F026",
+      "F027",
+      "F028",
+      "F031",
+      "F033",
+      "F034",
+      "F038",
+      "F039",
+      "F041",
+      "F042",
+      "F043",
+      "F047",
+      "F049",
+      "F050",
+      "F051",
+      "F052",
+      "F056",
+      "F057",
+      "F059",
+      "F060",
+      "F066",
+      "F067",
+      "F068",
+      "F070",
+      "F071",
+      "F073",
+      "F079",
+      "F080",
+      "F081"
+    ],
+    "certify-2": [
+      "F005",
+      "F006",
+      "F007",
+      "F029",
+      "F030",
+      "F035",
+      "F036",
+      "F037",
+      "F040",
+      "F044",
+      "F045",
+      "F046",
+      "F053",
+      "F054",
+      "F055",
+      "F058",
+      "F061",
+      "F062",
+      "F063",
+      "F069",
+      "F072",
+      "F074",
+      "F075",
+      "F076",
+      "F077",
+      "F082"
+    ],
+    "certify-3": [
+      "F020",
+      "F032",
+      "F048",
+      "F064",
+      "F065",
+      "F078",
+      "F083"
+    ],
+    "locate-only": [
+      "F008",
+      "F009",
+      "F010",
+      "F011",
+      "F012",
+      "F013",
+      "F014",
+      "F015",
+      "F016",
+      "F017",
+      "F023"
+    ]
+  },
+  "facts": [
+    {
+      "fact_id": "F002",
+      "owner_transformation": "ccref_hard_device_ui_001",
+      "statement": "Referral status COMPLETE means the referred person has successfully opened a new account and met the criteria to get the referral bonus; the bonus will be granted per the applicable referral program terms.",
+      "owner_anchors": [
+        {
+          "family": "device_ui",
+          "file": "device_screen_001_status_legend_2025-11-06.html",
+          "anchor": "successfully opened a new account and met the criteria to get the referral bonus"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "COMPLETE",
+          "resolve_in": "status_legend",
+          "reading": "legend row"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F003",
+      "owner_transformation": "ccref_hard_device_ui_001",
+      "statement": "Referral status IN_PROGRESS means the referred person has successfully opened a new account and is in progress toward meeting the criteria for the referral bonus; no action is required and the status should be monitored until criteria are met.",
+      "owner_anchors": [
+        {
+          "family": "device_ui",
+          "file": "device_screen_001_status_legend_2025-11-06.html",
+          "anchor": "in progress toward meeting the criteria for your referral bonus"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "IN_PROGRESS",
+          "resolve_in": "status_legend",
+          "reading": "legend row"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F004",
+      "owner_transformation": "ccref_hard_device_ui_001",
+      "statement": "Referral status NO_PROGRESS means the referred person has not applied yet and no progress has been made; the referrer may be reminded that the invitee has not started an application.",
+      "owner_anchors": [
+        {
+          "family": "device_ui",
+          "file": "device_screen_001_status_legend_2025-11-06.html",
+          "anchor": "your invitee hasn't started an application"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "NO_PROGRESS",
+          "resolve_in": "status_legend",
+          "reading": "legend row"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F005",
+      "owner_transformation": "ccref_hard_device_ui_001",
+      "statement": "Referral status APPLIED means the referred person has sent in the application and is waiting for a decision; the application decision should be awaited and no manual intervention is needed.",
+      "owner_anchors": [
+        {
+          "family": "device_ui",
+          "file": "device_screen_001_status_legend_2025-11-06.html",
+          "anchor": "the decision just needs to be awaited, and no manual intervention is needed"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "APPLIED",
+          "resolve_in": "status_legend",
+          "reading": "the 3.9 legend's decision-pending label"
+        },
+        {
+          "key": "rho_app_39",
+          "resolve_in": "release_note",
+          "reading": "the 11-03 note retires WAITING; rows dated earlier may still print it"
+        }
+      ],
+      "misjoin_trace": "the 3.8 capture (device_screen_004) and October digest rows print WAITING for the same state",
+      "notes": "the one status whose label changed across the release boundary"
+    },
+    {
+      "fact_id": "F006",
+      "owner_transformation": "ccref_hard_device_ui_001",
+      "statement": "Referral status REJECTED means the user has too many referral processes going on; do not retry immediately and review the user's existing referral activity before advising next steps.",
+      "owner_anchors": [
+        {
+          "family": "device_ui",
+          "file": "device_screen_002_needs_attention_2025-11-06.html",
+          "anchor": "too many referral processes going on at once"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REJECTED",
+          "resolve_in": "status_legend",
+          "reading": "needs-attention screen: too many referral processes"
+        },
+        {
+          "key": "RD-ROLL7",
+          "resolve_in": "denial_reasons",
+          "reading": "the console denial rows behind the label are the rolling-cap denials"
+        }
+      ],
+      "misjoin_trace": "joining REJECTED to RD-ROLL9 (the checking desk's row) imports the 9-day window into a card answer",
+      "notes": ""
+    },
+    {
+      "fact_id": "F007",
+      "owner_transformation": "ccref_hard_device_ui_001",
+      "statement": "Referral status ERROR means an error has occurred throughout the process; retry later or escalate internally if the condition persists.",
+      "owner_anchors": [
+        {
+          "family": "device_ui",
+          "file": "device_screen_002_needs_attention_2025-11-06.html",
+          "anchor": "our support team will escalate it internally"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "ERROR",
+          "resolve_in": "status_legend",
+          "reading": "needs-attention screen: retry later or escalate"
+        },
+        {
+          "key": "MAC-REF-219",
+          "resolve_in": "helpdesk_export",
+          "reading": "the incident macro is the escalation path the label points at"
+        }
+      ],
+      "misjoin_trace": "REJECTED sits beside ERROR on the same screen; swapping them advises retry-later on a capped account",
+      "notes": ""
+    },
+    {
+      "fact_id": "F008",
+      "owner_transformation": "ccref_hard_website_screenshots_001",
+      "statement": "For participating credit cards, the specific referral bonus amount and eligibility requirements vary by credit card type, and some cards may offer cash back bonuses, bonus points, or statement credits.",
+      "owner_anchors": [],
+      "join_class": "locate-only",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [],
+      "misjoin_trace": null,
+      "notes": "spoken in full at the owner; no keyed hop required"
+    },
+    {
+      "fact_id": "F009",
+      "owner_transformation": "ccref_hard_website_screenshots_001",
+      "statement": "When a customer refers someone to apply for a Rho-Bank credit card and the referred person is approved for a new card and meets the program requirements, the customer may be eligible to receive a referral bonus and both parties could be rewarded.",
+      "owner_anchors": [],
+      "join_class": "locate-only",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [],
+      "misjoin_trace": null,
+      "notes": "spoken in full at the owner; no keyed hop required"
+    },
+    {
+      "fact_id": "F010",
+      "owner_transformation": "ccref_hard_website_screenshots_001",
+      "statement": "Not all credit cards participate in the referral program; before sharing a referral link, the customer should make sure the card being referred has an active referral offer.",
+      "owner_anchors": [],
+      "join_class": "locate-only",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [],
+      "misjoin_trace": null,
+      "notes": "spoken in full at the owner; no keyed hop required"
+    },
+    {
+      "fact_id": "F011",
+      "owner_transformation": "ccref_hard_working_sessions_001",
+      "statement": "A customer can receive at most 2 referral bonuses in any rolling 7-day window.",
+      "owner_anchors": [
+        {
+          "family": "meetings",
+          "file": "meeting_02_cap_calibration.vtt",
+          "anchor": "at most 2 referral bonuses in any rolling 7-day window"
+        }
+      ],
+      "join_class": "locate-only",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [],
+      "misjoin_trace": null,
+      "notes": "spoken in full at the owner; no keyed hop required"
+    },
+    {
+      "fact_id": "F012",
+      "owner_transformation": "ccref_hard_working_sessions_001",
+      "statement": "If a customer attempts to receive more than 2 referrals in a single week, the third referral and any subsequent referrals that week are automatically denied and do not qualify for a bonus.",
+      "owner_anchors": [
+        {
+          "family": "meetings",
+          "file": "meeting_02_cap_calibration.vtt",
+          "anchor": "the third referral and any subsequent referrals that week are denied automatically, and they do not qualify for a bonus"
+        }
+      ],
+      "join_class": "locate-only",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [],
+      "misjoin_trace": null,
+      "notes": "spoken in full at the owner; no keyed hop required"
+    },
+    {
+      "fact_id": "F013",
+      "owner_transformation": "ccref_hard_working_sessions_001",
+      "statement": "The rolling 7-day referral bonus limit applies across all credit card types; referrals from different cards still count toward the same weekly cap.",
+      "owner_anchors": [
+        {
+          "family": "meetings",
+          "file": "meeting_02_cap_calibration.vtt",
+          "anchor": "applies across all credit card types. Referrals from different cards still count toward the same weekly cap"
+        }
+      ],
+      "join_class": "locate-only",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [],
+      "misjoin_trace": null,
+      "notes": "spoken in full at the owner; no keyed hop required"
+    },
+    {
+      "fact_id": "F014",
+      "owner_transformation": "ccref_hard_working_sessions_001",
+      "statement": "A rolling 7-day referral bonus window is evaluated based on the exact timestamps of the customer's most recent referral bonuses, not calendar weeks.",
+      "owner_anchors": [
+        {
+          "family": "meetings",
+          "file": "meeting_02_cap_calibration.vtt",
+          "anchor": "evaluated on the exact timestamps of the customer's most recent referral bonuses, not calendar weeks"
+        }
+      ],
+      "join_class": "locate-only",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [],
+      "misjoin_trace": null,
+      "notes": "spoken in full at the owner; no keyed hop required"
+    },
+    {
+      "fact_id": "F015",
+      "owner_transformation": "ccref_hard_working_sessions_001",
+      "statement": "Customers should track the timing of their last two successful referral bonuses before sending additional referrals.",
+      "owner_anchors": [
+        {
+          "family": "meetings",
+          "file": "meeting_02_cap_calibration.vtt",
+          "anchor": "track the timing of their last two successful referral bonuses before they send additional referrals"
+        }
+      ],
+      "join_class": "locate-only",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [],
+      "misjoin_trace": null,
+      "notes": "spoken in full at the owner; no keyed hop required"
+    },
+    {
+      "fact_id": "F016",
+      "owner_transformation": "ccref_hard_working_sessions_001",
+      "statement": "Auto-denied referrals due to the rolling 7-day referral bonus limit cannot be reinstated within the same 7-day window.",
+      "owner_anchors": [
+        {
+          "family": "meetings",
+          "file": "meeting_02_cap_calibration.vtt",
+          "anchor": "an auto-denied referral due to the rolling limit cannot be reinstated within the same 7-day window"
+        }
+      ],
+      "join_class": "locate-only",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [],
+      "misjoin_trace": null,
+      "notes": "spoken in full at the owner; no keyed hop required"
+    },
+    {
+      "fact_id": "F017",
+      "owner_transformation": "ccref_hard_working_sessions_001",
+      "statement": "If a referral is denied for hitting the rolling 7-day referral bonus limit, the customer should wait until enough time has passed to drop under the cap before attempting another referral.",
+      "owner_anchors": [
+        {
+          "family": "meetings",
+          "file": "meeting_02_cap_calibration.vtt",
+          "anchor": "wait until enough time has passed that you're back under it, and then send a fresh referral"
+        }
+      ],
+      "join_class": "locate-only",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [],
+      "misjoin_trace": null,
+      "notes": "spoken in full at the owner; no keyed hop required"
+    },
+    {
+      "fact_id": "F018",
+      "owner_transformation": "ccref_hard_website_screenshots_001",
+      "statement": "To refer a friend, a customer needs to generate a unique referral link tied to the customer's account, which can be done through the Rho-Bank mobile app, online banking portal, or by contacting customer service.",
+      "owner_anchors": [],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-PLT",
+          "resolve_in": "program_directory",
+          "reading": "every open program's row points at the same referral-center path"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F019",
+      "owner_transformation": "ccref_hard_website_screenshots_001",
+      "statement": "Once the customer has a referral link, the customer may share it with friends and family via email, text, or social media.",
+      "owner_anchors": [],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "RFL-2510-0912",
+          "resolve_in": "record_digest",
+          "reading": "a shared-by-text record lands like any other row"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F020",
+      "owner_transformation": "ccref_hard_website_screenshots_001",
+      "statement": "When a referred person uses the customer's referral link to apply and is approved, the referral is tracked to the customer's account.",
+      "owner_anchors": [],
+      "join_class": "certify-3",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "RFL-2511-0233",
+          "resolve_in": "record_digest",
+          "reading": "the referred applicant's row lands on the referrer's account the day the application is attributed"
+        },
+        {
+          "key": "VIEW-REF-STATUS",
+          "resolve_in": "helpdesk_export",
+          "reading": "the console groups the same rows by label, per account"
+        },
+        {
+          "key": "APPLIED",
+          "resolve_in": "status_legend",
+          "reading": "the dashboard shows the tracked referral under its current label"
+        }
+      ],
+      "misjoin_trace": "reading the transposed sibling RFL-2511-0483 (an ERROR row) makes the tracked referral look failed; the digest's account column disambiguates",
+      "notes": "FAQ tracking promise walked end-to-end through a November record"
+    },
+    {
+      "fact_id": "F021",
+      "owner_transformation": "ccref_hard_website_screenshots_001",
+      "statement": "Customers can track referral status at any time through the Rho-Bank mobile app or by contacting customer service.",
+      "owner_anchors": [],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "VIEW-REF-STATUS",
+          "resolve_in": "helpdesk_export",
+          "reading": "support's status view mirrors what the app shows the customer"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F022",
+      "owner_transformation": "ccref_hard_website_screenshots_001",
+      "statement": "Rho-Bank sends notifications when referrals are approved and when referral bonuses are earned.",
+      "owner_anchors": [],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "PYB-2025-W45",
+          "resolve_in": "payout_digest",
+          "reading": "earned-bonus notifications ride the batch issuance"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F023",
+      "owner_transformation": "ccref_hard_website_screenshots_001",
+      "statement": "For referral program questions or to confirm the current offer for a card, customers may reach customer service at 1-800-RHO-BANK.",
+      "owner_anchors": [],
+      "join_class": "locate-only",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [],
+      "misjoin_trace": null,
+      "notes": "spoken in full at the owner; no keyed hop required"
+    },
+    {
+      "fact_id": "F024",
+      "owner_transformation": "ccref_hard_working_sessions_001",
+      "statement": "Before providing the referral link tool, support must search the knowledge base to confirm the specific requested card has a documented referral program.",
+      "owner_anchors": [
+        {
+          "family": "meetings",
+          "file": "meeting_03_q4_readiness.vtt",
+          "anchor": "search the knowledge base and confirm the specific card the customer is asking about has a documented referral program"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "MAC-REF-231",
+          "resolve_in": "helpdesk_export",
+          "reading": "the closed-program macro's first line is the KB check"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F025",
+      "owner_transformation": "ccref_hard_working_sessions_001",
+      "statement": "Before providing the referral link tool, support must verify the customer's understanding of referral terms; if the customer cites terms that do not match any documented program, support must clarify the discrepancy.",
+      "owner_anchors": [
+        {
+          "family": "meetings",
+          "file": "meeting_03_q4_readiness.vtt",
+          "anchor": "cites terms that don't match any documented program, you clarify the discrepancy before you go one step further"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "RD-TERMS",
+          "resolve_in": "denial_reasons",
+          "reading": "claimed-terms mismatches land under the same reason row"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F026",
+      "owner_transformation": "ccref_hard_support_cases_carrier_001",
+      "statement": "If no referral program is documented for the requested card, support must explain why, must not provide the referral link tool, and must not transfer the customer to a human for that reason.",
+      "owner_anchors": [
+        {
+          "family": "support_cases",
+          "file": "case_007.md",
+          "anchor": "there's no link for me to help you generate, because there's nothing a link would enroll you in"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "RD-NOPRG",
+          "resolve_in": "denial_reasons",
+          "reading": "the no-program denial reason is the console's record of the rule"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F027",
+      "owner_transformation": "ccref_hard_support_cases_carrier_001",
+      "statement": "If the user's claimed referral terms are incorrect, support must explain why, must not provide the referral link tool, and must not transfer the customer to a human for that reason.",
+      "owner_anchors": [
+        {
+          "family": "support_cases",
+          "file": "case_002.md",
+          "anchor": "terms that don't match any documented program, and 'I'll figure it out later' is exactly the setup"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "RD-TERMS",
+          "resolve_in": "denial_reasons",
+          "reading": "wrong-claimed-terms denials share the reason row"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F028",
+      "owner_transformation": "ccref_hard_support_cases_carrier_001",
+      "statement": "If there is reason to believe a referral will be automatically rejected, support must explain why, must not provide the referral link tool, and must not transfer the customer to a human for that reason.",
+      "owner_anchors": [
+        {
+          "family": "support_cases",
+          "file": "case_011.md",
+          "anchor": "A third referral right now would get denied automatically the moment it tried to qualify"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "RD-ROLL7",
+          "resolve_in": "denial_reasons",
+          "reading": "the anticipated auto-reject is the rolling-cap reason"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F029",
+      "owner_transformation": "ccref_hard_support_cases_carrier_001",
+      "statement": "When support provides the referral link tool, support must provide the customer with `get_referral_link(user_id: str, card_name: str)` and instruct the customer to run it themselves.",
+      "owner_anchors": [
+        {
+          "family": "support_cases",
+          "file": "case_004.md",
+          "anchor": "get_referral_link(user_id: str, card_name: str)"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "CON-REFOPS-2",
+          "resolve_in": "helpdesk_export",
+          "reading": "the contract row prints the signature support hands out"
+        },
+        {
+          "key": "get_referral_link",
+          "resolve_in": "kept_call",
+          "reading": "the kept call is the governed provision, verbatim"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": "signature certified against the contract row"
+    },
+    {
+      "fact_id": "F030",
+      "owner_transformation": "ccref_hard_support_cases_carrier_001",
+      "statement": "When instructing the customer to use `get_referral_link(user_id: str, card_name: str)`, support must tell the customer to pass their own user_id and the exact card name, for example 'Gold Rewards Card'.",
+      "owner_anchors": [
+        {
+          "family": "support_cases",
+          "file": "case_004.md",
+          "anchor": "you'd type 'Gold Rewards Card' \u2014 exactly like that, full name"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "CON-REFOPS-2",
+          "resolve_in": "helpdesk_export",
+          "reading": "arg grammar: card_name must byte-match the directory's card_name column"
+        },
+        {
+          "key": "REFP-GRC",
+          "resolve_in": "program_directory",
+          "reading": "the Gold Rewards row's card_name is the exact string the call dictates"
+        }
+      ],
+      "misjoin_trace": "passing the directory's code (REFP-GRC) or a nickname instead of the exact card_name string fails the contract's grammar",
+      "notes": ""
+    },
+    {
+      "fact_id": "F031",
+      "owner_transformation": "ccref_hard_support_cases_carrier_001",
+      "statement": "Agents must not generate a referral link on the customer's behalf.",
+      "owner_anchors": [
+        {
+          "family": "support_cases",
+          "file": "case_004.md",
+          "anchor": "Me generating it on your behalf isn't a thing I'm allowed to do"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "CON-REFOPS-2",
+          "resolve_in": "helpdesk_export",
+          "reading": "the contract's run-by-customer clause"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F032",
+      "owner_transformation": "ccref_hard_support_cases_carrier_001",
+      "statement": "When `get_referral_link(user_id: str, card_name: str)` is called successfully, a referral record is created with status 'NO_PROGRESS' and the referred person can then use the generated link to apply.",
+      "owner_anchors": [
+        {
+          "family": "support_cases",
+          "file": "case_004.md",
+          "anchor": "a referral record was created on your account \u2014 that new row \u2014 and it starts in the NO_PROGRESS status"
+        }
+      ],
+      "join_class": "certify-3",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "CON-REFOPS-2",
+          "resolve_in": "helpdesk_export",
+          "reading": "the tool contract names the two arguments and the record write"
+        },
+        {
+          "key": "RFL-2511-0341",
+          "resolve_in": "record_digest",
+          "reading": "the row created 11-06 starts exactly as the contract writes it"
+        },
+        {
+          "key": "NO_PROGRESS",
+          "resolve_in": "status_legend",
+          "reading": "the creation status is the legend's no-application-yet label"
+        }
+      ],
+      "misjoin_trace": "an October import row still carries the 3.8 WAITING label; joining F032's creation status to that dated row misreads the current legend",
+      "notes": "tool-call outcome certified through contract, record, and legend"
+    },
+    {
+      "fact_id": "F033",
+      "owner_transformation": "ccref_hard_working_sessions_001",
+      "statement": "Support must reiterate the correct documented referral terms to prevent confusion and complaints.",
+      "owner_anchors": [
+        {
+          "family": "meetings",
+          "file": "meeting_03_q4_readiness.vtt",
+          "anchor": "reiterate the correct documented referral terms before you close"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "MAC-REF-224",
+          "resolve_in": "helpdesk_export",
+          "reading": "the reminder macro points at the documented terms, quoting none"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F034",
+      "owner_transformation": "ccref_hard_working_sessions_001",
+      "statement": "Referral link guidance must include the weekly limit reminder that customers can receive at most 2 referral bonuses in any rolling 7-day window and that the third and subsequent referrals in that window are automatically denied.",
+      "owner_anchors": [
+        {
+          "family": "meetings",
+          "file": "meeting_03_q4_readiness.vtt",
+          "anchor": "the guidance always includes the weekly limit reminder: customers can receive at most 2 referral bonuses in any rolling 7-day window, and the third and subsequent referrals in that window are denied automatically"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "MAC-REF-224",
+          "resolve_in": "helpdesk_export",
+          "reading": "the weekly-limit reminder macro is the echo, the tape is the owner"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F035",
+      "owner_transformation": "ccref_hard_email_archive_001",
+      "statement": "The Silver Rewards Card referral program pays 75 for each successful referral.",
+      "owner_anchors": [
+        {
+          "family": "emails",
+          "file": "thread_001.eml",
+          "anchor": "pays $75 for each successful referral"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-SLR",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "go_live_2025-10-30_silver_rewards",
+          "resolve_in": "governing_record_slr",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": "the REFP-SLZ row one line down governs the other Silver; its record pays $150 for logistics businesses",
+      "notes": "the two-Silvers mis-join is the corpus's flagship"
+    },
+    {
+      "fact_id": "F036",
+      "owner_transformation": "ccref_hard_email_archive_001",
+      "statement": "The Silver Rewards Card referral program allows up to 7 referral bonuses per calendar year.",
+      "owner_anchors": [
+        {
+          "family": "emails",
+          "file": "thread_001.eml",
+          "anchor": "allows up to 7 referral bonuses per calendar year"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-SLR",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "go_live_2025-10-30_silver_rewards",
+          "resolve_in": "governing_record_slr",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": "the pre-refresh archived page (rev 2025-10-30 morning) still prints the old cap",
+      "notes": "cap read at the dated go-live, not the archived page"
+    },
+    {
+      "fact_id": "F037",
+      "owner_transformation": "ccref_hard_email_archive_001",
+      "statement": "For the Silver Rewards Card referral program, the referred person must be approved and spend at least $750 within 60 days of account opening.",
+      "owner_anchors": [
+        {
+          "family": "emails",
+          "file": "thread_001.eml",
+          "anchor": "approved and spend at least $750 within 60 days of account opening"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-SLR",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "go_live_2025-10-30_silver_rewards",
+          "resolve_in": "governing_record_slr",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": "spend threshold at the governing record"
+    },
+    {
+      "fact_id": "F038",
+      "owner_transformation": "ccref_hard_email_archive_001",
+      "statement": "For the Silver Rewards Card referral program, the referrer should share the referral link or code with friends and colleagues and ensure they apply using the link or code so the referral is tracked.",
+      "owner_anchors": [
+        {
+          "family": "emails",
+          "file": "thread_001.eml",
+          "anchor": "Share your referral link or code with friends and colleagues, and make sure they apply using the link or code"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-SLR",
+          "resolve_in": "program_directory",
+          "reading": "share/track mechanics ride the program row"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F039",
+      "owner_transformation": "ccref_hard_email_archive_001",
+      "statement": "For the Silver Rewards Card referral program, the referrer is notified when the referral meets the qualifying spend requirement.",
+      "owner_anchors": [
+        {
+          "family": "emails",
+          "file": "thread_001.eml",
+          "anchor": "notified when your referral meets the qualifying spend requirement"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-SLR",
+          "resolve_in": "program_directory",
+          "reading": "notification cadence rides the program row"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F040",
+      "owner_transformation": "ccref_hard_email_archive_001",
+      "statement": "For the Silver Rewards Card referral program, the bonus typically posts within one to two billing cycles after the referred account meets the $750 requirement.",
+      "owner_anchors": [
+        {
+          "family": "emails",
+          "file": "thread_001.eml",
+          "anchor": "typically posts within one to two billing cycles after the referred account meets the $750 requirement"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-SLR",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "go_live_2025-10-30_silver_rewards",
+          "resolve_in": "governing_record_slr",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": "posting cadence; W45 batch instantiates it without owning it"
+    },
+    {
+      "fact_id": "F041",
+      "owner_transformation": "ccref_hard_email_archive_001",
+      "statement": "For the Silver Rewards Card referral program, a program tip is to remind the referral to activate their card promptly and add recurring bills to help meet $750 within 60 days.",
+      "owner_anchors": [
+        {
+          "family": "emails",
+          "file": "thread_001.eml",
+          "anchor": "activate their card promptly and add recurring bills; it is the reliable way to meet $750 within 60 days"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-SLR",
+          "resolve_in": "program_directory",
+          "reading": "tip rides the governing record the row names"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F042",
+      "owner_transformation": "ccref_hard_email_archive_001",
+      "statement": "For the Silver Rewards Card referral program, a program tip is to track the annual count to stay within the 7 limit.",
+      "owner_anchors": [
+        {
+          "family": "emails",
+          "file": "thread_001.eml",
+          "anchor": "Track your annual count so you stay within the 7 limit"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-SLR",
+          "resolve_in": "program_directory",
+          "reading": "annual-count tip rides the row's cap pointer"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F043",
+      "owner_transformation": "ccref_hard_website_screenshots_001",
+      "statement": "The Platinum Rewards Card referral program is shared through the customer's account to invite friends to apply.",
+      "owner_anchors": [],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-PLT",
+          "resolve_in": "program_directory",
+          "reading": "the row names the page as governing record"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F044",
+      "owner_transformation": "ccref_hard_website_screenshots_001",
+      "statement": "For the Platinum Rewards Card referral program, the referrer earns a referral bonus of $100 for each friend who is approved and meets the qualifying spend.",
+      "owner_anchors": [],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-PLT",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "platinum_referral_page_rev_2025-06-30",
+          "resolve_in": "governing_record_plt",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": "the wrong-terms kept call has a customer claiming $150 for a personal Silver card; the claim resolves against the SLZ row, not Platinum",
+      "notes": ""
+    },
+    {
+      "fact_id": "F045",
+      "owner_transformation": "ccref_hard_website_screenshots_001",
+      "statement": "For the Platinum Rewards Card referral program, the referred friend must spend at least $1,500 within 90 days of account opening to qualify the referrer for the bonus.",
+      "owner_anchors": [],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-PLT",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "platinum_referral_page_rev_2025-06-30",
+          "resolve_in": "governing_record_plt",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F046",
+      "owner_transformation": "ccref_hard_website_screenshots_001",
+      "statement": "The Platinum Rewards Card referral program allows up to 7 referral bonuses per calendar year.",
+      "owner_anchors": [],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-PLT",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "platinum_referral_page_rev_2025-06-30",
+          "resolve_in": "governing_record_plt",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": "Platinum sat out the Q4 refresh; joining the refresh threads to it reads another program's cap",
+      "notes": ""
+    },
+    {
+      "fact_id": "F047",
+      "owner_transformation": "ccref_hard_website_screenshots_001",
+      "statement": "The Platinum Rewards Card referral steps are to open the referrals section in the account, send the referral using the available sharing options, and track the status of pending referrals in the dashboard.",
+      "owner_anchors": [],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-PLT",
+          "resolve_in": "program_directory",
+          "reading": "steps live on the page the row points at"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F048",
+      "owner_transformation": "ccref_hard_website_screenshots_001",
+      "statement": "For the Platinum Rewards Card referral program, bonuses are typically credited after the referred applicant is approved and meets the $1,500 spend requirement within 90 days.",
+      "owner_anchors": [],
+      "join_class": "certify-3",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-PLT",
+          "resolve_in": "program_directory",
+          "reading": "the Platinum row names the governing page and its 2025-06-30 revision"
+        },
+        {
+          "key": "PYB-2025-W45",
+          "resolve_in": "payout_digest",
+          "reading": "the November batch carries a Platinum credit issued after approval + spend"
+        },
+        {
+          "key": "RFL-2511-0233",
+          "resolve_in": "record_digest",
+          "reading": "the credited record's dated events instantiate approval before issuance"
+        }
+      ],
+      "misjoin_trace": "pulling the adjacent PYB-2025-W44 batch instead surfaces the Silver Zoom clawback reversal and makes the cadence look conditional",
+      "notes": "crediting cadence instantiated by a batch row, governed by the page"
+    },
+    {
+      "fact_id": "F049",
+      "owner_transformation": "ccref_hard_website_screenshots_001",
+      "statement": "For the Platinum Rewards Card referral program, self-referrals and duplicate applications do not qualify.",
+      "owner_anchors": [],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "RD-SELF",
+          "resolve_in": "denial_reasons",
+          "reading": "self-referral denials have their own reason row"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F050",
+      "owner_transformation": "ccref_hard_website_screenshots_001",
+      "statement": "For the Platinum Rewards Card referral program, a tip is to share with friends who are likely to benefit from the card's features.",
+      "owner_anchors": [],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-PLT",
+          "resolve_in": "program_directory",
+          "reading": "tip rides the page"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F051",
+      "owner_transformation": "ccref_hard_website_screenshots_001",
+      "statement": "For the Platinum Rewards Card referral program, a tip is to remind the referral to meet the $1,500 spend threshold within 90 days.",
+      "owner_anchors": [],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-PLT",
+          "resolve_in": "program_directory",
+          "reading": "tip rides the page"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F052",
+      "owner_transformation": "ccref_hard_website_screenshots_001",
+      "statement": "For the Platinum Rewards Card referral program, a tip is to ensure the referrer's account is in good standing to receive bonuses promptly.",
+      "owner_anchors": [],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-PLT",
+          "resolve_in": "program_directory",
+          "reading": "tip rides the page"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F053",
+      "owner_transformation": "ccref_hard_email_archive_001",
+      "statement": "The EcoCard referral program pays 50 for each successful referral.",
+      "owner_anchors": [
+        {
+          "family": "emails",
+          "file": "thread_002.eml",
+          "anchor": "pays $50 for each successful referral"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-ECO",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "go_live_2025-10-30_ecocard",
+          "resolve_in": "governing_record_eco",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": "the archived pre-refresh EcoCard page prints $40; the directory's governing_date picks the go-live",
+      "notes": ""
+    },
+    {
+      "fact_id": "F054",
+      "owner_transformation": "ccref_hard_email_archive_001",
+      "statement": "The EcoCard referral program allows up to 7 referral bonuses per calendar year.",
+      "owner_anchors": [
+        {
+          "family": "emails",
+          "file": "thread_002.eml",
+          "anchor": "allows up to 7 referral bonuses per calendar year"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-ECO",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "go_live_2025-10-30_ecocard",
+          "resolve_in": "governing_record_eco",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F055",
+      "owner_transformation": "ccref_hard_email_archive_001",
+      "statement": "For the EcoCard referral program, the referred person must be approved and spend at least $500 within 60 days of account opening.",
+      "owner_anchors": [
+        {
+          "family": "emails",
+          "file": "thread_002.eml",
+          "anchor": "approved and spend at least $500 within 60 days of account opening"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-ECO",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "go_live_2025-10-30_ecocard",
+          "resolve_in": "governing_record_eco",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": "the $600 draft threshold dies inside the same thread; the governing message is the later dated one",
+      "notes": ""
+    },
+    {
+      "fact_id": "F056",
+      "owner_transformation": "ccref_hard_email_archive_001",
+      "statement": "For the EcoCard referral program, the referrer should share the referral link or code with friends and family and ensure they apply using the link or code so the referral is tracked.",
+      "owner_anchors": [
+        {
+          "family": "emails",
+          "file": "thread_002.eml",
+          "anchor": "Share your referral link or code with friends and family, and make sure they apply using the link or code so the referral is tracked"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-ECO",
+          "resolve_in": "program_directory",
+          "reading": "share mechanics ride the row"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F057",
+      "owner_transformation": "ccref_hard_email_archive_001",
+      "statement": "For the EcoCard referral program, the referrer is notified when the referral meets the qualifying spend requirement.",
+      "owner_anchors": [
+        {
+          "family": "emails",
+          "file": "thread_002.eml",
+          "anchor": "notified when your referral meets the qualifying spend requirement"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-ECO",
+          "resolve_in": "program_directory",
+          "reading": "notification cadence rides the row"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F058",
+      "owner_transformation": "ccref_hard_email_archive_001",
+      "statement": "For the EcoCard referral program, the bonus typically posts within one to two billing cycles after the referred account meets the $500 requirement.",
+      "owner_anchors": [
+        {
+          "family": "emails",
+          "file": "thread_002.eml",
+          "anchor": "typically posts within one to two billing cycles after the referred account meets the $500 requirement"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-ECO",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "go_live_2025-10-30_ecocard",
+          "resolve_in": "governing_record_eco",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F059",
+      "owner_transformation": "ccref_hard_email_archive_001",
+      "statement": "For the EcoCard referral program, a program tip is to remind the referral to activate their card promptly and add recurring bills to help meet $500 within 60 days.",
+      "owner_anchors": [
+        {
+          "family": "emails",
+          "file": "thread_002.eml",
+          "anchor": "activate their card promptly and add recurring bills; that is the reliable way to meet $500 within 60 days"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-ECO",
+          "resolve_in": "program_directory",
+          "reading": "tip rides the governing record"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F060",
+      "owner_transformation": "ccref_hard_email_archive_001",
+      "statement": "For the EcoCard referral program, a program tip is to track the annual count to stay within the 7 limit.",
+      "owner_anchors": [
+        {
+          "family": "emails",
+          "file": "thread_002.eml",
+          "anchor": "Track your annual count so you stay within the 7 limit"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-ECO",
+          "resolve_in": "program_directory",
+          "reading": "annual-count tip rides the row"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F061",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "The Business Gold Rewards Card referral program pays $200 for each successful referral who is approved and meets the qualifying spend.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "business_gold_referral_program_terms_v3.docx",
+          "anchor": "pays $200 for each successful referral who is approved and meets the qualifying spend"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-BGD",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "business_gold_referral_program_terms_v3",
+          "resolve_in": "governing_record_bgd",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": "the v2 DRAFT prints $150 in the same section; the directory row's governing_date (2025-08-26) picks v3",
+      "notes": ""
+    },
+    {
+      "fact_id": "F062",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "The Business Gold Rewards Card referral program allows up to 8 referral bonuses per calendar year.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "business_gold_referral_program_terms_v3.docx",
+          "anchor": "up to 8 referral bonuses per calendar year"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-BGD",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "business_gold_referral_program_terms_v3",
+          "resolve_in": "governing_record_bgd",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F063",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "For the Business Gold Rewards Card referral program, the referred business must spend $7,500 within 90 from account opening to qualify the referrer's bonus.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "business_gold_referral_program_terms_v3.docx",
+          "anchor": "must spend $7,500 within 90 days of account opening to qualify the referrer's bonus"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-BGD",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "business_gold_referral_program_terms_v3",
+          "resolve_in": "governing_record_bgd",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F064",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "The Business Gold Rewards Card referral program accepts new referrals until 2025-09-15.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "business_gold_referral_program_terms_v3.docx",
+          "anchor": "accepts new referrals until 2025-09-15"
+        }
+      ],
+      "join_class": "certify-3",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-BGD",
+          "resolve_in": "program_directory",
+          "reading": "the Business Gold row: window closed, governing record v3 FINAL 2025-08-26"
+        },
+        {
+          "key": "business_gold_referral_program_terms_v3",
+          "resolve_in": "governing_record_bgd",
+          "reading": "section 4 prints the window"
+        },
+        {
+          "key": "PYB-2025-W41",
+          "resolve_in": "payout_digest",
+          "reading": "in-flight submissions from before the close still pay out in October batches"
+        }
+      ],
+      "misjoin_trace": "the v2 DRAFT (2025-08-19) prints the same section shape with a different bonus figure; the directory row's governing_date picks v3",
+      "notes": "the close date is a directory fact only by pointer; the doc owns it"
+    },
+    {
+      "fact_id": "F065",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "For the Business Gold Rewards Card referral program, referrals submitted after 2025-09-15 are not eligible.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "business_gold_referral_program_terms_v3.docx",
+          "anchor": "Referrals submitted after 2025-09-15 are not eligible"
+        }
+      ],
+      "join_class": "certify-3",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-BGD",
+          "resolve_in": "program_directory",
+          "reading": "window_at_cut says closed 2025-09-15"
+        },
+        {
+          "key": "business_gold_referral_program_terms_v3",
+          "resolve_in": "governing_record_bgd",
+          "reading": "section 4: submissions after the date are not eligible"
+        },
+        {
+          "key": "RD-NOPRG",
+          "resolve_in": "denial_reasons",
+          "reading": "post-close asks land as no-active-program denials in the console"
+        }
+      ],
+      "misjoin_trace": "joining the SZ row's 2025-10-01 close to a Business Gold ask (the two closed business programs sit adjacent in the directory) passes an ineligible September-28 referral",
+      "notes": "post-close ineligibility; the adjacent closed program is the trap"
+    },
+    {
+      "fact_id": "F066",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "For the Business Gold Rewards Card referral program, the referrer generates a unique referral link from the account's referral center.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "business_gold_referral_program_terms_v3.docx",
+          "anchor": "generates a unique referral link from the account's referral center"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-BGD",
+          "resolve_in": "program_directory",
+          "reading": "link generation clause lives in the doc the row names"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F067",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "For the Business Gold Rewards Card referral program, the referrer shares the link directly with businesses that consent to receive it.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "business_gold_referral_program_terms_v3.docx",
+          "anchor": "shares the link directly with businesses that consent to receive it"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-BGD",
+          "resolve_in": "program_directory",
+          "reading": "consent clause lives in the doc"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F068",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "For the Business Gold Rewards Card referral program, the referrer tracks application status and eligibility in the referral dashboard.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "business_gold_referral_program_terms_v3.docx",
+          "anchor": "tracks application status and eligibility in the referral dashboard"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-BGD",
+          "resolve_in": "program_directory",
+          "reading": "dashboard-tracking clause lives in the doc"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F069",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "For the Business Gold Rewards Card referral program, once the referred account is approved and completes $7,500 within 90, the $200 bonus is queued for issuance to the referrer's account.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "business_gold_referral_program_terms_v3.docx",
+          "anchor": "completes $7,500 within 90 days, the $200 bonus is queued for issuance"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-BGD",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "business_gold_referral_program_terms_v3",
+          "resolve_in": "governing_record_bgd",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": "issuance queue clause; October batches instantiate"
+    },
+    {
+      "fact_id": "F070",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "For the Business Gold Rewards Card referral program, self-referrals are not permitted.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "business_gold_referral_program_terms_v3.docx",
+          "anchor": "Self-referrals are not permitted"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "RD-SELF",
+          "resolve_in": "denial_reasons",
+          "reading": "the conduct clause's console shadow"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F071",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "For the Business Gold Rewards Card referral program, referral invitations should be shared only with contacts who have given permission to receive them.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "business_gold_referral_program_terms_v3.docx",
+          "anchor": "shared only with contacts who have given permission to receive them"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-BGD",
+          "resolve_in": "program_directory",
+          "reading": "consent-to-receive clause lives in the doc"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F072",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "For the Business Gold Rewards Card referral program, if a referral applies without the referrer's link, the referral may not be attributed.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "business_gold_referral_program_terms_v3.docx",
+          "anchor": "applies without the referrer's link, the referral may not be attributed"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-BGD",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "business_gold_referral_program_terms_v3",
+          "resolve_in": "governing_record_bgd",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": "the attribution saga's RFL-2509 rows are the worked instance; reading them without \u00a76 invents a reinstatement path",
+      "notes": ""
+    },
+    {
+      "fact_id": "F073",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "For the Business Gold Rewards Card referral program, program terms, eligible industries, and promotional availability may change without notice prior to 2025-09-15.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "business_gold_referral_program_terms_v3.docx",
+          "anchor": "eligible industries, and promotional availability may change without notice prior to 2025-09-15"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-BGD",
+          "resolve_in": "program_directory",
+          "reading": "change-without-notice clause lives in the doc"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F074",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "The Silver Zoom Card referral program pays a referral bonus of $150 for each referred logistics business that is approved and meets the qualifying spend requirement.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "silver_zoom_referral_program_terms_v2.docx",
+          "anchor": "pays a referral bonus of $150 for each referred logistics business"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-SLZ",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "silver_zoom_referral_program_terms_v2",
+          "resolve_in": "governing_record_slz",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": "REFP-SLR is the near row; its record pays $75 for a personal card",
+      "notes": ""
+    },
+    {
+      "fact_id": "F075",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "The Silver Zoom Card referral program caps bonuses at 10 per calendar year.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "silver_zoom_referral_program_terms_v2.docx",
+          "anchor": "caps bonuses at 10 per calendar year"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-SLZ",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "silver_zoom_referral_program_terms_v2",
+          "resolve_in": "governing_record_slz",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F076",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "For the Silver Zoom Card referral program, the referred business must complete purchases totaling $7,500 within 90 days of account opening.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "silver_zoom_referral_program_terms_v2.docx",
+          "anchor": "complete purchases totaling $7,500 within 90 days of account opening"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-SLZ",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "silver_zoom_referral_program_terms_v2",
+          "resolve_in": "governing_record_slz",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F077",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "For the Silver Zoom Card referral program, only one referrer is credited per approved account.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "silver_zoom_referral_program_terms_v2.docx",
+          "anchor": "Only one referrer is credited per approved account"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-SLZ",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "silver_zoom_referral_program_terms_v2",
+          "resolve_in": "governing_record_slz",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": "the attribution saga shows two claimed referrers; without \u00a76's one-referrer clause the digest rows look contradictory",
+      "notes": ""
+    },
+    {
+      "fact_id": "F078",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "For the Silver Zoom Card referral program, no new referrals are accepted after 2025-10-01.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "silver_zoom_referral_program_terms_v2.docx",
+          "anchor": "No new referrals are accepted after 2025-10-01"
+        }
+      ],
+      "join_class": "certify-3",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-SLZ",
+          "resolve_in": "program_directory",
+          "reading": "Silver Zoom row: closed 2025-10-01, governing record v2 FINAL"
+        },
+        {
+          "key": "silver_zoom_referral_program_terms_v2",
+          "resolve_in": "governing_record_slz",
+          "reading": "section 4 prints the cutoff"
+        },
+        {
+          "key": "RD-NOPRG",
+          "resolve_in": "denial_reasons",
+          "reading": "new SZ asks after the cutoff take the no-active-program denial"
+        }
+      ],
+      "misjoin_trace": "the Business Gold row's 2025-09-15 close is one row up; joining it to a Silver Zoom ask denies a valid September-20 submission",
+      "notes": "mirror of F065 with the dates crossed the other way"
+    },
+    {
+      "fact_id": "F079",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "For the Silver Zoom Card referral program, the referrer must share the referral link or submit the referral through the account portal before the referred business applies.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "silver_zoom_referral_program_terms_v2.docx",
+          "anchor": "share the referral link or submit the referral through the account portal before the referred business applies"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-SLZ",
+          "resolve_in": "program_directory",
+          "reading": "portal-submission clause lives in the doc"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F080",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "For the Silver Zoom Card referral program, the referrer must ensure the referred business uses the link or is otherwise properly attributed during application.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "silver_zoom_referral_program_terms_v2.docx",
+          "anchor": "ensure the referred business uses the link or is otherwise properly attributed during application"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-SLZ",
+          "resolve_in": "program_directory",
+          "reading": "attribution clause lives in the doc"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F081",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "For the Silver Zoom Card referral program, the referrer tracks referral status within the account until the qualifying spend threshold of $7,500 is met.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "silver_zoom_referral_program_terms_v2.docx",
+          "anchor": "tracks referral status within the account until the qualifying spend threshold of $7,500 is met"
+        }
+      ],
+      "join_class": "certify-1",
+      "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+      "certification_chain": [
+        {
+          "key": "REFP-SLZ",
+          "resolve_in": "program_directory",
+          "reading": "tracking clause lives in the doc"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F082",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "For the Silver Zoom Card referral program, bonuses are typically issued to the referrer after the referred business satisfies the $7,500 requirement within 90 days.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "silver_zoom_referral_program_terms_v2.docx",
+          "anchor": "typically issued to the referrer after the referred business satisfies the $7,500 requirement within 90 days"
+        }
+      ],
+      "join_class": "certify-2",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "REFP-SLZ",
+          "resolve_in": "program_directory",
+          "reading": "the row picks the governing record by name and date"
+        },
+        {
+          "key": "silver_zoom_referral_program_terms_v2",
+          "resolve_in": "governing_record_slz",
+          "reading": "the value is read at the record"
+        }
+      ],
+      "misjoin_trace": null,
+      "notes": ""
+    },
+    {
+      "fact_id": "F083",
+      "owner_transformation": "ccref_hard_reference_documents_001",
+      "statement": "For the Silver Zoom Card referral program, if the referred business returns purchases or does not meet the requirement, no bonus is issued.",
+      "owner_anchors": [
+        {
+          "family": "terms_docs",
+          "file": "silver_zoom_referral_program_terms_v2.docx",
+          "anchor": "returns purchases or does not meet the requirement, no bonus is issued"
+        }
+      ],
+      "join_class": "certify-3",
+      "value_rule": "the governing value is read at the chain's terminal record; earlier hops only select which record governs",
+      "certification_chain": [
+        {
+          "key": "PYB-2025-W44",
+          "resolve_in": "payout_digest",
+          "reading": "the batch carries a reversal row, net of returns"
+        },
+        {
+          "key": "RFL-2511-0438",
+          "resolve_in": "record_digest",
+          "reading": "the reversed record: returned purchases dropped the qualifying spend"
+        },
+        {
+          "key": "silver_zoom_referral_program_terms_v2",
+          "resolve_in": "governing_record_slz",
+          "reading": "the returns clause is the governing sentence"
+        }
+      ],
+      "misjoin_trace": "reading the W44 reversal as a missed payout (or joining the transposed RFL-2511-0483) turns a governed clawback into an ops error",
+      "notes": "clawback path walked from batch to record to clause"
+    }
+  ],
+  "family_envelopes": {
+    "emails": {
+      "deep_action": "replace thread_001 (carrier, grown post-launch coda, anchors at core multiplicity), thread_011, thread_017; add thread_019-024 (digests, directory publication, RD-ROLL9 cross-desk, attribution saga, print logistics)",
+      "growth": "18 -> 24 threads, +~6.0k words",
+      "delivered": 24
+    },
+    "meetings": {
+      "deep_action": "replace meeting_01 (grown weekly with directory segment) and meeting_07 (keyed bizdesk console walk); add meeting_09 (November link-ops review) and meeting_10 (directory norming)",
+      "growth": "8 -> 10 sessions, +~5.5k words",
+      "delivered": 10
+    },
+    "support_cases": {
+      "deep_action": "replace case_010 (keyed console saga, family's largest, zero-fact) and case_008 (grown outage chat); add case_015-017 (unrecorded chat/secure; case_016 is the closed-program walk)",
+      "growth": "14 -> 17 cases, +~4.4k words",
+      "delivered": 17
+    },
+    "slack": {
+      "deep_action": "replace capture_02 and capture_04 as rolling re-pulls (core tool_calls byte-kept as prefixes)",
+      "growth": "31 -> ~62 and 24 -> ~50 distinct messages",
+      "delivered": 4
+    },
+    "helpdesk": {
+      "deep_action": "replace the export: program_directory table, FLD-534 denial reasons, CON-REFOPS-2, pointer macros, views, dated change_log; every core object byte-kept in order",
+      "growth": "23 -> ~60 objects",
+      "delivered": 1
+    },
+    "website": {
+      "deep_action": "add screen_013 (referral-center getting-started; zero-fact, pointer-only)",
+      "growth": "12 -> 13 pages",
+      "delivered": 13
+    },
+    "flowcharts": {
+      "deep_action": "add flow_004 link-ops escalation board (nodes LNK-N01..N09, official, zero-fact)",
+      "growth": "3 -> 4 boards",
+      "delivered": 4
+    },
+    "device_ui": {
+      "deep_action": "core-kept (legend screens are chain termini)",
+      "growth": "none",
+      "delivered": 4
+    },
+    "terms_docs": {
+      "deep_action": "core-kept (governing editions are chain termini)",
+      "growth": "none",
+      "delivered": 3
+    }
+  }
+}

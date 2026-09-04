@@ -1,0 +1,804 @@
+{
+  "format": "api_contract_pack_v1",
+  "release": {
+    "contract_id": "CONTRACT-CATALOG-DISPLAY-V1",
+    "environment": "production",
+    "status": "published",
+    "current": true,
+    "effective_at": "2026-07-06T09:00:00-04:00",
+    "snapshot_at": "2026-07-06T15:00:00-04:00",
+    "superseded_by": null
+  },
+  "cover_email": "From: Odile Ferrand <odile.ferrand@northstaroutfitters.com>\nTo: Storefront Integrations <storefront-integrations@northstaroutfitters.com>\nDate: Mon, 06 Jul 2026 15:00:00 -0400\nSubject: Published catalog display contract, 1.8 snapshot\n\nAttached is the 15:00 production snapshot for CONTRACT-CATALOG-DISPLAY-V1.\nDisplay blocks and placements are read-only projections of the merchandising\nplan; the plan itself moves through the merch calendar, never through this\ninterface. We kept the retired tile projection and the sandbox badge\nexperiments in the export because the spring cleanup postponed their removal\nto the 2.0 branch — read the lifecycle markers before you build against\nanything.\n",
+  "openapi": {
+    "openapi": "3.1.0",
+    "info": {
+      "title": "NorthStar Catalog Display API",
+      "version": "1.8.0",
+      "description": "Published production read contract for storefront display blocks, galleries, and merchandised placements. Retired and internal projections are retained for migration context only.",
+      "x-contract-id": "CONTRACT-CATALOG-DISPLAY-V1",
+      "x-contract-status": "published",
+      "x-environment": "production",
+      "x-effective-at": "2026-07-06T09:00:00-04:00",
+      "x-superseded-by": null,
+      "x-source-of-truth": true
+    },
+    "servers": [
+      {
+        "url": "https://api.northstaroutfitters.com/catalog-display/v1"
+      }
+    ],
+    "paths": {
+      "/display/{item_id}": {
+        "get": {
+          "operationId": "getDisplayBlock",
+          "summary": "Read the published display block for an item",
+          "parameters": [
+            {
+              "name": "item_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "locale",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "string",
+                "default": "en-US"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Published display block",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/DisplayBlock"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/display/{item_id}/gallery": {
+        "get": {
+          "operationId": "getDisplayGallery",
+          "summary": "Read the image gallery with focal hints",
+          "parameters": [
+            {
+              "name": "item_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Ordered gallery for the published display block",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/GalleryImage"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/collections/{slug}/placements": {
+        "get": {
+          "operationId": "listCollectionPlacements",
+          "summary": "List merchandised placements for a collection",
+          "parameters": [
+            {
+              "name": "slug",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "window",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "current",
+                  "upcoming"
+                ]
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Placements inside the requested window",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Placement"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/migration/v0/tiles/{tile_id}": {
+        "get": {
+          "operationId": "getRetiredTileProjection",
+          "summary": "Retired v0 tile projection",
+          "deprecated": true,
+          "parameters": [
+            {
+              "name": "tile_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Frozen v0 tile shape, migration reference only",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/RetiredTileV0"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/internal/merch/schedule/{slot_id}": {
+        "get": {
+          "operationId": "getInternalMerchSlot",
+          "summary": "Merch-planning-only schedule projection",
+          "parameters": [
+            {
+              "name": "slot_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Planning projection; merch-calendar audience only",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/InternalMerchSlot"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "LocalizedString": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string"
+            },
+            "locale": {
+              "type": "string"
+            },
+            "fallback_applied": {
+              "type": "boolean"
+            }
+          }
+        },
+        "EditorialBadge": {
+          "type": "object",
+          "properties": {
+            "badge_id": {
+              "type": "string"
+            },
+            "label": {
+              "$ref": "#/components/schemas/LocalizedString"
+            },
+            "placement_hint": {
+              "type": "string",
+              "enum": [
+                "corner",
+                "underline",
+                "inline"
+              ]
+            }
+          }
+        },
+        "FocalHint": {
+          "type": "object",
+          "properties": {
+            "x_ratio": {
+              "type": "number"
+            },
+            "y_ratio": {
+              "type": "number"
+            },
+            "safe_crop": {
+              "type": "string",
+              "enum": [
+                "square",
+                "wide",
+                "tall"
+              ]
+            }
+          }
+        },
+        "GalleryImage": {
+          "type": "object",
+          "properties": {
+            "asset_id": {
+              "type": "string"
+            },
+            "alt_text": {
+              "$ref": "#/components/schemas/LocalizedString"
+            },
+            "focal": {
+              "$ref": "#/components/schemas/FocalHint"
+            },
+            "position": {
+              "type": "integer"
+            }
+          }
+        },
+        "DisplayBlock": {
+          "type": "object",
+          "properties": {
+            "item_id": {
+              "type": "string"
+            },
+            "title": {
+              "$ref": "#/components/schemas/LocalizedString"
+            },
+            "editorial_subtitle": {
+              "$ref": "#/components/schemas/LocalizedString"
+            },
+            "badges": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/EditorialBadge"
+              }
+            },
+            "gallery_ref": {
+              "type": "string"
+            },
+            "published_at": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "PlacementWindow": {
+          "type": "object",
+          "properties": {
+            "opens_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "closes_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "timezone": {
+              "type": "string"
+            }
+          }
+        },
+        "Placement": {
+          "type": "object",
+          "properties": {
+            "placement_id": {
+              "type": "string"
+            },
+            "collection_slug": {
+              "type": "string"
+            },
+            "display_ref": {
+              "type": "string"
+            },
+            "slot": {
+              "type": "integer"
+            },
+            "window": {
+              "$ref": "#/components/schemas/PlacementWindow"
+            }
+          }
+        },
+        "CollectionHeader": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string"
+            },
+            "heading": {
+              "$ref": "#/components/schemas/LocalizedString"
+            },
+            "hero_asset_id": {
+              "type": "string"
+            }
+          }
+        },
+        "RetiredTileV0": {
+          "type": "object",
+          "description": "Frozen v0 shape. The flat title string predates localization.",
+          "properties": {
+            "tile_id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "image_url": {
+              "type": "string"
+            },
+            "promo_flag": {
+              "type": "boolean"
+            }
+          }
+        },
+        "InternalMerchSlot": {
+          "type": "object",
+          "properties": {
+            "slot_id": {
+              "type": "string"
+            },
+            "calendar_week": {
+              "type": "string"
+            },
+            "planner": {
+              "type": "string"
+            },
+            "locked": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    }
+  },
+  "postman_collection": {
+    "info": {
+      "name": "Catalog display saved examples",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+      {
+        "key": "baseUrl",
+        "value": "https://api.northstaroutfitters.com/catalog-display/v1"
+      }
+    ],
+    "item": [
+      {
+        "name": "Published display block",
+        "id": "POSTMAN-DSP-BLOCK",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=current."
+        },
+        "response": [
+          {
+            "name": "Published display block response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "current"
+              }
+            ],
+            "body": "{\n  \"item_id\": \"demo-item-2210\",\n  \"title\": {\"value\": \"Field Jacket\", \"locale\": \"en-US\", \"fallback_applied\": false},\n  \"editorial_subtitle\": {\"value\": \"Waxed cotton, cut for layering\", \"locale\": \"en-US\", \"fallback_applied\": false},\n  \"badges\": [{\"badge_id\": \"badge-new\", \"label\": {\"value\": \"New\", \"locale\": \"en-US\", \"fallback_applied\": false}, \"placement_hint\": \"corner\"}],\n  \"gallery_ref\": \"gal-demo-2210\",\n  \"published_at\": \"2026-07-02T08:30:00-04:00\"\n}"
+          }
+        ]
+      },
+      {
+        "name": "Gallery with focal hints",
+        "id": "POSTMAN-DSP-GALLERY",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=current."
+        },
+        "response": [
+          {
+            "name": "Gallery response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "current"
+              }
+            ],
+            "body": "[\n  {\"asset_id\": \"asset-demo-88a\", \"alt_text\": {\"value\": \"Front view on model\", \"locale\": \"en-US\", \"fallback_applied\": false}, \"focal\": {\"x_ratio\": 0.5, \"y_ratio\": 0.32, \"safe_crop\": \"tall\"}, \"position\": 1},\n  {\"asset_id\": \"asset-demo-88b\", \"alt_text\": {\"value\": \"Collar detail\", \"locale\": \"en-US\", \"fallback_applied\": false}, \"focal\": {\"x_ratio\": 0.44, \"y_ratio\": 0.18, \"safe_crop\": \"square\"}, \"position\": 2}\n]"
+          }
+        ]
+      },
+      {
+        "name": "Locale fallback marker",
+        "id": "POSTMAN-DSP-FALLBACK",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=current. Requested fr-CA, served en-US."
+        },
+        "response": [
+          {
+            "name": "Fallback-applied response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "current"
+              }
+            ],
+            "body": "{\n  \"item_id\": \"demo-item-1180\",\n  \"title\": {\"value\": \"Trail Mug\", \"locale\": \"en-US\", \"fallback_applied\": true},\n  \"editorial_subtitle\": {\"value\": \"Twelve ounces, double wall\", \"locale\": \"en-US\", \"fallback_applied\": true},\n  \"badges\": [],\n  \"gallery_ref\": \"gal-demo-1180\",\n  \"published_at\": \"2026-06-19T10:00:00-04:00\"\n}"
+          }
+        ]
+      },
+      {
+        "name": "Current placement window",
+        "id": "POSTMAN-DSP-PLACEMENT",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=current."
+        },
+        "response": [
+          {
+            "name": "Placement list response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "current"
+              }
+            ],
+            "body": "[\n  {\"placement_id\": \"plc-demo-301\", \"collection_slug\": \"summer-camp\", \"display_ref\": \"demo-item-2210\", \"slot\": 1, \"window\": {\"opens_at\": \"2026-07-01T00:00:00-04:00\", \"closes_at\": \"2026-07-31T23:59:59-04:00\", \"timezone\": \"America/New_York\"}}\n]"
+          }
+        ]
+      },
+      {
+        "name": "Closed-window placement rejection",
+        "id": "POSTMAN-DSP-WINDOW-CLOSED",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=current. Upcoming window requested after close."
+        },
+        "response": [
+          {
+            "name": "Window closed response",
+            "status": "Conflict",
+            "code": 409,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "current"
+              }
+            ],
+            "body": "{\n  \"response_code\": \"placement_window_closed\",\n  \"placement_id\": \"plc-demo-114\"\n}"
+          }
+        ]
+      },
+      {
+        "name": "Retired tile projection",
+        "id": "POSTMAN-DSP-TILE-V0",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=retired. Migration reference for the v0 tile shape."
+        },
+        "response": [
+          {
+            "name": "Retired tile response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "retired"
+              }
+            ],
+            "body": "{\n  \"tile_id\": \"tile-legacy-77\",\n  \"title\": \"Field Jacket\",\n  \"image_url\": \"https://cdn.northstaroutfitters.com/tiles/tile-legacy-77.jpg\",\n  \"promo_flag\": false\n}"
+          }
+        ]
+      },
+      {
+        "name": "Sandbox badge experiment",
+        "id": "POSTMAN-DSP-BADGE-DRAFT",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=draft. Sandbox-only badge rotation trial."
+        },
+        "response": [
+          {
+            "name": "Draft badge response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "draft"
+              }
+            ],
+            "body": "{\n  \"badge_id\": \"badge-rotation-x\",\n  \"label\": {\"value\": \"Back in stock\", \"locale\": \"en-US\", \"fallback_applied\": false},\n  \"placement_hint\": \"underline\"\n}"
+          }
+        ]
+      },
+      {
+        "name": "Merch planning slot",
+        "id": "POSTMAN-DSP-MERCH-SLOT",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/examples",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "examples"
+            ]
+          },
+          "description": "Saved example; lifecycle=internal. Merch-calendar audience."
+        },
+        "response": [
+          {
+            "name": "Planning slot response",
+            "status": "OK",
+            "code": 200,
+            "header": [
+              {
+                "key": "X-Example-Lifecycle",
+                "value": "internal"
+              }
+            ],
+            "body": "{\n  \"slot_id\": \"slot-w28-hero\",\n  \"calendar_week\": \"2026-W28\",\n  \"planner\": \"merch-planning\",\n  \"locked\": true\n}"
+          }
+        ]
+      }
+    ]
+  },
+  "error_behavior_columns": [
+    "rule_id",
+    "status",
+    "environment",
+    "audience",
+    "http_status",
+    "condition",
+    "response_code",
+    "notes",
+    "updated_at",
+    "superseded_by"
+  ],
+  "error_behavior": [
+    {
+      "rule_id": "DSP-2001",
+      "status": "published",
+      "environment": "production",
+      "audience": "storefront",
+      "http_status": "401",
+      "condition": "Missing or invalid service credential",
+      "response_code": "authentication_failed",
+      "notes": "Transport control shared across the platform gateway",
+      "updated_at": "2026-06-15T09:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "DSP-2002",
+      "status": "published",
+      "environment": "production",
+      "audience": "storefront",
+      "http_status": "404",
+      "condition": "Item has no published display block",
+      "response_code": "display_not_published",
+      "notes": "Unpublished is not an error upstream; merch may be mid-cycle",
+      "updated_at": "2026-06-15T09:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "DSP-2003",
+      "status": "published",
+      "environment": "production",
+      "audience": "storefront",
+      "http_status": "422",
+      "condition": "Requested locale is not in the supported set",
+      "response_code": "locale_unsupported",
+      "notes": "Fallback only applies to omitted locales, never to bad ones",
+      "updated_at": "2026-05-20T09:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "DSP-2004",
+      "status": "published",
+      "environment": "production",
+      "audience": "storefront",
+      "http_status": "409",
+      "condition": "Placement window closed between plan and request",
+      "response_code": "placement_window_closed",
+      "notes": "Windows close on the calendar, not on traffic",
+      "updated_at": "2026-05-20T09:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "DSP-2005",
+      "status": "published",
+      "environment": "production",
+      "audience": "storefront",
+      "http_status": "429",
+      "condition": "Client transport quota exceeded",
+      "response_code": "rate_limited",
+      "notes": "Retry metadata is in the response headers",
+      "updated_at": "2026-04-10T09:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "DSP-2006",
+      "status": "published",
+      "environment": "production",
+      "audience": "storefront",
+      "http_status": "503",
+      "condition": "Asset pipeline dependency unavailable",
+      "response_code": "render_dependency_unavailable",
+      "notes": "Gallery reads degrade before display blocks do",
+      "updated_at": "2026-04-10T09:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "DSP-0801",
+      "status": "retired",
+      "environment": "production",
+      "audience": "tiles-v0",
+      "http_status": "410",
+      "condition": "Tile id from the pre-2025 numbering",
+      "response_code": "tile_numbering_retired",
+      "notes": "Retired with the v0 tile projection",
+      "updated_at": "2026-01-12T09:00:00-05:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "DSP-0802",
+      "status": "retired",
+      "environment": "production",
+      "audience": "tiles-v0",
+      "http_status": "422",
+      "condition": "Flat title exceeded the v0 length cap",
+      "response_code": "tile_title_overflow",
+      "notes": "Length cap died with the flat title field",
+      "updated_at": "2026-01-12T09:00:00-05:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "DSP-D201",
+      "status": "draft",
+      "environment": "sandbox",
+      "audience": "experiments",
+      "http_status": "422",
+      "condition": "Badge rotation variant missing",
+      "response_code": "badge_variant_missing",
+      "notes": "Zero-traffic draft for the rotation trial",
+      "updated_at": "2026-06-01T09:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "DSP-D202",
+      "status": "draft",
+      "environment": "sandbox",
+      "audience": "experiments",
+      "http_status": "400",
+      "condition": "Editorial preview token malformed",
+      "response_code": "preview_token_invalid",
+      "notes": "Preview flow is sandbox-only until the 2.0 branch",
+      "updated_at": "2026-06-01T09:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "DSP-D203",
+      "status": "draft",
+      "environment": "sandbox",
+      "audience": "merch-calendar",
+      "http_status": "403",
+      "condition": "Planner role absent on schedule read",
+      "response_code": "planner_scope_missing",
+      "notes": "Internal projection gate, unreleased",
+      "updated_at": "2026-06-01T09:00:00-04:00",
+      "superseded_by": ""
+    }
+  ],
+  "record_contract_notes": "# NorthStar catalog display contract notes\n\nContract: `CONTRACT-CATALOG-DISPLAY-V1`  \nEnvironment: production  \nStatus: published and current  \nEffective: 2026-07-06 09:00 ET  \nSuperseded by: none\n\n## How to read this snapshot\n\nDisplay blocks, galleries, and placements are read-only projections of the\nmerchandising plan. `openapi.yaml` is the normative shape for all three; the\nsaved Postman responses show single concrete payloads and nothing more.\nAnything marked retired, draft, sandbox, or internal is outside the current\nstorefront surface.\n\n## Display block boundaries\n\nA display block owns presentation copy only: localized title, editorial\nsubtitle, badge set, and a gallery reference. Product structure — options,\nvariants, availability — lives in the commerce systems and is deliberately\nabsent here; a display block can be published for an item the commerce side\nhas paused, and the storefront is expected to reconcile the two reads.\n\n## Localization and fallback\n\nEvery customer-visible string travels as a localized value with an explicit\n`fallback_applied` marker. Fallback fires only when the caller omits a locale;\nan unsupported locale is a 422, because silently anglicizing a requested\nlocale caused the spring incident the marker exists to prevent.\n\n## Image pipeline\n\nGallery entries carry focal hints so downstream crops stay on the subject.\nThe hints are ratios, not pixels; the asset pipeline owns final geometry.\nWhen the pipeline degrades, gallery reads shed load first and display blocks\nkeep serving — the storefront should render text before it renders nothing.\n\n## Lifecycle material\n\nThe v0 tile projection and its two error rows are frozen for migration\nreference; the flat title string predates localization and must not be\nrevived. The badge-rotation and editorial-preview rows are sandbox drafts\nparked for the 2.0 branch. The merch schedule projection is visible in this\nexport for the planning audience and carries its own role gate.\n"
+}

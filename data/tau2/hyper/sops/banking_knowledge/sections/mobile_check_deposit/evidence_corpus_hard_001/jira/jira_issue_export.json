@@ -1,0 +1,493 @@
+{
+  "export_format": "jira_cloud_issue_export_v1",
+  "exported_at": "2025-11-13T13:05:12-05:00",
+  "site": {
+    "displayName": "Rho Bank",
+    "baseUrl": "https://rhobank.atlassian.net"
+  },
+  "jql": "project = DEP AND updated >= 2025-10-20 ORDER BY key ASC",
+  "projects": [
+    {
+      "key": "DEP",
+      "name": "Deposit Platform"
+    }
+  ],
+  "users": [
+    {
+      "accountId": "epark",
+      "displayName": "Elliot Park"
+    },
+    {
+      "accountId": "squreshi",
+      "displayName": "Sana Qureshi"
+    },
+    {
+      "accountId": "tmbeki",
+      "displayName": "Thandi Mbeki"
+    },
+    {
+      "accountId": "iross",
+      "displayName": "Imani Ross"
+    },
+    {
+      "accountId": "dvoss",
+      "displayName": "Daniela Voss"
+    },
+    {
+      "accountId": "mokafo",
+      "displayName": "M. Okafor"
+    }
+  ],
+  "issues": [
+    {
+      "id": "90171",
+      "key": "DEP-4171",
+      "self": "https://rhobank.atlassian.net/rest/api/3/issue/90171",
+      "fields": {
+        "summary": "Daily deposit-status extract for servicing desks: November wave cadence",
+        "description": "Servicing desks want the deposit-status extract daily (not weekly) through the November deposit wave, so agents and leads can eyeball posting/availability patterns without querying the platform directly. Same schema as October; only the cadence changes.",
+        "issuetype": {
+          "name": "Task"
+        },
+        "status": {
+          "name": "Done"
+        },
+        "priority": {
+          "name": "P3"
+        },
+        "resolution": {
+          "name": "Done"
+        },
+        "project": {
+          "key": "DEP"
+        },
+        "labels": [
+          "november-wave",
+          "extracts"
+        ],
+        "components": [
+          {
+            "name": "data-extracts"
+          }
+        ],
+        "fixVersions": [],
+        "created": "2025-10-27T09:18:44-04:00",
+        "updated": "2025-11-05T15:22:31-05:00",
+        "reporter": {
+          "accountId": "squreshi",
+          "displayName": "Sana Qureshi"
+        },
+        "assignee": {
+          "accountId": "epark",
+          "displayName": "Elliot Park"
+        },
+        "comment": {
+          "total": 1,
+          "comments": [
+            {
+              "id": "c-4171-01",
+              "author": {
+                "accountId": "epark"
+              },
+              "created": "2025-11-05T15:22:31-05:00",
+              "body": "Daily job live. Runs 06:30 ET through Nov 23, lands in the servicing share as deposit_status_extract_<date>.json. Fields unchanged from the October schema; reason codes come through as stamped by the review desk."
+            }
+          ]
+        },
+        "issuelinks": []
+      },
+      "changelog": {
+        "histories": [
+          {
+            "id": "h-4171-01",
+            "author": {
+              "accountId": "epark"
+            },
+            "created": "2025-11-05T15:20:12-05:00",
+            "items": [
+              {
+                "field": "status",
+                "fromString": "In Progress",
+                "toString": "Done"
+              },
+              {
+                "field": "resolution",
+                "fromString": null,
+                "toString": "Done"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "90177",
+      "key": "DEP-4177",
+      "self": "https://rhobank.atlassian.net/rest/api/3/issue/90177",
+      "fields": {
+        "summary": "Enable batch dedupe mode for holiday deposit volume (Nov 1 config push)",
+        "description": "Holiday volume plan: switch the duplicate detector to batch dedupe mode for the Nov 1 processing window onward. Batch mode bundles the widened serial-window compare so sequential-run items can be dedupe-checked in one pass. Load-tested against September volumes.",
+        "issuetype": {
+          "name": "Task"
+        },
+        "status": {
+          "name": "Done"
+        },
+        "priority": {
+          "name": "P2"
+        },
+        "resolution": {
+          "name": "Done"
+        },
+        "project": {
+          "key": "DEP"
+        },
+        "labels": [
+          "detector",
+          "holiday-volume"
+        ],
+        "components": [
+          {
+            "name": "deposit-detector"
+          }
+        ],
+        "fixVersions": [],
+        "created": "2025-10-24T10:14:26-04:00",
+        "updated": "2025-10-31T16:40:02-04:00",
+        "reporter": {
+          "accountId": "squreshi",
+          "displayName": "Sana Qureshi"
+        },
+        "assignee": {
+          "accountId": "epark",
+          "displayName": "Elliot Park"
+        },
+        "comment": {
+          "total": 1,
+          "comments": [
+            {
+              "id": "c-4177-01",
+              "author": {
+                "accountId": "epark"
+              },
+              "created": "2025-10-31T16:40:02-04:00",
+              "body": "Config staged for the Nov 1 window. Batch mode on, serial-window compare per the bundle defaults. Canary batch clean."
+            }
+          ]
+        },
+        "issuelinks": [
+          {
+            "type": {
+              "name": "Relates"
+            },
+            "issueKey": "DEP-4183"
+          }
+        ]
+      },
+      "changelog": {
+        "histories": [
+          {
+            "id": "h-4177-01",
+            "author": {
+              "accountId": "epark"
+            },
+            "created": "2025-10-31T16:38:50-04:00",
+            "items": [
+              {
+                "field": "status",
+                "fromString": "In Progress",
+                "toString": "Done"
+              },
+              {
+                "field": "resolution",
+                "fromString": null,
+                "toString": "Done"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "90183",
+      "key": "DEP-4183",
+      "self": "https://rhobank.atlassian.net/rest/api/3/issue/90183",
+      "fields": {
+        "summary": "Duplicate detector false positives on sequential-serial check runs (sealed-envelope reports)",
+        "description": "Two customer reports this week of the duplicate warning firing on checks the customers credibly never presented anywhere. Reported from case DEP-2511-0042: check #308, $140.00, water-district rebate run, matched to a Nov 1 presentment on routing + account + serial. Pattern: routing 011402775, serial window 300-320 — rebate runs print sequential serials. Second pair from case DEP-2511-0007 attached. Both held items are with the review desk.",
+        "issuetype": {
+          "name": "Bug"
+        },
+        "status": {
+          "name": "Done"
+        },
+        "priority": {
+          "name": "P1"
+        },
+        "resolution": {
+          "name": "Fixed"
+        },
+        "project": {
+          "key": "DEP"
+        },
+        "labels": [
+          "detector",
+          "november-wave",
+          "false-positive"
+        ],
+        "components": [
+          {
+            "name": "deposit-detector"
+          }
+        ],
+        "fixVersions": [
+          {
+            "name": "detector-2025.11.1"
+          }
+        ],
+        "created": "2025-11-08T11:42:33-05:00",
+        "updated": "2025-11-10T10:05:30-05:00",
+        "reporter": {
+          "accountId": "tmbeki",
+          "displayName": "Thandi Mbeki"
+        },
+        "assignee": {
+          "accountId": "epark",
+          "displayName": "Elliot Park"
+        },
+        "comment": {
+          "total": 4,
+          "comments": [
+            {
+              "id": "c-4183-01",
+              "author": {
+                "accountId": "epark"
+              },
+              "created": "2025-11-08T12:14:07-05:00",
+              "body": "Taking this. Need exact presentment timestamps for both items in each pair — checking whether last December's rebate issuance batch (Dec 27) is the common parent."
+            },
+            {
+              "id": "c-4183-02",
+              "author": {
+                "accountId": "tmbeki"
+              },
+              "created": "2025-11-08T12:31:52-05:00",
+              "body": "Timestamps added for both pairs. Pair 1: held item 2025-11-08 10:04 ET vs matched presentment 2025-11-01 08:12 ET. Pair 2: held item 2025-11-07 14:22 ET vs matched presentment 2025-11-01 08:12 ET. Same parent batch, if that means anything."
+            },
+            {
+              "id": "c-4183-03",
+              "author": {
+                "accountId": "epark"
+              },
+              "created": "2025-11-08T13:02:40-05:00",
+              "body": "It means everything. The Nov 1 window ran with batch dedupe mode on (DEP-4177), and the bundled serial-window compare treats serial proximity within the window as a match signal even when amounts differ. On a sequential-serial rebate run that's a false-positive machine: every check in the run sits within ~20 serials of its neighbors. Reverting the compare to exact-serial for non-batch items; batch mode keeps the window only where the parent batch id matches."
+            },
+            {
+              "id": "c-4183-04",
+              "author": {
+                "accountId": "epark"
+              },
+              "created": "2025-11-10T10:04:12-05:00",
+              "body": "Fix shipped in detector-2025.11.1, deployed in the Sunday-night window. Affected-item list (11 items, all on the two rebate-run patterns) handed to the review desk; their releases are flowing this morning. Customer-facing guidance needs no change — the duplicate-warning help page (HC-7227) already tells customers not to retry the item and to contact support through the app, which is exactly the behavior we want while a pair is held. Closing."
+            }
+          ]
+        },
+        "issuelinks": [
+          {
+            "type": {
+              "name": "Relates"
+            },
+            "issueKey": "DEP-4177"
+          }
+        ]
+      },
+      "changelog": {
+        "histories": [
+          {
+            "id": "h-4183-01",
+            "author": {
+              "accountId": "epark"
+            },
+            "created": "2025-11-08T12:14:07-05:00",
+            "items": [
+              {
+                "field": "status",
+                "fromString": "To Do",
+                "toString": "In Progress"
+              }
+            ]
+          },
+          {
+            "id": "h-4183-02",
+            "author": {
+              "accountId": "epark"
+            },
+            "created": "2025-11-10T10:05:30-05:00",
+            "items": [
+              {
+                "field": "status",
+                "fromString": "In Progress",
+                "toString": "Done"
+              },
+              {
+                "field": "resolution",
+                "fromString": null,
+                "toString": "Fixed"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "90186",
+      "key": "DEP-4186",
+      "self": "https://rhobank.atlassian.net/rest/api/3/issue/90186",
+      "fields": {
+        "summary": "Check-retention wording differs between app confirmation screen and help page",
+        "description": "Report from the deposit desk: the app's deposit-confirmation screen and the help-center retention article give differently-scoped keep-the-check guidance, and customers with both open ask which one is meant. Needs a content review across both surfaces; no copy change proposed yet.",
+        "issuetype": {
+          "name": "Task"
+        },
+        "status": {
+          "name": "To Do"
+        },
+        "priority": {
+          "name": "P4"
+        },
+        "resolution": null,
+        "project": {
+          "key": "DEP"
+        },
+        "labels": [
+          "app-content",
+          "help-center"
+        ],
+        "components": [
+          {
+            "name": "app-content"
+          }
+        ],
+        "fixVersions": [],
+        "created": "2025-11-09T13:35:10-05:00",
+        "updated": "2025-11-09T14:02:47-05:00",
+        "reporter": {
+          "accountId": "iross",
+          "displayName": "Imani Ross"
+        },
+        "assignee": null,
+        "comment": {
+          "total": 1,
+          "comments": [
+            {
+              "id": "c-4186-01",
+              "author": {
+                "accountId": "dvoss"
+              },
+              "created": "2025-11-09T14:02:47-05:00",
+              "body": "Adding the two surfaces side by side from today's call. Confirmation screen: 'Keep the paper check until the deposit posts, then destroy it.' Help page: 'Retain the paper check until the deposit is both posted and available, then securely destroy it.' Same day for most items, up to a week apart for review-lane items — that's when customers notice."
+            }
+          ]
+        },
+        "issuelinks": []
+      },
+      "changelog": {
+        "histories": [
+          {
+            "id": "h-4186-01",
+            "author": {
+              "accountId": "squreshi"
+            },
+            "created": "2025-11-09T14:02:47-05:00",
+            "items": [
+              {
+                "field": "labels",
+                "fromString": "app-content",
+                "toString": "app-content help-center"
+              },
+              {
+                "field": "priority",
+                "fromString": "P3",
+                "toString": "P4"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "90190",
+      "key": "DEP-4190",
+      "self": "https://rhobank.atlassian.net/rest/api/3/issue/90190",
+      "fields": {
+        "summary": "Availability matrix printable export: repeat rev letter and effective date in every page header",
+        "description": "This week a desk quoted a grid number from a printout whose rev letter lives only in the footer of the last page. Two revisions of the matrix legitimately coexist in the drive folder while desks migrate bookmarks, so the paper needs to identify itself better: repeat the rev letter and effective date in the header of every page of the printable export, and add the bookmark-title convention (title carries the effective date) to the folder README. The console reference field on the status macro remains the desk's quoting source; this is about the paper not lying by omission.",
+        "issuetype": {
+          "name": "Task"
+        },
+        "status": {
+          "name": "To Do"
+        },
+        "priority": {
+          "name": "P3"
+        },
+        "resolution": null,
+        "project": {
+          "key": "DEP"
+        },
+        "labels": [
+          "documentation",
+          "november-wave"
+        ],
+        "components": [
+          {
+            "name": "deposit-operations"
+          }
+        ],
+        "fixVersions": [],
+        "created": "2025-11-13T09:48:05-05:00",
+        "updated": "2025-11-13T09:48:33-05:00",
+        "reporter": {
+          "accountId": "mokafo",
+          "displayName": "M. Okafor"
+        },
+        "assignee": {
+          "accountId": "mokafo",
+          "displayName": "M. Okafor"
+        },
+        "comment": {
+          "total": 1,
+          "comments": [
+            {
+              "id": "c-4190-01",
+              "author": {
+                "accountId": "mokafo"
+              },
+              "created": "2025-11-13T09:48:33-05:00",
+              "body": "Sizing note before anyone grabs this: the printable export template is one file, so the header repeat is a template change plus a re-export of both revisions currently in the folder. The README bookmark-title line I can do today; folder is mine. Header work should ride the next content batch rather than a one-off."
+            }
+          ]
+        },
+        "issuelinks": []
+      },
+      "changelog": {
+        "histories": [
+          {
+            "id": "h-4190-01",
+            "author": {
+              "accountId": "mokafo"
+            },
+            "created": "2025-11-13T09:48:33-05:00",
+            "items": [
+              {
+                "field": "labels",
+                "fromString": "",
+                "toString": "print-export"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

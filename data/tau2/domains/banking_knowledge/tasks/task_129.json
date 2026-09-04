@@ -1,0 +1,72 @@
+{
+  "id": "task_129",
+  "description": {
+    "purpose": "Task: task_129",
+    "relevant_policies": null,
+    "notes": "REPLACEMENT CARD - ENTRY-TIER EXPEDITED FEE FLIPS THE SHIPPING CHOICE. Existing db customer Priya Sharma's EcoCard chip is cracked (reason: damaged). She wants the new card fast, but only if rush shipping is free: her scripted rule is 'accept expedited if it costs nothing, decline if it costs anything'. Per 'Credit Card Replacement Shipping Options and Fees', the EcoCard is entry-tier, so expedited shipping costs $15.00 - the agent must advise the fee (communicate_info '$15'), at which point she chooses standard delivery (free, 7-10 business days). CORRECT: order_replacement_credit_card_7291 with reason 'damaged', expedited_shipping false, shipped to her home address. THE TRAP: an agent that skips the fee-by-tier advisory or assumes expedited is complimentary (true only for premium-tier and above) places an expedited order -> expedited_shipping=true in the order record -> DB mismatch. The agent must also communicate the standard delivery window (nl assertion; the doc's en-dash '7-10' makes substring pinning unsafe)."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Priya Sharma, a 35-year-old software engineer from Chicago, IL. You have a Gold Rewards Card and an EcoCard with Rho-Bank. You are friendly but careful with money - you hate paying junk fees.\n\n**Your situation:** You dropped your EcoCard in a parking lot last week and a car ran over it. The chip is cracked: the card gets declined at chip readers, and tap only works about half the time. You use this card for everyday spending, so you want a replacement. You'd love to get it quickly, but you are NOT willing to pay anything extra for shipping - a few years ago your old bank charged you a surprise rush fee and you're still annoyed about it.\n\n**Your shipping rule (important):** If expedited or rush shipping is FREE, take it. If it costs ANY fee at all, decline it and take standard shipping instead. If the agent never mentions shipping speed, ask: \"How fast will it get here? Is there a faster option?\"\n\n**Information you know and should provide when asked:**\n- Your full name: Priya Sharma\n- Your phone number: 312-555-0481\n- Your email: sparkle_queen_99@yahoo.com\n- Your date of birth: 11/03/1990\n- Your home address: 562 Riverside Drive, Chicago, IL 60611 (ship the card here - confirm this when asked)\n\n## Conversation Flow:\n\n1. **Opening:** \"Hi, I need a replacement for my EcoCard. I dropped it and a car ran over it - the chip is cracked and it barely works anymore. Can you send me a new one?\"\n\n2. **Provide verification info when asked:** Give your name, phone number, email, date of birth as requested.\n\n3. **If asked what happened to the card / the reason:** \"It's physically damaged - the chip is cracked. It wasn't lost or stolen, I have it right here, it just doesn't work.\"\n\n4. **If asked about shipping speed or offered expedited shipping:** Ask whether it costs anything. \"How fast is that, and is there a fee?\"\n\n5. **If told expedited shipping has a fee (any amount):** Decline it. \"Fifteen dollars to mail me a card? No thanks. Standard shipping is fine, I can wait.\" (Adjust the amount to whatever fee the agent quotes - decline any fee.)\n\n6. **If told expedited shipping is free/complimentary:** Accept it. \"Oh, if it's free, then yes, absolutely, send it expedited.\"\n\n7. **If asked to confirm the shipping address:** \"Yes, my home address - 562 Riverside Drive, Chicago, IL 60611. No unit number.\"\n\n8. **If asked how soon you need it / whether you want to know the delivery timeline:** \"Yes, when should I expect it?\"\n\n9. **After the replacement order is placed:** Thank the agent and end the conversation. \"Perfect, thanks for your help. Bye!\" ###STOP###\n\nDo not dump all your information at once. Only provide additional details about your situation when the agent asks. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": null,
+      "user_data": null
+    },
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Priya Sharma",
+          "user_id": "af0581dcbf",
+          "address": "562 Riverside Drive, Chicago, IL 60611",
+          "email": "sparkle_queen_99@yahoo.com",
+          "phone_number": "312-555-0481",
+          "date_of_birth": "11/03/1990",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "129_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "order_replacement_credit_card_7291"
+        },
+        "requestor": "assistant",
+        "action_id": "129_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "order_replacement_credit_card_7291",
+          "arguments": "{\"credit_card_account_id\": \"cc_af0581dcbf_eco\", \"user_id\": \"af0581dcbf\", \"shipping_address\": \"562 Riverside Drive, Chicago, IL 60611\", \"reason\": \"damaged\", \"expedited_shipping\": false}"
+        },
+        "requestor": "assistant",
+        "action_id": "129_2"
+      }
+    ],
+    "communicate_info": [
+      "$15"
+    ],
+    "nl_assertions": [
+      "The agent tells the customer the expected delivery window for standard delivery (7 to 10 business days)."
+    ],
+    "reward_basis": [
+      "DB",
+      "COMMUNICATE",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_credit_cards_credit_card_replacements_001",
+    "doc_credit_cards_credit_card_replacements_002"
+  ]
+}

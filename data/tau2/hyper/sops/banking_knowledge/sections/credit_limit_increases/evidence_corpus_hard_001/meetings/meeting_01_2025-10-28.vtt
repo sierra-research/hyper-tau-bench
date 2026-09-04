@@ -1,0 +1,190 @@
+WEBVTT
+
+00:00:04.381 --> 00:00:27.531
+<v Renata Ellis>Okay, it is ten oh two on Tuesday the twenty-eighth, this is CLI enablement session one, tier-boundary mechanics, and the recording light is on. This goes to the library, so if you say something brilliant it is immortal, and if I say something wrong, mercifully, so is the correction.
+
+00:00:30.377 --> 00:01:02.030
+<v Renata Ellis>Quick framing for anyone who slept through yesterday. As of Monday morning this desk owns credit-limit increase decisioning end to end. Joel's directive gives you the spine, the order of operations, and I am not going to re-teach the directive. What the directive does not do is teach you how the eligibility criteria actually behave at the edges, and the edges are where week one goes wrong.
+
+00:01:04.695 --> 00:01:22.175
+<v Renata Ellis>So today is the three basic criteria and their boundary behavior. Thursday is payment history and amount verification. Two sessions, both recorded, and between them you will have touched every check you'll run on a live request.
+
+00:01:26.934 --> 00:01:51.974
+<v Renata Ellis>Let me start with the sentence I want tattooed somewhere you can see it. I'm reading from the runbook card so I get it exact: at the time a credit-limit increase request is submitted, all three card-tier eligibility criteria must be met: minimum account age, cooldown between requests, and maximum utilization at request.
+
+00:01:55.792 --> 00:02:15.634
+<v Renata Ellis>Three criteria, one timestamp. Everything is measured at the time the request is submitted. Not when the customer first called, not when you finish the checklist twenty minutes later. Submission time. Hold that thought because every boundary question today collapses into it.
+
+00:02:19.767 --> 00:02:33.467
+<v Nadia Osei>Can I ask the dumb version of the question before we start? Why three separate criteria at all? The back office just sort of knew whether someone was eligible.
+
+00:02:37.216 --> 00:03:03.200
+<v Renata Ellis>The back office had eight years of calluses, Nadia, and we have a checklist. The checklist is how you compress eight years into week one. Three criteria because they measure three different kinds of risk, and you check all three because any one of them alone can be fine while another one is on fire.
+
+00:03:06.474 --> 00:03:40.017
+<v Renata Ellis>Criterion one, minimum account age. Every tier has a minimum number of days the account has to have been open before an increase request can qualify. The number itself varies by tier and I am deliberately not reciting the table at you, because the table is versioned and the workbook is the source. You read the current matrix tab when you check, every time, even if you think you remember it.
+
+00:03:44.266 --> 00:04:11.195
+<v Renata Ellis>What I will teach is how the boundary behaves, because that is not in the table. Here is the rule: an account qualifies for the minimum account age criterion on or after the day the applicable minimum account age is reached. On or after. The day the account hits the minimum, it qualifies. Not the day after.
+
+00:04:15.009 --> 00:04:17.371
+<v Marcus Bell>So it's inclusive. Day-of counts.
+
+00:04:21.759 --> 00:04:47.743
+<v Renata Ellis>Day-of counts. Let's make it concrete with the entry tier, because entry is where the age question actually shows up on the floor. Entry's minimum is a hundred and twenty days, that one you can hold onto because we're about to do arithmetic with it. Nadia, your account from this morning, when did it open?
+
+00:04:51.795 --> 00:04:58.410
+<v Nadia Osei>First of July. And the customer called yesterday wanting more room before the holidays.
+
+00:05:02.960 --> 00:05:06.739
+<v Renata Ellis>Perfect specimen. Count it out loud for us.
+
+00:05:10.169 --> 00:05:20.091
+<v Nadia Osei>July is thirty-one days, so thirty-one from the first... July gives me thirty, wait, do I count the open date itself?
+
+00:05:22.725 --> 00:05:49.182
+<v Renata Ellis>Day zero is the open date, the account turns one day old the next day. Console does this math for you, by the way, the account record shows age in days right on the summary pane. The reason I make you do it by hand once is so you trust the pane instead of your gut.
+
+00:05:51.801 --> 00:05:56.525
+<v Nadia Osei>Then yesterday it was a hundred and nineteen days old.
+
+00:06:00.750 --> 00:06:25.790
+<v Renata Ellis>A hundred and nineteen. So here is the boundary sentence, again exact from the card: an Entry-tier account open for 119 days does not qualify for the minimum account age criterion; on day 120 and beyond it qualifies if the other criteria are met. Your customer was one day early, Nadia. One day.
+
+00:06:28.459 --> 00:06:31.766
+<v Nadia Osei>Which feels terrible to say to someone.
+
+00:06:35.799 --> 00:07:10.287
+<v Renata Ellis>It feels terrible and you say it anyway, and Thursday we'll talk about how the denial conversation should sound, and there will be a kept call in the library that does it right. What you do not do is sit on the request overnight so it ages into qualifying. The request is measured when it is submitted, and you submit when the customer confirms the amount. You don't get to time-travel the paperwork.
+
+00:07:14.225 --> 00:07:20.839
+<v Elif Demir>What if the customer says, fine, I'll call back tomorrow? Is that gaming it?
+
+00:07:23.206 --> 00:07:52.497
+<v Renata Ellis>That is not gaming anything, that's the customer making a fresh request on a day the account qualifies. Tomorrow the account is a hundred and twenty days old, and the rule says on day 120 and beyond it qualifies. There is nothing shady about waiting until you're eligible. What would be shady is you holding today's request in a drawer until midnight.
+
+00:07:56.893 --> 00:08:07.287
+<v Marcus Bell>Does the clock start at application or activation? I had one where the card shipped two weeks after the application went through.
+
+00:08:09.580 --> 00:08:31.312
+<v Renata Ellis>Open date on the account record, which is when the account was established, not when the plastic got activated. The summary pane's age-in-days number is computed from that open date, so again, trust the pane. If the pane and the customer's memory disagree, the pane wins.
+
+00:08:35.939 --> 00:08:45.860
+<v Grace Okonkwo>And mid-tier and premium ages? You said you're not reciting the table, but do we at least get told they're shorter?
+
+00:08:50.415 --> 00:09:25.848
+<v Renata Ellis>They're different, and the workbook matrix tab is where you read them, current version, at check time. I'm being a pain about this on purpose. The numbers have changed before and they will change again, and the person who memorized last year's table is more dangerous than the person who never learned it. The boundary behavior is what transfers: whatever the minimum is for the tier in front of you, day-of qualifies, day-before does not.
+
+00:09:28.653 --> 00:09:48.495
+<v Renata Ellis>Criterion two. Cooldown between requests. Concept first: after a customer gets an increase, there's a waiting period per tier before another request can go through. The per-tier lengths, same speech as before, live in the workbook matrix tab, read at check time.
+
+00:09:52.729 --> 00:10:13.516
+<v Renata Ellis>Mechanically, the check runs through the console's history macro, which pulls the account's request history and you compare dates. The console spells out the how. What I want to spend our time on is the two questions the macro does not answer for you.
+
+00:10:17.767 --> 00:10:37.609
+<v Tomas Rivera>Let me guess, because I hit both of them yesterday. A customer with a denied request from September, does the denial start a clock? And when a clock does start, does it start from when they asked or when it got decided?
+
+00:10:40.159 --> 00:11:13.703
+<v Renata Ellis>Those are exactly the two, Tomas, and I am going to give you an unsatisfying answer on purpose. The runbook sentence on cooldown is genuinely ambiguous on both points, I flagged it to Joel this morning, and he owes the floor a written ruling. Until that ruling exists in writing, in the channel where rulings live, you do not guess. If a cooldown call is ambiguous, you ask before you deny.
+
+00:11:17.778 --> 00:11:21.558
+<v Tomas Rivera>So we hold the request while we ask?
+
+00:11:24.105 --> 00:12:00.955
+<v Renata Ellis>You ask in the channel, you get an answer from Joel or from me, and then you act on the request you already submitted. What you do not do is deny someone because your neighbor at the next desk remembers a rule from somewhere. A wrong denial is not a safe error, it's a customer who was entitled to a yes walking away with a no. I would rather eat ten awkward five-minute waits than one of those.
+
+00:12:05.712 --> 00:12:12.799
+<v Nadia Osei>It does feel like the kind of thing that's going to bite someone this week.
+
+00:12:16.927 --> 00:12:29.211
+<v Renata Ellis>It might. And if it does, the fix will be a dated ruling everyone can read, not a whisper network. Moving on before I editorialize further.
+
+00:12:34.155 --> 00:12:57.304
+<v Renata Ellis>Criterion three, utilization, and this is the one with real arithmetic in it, so everyone wake up. Card first, exact words: current utilization must be below the applicable card-tier maximum threshold at the time the credit-limit increase request is submitted; utilization at or above the threshold does not qualify.
+
+00:12:59.654 --> 00:13:19.024
+<v Renata Ellis>Two load-bearing words in there. Below, and submitted. Below means strictly below, at-the-threshold fails, and we're about to beat that to death with examples. Submitted means the timestamp again, current utilization at submission, not the statement balance from three weeks ago.
+
+00:13:22.114 --> 00:13:30.618
+<v Renata Ellis>Utilization is balance divided by limit, as a percentage. Elif, warm up: balance twenty-eight forty, limit four thousand.
+
+00:13:34.554 --> 00:13:37.861
+<v Elif Demir>Twenty-eight forty over four thousand... seventy-one percent.
+
+00:13:41.764 --> 00:14:10.110
+<v Renata Ellis>Seventy-one on an entry-tier card, whose threshold is seventy. And the card gives you this exact case, verbatim: an Entry-tier utilization of 71% is above 70% and does not qualify; a Premium-tier utilization exactly at 90% does not meet the below-90% requirement. Both halves of that sentence matter. The first half is the easy one, seventy-one is over seventy, done.
+
+00:14:12.820 --> 00:14:28.883
+<v Renata Ellis>The second half is the one that will burn somebody. Exactly at the threshold. A premium card sitting at ninety point zero, not a hair over. The threshold is ninety. Does it qualify? Grace.
+
+00:14:33.569 --> 00:14:37.821
+<v Grace Okonkwo>No. Below means below, and exactly-at is not below.
+
+00:14:42.391 --> 00:14:57.982
+<v Renata Ellis>Correct, and say it that flatly to yourself every time, because your instinct wants at-the-line to count, the customer's instinct really wants at-the-line to count, and the rule is one word long. Below.
+
+00:15:01.026 --> 00:15:09.057
+<v Marcus Bell>What about rounding? Customer's at sixty-nine point six on entry. Do I round to seventy and deny?
+
+00:15:11.666 --> 00:15:37.650
+<v Renata Ellis>You don't round anything yourself. The console utilization field on the account summary carries the computed figure, and that figure is what you compare to the threshold. Sixty-nine point six is below seventy, qualifies on this criterion. Your job is comparison, not arithmetic hygiene. If you're doing division on a napkin, something has gone wrong.
+
+00:15:41.720 --> 00:15:51.168
+<v Elif Demir>And if a payment posts while we're on the phone? Say they pay it down from seventy-one to sixty-eight mid-call.
+
+00:15:54.509 --> 00:16:23.327
+<v Renata Ellis>Then the current utilization at the time the request is submitted is sixty-eight, and that's the number that counts. This cuts both ways, by the way. If they're at sixty-eight when they call and a big authorization lands before you submit, you're reading seventy-something at submission time and that's the truth of the account. The timestamp doesn't care about the story.
+
+00:16:27.385 --> 00:16:36.361
+<v Tomas Rivera>Is it legitimate to tell a customer, pay down four hundred dollars and call back? That feels like coaching.
+
+00:16:39.942 --> 00:17:13.486
+<v Renata Ellis>It is legitimate and it is on the card, last sentence of the day, exact words: if any single basic tier eligibility criterion is not met, the customer should wait until it is met or lower utilization before submitting the credit-limit increase request. Notice it names the only two remedies there are. Time fixes age and cooldown. Paying down fixes utilization. There is no third lever, no override, no supervisor exception.
+
+00:17:16.791 --> 00:17:47.500
+<v Renata Ellis>And notice the word single. One failed criterion is enough to make that the conversation. You don't need three failures to tell someone the honest answer, and you also don't stop checking after one failure, because Joel wants complete records, but the customer conversation is allowed to be, here's the one thing standing between you and a qualifying request, and here's which lever moves it.
+
+00:17:49.760 --> 00:17:54.012
+<v Nadia Osei>That's actually a nicer conversation than a flat no.
+
+00:17:56.590 --> 00:18:15.015
+<v Renata Ellis>It's the nicest true thing you can say, which is the standard for every sentence on this floor. All right, boundary drill, rapid fire, then we're done. Entry account, one hundred twenty days old today, calls today. Age criterion?
+
+00:18:18.499 --> 00:18:21.334
+<v Marcus Bell>Qualifies. Day-of counts, on or after.
+
+00:18:25.573 --> 00:18:29.825
+<v Renata Ellis>Premium card, utilization reading eighty-nine point nine. Threshold ninety.
+
+00:18:33.216 --> 00:18:35.579
+<v Elif Demir>Below ninety, qualifies on utilization.
+
+00:18:39.863 --> 00:18:46.005
+<v Renata Ellis>Same card, tomorrow, big hotel authorization posts, reading ninety point one at submission.
+
+00:18:49.716 --> 00:18:53.968
+<v Elif Demir>Above, doesn't qualify. And exactly ninety wouldn't have either.
+
+00:18:58.633 --> 00:19:07.610
+<v Renata Ellis>Entry card, one hundred nineteen days, customer offers to pay the balance to zero on the phone right now.
+
+00:19:11.644 --> 00:19:17.786
+<v Grace Okonkwo>Still doesn't qualify. Zero balance fixes utilization, it doesn't fix age. Wrong lever.
+
+00:19:20.887 --> 00:19:27.029
+<v Renata Ellis>Beautiful. Denied request in September, wants to go again in November, cooldown status?
+
+00:19:29.617 --> 00:19:35.759
+<v Tomas Rivera>Open question, ask in the channel before denying, wait for the written ruling.
+
+00:19:38.143 --> 00:20:05.545
+<v Renata Ellis>You were all listening. Two logistics notes before the door. First, where the checklist lives: the console presents it on the request record itself, in order, and the workbook link sits on each line that needs a number. You should never have the workbook open from a bookmark and the request in another window, work from the record.
+
+00:20:07.856 --> 00:20:21.084
+<v Marcus Bell>And if the console figure and a statement PDF the customer is reading from disagree? He had last month's statement in his hand telling me a different utilization.
+
+00:20:25.699 --> 00:20:46.959
+<v Renata Ellis>Statement utilization is a snapshot from the statement date, which is history. Current utilization at submission is the criterion, and the console field is current. Explain the difference kindly, it's a genuinely confusing thing to see two numbers, but compare against exactly one of them.
+
+00:20:51.608 --> 00:21:09.560
+<v Renata Ellis>Last housekeeping: this recording lands in the library today, Thursday is payment history and amount verification, ten o'clock, same room. If you carry one thing out of here, carry the timestamp. Every criterion, measured at submission. Thanks, everyone.

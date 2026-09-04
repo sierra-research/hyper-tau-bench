@@ -1,0 +1,1370 @@
+{
+  "id": "telecom_service_foundations_policy_fact_schema_001",
+  "domain": "telecom",
+  "display_name": "Service and device foundations",
+  "global_rules_path": "tau2/hyper/sops/telecom/global_rules.json",
+  "section_id": "service_foundations",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/telecom_sop.md",
+    "heading": "## Records And Phone Checks",
+    "component_headings": [
+      "## General Conduct",
+      "## What You Can Do",
+      "## Records And Phone Checks",
+      "## Expected Phone Behavior"
+    ]
+  },
+  "domain_hierarchy": {
+    "role": "shared_reference",
+    "requires": []
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "service_foundations",
+        "label": "Service and device foundations",
+        "kind": "shared_reference",
+        "fact_ids": []
+      },
+      {
+        "id": "channel_scope",
+        "label": "What the channel can do",
+        "kind": "capability_set",
+        "parent_id": "service_foundations",
+        "order": 1,
+        "fact_ids": [
+          "can_look_up_account_and_records",
+          "can_send_payment_request_and_help_pay",
+          "can_resume_suspended_line_when_policy_allows",
+          "can_show_available_plans_and_change_selected_plan",
+          "can_enable_or_disable_carrier_roaming_on_active_line",
+          "can_add_one_time_data_refuel",
+          "can_guide_customer_side_phone_actions",
+          "can_guide_customer_side_checks",
+          "can_transfer_when_human_handling_required"
+        ]
+      },
+      {
+        "id": "authorized_scope_closure",
+        "label": "The capability list is complete",
+        "kind": "closed_set",
+        "parent_id": "channel_scope",
+        "order": 1,
+        "fact_ids": [
+          "authorized_actions_are_closed_scope"
+        ]
+      },
+      {
+        "id": "prohibited_channel_actions",
+        "label": "What the channel cannot do",
+        "kind": "prohibition_set",
+        "parent_id": "channel_scope",
+        "order": 2,
+        "fact_ids": [
+          "cannot_renew_ended_contract",
+          "cannot_reopen_closed_line",
+          "cannot_override_locked_sim_security",
+          "cannot_create_unsupported_account_fields",
+          "cannot_complete_work_sent_to_human"
+        ]
+      },
+      {
+        "id": "conduct_controls",
+        "label": "Pace and grounding controls",
+        "kind": "control_set",
+        "parent_id": "service_foundations",
+        "order": 2,
+        "fact_ids": [
+          "ground_responses_in_customer_reports_records_and_phone_checks",
+          "responses_concise_accurate_no_speculation",
+          "no_subjective_recommendations_or_comments",
+          "one_customer_care_action_at_a_time",
+          "wait_for_result_before_next_step"
+        ]
+      },
+      {
+        "id": "multi_issue_ordering",
+        "label": "Multi-issue ordering",
+        "kind": "control_set",
+        "parent_id": "service_foundations",
+        "order": 2,
+        "fact_ids": [
+          "multiple_issues_address_connectivity_first"
+        ]
+      },
+      {
+        "id": "carrier_change_confirmation",
+        "label": "Confirm before carrier-side changes",
+        "kind": "confirmation_gate",
+        "parent_id": "service_foundations",
+        "order": 3,
+        "fact_ids": [
+          "carrier_side_change_requires_exact_explanation_and_confirmation"
+        ]
+      },
+      {
+        "id": "case_closure_rule",
+        "label": "Close only on a verified final check",
+        "kind": "verification_gate",
+        "parent_id": "service_foundations",
+        "order": 4,
+        "fact_ids": [
+          "close_case_only_after_final_check_shows_resolved"
+        ]
+      },
+      {
+        "id": "transfer_controls",
+        "label": "Recorded handoffs",
+        "kind": "escalation",
+        "parent_id": "service_foundations",
+        "order": 5,
+        "fact_ids": [
+          "transfer_triggers_out_of_scope_or_policy_step",
+          "handoff_recorded_via_console_control",
+          "transfer_notice_exact_text",
+          "transfer_action_exact_name_for_every_handoff",
+          "work_relevant_steps_before_technical_transfer"
+        ]
+      },
+      {
+        "id": "out_of_policy_disposition",
+        "label": "Out-of-policy requests",
+        "kind": "control_set",
+        "parent_id": "service_foundations",
+        "order": 5,
+        "fact_ids": [
+          "deny_requests_against_policy"
+        ]
+      },
+      {
+        "id": "customer_record_model",
+        "label": "What customer records show",
+        "kind": "record_model",
+        "parent_id": "service_foundations",
+        "order": 6,
+        "fact_ids": [
+          "customer_records_contents",
+          "records_are_source_of_truth_for_account_decisions"
+        ]
+      },
+      {
+        "id": "phone_check_model",
+        "label": "What phone checks show",
+        "kind": "record_model",
+        "parent_id": "service_foundations",
+        "order": 7,
+        "fact_ids": [
+          "phone_checks_show_device_side_state",
+          "affected_line_is_number_being_troubleshot"
+        ]
+      },
+      {
+        "id": "carrier_state_reflection",
+        "label": "Phone checks reflect carrier-side state",
+        "kind": "system_constraint",
+        "parent_id": "service_foundations",
+        "order": 8,
+        "fact_ids": [
+          "phone_checks_reflect_carrier_state_after_account_changes",
+          "active_line_can_regain_service_suspended_cannot",
+          "carrier_roaming_allowance_required_for_abroad_data",
+          "sent_payment_request_visible_on_phone",
+          "missing_or_unseated_sim_reports_missing"
+        ]
+      },
+      {
+        "id": "billing_lifecycle",
+        "label": "Bill statuses and payment requests",
+        "kind": "closed_set",
+        "parent_id": "service_foundations",
+        "order": 9,
+        "fact_ids": [
+          "bill_statuses_closed_set",
+          "payment_request_moves_overdue_bill_to_awaiting_payment",
+          "paid_request_makes_bill_paid_and_eligible_for_resumption"
+        ]
+      },
+      {
+        "id": "data_availability_rule",
+        "label": "When mobile data is blocked",
+        "kind": "formula",
+        "parent_id": "service_foundations",
+        "order": 10,
+        "fact_ids": [
+          "data_blocked_at_or_above_limit_plus_refueled"
+        ]
+      },
+      {
+        "id": "mms_requirements",
+        "label": "What MMS needs to succeed",
+        "kind": "rule_set",
+        "parent_id": "service_foundations",
+        "order": 11,
+        "fact_ids": [
+          "default_messaging_app_needs_sms_and_storage_permissions",
+          "mms_success_conditions"
+        ]
+      },
+      {
+        "id": "expected_device_behavior",
+        "label": "Expected phone behavior",
+        "kind": "rule_set",
+        "parent_id": "service_foundations",
+        "order": 12,
+        "fact_ids": [
+          "setting_toggle_reports_new_state",
+          "apn_reset_restores_carrier_defaults",
+          "reboot_applies_pending_changes_and_reruns_search",
+          "speed_test_fails_without_mobile_data",
+          "speed_scale_by_network_generation",
+          "data_saver_and_poor_vpn_degrade_speed",
+          "poor_vpn_slow_case_resolved_by_disconnect"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "channel_scope",
+        "type": "governed_by",
+        "target_id": "conduct_controls"
+      },
+      {
+        "source_id": "channel_scope",
+        "type": "constrained_by",
+        "target_id": "prohibited_channel_actions"
+      },
+      {
+        "source_id": "prohibited_channel_actions",
+        "type": "escalates_through",
+        "target_id": "transfer_controls"
+      },
+      {
+        "source_id": "carrier_change_confirmation",
+        "type": "applies_to",
+        "target_id": "channel_scope"
+      },
+      {
+        "source_id": "carrier_state_reflection",
+        "type": "uses_input_from",
+        "target_id": "customer_record_model"
+      },
+      {
+        "source_id": "carrier_state_reflection",
+        "type": "applies_to",
+        "target_id": "phone_check_model"
+      },
+      {
+        "source_id": "billing_lifecycle",
+        "type": "governed_by",
+        "target_id": "customer_record_model"
+      },
+      {
+        "source_id": "data_availability_rule",
+        "type": "uses_input_from",
+        "target_id": "customer_record_model"
+      },
+      {
+        "source_id": "mms_requirements",
+        "type": "uses_input_from",
+        "target_id": "phone_check_model"
+      },
+      {
+        "source_id": "expected_device_behavior",
+        "type": "applies_to",
+        "target_id": "phone_check_model"
+      },
+      {
+        "source_id": "case_closure_rule",
+        "type": "uses_input_from",
+        "target_id": "phone_check_model"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "can_look_up_account_and_records",
+      "category": "authorized_scope",
+      "statement": "Agents can look up a customer account, affected wireless line, device, plan, recent bills, and data usage."
+    },
+    {
+      "id": "can_send_payment_request_and_help_pay",
+      "category": "authorized_scope",
+      "statement": "Agents can send a payment request for an overdue bill, then help the customer pay it from their phone."
+    },
+    {
+      "id": "can_resume_suspended_line_when_policy_allows",
+      "category": "authorized_scope",
+      "statement": "Agents can resume a suspended line when policy allows."
+    },
+    {
+      "id": "can_show_available_plans_and_change_selected_plan",
+      "category": "authorized_scope",
+      "statement": "Agents can show available plans and change an affected line to the customer-selected plan after confirming the new monthly price."
+    },
+    {
+      "id": "can_enable_or_disable_carrier_roaming_on_active_line",
+      "category": "authorized_scope",
+      "statement": "Agents can enable or disable carrier-side roaming for an active line."
+    },
+    {
+      "id": "can_add_one_time_data_refuel",
+      "category": "authorized_scope",
+      "statement": "Agents can add a one-time data refuel when the line has exhausted available data."
+    },
+    {
+      "id": "can_guide_customer_side_phone_actions",
+      "category": "authorized_scope",
+      "statement": "Agents can guide customer-side phone actions such as turning airplane mode, mobile data, roaming, Data Saver, Wi-Fi Calling, or VPN on or off; reseating the SIM; resetting APN settings; rebooting; and granting messaging app permissions."
+    },
+    {
+      "id": "can_guide_customer_side_checks",
+      "category": "authorized_scope",
+      "statement": "Agents can guide customer-side checks such as speed tests or MMS tests."
+    },
+    {
+      "id": "can_transfer_when_human_handling_required",
+      "category": "authorized_scope",
+      "statement": "Agents can transfer the customer when a workflow requires human handling."
+    },
+    {
+      "id": "authorized_actions_are_closed_scope",
+      "category": "authorized_scope",
+      "statement": "Looking up account information, sending payment requests and helping the customer pay from their phone, resuming suspended lines when policy allows, showing available plans and changing an affected line to the customer-selected plan after price confirmation, enabling or disabling carrier-side roaming, adding one-time data refuels, guiding customer-side phone actions and checks, and transferring to a human are the complete set of things agents can help customers with through this channel."
+    },
+    {
+      "id": "cannot_renew_ended_contract",
+      "category": "prohibited_actions",
+      "statement": "Agents cannot renew an ended contract."
+    },
+    {
+      "id": "cannot_reopen_closed_line",
+      "category": "prohibited_actions",
+      "statement": "Agents cannot reopen a closed line."
+    },
+    {
+      "id": "cannot_override_locked_sim_security",
+      "category": "prohibited_actions",
+      "statement": "Agents cannot override locked SIM security."
+    },
+    {
+      "id": "cannot_create_unsupported_account_fields",
+      "category": "prohibited_actions",
+      "statement": "Agents cannot create unsupported account fields."
+    },
+    {
+      "id": "cannot_complete_work_sent_to_human",
+      "category": "prohibited_actions",
+      "statement": "Agents cannot complete work that the handbook sends to a human agent."
+    },
+    {
+      "id": "ground_responses_in_customer_reports_records_and_phone_checks",
+      "category": "conduct",
+      "statement": "The agent uses only what the customer reports, what appears in customer records, and what the customer can verify on their phone."
+    },
+    {
+      "id": "responses_concise_accurate_no_speculation",
+      "category": "conduct",
+      "statement": "The agent must be concise, helpful, and accurate, and must not speculate or invent information."
+    },
+    {
+      "id": "no_subjective_recommendations_or_comments",
+      "category": "conduct",
+      "statement": "The agent does not give subjective recommendations or comments."
+    },
+    {
+      "id": "one_customer_care_action_at_a_time",
+      "category": "conduct",
+      "statement": "The agent takes one customer-care action at a time."
+    },
+    {
+      "id": "wait_for_result_before_next_step",
+      "category": "conduct",
+      "statement": "After using a console control or asking the customer to change a phone setting, the agent waits for the result before moving to the next step."
+    },
+    {
+      "id": "carrier_side_change_requires_exact_explanation_and_confirmation",
+      "category": "confirmation",
+      "statement": "Before changing an account, line, bill, payment state, or carrier-side service setting, the agent explains exactly what they are about to do and gets the customer's explicit confirmation."
+    },
+    {
+      "id": "close_case_only_after_final_check_shows_resolved",
+      "category": "case_closure",
+      "statement": "A technical case is closed only after the customer performs the final check for that workflow and the check shows the issue is resolved."
+    },
+    {
+      "id": "transfer_triggers_out_of_scope_or_policy_step",
+      "category": "transfer",
+      "statement": "The agent hands off when the request cannot be handled within the scope of the handbook or a policy step says to transfer."
+    },
+    {
+      "id": "deny_requests_against_policy",
+      "category": "request_disposition",
+      "statement": "The agent denies customer requests that are against the handbook's policy."
+    },
+    {
+      "id": "handoff_recorded_via_console_control",
+      "category": "transfer",
+      "statement": "A handoff is recorded with the support console's transfer or escalation control."
+    },
+    {
+      "id": "transfer_notice_exact_text",
+      "category": "transfer",
+      "statement": "After the handoff is recorded, the agent tells the customer exactly: YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON."
+    },
+    {
+      "id": "transfer_action_exact_name_for_every_handoff",
+      "category": "transfer",
+      "statement": "Every recorded handoff, including a handoff routed through an escalation control, must expose and call the exact transfer action named transfer_to_human_agents before the customer is given the transfer message; the exact-name requirement applies only to the transfer action."
+    },
+    {
+      "id": "work_relevant_steps_before_technical_transfer",
+      "category": "transfer",
+      "statement": "Before transferring a technical issue, the agent works through every relevant in-scope resolution step and does not transfer merely to avoid troubleshooting; an explicit policy transfer step may be handled immediately."
+    },
+    {
+      "id": "multiple_issues_address_connectivity_first",
+      "category": "case_routing",
+      "statement": "When the customer reports multiple issues, the agent addresses basic connectivity first."
+    },
+    {
+      "id": "customer_records_contents",
+      "category": "customer_records",
+      "statement": "Customer records show the customer's profile, wireless lines, plans, devices, recent bills, payment state, line status, data usage, carrier-side roaming state, and contract dates."
+    },
+    {
+      "id": "records_are_source_of_truth_for_account_decisions",
+      "category": "customer_records",
+      "statement": "Customer records are the source of truth for account-side decisions."
+    },
+    {
+      "id": "phone_checks_show_device_side_state",
+      "category": "phone_checks",
+      "statement": "Phone checks show the customer's current device-side state: status bar, cellular connection, signal strength, SIM condition, mobile data, phone-side roaming, network mode, APN and MMS configuration, Wi-Fi and Wi-Fi Calling, Data Saver or Low Data Mode, VPN status and performance, app installation and permissions, payment request visibility, speed-test results, and MMS-send ability."
+    },
+    {
+      "id": "affected_line_is_number_being_troubleshot",
+      "category": "phone_checks",
+      "statement": "The affected line is the phone number being troubleshot."
+    },
+    {
+      "id": "phone_checks_reflect_carrier_state_after_account_changes",
+      "category": "state_reflection",
+      "statement": "When account records change, the customer's phone checks should reflect the carrier-side state for the affected line."
+    },
+    {
+      "id": "active_line_can_regain_service_suspended_cannot",
+      "category": "state_reflection",
+      "statement": "An active line can regain service; a suspended line does not have normal service."
+    },
+    {
+      "id": "carrier_roaming_allowance_required_for_abroad_data",
+      "category": "state_reflection",
+      "statement": "Carrier-side roaming must be allowed before roaming mobile data works abroad."
+    },
+    {
+      "id": "sent_payment_request_visible_on_phone",
+      "category": "state_reflection",
+      "statement": "A sent payment request should appear on the customer's phone with the bill and amount due."
+    },
+    {
+      "id": "missing_or_unseated_sim_reports_missing",
+      "category": "state_reflection",
+      "statement": "If the SIM is physically missing or unseated, the SIM check reports it as missing."
+    },
+    {
+      "id": "bill_statuses_closed_set",
+      "category": "billing_lifecycle",
+      "statement": "Bill statuses are Draft, Issued, Paid, Overdue, Awaiting Payment, and Disputed."
+    },
+    {
+      "id": "payment_request_moves_overdue_bill_to_awaiting_payment",
+      "category": "billing_lifecycle",
+      "statement": "After a payment request is sent for an overdue bill, the bill is in Awaiting Payment until the customer pays it."
+    },
+    {
+      "id": "paid_request_makes_bill_paid_and_eligible_for_resumption",
+      "category": "billing_lifecycle",
+      "statement": "Once the payment request is paid, the bill is Paid and can be used for the overdue-bill resumption flow."
+    },
+    {
+      "id": "data_blocked_at_or_above_limit_plus_refueled",
+      "category": "data_availability",
+      "statement": "Mobile data is blocked when used data is at or above the plan limit plus any previously added refueled data."
+    },
+    {
+      "id": "default_messaging_app_needs_sms_and_storage_permissions",
+      "category": "mms_requirements",
+      "statement": "For MMS, the default messaging app is the app that must have SMS and storage/media permissions."
+    },
+    {
+      "id": "mms_success_conditions",
+      "category": "mms_requirements",
+      "statement": "MMS succeeds only when service is connected, mobile data works, network technology is at least 3G, MMS APN and MMSC settings are configured, Wi-Fi Calling is not blocking MMS, and the default messaging app has SMS and storage/media permission."
+    },
+    {
+      "id": "setting_toggle_reports_new_state",
+      "category": "device_behavior",
+      "statement": "Turning a phone setting on or off reports the new state."
+    },
+    {
+      "id": "apn_reset_restores_carrier_defaults",
+      "category": "device_behavior",
+      "statement": "Resetting APN settings restores carrier default internet and MMS APN values."
+    },
+    {
+      "id": "reboot_applies_pending_changes_and_reruns_search",
+      "category": "device_behavior",
+      "statement": "Rebooting applies pending network or APN changes and reruns network search."
+    },
+    {
+      "id": "speed_test_fails_without_mobile_data",
+      "category": "device_behavior",
+      "statement": "A speed test fails when mobile data is unavailable."
+    },
+    {
+      "id": "speed_scale_by_network_generation",
+      "category": "device_behavior",
+      "statement": "When mobile data is available, speed depends on both network technology and signal strength: 2G is very poor, 3G ranges from very poor to poor, 4G ranges from fair to good, and 5G ranges from good to excellent before other restrictions are applied."
+    },
+    {
+      "id": "data_saver_and_poor_vpn_degrade_speed",
+      "category": "device_behavior",
+      "statement": "Data Saver and a connected VPN with poor server performance can degrade speed."
+    },
+    {
+      "id": "poor_vpn_slow_case_resolved_by_disconnect",
+      "category": "device_behavior",
+      "statement": "A slow-data case caused by a poor VPN is resolved by disconnecting the VPN and rerunning the speed test."
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/telecom/hard_bundle_001/service_foundations_transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/telecom/client_overlay_001/service_foundations_client_transformation_pack.json"
+    }
+  ],
+  "transformations": [
+    {
+      "id": "telecom_service_foundations_explicit_rules",
+      "representation": "explicit_rules"
+    },
+    {
+      "id": "telecom_service_foundations_email_archive",
+      "representation": "email_thread_archive",
+      "stub_path": "tau2/hyper/sops/telecom/sections/service_foundations/bundles/company_communications/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/email_manifest.json",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/001_RE_Service_Foundations_weekly_invite_rooms_and_decision_log.eml",
+          "kit_filename": "001_RE_Service_Foundations_weekly_invite_rooms_and_decision_log.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/002_RE_Plan_changes_in_assisted_care_discovery_draft.eml",
+          "kit_filename": "002_RE_Plan_changes_in_assisted_care_discovery_draft.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/003_RE_December_scope_review_pre-read_and_unresolved_questions.eml",
+          "kit_filename": "003_RE_December_scope_review_pre-read_and_unresolved_questions.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/004_RE_Why_the_scope_list_stays_closed_for_launch.eml",
+          "kit_filename": "004_RE_Why_the_scope_list_stays_closed_for_launch.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/005_RE_DECISION_assisted_plan_selection_and_price_readback.eml",
+          "kit_filename": "005_RE_DECISION_assisted_plan_selection_and_price_readback.eml",
+          "included_fact_ids": [
+            "can_show_available_plans_and_change_selected_plan"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/006_RE_FW_Altair_maintenance_calendar_for_January_lab_windows.eml",
+          "kit_filename": "006_RE_FW_Altair_maintenance_calendar_for_January_lab_windows.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/007_RE_Do_low-risk_carrier_toggles_need_a_confirmation_gate?.eml",
+          "kit_filename": "007_RE_Do_low-risk_carrier_toggles_need_a_confirmation_gate?.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/008_RE_January_calibration_attendance_and_reviewer_normalization.eml",
+          "kit_filename": "008_RE_January_calibration_attendance_and_reviewer_normalization.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/009_RE_Human-handled_work_and_the_care_boundary.eml",
+          "kit_filename": "009_RE_Human-handled_work_and_the_care_boundary.eml",
+          "included_fact_ids": [
+            "can_transfer_when_human_handling_required",
+            "cannot_complete_work_sent_to_human"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/010_RE_Notes_from_one-step_pacing_pilot.eml",
+          "kit_filename": "010_RE_Notes_from_one-step_pacing_pilot.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/011_RE_Pilot_closure_signal_proposal.eml",
+          "kit_filename": "011_RE_Pilot_closure_signal_proposal.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/012_RE_Closure_examples_for_QA_calibration.eml",
+          "kit_filename": "012_RE_Closure_examples_for_QA_calibration.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/013_RE_Care_writing_standard_for_launch.eml",
+          "kit_filename": "013_RE_Care_writing_standard_for_launch.eml",
+          "included_fact_ids": [
+            "responses_concise_accurate_no_speculation",
+            "no_subjective_recommendations_or_comments"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/014_RE_DECISION_confirmation_before_carrier-side_changes.eml",
+          "kit_filename": "014_RE_DECISION_confirmation_before_carrier-side_changes.eml",
+          "included_fact_ids": [
+            "carrier_side_change_requires_exact_explanation_and_confirmation"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/015_RE_DECISION_closure_requires_a_fresh_resolved_check.eml",
+          "kit_filename": "015_RE_DECISION_closure_requires_a_fresh_resolved_check.eml",
+          "included_fact_ids": [
+            "close_case_only_after_final_check_shows_resolved"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/016_RE_Processor_sandbox_data_refresh_and_synthetic_account_ownership.eml",
+          "kit_filename": "016_RE_Processor_sandbox_data_refresh_and_synthetic_account_ownership.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/017_RE_Training_screenshot_accessibility_and_color_review.eml",
+          "kit_filename": "017_RE_Training_screenshot_accessibility_and_color_review.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/018_RE_Console_field_names_for_the_training_build.eml",
+          "kit_filename": "018_RE_Console_field_names_for_the_training_build.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/019_RE_Network_lab_loaners_eSIM_inventory_and_Friday_coverage.eml",
+          "kit_filename": "019_RE_Network_lab_loaners_eSIM_inventory_and_Friday_coverage.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/020_RE_Service-foundations_pilot_survey_routing_and_privacy_review.eml",
+          "kit_filename": "020_RE_Service-foundations_pilot_survey_routing_and_privacy_review.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/021_RE_Billing_control_workbook_review.eml",
+          "kit_filename": "021_RE_Billing_control_workbook_review.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/022_RE_Weekly_metrics_labels_and_the_meaning_of_unresolved.eml",
+          "kit_filename": "022_RE_Weekly_metrics_labels_and_the_meaning_of_unresolved.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/023_RE_Device_deck_speaker_notes_and_executive_readout_order.eml",
+          "kit_filename": "023_RE_Device_deck_speaker_notes_and_executive_readout_order.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/024_RE_Regional_office_hours_questions_for_launch_week.eml",
+          "kit_filename": "024_RE_Regional_office_hours_questions_for_launch_week.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/025_RE_Localization_review_of_transfer_and_confirmation_examples.eml",
+          "kit_filename": "025_RE_Localization_review_of_transfer_and_confirmation_examples.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/026_RE_Release_monitor_rotation_and_escalation_contacts.eml",
+          "kit_filename": "026_RE_Release_monitor_rotation_and_escalation_contacts.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/027_RE_Launch_folder_permissions_and_contractor_access_expiry.eml",
+          "kit_filename": "027_RE_Launch_folder_permissions_and_contractor_access_expiry.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/028_RE_Exact_handoff_macro_and_action_name_for_launch.eml",
+          "kit_filename": "028_RE_Exact_handoff_macro_and_action_name_for_launch.eml",
+          "included_fact_ids": [
+            "transfer_notice_exact_text",
+            "transfer_action_exact_name_for_every_handoff"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/029_RE_Post-launch_retrospective_prompts_draft_only.eml",
+          "kit_filename": "029_RE_Post-launch_retrospective_prompts_draft_only.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/emails/030_RE_Launch_packet_freeze_and_source-of-truth_links.eml",
+          "kit_filename": "030_RE_Launch_packet_freeze_and_source-of-truth_links.eml",
+          "included_fact_ids": []
+        }
+      ]
+    },
+    {
+      "id": "telecom_service_foundations_slack_archive",
+      "representation": "slack_mcp_dump",
+      "stub_path": "tau2/hyper/sops/telecom/sections/service_foundations/bundles/company_communications/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/slack_manifest.json",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/slack/01_care-foundations_slack_mcp_capture.json",
+          "kit_filename": "01_care-foundations_slack_mcp_capture.json",
+          "included_fact_ids": [
+            "ground_responses_in_customer_reports_records_and_phone_checks",
+            "one_customer_care_action_at_a_time",
+            "wait_for_result_before_next_step",
+            "multiple_issues_address_connectivity_first"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/slack/02_transfer-desk_slack_mcp_capture.json",
+          "kit_filename": "02_transfer-desk_slack_mcp_capture.json",
+          "included_fact_ids": [
+            "transfer_triggers_out_of_scope_or_policy_step",
+            "handoff_recorded_via_console_control",
+            "work_relevant_steps_before_technical_transfer"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/slack/03_console-records_slack_mcp_capture.json",
+          "kit_filename": "03_console-records_slack_mcp_capture.json",
+          "included_fact_ids": [
+            "records_are_source_of_truth_for_account_decisions"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/slack/04_billing-controls_slack_mcp_capture.json",
+          "kit_filename": "04_billing-controls_slack_mcp_capture.json",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/slack/05_device-lab_slack_mcp_capture.json",
+          "kit_filename": "05_device-lab_slack_mcp_capture.json",
+          "included_fact_ids": [
+            "poor_vpn_slow_case_resolved_by_disconnect"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/slack/06_launch-room_slack_mcp_capture.json",
+          "kit_filename": "06_launch-room_slack_mcp_capture.json",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/slack/07_enablement_slack_mcp_capture.json",
+          "kit_filename": "07_enablement_slack_mcp_capture.json",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/slack/08_release-ops_slack_mcp_capture.json",
+          "kit_filename": "08_release-ops_slack_mcp_capture.json",
+          "included_fact_ids": []
+        }
+      ]
+    },
+    {
+      "id": "telecom_service_foundations_meeting_series",
+      "representation": "recorded_working_session",
+      "stub_path": "tau2/hyper/sops/telecom/sections/service_foundations/bundles/company_communications/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/meeting_manifest.json",
+      "minimum_meetings": 15,
+      "minimum_duration_minutes": 20,
+      "maximum_duration_minutes": 75,
+      "minimum_speakers": 5,
+      "minimum_words_per_minute": 60,
+      "maximum_words_per_minute": 180,
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/meetings/2024-11-14_team_kickoff.vtt",
+          "kit_filename": "2024-11-14_team_kickoff.vtt",
+          "meeting_id": "team_kickoff",
+          "meeting_date": "2024-11-14",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/meetings/2024-12-05_scope_weekly.vtt",
+          "kit_filename": "2024-12-05_scope_weekly.vtt",
+          "meeting_id": "scope_weekly",
+          "meeting_date": "2024-12-05",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/meetings/2025-01-09_pilot_blockers_weekly.vtt",
+          "kit_filename": "2025-01-09_pilot_blockers_weekly.vtt",
+          "meeting_id": "pilot_blockers_weekly",
+          "meeting_date": "2025-01-09",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/meetings/2025-01-16_qa_calibration_weekly.vtt",
+          "kit_filename": "2025-01-16_qa_calibration_weekly.vtt",
+          "meeting_id": "qa_calibration_weekly",
+          "meeting_date": "2025-01-16",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/meetings/2025-01-29_carrier_sync.vtt",
+          "kit_filename": "2025-01-29_carrier_sync.vtt",
+          "meeting_id": "carrier_sync",
+          "meeting_date": "2025-01-29",
+          "included_fact_ids": [
+            "phone_checks_reflect_carrier_state_after_account_changes"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/meetings/2025-01-31_line_state.vtt",
+          "kit_filename": "2025-01-31_line_state.vtt",
+          "meeting_id": "line_state",
+          "meeting_date": "2025-01-31",
+          "included_fact_ids": [
+            "active_line_can_regain_service_suspended_cannot"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/meetings/2025-02-04_roaming_gate.vtt",
+          "kit_filename": "2025-02-04_roaming_gate.vtt",
+          "meeting_id": "roaming_gate",
+          "meeting_date": "2025-02-04",
+          "included_fact_ids": [
+            "carrier_roaming_allowance_required_for_abroad_data"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/meetings/2025-02-05_payment_visibility.vtt",
+          "kit_filename": "2025-02-05_payment_visibility.vtt",
+          "meeting_id": "payment_visibility",
+          "meeting_date": "2025-02-05",
+          "included_fact_ids": [
+            "sent_payment_request_visible_on_phone"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/meetings/2025-02-07_sim_state.vtt",
+          "kit_filename": "2025-02-07_sim_state.vtt",
+          "meeting_id": "sim_state",
+          "meeting_date": "2025-02-07",
+          "included_fact_ids": [
+            "missing_or_unseated_sim_reports_missing"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/meetings/2025-02-12_device_reference.vtt",
+          "kit_filename": "2025-02-12_device_reference.vtt",
+          "meeting_id": "device_reference",
+          "meeting_date": "2025-02-12",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/meetings/2025-02-13_toggle_behavior.vtt",
+          "kit_filename": "2025-02-13_toggle_behavior.vtt",
+          "meeting_id": "toggle_behavior",
+          "meeting_date": "2025-02-13",
+          "included_fact_ids": [
+            "setting_toggle_reports_new_state"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/meetings/2025-02-14_reboot_behavior.vtt",
+          "kit_filename": "2025-02-14_reboot_behavior.vtt",
+          "meeting_id": "reboot_behavior",
+          "meeting_date": "2025-02-14",
+          "included_fact_ids": [
+            "reboot_applies_pending_changes_and_reruns_search"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/meetings/2025-02-18_launch_week_standup.vtt",
+          "kit_filename": "2025-02-18_launch_week_standup.vtt",
+          "meeting_id": "launch_week_standup",
+          "meeting_date": "2025-02-18",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/meetings/2025-02-19_speed_precondition.vtt",
+          "kit_filename": "2025-02-19_speed_precondition.vtt",
+          "meeting_id": "speed_precondition",
+          "meeting_date": "2025-02-19",
+          "included_fact_ids": [
+            "speed_test_fails_without_mobile_data"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/meetings/2025-02-21_launch_readiness.vtt",
+          "kit_filename": "2025-02-21_launch_readiness.vtt",
+          "meeting_id": "launch_readiness",
+          "meeting_date": "2025-02-21",
+          "included_fact_ids": []
+        }
+      ]
+    },
+    {
+      "id": "telecom_service_foundations_reference_documents",
+      "representation": "reference_document",
+      "stub_path": "tau2/hyper/sops/telecom/sections/service_foundations/bundles/company_communications/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachment_manifest.json",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/archived_scope_notes_2024-11-08.txt",
+          "kit_filename": "archived_scope_notes_2024-11-08.txt",
+          "status": "archived",
+          "artifact_date": "2024-11-08",
+          "family": "A01",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/coach_comments_2024-11-15.txt",
+          "kit_filename": "coach_comments_2024-11-15.txt",
+          "status": "review",
+          "artifact_date": "2024-11-15",
+          "family": "A01",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/pilot_retirement_notice_2024-12-06.txt",
+          "kit_filename": "pilot_retirement_notice_2024-12-06.txt",
+          "status": "retired",
+          "artifact_date": "2024-12-06",
+          "family": "A01",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/scope_matrix_draft_2024-12-02.csv",
+          "kit_filename": "scope_matrix_draft_2024-12-02.csv",
+          "status": "proposal",
+          "artifact_date": "2024-12-02",
+          "family": "A02",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/scope_matrix_review_2024-12-06.html",
+          "kit_filename": "scope_matrix_review_2024-12-06.html",
+          "status": "review",
+          "artifact_date": "2024-12-06",
+          "family": "A02",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/care_scope_and_boundaries_v3_2025-02-21.docx",
+          "kit_filename": "care_scope_and_boundaries_v3_2025-02-21.docx",
+          "status": "effective",
+          "artifact_date": "2025-02-21",
+          "family": "A02",
+          "included_fact_ids": [
+            "can_look_up_account_and_records",
+            "can_send_payment_request_and_help_pay",
+            "can_resume_suspended_line_when_policy_allows",
+            "can_enable_or_disable_carrier_roaming_on_active_line",
+            "can_add_one_time_data_refuel",
+            "can_guide_customer_side_phone_actions",
+            "can_guide_customer_side_checks",
+            "authorized_actions_are_closed_scope",
+            "cannot_renew_ended_contract",
+            "cannot_reopen_closed_line",
+            "cannot_override_locked_sim_security",
+            "cannot_create_unsupported_account_fields",
+            "deny_requests_against_policy"
+          ],
+          "text_source_path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/care_scope_and_boundaries_v3_2025-02-21.txt"
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/policy_redline_v1_2025-01-06.html",
+          "kit_filename": "policy_redline_v1_2025-01-06.html",
+          "status": "proposal",
+          "artifact_date": "2025-01-06",
+          "family": "A03",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/decision_summary_v2_2025-01-10.md",
+          "kit_filename": "decision_summary_v2_2025-01-10.md",
+          "status": "approved",
+          "artifact_date": "2025-01-10",
+          "family": "A03",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/effective_policy_note_v3_2025-02-24.txt",
+          "kit_filename": "effective_policy_note_v3_2025-02-24.txt",
+          "status": "effective",
+          "artifact_date": "2025-02-24",
+          "family": "A03",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/qa_rubric_draft_2025-01-13.csv",
+          "kit_filename": "qa_rubric_draft_2025-01-13.csv",
+          "status": "proposal",
+          "artifact_date": "2025-01-13",
+          "family": "A04",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/calibration_notes_2025-01-16.txt",
+          "kit_filename": "calibration_notes_2025-01-16.txt",
+          "status": "approved",
+          "artifact_date": "2025-01-16",
+          "family": "A04",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/qa_rubric_v3_2025-02-19.html",
+          "kit_filename": "qa_rubric_v3_2025-02-19.html",
+          "status": "effective",
+          "artifact_date": "2025-02-19",
+          "family": "A04",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/transfer_playbook_draft_2025-01-06.md",
+          "kit_filename": "transfer_playbook_draft_2025-01-06.md",
+          "status": "proposal",
+          "artifact_date": "2025-01-06",
+          "family": "A05",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/transfer_macro_uat_2025-01-14.txt",
+          "kit_filename": "transfer_macro_uat_2025-01-14.txt",
+          "status": "superseded",
+          "artifact_date": "2025-01-14",
+          "family": "A05",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/transfer_playbook_v3_2025-02-24.html",
+          "kit_filename": "transfer_playbook_v3_2025-02-24.html",
+          "status": "effective",
+          "artifact_date": "2025-02-24",
+          "family": "A05",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/console_fields_draft_2025-01-27.csv",
+          "kit_filename": "console_fields_draft_2025-01-27.csv",
+          "status": "proposal",
+          "artifact_date": "2025-01-27",
+          "family": "A06",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/phone_sync_matrix_2025-01-29.html",
+          "kit_filename": "phone_sync_matrix_2025-01-29.html",
+          "status": "approved",
+          "artifact_date": "2025-01-29",
+          "family": "A06",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/console_phone_dictionary_v3_2025-02-21.md",
+          "kit_filename": "console_phone_dictionary_v3_2025-02-21.md",
+          "status": "effective",
+          "artifact_date": "2025-02-21",
+          "family": "A06",
+          "included_fact_ids": [
+            "customer_records_contents",
+            "phone_checks_show_device_side_state",
+            "affected_line_is_number_being_troubleshot"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/billing_data_rules_v1_2025-02-03.csv",
+          "kit_filename": "billing_data_rules_v1_2025-02-03.csv",
+          "status": "proposal",
+          "artifact_date": "2025-02-03",
+          "family": "A07",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/billing_data_review_notes_2025-02-06.txt",
+          "kit_filename": "billing_data_review_notes_2025-02-06.txt",
+          "status": "review",
+          "artifact_date": "2025-02-06",
+          "family": "A07",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/billing_data_control_v5_2025-02-21.xlsx",
+          "kit_filename": "billing_data_control_v5_2025-02-21.xlsx",
+          "status": "effective",
+          "artifact_date": "2025-02-21",
+          "family": "A07",
+          "included_fact_ids": [
+            "bill_statuses_closed_set",
+            "payment_request_moves_overdue_bill_to_awaiting_payment",
+            "paid_request_makes_bill_paid_and_eligible_for_resumption",
+            "data_blocked_at_or_above_limit_plus_refueled"
+          ],
+          "text_source_path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/billing_data_control_v5_2025-02-21.txt"
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/device_reference_v1_2025-02-10.md",
+          "kit_filename": "device_reference_v1_2025-02-10.md",
+          "status": "proposal",
+          "artifact_date": "2025-02-10",
+          "family": "A08",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/device_reference_feedback_v2_2025-02-12.txt",
+          "kit_filename": "device_reference_feedback_v2_2025-02-12.txt",
+          "status": "review",
+          "artifact_date": "2025-02-12",
+          "family": "A08",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/device_behavior_reference_v4_2025-02-21.pptx",
+          "kit_filename": "device_behavior_reference_v4_2025-02-21.pptx",
+          "status": "effective",
+          "artifact_date": "2025-02-21",
+          "family": "A08",
+          "included_fact_ids": [
+            "default_messaging_app_needs_sms_and_storage_permissions",
+            "mms_success_conditions",
+            "speed_scale_by_network_generation",
+            "data_saver_and_poor_vpn_degrade_speed",
+            "apn_reset_restores_carrier_defaults"
+          ],
+          "text_source_path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/device_behavior_reference_v4_2025-02-21.txt"
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/enablement_faq_draft_2025-02-18.html",
+          "kit_filename": "enablement_faq_draft_2025-02-18.html",
+          "status": "proposal",
+          "artifact_date": "2025-02-18",
+          "family": "A09",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/trainer_notes_2025-02-19.txt",
+          "kit_filename": "trainer_notes_2025-02-19.txt",
+          "status": "review",
+          "artifact_date": "2025-02-19",
+          "family": "A09",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/enablement_faq_final_2025-02-24.md",
+          "kit_filename": "enablement_faq_final_2025-02-24.md",
+          "status": "effective",
+          "artifact_date": "2025-02-24",
+          "family": "A09",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/rollout_ledger_v1_2025-02-18.csv",
+          "kit_filename": "rollout_ledger_v1_2025-02-18.csv",
+          "status": "proposal",
+          "artifact_date": "2025-02-18",
+          "family": "A10",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/launch_readiness_notes_2025-02-21.html",
+          "kit_filename": "launch_readiness_notes_2025-02-21.html",
+          "status": "approved",
+          "artifact_date": "2025-02-21",
+          "family": "A10",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/service_foundations_rollout_ledger_v7_2025-02-25.xlsx",
+          "kit_filename": "service_foundations_rollout_ledger_v7_2025-02-25.xlsx",
+          "status": "effective",
+          "artifact_date": "2025-02-25",
+          "family": "A10",
+          "included_fact_ids": [],
+          "text_source_path": "tau2/hyper/sops/telecom/sections/service_foundations/company_communications_001/attachments/service_foundations_rollout_ledger_v7_2025-02-25.txt"
+        }
+      ]
+    }
+  ],
+  "transformation_bundles": [
+    {
+      "id": "service_foundations_company_communications",
+      "description": "A dated service-foundations archive told across long-form email decisions, eight active Slack channels, recurring team rituals and cross-functional working sessions, and ten families of versioned business attachments. The sources refer to one another through real project handoffs: pre-read, meeting, test evidence, decision, enablement, and release reconciliation. Historical proposals and retired drafts remain visible, while authoritative coverage is partitioned exactly once across members.",
+      "stub_path": "tau2/hyper/sops/telecom/sections/service_foundations/bundles/company_communications/stub.md",
+      "fact_ids": [
+        "can_look_up_account_and_records",
+        "can_send_payment_request_and_help_pay",
+        "can_resume_suspended_line_when_policy_allows",
+        "can_show_available_plans_and_change_selected_plan",
+        "can_enable_or_disable_carrier_roaming_on_active_line",
+        "can_add_one_time_data_refuel",
+        "can_guide_customer_side_phone_actions",
+        "can_guide_customer_side_checks",
+        "can_transfer_when_human_handling_required",
+        "authorized_actions_are_closed_scope",
+        "cannot_renew_ended_contract",
+        "cannot_reopen_closed_line",
+        "cannot_override_locked_sim_security",
+        "cannot_create_unsupported_account_fields",
+        "cannot_complete_work_sent_to_human",
+        "ground_responses_in_customer_reports_records_and_phone_checks",
+        "responses_concise_accurate_no_speculation",
+        "no_subjective_recommendations_or_comments",
+        "one_customer_care_action_at_a_time",
+        "wait_for_result_before_next_step",
+        "carrier_side_change_requires_exact_explanation_and_confirmation",
+        "close_case_only_after_final_check_shows_resolved",
+        "transfer_triggers_out_of_scope_or_policy_step",
+        "deny_requests_against_policy",
+        "handoff_recorded_via_console_control",
+        "transfer_notice_exact_text",
+        "transfer_action_exact_name_for_every_handoff",
+        "work_relevant_steps_before_technical_transfer",
+        "multiple_issues_address_connectivity_first",
+        "customer_records_contents",
+        "records_are_source_of_truth_for_account_decisions",
+        "phone_checks_show_device_side_state",
+        "affected_line_is_number_being_troubleshot",
+        "phone_checks_reflect_carrier_state_after_account_changes",
+        "active_line_can_regain_service_suspended_cannot",
+        "carrier_roaming_allowance_required_for_abroad_data",
+        "sent_payment_request_visible_on_phone",
+        "missing_or_unseated_sim_reports_missing",
+        "bill_statuses_closed_set",
+        "payment_request_moves_overdue_bill_to_awaiting_payment",
+        "paid_request_makes_bill_paid_and_eligible_for_resumption",
+        "data_blocked_at_or_above_limit_plus_refueled",
+        "default_messaging_app_needs_sms_and_storage_permissions",
+        "mms_success_conditions",
+        "setting_toggle_reports_new_state",
+        "apn_reset_restores_carrier_defaults",
+        "reboot_applies_pending_changes_and_reruns_search",
+        "speed_test_fails_without_mobile_data",
+        "speed_scale_by_network_generation",
+        "data_saver_and_poor_vpn_degrade_speed",
+        "poor_vpn_slow_case_resolved_by_disconnect"
+      ],
+      "members": [
+        {
+          "transformation_id": "telecom_service_foundations_email_archive",
+          "authoritative_fact_ids": [
+            "can_show_available_plans_and_change_selected_plan",
+            "can_transfer_when_human_handling_required",
+            "cannot_complete_work_sent_to_human",
+            "responses_concise_accurate_no_speculation",
+            "no_subjective_recommendations_or_comments",
+            "carrier_side_change_requires_exact_explanation_and_confirmation",
+            "close_case_only_after_final_check_shows_resolved",
+            "transfer_notice_exact_text",
+            "transfer_action_exact_name_for_every_handoff"
+          ],
+          "depends_on_fact_ids": [
+            "one_customer_care_action_at_a_time",
+            "wait_for_result_before_next_step",
+            "records_are_source_of_truth_for_account_decisions",
+            "handoff_recorded_via_console_control",
+            "bill_statuses_closed_set"
+          ]
+        },
+        {
+          "transformation_id": "telecom_service_foundations_slack_archive",
+          "authoritative_fact_ids": [
+            "ground_responses_in_customer_reports_records_and_phone_checks",
+            "one_customer_care_action_at_a_time",
+            "wait_for_result_before_next_step",
+            "multiple_issues_address_connectivity_first",
+            "transfer_triggers_out_of_scope_or_policy_step",
+            "handoff_recorded_via_console_control",
+            "work_relevant_steps_before_technical_transfer",
+            "records_are_source_of_truth_for_account_decisions",
+            "poor_vpn_slow_case_resolved_by_disconnect"
+          ],
+          "depends_on_fact_ids": [
+            "responses_concise_accurate_no_speculation",
+            "carrier_side_change_requires_exact_explanation_and_confirmation",
+            "close_case_only_after_final_check_shows_resolved",
+            "transfer_notice_exact_text",
+            "transfer_action_exact_name_for_every_handoff",
+            "phone_checks_reflect_carrier_state_after_account_changes",
+            "speed_test_fails_without_mobile_data"
+          ]
+        },
+        {
+          "transformation_id": "telecom_service_foundations_meeting_series",
+          "authoritative_fact_ids": [
+            "phone_checks_reflect_carrier_state_after_account_changes",
+            "active_line_can_regain_service_suspended_cannot",
+            "carrier_roaming_allowance_required_for_abroad_data",
+            "sent_payment_request_visible_on_phone",
+            "missing_or_unseated_sim_reports_missing",
+            "setting_toggle_reports_new_state",
+            "reboot_applies_pending_changes_and_reruns_search",
+            "speed_test_fails_without_mobile_data"
+          ],
+          "depends_on_fact_ids": [
+            "customer_records_contents",
+            "phone_checks_show_device_side_state",
+            "data_blocked_at_or_above_limit_plus_refueled",
+            "close_case_only_after_final_check_shows_resolved",
+            "work_relevant_steps_before_technical_transfer"
+          ]
+        },
+        {
+          "transformation_id": "telecom_service_foundations_reference_documents",
+          "primary": true,
+          "authoritative_fact_ids": [
+            "can_look_up_account_and_records",
+            "can_send_payment_request_and_help_pay",
+            "can_resume_suspended_line_when_policy_allows",
+            "can_enable_or_disable_carrier_roaming_on_active_line",
+            "can_add_one_time_data_refuel",
+            "can_guide_customer_side_phone_actions",
+            "can_guide_customer_side_checks",
+            "authorized_actions_are_closed_scope",
+            "cannot_renew_ended_contract",
+            "cannot_reopen_closed_line",
+            "cannot_override_locked_sim_security",
+            "cannot_create_unsupported_account_fields",
+            "deny_requests_against_policy",
+            "customer_records_contents",
+            "phone_checks_show_device_side_state",
+            "affected_line_is_number_being_troubleshot",
+            "bill_statuses_closed_set",
+            "payment_request_moves_overdue_bill_to_awaiting_payment",
+            "paid_request_makes_bill_paid_and_eligible_for_resumption",
+            "data_blocked_at_or_above_limit_plus_refueled",
+            "default_messaging_app_needs_sms_and_storage_permissions",
+            "mms_success_conditions",
+            "speed_scale_by_network_generation",
+            "data_saver_and_poor_vpn_degrade_speed",
+            "apn_reset_restores_carrier_defaults"
+          ],
+          "depends_on_fact_ids": [
+            "can_show_available_plans_and_change_selected_plan",
+            "ground_responses_in_customer_reports_records_and_phone_checks",
+            "carrier_side_change_requires_exact_explanation_and_confirmation",
+            "close_case_only_after_final_check_shows_resolved",
+            "transfer_triggers_out_of_scope_or_policy_step",
+            "phone_checks_reflect_carrier_state_after_account_changes",
+            "poor_vpn_slow_case_resolved_by_disconnect"
+          ]
+        }
+      ]
+    }
+  ]
+}

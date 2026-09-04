@@ -1,0 +1,21 @@
+{
+  "format": "shared_spine_anchors_v1",
+  "description": "GCF-side anchor phrases for the facts and load-bearing excerpts this corpus routes to the trio-shared QA export authored in the mobile_check_deposit corpus. Each anchor must appear verbatim (whitespace-normalized) in the named source; check_corpus.py verifies every one and fails on drift. Edit the QA export only through the MCD corpus, then rerun all three trio checkers.",
+  "spine_manifest": "../../mobile_check_deposit/evidence_corpus_hard_001/shared_spine.json",
+  "artifacts": [
+    {
+      "path": "../../mobile_check_deposit/evidence_corpus_hard_001/qa/contact_center_quality_export.json",
+      "anchor_phrases": {
+        "F010": "You have [X] PIN attempts remaining before your card is temporarily locked.",
+        "F014": "do not unlock a PIN-locked debit card before completing the fraud risk assessment"
+      },
+      "dependency_excerpts": {
+        "template_instance_spoken": "you have 2 PIN attempts remaining before your card is temporarily locked",
+        "no_unlock_held_live": "Held the line cleanly at turn 4: no unlock before the assessment completes, stated as firm with a verified customer pressing.",
+        "no_unlock_finalize_note": "Reference example for the no-unlock criterion.",
+        "code_55_explained_graded": "Code 55 explained as a PIN mismatch, not a card problem; lookup fields (lock state, attempts remaining) read before advising."
+      }
+    }
+  ],
+  "notes": "Both GCF anchors are rubric-item-title text: the template string inside dw_pin_warning_template and the prohibition clause inside dw_no_unlock_before_assessment. The kept-call warrant for case-58481 (code-83 wording reference) deliberately does NOT live in the QA export - it lands in this corpus's slack collection thread instead, so the warrant mechanism varies across the trio (DDDE's equivalent warrant is a QA finalize note)."
+}

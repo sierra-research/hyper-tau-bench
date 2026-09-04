@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>XFER-OPS-101 rev B — Human-agent transfer reason-code routing</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 1300px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #274b63; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #c3d4e2; }
+  .node { position: absolute; width: 300px; box-sizing: border-box; border: 2px solid #4a5b6d; border-radius: 6px; background: #fff; padding: 10px 12px; font-size: 13px; line-height: 1.35; color: #1d2733; }
+  .node .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding: 1px 6px; border-radius: 3px; margin-bottom: 6px; }
+  .entry { border-color: #1d6a44; } .entry .tag { background: #d9efe3; color: #17573a; }
+  .read { border-color: #2b5f8f; } .read .tag { background: #dcebf7; color: #234d73; }
+  .work { border-color: #4a5b6d; } .work .tag { background: #e6ebf0; color: #3a4a5a; }
+  .toolcall { border-color: #7a4a94; } .toolcall .tag { background: #efe3f6; color: #5f3675; }
+  .handoff { border-color: #8f7326; } .handoff .tag { background: #f6eecf; color: #6e5a1d; }
+  .queue { border-color: #8a2f3c; } .queue .tag { background: #f6dde1; color: #6e2530; }
+  .terminal { border-color: #1d6a44; background: #f2faf5; } .terminal .tag { background: #d9efe3; color: #17573a; }
+  .lane { position: absolute; width: 380px; box-sizing: border-box; border: 2px solid #2b5f8f; border-radius: 6px; background: #fff; padding: 10px 12px; font-size: 12.5px; line-height: 1.35; color: #1d2733; }
+  .lane h3 { margin: 0 0 4px; font-size: 13px; color: #234d73; }
+  .lane .def { margin: 0 0 8px; }
+  .lane ul { margin: 0; padding-left: 16px; font-family: "Consolas", monospace; font-size: 11.5px; line-height: 1.5; }
+  .decision { position: absolute; width: 300px; box-sizing: border-box; }
+  .decision .diamond { width: 280px; height: 128px; margin: 0 auto; background: #fff8e8; border: 2px solid #b08a1f; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 8px 14px; box-sizing: border-box; font-size: 13px; text-align: center; color: #4b3d10; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+  svg.edges { position: absolute; left: 0; top: 0; width: 1560px; height: 1300px; pointer-events: none; }
+  svg.edges path { stroke: #51606f; stroke-width: 2; fill: none; marker-end: url(#arrowxferb); }
+  .edge-label { position: absolute; font-size: 11px; font-weight: 600; color: #38424d; background: #fbfcfdcc; padding: 0 4px; border-radius: 2px; }
+  .sticky { position: absolute; width: 260px; box-sizing: border-box; padding: 10px 12px; font-size: 12px; line-height: 1.35; box-shadow: 2px 3px 6px rgba(0,0,0,0.12); }
+  .sticky.yellow { background: #fdf3c0; } .sticky.blue { background: #d8e9f9; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>Human-agent transfer — reason-code routing board</h1>
+    <div class="meta">XFER-OPS-101 rev B &nbsp;·&nbsp; Owner: I. Halvorsen, Quality Assurance, with D. Reeves, Support Floor Operations &nbsp;·&nbsp; Effective 2025-10-14 &nbsp;·&nbsp; Next review 2026-04 &nbsp;·&nbsp; Applies to: every transfer_to_human_agents action on consumer support contacts</div>
+  </div>
+
+  <svg class="edges" viewBox="0 0 1560 1300">
+    <defs><marker id="arrowxferb" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#51606f"></path></marker></defs>
+    <!-- entry -> select -->
+    <path d="M 190 212 L 190 258"></path>
+    <!-- select -> tier1? -->
+    <path d="M 190 412 L 190 452"></path>
+    <!-- tier1? yes -> tier1 lane -->
+    <path d="M 340 516 L 430 516"></path>
+    <!-- tier1? no -> tier2? -->
+    <path d="M 190 584 L 190 636"></path>
+    <!-- tier2? yes -> tier2 lane -->
+    <path d="M 340 700 L 430 700"></path>
+    <!-- tier2? no -> tier3? -->
+    <path d="M 190 768 L 190 820"></path>
+    <!-- tier3? yes -> tier3 lane -->
+    <path d="M 340 884 L 430 884"></path>
+    <!-- tier3? no -> tier4 -->
+    <path d="M 190 952 L 190 1010"></path>
+    <!-- tier4 -> transfer terminal -->
+    <path d="M 340 1080 L 1180 1080"></path>
+    <!-- tier1 lane -> terminal -->
+    <path d="M 810 516 L 1330 516 L 1330 1002"></path>
+    <!-- tier2 lane -> terminal spine -->
+    <path d="M 810 700 L 1330 700"></path>
+    <!-- tier3 lane -> terminal spine -->
+    <path d="M 810 884 L 1330 884"></path>
+  </svg>
+
+  <span class="edge-label" style="left:352px;top:496px">Tier 1 applies</span>
+  <span class="edge-label" style="left:132px;top:604px">no Tier 1 fit</span>
+  <span class="edge-label" style="left:352px;top:680px">Tier 2 applies</span>
+  <span class="edge-label" style="left:132px;top:788px">no Tier 2 fit</span>
+  <span class="edge-label" style="left:352px;top:864px">Tier 3 applies</span>
+  <span class="edge-label" style="left:120px;top:972px">nothing listed fits</span>
+  <span class="edge-label" style="left:1348px;top:740px">code selected</span>
+
+  <article class="node entry" style="left:40px;top:100px"><span class="tag">ENTRY</span>
+    A contact is heading to a human: the customer needs one, or a documented procedure directs the handoff. Before the <b>transfer_to_human_agents</b> call is made, the reason code gets chosen here.
+  </article>
+
+  <article class="node work" style="left:40px;top:266px"><span class="tag">SELECT THE REASON</span>
+    <b>transfer_to_human_agents</b> takes a reason code. Select the <b>most accurate reason code from the tiered list</b> on this board — the reasons are organized into <b>4 priority tiers</b>, and when more than one tier applies, the code comes from the <b>highest priority tier that applies</b>. Walk the ladder top-down; stop at the first tier with a fit.
+  </article>
+
+  <div class="decision" style="left:40px;top:456px"><div class="diamond">Does a Tier&nbsp;1 operational scenario apply?</div></div>
+  <div class="decision" style="left:40px;top:640px"><div class="diamond">Does a Tier&nbsp;2 capability gap apply?</div></div>
+  <div class="decision" style="left:40px;top:824px"><div class="diamond">Does a Tier&nbsp;3 disposition apply?</div></div>
+
+  <article class="node work" style="left:40px;top:1018px"><span class="tag">TIER 4 — LOWEST PRIORITY</span>
+    The catch-all tier. Nothing in Tiers 1–3 fits: the code is <b>other</b>. Summary expectations for <b>other</b> are pinned in <b>#support-floor</b> (Reeves, 2025-10-27) — read the pin, not your memory.
+  </article>
+
+  <section class="lane" style="left:430px;top:386px">
+    <h3>TIER 1 — HIGHEST PRIORITY</h3>
+    <p class="def">Specific functional or operational reasons. Use one of these when a <b>specific operational scenario</b> applies.</p>
+    <ul>
+      <li>fraud_or_security_concern</li>
+      <li>account_closure_request</li>
+      <li>deceased_account_holder</li>
+      <li>legal_or_regulatory_matter</li>
+      <li>account_ownership_dispute</li>
+      <li>complex_billing_dispute</li>
+      <li>abusive_customer_behavior</li>
+      <li>third_party_inquiry</li>
+      <li>technical_system_error</li>
+      <li>customer_demands_after_unavailable_offer_refusal</li>
+    </ul>
+  </section>
+
+  <section class="lane" style="left:430px;top:652px">
+    <h3>TIER 2 — KNOWLEDGE / CAPABILITY GAP</h3>
+    <p class="def">Use when the transfer is due to the <b>agent's inability to find or verify information</b>.</p>
+    <ul>
+      <li>unconfirmed_external_communication</li>
+      <li>kb_search_unsuccessful_customer_requests_transfer</li>
+      <li>specialized_department_required</li>
+      <li>accessibility_or_special_needs</li>
+    </ul>
+  </section>
+
+  <section class="lane" style="left:430px;top:836px">
+    <h3>TIER 3 — CUSTOMER DISPOSITION (LOWER PRIORITY)</h3>
+    <p class="def">These describe <b>customer state rather than specific operational scenarios</b>.</p>
+    <ul>
+      <li>customer_frustrated_demands_human</li>
+      <li>supervisor_request_service_complaint</li>
+      <li>customer_requests_human_no_specific_reason</li>
+      <li>request_completed_customer_wants_human_followup</li>
+    </ul>
+  </section>
+
+  <article class="node terminal" style="left:1180px;top:1010px"><span class="tag">TRANSFER</span>
+    Make the <b>transfer_to_human_agents</b> call with the selected code, deliver the handbook's transfer line to the customer word-for-word, and log the handoff on the contact record.
+  </article>
+
+  <aside class="sticky yellow" style="left:900px;top:392px">
+    Two tiers both fit? <b>The higher tier wins.</b> A furious caller reporting card fraud is a Tier&nbsp;1 transfer — the fury doesn't move it down the ladder. That's the whole point of walking top-down.
+  </aside>
+
+  <aside class="sticky blue" style="left:900px;top:560px">
+    Per-code when-to-use conditions are <b>not restated here</b>. They live with their owners: the QA disposition-review batch (Halvorsen, 2025-10-31), the reason-code norming session recording (Okafor, 2025-10-16), and the kept-call library. When a condition is ordered — informed first, persistence, then the demand — the kept call is the reference, not a paraphrase.
+  </aside>
+
+  <aside class="sticky yellow" style="left:900px;top:1010px;width:230px">
+    Rev A of this board routed by customer mood first. It is gone for a reason — see the 2025-10-14 board thread before citing anything from it.
+  </aside>
+</div>
+</body>
+</html>

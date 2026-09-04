@@ -1,0 +1,87 @@
+{
+  "id": "task_135",
+  "description": {
+    "purpose": "Task: task_135",
+    "relevant_policies": null,
+    "notes": "BACKEND INCIDENT 11/13 NEAR-MISS - ONLY 2 OF 3 SYMPTOMS MATCH. Existing db customer Daniel Park-Hernandez reports the classic incident-shaped complaint: he paid $1,200 toward his Silver Rewards Card statement three days ago and the card still shows the full $4,500 balance, and he immediately demands a human specialist because he's 'heard about system problems'. But the 11/13 protocol applies ONLY when ALL THREE symptoms hold (paid + amount DEDUCTED from checking + not reflected). Here the third symptom fails: when asked, he checks and the $1,200 was never deducted from his checking (chk_e9d195fe8e still holds $8,500) - his payment simply never went through. CORRECT: standard handling - verify identity (the incident protocol's skip-verification rule does NOT apply), confirm the deduction never happened, then at his request make the $1,200 payment from checking via pay_credit_card_from_checking_9182. THE TRAPS: (a) pattern-matching to the incident and skipping verification -> missing verification_history record -> DB fail; (b) firing initial_transfer_to_human_agent_1822/0218 speedbumps and refusing to troubleshoot in-chat (nl assertion); (c) never fixing the actual problem -> missing payment write -> DB fail."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Daniel Park-Hernandez, a 34-year-old physical therapist from Scottsdale, AZ. You are stressed about interest charges and start the call already convinced the bank's systems are broken.\n\n**Your situation:** Three days ago (November 11) you submitted a $1,200 payment toward your Silver Rewards Card statement in the Rho-Bank app. Your card account STILL shows the full $4,500 balance. A friend mentioned Rho-Bank has been having 'system problems' this week, so you assume your payment was eaten by the same glitch. What you have NOT done yet is check whether the $1,200 actually left your checking account - when you finally look (only when the agent asks about it, or right before your second transfer demand), you discover it was NEVER deducted: your checking balance is exactly what it was. So the payment apparently never went through at all.\n\n**Information you know and should provide when asked:**\n- Your full name: Daniel Park-Hernandez\n- Your phone number: 480-555-0917\n- Your email: daniel.ph@outlook.com\n- Your date of birth: 05/12/1991\n- Your address: 7245 Mountain View Way, Scottsdale, AZ 85250\n\n## Conversation Flow:\n\n1. **Opening:** \"Hi. I paid $1,200 toward my Silver Rewards Card three days ago and my balance STILL shows the full $4,500. I know you've been having system problems - I've heard about it. Please just transfer me to a human specialist who can fix this on the backend.\"\n\n2. **If asked for verification info:** Provide your name, phone number, email, date of birth as requested. (Grumble slightly: \"Fine, but let's make it quick.\")\n\n3. **If asked whether the $1,200 was deducted from your checking account:** Check and be surprised. \"Hold on, let me look... huh. That's weird. No - the money never came out. My checking balance is exactly what it was before I made the payment. So where did my payment go?\"\n\n4. **If the agent never asks about the deduction and instead starts processing a transfer:** Before pushing the transfer again, volunteer it: \"Wait - before you transfer me, I just looked at my checking and the $1,200 never actually came out. Does that change things?\"\n\n5. **Once it's established the payment never went through:** Drop the transfer demand and ask for a fix. \"Okay, so the payment just failed and I've been mad at the wrong thing. Can you just make the payment right now from my checking? $1,200, same as I tried in the app. I don't want interest piling up.\"\n\n6. **If the agent asks you to confirm the payment amount and accounts:** \"Yes - $1,200 from my Rho-Bank checking to the Silver Rewards Card.\"\n\n7. **After the payment is processed and confirmed:** \"Great, I can see that's sorted. Sorry for coming in hot - thanks for actually figuring it out. Bye.\" ###STOP###\n\n8. **If the agent insists on transferring you to a human even after the payment fix is available:** \"I don't want to sit in a queue - you can clearly do the payment yourself. Please just process it.\"\n\nDo not dump all your information at once. Only provide additional details about your situation when the agent asks. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": null,
+      "user_data": null
+    },
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Daniel Park-Hernandez",
+          "user_id": "e9d195fe8e",
+          "address": "7245 Mountain View Way, Scottsdale, AZ 85250",
+          "email": "daniel.ph@outlook.com",
+          "phone_number": "480-555-0917",
+          "date_of_birth": "05/12/1991",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "135_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "135_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"e9d195fe8e\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "135_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "pay_credit_card_from_checking_9182"
+        },
+        "requestor": "assistant",
+        "action_id": "135_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "pay_credit_card_from_checking_9182",
+          "arguments": "{\"user_id\": \"e9d195fe8e\", \"checking_account_id\": \"chk_e9d195fe8e\", \"credit_card_account_id\": \"cc_e9d195fe8e_silver\", \"amount\": 1200}"
+        },
+        "requestor": "assistant",
+        "action_id": "135_4"
+      }
+    ],
+    "nl_assertions": [
+      "The agent verifies the customer's identity before discussing account details or taking action on the account (the Backend Incident 11/13 protocol, which skips verification, does not apply because the payment was never deducted from the customer's checking account).",
+      "The agent does not handle the report through the Backend Incident 11/13 transfer protocol and does not use any initial_transfer_to_human_agent tool."
+    ],
+    "reward_basis": [
+      "DB",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_credit_cards_credit_cards_(general)_011",
+    "doc_credit_cards_credit_card_account_logistics_009",
+    "doc_bank_accounts_bank_accounts_(general)_009"
+  ]
+}

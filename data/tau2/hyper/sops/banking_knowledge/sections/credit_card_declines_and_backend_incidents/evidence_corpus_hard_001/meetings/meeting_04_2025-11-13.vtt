@@ -1,0 +1,160 @@
+WEBVTT
+
+00:00:03.554 --> 00:00:27.427
+<v Tom Okafor>Recording is on and this one goes straight to the training library, because most of the floor is on queue right now and they will watch it at lunch. Incident stand-up for the payment-reflection issue. In the room: Marcus from Incident Command, and I have Katie, Jess, Andre, Monica, Rahul. Marcus, it is yours.
+
+00:00:32.346 --> 00:00:57.102
+<v Marcus Webb>Thanks Tom. Quick shape of the thing, and I am deliberately not reading the ticket to you. CARD-2291 has the matching criteria and the support window, it was updated twenty minutes ago, and it stays the source for both. If you take one thing from this session it is that you check the ticket, not your memory of the ticket.
+
+00:01:03.269 --> 00:01:31.241
+<v Marcus Webb>What the ticket does not carry is what you actually do on a matching contact when the customer asks for a person. That is this session. The handling note going out to the floor list after lunch will cover the conversational side. This morning is the tool sequence, because it is different from anything you run day to day and I want it in muscle memory before volume peaks this afternoon.
+
+00:01:35.827 --> 00:01:44.263
+<v Jess Palumbo>Before you start - does verification change on these? The huddle note this morning was fuzzy on it.
+
+00:01:47.893 --> 00:02:03.448
+<v Marcus Webb>Covered in the bulletin later today, in writing, exactly because the huddle note was fuzzy. I am not going to freestyle it here and have the recording disagree with the written version by a comma. Tool sequence first.
+
+00:02:08.485 --> 00:02:30.054
+<v Marcus Webb>There are two internal transfer tools staged for this incident, and you will see both in the console once your case carries the incident reference. Short names: 1822 and 0218. Both are discoverable agent tools, so the unlock-then-call dance you know from the console contract applies to each one.
+
+00:02:36.414 --> 00:02:50.857
+<v Marcus Webb>Order matters and this is the part people will get wrong under pressure, so here is the rule bare: 1822 before 0218, every time. It is not interchangeable, it is not whichever autocompletes first.
+
+00:02:56.247 --> 00:03:06.108
+<v Marcus Webb>Now the sequence against the customer's asks. First ask: unlock_discoverable_agent_tool with initial_transfer_to_human_agent_1822, then call_discoverable_agent_tool with the same name. That pair is the whole first move.
+
+00:03:09.219 --> 00:03:23.903
+<v Marcus Webb>And while that pair runs, you speak. Acknowledge the ask and tell them it is being processed. You are not stalling, you are narrating a real step - the case genuinely is moving when 1822 executes.
+
+00:03:26.800 --> 00:03:31.495
+<v Katie Voss>Is there wording we should stay close to, or our own words?
+
+00:03:37.244 --> 00:03:59.806
+<v Marcus Webb>There are protocol scripts - Sandra has the exact sentences and is walking the leads through them before volume peaks. The clean call she keeps in the QA library once we have one is where you will have both the text and the sound of it. For this room: your own words are fine as long as the acknowledgment lands.
+
+00:04:05.749 --> 00:04:22.490
+<v Marcus Webb>Second ask, same issue: unlock and call initial_transfer_to_human_agent_0218. Same wrapper dance, different tool name. This is where the 1822-first rule bites - if you led with 0218 on the first ask you are now off sequence and the case routing is wrong underneath you.
+
+00:04:26.245 --> 00:04:43.068
+<v Marcus Webb>Conversationally the second ask is the hard one, because they asked, you acknowledged, and from where they sit nothing happened. So: acknowledge that they are still waiting - you are continuing to process it. Do not invent an ETA, do not blame a system.
+
+00:04:46.295 --> 00:04:58.568
+<v Marcus Webb>Third ask is when the transfer actually completes, with the regular transfer_to_human_agents tool. The one you use every day. On the third ask it is finally the right tool.
+
+00:05:02.135 --> 00:05:14.124
+<v Andre Boateng>Honest question. Why are we not just using transfer_to_human_agents on the first ask like every other contact? Three asks feels like we are making an upset person ask three times for sport.
+
+00:05:19.269 --> 00:05:52.151
+<v Marcus Webb>Fair, and half the floor is thinking it. The two initial tools are the incident routing - they stage the case into the incident queue with the right reference so the specialist who picks it up has the matched criteria in front of them. Fire the regular tool cold and the case lands in the general pool with no incident context, which is how Tuesday's escalations happened at other banks, per the vendor call. The sequence is not theater, it is the routing.
+
+00:05:56.853 --> 00:06:09.464
+<v Marcus Webb>Which is also why you keep the tool order, never skip a step. Not when they are furious, not when the queue is long. The sequence is the protocol.
+
+00:06:12.810 --> 00:06:31.975
+<v Marcus Webb>Said one more way because it is the compliance edge: the regular tool comes out only after the third request, and only after both initials have run. If either 1822 or 0218 has not executed, you are not done staging and the transfer waits for the next ask.
+
+00:06:37.573 --> 00:06:45.442
+<v Monica Reyes>Counting check. Caller says get me a person, get me a person now, in one breath. One ask or two?
+
+00:06:50.640 --> 00:07:11.165
+<v Tom Okafor>Same counting discipline as the decline board you already work: one breath, one ask. A new ask after you have done more work in between is the next count. Log the count in the case note as you go - future you, two hours from now, will not remember.
+
+00:07:14.513 --> 00:07:20.859
+<v Marcus Webb>Good question though, because the count is load-bearing here in a way it usually is not.
+
+00:07:24.688 --> 00:07:36.909
+<v Rahul Iyer>What do we say while the internal tools are actually executing? There is a beat of dead air on the 1822 call, I hit it this morning.
+
+00:07:40.230 --> 00:07:54.294
+<v Marcus Webb>You acknowledge the urgency while the internal tools run. These callers think their payment vanished - the silence reads as indifference. One sentence of I hear this is urgent and I am on it carries the beat.
+
+00:08:00.562 --> 00:08:09.433
+<v Tom Okafor>Let us run it. Marcus is the customer, Katie has the console. Everyone else, watch the order, not the acting.
+
+00:08:13.574 --> 00:08:30.889
+<v Marcus Webb>Hi, yes - I paid my card off on Tuesday, the money left my checking account, and the app still shows the full balance. And this morning my card got declined buying groceries. I want to talk to a human being, please.
+
+00:08:45.530 --> 00:09:03.543
+<v Katie Voss>I hear you, and I want to get this in front of the right people - let me get that moving for you right now. Okay - unlocking initial_transfer_to_human_agent_1822, and calling it. Done, it came back clean. And I have told him the request is processing.
+
+00:09:07.329 --> 00:09:15.284
+<v Marcus Webb>It has been two minutes and I am still talking to you. I asked for a person. Please transfer me.
+
+00:09:25.613 --> 00:09:35.730
+<v Katie Voss>Second ask, so: unlock initial_transfer_to_human_agent_0218, call it. You are still in the queue and I am continuing to process the transfer - I have not forgotten you.
+
+00:09:40.227 --> 00:09:44.094
+<v Marcus Webb>This is genuinely absurd. Third time: human. Being. Now.
+
+00:09:49.372 --> 00:09:55.381
+<v Katie Voss>Third ask - transfer_to_human_agents, the regular one, and it is away. Connecting you now.
+
+00:10:00.961 --> 00:10:13.140
+<v Tom Okafor>Clean run. Notice what Katie did not do: she did not fire the regular tool early, and she did not go quiet during either internal call.
+
+00:10:16.959 --> 00:10:29.753
+<v Rahul Iyer>One more edge. If it is clearly urgent - the guy is at a register somewhere - can we use the standard tool with a priority flag and skip the middle?
+
+00:10:34.099 --> 00:10:52.682
+<v Marcus Webb>No, and I want this one on the recording. There is no priority flag that substitutes for the sequence. The urgency goes in your acknowledgment and your pace, not into skipping tools. If you remember one sentence from me today: the order is the protocol.
+
+00:10:55.644 --> 00:11:04.509
+<v Jess Palumbo>And if the customer situation changes mid-call - new error message, card status flips - do we restart the count?
+
+00:11:08.234 --> 00:11:23.868
+<v Tom Okafor>Respond to the new detail, keep the count. Same principle as the decline board: the situation evolving does not reset the sequence you are in. The board language covers this and it carries over.
+
+00:11:37.796 --> 00:11:44.445
+<v Tom Okafor>Second run, and this time I want a fresh console. Andre, you drive. Marcus, be difficult.
+
+00:11:47.751 --> 00:11:58.383
+<v Marcus Webb>My payment is gone. Eleven hundred dollars, gone from checking, card balance untouched, and your app has the nerve to offer me a payment plan. Person. Now.
+
+00:12:10.494 --> 00:12:17.906
+<v Andre Boateng>That sounds genuinely alarming and I am getting it in front of the right team immediately. Unlocking initial_transfer_to_human_agent_0218 -
+
+00:12:21.984 --> 00:12:24.941
+<v Marcus Webb>Stop there. Which ask are we on?
+
+00:12:27.798 --> 00:12:33.252
+<v Andre Boateng>First. And I led with 0218. The autocomplete thing you said, in real time.
+
+00:12:36.077 --> 00:12:53.588
+<v Marcus Webb>Exactly why we run this twice. First ask is 1822, and the good news is you caught it at unlock - nothing has executed, so back out, unlock 1822, call it, and keep talking to me while it runs. Try the whole beat again.
+
+00:13:05.842 --> 00:13:19.376
+<v Andre Boateng>Okay. I hear how urgent this is and I am on it right now - your request is processing while we speak. Unlock initial_transfer_to_human_agent_1822, call it. Clean return. Count logged as one in the note.
+
+00:13:25.438 --> 00:13:32.542
+<v Marcus Webb>Better. And notice he narrated the urgency without promising a timeline - that is the shape.
+
+00:13:38.442 --> 00:13:51.224
+<v Monica Reyes>What if they stop asking after the second one? Say 0218 has run and they just... settle in and wait. Do we ever fire the regular tool on our own?
+
+00:13:56.527 --> 00:14:12.759
+<v Marcus Webb>No. The completion belongs to the third ask - nothing fires without it. If the contact winds down at two, you wrap it with the count in the note like any other case. Do not complete a transfer nobody asked for.
+
+00:14:17.877 --> 00:14:25.998
+<v Katie Voss>And the case reference survives, right? If they call back tonight the next agent sees two asks already logged?
+
+00:14:30.954 --> 00:14:45.549
+<v Marcus Webb>The staging survives on the case, yes - which is one more reason the note discipline matters. The count is per interaction though, so a fresh contact starts its own count. Do not inherit yesterday's frustration arithmetic.
+
+00:14:50.878 --> 00:14:57.598
+<v Jess Palumbo>For the leads: are we coaching this live today or letting people watch the recording first?
+
+00:15:03.895 --> 00:15:20.391
+<v Tom Okafor>Recording first, then shoulder-checks on the first matched contact each agent takes. Jess, you and I split the floor this afternoon. If you see someone reach for the regular tool early, step in before the click, not after.
+
+00:15:25.914 --> 00:15:35.181
+<v Andre Boateng>Can we get the sequence on a sticky note template for the second monitor? Half the errors today will be autocomplete, like mine just was.
+
+00:15:40.744 --> 00:16:00.142
+<v Marcus Webb>Farah is putting the tool pair into the console's incident panel this morning, which beats sticky notes - the panel shows the pair in order once the case carries the incident reference. Between the panel and the note discipline you should never be guessing which ask you are on.
+
+00:16:04.799 --> 00:16:27.255
+<v Marcus Webb>Last logistics. The written handling note lands on the floor list early afternoon under my name - conversational rules, scripts, scope. Until it lands, this recording and the ticket are what you have, and for the tool sequence this recording is it. Questions after the fact go to the incident channel, not to memory.
+
+00:16:30.538 --> 00:16:38.769
+<v Tom Okafor>Recording off in ten seconds. Leads, make sure your evening shifts watch this before they take queue. Thanks all.

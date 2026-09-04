@@ -1,0 +1,139 @@
+WEBVTT
+
+00:00:00.800 --> 00:00:08.908
+<v Maya Chen>Can we start with the known-device idea? We only have half an hour and the mock is already with engineering.
+
+00:00:09.088 --> 00:00:11.965
+<v Kira Wallace>Sure. I have the sequence diagram up.
+
+00:00:12.305 --> 00:00:13.995
+<v Priya Shah>I can see it.
+
+00:00:14.115 --> 00:00:15.365
+<v Luis Ortega>Same here.
+
+00:00:15.485 --> 00:00:25.759
+<v Kira Wallace>The concept uses device familiarity plus matching name and phone to let an existing customer start a second business account without the full identity step.
+
+00:00:26.809 --> 00:00:28.956
+<v Maya Chen>Start it, or finish it?
+
+00:00:29.136 --> 00:00:33.075
+<v Kira Wallace>Finish it. Sorry, yes, that is the controversial part.
+
+00:00:33.415 --> 00:00:40.937
+<v Luis Ortega>The conversion drop is at identity, so if we only move the check later we don't get much benefit.
+
+00:00:41.457 --> 00:00:43.570
+<v Priya Shah>What exactly is “known” here?
+
+00:00:44.330 --> 00:00:49.621
+<v Kira Wallace>Cookie history, prior successful login, device fingerprint, and no recent credential reset.
+
+00:00:50.671 --> 00:00:57.009
+<v Priya Shah>That is a risk signal. It is not proof of the person holding the device.
+
+00:00:57.189 --> 00:00:59.527
+<v Luis Ortega>But they are already logged in.
+
+00:00:59.867 --> 00:01:08.438
+<v Priya Shah>A session can be stolen. A device can be shared. Which customer are we verifying—the browser or the person?
+
+00:01:08.958 --> 00:01:10.208
+<v Maya Chen>Mm-hm.
+
+00:01:10.328 --> 00:01:12.928
+[Kira zooms into the threat-model notes.]
+
+00:01:24.928 --> 00:01:34.329
+<v Kira Wallace>We listed shared office computers, compromised sessions, stale phone numbers, and a recent ownership change that the profile has not caught yet.
+
+00:01:34.509 --> 00:01:37.236
+<v Luis Ortega>The ownership-change case seems separate from identity.
+
+00:01:37.576 --> 00:01:43.069
+<v Priya Shah>It is related when the person opening the account is no longer authorized.
+
+00:01:43.589 --> 00:01:48.169
+<v Maya Chen>We also have sanctions screening tied into the identity result, right?
+
+00:01:48.929 --> 00:01:54.271
+<v Kira Wallace>Yes. The current call returns the verification outcome and the screening reference together.
+
+00:01:55.321 --> 00:02:00.386
+<v Luis Ortega>Could we keep screening and skip the interactive part for a low-risk device?
+
+00:02:00.566 --> 00:02:10.524
+<v Priya Shah>No, wait—“skip” is doing a lot of work there. What would bind the screening result to the person in front of us?
+
+00:02:10.864 --> 00:02:12.114
+<v Luis Ortega>The authenticated profile.
+
+00:02:12.234 --> 00:02:16.344
+<v Kira Wallace>Unless the profile is the thing that was taken over.
+
+00:02:17.104 --> 00:02:18.354
+<v Luis Ortega>Right. Okay.
+
+00:02:18.474 --> 00:02:28.849
+<v Maya Chen>Let's test it with a real pattern. Bookkeeper uses the owner's laptop every Friday. The device is known, phone matches, bookkeeper starts a new account.
+
+00:02:29.029 --> 00:02:33.677
+<v Priya Shah>That is exactly why device familiarity cannot stand in for identity.
+
+00:02:34.017 --> 00:02:39.188
+<v Kira Wallace>And it would score well. Same IP, same browser, normal login time.
+
+00:02:39.708 --> 00:02:43.335
+<v Luis Ortega>Yeah, that example kills the clean version of this.
+
+00:02:44.095 --> 00:02:46.695
+[A notification sound interrupts the call; Maya mutes briefly.]
+
+00:02:56.695 --> 00:02:58.436
+<v Maya Chen>Sorry. Go ahead, Priya.
+
+00:02:58.556 --> 00:03:08.515
+<v Priya Shah>I was going to ask whether we can speed up identity without removing it. Reuse recent verified attributes, fewer prompts, something like that.
+
+00:03:08.855 --> 00:03:14.728
+<v Kira Wallace>Possibly. We can prefill, but the customer still has to complete the verification challenge.
+
+00:03:15.248 --> 00:03:18.755
+<v Luis Ortega>Would that count as the same flow for Support?
+
+00:03:19.515 --> 00:03:29.034
+<v Maya Chen>If the outcome is the same and the sequence stays identity, eligibility, product discussion, confirmation, create—yes. The interface can be faster.
+
+00:03:30.084 --> 00:03:34.309
+<v Priya Shah>That order matters. Account details cannot appear before identity succeeds.
+
+00:03:34.489 --> 00:03:35.739
+<v Luis Ortega>Understood.
+
+00:03:35.859 --> 00:03:41.201
+<v Kira Wallace>Then I should close the bypass ticket and open a separate prefill ticket.
+
+00:03:41.721 --> 00:03:49.903
+<v Luis Ortega>Can you keep the threat model attached? I don't want the same proposal coming back next quarter with a different name.
+
+00:03:50.663 --> 00:03:51.913
+<v Kira Wallace>Yep.
+
+00:03:52.033 --> 00:04:00.261
+<v Maya Chen>Noah isn't here, so I will write the support note. Known device may reduce friction; it does not replace verification.
+
+00:04:00.441 --> 00:04:09.012
+<v Priya Shah>Please say “may support a streamlined verification experience.” If you say reduce friction, somebody will interpret it as fewer controls.
+
+00:04:09.352 --> 00:04:11.785
+<v Maya Chen>Good catch. I'll use your wording.
+
+00:04:12.305 --> 00:04:15.931
+<v Luis Ortega>And the account-create button stays after explicit confirmation, correct?
+
+00:04:16.691 --> 00:04:19.529
+<v Maya Chen>Correct. This review doesn't change that gate.
+
+00:04:20.579 --> 00:04:26.041
+<v Kira Wallace>All right. Bypass concept closed, prefill investigation open. I have what I need.

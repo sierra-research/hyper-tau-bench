@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>RET-OPS-303 - rev A</title>
+<style>
+  body{margin:0;background:#e7ebef;font-family:"Segoe UI",Arial,sans-serif}
+  .canvas{position:relative;width:1500px;height:1000px;background:#fbfcfd;overflow:hidden}
+  .titleblock{position:absolute;left:24px;top:20px;width:270px;border:1px solid #b3bcc6;background:#ffffff;border-radius:6px;padding:10px 14px;box-sizing:border-box}
+  .tb1{font-size:16px;font-weight:700;color:#2c3a48;margin-bottom:2px}
+  .tb2{font-size:12px;color:#4a5a68;line-height:1.5}
+  .bt{position:absolute;left:340px;top:38px;font-size:21px;font-weight:600;color:#2c3a48}
+  .legend{position:absolute;left:1080px;top:26px;width:396px;border:1px solid #b3bcc6;background:#ffffff;border-radius:6px;padding:8px 12px;font-size:11.5px;color:#4a5a68;box-sizing:border-box;line-height:1.5}
+  .node{position:absolute;box-sizing:border-box;background:#ffffff;border:2px solid #4a6076;border-radius:10px;padding:9px 13px;font-size:13px;color:#22303c;line-height:1.4;white-space:pre-wrap}
+  .start{border-color:#3e7a5e;background:#eef7f2}
+  .stop{border-color:#9c4a4a;background:#fbeeec}
+  .aside{position:absolute;box-sizing:border-box;border:1.5px dashed #8a97a4;background:#f5f7f9;border-radius:8px;padding:8px 12px;font-size:12px;color:#44525f;line-height:1.4}
+  .dwrap{position:absolute}
+  .dshape{position:absolute;left:15%;top:15%;width:70%;height:70%;transform:rotate(45deg);background:#fdf6ea;border:2px solid #a8763b;box-sizing:border-box}
+  .dlabel{position:absolute;left:8%;right:8%;top:0;bottom:0;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;color:#5a4326;line-height:1.3}
+  .eh{position:absolute;height:2px;background:#5b6c7c}
+  .ev{position:absolute;width:2px;background:#5b6c7c}
+  .ar-r{position:absolute;width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:8px solid #5b6c7c}
+  .ar-l{position:absolute;width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-right:8px solid #5b6c7c}
+  .ar-d{position:absolute;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:8px solid #5b6c7c}
+  .ar-u{position:absolute;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:8px solid #5b6c7c}
+  .elbl{position:absolute;font-size:11.5px;color:#4f6070;background:#fbfcfd;padding:1px 5px;line-height:1.35}
+  .brk{position:absolute;border-top:1.5px dashed #8a97a4}
+  .pathnote{position:absolute;box-sizing:border-box;border:1px solid #b3bcc6;background:#ffffff;border-radius:6px;padding:9px 13px;font-size:12px;color:#4a5a68;line-height:1.5}
+  .foot{position:absolute;left:24px;bottom:8px;font-size:11px;color:#7c8894}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <div class="eh" style="left:420px;top:200px;width:60px"></div><div class="ar-r" style="left:472px;top:196px"></div>
+  <div class="eh" style="left:880px;top:200px;width:60px"></div><div class="ar-r" style="left:932px;top:196px"></div>
+  <div class="ev" style="left:1119px;top:224px;height:136px"></div><div class="ar-d" style="left:1114px;top:352px"></div>
+  <div class="eh" style="left:808px;top:404px;width:132px"></div><div class="ar-l" style="left:800px;top:400px"></div>
+  <div class="eh" style="left:638px;top:404px;width:2px"></div>
+  <div class="eh" style="left:630px;top:404px;width:10px"></div><div class="ar-l" style="left:630px;top:400px"></div>
+  <div class="ev" style="left:719px;top:485px;height:55px"></div><div class="ar-d" style="left:714px;top:532px"></div>
+  <div class="ev" style="left:464px;top:431px;height:229px"></div><div class="ar-d" style="left:459px;top:652px"></div>
+  <div class="eh" style="left:630px;top:684px;width:70px"></div><div class="ar-r" style="left:692px;top:680px"></div>
+  <div class="eh" style="left:1130px;top:684px;width:70px"></div><div class="ar-r" style="left:1192px;top:680px"></div>
+  <div class="brk" style="left:300px;top:310px;width:1000px"></div>
+
+  <div class="elbl" style="left:432px;top:180px">in scope</div>
+  <div class="elbl" style="left:892px;top:180px">1</div>
+  <div class="elbl" style="left:1130px;top:280px">2</div>
+  <div class="elbl" style="left:836px;top:384px">check funds</div>
+  <div class="elbl" style="left:648px;top:384px">3</div>
+  <div class="elbl" style="left:730px;top:500px">no</div>
+  <div class="elbl" style="left:474px;top:540px">4</div>
+  <div class="elbl" style="left:648px;top:664px">5</div>
+  <div class="elbl" style="left:1140px;top:664px">done</div>
+  <div class="elbl" style="left:430px;top:286px">look up both accounts to obtain account IDs and verify balances</div>
+
+  <div class="titleblock">
+    <div class="tb1">RET-OPS-303 - rev A</div>
+    <div class="tb2">Retention Operations</div>
+    <div class="tb2">Owner: Silas Brandt</div>
+    <div class="tb2">2025-10-14</div>
+  </div>
+  <div class="bt">PAYOFF-FROM-CHECKING - pay a credit card from Rho checking</div>
+  <div class="legend">Legend: rounded box = process step / diamond = decision / green = start or finish / red = stop / dashed box = reference note</div>
+
+  <div class="node start" style="left:60px;top:170px;width:360px">Customer asks to pay off a credit card balance from their Rho checking account</div>
+  <div class="node" style="left:480px;top:170px;width:400px">In scope for the desk: the agent may process the payment directly when funds come from a Rho checking account</div>
+  <div class="node" style="left:940px;top:174px;width:360px">Verify the customer's identity (standard procedures)</div>
+  <div class="node" style="left:940px;top:360px;width:360px">Look up the checking account - confirm a Rho checking account with sufficient funds to cover the payment amount</div>
+  <div class="dwrap" style="left:640px;top:325px;width:160px;height:160px"><div class="dshape"></div><div class="dlabel">Checking balance covers the amount?</div></div>
+  <div class="node stop" style="left:560px;top:540px;width:320px">Balance does not cover the amount - do not process the transfer</div>
+  <div class="node" style="left:300px;top:379px;width:330px">Look up the credit card account - confirm the outstanding balance</div>
+  <div class="node" style="left:300px;top:660px;width:330px">confirm the payment amount and authorization</div>
+  <div class="node" style="left:700px;top:660px;width:430px">unlock pay_credit_card_from_checking_9182, then call it</div>
+  <div class="node start" style="left:1200px;top:660px;width:250px">Payment posted - confirm with the customer and note the case</div>
+  <div class="pathnote" style="left:60px;top:820px;width:1380px">Path: verify identity -> look up the checking account (sufficient funds) -> look up the credit card account (outstanding balance) -> confirm the payment amount and authorization -> unlock pay_credit_card_from_checking_9182, then call it</div>
+
+  <div class="foot">RET-OPS-303 rev A - Retention Operations - 1 of 1</div>
+</div>
+</body>
+</html>

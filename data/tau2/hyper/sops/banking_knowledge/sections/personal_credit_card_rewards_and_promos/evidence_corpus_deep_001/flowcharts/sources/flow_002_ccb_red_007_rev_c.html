@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CCB-RED-007 rev C — Crypto-Cash Back crypto redemption flow</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 2320px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #14395c; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #bcd0e2; }
+  .node { position: absolute; width: 300px; box-sizing: border-box; border: 2px solid #4a5b6d; border-radius: 6px; background: #fff; padding: 10px 12px; font-size: 13px; line-height: 1.35; color: #1d2733; }
+  .node .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding: 1px 6px; border-radius: 3px; margin-bottom: 6px; }
+  .entry { border-color: #1d6a44; } .entry .tag { background: #d9efe3; color: #17573a; }
+  .read { border-color: #2b5f8f; } .read .tag { background: #dcebf7; color: #234d73; }
+  .work { border-color: #4a5b6d; } .work .tag { background: #e6ebf0; color: #3a4a5a; }
+  .write { border-color: #a2543a; } .write .tag { background: #f7e5dd; color: #7f3f2a; }
+  .gate { border-color: #8f7326; } .gate .tag { background: #f6eecf; color: #6e5a1d; }
+  .queue { border-color: #8a2f3c; } .queue .tag { background: #f6dde1; color: #6e2530; }
+  .terminal { border-color: #1d6a44; background: #f2faf5; } .terminal .tag { background: #d9efe3; color: #17573a; }
+  .decision { position: absolute; width: 300px; box-sizing: border-box; }
+  .decision .diamond { width: 280px; height: 128px; margin: 0 auto; background: #fff8e8; border: 2px solid #b08a1f; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 8px 14px; box-sizing: border-box; font-size: 13px; text-align: center; color: #4b3d10; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+  svg.edges { position: absolute; left: 0; top: 0; width: 1560px; height: 2320px; pointer-events: none; }
+  svg.edges path { stroke: #51606f; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+  svg.edges path.loop { stroke-dasharray: 6 4; }
+  .edge-label { position: absolute; font-size: 11px; font-weight: 600; color: #38424d; background: #fbfcfdcc; padding: 0 4px; border-radius: 2px; }
+  .sticky { position: absolute; width: 250px; box-sizing: border-box; padding: 10px 12px; font-size: 12px; line-height: 1.35; box-shadow: 2px 3px 6px rgba(0,0,0,0.12); }
+  .sticky.yellow { background: #fdf3c0; } .sticky.blue { background: #d8e9f9; }
+  .control-definitions { position: absolute; left: 24px; top: 1160px; width: 1512px; box-sizing: border-box; border: 2px solid #14395c; background: #f4f8fc; border-radius: 6px; padding: 14px 18px; }
+  .control-definitions h2 { margin: 0 0 8px; font-size: 14px; letter-spacing: 0.4px; color: #14395c; }
+  .control-definitions dl { margin: 0; font-size: 12.5px; line-height: 1.45; color: #1d2733; }
+  .control-definitions dt { font-weight: 700; font-family: "Consolas", monospace; margin-top: 7px; }
+  .control-definitions dd { margin: 1px 0 0 14px; }
+  .panel { position: absolute; box-sizing: border-box; border: 2px solid #14395c; background: #f4f8fc; border-radius: 6px; padding: 14px 18px; }
+  .panel h2 { margin: 0 0 8px; font-size: 14px; letter-spacing: 0.4px; color: #14395c; }
+  .panel dl { margin: 0; font-size: 12.5px; line-height: 1.45; color: #1d2733; }
+  .panel dt { font-weight: 700; font-family: "Consolas", monospace; margin-top: 7px; }
+  .panel dd { margin: 1px 0 0 14px; }
+  .panel ul { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.5; color: #1d2733; }
+  .panel li { margin-bottom: 5px; }
+  .lane-h { position: absolute; font-size: 13px; font-weight: 700; letter-spacing: 0.8px; color: #14395c; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>Crypto-Cash Back — crypto redemption flow</h1>
+    <div class="meta">CCB-RED-007 rev C &nbsp;·&nbsp; Owner: R. Ortiz, Card Rewards Servicing &nbsp;·&nbsp; Updated 2025-10-27 &nbsp;·&nbsp; Applies to: Crypto-Cash Back crypto redemptions in the app</div>
+  </div>
+
+  <svg class="edges" viewBox="0 0 1560 2320">
+    <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#51606f"></path></marker></defs>
+    <!-- entry -> enabled? -->
+    <path d="M 190 228 L 190 300"></path>
+    <!-- enabled? no -> enablement check -->
+    <path d="M 190 432 L 190 496"></path>
+    <!-- enablement check -> servicing queue (cannot confirm) -->
+    <path d="M 190 622 L 190 688"></path>
+    <!-- enablement check -> loop back to entry (enabled) -->
+    <path class="loop" d="M 344 540 L 420 540 L 420 170 L 348 170"></path>
+    <!-- enabled? yes -> threshold decision -->
+    <path d="M 340 366 L 640 366 L 640 150 L 660 150"></path>
+    <!-- threshold no -> accumulate -->
+    <path d="M 810 214 L 810 340"></path>
+    <!-- accumulate -> loop back to threshold -->
+    <path class="loop" d="M 660 400 L 600 400 L 600 148 L 656 148"></path>
+    <!-- threshold yes -> select currency -->
+    <path d="M 950 148 L 1100 148 L 1100 540 L 964 540"></path>
+    <!-- select -> integration? -->
+    <path d="M 810 626 L 810 682"></path>
+    <!-- integration yes -> integrated wallet -->
+    <path d="M 960 746 L 1160 746 L 1160 214 L 1196 214"></path>
+    <!-- integration no -> manual entry -->
+    <path d="M 810 814 L 810 872"></path>
+    <!-- manual entry -> review (join) -->
+    <path d="M 964 936 L 1080 936 L 1080 430 L 1176 430"></path>
+    <!-- integrated wallet -> review -->
+    <path d="M 1330 300 L 1330 356"></path>
+    <!-- review -> confirmation gate -->
+    <path d="M 1330 494 L 1330 566"></path>
+    <!-- confirmation gate -> submitted terminal -->
+    <path d="M 1330 700 L 1330 756"></path>
+  </svg>
+
+  <span class="edge-label" style="left:150px;top:452px">not enabled / cannot proceed</span>
+  <span class="edge-label" style="left:388px;top:346px">enabled — proceed</span>
+  <span class="edge-label" style="left:426px;top:518px">enablement confirmed — restart</span>
+  <span class="edge-label" style="left:150px;top:648px">cannot confirm enablement</span>
+  <span class="edge-label" style="left:826px;top:244px">below 30 — accumulate</span>
+  <span class="edge-label" style="left:975px;top:126px">balance meets 30 — continue</span>
+  <span class="edge-label" style="left:1000px;top:726px">integration available</span>
+  <span class="edge-label" style="left:826px;top:838px">integration unavailable</span>
+  <span class="edge-label" style="left:1040px;top:914px">address entered + accuracy confirmed</span>
+  <span class="edge-label" style="left:1352px;top:328px">wallet selected</span>
+  <span class="edge-label" style="left:1352px;top:730px">submitted</span>
+
+  <article class="node entry" style="left:40px;top:100px"><span class="tag">ENTRY</span>
+    Customer opens <b>Rewards</b> in the app and chooses <b>Redeem to Crypto</b>. This flow covers the app-side redemption sequence end to end.
+  </article>
+
+  <div class="decision" style="left:40px;top:300px"><div class="diamond">Crypto redemption enabled on the account?</div></div>
+
+  <article class="node gate" style="left:40px;top:504px"><span class="tag">ENABLEMENT CHECK</span>
+    Ensure redemption is enabled on the account (on Crypto-Cash Back accounts, availability is <b>Yes</b>). If enabled, restart the flow from Rewards.
+  </article>
+
+  <article class="node queue" style="left:40px;top:696px"><span class="tag">QUEUE — SERVICING</span>
+    Enablement cannot be confirmed from the app: route to card servicing with the account reference. Do not attempt the redemption again until servicing confirms.
+  </article>
+
+  <div class="decision" style="left:660px;top:84px"><div class="diamond">Reward balance meets the 30 threshold?</div></div>
+
+  <article class="node work" style="left:660px;top:348px"><span class="tag">ACCUMULATE</span>
+    Below the threshold: accumulate more rewards until the balance reaches <b>30</b>. Balance is trackable in the app; return to the flow when the requirement is met.
+  </article>
+
+  <article class="node work" style="left:660px;top:508px"><span class="tag">SELECT — CURRENCY</span>
+    Select a cryptocurrency from the available list. The list can include <b>up to 12 options</b>; availability is account-independent screen content.
+  </article>
+
+  <div class="decision" style="left:660px;top:682px"><div class="diamond">Direct wallet integration available?</div></div>
+
+  <article class="node work" style="left:660px;top:880px"><span class="tag">MANUAL WALLET ENTRY</span>
+    Integration unavailable: use manual wallet address entry. Enter the destination address and <b>confirm accuracy before submitting</b>.
+  </article>
+
+  <article class="node work" style="left:1196px;top:100px"><span class="tag">WALLET — INTEGRATED</span>
+    Choose the destination wallet through the direct integration (availability on this product: <b>Yes</b>).
+  </article>
+
+  <article class="node read" style="left:1180px;top:364px"><span class="tag">REVIEW — CONVERSION</span>
+    Review the estimated conversion. A conversion fee of <b>1.25%</b> applies to the rewards you convert; the fee is applied at the time of conversion.
+  </article>
+
+  <article class="node gate" style="left:1180px;top:574px"><span class="tag">CONFIRMATION GATE</span>
+    Confirm the wallet address and submit the redemption request. No submission without the wallet confirmation step.
+  </article>
+
+  <article class="node terminal" style="left:1180px;top:764px"><span class="tag">TERMINAL — SUBMITTED</span>
+    Redemption request submitted. Platform-side processing follows; the customer sees status in the app.
+  </article>
+
+  <aside class="sticky yellow" style="left:60px;top:900px">
+    Design history: rev B circulated in October 2025 for review; constants on this revision verified against product configuration 2025-10-24 to 2025-10-27 (servicing decision log).
+  </aside>
+  <aside class="sticky blue" style="left:60px;top:1030px">
+    Handling note: most stalled redemptions in November were balance-threshold misreads after a pending return. Check the live balance at flow start.
+  </aside>
+
+  <section class="control-definitions">
+    <h2>CONTROL DEFINITIONS</h2>
+    <dl>
+      <dt>Redemption steps</dt>
+      <dd>1. Open Rewards in the app and choose Redeem to Crypto. 2. Confirm the current reward balance meets the 30 threshold. 3. Select a cryptocurrency from the available list (up to 12 options). 4. Choose the transfer method: direct wallet integration if available (Yes), otherwise manual wallet address entry. 5. Review the estimated conversion; a conversion fee of 1.25% applies to the rewards you convert. 6. Confirm the wallet address and submit the redemption request.</dd>
+      <dt>Conversion fee</dt>
+      <dd>Conversion fee: 1.25%, applied at the time of conversion.</dd>
+      <dt>Currency list</dt>
+      <dd>The number of available cryptocurrencies can be up to 12.</dd>
+      <dt>Troubleshooting</dt>
+      <dd>Can't proceed? Ensure the redemption is enabled: Yes. Threshold not met? Accumulate more rewards until you reach 30. Integration unavailable? If Yes is False, enter your wallet address manually and confirm accuracy before submitting.</dd>
+    </dl>
+  </section>
+  <section class="panel" style="left:24px;top:1520px;width:740px">
+    <h2>LEGEND — READING THIS BOARD</h2>
+    <dl>
+      <dt>Node colors</dt>
+      <dd>Green border: entry and terminal states. Blue border: reads from a system of record. Grey border: work steps performed in the flow. Rust border: writes back to the rewards record. Gold border: gates that must pass before the flow continues. Red border: hand-offs into a servicing queue.</dd>
+      <dt>Diamonds</dt>
+      <dd>Decision points. Every outbound edge carries a label naming the branch condition; if an edge has no label, it is not a branch.</dd>
+      <dt>Edges</dt>
+      <dd>Solid arrows advance the flow. Dashed arrows are re-entry loops: the flow returns to an earlier node and continues from there with the updated state.</dd>
+      <dt>Stickies</dt>
+      <dd>Yellow stickies carry design history and coaching notes; blue stickies carry queue and volume observations. Stickies annotate the board; the nodes and the control definitions carry the flow itself.</dd>
+    </dl>
+  </section>
+  <section class="panel" style="left:796px;top:1520px;width:740px">
+    <h2>SERVICING NOTES — OCTOBER / NOVEMBER</h2>
+    <ul>
+      <li>2025-10-28 — Constants verification window closed out; the verification record lives in the servicing decision log entries for 2025-10-24 through 2025-10-27.</li>
+      <li>2025-11-03 — Stalled-redemption contacts spike the week after each statement cycle. Triage with the stall cards below before escalating; most contacts close at the balance step.</li>
+      <li>2025-11-07 — Two agents were reading the currency list to customers from memory of last month's screen. The list is screen content: open the flow with the customer and read what the screen shows.</li>
+      <li>2025-11-12 — Records hygiene session pulled stale printouts of the predecessor draft from the break room; figure questions route to this board by reference, never to paper.</li>
+      <li>2025-11-13 — Calibration clinic replayed the stall shapes below against live cases; case notes on stalled redemptions should name which stall card applied and where the customer resumed the flow.</li>
+    </ul>
+  </section>
+  <span class="lane-h" style="left:40px;top:1892px">STALL TRIAGE — WHERE REDEMPTIONS GET STUCK</span>
+
+  <article class="node work" style="left:40px;top:1930px"><span class="tag">STALL — ENABLEMENT</span>
+    Customer cannot start the flow at all. The enablement gate and the servicing queue at the top-left own this path end to end; most November enablement stalls were profile confusion, not configuration. Route with the account reference and stop there.
+  </article>
+
+  <article class="node work" style="left:420px;top:1930px"><span class="tag">STALL — BALANCE MISREAD</span>
+    Stalled at the threshold step after a pending return. The live balance at flow start governs; walk the customer through a tracker refresh before any re-attempt, and never quote a balance from an earlier screen or a screenshot.
+  </article>
+
+  <article class="node work" style="left:800px;top:1930px"><span class="tag">STALL — ADDRESS ENTRY</span>
+    Manual-entry customers who rush the address step generate most address-correction contacts. Slow the interaction down at the confirmation gate and have the customer read the address back in two halves before submitting.
+  </article>
+
+  <aside class="sticky yellow" style="left:1180px;top:1930px">
+    Gate coaching: on manual entry the confirmation gate is the whole defense. Case notes should show the read-back happened — December sampling pulls gate-skip attempts.
+  </aside>
+  <aside class="sticky blue" style="left:1180px;top:2130px">
+    Queue note: integration-available customers who insist on manual entry are served by the troubleshooting control's own wording. Read it with them rather than arguing the toggle.
+  </aside>
+  <aside class="sticky yellow" style="left:420px;top:2130px">
+    Resume point matters: a customer who stalled at the currency step does not restart from enablement. Note where they stopped and re-enter there — restarts from the top are where the duplicate-contact tickets come from.
+  </aside>
+</div>
+</body>
+</html>

@@ -1,0 +1,169 @@
+{
+  "id": "retail_plus_wrong_entitlement_policy_fact_schema_001",
+  "domain": "retail_plus",
+  "studio_hidden": true,
+  "section_id": "wrong_entitlement",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/retail_plus_sop.md",
+    "heading": "## When a customer is wrong about what they're entitled to"
+  },
+  "rendered_section_path": "tau2/hyper/sops/retail_plus/sections/wrong_entitlement/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/wrong_entitlement/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "response_phrasing_context": {
+    "selected_rule_ids": [
+      "never_say_unfortunately",
+      "max_one_apology_per_conversation",
+      "no_premature_outcome_language",
+      "identifier_minimization",
+      "no_generic_service_invitations",
+      "no_support_deflection",
+      "customer_visible_failure_language",
+      "no_long_menu_dumps",
+      "match_warmth_to_outcome",
+      "no_first_person_cant",
+      "no_internal_tool_mentions",
+      "no_policy_jargon"
+    ],
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "The no_generic_service_invitations rule must still allow current-request procedural completeness checks required by one-shot item changes and exchanges.",
+      "Transfer language must use the exact SOP-mandated message even when other phrasing rules are active.",
+      "The avoid_repeated_openings rule is intentionally not applied to this section because several wrong-entitlement examples end in the same exact SOP-mandated transfer message."
+    ],
+    "rules_path": "tau2/hyper/response_phrasing/retail_plus_response_phrasing.yaml"
+  },
+  "style_exemplar": {
+    "id": "customer_support_chat",
+    "path": "tau2/hyper/sops/retail_plus/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "polite denials without banned phrasing",
+      "redirect to a supported path when one exists",
+      "offer transfer when customer wants more authority"
+    ]
+  },
+  "facts": [
+    {
+      "id": "price_drop_not_accepted_cancel_reason",
+      "category": "entitlement_denial",
+      "statement": "A price drop after purchase is not an accepted cancellation reason; the agent should tell the customer politely, and if the customer pushes, transfer.",
+      "canonical_source": "When a customer is wrong about what they're entitled to"
+    },
+    {
+      "id": "return_refund_destination_limits",
+      "category": "entitlement_denial",
+      "statement": "Refunds for returns go to the original payment method or to an existing gift card that was already on the profile before the return request was opened, nothing else; a return refund cannot be sent to a different credit card than the customer paid with. This limit does not apply to the price difference on an exchange, which can go to any payment method saved on the customer's profile.",
+      "canonical_source": "When a customer is wrong about what they're entitled to"
+    },
+    {
+      "id": "delivered_order_cancel_request_redirects_to_return",
+      "category": "entitlement_denial",
+      "statement": "A delivered order cannot be cancelled; the agent should treat the customer's supported path as a return and walk the customer through the return process.",
+      "canonical_source": "When a customer is wrong about what they're entitled to"
+    },
+    {
+      "id": "exchanged_order_no_further_exchange",
+      "category": "entitlement_denial",
+      "statement": "Once an order has been through the exchange flow, no further exchanges are available for that order.",
+      "canonical_source": "When a customer is wrong about what they're entitled to"
+    },
+    {
+      "id": "friend_order_or_package_not_actionable",
+      "category": "entitlement_denial",
+      "statement": "Agents can only act on the customer's own orders; they cannot reroute or otherwise act on a friend's package or order, and the friend needs to call us.",
+      "canonical_source": "When a customer is wrong about what they're entitled to"
+    },
+    {
+      "id": "new_payment_method_not_added_by_care",
+      "category": "entitlement_denial",
+      "statement": "Customer care cannot add a new gift card or any other new payment method to the customer's account; the customer must add new payment methods through the website, and the agent should tell them so.",
+      "canonical_source": "When a customer is wrong about what they're entitled to"
+    },
+    {
+      "id": "wrong_entitlement_decline_explain_transfer_if_authority_requested",
+      "category": "entitlement_denial",
+      "statement": "When a request runs into one of the wrong-entitlement walls - price-drop cancellation reason, a return refund to anything other than the original payment method or an existing gift card, delivered-order cancellation, further exchange once an order has been through the exchange flow, acting on someone else's order or package, or adding a new payment method through customer care - the agent should decline politely and explain why. If the customer wants to talk to someone with more authority, transfer.",
+      "canonical_source": "When a customer is wrong about what they're entitled to"
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Price-drop cancellation reason declined",
+      "included_fact_ids": [
+        "price_drop_not_accepted_cancel_reason",
+        "wrong_entitlement_decline_explain_transfer_if_authority_requested"
+      ],
+      "style_notes": [
+        "customer frames a price drop after purchase as the reason for cancelling",
+        "agent politely declines, explains that price drop is not an accepted cancellation reason, and transfers if the customer pushes"
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Delivered cancellation redirected to return process",
+      "included_fact_ids": [
+        "delivered_order_cancel_request_redirects_to_return",
+        "wrong_entitlement_decline_explain_transfer_if_authority_requested"
+      ],
+      "style_notes": [
+        "customer wants cancellation after delivery",
+        "agent declines cancellation, explains delivered orders are not cancelled, and walks the customer through the return process"
+      ]
+    },
+    {
+      "id": "C",
+      "title": "Second exchange after exchange flow declined",
+      "included_fact_ids": [
+        "exchanged_order_no_further_exchange",
+        "wrong_entitlement_decline_explain_transfer_if_authority_requested"
+      ],
+      "style_notes": [
+        "customer asks to change an item again after the order has been through the exchange flow",
+        "agent politely declines and explains that no further exchanges are available on that order"
+      ]
+    },
+    {
+      "id": "D",
+      "title": "New payment method must be added on website",
+      "included_fact_ids": [
+        "new_payment_method_not_added_by_care",
+        "wrong_entitlement_decline_explain_transfer_if_authority_requested"
+      ],
+      "style_notes": [
+        "customer asks customer care to add a new gift card or other new payment method",
+        "agent explains that customer care does not add new payment methods and that the customer must add them through the website",
+        "if the customer asks for someone with more authority after the explanation, agent transfers"
+      ]
+    },
+    {
+      "id": "E",
+      "title": "Return refund destination limited",
+      "included_fact_ids": [
+        "return_refund_destination_limits",
+        "wrong_entitlement_decline_explain_transfer_if_authority_requested"
+      ],
+      "style_notes": [
+        "customer asks for a return refund to go to a different credit card than the one paid with",
+        "agent politely declines and explains that return refunds go only to the original payment method or an existing gift card, nothing else"
+      ]
+    },
+    {
+      "id": "F",
+      "title": "Friend order or package request declined",
+      "included_fact_ids": [
+        "friend_order_or_package_not_actionable",
+        "wrong_entitlement_decline_explain_transfer_if_authority_requested"
+      ],
+      "style_notes": [
+        "customer asks the agent to reroute or otherwise act on a friend's package or order",
+        "agent politely declines, explains that agents can only act on the customer's own orders, and says the friend needs to call us"
+      ]
+    }
+  ]
+}

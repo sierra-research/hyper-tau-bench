@@ -1,0 +1,88 @@
+From: Rosa Delgado <rosa.delgado@rho-bank.com>
+To: Noah Kim <noah.kim@rho-bank.com>, Aiden Park <aiden.park@rho-bank.com>
+Cc: Maya Chen <maya.chen@rho-bank.com>, Luis Ortega <luis.ortega@rho-bank.com>
+Date: Thu, 09 Oct 2025 13:22:48 -0400
+Subject: RE: True Blue -1 display in the comparison table
+Message-ID: <c02757efb083e78d7589@rho-bank.com>
+In-Reply-To: <9ae22640647e3ed83a03@rho-bank.com>
+References: <5764ef5a64bb01d7ff20@rho-bank.com>
+ <fc34f8d342b17ac97cb9@rho-bank.com> <ddd5b0a9265e32d73205@rho-bank.com>
+ <d45e64f3e64d536decb3@rho-bank.com> <78e0f40e5b52882b08e4@rho-bank.com>
+ <9ae22640647e3ed83a03@rho-bank.com>
+Thread-Topic: True Blue -1 display in the comparison table
+Thread-Index: 5f7b6bc8b67633d2ba828231cde8b038
+Accept-Language: en-US
+X-Auto-Response-Suppress: All
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Much clearer in the branch view. Thank you.
+
+-----Original Message-----
+From: Noah Kim <noah.kim@rho-bank.com>
+Sent: Thu, 09 Oct 2025 11:05:33 -0400
+To: Aiden Park <aiden.park@rho-bank.com>, Maya Chen <maya.chen@rho-bank.com>
+Cc: Luis Ortega <luis.ortega@rho-bank.com>
+Subject: RE: True Blue -1 display in the comparison table
+
+Event check passed: the rendered label is readable, while the analytics paylo=
+ad retains the field key and raw value. No other sentinel values are translat=
+ed by this component rule.
+
+-----Original Message-----
+From: Aiden Park <aiden.park@rho-bank.com>
+Sent: Thu, 09 Oct 2025 08:12:24 -0400
+To: Maya Chen <maya.chen@rho-bank.com>, Noah Kim <noah.kim@rho-bank.com>
+Cc: Rosa Delgado <rosa.delgado@rho-bank.com>, Luis Ortega <luis.ortega@rho-ba=
+nk.com>
+Subject: RE: True Blue -1 display in the comparison table
+
+Change is in review with the field-key guard. The detail page already says un=
+limited, so this brings the comparison row into line without touching the pro=
+duct record.
+
+-----Original Message-----
+From: Noah Kim <noah.kim@rho-bank.com>
+Sent: Wed, 08 Oct 2025 11:44:52 -0400
+To: Aiden Park <aiden.park@rho-bank.com>, Maya Chen <maya.chen@rho-bank.com>
+Cc: Luis Ortega <luis.ortega@rho-bank.com>
+Subject: RE: True Blue -1 display in the comparison table
+
+Field-level mapping is safer. The API will continue to return -1; the compari=
+son component can render the label and retain the raw value in its event payl=
+oad.
+
+-----Original Message-----
+From: Maya Chen <maya.chen@rho-bank.com>
+Sent: Wed, 08 Oct 2025 09:26:17 -0400
+To: Aiden Park <aiden.park@rho-bank.com>, Rosa Delgado <rosa.delgado@rho-bank=
+.com>
+Cc: Luis Ortega <luis.ortega@rho-bank.com>, Noah Kim <noah.kim@rho-bank.com>
+Subject: RE: True Blue -1 display in the comparison table
+
+For the True Blue included-transactions field, -1 means unlimited monthly tra=
+nsactions. Do not generalize that translation to unrelated numeric fields. Pl=
+ease scope the component rule to this field key.
+
+-----Original Message-----
+From: Aiden Park <aiden.park@rho-bank.com>
+Sent: Tue, 07 Oct 2025 15:02:39 -0400
+To: Rosa Delgado <rosa.delgado@rho-bank.com>, Luis Ortega <luis.ortega@rho-ba=
+nk.com>
+Subject: RE: True Blue -1 display in the comparison table
+
+Yes, the UI can translate the sentinel for display while preserving the sourc=
+e value in the data payload. I need Product to confirm that -1 is always unli=
+mited for this field, not just on True Blue.
+
+-----Original Message-----
+From: Rosa Delgado <rosa.delgado@rho-bank.com>
+Sent: Tue, 07 Oct 2025 14:18:03 -0400
+To: Luis Ortega <luis.ortega@rho-bank.com>, Aiden Park <aiden.park@rho-bank.c=
+om>
+Subject: True Blue -1 display in the comparison table
+
+Three bankers reported that '-1 transactions' looks like a broken limit. The =
+product guide explains it, but the comparison table only shows the number. Ca=
+n we display 'unlimited' without changing the underlying field?

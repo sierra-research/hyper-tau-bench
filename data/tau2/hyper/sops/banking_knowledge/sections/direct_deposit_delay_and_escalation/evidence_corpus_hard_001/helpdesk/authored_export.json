@@ -1,0 +1,287 @@
+{
+ "format": "helpdesk_automation_export_v2",
+ "snapshot": {
+  "source_system": "rho-helpdesk",
+  "account": "rho-bank-payroll-support",
+  "workspace": "payroll-servicing-console",
+  "environment": "production",
+  "exported_at": "2025-11-13T08:40:22-05:00",
+  "timezone": "America/New_York",
+  "export_version": "2025.46",
+  "requested_by": "yusuf.toure"
+ },
+ "cover_email": "From: Yusuf Toure <yusuf.toure@rhobank.com>\nTo: Payroll Servicing <payroll-servicing@rhobank.com>\nDate: Thu, 13 Nov 2025 08:51:04 -0500\nSubject: payroll-servicing console export, 2025.46\nMessage-ID: <7c3f18aa50de92@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nTeam,\n\nFresh cut of the payroll-servicing workspace while the November numbers are still climbing. Nothing structural changed since 2025.43; this export exists because the QA wave and the new-hire cohort should be reading the macro text the console actually runs, not a screenshot from someone's onboarding folder.\n\nTwo reminders that November makes expensive to forget. The guided flow's reference field names the schedule doc rev it resolves against - if your bookmark disagrees with the reference field, trust the field and fix the bookmark. And the request counter is case data: it gets recorded at close whether the contact transferred or not. The counting rules are in CON-DDCOUNT-1; the counter is not a scoreboard, it is the record that we helped first.\n\nSaved-response bodies are not in this export, per CON-DDSAVED-1. If you need to hear the holding line the way it should sound, the QA calibration library is the place - the reviewers keep the reference interactions.\n\nYusuf\nPayroll Servicing\n",
+ "macros": [
+  {
+   "macro_id": "MCR-5220",
+   "name": "Direct deposit delay - guided flow",
+   "description": "The servicing path for a where-is-my-paycheck contact. Timing help first, employer verification second, transfer only per the counting steps. Reference: Doc DD-SCHED rev C (console reference field, set 2025-10-20).",
+   "active": true,
+   "environment": "production",
+   "status": "current",
+   "effective_at": "2025-09-22T09:00:00-04:00",
+   "updated_at": "2025-10-20T08:00:00-04:00",
+   "usage_30d": 611,
+   "usage_90d": 902,
+   "superseded_by": null,
+   "steps": [
+    "Verify identity, then check the account for a failed or returned credit before saying anything about timing - a real return changes the conversation",
+    "Explain the typical posting timing before escalating: the morning window and the employer-schedule dependency, in customer words",
+    "Advise the customer to check again at the appropriate time and verify the pay schedule with the employer",
+    "On each explicit request for a human agent, increment payroll.request_counter (counting rules: CON-DDCOUNT-1) and open the response with saved response DD-HOLD-1, then keep helping",
+    "After the eighth explicit request for a human agent, complete the transfer with transfer_to_human_agents and close with saved response DD-XFER-1",
+    "Timing questions resolve against Doc DD-SCHED at the rev this macro's reference field names; the account's transaction feed confirms actual postings"
+   ]
+  },
+  {
+   "macro_id": "MCR-5224",
+   "name": "Missing payroll file - employer verification",
+   "description": "For the rare contact where the pay date and window have genuinely passed: check the file-arrival extract before anyone blames the account.",
+   "active": true,
+   "environment": "production",
+   "status": "current",
+   "effective_at": "2025-09-22T09:00:00-04:00",
+   "updated_at": "2025-09-22T09:00:00-04:00",
+   "usage_30d": 17,
+   "usage_90d": 31,
+   "superseded_by": null,
+   "steps": [
+    "Confirm the pay date and pattern on the case (payroll.employer_pattern, payroll.pay_date)",
+    "Check the payroll_credit extract for the employer's file: received, late, or not received (payroll.file_status)",
+    "If the file was not received, the fix is on the employer/provider side - coach the customer to verify with their payroll contact, and note the provider cutoff if known",
+    "A late file posts in the next processing window; set that expectation from the extract, not from hope"
+   ]
+  },
+  {
+   "macro_id": "MCR-5231",
+   "name": "Employer pattern capture",
+   "description": "Record the employer's submitter pattern on the profile after any payroll contact, so the next timing call starts from data.",
+   "active": true,
+   "environment": "production",
+   "status": "current",
+   "effective_at": "2025-10-06T09:00:00-04:00",
+   "updated_at": "2025-10-06T09:00:00-04:00",
+   "usage_30d": 388,
+   "usage_90d": 645,
+   "superseded_by": null,
+   "steps": [
+    "Set payroll.employer_pattern from the extract's history for the employer, not from the customer's guess",
+    "If the extract shows no history, leave the field empty - an empty field is honest, a guessed one is a future mis-advice"
+   ]
+  },
+  {
+   "macro_id": "MCR-4808",
+   "name": "Transfer on request - payments queue",
+   "active": false,
+   "environment": "production",
+   "status": "retired",
+   "effective_at": "2024-11-04T09:00:00-05:00",
+   "updated_at": "2025-09-22T09:00:00-04:00",
+   "usage_30d": 0,
+   "usage_90d": 0,
+   "superseded_by": null,
+   "steps": [
+    "Retired step text withheld from active view; see workspace version history"
+   ]
+  }
+ ],
+ "triggers": [
+  {
+   "trigger_id": "TRG-7010",
+   "name": "Route payroll-timing contacts to the guided flow",
+   "description": "New contacts on missing or late direct deposits get MCR-5220 attached and land in payroll-timing.",
+   "active": true,
+   "environment": "production",
+   "status": "current",
+   "priority": 2,
+   "effective_at": "2025-09-22T09:00:00-04:00",
+   "updated_at": "2025-09-22T09:00:00-04:00",
+   "usage_30d": 640,
+   "conditions": [
+    "contact.topic == 'direct_deposit_missing_or_late'"
+   ],
+   "actions": [
+    "attach_macro:MCR-5220",
+    "set_queue:payroll-timing"
+   ]
+  },
+  {
+   "trigger_id": "TRG-7014",
+   "name": "Flag transferred payroll contacts for pattern capture",
+   "description": "Any payroll contact that reaches transfer_to_human_agents gets MCR-5231 queued for wrap-up, so the employer record improves even on the hard calls.",
+   "active": true,
+   "environment": "production",
+   "status": "current",
+   "priority": 5,
+   "effective_at": "2025-10-06T09:00:00-04:00",
+   "updated_at": "2025-10-06T09:00:00-04:00",
+   "usage_30d": 3,
+   "conditions": [
+    "contact.queue == 'payroll-timing'",
+    "contact.transferred == true"
+   ],
+   "actions": [
+    "attach_macro:MCR-5231"
+   ]
+  }
+ ],
+ "policy_contracts": [
+  {
+   "contract_id": "CON-DDCOUNT-1",
+   "name": "Explicit-request counting discipline",
+   "status": "current",
+   "effective_at": "2025-09-22T09:00:00-04:00",
+   "clauses": [
+    "An explicit request is the customer plainly asking for a human, an agent, a person, or a supervisor. Venting ('this is ridiculous') is not a request; a question about whether humans exist ('is there even a person there?') is a request if a transfer is what it asks for.",
+    "The counter increments once per explicit request, never resets within a contact, and is recorded on the case at close whether or not a transfer happened.",
+    "The counter is case data. The threshold that acts on it, and the action taken, live on the guided flow's steps - this contract only defines what counts."
+   ]
+  },
+  {
+   "contract_id": "CON-DDSAVED-1",
+   "name": "Saved-response bodies excluded from export",
+   "status": "current",
+   "effective_at": "2025-10-27T09:00:00-04:00",
+   "clauses": [
+    "Saved responses (DD-HOLD-1, DD-XFER-1) are workspace content and are not serialized into console exports; the console renders them at use time.",
+    "Spoken reference instances live in the QA calibration library, which the reviewers curate. Wording questions go to the library's reference interactions, not to memory."
+   ]
+  }
+ ],
+ "field_columns": ["row_id", "field_key", "field_name", "field_type", "option_value", "option_description", "active", "status", "environment", "updated_at"],
+ "fields": [
+  {
+   "row_id": "FLD-870",
+   "field_key": "payroll.request_counter",
+   "field_name": "Explicit human-request count",
+   "field_type": "integer",
+   "option_value": null,
+   "option_description": "Incremented per CON-DDCOUNT-1; recorded on the case at close.",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-22T09:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-871",
+   "field_key": "payroll.employer_pattern",
+   "field_name": "Employer submitter pattern",
+   "field_type": "dropdown",
+   "option_value": "T-2",
+   "option_description": "File submitted two business days ahead of the pay date (Key DD-PATTERN).",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-10-06T09:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-872",
+   "field_key": "payroll.employer_pattern",
+   "field_name": "Employer submitter pattern",
+   "field_type": "dropdown",
+   "option_value": "T-1",
+   "option_description": "File submitted one business day ahead of the pay date (Key DD-PATTERN).",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-10-06T09:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-873",
+   "field_key": "payroll.employer_pattern",
+   "field_name": "Employer submitter pattern",
+   "field_type": "dropdown",
+   "option_value": "T-0",
+   "option_description": "File submitted on the pay date itself (Key DD-PATTERN).",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-10-06T09:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-874",
+   "field_key": "payroll.file_status",
+   "field_name": "Employer file status",
+   "field_type": "dropdown",
+   "option_value": "received",
+   "option_description": "File present in the payroll_credit extract for the pay date.",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-22T09:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-875",
+   "field_key": "payroll.file_status",
+   "field_name": "Employer file status",
+   "field_type": "dropdown",
+   "option_value": "late",
+   "option_description": "File arrived after the window cutoff; posts next processing window.",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-22T09:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-876",
+   "field_key": "payroll.file_status",
+   "field_name": "Employer file status",
+   "field_type": "dropdown",
+   "option_value": "not_received",
+   "option_description": "No file for the pay date; employer/provider side owns the fix.",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-22T09:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-877",
+   "field_key": "payroll.pay_date",
+   "field_name": "Official pay date",
+   "field_type": "date",
+   "option_value": null,
+   "option_description": "The employer's stated pay date, before any holiday shift.",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-22T09:00:00-04:00"
+  }
+ ],
+ "sla_policies": [
+  {
+   "policy_id": "SLA-PAY-1",
+   "name": "Payroll-timing first response",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "target": "first_response < 2 business hours",
+   "applies_to": "queue:payroll-timing",
+   "updated_at": "2025-09-22T09:00:00-04:00"
+  }
+ ],
+ "views": [
+  {
+   "view_id": "VIEW-4102",
+   "name": "Payroll - delay contacts, open",
+   "active": true,
+   "status": "current",
+   "filters": [
+    "queue == payroll-timing",
+    "state == open"
+   ],
+   "updated_at": "2025-09-22T09:00:00-04:00"
+  },
+  {
+   "view_id": "VIEW-4103",
+   "name": "Payroll - transferred this week",
+   "active": true,
+   "status": "current",
+   "filters": [
+    "queue == payroll-timing",
+    "transferred == true",
+    "age < 7d"
+   ],
+   "updated_at": "2025-10-06T09:00:00-04:00"
+  }
+ ]
+}

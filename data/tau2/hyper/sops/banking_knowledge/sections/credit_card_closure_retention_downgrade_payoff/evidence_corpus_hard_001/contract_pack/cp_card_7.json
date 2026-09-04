@@ -1,0 +1,247 @@
+{
+  "format": "api_contract_pack_v1",
+  "release": {
+    "id": "CP-CARD-7",
+    "version": "7.2.0",
+    "environment": "production",
+    "status": "published",
+    "current": true,
+    "superseded_by": null,
+    "published_on": "2025-10-16",
+    "owner": "Card Platform Engineering"
+  },
+  "cover_email": "From: Priya Raman <priya.raman@rhobank.com>\nTo: retention-ops@rhobank.com, card-servicing-floor@rhobank.com\nCc: felix.osterberg@rhobank.com\nDate: Thu, 16 Oct 2025 09:47:12 -0400\nSubject: CP-CARD-7 v7.2.0 is live in production\n\nMorning all,\n\nv7.2.0 of the card servicing contract pack is published. Same seven\noperation cards as v7.1, with the response-shape appendix folded into\nrecord_contract_notes.md and the two lookup-tool error tables regenerated\nfrom the gateway configs (they drifted from what the floor was seeing in\nSeptember - that is fixed at the source now).\n\nReminders that keep showing up in tickets:\n\n- The two discoverable tools (pay_credit_card_from_checking_9182 and\n  apply_statement_credit_8472) are not callable until you enable them for\n  the session with unlock_discoverable_agent_tool. After the unlock, invoke\n  them through call_discoverable_agent_tool - the arguments travel as one\n  JSON string, all required fields present, exactly as the card spells\n  them.\n- log_credit_card_closure_reason_4521 takes its three parameters and\n  nothing else. The gateway rejects extras; that is by design.\n- waive_fee_legacy remains in the document for record continuity only. Fee\n  waivers go through apply_credit_card_account_flag_6147 with an\n  expiration_date and a reason.\n\nQuestions on a card go to #card-platform; questions on floor procedure go\nto Retention Operations, not to us.\n\nPriya\nCard Platform Engineering | Rho Bank\n",
+  "openapi": {
+    "openapi": "3.1.0",
+    "info": {
+      "title": "Rho Bank Card Servicing Tools - CP-CARD-7",
+      "version": "7.2.0",
+      "description": "Operation cards for the card servicing and retention floor. Every operation runs against the internal tools gateway and requires an authenticated servicing session. Discoverable operations are marked with x-session-unlock and must be enabled per session before invocation."
+    },
+    "servers": [{"url": "https://tools-gw.internal.rhobank.com/v7"}],
+    "paths": {
+      "/tools/close_credit_card_account_7834": {
+        "post": {
+          "operationId": "close_credit_card_account_7834",
+          "summary": "Close a credit card account",
+          "description": "Closes the credit card account after floor eligibility checks are complete. credit_card_account_id is the unique identifier for the credit card account, found in the customer's account profile or by looking up their credit card accounts. user_id must match the authenticated user.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["credit_card_account_id", "user_id"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "credit_card_account_id": {"type": "string", "description": "Unique identifier for the credit card account; found in the customer's account profile or by looking up their credit card accounts."},
+                    "user_id": {"type": "string", "description": "Must match the authenticated user."}
+                  }
+                }
+              }
+            }
+          },
+          "responses": {"200": {"description": "Closure accepted; confirmation and final statement follow by email."}}
+        }
+      },
+      "/tools/get_closure_reason_history_8293": {
+        "post": {
+          "operationId": "get_closure_reason_history_8293",
+          "summary": "Look up closure reason records for an account",
+          "description": "Returns closure reason records logged against the specific credit card account. Run before logging a reason or making retention offers, per the floor boards.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["credit_card_account_id"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "credit_card_account_id": {"type": "string", "description": "String identifying the credit card account the customer wants to close."}
+                  }
+                }
+              }
+            }
+          },
+          "responses": {"200": {"description": "Closure reason records for the account, newest first."}}
+        }
+      },
+      "/tools/log_credit_card_closure_reason_4521": {
+        "post": {
+          "operationId": "log_credit_card_closure_reason_4521",
+          "summary": "Log a closure reason",
+          "description": "Accepts credit_card_account_id, user_id, and closure_reason - and nothing else. The gateway rejects any additional parameter.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["credit_card_account_id", "user_id", "closure_reason"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "credit_card_account_id": {"type": "string"},
+                    "user_id": {"type": "string"},
+                    "closure_reason": {
+                      "type": "string",
+                      "enum": ["annual_fee", "not_using_card", "found_better_card", "unhappy_with_rewards", "simplifying_finances", "negative_experience", "other"]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {"200": {"description": "Reason logged."}}
+        }
+      },
+      "/tools/apply_credit_card_account_flag_6147": {
+        "post": {
+          "operationId": "apply_credit_card_account_flag_6147",
+          "summary": "Apply an account flag",
+          "description": "Applies a servicing flag to a credit card account. For the retention loyalty waiver: flag_type annual_fee_waived, expiration_date set to a date one year from today in MM/DD/YYYY format, reason set to loyalty_benefit.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["credit_card_account_id", "user_id", "flag_type", "expiration_date", "reason"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "credit_card_account_id": {"type": "string"},
+                    "user_id": {"type": "string"},
+                    "flag_type": {"type": "string", "enum": ["annual_fee_waived", "paper_statements", "travel_notice", "hardship_review"]},
+                    "expiration_date": {"type": "string", "description": "MM/DD/YYYY. For the loyalty waiver: one year from today.", "examples": ["11/14/2026"]},
+                    "reason": {"type": "string", "description": "For the loyalty waiver this is the literal loyalty_benefit.", "examples": ["loyalty_benefit"]}
+                  }
+                }
+              }
+            }
+          },
+          "responses": {"200": {"description": "Flag applied."}}
+        }
+      },
+      "/tools/downgrade_credit_card_3847": {
+        "post": {
+          "operationId": "downgrade_credit_card_3847",
+          "summary": "Downgrade a credit card product",
+          "description": "Processes a product downgrade preserving the account. target_card_type must be Bronze Rewards Card for a personal downgrade or Business Bronze Rewards Card for a business downgrade.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["credit_card_account_id", "user_id", "target_card_type"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "credit_card_account_id": {"type": "string"},
+                    "user_id": {"type": "string"},
+                    "target_card_type": {"type": "string", "enum": ["Bronze Rewards Card", "Business Bronze Rewards Card"], "description": "Bronze Rewards Card for personal downgrades; Business Bronze Rewards Card for business downgrades."}
+                  }
+                }
+              }
+            }
+          },
+          "responses": {"200": {"description": "Downgrade processed."}}
+        }
+      },
+      "/tools/pay_credit_card_from_checking_9182": {
+        "post": {
+          "operationId": "pay_credit_card_from_checking_9182",
+          "summary": "Pay a credit card balance from a Rho checking account",
+          "x-session-unlock": "unlock_discoverable_agent_tool",
+          "x-invocation": "call_discoverable_agent_tool",
+          "description": "Discoverable session tool: enable it for the session with unlock_discoverable_agent_tool, then invoke it through call_discoverable_agent_tool with the required arguments. Debits the specified amount from the checking account and reduces the credit card balance by the same amount. The account IDs and user_id must match the authenticated customer, and the amount must be one the customer authorized.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["user_id", "checking_account_id", "credit_card_account_id", "amount"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "user_id": {"type": "string"},
+                    "checking_account_id": {"type": "string"},
+                    "credit_card_account_id": {"type": "string"},
+                    "amount": {"type": "number", "exclusiveMinimum": 0, "description": "Positive; cannot exceed the checking account balance or the credit card outstanding balance."}
+                  }
+                }
+              }
+            }
+          },
+          "responses": {"200": {"description": "Payment posted. The confirmation includes the new balances for both the checking account and the credit card account."}}
+        }
+      },
+      "/tools/apply_statement_credit_8472": {
+        "post": {
+          "operationId": "apply_statement_credit_8472",
+          "summary": "Apply a statement credit",
+          "x-session-unlock": "unlock_discoverable_agent_tool",
+          "x-invocation": "call_discoverable_agent_tool",
+          "description": "Discoverable session tool: enable it for the session with unlock_discoverable_agent_tool, then invoke it through call_discoverable_agent_tool passing all required arguments as one JSON string. Reason definitions are published on the statement-credit reasons page in the servicing help center.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["user_id", "credit_card_account_id", "amount", "reason"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "user_id": {"type": "string", "description": "The customer's unique user identifier in the system."},
+                    "credit_card_account_id": {"type": "string", "description": "The credit card account ID to apply the credit to; find it by calling get_credit_card_accounts_by_user."},
+                    "amount": {"type": "number", "exclusiveMinimum": 0, "description": "Positive number in dollars, such as 25.00 for a $25 credit."},
+                    "reason": {
+                      "type": "string",
+                      "enum": ["goodwill_adjustment", "promotional_credit", "annual_fee_reversal", "late_fee_reversal", "interest_charge_reversal", "dispute_resolution", "price_match", "retention_offer", "error_correction", "other"]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {"200": {"description": "Credit applied; it posts as a negative transaction on the account."}}
+        }
+      },
+      "/tools/waive_fee_legacy": {
+        "post": {
+          "operationId": "waive_fee_legacy",
+          "summary": "Legacy fee waiver entry",
+          "deprecated": true,
+          "description": "Retained for record continuity. Fee waivers go through apply_credit_card_account_flag_6147 with an expiration_date and a reason.",
+          "responses": {"410": {"description": "Disabled at the gateway."}}
+        }
+      }
+    }
+  },
+  "postman_collection": {
+    "info": {
+      "name": "CP-CARD-7 servicing tools",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+      "description": "Floor-facing request set for the seven operation cards. Session token from the servicing console; discoverable tools need the session unlock first."
+    },
+    "item": [
+      {"name": "close_credit_card_account_7834", "request": {"method": "POST", "url": "{{gateway}}/tools/close_credit_card_account_7834", "body": {"mode": "raw", "raw": "{\"credit_card_account_id\": \"{{cc_account_id}}\", \"user_id\": \"{{user_id}}\"}"}}},
+      {"name": "get_closure_reason_history_8293", "request": {"method": "POST", "url": "{{gateway}}/tools/get_closure_reason_history_8293", "body": {"mode": "raw", "raw": "{\"credit_card_account_id\": \"{{cc_account_id}}\"}"}}},
+      {"name": "log_credit_card_closure_reason_4521", "request": {"method": "POST", "url": "{{gateway}}/tools/log_credit_card_closure_reason_4521", "body": {"mode": "raw", "raw": "{\"credit_card_account_id\": \"{{cc_account_id}}\", \"user_id\": \"{{user_id}}\", \"closure_reason\": \"not_using_card\"}"}}},
+      {"name": "apply_credit_card_account_flag_6147", "request": {"method": "POST", "url": "{{gateway}}/tools/apply_credit_card_account_flag_6147", "body": {"mode": "raw", "raw": "{\"credit_card_account_id\": \"{{cc_account_id}}\", \"user_id\": \"{{user_id}}\", \"flag_type\": \"annual_fee_waived\", \"expiration_date\": \"11/14/2026\", \"reason\": \"loyalty_benefit\"}"}}},
+      {"name": "downgrade_credit_card_3847", "request": {"method": "POST", "url": "{{gateway}}/tools/downgrade_credit_card_3847", "body": {"mode": "raw", "raw": "{\"credit_card_account_id\": \"{{cc_account_id}}\", \"user_id\": \"{{user_id}}\", \"target_card_type\": \"Bronze Rewards Card\"}"}}},
+      {"name": "pay_credit_card_from_checking_9182 (via call_discoverable_agent_tool)", "request": {"method": "POST", "url": "{{gateway}}/session/call_discoverable_agent_tool", "body": {"mode": "raw", "raw": "{\"tool_name\": \"pay_credit_card_from_checking_9182\", \"arguments\": \"{\\\"user_id\\\": \\\"{{user_id}}\\\", \\\"checking_account_id\\\": \\\"{{chk_account_id}}\\\", \\\"credit_card_account_id\\\": \\\"{{cc_account_id}}\\\", \\\"amount\\\": 250.00}\"}"}}},
+      {"name": "apply_statement_credit_8472 (via call_discoverable_agent_tool)", "request": {"method": "POST", "url": "{{gateway}}/session/call_discoverable_agent_tool", "body": {"mode": "raw", "raw": "{\"tool_name\": \"apply_statement_credit_8472\", \"arguments\": \"{\\\"user_id\\\": \\\"{{user_id}}\\\", \\\"credit_card_account_id\\\": \\\"{{cc_account_id}}\\\", \\\"amount\\\": 25.00, \\\"reason\\\": \\\"goodwill_adjustment\\\"}\"}"}}}
+    ]
+  },
+  "error_behavior_columns": ["tool", "condition", "gateway_signal", "floor_response"],
+  "error_behavior": [
+    {"tool": "get_pending_replacement_orders_5765", "condition": "invalid credit_card_account_id", "gateway_signal": "400 INVALID_IDENTIFIER", "floor_response": "Re-verify that the identifier is account-level rather than card-level; confirm the identifier format and the source it was copied from."},
+    {"tool": "get_pending_replacement_orders_5765", "condition": "permission or access denied", "gateway_signal": "403 ACCESS_DENIED", "floor_response": "Ensure your role has access to run the tool; re-authenticate if the session may have expired."},
+    {"tool": "get_pending_replacement_orders_5765", "condition": "empty or ambiguous response", "gateway_signal": "200 with indeterminate payload", "floor_response": "Retry the call. If ambiguity persists, escalate to the support engineering queue with the call context and the credit_card_account_id."},
+    {"tool": "get_user_dispute_history_7291", "condition": "empty result set", "gateway_signal": "200 with empty list", "floor_response": "The user has not filed any credit card disputes, or the user_id is incorrect. Confirm the user_id and try again."},
+    {"tool": "get_user_dispute_history_7291", "condition": "permission or access error", "gateway_signal": "403 ACCESS_DENIED", "floor_response": "Ensure you hold the internal privileges required to view dispute histories."},
+    {"tool": "get_user_dispute_history_7291", "condition": "invalid or malformed user_id", "gateway_signal": "400 INVALID_IDENTIFIER", "floor_response": "Validate the user_id format and reissue the request."},
+    {"tool": "get_user_dispute_history_7291", "condition": "partial or truncated data", "gateway_signal": "206 PARTIAL_RESULT", "floor_response": "Retry the call. If the issue persists, capture the request context and escalate through internal support channels."}
+  ],
+  "record_contract_notes": "# Record contracts - lookup tools referenced by the servicing floor\n\nThe two read-only lookup tools are documented at the record level here;\ntheir floor procedure lives on the Retention Operations job aids.\n\n## get_pending_replacement_orders_5765 - response shape\n\nA successful response contains `orders`: a collection of replacement order\nrecords, or an empty collection if none are pending.\n\nTypical replacement order record fields:\n\n| field | notes |\n|---|---|\n| order_id | gateway-issued identifier |\n| status | examples: pending, shipped, delivered, cancelled |\n| created_at | order creation timestamp |\n| latest_event_at | most recent carrier or fulfilment event |\n| notes | optional free text |\n\n## get_user_dispute_history_7291 - response shape\n\nThe expected output is a list of dispute records for the specified user.\nThe tool returns only credit card disputes associated with the specified\nuser_id.\n\nEach dispute record includes dispute identifiers and metadata: dispute_id,\ndispute_date, status (such as open, under_review, or closed), and\nlast_updated_at. Each record includes transaction details: transaction_id,\ntransaction_date, merchant_name, amount, currency, and card_last4. Records\nmay include additional dispute context if available: reason_code, outcome,\nand notes or internal comments.\n\nDispute-history data is customer data: handle it in accordance with\ninternal data handling and privacy requirements.\n\n## Discoverable session tools\n\npay_credit_card_from_checking_9182 and apply_statement_credit_8472 are\nsession-scoped: enable with unlock_discoverable_agent_tool, invoke through\ncall_discoverable_agent_tool, arguments as one JSON string with every\nrequired field present. The gateway logs the unlock and the call as\nseparate audit events.\n\nStatement-credit reason definitions are published on the statement-credit\nreasons page in the servicing help center; the enum on the operation card\nis the closed list.\n"
+}

@@ -1,0 +1,20 @@
+{
+  "format": "shared_spine_anchors_v1",
+  "description": "DDDE-side anchor phrases for the facts and load-bearing excerpts this corpus routes to the trio-shared QA export authored in the mobile_check_deposit corpus. Each anchor must appear verbatim (whitespace-normalized) in the named source; check_corpus.py verifies every one and fails on drift. Edit the QA export only through the MCD corpus, then rerun all three trio checkers.",
+  "spine_manifest": "../../mobile_check_deposit/evidence_corpus_hard_001/shared_spine.json",
+  "artifacts": [
+    {
+      "path": "../../mobile_check_deposit/evidence_corpus_hard_001/qa/contact_center_quality_export.json",
+      "anchor_phrases": {
+        "F008": "no transfer until the customer has explicitly requested a human exactly 8 times — the transfer follows the eighth request, never an earlier one"
+      },
+      "dependency_excerpts": {
+        "counting_log_instance": "Counting log shows 2/8; the protocol's threshold was never reached and the agent never suggested the transfer was on the table early.",
+        "kept_call_pointer": "The long-count reference interaction for calibration is the Nov 12 kept call on case-58492.",
+        "holding_line_spoken": "I understand your frustration, but I need to try to help you resolve this first before I can initiate a transfer. Let me see what else I can do for you....",
+        "timing_first_title": "Direct-deposit delay: typical posting timing explained before any escalation motion"
+      }
+    }
+  ],
+  "notes": "The holding line appears in the shared export as spoken instances inside qa-25W46-007; its owner is this corpus's kept call (case-58492). The kept_call_pointer excerpt is the in-world warrant that routes wording questions from the console's CON-DDSAVED-1 through the QA library to the kept call."
+}

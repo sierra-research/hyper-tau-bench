@@ -1,0 +1,93 @@
+{
+  "format": "shared_spine_anchors_v1",
+  "description": "CLI-side anchor phrases for the 41 facts this corpus routes to shared-spine artifacts authored in the credit_card_transaction_disputes corpus. Each anchor is a verbatim (whitespace-normalized) substring of the named disputes source; check_corpus.py verifies every one and fails on drift. Edit the disputes source only through its own corpus, then rerun both checkers.",
+  "spine_manifest": "../../credit_card_transaction_disputes/evidence_corpus_hard_001/shared_spine.json",
+  "artifacts": [
+    {
+      "path": "flowcharts/sources/flow_001_ccd_pc_201_rev_b.html",
+      "anchor_phrases": {
+        "F076": "has the credit card account been open for at least 60 days",
+        "F077": "satisfied only by: unauthorized_fraudulent_charge",
+        "F078": "unauthorized_fraudulent_charge; duplicate_charge",
+        "F079": "goods_services_not_received with the additional condition that the purchase was made more than 30 days ago",
+        "F080": "is the disputed transaction amount at least $25.00 and not above the card tier",
+        "F082": "for any dispute reason other than unauthorized_fraudulent_charge, the customer must have attempted to resolve the issue with the merchant first"
+      }
+    },
+    {
+      "path": "meetings/meeting_02_2025-10-28.vtt",
+      "anchor_phrases": {
+        "F075": "all five true means eligible, and eligible only if all five are true",
+        "F088": "The account is less than 60 days old, and that alone is a no",
+        "F089": "incorrect_amount, goods_services_not_as_described, canceled_subscription_still_charging, refund_never_processed - any of those four and the customer is not eligible for provisional credit",
+        "F090": "under $25.00 and the amount criterion fails on the low end",
+        "F091": "A non-fraud dispute where the customer never contacted the merchant first is not eligible",
+        "F092": "A purchase made within the last 30 days because the merchant may still be processing delivery is a no",
+        "F107": "those three satisfy the reason criterion and nothing else does; every other reason category fails it"
+      }
+    },
+    {
+      "path": "reference_docs/text/card_program_matrices_2025_v4.txt",
+      "anchor_phrases": {
+        "F017": "Entry-tier | 120 days | 120 days | 70%",
+        "F018": "Mid-tier | 90 days | 90 days | 80%",
+        "F019": "Premium-tier | 60 days | 60 days | 90%",
+        "F031": "Entry-tier | 25% of the current credit limit",
+        "F032": "Mid-tier | 50% of the current credit limit",
+        "F033": "Premium-tier | 50% of the current credit limit",
+        "F083": "Entry Tier | Bronze Rewards Card, EcoCard, Business Bronze Rewards Card, Crypto-Cash Back Card | $2,500.00",
+        "F084": "Mid Tier | Silver Rewards Card, Business Silver Rewards Card, Green Rewards Card, Silver Zoom Card | $5,000.00",
+        "F085": "Premium Tier | Gold Rewards Card, Business Gold Rewards Card | $10,000.00",
+        "F086": "Elite Tier | Platinum Rewards Card, Business Platinum Rewards Card | $15,000.00",
+        "F087": "Invitation Tier | Diamond Elite Card | $25,000.00"
+      }
+    },
+    {
+      "path": "api_pack/authored_contract.json",
+      "anchor_phrases": {
+        "F093": "Call it with the user's user_id to get a list of all disputes filed by that user, including dispute dates, statuses, and transaction details",
+        "F094": "When a consolidated list of all credit card disputes filed by a specific user is needed",
+        "F095": "The required input is user_id, the user's canonical internal identifier",
+        "F097": "The expected output is a list of dispute records for the specified user",
+        "F098": "dispute_id, dispute_date, status such as open, under_review, or closed, and last_updated_at",
+        "F099": "transaction_id, transaction_date, merchant_name, amount, currency, and card_last4",
+        "F100": "reason_code, outcome, and notes or internal comments",
+        "F106": "returns only credit card disputes associated with the specified user_id"
+      }
+    },
+    {
+      "path": "kb/knowledge_archive.html",
+      "anchor_phrases": {
+        "F096": "invoke get_user_dispute_history_7291 with the user_id parameter",
+        "F101": "use dispute_date and last_updated_at to understand timeline and recency"
+      }
+    },
+    {
+      "path": "slack/capture_02.json",
+      "anchor_phrases": {
+        "F102": "either the user has not filed any credit card disputes or the user_id is incorrect",
+        "F103": "necessary internal privileges to view dispute histories",
+        "F104": "Validate the format of the user_id and reissue the request",
+        "F105": "capture the request context and escalate through internal support channels"
+      }
+    },
+    {
+      "path": "slack/capture_01.json",
+      "anchor_phrases": {
+        "F081": "the customer has not filed more than 2 disputes in the past 12 months"
+      }
+    },
+    {
+      "path": "emails/thread_001.eml",
+      "anchor_phrases": {
+        "F073": "Every dispute you process includes determining whether the customer is eligible for provisional credit"
+      }
+    },
+    {
+      "path": "website/pages/screen_001_provisional_credit_faq.html",
+      "anchor_phrases": {
+        "F074": "Provisional credit means the disputed amount is temporarily credited back to your account while the investigation is ongoing"
+      }
+    }
+  ]
+}

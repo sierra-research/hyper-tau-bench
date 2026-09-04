@@ -1,0 +1,68 @@
+{
+  "id": "banking_transfer_and_account_recovery_boundaries_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "transfer_and_account_recovery_boundaries",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/transfer_and_account_recovery_boundaries/source.md",
+    "heading": "## Human transfer and account-recovery boundary cases"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/transfer_and_account_recovery_boundaries/transcript_induction_001.md",
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook requirements from shared context: verify identity before account-specific information, get explicit confirmation before account-modifying actions, and use the exact transfer message when a transfer is performed.",
+      "Support console turns may mention document ids, internal tool results, and eligibility checks; Agent turns should give the customer the customer-visible next step or outcome.",
+      "Do not transform concrete KB tables, thresholds, statuses, fees, amounts, or condition-specific outcomes into vague dependency statements."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "identity verification before account-specific details",
+      "explicit customer confirmation before account-modifying actions",
+      "plain-language customer-facing outcomes",
+      "support-console notes for internal KB/tool evidence"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_042.json",
+      "tau2/domains/banking_knowledge/documents/doc_customer_support_special_support_codes_001.json"
+    ],
+    "summary": "Unsupported changes, documented transfer reason codes, special support code limits, and exact transfer behavior.",
+    "rules": [
+      "Preserve all values, tables, thresholds, statuses, fees, amounts, eligibility gates, tool/action names, and condition-to-outcome mappings from the source bundle.",
+      "Use the shared banking handbook for identity verification, explicit confirmation before account-modifying actions, discoverable-tool wrapper behavior, schema limits, and transfer wording.",
+      "Do not invent unsupported account fields, undocumented override mechanisms, undocumented tool names, or customer entitlements not present in the source bundle.",
+      "When a source document is internal, represent its internal checks in Support console turns or agent behavior rather than as exposed policy narration."
+    ],
+    "candidate": {
+      "id": "transfer_and_account_recovery_boundaries",
+      "title": "Human transfer and account-recovery boundary cases",
+      "priority": 1,
+      "related_task_ids": [
+        "task_004",
+        "task_005",
+        "task_008",
+        "task_012",
+        "task_014",
+        "task_088",
+        "task_090",
+        "task_091",
+        "task_092"
+      ],
+      "recommended_case_count": 4,
+      "losslessness_risks": [
+        "Do not collapse transfer reason codes into a generic transfer rule.",
+        "Preserve exact transfer trigger conditions and any special-code limitations.",
+        "Preserve the banking handbook's exact transfer message from shared context."
+      ]
+    }
+  },
+  "facts": [],
+  "transcripts": []
+}

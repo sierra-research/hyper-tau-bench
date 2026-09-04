@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SLV-RWD-041 rev A — Silver Rewards enhanced-rate earn</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 1560px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #14395c; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #bcd0e2; }
+  .node { position: absolute; width: 300px; box-sizing: border-box; border: 2px solid #4a5b6d; border-radius: 6px; background: #fff; padding: 10px 12px; font-size: 13px; line-height: 1.35; color: #1d2733; }
+  .node .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding: 1px 6px; border-radius: 3px; margin-bottom: 6px; }
+  .entry { border-color: #1d6a44; } .entry .tag { background: #d9efe3; color: #17573a; }
+  .read { border-color: #2b5f8f; } .read .tag { background: #dcebf7; color: #234d73; }
+  .work { border-color: #4a5b6d; } .work .tag { background: #e6ebf0; color: #3a4a5a; }
+  .write { border-color: #a2543a; } .write .tag { background: #f7e5dd; color: #7f3f2a; }
+  .gate { border-color: #8f7326; } .gate .tag { background: #f6eecf; color: #6e5a1d; }
+  .queue { border-color: #8a2f3c; } .queue .tag { background: #f6dde1; color: #6e2530; }
+  .terminal { border-color: #1d6a44; background: #f2faf5; } .terminal .tag { background: #d9efe3; color: #17573a; }
+  .decision { position: absolute; width: 300px; box-sizing: border-box; }
+  .decision .diamond { width: 280px; height: 128px; margin: 0 auto; background: #fff8e8; border: 2px solid #b08a1f; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 8px 14px; box-sizing: border-box; font-size: 13px; text-align: center; color: #4b3d10; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+  svg.edges { position: absolute; left: 0; top: 0; width: 1560px; height: 1560px; pointer-events: none; }
+  svg.edges path { stroke: #51606f; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+  svg.edges path.loop { stroke-dasharray: 6 4; }
+  .edge-label { position: absolute; font-size: 11px; font-weight: 600; color: #38424d; background: #fbfcfdcc; padding: 0 4px; border-radius: 2px; }
+  .sticky { position: absolute; width: 250px; box-sizing: border-box; padding: 10px 12px; font-size: 12px; line-height: 1.35; box-shadow: 2px 3px 6px rgba(0,0,0,0.12); }
+  .sticky.yellow { background: #fdf3c0; } .sticky.blue { background: #d8e9f9; }
+  .control-definitions { position: absolute; left: 24px; top: 1180px; width: 1512px; box-sizing: border-box; border: 2px solid #14395c; background: #f4f8fc; border-radius: 6px; padding: 14px 18px; }
+  .control-definitions h2 { margin: 0 0 8px; font-size: 14px; letter-spacing: 0.4px; color: #14395c; }
+  .control-definitions dl { margin: 0; font-size: 12.5px; line-height: 1.45; color: #1d2733; }
+  .control-definitions dt { font-weight: 700; font-family: "Consolas", monospace; margin-top: 7px; }
+  .control-definitions dd { margin: 1px 0 0 14px; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>Silver Rewards enhanced-rate earn — servicing board</h1>
+    <div class="meta">SLV-RWD-041 rev A &nbsp;·&nbsp; Owner: R. Ortiz, Card Rewards Servicing &nbsp;·&nbsp; Updated 2025-10-02 &nbsp;·&nbsp; Walkthrough 2025-10-07 &nbsp;·&nbsp; Applies to: Silver Rewards Card enhanced-rate earning</div>
+  </div>
+
+  <svg class="edges" viewBox="0 0 1560 1560">
+    <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#51606f"></path></marker></defs>
+    <!-- entry -> categorize at auth -->
+    <path d="M 190 214 L 190 274"></path>
+    <!-- categorize -> category decision -->
+    <path d="M 190 408 L 190 460"></path>
+    <!-- category no -> standard terminal -->
+    <path d="M 190 592 L 190 656"></path>
+    <!-- category yes -> earn at auth -->
+    <path d="M 340 520 L 640 520 L 640 214 L 660 214"></path>
+    <!-- earn at auth -> post reconcile -->
+    <path d="M 810 300 L 810 360"></path>
+    <!-- reconcile -> mismatch decision -->
+    <path d="M 810 494 L 810 546"></path>
+    <!-- mismatch yes -> correction work -->
+    <path d="M 960 610 L 1160 610 L 1160 214 L 1180 214"></path>
+    <!-- mismatch no -> stands terminal -->
+    <path d="M 810 678 L 810 742"></path>
+    <!-- correction -> stands terminal -->
+    <path class="loop" d="M 1330 328 L 1330 774 L 964 774"></path>
+  </svg>
+
+  <span class="edge-label" style="left:148px;top:618px">not travel / not software</span>
+  <span class="edge-label" style="left:390px;top:500px">travel or software/SaaS at authorization</span>
+  <span class="edge-label" style="left:1000px;top:588px">posted category differs</span>
+  <span class="edge-label" style="left:826px;top:702px">no difference at posting</span>
+  <span class="edge-label" style="left:1348px;top:560px">adjusted value re-posts</span>
+
+  <article class="node entry" style="left:40px;top:100px"><span class="tag">ENTRY</span>
+    Silver Rewards Card purchase is <b>authorized</b>. Draft approach: compute the enhanced-rate outcome at authorization so the customer sees earnings immediately.
+  </article>
+
+  <article class="node read" style="left:40px;top:282px"><span class="tag">READ — AUTHORIZATION</span>
+    Read the merchant category available on the authorization message and classify the transaction on that basis.
+  </article>
+
+  <div class="decision" style="left:40px;top:460px"><div class="diamond">Authorization category: travel or software/SaaS?</div></div>
+
+  <article class="node terminal" style="left:40px;top:664px"><span class="tag">TERMINAL — STANDARD RATE</span>
+    Not eligible for the enhanced rate at authorization. Earns per the card's standard program terms.
+  </article>
+
+  <article class="node work" style="left:660px;top:100px"><span class="tag">EARN — AT AUTHORIZATION</span>
+    Credit the enhanced earn (4.0% back for travel; 4.0% back for software) against the authorization amount, flagged as provisional.
+  </article>
+
+  <article class="node work" style="left:660px;top:368px"><span class="tag">RECONCILE — AT POSTING</span>
+    When the transaction posts, compare the posted category and amount against the authorization-time classification.
+  </article>
+
+  <div class="decision" style="left:660px;top:546px"><div class="diamond">Posted record differs from authorization-time result?</div></div>
+
+  <article class="node terminal" style="left:660px;top:750px"><span class="tag">TERMINAL — REWARDS STAND</span>
+    Earned value stands as computed. Customer-visible history keeps the authorization-time value.
+  </article>
+
+  <article class="node write" style="left:1180px;top:100px"><span class="tag">WRITE — CORRECTION</span>
+    Re-run the classification on the posted record and correct the provisional earn. Correction entries net against the authorization-time credit.
+  </article>
+
+  <aside class="sticky yellow" style="left:60px;top:880px">
+    Open question (S. Whitcomb, 10-07 walkthrough): wallet-paid transactions can change category between authorization and posting — how often does the provisional value survive?
+  </aside>
+  <aside class="sticky blue" style="left:60px;top:1010px">
+    Draft rationale: customers keep calling about "missing" earnings in the gap between purchase and posting; showing a provisional number may cut those calls.
+  </aside>
+
+  <section class="control-definitions">
+    <h2>CONTROL DEFINITIONS</h2>
+    <dl>
+      <dt>Provisional earn</dt>
+      <dd>Draft mechanism: enhanced-rate value computed from the authorization message and flagged provisional until posting reconciliation.</dd>
+      <dt>Reconciliation</dt>
+      <dd>Posting-time comparison of category and amount against the authorization-time classification, with correction entries where they differ.</dd>
+      <dt>Category source</dt>
+      <dd>Draft uses the authorization message's merchant category. Review question: whether the authorization category is a reliable stand-in for the merchant's submitted category on the posted record.</dd>
+    </dl>
+  </section>
+</div>
+</body>
+</html>

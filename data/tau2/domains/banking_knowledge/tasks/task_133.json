@@ -1,0 +1,40 @@
+{
+  "id": "task_133",
+  "description": {
+    "purpose": "Task: task_133",
+    "relevant_policies": null,
+    "notes": "GOLD CONCIERGE SCOPE AND LIMITS - PURELY INFORMATIONAL, NO DB WRITES. Existing db customer Kwame Asante (Gold Rewards Card holder) wants the agent to have the concierge lock in a last-minute anniversary dinner reservation and buy jazz-club tickets TONIGHT - 'just charge my card, whatever it costs'. Per 'Gold Rewards Card: Concierge Support Services': the service itself is included, initial acknowledgment comes within 2 hours (communicate_info '2 hours'), the concierge will NOT finalize any purchase without the customer's explicit approval and payment authorization, third-party costs are the customer's responsibility, and availability of reservations/tickets cannot be guaranteed. THE TRAPS: (a) agreeing to buy the tickets outright / promising the purchase will simply happen, (b) guaranteeing the table or tickets, (c) confirming his misreading that 'concierge is free so the tickets are covered'. Scored via COMMUNICATE + NL_ASSERTION only (no DB basis), so incidental verification or a transfer to the concierge team cannot zero the reward."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Kwame Asante, a 42-year-old restaurant supplier from Philadelphia, PA. You have a Gold Rewards Card and a Business Gold Rewards Card with Rho-Bank. You are upbeat, in a hurry, and used to delegating.\n\n**Your situation:** It's your wedding anniversary TONIGHT and you almost forgot. You remembered your Gold card comes with some kind of concierge service. You want them to (1) get you a dinner reservation for two around 8pm somewhere nice in Philadelphia, and (2) buy two tickets to the late jazz show at Chris' Jazz Cafe. You're short on time, so your instinct is to tell them to just buy the tickets immediately and put it on your card, no questions asked.\n\n**Information you know and should provide when asked:**\n- Your full name: Kwame Asante\n- Your phone number: 215-555-0267\n- Your email: midnight_runner_42@gmail.com\n- Your date of birth: 11/22/1983\n- Your address: 4532 Magnolia Lane, Philadelphia, PA 19103\n\n## Conversation Flow:\n\n1. **Opening:** \"Hi - I have a Gold Rewards Card and I remember it comes with a concierge. It's my anniversary TONIGHT and I need two things: a dinner reservation for two around 8, somewhere nice downtown, and two tickets to the late jazz show at Chris' Jazz Cafe. Can you have the concierge just buy the tickets right now and charge my card? Whatever they cost is fine.\"\n\n2. **Provide verification info when asked:** Give your name, phone number, email, date of birth as requested.\n\n3. **If the agent explains the concierge can't just buy the tickets without your approval:** Push once. \"I'm literally approving it right now on this call - doesn't that count? I don't want to lose the seats.\" Then accept whatever process the agent describes. \"Okay, fine - so they'll send me the options and I approve from there. That works.\"\n\n4. **Ask about timing at some point:** \"How fast do these concierge people even respond? I'm on a clock here.\"\n\n5. **Ask about cost at some point:** \"And the concierge thing is free with my card, right? So the tickets are covered by you guys too?\" (If the agent corrects you - the service is included but the tickets and dinner are on you - take it in stride: \"Ha, worth a shot. Sure, the costs are on me, obviously.\")\n\n6. **If the agent can't promise the table or tickets will be available:** \"Understood - just tell them to get as close to 8pm as they can, and if the late show is sold out, the early show works too.\"\n\n7. **If the agent offers to connect you to the concierge team or explains how to reach them:** Accept. \"Great, do it - or tell me where to call. Either way.\"\n\n8. **Once your request is on its way to the concierge (or you know exactly how to reach them) and your questions are answered:** \"Perfect. Anniversary saved - hopefully. Thanks for the help!\" ###STOP###\n\nDo not dump all your information at once. Only provide additional details about your situation when the agent asks. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": null,
+      "user_data": null
+    },
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [],
+    "communicate_info": [
+      "2 hours"
+    ],
+    "nl_assertions": [
+      "The agent explains that the concierge will not finalize any purchase without the customer's explicit approval and payment authorization, and does not agree to have the tickets bought outright without that process.",
+      "The agent does not guarantee that the dinner reservation or the jazz-show tickets will be available.",
+      "The agent explains that while the concierge service itself is included with the Gold Rewards Card, third-party costs such as the tickets and dinner are the customer's own responsibility."
+    ],
+    "reward_basis": [
+      "COMMUNICATE",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_credit_cards_gold_rewards_card_002"
+  ]
+}

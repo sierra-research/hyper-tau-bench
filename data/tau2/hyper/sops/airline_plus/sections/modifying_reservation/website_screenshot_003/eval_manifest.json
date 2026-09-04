@@ -1,0 +1,79 @@
+{
+  "id": "airline_modifying_reservation_website_screenshot_003",
+  "representation": "website_screenshot",
+  "context": "manage_trip_review_changes_insufficient_gift_card_balance",
+  "agent_facing_artifact": "gift_card_insufficient_balance_with_images.png",
+  "author_source_artifact": "gift_card_insufficient_balance.html",
+  "visual_distractor_assets": {
+    "generation_mode": "built_in_imagegen",
+    "rendering_mode": "browser_rendered_html",
+    "assets": [
+      "../../../website_assets/desert_canyon.png",
+      "../../../website_assets/snowy_fjord_village.png",
+      "../../../website_assets/city_waterfront.png",
+      "../../../website_assets/text_backdrop_weather.png"
+    ],
+    "purpose": "Add varied policy-irrelevant destination imagery and a text-dense raster background while keeping all domain-fact text deterministic in HTML."
+  },
+  "canonical_fact_id": "modification_gift_card_must_cover_charge",
+  "target_facts": [
+    {
+      "id": "modification_gift_card_must_cover_charge",
+      "statement": "A gift card used for a flight or cabin modification charge must have enough balance to cover the full charge."
+    }
+  ],
+  "grounded_distractors": {
+    "source_path": "data/tau2/domains/airline_plus/db.json",
+    "user_id": "xiu_villanueva_6564",
+    "reservation_id": "O6HO62",
+    "visible_values": [
+      "Xiu Villanueva",
+      "LAX to BOS round trip",
+      "May 28 to May 30",
+      "3 travelers",
+      "Economy to business cabin change",
+      "Saved gift card ending in 3451 with a $117 balance",
+      "Desert canyon destination photograph",
+      "Snowy fjord village destination photograph",
+      "Waterfront city destination photograph",
+      "Desert mornings",
+      "Snowbound villages",
+      "Waterfront cities",
+      "Text-dense travel-weather dashboard in the page background"
+    ],
+    "derived_values": [
+      {
+        "value": "$3,042 cabin-change charge",
+        "derivation": "The original economy airfare is ($171 + $232 + $151 + $172) × 3 = $2,178. Current business pricing is ($409 + $361 + $517 + $453) × 3 = $5,220. The price difference is $5,220 - $2,178 = $3,042."
+      },
+      {
+        "value": "$2,925 additional balance needed",
+        "derivation": "$3,042 cabin-change charge - $117 gift card balance = $2,925."
+      }
+    ]
+  },
+  "excluded_claims": [
+    "A gift card can be combined with another payment method for a modification",
+    "Partial gift card payment is accepted for a modification",
+    "Travel certificates are permitted or prohibited for modification payments",
+    "The gift card can be overdrawn",
+    "A new payment method can be added from this modal",
+    "The generated destination or weather imagery establishes modification-payment eligibility or requirements"
+  ],
+  "distribution": {
+    "expose_to_developer_agent": [
+      "gift_card_insufficient_balance_with_images.png"
+    ],
+    "keep_author_side": [
+      "gift_card_insufficient_balance.html",
+      "gift_card_insufficient_balance.png",
+      "eval_manifest.json"
+    ],
+    "shared_author_assets": [
+      "../../../website_assets/desert_canyon.png",
+      "../../../website_assets/snowy_fjord_village.png",
+      "../../../website_assets/city_waterfront.png",
+      "../../../website_assets/text_backdrop_weather.png"
+    ]
+  }
+}

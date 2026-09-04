@@ -1,0 +1,164 @@
+{
+  "id": "retail_plus_exchanging_delivered_order_policy_fact_schema_001",
+  "domain": "retail_plus",
+  "studio_hidden": true,
+  "section_id": "exchanging_delivered_order",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/retail_plus_sop.md",
+    "heading": "## Exchanging a delivered order"
+  },
+  "rendered_section_path": "tau2/hyper/sops/retail_plus/sections/exchanging_delivered_order/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/exchanging_delivered_order/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "response_phrasing_context": {
+    "selected_rule_ids": [
+      "never_say_unfortunately",
+      "max_one_apology_per_conversation",
+      "no_premature_outcome_language",
+      "identifier_minimization",
+      "avoid_repeated_openings",
+      "no_generic_service_invitations",
+      "no_support_deflection",
+      "customer_visible_failure_language",
+      "no_long_menu_dumps",
+      "match_warmth_to_outcome",
+      "no_first_person_cant",
+      "no_internal_tool_mentions",
+      "no_policy_jargon"
+    ],
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "The no_generic_service_invitations rule must still allow current-request procedural completeness checks required by one-shot item changes and exchanges.",
+      "Transfer language must use the exact SOP-mandated message even when other phrasing rules are active."
+    ],
+    "rules_path": "tau2/hyper/response_phrasing/retail_plus_response_phrasing.yaml"
+  },
+  "style_exemplar": {
+    "id": "customer_support_chat",
+    "path": "tau2/hyper/sops/retail_plus/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "delivered-order exchange eligibility",
+      "same-product variant constraints",
+      "one-shot completeness check",
+      "price-difference handling"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/retail_plus_sop.md",
+      "src/tau2/domains/retail/data_model.py",
+      "src/tau2/domains/retail_plus/tools.py"
+    ],
+    "summary": "Exchange records must preserve the documented order-field shape.",
+    "rules": [
+      "Represent exchange_items and exchange_new_items in Support console notes as lists of original and replacement item_id strings, not item objects or natural-language descriptions.",
+      "Customer-facing Agent turns may use item names instead of internal item IDs unless exact disambiguation is needed."
+    ]
+  },
+  "facts": [
+    {
+      "id": "exchange_requires_delivered_order",
+      "category": "exchange_gate",
+      "statement": "Before starting an exchange, the agent must check the order's current status; only an order whose current status is delivered may enter the exchange flow.",
+      "canonical_source": "Exchanging a delivered order"
+    },
+    {
+      "id": "exchange_same_product_different_variant_only",
+      "category": "exchange_items",
+      "statement": "For an exchange, each replacement must be a different variant of the same product type as the original item; cross-type swaps are not allowed.",
+      "canonical_source": "Exchanging a delivered order"
+    },
+    {
+      "id": "exchange_new_variant_available",
+      "category": "exchange_items",
+      "statement": "The new variant in an exchange must currently be available.",
+      "canonical_source": "Exchanging a delivered order"
+    },
+    {
+      "id": "exchange_single_price_difference_method",
+      "category": "exchange_payment",
+      "statement": "The customer pays or is refunded the exchange price difference through a single payment method.",
+      "canonical_source": "Exchanging a delivered order"
+    },
+    {
+      "id": "exchange_gift_card_covers_price_increase",
+      "category": "exchange_payment",
+      "statement": "If an exchange price goes up and the customer uses a gift card, the gift card must have enough balance to cover the price difference.",
+      "canonical_source": "Exchanging a delivered order"
+    },
+    {
+      "id": "exchange_one_shot_complete_list_before_submit",
+      "category": "exchange_one_shot",
+      "statement": "An exchange is one-shot for the order, so the agent must confirm the customer has provided the complete list of items to exchange before submission.",
+      "canonical_source": "Exchanging a delivered order"
+    },
+    {
+      "id": "exchange_submission_sets_status_and_email",
+      "category": "exchange_submission",
+      "statement": "After an exchange is submitted, the order status becomes exchange requested and the customer receives an email about how to send back the original items.",
+      "canonical_source": "Exchanging a delivered order"
+    },
+    {
+      "id": "exchange_no_new_order_needed",
+      "category": "exchange_submission",
+      "statement": "A customer does not need to place a new order for an exchange because the exchange handles the replacement.",
+      "canonical_source": "Exchanging a delivered order"
+    },
+    {
+      "id": "exchange_after_submission_no_second_pass",
+      "category": "exchange_one_shot",
+      "statement": "After an exchange is submitted, there is no second exchange pass for that order.",
+      "canonical_source": "Exchanging a delivered order"
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Delivered exchange to available same-product-type variant",
+      "included_fact_ids": [
+        "exchange_requires_delivered_order",
+        "exchange_same_product_different_variant_only",
+        "exchange_new_variant_available",
+        "exchange_single_price_difference_method",
+        "exchange_gift_card_covers_price_increase",
+        "exchange_one_shot_complete_list_before_submit",
+        "exchange_submission_sets_status_and_email",
+        "exchange_no_new_order_needed"
+      ],
+      "style_notes": [
+        "valid exchange with price increase",
+        "agent asks whether the list is complete before submission"
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Cross-type exchange declined",
+      "included_fact_ids": [
+        "exchange_requires_delivered_order",
+        "exchange_same_product_different_variant_only",
+        "exchange_new_variant_available"
+      ],
+      "style_notes": [
+        "customer tries to exchange one product type for another",
+        "agent keeps the allowed replacement within same product type"
+      ]
+    },
+    {
+      "id": "C",
+      "title": "Second exchange pass blocked",
+      "included_fact_ids": [
+        "exchange_one_shot_complete_list_before_submit",
+        "exchange_after_submission_no_second_pass"
+      ],
+      "style_notes": [
+        "order already has exchange requested status",
+        "agent explains no second pass is available"
+      ]
+    }
+  ]
+}

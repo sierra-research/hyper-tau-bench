@@ -1,0 +1,1268 @@
+{
+  "id": "banking_credit_limit_increases_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "credit_limit_increases",
+  "display_name": "Credit-limit increase request, eligibility, approval, and denial",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/credit_limit_increases/source.md",
+    "heading": "## Credit-limit increase request, eligibility, approval, and denial"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/credit_limit_increases/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/credit_limit_increases/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/credit_limit_increases/evidence_corpus_hard_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/credit_limit_increases/evidence_corpus_deep_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/credit_limit_increases/client_overlay_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/credit_limit_increases/client_overlay_card_servicing_001/transformation_pack.json"
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook requirements from shared context: verify identity before account-specific information, get explicit confirmation before account-modifying actions, and use the exact transfer message when a transfer is performed.",
+      "Support console turns may mention document ids, internal tool results, and eligibility checks; Agent turns should give the customer the customer-visible next step or outcome.",
+      "Do not transform concrete KB tables, thresholds, statuses, fees, amounts, or condition-specific outcomes into vague dependency statements."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "identity verification before account-specific details",
+      "explicit customer confirmation before account-modifying actions",
+      "plain-language customer-facing outcomes",
+      "support-console notes for internal KB/tool evidence"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_card_account_logistics_004.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_card_account_logistics_005.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_card_account_logistics_006.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_card_account_logistics_007.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_card_account_logistics_009.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_015.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_016.json"
+    ],
+    "summary": "Customer CLI requests, tier-specific eligibility, payment-history checks, approval/denial processing, and related blockers.",
+    "rules": [
+      "Preserve all values, tables, thresholds, statuses, fees, amounts, eligibility gates, tool/action names, and condition-to-outcome mappings from the source bundle.",
+      "Use the shared banking handbook for identity verification, explicit confirmation before account-modifying actions, discoverable-tool wrapper behavior, schema limits, and transfer wording.",
+      "Do not invent unsupported account fields, undocumented override mechanisms, undocumented tool names, or customer entitlements not present in the source bundle.",
+      "When a source document is internal, represent its internal checks in Support console turns or agent behavior rather than as exposed policy narration."
+    ],
+    "candidate": {
+      "id": "credit_limit_increases",
+      "title": "Credit-limit increase request, eligibility, approval, and denial",
+      "priority": 1,
+      "related_task_ids": [
+        "task_050",
+        "task_051",
+        "task_052",
+        "task_053",
+        "task_054"
+      ],
+      "recommended_case_count": 5,
+      "losslessness_risks": [
+        "Preserve tier-specific CLI thresholds.",
+        "Preserve waiting periods and recent-request blockers.",
+        "Do not claim an increase is approved before the internal approval action succeeds."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "credit_limit_increases_journey",
+        "label": "Credit-limit increase request, eligibility, approval, and denial",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "credit_limit_increases_shared_rules",
+        "label": "Shared workflow rules",
+        "kind": "shared_reference",
+        "parent_id": "credit_limit_increases_journey",
+        "order": 1,
+        "description": "Rules, prerequisites, and reference values used by more than one customer pathway in this journey.",
+        "fact_ids": [
+          "F002",
+          "F003",
+          "F004",
+          "F005",
+          "F014",
+          "F016",
+          "F017",
+          "F018",
+          "F020",
+          "F021",
+          "F022",
+          "F023",
+          "F024",
+          "F025",
+          "F026",
+          "F027",
+          "F028",
+          "F029",
+          "F030",
+          "F031",
+          "F032",
+          "F033",
+          "F034",
+          "F035",
+          "F036",
+          "F037",
+          "F038",
+          "F039",
+          "F040",
+          "F041",
+          "F042",
+          "F043",
+          "F044",
+          "F045",
+          "F046",
+          "F047",
+          "F048",
+          "F050",
+          "F058",
+          "F060",
+          "F062",
+          "F073",
+          "F074",
+          "F075",
+          "F076",
+          "F079",
+          "F080",
+          "F081",
+          "F082"
+        ]
+      },
+      {
+        "id": "credit_limit_increases_path_a",
+        "label": "Collect and submit a business credit-limit request",
+        "kind": "scenario_branch",
+        "parent_id": "credit_limit_increases_journey",
+        "order": 2,
+        "description": "Policy path represented by case A.",
+        "fact_ids": [
+          "F006",
+          "F007",
+          "F008",
+          "F009",
+          "F010",
+          "F011",
+          "F012",
+          "F013",
+          "F015",
+          "F049",
+          "F061"
+        ]
+      },
+      {
+        "id": "credit_limit_increases_path_b",
+        "label": "Reject a request before the account-age threshold",
+        "kind": "scenario_branch",
+        "parent_id": "credit_limit_increases_journey",
+        "order": 3,
+        "description": "Policy path represented by case B.",
+        "fact_ids": []
+      },
+      {
+        "id": "credit_limit_increases_path_c",
+        "label": "Reject a request inside the prior-increase cooldown",
+        "kind": "scenario_branch",
+        "parent_id": "credit_limit_increases_journey",
+        "order": 4,
+        "description": "Policy path represented by case C.",
+        "fact_ids": [
+          "F052"
+        ]
+      },
+      {
+        "id": "credit_limit_increases_path_d",
+        "label": "Evaluate a request with high utilization",
+        "kind": "scenario_branch",
+        "parent_id": "credit_limit_increases_journey",
+        "order": 5,
+        "description": "Policy path represented by case D.",
+        "fact_ids": [
+          "F019",
+          "F056"
+        ]
+      },
+      {
+        "id": "credit_limit_increases_path_e",
+        "label": "Reject a request before an entry-tier age threshold",
+        "kind": "scenario_branch",
+        "parent_id": "credit_limit_increases_journey",
+        "order": 6,
+        "description": "Policy path represented by case E.",
+        "fact_ids": [
+          "F051"
+        ]
+      },
+      {
+        "id": "credit_limit_increases_path_f",
+        "label": "Block a request while replacement activity is pending",
+        "kind": "scenario_branch",
+        "parent_id": "credit_limit_increases_journey",
+        "order": 7,
+        "description": "Policy path represented by case F.",
+        "fact_ids": [
+          "F054"
+        ]
+      },
+      {
+        "id": "credit_limit_increases_path_g",
+        "label": "Block a request while a dispute remains open",
+        "kind": "scenario_branch",
+        "parent_id": "credit_limit_increases_journey",
+        "order": 8,
+        "description": "Policy path represented by case G.",
+        "fact_ids": [
+          "F053",
+          "F093",
+          "F094",
+          "F095",
+          "F096",
+          "F097",
+          "F098",
+          "F099",
+          "F100",
+          "F101",
+          "F102",
+          "F103",
+          "F104",
+          "F105",
+          "F106"
+        ]
+      },
+      {
+        "id": "credit_limit_increases_path_h",
+        "label": "Reject a request with a late payment",
+        "kind": "scenario_branch",
+        "parent_id": "credit_limit_increases_journey",
+        "order": 9,
+        "description": "Policy path represented by case H.",
+        "fact_ids": [
+          "F055"
+        ]
+      },
+      {
+        "id": "credit_limit_increases_path_i",
+        "label": "Evaluate payment-history eligibility",
+        "kind": "scenario_branch",
+        "parent_id": "credit_limit_increases_journey",
+        "order": 10,
+        "description": "Policy path represented by case I.",
+        "fact_ids": [
+          "F057"
+        ]
+      },
+      {
+        "id": "credit_limit_increases_path_j",
+        "label": "Explain a denied Silver-card request",
+        "kind": "scenario_branch",
+        "parent_id": "credit_limit_increases_journey",
+        "order": 11,
+        "description": "Policy path represented by case J.",
+        "fact_ids": []
+      },
+      {
+        "id": "credit_limit_increases_path_k",
+        "label": "Investigate an unrecognized denial reason",
+        "kind": "scenario_branch",
+        "parent_id": "credit_limit_increases_journey",
+        "order": 12,
+        "description": "Policy path represented by case K.",
+        "fact_ids": [
+          "F059"
+        ]
+      },
+      {
+        "id": "credit_limit_increases_path_l",
+        "label": "Pay a credit-card balance from checking",
+        "kind": "scenario_branch",
+        "parent_id": "credit_limit_increases_journey",
+        "order": 13,
+        "description": "Policy path represented by case L.",
+        "fact_ids": [
+          "F063",
+          "F064",
+          "F065",
+          "F066",
+          "F067",
+          "F068",
+          "F069",
+          "F070",
+          "F071",
+          "F072"
+        ]
+      },
+      {
+        "id": "credit_limit_increases_path_m",
+        "label": "Evaluate provisional credit for an unauthorized charge",
+        "kind": "scenario_branch",
+        "parent_id": "credit_limit_increases_journey",
+        "order": 14,
+        "description": "Policy path represented by case M.",
+        "fact_ids": [
+          "F077",
+          "F083"
+        ]
+      },
+      {
+        "id": "credit_limit_increases_path_n",
+        "label": "Evaluate provisional credit for a duplicate charge",
+        "kind": "scenario_branch",
+        "parent_id": "credit_limit_increases_journey",
+        "order": 15,
+        "description": "Policy path represented by case N.",
+        "fact_ids": [
+          "F078",
+          "F084"
+        ]
+      },
+      {
+        "id": "credit_limit_increases_path_o",
+        "label": "Evaluate provisional credit for undelivered goods",
+        "kind": "scenario_branch",
+        "parent_id": "credit_limit_increases_journey",
+        "order": 16,
+        "description": "Policy path represented by case O.",
+        "fact_ids": [
+          "F085"
+        ]
+      },
+      {
+        "id": "credit_limit_increases_path_p",
+        "label": "Reject provisional credit for an ineligible dispute reason",
+        "kind": "scenario_branch",
+        "parent_id": "credit_limit_increases_journey",
+        "order": 17,
+        "description": "Policy path represented by case P.",
+        "fact_ids": [
+          "F086",
+          "F089",
+          "F107"
+        ]
+      },
+      {
+        "id": "credit_limit_increases_path_q",
+        "label": "Reject provisional credit below amount and age thresholds",
+        "kind": "scenario_branch",
+        "parent_id": "credit_limit_increases_journey",
+        "order": 18,
+        "description": "Policy path represented by case Q.",
+        "fact_ids": [
+          "F087",
+          "F088",
+          "F090"
+        ]
+      },
+      {
+        "id": "credit_limit_increases_path_r",
+        "label": "Reject provisional credit before merchant contact or aging",
+        "kind": "scenario_branch",
+        "parent_id": "credit_limit_increases_journey",
+        "order": 19,
+        "description": "Policy path represented by case R.",
+        "fact_ids": [
+          "F091",
+          "F092"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "credit_limit_increases_path_a",
+        "type": "uses_shared_rules",
+        "target_id": "credit_limit_increases_shared_rules"
+      },
+      {
+        "source_id": "credit_limit_increases_path_b",
+        "type": "uses_shared_rules",
+        "target_id": "credit_limit_increases_shared_rules"
+      },
+      {
+        "source_id": "credit_limit_increases_path_c",
+        "type": "uses_shared_rules",
+        "target_id": "credit_limit_increases_shared_rules"
+      },
+      {
+        "source_id": "credit_limit_increases_path_d",
+        "type": "uses_shared_rules",
+        "target_id": "credit_limit_increases_shared_rules"
+      },
+      {
+        "source_id": "credit_limit_increases_path_e",
+        "type": "uses_shared_rules",
+        "target_id": "credit_limit_increases_shared_rules"
+      },
+      {
+        "source_id": "credit_limit_increases_path_f",
+        "type": "uses_shared_rules",
+        "target_id": "credit_limit_increases_shared_rules"
+      },
+      {
+        "source_id": "credit_limit_increases_path_g",
+        "type": "uses_shared_rules",
+        "target_id": "credit_limit_increases_shared_rules"
+      },
+      {
+        "source_id": "credit_limit_increases_path_h",
+        "type": "uses_shared_rules",
+        "target_id": "credit_limit_increases_shared_rules"
+      },
+      {
+        "source_id": "credit_limit_increases_path_i",
+        "type": "uses_shared_rules",
+        "target_id": "credit_limit_increases_shared_rules"
+      },
+      {
+        "source_id": "credit_limit_increases_path_j",
+        "type": "uses_shared_rules",
+        "target_id": "credit_limit_increases_shared_rules"
+      },
+      {
+        "source_id": "credit_limit_increases_path_k",
+        "type": "uses_shared_rules",
+        "target_id": "credit_limit_increases_shared_rules"
+      },
+      {
+        "source_id": "credit_limit_increases_path_l",
+        "type": "uses_shared_rules",
+        "target_id": "credit_limit_increases_shared_rules"
+      },
+      {
+        "source_id": "credit_limit_increases_path_m",
+        "type": "uses_shared_rules",
+        "target_id": "credit_limit_increases_shared_rules"
+      },
+      {
+        "source_id": "credit_limit_increases_path_n",
+        "type": "uses_shared_rules",
+        "target_id": "credit_limit_increases_shared_rules"
+      },
+      {
+        "source_id": "credit_limit_increases_path_o",
+        "type": "uses_shared_rules",
+        "target_id": "credit_limit_increases_shared_rules"
+      },
+      {
+        "source_id": "credit_limit_increases_path_p",
+        "type": "uses_shared_rules",
+        "target_id": "credit_limit_increases_shared_rules"
+      },
+      {
+        "source_id": "credit_limit_increases_path_q",
+        "type": "uses_shared_rules",
+        "target_id": "credit_limit_increases_shared_rules"
+      },
+      {
+        "source_id": "credit_limit_increases_path_r",
+        "type": "uses_shared_rules",
+        "target_id": "credit_limit_increases_shared_rules"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "F002",
+      "statement": "An agent may state that a credit-limit increase is approved only after the approve action has succeeded at the process-the-decision step; the decision is communicated to the customer only after it has been processed."
+    },
+    {
+      "id": "F003",
+      "statement": "A customer can request a credit limit increase on a Rho-Bank credit card only if the customer meets the eligibility criteria, including card-tier-specific requirements."
+    },
+    {
+      "id": "F004",
+      "statement": "Only the account owner or an authorized account manager may submit a credit-limit increase request for the account."
+    },
+    {
+      "id": "F005",
+      "statement": "To request a credit-limit increase, the request details to gather are the current credit card account information, either the new total credit limit requested or the dollar amount of the requested increase, and a brief reason for the increase."
+    },
+    {
+      "id": "F006",
+      "statement": "Examples of acceptable reasons for a credit-limit increase request include an upcoming large purchase, business expansion, or improved financial position."
+    },
+    {
+      "id": "F007",
+      "statement": "A customer may submit a credit-limit increase request through secure in-app chat, secure message from the online account, or by phone using the customer support number listed in the app or on the website."
+    },
+    {
+      "id": "F008",
+      "statement": "A customer submitting a credit-limit increase request must provide the requested information and be prepared to supply additional information if asked during review."
+    },
+    {
+      "id": "F009",
+      "statement": "The credit-limit increase request submission procedure includes a Confirm submission step: ask the support agent to confirm that the request has been submitted and to provide a reference confirmation."
+    },
+    {
+      "id": "F010",
+      "statement": "The customer should make sure contact information is up to date so notifications are received without delay."
+    },
+    {
+      "id": "F011",
+      "statement": "After a credit-limit increase request is submitted, Rho-Bank reviews the account and the reason for the request."
+    },
+    {
+      "id": "F012",
+      "statement": "After a credit-limit increase request is submitted, the customer receives a decision notification by email within a few business days."
+    },
+    {
+      "id": "F013",
+      "statement": "If a credit-limit increase request is approved, the new credit limit takes effect as soon as the change is processed and appears in the account once the update completes."
+    },
+    {
+      "id": "F014",
+      "statement": "If a credit-limit increase request is denied, the customer receives an explanation and information about when another request can be submitted."
+    },
+    {
+      "id": "F015",
+      "statement": "For a smooth credit-limit increase request, the customer should state a clear, specific requested limit or increase amount, provide a concise reason tied to expected spending needs, and ensure account information and communication preferences are current."
+    },
+    {
+      "id": "F016",
+      "statement": "At the time a credit-limit increase request is submitted, all three card-tier eligibility criteria must be met: minimum account age, cooldown between requests, and maximum utilization at request."
+    },
+    {
+      "id": "F017",
+      "statement": "For Entry-tier cards, the source tier summary lists a minimum account age of 120 days, a cooldown between requests of 120 days, and a maximum utilization at request of 70%."
+    },
+    {
+      "id": "F018",
+      "statement": "For Mid-tier cards, the minimum account age is 90 days, the cooldown between requests is 90 days, and the maximum utilization at request is 80%."
+    },
+    {
+      "id": "F019",
+      "statement": "For Premium-tier cards, the minimum account age is 60 days, the cooldown between requests is 60 days, and the maximum utilization at request is 90%."
+    },
+    {
+      "id": "F020",
+      "statement": "A credit card account qualifies for the minimum account age criterion on or after the day the applicable minimum account age is reached."
+    },
+    {
+      "id": "F021",
+      "statement": "An Entry-tier account open for 119 days does not qualify for the minimum account age criterion; on day 120 and beyond it qualifies if the other criteria are met."
+    },
+    {
+      "id": "F022",
+      "statement": "The cooldown period between credit-limit increase submissions applies only if the most recent request was approved; denied requests do not trigger a cooldown period."
+    },
+    {
+      "id": "F023",
+      "statement": "When the cooldown period applies because the most recent credit-limit increase request was approved, count the cooldown from the date the customer submitted that approved credit-limit increase request, and the required number of full days must pass before another submission."
+    },
+    {
+      "id": "F024",
+      "statement": "Current utilization must be below the applicable card-tier maximum threshold at the time the credit-limit increase request is submitted; utilization at or above the threshold does not qualify."
+    },
+    {
+      "id": "F025",
+      "statement": "An Entry-tier utilization of 71% is above 70% and does not qualify; a Premium-tier utilization exactly at 90% does not meet the below-90% requirement."
+    },
+    {
+      "id": "F026",
+      "statement": "If any single basic tier eligibility criterion is not met, the customer should wait until it is met or lower utilization before submitting the credit-limit increase request."
+    },
+    {
+      "id": "F027",
+      "statement": "Entry-tier cards require 6 consecutive months of on-time payments for credit-limit increase approval."
+    },
+    {
+      "id": "F028",
+      "statement": "Mid-tier cards require 3 consecutive months of on-time payments for credit-limit increase approval."
+    },
+    {
+      "id": "F029",
+      "statement": "Premium-tier cards require 3 consecutive months of on-time payments for credit-limit increase approval."
+    },
+    {
+      "id": "F030",
+      "statement": "Use the get_payment_history_6183 tool to verify that the customer's payment history meets the requirement for the card tier; the required arguments are credit_card_account_id as a required string and months as a required integer set to the appropriate value for the card tier."
+    },
+    {
+      "id": "F031",
+      "statement": "For Entry-tier cards, the maximum credit-limit increase allowed per request is 25% of the current credit limit."
+    },
+    {
+      "id": "F032",
+      "statement": "For Mid-tier cards, the maximum credit-limit increase allowed per request is 50% of the current credit limit."
+    },
+    {
+      "id": "F033",
+      "statement": "For Premium-tier cards, the maximum credit-limit increase allowed per request is 50% of the current credit limit."
+    },
+    {
+      "id": "F034",
+      "statement": "If a customer requests more than the maximum allowed for the card tier, inform the customer of the maximum amount they are eligible for and ask whether they would like to proceed with that amount instead."
+    },
+    {
+      "id": "F035",
+      "statement": "Agents must follow the credit-limit increase processing workflow in this exact order: Step 0 confirm requested amount is within limits, Step 1 submit the request, Step 2 verify basic eligibility, Step 3 verify payment history and requested amount, Step 4 process the decision, and Step 5 communicate the decision."
+    },
+    {
+      "id": "F036",
+      "statement": "Before submitting any credit-limit increase request, verify that the customer's requested increase amount is within the maximum allowed for the card tier."
+    },
+    {
+      "id": "F037",
+      "statement": "If the requested increase amount exceeds the tier limit, inform the customer of the maximum allowed, ask the customer to adjust the request, and do not submit a request that exceeds the tier limit."
+    },
+    {
+      "id": "F038",
+      "statement": "The customer must confirm a valid requested increase amount within the card-tier limit before the agent submits the credit-limit increase request."
+    },
+    {
+      "id": "F039",
+      "statement": "After the customer confirms a valid increase amount within the card-tier limit, submit the credit-limit increase request using submit_credit_limit_increase_request_7392 with credit_card_account_id as a required string, user_id as a required string, and requested_increase_amount as a required integer dollar amount by which to increase the credit limit."
+    },
+    {
+      "id": "F040",
+      "statement": "Submitting the credit-limit increase request creates a formal record before eligibility checks are performed; eligibility checks are internal and not exposed to customers, so the submission must happen first after a valid amount is confirmed."
+    },
+    {
+      "id": "F041",
+      "statement": "After submitting the credit-limit increase request, verify all eligibility requirements, and check all eligibility criteria before making an approval or denial decision to ensure complete audit records."
+    },
+    {
+      "id": "F042",
+      "statement": "Basic credit-limit increase eligibility includes verifying that the account has been open for the minimum required days for the card tier."
+    },
+    {
+      "id": "F043",
+      "statement": "Basic credit-limit increase eligibility includes using get_credit_limit_increase_history_4829 with credit_card_account_id as a required string to check whether the customer has submitted a request within the card-tier cooldown period; if a request exists within this period, deny the new request and inform the customer when they will be eligible to submit again."
+    },
+    {
+      "id": "F044",
+      "statement": "Basic credit-limit increase eligibility requires verifying that the account has no active disputes."
+    },
+    {
+      "id": "F045",
+      "statement": "Basic credit-limit increase eligibility requires verifying that there are no outstanding replacement card orders for the account; if a replacement is pending, the credit-limit increase cannot be processed until the replacement is delivered or cancelled."
+    },
+    {
+      "id": "F046",
+      "statement": "Basic credit-limit increase eligibility requires that the account be current with no past-due balance."
+    },
+    {
+      "id": "F047",
+      "statement": "Basic credit-limit increase eligibility requires verifying that current utilization is below the maximum threshold for the card tier."
+    },
+    {
+      "id": "F048",
+      "statement": "Step 3 of the credit-limit increase workflow is to verify payment history and requested amount after basic eligibility and before processing the decision."
+    },
+    {
+      "id": "F049",
+      "statement": "If all requirements are met and the requested amount is within limits, use approve_credit_limit_increase_5847 to approve and apply the increase with credit_card_account_id as a required string, user_id as a required string, and new_credit_limit as a required float for the new total credit limit to set."
+    },
+    {
+      "id": "F050",
+      "statement": "If any credit-limit increase requirements are not met, use deny_credit_limit_increase_5848 to record the denial with credit_card_account_id as a required string, user_id as a required string, and denial_reason as a required string that must be exactly one of: 'insufficient_account_age', 'cooldown_period_active', 'pending_disputes', 'pending_replacement_card', 'past_due_balance', 'high_utilization', 'insufficient_payment_history', 'requested_amount_exceeds_limit', or 'other'."
+    },
+    {
+      "id": "F051",
+      "statement": "One permitted deny_credit_limit_increase_5848 denial_reason enum value is 'insufficient_account_age'."
+    },
+    {
+      "id": "F052",
+      "statement": "One permitted deny_credit_limit_increase_5848 denial_reason enum value is 'cooldown_period_active'."
+    },
+    {
+      "id": "F053",
+      "statement": "One permitted deny_credit_limit_increase_5848 denial_reason enum value is 'pending_disputes'."
+    },
+    {
+      "id": "F054",
+      "statement": "One permitted deny_credit_limit_increase_5848 denial_reason enum value is 'pending_replacement_card'."
+    },
+    {
+      "id": "F055",
+      "statement": "One permitted deny_credit_limit_increase_5848 denial_reason enum value is 'past_due_balance'."
+    },
+    {
+      "id": "F056",
+      "statement": "One permitted deny_credit_limit_increase_5848 denial_reason enum value is 'high_utilization'."
+    },
+    {
+      "id": "F057",
+      "statement": "One permitted deny_credit_limit_increase_5848 denial_reason enum value is 'insufficient_payment_history'."
+    },
+    {
+      "id": "F058",
+      "statement": "One permitted deny_credit_limit_increase_5848 denial_reason enum value is 'requested_amount_exceeds_limit'."
+    },
+    {
+      "id": "F059",
+      "statement": "One permitted deny_credit_limit_increase_5848 denial_reason enum value is 'other'."
+    },
+    {
+      "id": "F060",
+      "statement": "After processing the credit-limit increase decision, inform the customer of the decision and provide next steps."
+    },
+    {
+      "id": "F061",
+      "statement": "For credit-limit increase approvals, confirm the new credit limit to the customer after the approval has been processed."
+    },
+    {
+      "id": "F062",
+      "statement": "For credit-limit increase denials, explain the denial reason and when the customer may be eligible to reapply."
+    },
+    {
+      "id": "F063",
+      "statement": "When a customer needs to pay off a credit card balance using funds from a Rho-Bank checking account, the payment can be processed directly."
+    },
+    {
+      "id": "F064",
+      "statement": "Prerequisites for paying a credit card from checking are verifying the customer's identity, confirming the customer has a Rho-Bank checking account with sufficient funds to cover the payment amount, and looking up both the checking account and credit card account to obtain account IDs and verify balances."
+    },
+    {
+      "id": "F065",
+      "statement": "The process for paying a credit card from checking must occur in order: verify identity, look up the checking account to confirm sufficient funds, look up the credit card account to confirm the outstanding balance, confirm the payment amount with the customer and obtain authorization to transfer, unlock the pay_credit_card_from_checking_9182 tool using unlock_discoverable_agent_tool, and call the tool using call_discoverable_agent_tool."
+    },
+    {
+      "id": "F066",
+      "statement": "Before paying a credit card from checking, confirm the payment amount with the customer and obtain authorization to transfer."
+    },
+    {
+      "id": "F067",
+      "statement": "To pay a credit card from checking, use unlock_discoverable_agent_tool to enable pay_credit_card_from_checking_9182 for the session, then pass the arguments through call_discoverable_agent_tool exactly as listed."
+    },
+    {
+      "id": "F068",
+      "statement": "The pay_credit_card_from_checking_9182 tool requires user_id as a string, checking_account_id as a string, credit_card_account_id as a string, and amount as a float payment amount in dollars."
+    },
+    {
+      "id": "F069",
+      "statement": "The amount for pay_credit_card_from_checking_9182 must be positive and cannot exceed the checking account balance or the credit card outstanding balance."
+    },
+    {
+      "id": "F070",
+      "statement": "The pay_credit_card_from_checking_9182 tool debits the specified amount from the checking account and reduces the credit card balance by the same amount."
+    },
+    {
+      "id": "F071",
+      "statement": "A confirmation from pay_credit_card_from_checking_9182 includes the new balances for both the checking account and the credit card account."
+    },
+    {
+      "id": "F072",
+      "statement": "When passing pay_credit_card_from_checking_9182 arguments, ensure the account IDs and user_id match the authenticated customer and the amount is authorized."
+    },
+    {
+      "id": "F073",
+      "statement": "When processing a credit card transaction dispute, the agent must determine whether the customer is eligible for provisional credit."
+    },
+    {
+      "id": "F074",
+      "statement": "Provisional credit means the disputed amount is temporarily credited back to the customer's account while the investigation is ongoing."
+    },
+    {
+      "id": "F075",
+      "statement": "A customer is eligible for provisional credit if all listed provisional-credit eligibility criteria are true, and the customer is eligible only if all listed provisional-credit eligibility criteria are true."
+    },
+    {
+      "id": "F076",
+      "statement": "The provisional-credit account-standing criterion requires the customer's credit card account to have been open for at least 60 days."
+    },
+    {
+      "id": "F077",
+      "statement": "The dispute reason category 'unauthorized_fraudulent_charge' satisfies the provisional-credit dispute-reason criterion."
+    },
+    {
+      "id": "F078",
+      "statement": "The dispute reason category 'duplicate_charge' satisfies the provisional-credit dispute-reason criterion."
+    },
+    {
+      "id": "F079",
+      "statement": "The dispute reason category 'goods_services_not_received' satisfies the provisional-credit dispute-reason criterion only if the purchase was made more than 30 days ago."
+    },
+    {
+      "id": "F080",
+      "statement": "The provisional-credit dispute-amount criterion requires the transaction amount to be at least $25.00 and not exceed the card's maximum provisional credit limit based on card tier."
+    },
+    {
+      "id": "F081",
+      "statement": "The provisional-credit previous-disputes criterion requires that the customer has not filed more than 2 disputes in the past 12 months."
+    },
+    {
+      "id": "F082",
+      "statement": "For provisional credit, non-fraud disputes, meaning anything other than 'unauthorized_fraudulent_charge', require that the customer attempted to resolve the issue with the merchant first."
+    },
+    {
+      "id": "F083",
+      "statement": "For Entry Tier cards, including Bronze Rewards Card, EcoCard, Business Bronze Rewards Card, and Crypto-Cash Back Card, the maximum provisional credit limit is $2500.00."
+    },
+    {
+      "id": "F084",
+      "statement": "For Mid Tier cards, including Silver Rewards Card, Business Silver Rewards Card, Green Rewards Card, and Silver Zoom Card, the maximum provisional credit limit is $5000.00."
+    },
+    {
+      "id": "F085",
+      "statement": "For Premium Tier cards, including Gold Rewards Card and Business Gold Rewards Card, the maximum provisional credit limit is $10000.00."
+    },
+    {
+      "id": "F086",
+      "statement": "For Elite Tier cards, including Platinum Rewards Card and Business Platinum Rewards Card, the maximum provisional credit limit is $15000.00."
+    },
+    {
+      "id": "F087",
+      "statement": "For Invitation Tier cards, including Diamond Elite Card, the maximum provisional credit limit is $25000.00."
+    },
+    {
+      "id": "F088",
+      "statement": "A customer is not eligible for provisional credit if the credit card account is less than 60 days old."
+    },
+    {
+      "id": "F089",
+      "statement": "A customer is not eligible for provisional credit if the dispute reason is 'incorrect_amount', 'goods_services_not_as_described', 'canceled_subscription_still_charging', or 'refund_never_processed'."
+    },
+    {
+      "id": "F090",
+      "statement": "A customer is not eligible for provisional credit if the transaction amount is under $25.00 or exceeds the card's maximum provisional credit limit based on tier."
+    },
+    {
+      "id": "F091",
+      "statement": "For non-fraud disputes, a customer is not eligible for provisional credit if the customer did not contact the merchant first."
+    },
+    {
+      "id": "F092",
+      "statement": "For 'goods_services_not_received', a customer is not eligible for provisional credit if the purchase was made within the last 30 days because the merchant may still be processing delivery."
+    },
+    {
+      "id": "F093",
+      "statement": "Use get_user_dispute_history_7291 with the customer's user_id to retrieve a list of all credit card disputes filed by that user, including dispute dates, statuses, and transaction details."
+    },
+    {
+      "id": "F094",
+      "statement": "Use get_user_dispute_history_7291 when a consolidated list of all credit card disputes filed by a specific user is needed, when reviewing the current status or historical progression of a user's disputes, or when transaction-level context for each dispute is needed."
+    },
+    {
+      "id": "F095",
+      "statement": "The required input for get_user_dispute_history_7291 is user_id, which is the user's canonical internal identifier, and the agent should ensure the correct and current user_id is used before making the call."
+    },
+    {
+      "id": "F096",
+      "statement": "The procedure for get_user_dispute_history_7291 is to obtain the user_id, invoke the tool with the user_id parameter, and review the returned list of disputes and associated transaction details."
+    },
+    {
+      "id": "F097",
+      "statement": "The expected output of get_user_dispute_history_7291 is a list of dispute records for the specified user."
+    },
+    {
+      "id": "F098",
+      "statement": "Each get_user_dispute_history_7291 dispute record includes dispute identifiers and metadata: dispute_id, dispute_date, status such as open, under_review, or closed, and last_updated_at."
+    },
+    {
+      "id": "F099",
+      "statement": "Each get_user_dispute_history_7291 dispute record includes transaction details related to the dispute: transaction_id, transaction_date, merchant_name, amount, currency, and card_last4."
+    },
+    {
+      "id": "F100",
+      "statement": "Each get_user_dispute_history_7291 dispute record may include additional dispute context if available: reason_code, outcome, and notes or internal comments."
+    },
+    {
+      "id": "F101",
+      "statement": "When interpreting get_user_dispute_history_7291 results, verify the list is complete, use dispute_date and last_updated_at to understand timeline and recency, use status to determine whether action is needed, and review transaction details to confirm the disputed transaction context."
+    },
+    {
+      "id": "F102",
+      "statement": "If get_user_dispute_history_7291 returns an empty result set, the user has not filed any credit card disputes or the user_id is incorrect; confirm the correct user_id and try again."
+    },
+    {
+      "id": "F103",
+      "statement": "If get_user_dispute_history_7291 returns a permission or access error, ensure the agent has the necessary internal privileges to view dispute histories."
+    },
+    {
+      "id": "F104",
+      "statement": "If get_user_dispute_history_7291 returns an invalid or malformed user_id error, validate the format of user_id and reissue the request."
+    },
+    {
+      "id": "F105",
+      "statement": "If get_user_dispute_history_7291 returns partial or truncated data, retry the call; if the issue persists, capture the request context and escalate through internal support channels."
+    },
+    {
+      "id": "F106",
+      "statement": "get_user_dispute_history_7291 returns only credit card disputes associated with the specified user_id, and user data must always be handled in accordance with internal data handling and privacy requirements."
+    },
+    {
+      "id": "F107",
+      "statement": "The provisional-credit dispute-reason criterion is exhaustive: only 'unauthorized_fraudulent_charge', 'duplicate_charge', or 'goods_services_not_received' with the purchase made more than 30 days ago satisfies the criterion; every other dispute reason category fails the criterion."
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "summary": "Approved Mid-tier credit-limit increase request after valid intake, submission, internal eligibility checks, payment-history verification, approval action, and approval communication.",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F015",
+        "F016",
+        "F018",
+        "F020",
+        "F022",
+        "F023",
+        "F024",
+        "F026",
+        "F028",
+        "F030",
+        "F032",
+        "F035",
+        "F036",
+        "F038",
+        "F039",
+        "F040",
+        "F041",
+        "F042",
+        "F043",
+        "F044",
+        "F045",
+        "F046",
+        "F047",
+        "F048",
+        "F049",
+        "F060",
+        "F061"
+      ]
+    },
+    {
+      "id": "B",
+      "summary": "Entry-tier credit-limit increase request blocked before submission because the requested increase exceeds the Entry-tier maximum and must be adjusted.",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F016",
+        "F017",
+        "F020",
+        "F021",
+        "F022",
+        "F023",
+        "F024",
+        "F025",
+        "F026",
+        "F027",
+        "F031",
+        "F034",
+        "F035",
+        "F036",
+        "F037",
+        "F038",
+        "F058"
+      ]
+    },
+    {
+      "id": "C",
+      "summary": "Mid-tier credit-limit increase denial for an active cooldown triggered by a recent approved request.",
+      "included_fact_ids": [
+        "F002",
+        "F014",
+        "F016",
+        "F018",
+        "F022",
+        "F023",
+        "F035",
+        "F036",
+        "F038",
+        "F039",
+        "F040",
+        "F041",
+        "F043",
+        "F050",
+        "F052",
+        "F060",
+        "F062"
+      ]
+    },
+    {
+      "id": "D",
+      "summary": "Premium-tier credit-limit increase denial for utilization at or above the below-90% threshold.",
+      "included_fact_ids": [
+        "F002",
+        "F014",
+        "F016",
+        "F019",
+        "F024",
+        "F025",
+        "F026",
+        "F029",
+        "F033",
+        "F035",
+        "F036",
+        "F038",
+        "F039",
+        "F040",
+        "F041",
+        "F047",
+        "F050",
+        "F056",
+        "F060",
+        "F062"
+      ]
+    },
+    {
+      "id": "E",
+      "summary": "Entry-tier credit-limit increase denial for insufficient account age.",
+      "included_fact_ids": [
+        "F002",
+        "F014",
+        "F016",
+        "F017",
+        "F020",
+        "F021",
+        "F026",
+        "F035",
+        "F036",
+        "F038",
+        "F039",
+        "F040",
+        "F041",
+        "F042",
+        "F050",
+        "F051",
+        "F060",
+        "F062"
+      ]
+    },
+    {
+      "id": "F",
+      "summary": "Credit-limit increase denial because a replacement card order is pending.",
+      "included_fact_ids": [
+        "F002",
+        "F035",
+        "F039",
+        "F040",
+        "F041",
+        "F045",
+        "F050",
+        "F054",
+        "F060",
+        "F062"
+      ]
+    },
+    {
+      "id": "G",
+      "summary": "Credit-limit increase denial because the account has an active dispute, with internal dispute-history retrieval used for dispute context.",
+      "included_fact_ids": [
+        "F002",
+        "F035",
+        "F039",
+        "F040",
+        "F041",
+        "F044",
+        "F050",
+        "F053",
+        "F060",
+        "F062",
+        "F093",
+        "F094",
+        "F095",
+        "F096",
+        "F097",
+        "F098",
+        "F099",
+        "F100",
+        "F101",
+        "F102",
+        "F103",
+        "F104",
+        "F105",
+        "F106"
+      ]
+    },
+    {
+      "id": "H",
+      "summary": "Credit-limit increase denial because the account is not in good standing due to a past-due balance.",
+      "included_fact_ids": [
+        "F002",
+        "F035",
+        "F039",
+        "F040",
+        "F041",
+        "F046",
+        "F050",
+        "F055",
+        "F060",
+        "F062"
+      ]
+    },
+    {
+      "id": "I",
+      "summary": "Credit-limit increase denial for insufficient payment history after required payment-history verification.",
+      "included_fact_ids": [
+        "F002",
+        "F027",
+        "F028",
+        "F029",
+        "F030",
+        "F035",
+        "F039",
+        "F040",
+        "F041",
+        "F048",
+        "F050",
+        "F057",
+        "F060",
+        "F062"
+      ]
+    },
+    {
+      "id": "J",
+      "summary": "Credit-limit increase denial or record using the requested_amount_exceeds_limit denial reason when an amount exceeds the allowed limit.",
+      "included_fact_ids": [
+        "F002",
+        "F031",
+        "F032",
+        "F033",
+        "F034",
+        "F036",
+        "F037",
+        "F050",
+        "F058",
+        "F060",
+        "F062"
+      ]
+    },
+    {
+      "id": "K",
+      "summary": "Credit-limit increase denial recorded with the 'other' denial reason when an unmet requirement is not covered by the specifically enumerated denial reasons.",
+      "included_fact_ids": [
+        "F002",
+        "F050",
+        "F059",
+        "F060",
+        "F062"
+      ]
+    },
+    {
+      "id": "L",
+      "summary": "Customer pays down a credit card balance from a Rho-Bank checking account before or apart from a credit-limit increase request.",
+      "included_fact_ids": [
+        "F063",
+        "F064",
+        "F065",
+        "F066",
+        "F067",
+        "F068",
+        "F069",
+        "F070",
+        "F071",
+        "F072"
+      ]
+    },
+    {
+      "id": "M",
+      "summary": "Provisional-credit eligibility determination for an Entry Tier unauthorized_fraudulent_charge dispute.",
+      "included_fact_ids": [
+        "F073",
+        "F074",
+        "F075",
+        "F076",
+        "F077",
+        "F080",
+        "F081",
+        "F082",
+        "F083"
+      ]
+    },
+    {
+      "id": "N",
+      "summary": "Provisional-credit eligibility determination for a Mid Tier duplicate_charge dispute.",
+      "included_fact_ids": [
+        "F073",
+        "F074",
+        "F075",
+        "F076",
+        "F078",
+        "F080",
+        "F081",
+        "F082",
+        "F084"
+      ]
+    },
+    {
+      "id": "O",
+      "summary": "Provisional-credit eligibility determination for a Premium Tier goods_services_not_received dispute where the purchase was made more than 30 days ago.",
+      "included_fact_ids": [
+        "F073",
+        "F074",
+        "F075",
+        "F076",
+        "F079",
+        "F080",
+        "F081",
+        "F082",
+        "F085"
+      ]
+    },
+    {
+      "id": "P",
+      "summary": "Provisional-credit denial for an Elite Tier dispute with an ineligible dispute reason.",
+      "included_fact_ids": [
+        "F073",
+        "F075",
+        "F086",
+        "F089",
+        "F107"
+      ]
+    },
+    {
+      "id": "Q",
+      "summary": "Provisional-credit denial for an Invitation Tier dispute due to account age or transaction amount outside provisional-credit limits.",
+      "included_fact_ids": [
+        "F073",
+        "F075",
+        "F080",
+        "F087",
+        "F088",
+        "F090"
+      ]
+    },
+    {
+      "id": "R",
+      "summary": "Provisional-credit denial for a non-fraud dispute without merchant contact or a goods_services_not_received purchase made within the last 30 days.",
+      "included_fact_ids": [
+        "F073",
+        "F075",
+        "F079",
+        "F082",
+        "F091",
+        "F092"
+      ]
+    }
+  ]
+}

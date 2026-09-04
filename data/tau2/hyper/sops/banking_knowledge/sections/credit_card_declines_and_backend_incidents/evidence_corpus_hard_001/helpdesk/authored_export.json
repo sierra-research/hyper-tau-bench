@@ -1,0 +1,227 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "Rho Helpdesk",
+    "account": "rho-bank-consumer-and-business",
+    "workspace": "card-support-console",
+    "environment": "production",
+    "exported_at": "2025-11-13T15:05:00-05:00",
+    "timezone": "America/New_York",
+    "export_version": "2025.46",
+    "requested_by": "farah.idris@rhobank.com"
+  },
+  "cover_email": "From: Helpdesk Administration <helpdesk-admin@rhobank.com>\nTo: Farah Idris <farah.idris@rhobank.com>\nDate: Thu, 13 Nov 2025 15:11:38 -0500\nSubject: card-support-console workspace export (2025.46)\nMessage-ID: <hd-export-2025-46-cardsupport@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nFarah,\n\nFull production export of the card-support-console workspace you requested this afternoon — macros, triggers, field definitions, contracts, SLAs, and views, current as of 15:05. The discoverable-tool access contract is in policy_contracts; the retired auto-response pair is included with its lifecycle metadata since you asked for history too.\n\nHelpdesk Administration",
+  "macros": [
+    {
+      "macro_id": "MAC-4102",
+      "name": "Decline triage — case note scaffold",
+      "description": "Inserts the decline-triage note scaffold (card status, recent authorizations, merchant/category findings, transfer-request count) into the case record.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-08-14T09:00:00-04:00",
+      "updated_at": "2025-10-24T09:40:12-04:00",
+      "usage_30d": 1184,
+      "usage_90d": 3391,
+      "superseded_by": null,
+      "steps": [
+        "Insert note template: card status / recent authorizations / merchant or category holds / transfer-request count / next step",
+        "Apply tag decline-triage"
+      ]
+    },
+    {
+      "macro_id": "MAC-4155",
+      "name": "Incident contact — log and tag",
+      "description": "Logs an incident-matched contact against the active incident record and applies the incident tag. Content-free by design: handling guidance lives with Incident Command, not in macros.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-11-13T10:20:00-05:00",
+      "updated_at": "2025-11-13T10:20:00-05:00",
+      "usage_30d": 74,
+      "usage_90d": 74,
+      "superseded_by": null,
+      "steps": [
+        "Set field incident_reference from the active incident list",
+        "Apply tag incident-contact",
+        "Insert note line: matched criteria confirmed per the incident record"
+      ]
+    },
+    {
+      "macro_id": "MAC-3720",
+      "name": "Auto-reply: card declined (retired)",
+      "description": "Legacy canned reply for tickets containing 'declined'. Retired 2025-10-02 with its trigger TRG-2602 after the September QA review found canned decline replies answering the wrong question in most sampled tickets.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "effective_at": "2024-11-06T09:00:00-05:00",
+      "updated_at": "2025-10-02T13:15:44-04:00",
+      "usage_30d": 0,
+      "usage_90d": 211,
+      "superseded_by": null,
+      "steps": [
+        "Send canned reply: general decline causes list",
+        "Set status pending"
+      ]
+    },
+    {
+      "macro_id": "MAC-4160",
+      "name": "Post-transfer wrap-up",
+      "description": "Documentation scaffold applied after any transfer: tools used in order, request count, findings so far.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-08-14T09:00:00-04:00",
+      "updated_at": "2025-08-14T09:00:00-04:00",
+      "usage_30d": 322,
+      "usage_90d": 918,
+      "superseded_by": null,
+      "steps": [
+        "Insert note template: tools used in order / request count / findings",
+        "Set status solved-pending-review"
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "TRG-2602",
+      "name": "Keyword: declined → auto-reply (retired)",
+      "description": "Fired MAC-3720 on new tickets containing 'declined'. Deactivated 2025-10-02 alongside the macro retirement.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "priority": 40,
+      "effective_at": "2024-11-06T09:00:00-05:00",
+      "updated_at": "2025-10-02T13:15:44-04:00",
+      "usage_30d": 0,
+      "conditions": ["ticket.created", "body contains 'declined'"],
+      "actions": ["apply macro MAC-3720"]
+    },
+    {
+      "trigger_id": "TRG-2688",
+      "name": "Incident tag → incident queue",
+      "description": "Routes incident-tagged contacts to the incident review queue and stamps the active incident reference.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 10,
+      "effective_at": "2025-11-13T10:20:00-05:00",
+      "updated_at": "2025-11-13T10:20:00-05:00",
+      "usage_30d": 74,
+      "conditions": ["tag added incident-contact"],
+      "actions": ["move to view VIEW-901", "notify group incident-command"]
+    },
+    {
+      "trigger_id": "TRG-2641",
+      "name": "P1 incident SLA stamp",
+      "description": "Applies the P1 incident SLA policy to contacts carrying an active incident reference.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 15,
+      "effective_at": "2025-06-11T09:00:00-04:00",
+      "updated_at": "2025-06-11T09:00:00-04:00",
+      "usage_30d": 74,
+      "conditions": ["field incident_reference is set"],
+      "actions": ["apply sla SLA-INC-P1"]
+    }
+  ],
+  "policy_contracts": [
+    {
+      "contract_id": "CON-DTOOL-7",
+      "name": "Discoverable agent tool access",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "card-support-operations",
+      "scope": "All discoverable agent tools surfaced in the card-support console, including the incident transfer tools initial_transfer_to_human_agent_1822 and initial_transfer_to_human_agent_0218, which are internal agent tools, not user tools — they are never handed to customers to run.",
+      "required_fields": ["tool_name"],
+      "closed_world": true,
+      "wrapper_rule": "Each discoverable tool must be unlocked with unlock_discoverable_agent_tool before executing it with call_discoverable_agent_tool; the console rejects call attempts on tools that were not unlocked in the same interaction.",
+      "effective_at": "2025-05-20T09:00:00-04:00",
+      "updated_at": "2025-11-13T10:22:31-05:00"
+    },
+    {
+      "contract_id": "CON-CASE-3",
+      "name": "Case record completeness",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "quality",
+      "scope": "Case records for decline and incident contacts must carry the triage scaffold fields before closure; QA sampling reads these fields.",
+      "required_fields": ["card_status", "transfer_request_count", "next_step"],
+      "closed_world": false,
+      "effective_at": "2025-08-14T09:00:00-04:00",
+      "updated_at": "2025-08-14T09:00:00-04:00"
+    }
+  ],
+  "field_columns": [
+    "row_id",
+    "field_key",
+    "field_name",
+    "field_type",
+    "option_value",
+    "option_description",
+    "active",
+    "status",
+    "environment",
+    "updated_at"
+  ],
+  "fields": [
+    { "row_id": "FLD-701", "field_key": "incident_reference", "field_name": "Incident reference", "field_type": "dropdown", "option_value": "CARD-2291", "option_description": "Payment posted, not reflected on statement balance (11/13)", "active": true, "status": "current", "environment": "production", "updated_at": "2025-11-13T10:20:00-05:00" },
+    { "row_id": "FLD-716", "field_key": "incident_reference", "field_name": "Incident reference", "field_type": "dropdown", "option_value": "none", "option_description": "No active incident match", "active": true, "status": "current", "environment": "production", "updated_at": "2025-11-13T10:20:00-05:00" },
+    { "row_id": "FLD-717", "field_key": "decline_category", "field_name": "Decline category", "field_type": "dropdown", "option_value": "merchant_hold", "option_description": "Merchant or category hold", "active": true, "status": "current", "environment": "production", "updated_at": "2025-08-14T09:00:00-04:00" },
+    { "row_id": "FLD-718", "field_key": "decline_category", "field_name": "Decline category", "field_type": "dropdown", "option_value": "card_status", "option_description": "Card status (expired, frozen, replaced)", "active": true, "status": "current", "environment": "production", "updated_at": "2025-08-14T09:00:00-04:00" },
+    { "row_id": "FLD-719", "field_key": "decline_category", "field_name": "Decline category", "field_type": "dropdown", "option_value": "available_credit", "option_description": "Available credit or limit", "active": true, "status": "current", "environment": "production", "updated_at": "2025-08-14T09:00:00-04:00" },
+    { "row_id": "FLD-720", "field_key": "decline_category", "field_name": "Decline category", "field_type": "dropdown", "option_value": "unresolved", "option_description": "Cause not identified in-contact", "active": true, "status": "current", "environment": "production", "updated_at": "2025-08-14T09:00:00-04:00" },
+    { "row_id": "FLD-721", "field_key": "transfer_request_count", "field_name": "Transfer request count", "field_type": "number", "option_value": null, "option_description": "Count of transfer requests in this interaction", "active": true, "status": "current", "environment": "production", "updated_at": "2025-08-14T09:00:00-04:00" }
+  ],
+  "sla_policies": [
+    {
+      "policy_id": "SLA-INC-P1",
+      "name": "P1 incident contact response",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "first response 15 minutes, update every 2 hours while the incident is open",
+      "applies_to": "contacts carrying an active incident_reference",
+      "updated_at": "2025-06-11T09:00:00-04:00"
+    },
+    {
+      "policy_id": "SLA-STD-CARD",
+      "name": "Standard card-support response",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "first response 4 business hours",
+      "applies_to": "all card-support contacts without an incident reference",
+      "updated_at": "2025-06-11T09:00:00-04:00"
+    }
+  ],
+  "views": [
+    {
+      "view_id": "VIEW-901",
+      "name": "Incident review queue",
+      "active": true,
+      "status": "current",
+      "filters": ["tag incident-contact", "status < solved"],
+      "updated_at": "2025-11-13T10:20:00-05:00"
+    },
+    {
+      "view_id": "VIEW-877",
+      "name": "Decline triage",
+      "active": true,
+      "status": "current",
+      "filters": ["tag decline-triage", "status < solved"],
+      "updated_at": "2025-08-14T09:00:00-04:00"
+    },
+    {
+      "view_id": "VIEW-820",
+      "name": "Aging card cases",
+      "active": true,
+      "status": "current",
+      "filters": ["updated > 72h", "group card-support"],
+      "updated_at": "2025-06-11T09:00:00-04:00"
+    }
+  ]
+}

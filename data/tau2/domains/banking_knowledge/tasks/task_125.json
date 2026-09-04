@@ -1,0 +1,358 @@
+{
+  "id": "task_125",
+  "description": {
+    "purpose": "Task: task_125",
+    "relevant_policies": null,
+    "notes": "BLUEST ATM REBATES - MONTHLY $50 CAP LIMITS THE CORRECTION. Customer racked up ATM fees during a two-week Las Vegas conference (11/03-11/12): seven out-of-network withdrawals with operator surcharges of 8.50+8.50+9.00+8.75+9.25+7.00+7.00 = $58.00 plus Rho-Bank's own $2.00 out-of-network fee on each (7 x $2.00 = $14.00), for $72.00 of aggregate November ATM fees - all correctly charged. Bluest rebates ATM fees up to $50 per month; the system posted only two rebates ($8.50 + $8.50 = $17.00) and then stopped. The customer wants the remaining $55.00 back. Correct: total rebates for the month are capped at $50.00, so the missing amount is $50.00 - $17.00 = $33.00, applied as ONE rebate_credit of $33.00 (per policy: single credit per account, inform the customer of the applied credit and new balance; holdings 811.00 -> $844.00). Agents that credit $55.00 (ignoring the cap) or refund the correctly-charged fees diverge the DB. COMMUNICATE tokens pin the inform-credit-and-new-balance mandate."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Iker Etxeberria, a 34-year-old structural engineer in Sacramento, just back from a two-week conference in Las Vegas where every hotel and casino ATM charged outrageous surcharges.\n\n**Verification info:**\n- Name: Iker Etxeberria | Phone: 916-555-0274 | Email: iker.etxeberria@gmail.com\n- DOB: 08/09/1991 | Address: 2846 Marshall Way, Sacramento, CA 95818\n\n## Conversation Flow (Respond reactively - only provide details when the agent asks):\n\n1. **Opening:** \"Hi - I just got back from a conference in Las Vegas and the ATMs there ate me alive. I count about $72 in ATM fees on my Bluest account this month, and only $17 in rebates ever posted - then they just stopped. Bluest is supposed to rebate ATM fees, right? I'd like the other $55 credited back.\"\n\n2. **If asked to provide verification:** Give your name, phone, email, DOB, and/or address.\n\n3. **If asked for details:** \"Can you pull my transactions? It was seven withdrawals between November 3rd and 12th - each one has the ATM's surcharge plus your bank's own fee. The rebates stopped posting after the first couple.\"\n\n4. **If agent explains there is a monthly rebate cap and offers to credit the remaining amount up to the cap:** \"A cap, huh? I had no idea. Fine - whatever the most is that you can credit me, do that.\"\n\n5. **If agent applies a credit:** \"Thanks. Can you confirm exactly how much you credited and what my balance is now?\"\n\n6. **If agent offers to credit the full $55:** Accept it happily.\n\n7. **After the agent confirms the credit amount and new balance:** \"Alright, noted. Next conference I'm bringing cash. Thanks for sorting it.\" ###STOP###\n\nOnly provide additional details about your situation when the agent asks. Never respond as a customer service representative/assistant."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "users": {
+          "data": {
+            "ie93b6z2r8": {
+              "name": "Iker Etxeberria",
+              "user_id": "ie93b6z2r8",
+              "address": "2846 Marshall Way, Sacramento, CA 95818",
+              "email": "iker.etxeberria@gmail.com",
+              "phone_number": "916-555-0274",
+              "date_of_birth": "08/09/1991"
+            }
+          }
+        },
+        "accounts": {
+          "data": {
+            "chk_ie93b6z2r8_bluest": {
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "user_id": "ie93b6z2r8",
+              "class": "checking",
+              "level": "Bluest Account",
+              "date_opened": "02/18/2023",
+              "status": "OPEN",
+              "current_holdings": "811.00"
+            }
+          }
+        },
+        "bank_account_transaction_history": {
+          "data": {
+            "btxn_ie125_dd_oct31": {
+              "transaction_id": "btxn_ie125_dd_oct31",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "10/31/2025",
+              "description": "DIRECT DEPOSIT - GOLDEN BEAR ENGINEERING",
+              "amount": 3200.0,
+              "type": "direct_deposit",
+              "status": "posted"
+            },
+            "btxn_ie125_wd_1103": {
+              "transaction_id": "btxn_ie125_wd_1103",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/03/2025",
+              "description": "ATM WITHDRAWAL - GRAND CANYON CASINO ATM LAS VEGAS NV",
+              "amount": -200.0,
+              "type": "atm_withdrawal",
+              "status": "posted"
+            },
+            "btxn_ie125_op_1103": {
+              "transaction_id": "btxn_ie125_op_1103",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/03/2025",
+              "description": "ATM OPERATOR SURCHARGE - GRAND CANYON CASINO",
+              "amount": -8.5,
+              "type": "atm_fee",
+              "status": "posted"
+            },
+            "btxn_ie125_rho_1103": {
+              "transaction_id": "btxn_ie125_rho_1103",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/03/2025",
+              "description": "OUT-OF-NETWORK ATM FEE",
+              "amount": -2.0,
+              "type": "atm_fee",
+              "status": "posted"
+            },
+            "btxn_ie125_reb_1104": {
+              "transaction_id": "btxn_ie125_reb_1104",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/04/2025",
+              "description": "ATM FEE REBATE",
+              "amount": 8.5,
+              "type": "fee_rebate",
+              "status": "posted"
+            },
+            "btxn_ie125_wd_1104": {
+              "transaction_id": "btxn_ie125_wd_1104",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/04/2025",
+              "description": "ATM WITHDRAWAL - SILVER STATE HOTEL ATM LAS VEGAS NV",
+              "amount": -300.0,
+              "type": "atm_withdrawal",
+              "status": "posted"
+            },
+            "btxn_ie125_op_1104": {
+              "transaction_id": "btxn_ie125_op_1104",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/04/2025",
+              "description": "ATM OPERATOR SURCHARGE - SILVER STATE HOTEL",
+              "amount": -8.5,
+              "type": "atm_fee",
+              "status": "posted"
+            },
+            "btxn_ie125_rho_1104": {
+              "transaction_id": "btxn_ie125_rho_1104",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/04/2025",
+              "description": "OUT-OF-NETWORK ATM FEE",
+              "amount": -2.0,
+              "type": "atm_fee",
+              "status": "posted"
+            },
+            "btxn_ie125_reb_1105": {
+              "transaction_id": "btxn_ie125_reb_1105",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/05/2025",
+              "description": "ATM FEE REBATE",
+              "amount": 8.5,
+              "type": "fee_rebate",
+              "status": "posted"
+            },
+            "btxn_ie125_wd_1106": {
+              "transaction_id": "btxn_ie125_wd_1106",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/06/2025",
+              "description": "ATM WITHDRAWAL - CONVENTION CENTER KIOSK LAS VEGAS NV",
+              "amount": -200.0,
+              "type": "atm_withdrawal",
+              "status": "posted"
+            },
+            "btxn_ie125_op_1106": {
+              "transaction_id": "btxn_ie125_op_1106",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/06/2025",
+              "description": "ATM OPERATOR SURCHARGE - CONVENTION CENTER KIOSK",
+              "amount": -9.0,
+              "type": "atm_fee",
+              "status": "posted"
+            },
+            "btxn_ie125_rho_1106": {
+              "transaction_id": "btxn_ie125_rho_1106",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/06/2025",
+              "description": "OUT-OF-NETWORK ATM FEE",
+              "amount": -2.0,
+              "type": "atm_fee",
+              "status": "posted"
+            },
+            "btxn_ie125_wd_1108": {
+              "transaction_id": "btxn_ie125_wd_1108",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/08/2025",
+              "description": "ATM WITHDRAWAL - FREMONT STREET PAVILION ATM LAS VEGAS NV",
+              "amount": -250.0,
+              "type": "atm_withdrawal",
+              "status": "posted"
+            },
+            "btxn_ie125_op_1108": {
+              "transaction_id": "btxn_ie125_op_1108",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/08/2025",
+              "description": "ATM OPERATOR SURCHARGE - FREMONT STREET PAVILION",
+              "amount": -8.75,
+              "type": "atm_fee",
+              "status": "posted"
+            },
+            "btxn_ie125_rho_1108": {
+              "transaction_id": "btxn_ie125_rho_1108",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/08/2025",
+              "description": "OUT-OF-NETWORK ATM FEE",
+              "amount": -2.0,
+              "type": "atm_fee",
+              "status": "posted"
+            },
+            "btxn_ie125_wd_1110": {
+              "transaction_id": "btxn_ie125_wd_1110",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/10/2025",
+              "description": "ATM WITHDRAWAL - DESERT ROSE RESORT ATM LAS VEGAS NV",
+              "amount": -300.0,
+              "type": "atm_withdrawal",
+              "status": "posted"
+            },
+            "btxn_ie125_op_1110": {
+              "transaction_id": "btxn_ie125_op_1110",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/10/2025",
+              "description": "ATM OPERATOR SURCHARGE - DESERT ROSE RESORT",
+              "amount": -9.25,
+              "type": "atm_fee",
+              "status": "posted"
+            },
+            "btxn_ie125_rho_1110": {
+              "transaction_id": "btxn_ie125_rho_1110",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/10/2025",
+              "description": "OUT-OF-NETWORK ATM FEE",
+              "amount": -2.0,
+              "type": "atm_fee",
+              "status": "posted"
+            },
+            "btxn_ie125_wd_1111": {
+              "transaction_id": "btxn_ie125_wd_1111",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/11/2025",
+              "description": "ATM WITHDRAWAL - STRIP GAS MART ATM LAS VEGAS NV",
+              "amount": -150.0,
+              "type": "atm_withdrawal",
+              "status": "posted"
+            },
+            "btxn_ie125_op_1111": {
+              "transaction_id": "btxn_ie125_op_1111",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/11/2025",
+              "description": "ATM OPERATOR SURCHARGE - STRIP GAS MART",
+              "amount": -7.0,
+              "type": "atm_fee",
+              "status": "posted"
+            },
+            "btxn_ie125_rho_1111": {
+              "transaction_id": "btxn_ie125_rho_1111",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/11/2025",
+              "description": "OUT-OF-NETWORK ATM FEE",
+              "amount": -2.0,
+              "type": "atm_fee",
+              "status": "posted"
+            },
+            "btxn_ie125_wd_1112": {
+              "transaction_id": "btxn_ie125_wd_1112",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/12/2025",
+              "description": "ATM WITHDRAWAL - AIRPORT TERMINAL 1 ATM LAS VEGAS NV",
+              "amount": -200.0,
+              "type": "atm_withdrawal",
+              "status": "posted"
+            },
+            "btxn_ie125_op_1112": {
+              "transaction_id": "btxn_ie125_op_1112",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/12/2025",
+              "description": "ATM OPERATOR SURCHARGE - AIRPORT TERMINAL 1",
+              "amount": -7.0,
+              "type": "atm_fee",
+              "status": "posted"
+            },
+            "btxn_ie125_rho_1112": {
+              "transaction_id": "btxn_ie125_rho_1112",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/12/2025",
+              "description": "OUT-OF-NETWORK ATM FEE",
+              "amount": -2.0,
+              "type": "atm_fee",
+              "status": "posted"
+            },
+            "btxn_ie125_pur_1109": {
+              "transaction_id": "btxn_ie125_pur_1109",
+              "account_id": "chk_ie93b6z2r8_bluest",
+              "date": "11/09/2025",
+              "description": "DEBIT CARD PURCHASE - VEGAS EATS DELIVERY",
+              "amount": -68.4,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            }
+          }
+        }
+      }
+    }
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Iker Etxeberria",
+          "user_id": "ie93b6z2r8",
+          "address": "2846 Marshall Way, Sacramento, CA 95818",
+          "email": "iker.etxeberria@gmail.com",
+          "phone_number": "916-555-0274",
+          "date_of_birth": "08/09/1991",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "125_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "125_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"ie93b6z2r8\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "125_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_bank_account_transactions_9173"
+        },
+        "requestor": "assistant",
+        "action_id": "125_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_bank_account_transactions_9173",
+          "arguments": "{\"account_id\": \"chk_ie93b6z2r8_bluest\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "125_4"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "apply_checking_account_credit_5829"
+        },
+        "requestor": "assistant",
+        "action_id": "125_5"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "apply_checking_account_credit_5829",
+          "arguments": "{\"account_id\": \"chk_ie93b6z2r8_bluest\", \"amount\": 33.00, \"credit_type\": \"rebate_credit\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "125_6"
+      }
+    ],
+    "communicate_info": [
+      "$33.00",
+      "$844.00"
+    ],
+    "reward_basis": [
+      "DB",
+      "COMMUNICATE"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_checking_accounts_bluest_account_007",
+    "doc_checking_accounts_bluest_account_010",
+    "doc_bank_accounts_bank_accounts_(general)_017",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_bank_accounts_bank_accounts_(general)_018"
+  ]
+}

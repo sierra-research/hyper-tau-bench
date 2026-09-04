@@ -1,0 +1,237 @@
+{
+  "id": "telecom_restore_service_support_transcripts_hard_001",
+  "case_count": 7,
+  "description": "Hard-bundle case archive for the Restore Service workflow. Every case is context-only: no case owns a fact. Case B preserves a wrong ending (PUK walkthrough from the account record) refuted by its QA annotation quoting the June security bulletin; case E preserves a premature technical transfer corrected by a second-act follow-up that works the skipped SIM and APN branches. Authority for every referenced fact stays with the frozen core carriers (the three-chart Restore Service flowchart set at revision 3.3 and the companion APN recording).",
+  "cases": [
+    {
+      "filename": "case_001.md",
+      "channel": "Live chat",
+      "qa_status": "Reviewed \u2014 no findings",
+      "turn_count": 25,
+      "customer_turn_count": 13,
+      "agent_turn_count": 11,
+      "console_event_count": 1,
+      "word_count": 505,
+      "spoken_word_count": 409,
+      "chat_span_seconds": 378,
+      "active_handle_time_seconds": 668,
+      "authoritative_fact_ids": [],
+      "arc": {
+        "pattern": "F",
+        "echoes_fact_ids": [
+          "entry_no_service_or_cannot_connect",
+          "start_with_status_bar_check",
+          "no_service_check_cellular_network_status",
+          "active_sim_no_service_check_apn_settings",
+          "incorrect_apn_reset_reboot_recheck",
+          "resolved_when_status_bar_connected"
+        ]
+      },
+      "depends_on_fact_ids": [
+        "active_sim_no_service_check_apn_settings",
+        "incorrect_apn_reset_reboot_recheck"
+      ],
+      "realism_markers": [
+        "customer_self_diagnosis",
+        "reboot_wait",
+        "verified_resolution",
+        "humor"
+      ]
+    },
+    {
+      "filename": "case_002.md",
+      "channel": "Phone",
+      "qa_status": "Flagged for coaching",
+      "turn_count": 15,
+      "customer_turn_count": 6,
+      "agent_turn_count": 7,
+      "console_event_count": 2,
+      "word_count": 450,
+      "spoken_word_count": 267,
+      "handle_time_seconds": 265,
+      "spoken_words_per_minute": 60.5,
+      "authoritative_fact_ids": [],
+      "arc": {
+        "pattern": "B",
+        "misreads_fact_id": "pin_puk_locked_sim_is_transferred",
+        "misreading": "agent reads codes off the account record and walks the customer through PUK entry",
+        "corrected_by": "QA annotation in-file quoting the June security bulletin by month; the value read out is identified as the SIM kit fulfilment reference, not a PUK",
+        "composes_with": "service_foundations.cannot_override_locked_sim_security"
+      },
+      "depends_on_fact_ids": [],
+      "realism_markers": [
+        "qa_annotation",
+        "wrong_ending_preserved",
+        "plausible_wrong_value_explained",
+        "attempt_counter_tension"
+      ]
+    },
+    {
+      "filename": "case_003.md",
+      "channel": "Live chat",
+      "qa_status": "Reviewed \u2014 exemplar",
+      "turn_count": 13,
+      "customer_turn_count": 5,
+      "agent_turn_count": 6,
+      "console_event_count": 2,
+      "word_count": 283,
+      "spoken_word_count": 172,
+      "chat_span_seconds": 104,
+      "active_handle_time_seconds": 192,
+      "authoritative_fact_ids": [],
+      "arc": {
+        "pattern": "F",
+        "echoes_fact_ids": [
+          "start_with_status_bar_check"
+        ],
+        "composes_with": "service_foundations.work_relevant_steps_before_technical_transfer \u2014 the exemplar note names the immediate handoff as the explicit policy transfer step"
+      },
+      "depends_on_fact_ids": [],
+      "realism_markers": [
+        "exemplar_annotation",
+        "transfer_message_verbatim",
+        "no_attempts_spent"
+      ]
+    },
+    {
+      "filename": "case_004.md",
+      "channel": "Phone",
+      "qa_status": "Approved",
+      "turn_count": 34,
+      "customer_turn_count": 15,
+      "agent_turn_count": 15,
+      "console_event_count": 4,
+      "word_count": 687,
+      "spoken_word_count": 537,
+      "handle_time_seconds": 450,
+      "spoken_words_per_minute": 71.6,
+      "authoritative_fact_ids": [],
+      "arc": {
+        "pattern": "E",
+        "hops": "device-side checks exhausted -> affected line identified -> suspension reason read -> overdue-bill resumption flow run in full (bill verified overdue, payment request to device after confirmation, bill confirmed paid, resumption run after customer confirmation)",
+        "echoes_fact_ids": [
+          "overdue_suspension_uses_resumption_flow",
+          "resolved_when_status_bar_connected"
+        ],
+        "composes_with": "resume_suspended_line resumption chain \u2014 verify-overdue, confirm-before-request, confirm-paid, confirm-before-resume all enacted in paraphrase",
+        "dead_proposal_refused": "auto-resumption on a payment promise named as parked, never policy"
+      },
+      "depends_on_fact_ids": [
+        "overdue_suspension_uses_resumption_flow"
+      ],
+      "realism_markers": [
+        "payment_promise_pushback",
+        "console_audit_events",
+        "verified_resolution",
+        "follow_up_offer"
+      ]
+    },
+    {
+      "filename": "case_005.md",
+      "channel": "Live chat",
+      "qa_status": "Flagged for coaching",
+      "turn_count": 26,
+      "customer_turn_count": 12,
+      "agent_turn_count": 11,
+      "console_event_count": 3,
+      "word_count": 501,
+      "spoken_word_count": 290,
+      "follow_up_contact": true,
+      "chat_span_seconds": 319,
+      "active_handle_time_seconds": 565,
+      "authoritative_fact_ids": [],
+      "arc": {
+        "pattern": "B",
+        "misreads_fact_id": "unresolved_service_after_supported_steps_transfers",
+        "misreading": "technical transfer issued after only the status-bar and airplane-mode checks",
+        "corrected_by": "QA annotation in-file; second-act follow-up contact works the skipped SIM and APN branches to resolution",
+        "composes_with": "service_foundations.work_relevant_steps_before_technical_transfer"
+      },
+      "depends_on_fact_ids": [
+        "unresolved_service_after_supported_steps_transfers",
+        "check_sim_status_after_network_check"
+      ],
+      "realism_markers": [
+        "qa_annotation",
+        "second_act_follow_up",
+        "wrong_ending_preserved",
+        "retired_profile_detail"
+      ]
+    },
+    {
+      "filename": "case_006.md",
+      "channel": "Live chat",
+      "qa_status": "Approved",
+      "turn_count": 12,
+      "customer_turn_count": 5,
+      "agent_turn_count": 6,
+      "console_event_count": 1,
+      "word_count": 301,
+      "spoken_word_count": 232,
+      "chat_span_seconds": 117,
+      "active_handle_time_seconds": 185,
+      "authoritative_fact_ids": [],
+      "arc": {
+        "pattern": "B",
+        "misreads_fact_id": "connected_status_not_a_no_service_issue",
+        "misreading": "customer frames a slow-data symptom as no service",
+        "corrected_by": "agent stops the no-service flow on the connected status bar and routes to the slow-data steps"
+      },
+      "depends_on_fact_ids": [
+        "connected_status_not_a_no_service_issue"
+      ],
+      "realism_markers": [
+        "customer_misframing",
+        "scope_disambiguation",
+        "humor"
+      ]
+    },
+    {
+      "filename": "case_007.md",
+      "channel": "Phone",
+      "qa_status": "Approved",
+      "turn_count": 40,
+      "customer_turn_count": 18,
+      "agent_turn_count": 19,
+      "console_event_count": 3,
+      "word_count": 968,
+      "spoken_word_count": 804,
+      "handle_time_seconds": 675,
+      "spoken_words_per_minute": 71.5,
+      "authoritative_fact_ids": [],
+      "arc": {
+        "pattern": "filler",
+        "topic": "returning_traveler_three_layer_heavy_tail",
+        "echoes_fact_ids": [
+          "airplane_mode_on_disable_and_recheck"
+        ],
+        "composes_with": "resume_suspended_line ended-contract handling \u2014 renewal-or-exception explanation, recorded handoff, and the verbatim transfer message enacted in paraphrase; no in-channel reactivation"
+      },
+      "depends_on_fact_ids": [],
+      "realism_markers": [
+        "layered_causes",
+        "bag_archaeology_pause",
+        "humor",
+        "transfer_message_verbatim"
+      ]
+    }
+  ],
+  "distribution": {
+    "misreading_cases": 3,
+    "approved_echo_cases": 3,
+    "filler_cases": 1,
+    "expose_to_developer_agent": [
+      "case_001.md",
+      "case_002.md",
+      "case_003.md",
+      "case_004.md",
+      "case_005.md",
+      "case_006.md",
+      "case_007.md"
+    ],
+    "keep_author_side": [
+      "eval_manifest.json",
+      "README.md"
+    ]
+  }
+}

@@ -1,0 +1,1491 @@
+{
+  "id": "telecom_restore_data_abroad_jira_client_additions_authored",
+  "note": "Client-overlay copy of the hand-authored hard-bundle additions to the travel-care jira snapshot. generate_export_client.py assembles export mechanics (ids, timestamps, changelogs), applies the core rewrites from authored_core_rewrites.json, and merges these issues into the client replacement export; edit bodies here, never in the generated export.",
+  "new_users": [
+    {
+      "accountId": "marisol",
+      "displayName": "Marisol Vega",
+      "active": true
+    },
+    {
+      "accountId": "kenji",
+      "displayName": "Kenji Sato",
+      "active": true
+    }
+  ],
+  "issues": [
+    {
+      "key": "ROAM-214",
+      "ordinal": 25,
+      "project": "ROAM",
+      "summary": "Inventory legacy Traveler Pack references across care surfaces",
+      "issuetype": "Task",
+      "status": "Done",
+      "resolution": "Done",
+      "priority": "Medium",
+      "created": "2026-06-15",
+      "updated": "2026-07-02",
+      "reporter": "tessa",
+      "assignee": "marisol",
+      "labels": [
+        "travel-care",
+        "content",
+        "finance-ops"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [],
+      "description": "Before the legacy console gate can come out, we need a complete list of every surface that still mentions the Traveler Pack.\n\nBackground\nThe Traveler Pack ($10/month) left the retail catalog in March, but the add-on still appears in older macros, two console tooltips, one archived FAQ, and the legacy enablement gate itself. Removing the gate without sweeping the copy would leave agents quoting a product that no longer exists.\n\nScope\nCatalog every macro, tooltip, help draft, and training slide that names the Traveler Pack or ties roaming enablement to an add-on purchase. Output feeds the gate-removal story and the copy refresh that follows it.",
+      "comments": [
+        {
+          "author": "marisol",
+          "body": "First pass done: eleven macros, two tooltips, one archived FAQ, and the gate copy itself. Sheet attached."
+        },
+        {
+          "author": "tessa",
+          "body": "Add the outbound travel-notice email footer — it still says roaming 'may require a travel add-on.'"
+        },
+        {
+          "author": "marisol",
+          "body": "Footer added, total is fifteen surfaces. Thirteen are copy-only; the gate and one macro have behavior attached."
+        },
+        {
+          "author": "kenji",
+          "body": "Confirming the gate is the only surface that actually blocks the enablement write. The macro just prints stale text."
+        },
+        {
+          "author": "tessa",
+          "body": "Handing the list to ROAM-229. Copy-only fixes can trail the gate removal, behavior changes cannot."
+        },
+        {
+          "author": "marisol",
+          "body": "Closing as complete. Inventory is frozen as of June 30; anything new goes straight onto ROAM-229's checklist."
+        }
+      ],
+      "transitions": [
+        {
+          "author": "marisol",
+          "date": "2026-06-17",
+          "to": "In Progress"
+        },
+        {
+          "author": "tessa",
+          "date": "2026-07-02",
+          "to": "Done"
+        }
+      ],
+      "arc": {
+        "pattern": "A-support",
+        "role": "pre-work for the Traveler Pack retirement; establishes the add-on as a retired retail product with lingering copy"
+      },
+      "adjudication_role": "supporting_current"
+    },
+    {
+      "key": "ROAM-229",
+      "ordinal": 26,
+      "project": "ROAM",
+      "summary": "Remove Traveler Pack gate from carrier roaming enablement",
+      "issuetype": "Story",
+      "status": "Done",
+      "resolution": "Done",
+      "priority": "High",
+      "created": "2026-06-24",
+      "updated": "2026-07-30",
+      "reporter": "jonah",
+      "assignee": "kenji",
+      "labels": [
+        "carrier-control",
+        "travel-care",
+        "finance-ops"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [
+        {
+          "name": "Care 2026.07"
+        }
+      ],
+      "description": "Retire the legacy console check that blocks carrier roaming enablement unless the account carries the Traveler Pack add-on.\n\nBackground\nThe gate dates from the era when roaming enablement was sold as part of the $10/month Traveler Pack. The add-on left the retail catalog in March and existing subscriptions lapsed with the June billing cycle, so the gate now blocks a supported change against a product nobody can buy. ROAM-214 holds the inventory of related copy.\n\nAcceptance criteria\nThe enablement control works on any eligible line with no add-on check, and no purchase prompt may remain anywhere in the flow. The removal ships in release 2026.07, ahead of the August decision-map work, and the event log keeps recording prior value, new value, and operator unchanged.",
+      "comments": [
+        {
+          "author": "kenji",
+          "body": "Gate check is isolated behind one feature flag; removal is a flag delete plus the dead branch."
+        },
+        {
+          "author": "jonah",
+          "body": "Sequencing note: this must land before the August rollout so the new explanation copy never has to mention an add-on."
+        },
+        {
+          "author": "marisol",
+          "body": "Billing sign-off: no active Traveler Pack subscriptions remain as of the June cycle. Nothing left to bill against, so the gate is guarding air."
+        },
+        {
+          "author": "kenji",
+          "body": "Removed in 2026.07 build 3. Enablement on a test line went through with no add-on prompt and the audit event unchanged."
+        },
+        {
+          "author": "nia",
+          "body": "QA passed across eligible, ineligible, and multi-line accounts. The only remaining add-on mentions are the copy-only surfaces from the ROAM-214 sheet, tracked for the tooltip refresh."
+        },
+        {
+          "author": "jonah",
+          "body": "Done with the 2026.07 release. For anyone landing here from a care question: the add-on requirement is gone, and the current customer explanation lives on ROAM-251."
+        },
+        {
+          "author": "priya",
+          "date": "2026-07-27",
+          "body": "Post-release check, July 27: two of thirty sampled abroad-data contacts still quoted the $10 add-on to customers. That's stale memory, not a console problem — flagging to the coaching track on CARE-598 and the copy refresh on ROAM-273."
+        },
+        {
+          "author": "kenji",
+          "date": "2026-07-30",
+          "body": "Confirming zero gate hits in telemetry since the release. The flag and dead code are deleted, not just disabled."
+        }
+      ],
+      "transitions": [
+        {
+          "author": "kenji",
+          "date": "2026-06-26",
+          "to": "In Progress"
+        },
+        {
+          "author": "nia",
+          "date": "2026-07-10",
+          "to": "In Review"
+        },
+        {
+          "author": "jonah",
+          "date": "2026-07-16",
+          "to": "Done"
+        }
+      ],
+      "arc": {
+        "pattern": "A",
+        "supersedes": "Traveler Pack add-on requirement for roaming enablement",
+        "for_fact_ids": [
+          "explain_carrier_roaming_needed_when_off"
+        ],
+        "role": "retirement rollout ticket; closes 2026-07-30, before the snapshot; discusses the gate's removal and release timing without narrating the resulting care procedure or its cost; points at ROAM-251 for the current explanation"
+      },
+      "adjudication_role": "supporting_current"
+    },
+    {
+      "key": "ROAM-238",
+      "ordinal": 27,
+      "project": "ROAM",
+      "summary": "Migrate legacy allowance audit records to the v3 event schema",
+      "issuetype": "Task",
+      "status": "Done",
+      "resolution": "Done",
+      "priority": "Medium",
+      "created": "2026-06-29",
+      "updated": "2026-07-20",
+      "reporter": "samir",
+      "assignee": "kenji",
+      "labels": [
+        "carrier-control",
+        "analytics"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [
+        {
+          "name": "Care 2026.07"
+        }
+      ],
+      "description": "Old allowance-change events store only the new value. The v3 schema wants prior value, new value, operator, and the confirmation reference on one row.\n\nScope\nBackfill what can be derived (prior value reconstructs from the event sequence), mark what cannot, and cut all new writes over to the v3 schema in the same release as ROAM-229 so July isn't split across formats.",
+      "comments": [
+        {
+          "author": "kenji",
+          "body": "Backfill script derives prior values for 98.6% of historical rows; the rest predate event logging and get an explicit unknown marker."
+        },
+        {
+          "author": "samir",
+          "body": "Keep the unknown marker queryable — downstream audit checks need to skip those rows cleanly."
+        },
+        {
+          "author": "kenji",
+          "body": "Cutover done with the 2026.07 release. New writes carry all four fields; dashboards read both formats through the view."
+        },
+        {
+          "author": "nia",
+          "body": "Verified on the fixture accounts: one event per change, prior and new values present, confirmation reference populated for July writes."
+        },
+        {
+          "author": "samir",
+          "body": "Closing. The audit trail is now one query instead of three."
+        }
+      ],
+      "transitions": [
+        {
+          "author": "kenji",
+          "date": "2026-07-01",
+          "to": "In Progress"
+        },
+        {
+          "author": "samir",
+          "date": "2026-07-20",
+          "to": "Done"
+        }
+      ],
+      "arc": {
+        "pattern": "filler",
+        "role": "rollout texture; keeps the audit-event vocabulary (prior value, new value, operator, confirmation) alive outside the carrier stories"
+      },
+      "adjudication_role": "distractor_closed"
+    },
+    {
+      "key": "ROAM-242",
+      "ordinal": 28,
+      "project": "ROAM",
+      "summary": "Regression: allowance writes rejected for non-active lines",
+      "issuetype": "Test",
+      "status": "Done",
+      "resolution": "Done",
+      "priority": "High",
+      "created": "2026-06-30",
+      "updated": "2026-07-22",
+      "reporter": "nia",
+      "assignee": "elena",
+      "labels": [
+        "qa",
+        "carrier-control"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [
+        {
+          "name": "Care 2026.07"
+        }
+      ],
+      "description": "With the Traveler Pack gate on its way out under ROAM-229, line state becomes the only eligibility condition on the enablement control. Lock that down before the August work builds on it.\n\nTest plan\nAttempt allowance reads and writes against active, suspended (overdue), suspended (contract-ended), and cancelled lines. Reads may succeed everywhere; writes must succeed only for an active line and return a typed rejection otherwise.\n\nExit criteria\nA suspended line can never take an allowance write, including through the batch path, and the rejection tells the operator which flow owns the line's state.",
+      "comments": [
+        {
+          "author": "elena",
+          "body": "Wrote the four-state fixture. The overdue-suspended case matters most — that's the one care actually meets abroad."
+        },
+        {
+          "author": "nia",
+          "body": "First run: cancelled and contract-ended reject correctly, overdue-suspended write went through on the batch path. Filed the fix against the release."
+        },
+        {
+          "author": "kenji",
+          "body": "Batch path was checking account standing, not line state. Fixed to evaluate per line; the interactive path was always correct."
+        },
+        {
+          "author": "elena",
+          "body": "Re-run green across all four states. The rejection copy now names the owning flow — the overdue-suspended message points at resumption before any roaming work."
+        },
+        {
+          "author": "nia",
+          "body": "QA sign-off. The suspended-line QA fixture from the August audit reuses this matrix."
+        },
+        {
+          "author": "elena",
+          "body": "Done with 2026.07. Any allowance-write rejection you see in care now is line-state, nothing else."
+        }
+      ],
+      "transitions": [
+        {
+          "author": "elena",
+          "date": "2026-07-03",
+          "to": "In Progress"
+        },
+        {
+          "author": "nia",
+          "date": "2026-07-22",
+          "to": "Done"
+        }
+      ],
+      "arc": {
+        "pattern": "C-support",
+        "composes_with": "service_foundations.can_enable_or_disable_carrier_roaming_on_active_line",
+        "role": "establishes in QA record form that allowance writes apply to active lines only, matching case E's scope moment; paraphrase only"
+      },
+      "adjudication_role": "supporting_current"
+    },
+    {
+      "key": "ROAM-256",
+      "ordinal": 29,
+      "project": "ROAM",
+      "summary": "Auto-enable roaming when a travel notice is on file",
+      "issuetype": "Spike",
+      "status": "Closed",
+      "resolution": "Rejected",
+      "priority": "Medium",
+      "created": "2026-07-06",
+      "updated": "2026-08-01",
+      "reporter": "diego",
+      "assignee": "priya",
+      "labels": [
+        "travel-care",
+        "automation",
+        "consent"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [],
+      "description": "Proposal from the July contact-driver review: when a customer files a travel notice, flip the carrier roaming allowance on automatically for the trip window and skip the care contact entirely.\n\nBackground\nRoughly a third of abroad-data contacts end with a simple allowance enablement. If the travel notice predicts the need, enabling ahead of travel could remove those contacts.\n\nQuestions to answer\nWhether a filed travel notice can stand in for the customer asking us to change the line; what happens on multi-line accounts where the notice names no line; and how an automatic write would satisfy the audit event's confirmation reference.",
+      "comments": [
+        {
+          "author": "diego",
+          "body": "Sizing note: about a third of abroad-data contacts would disappear if this worked. Worth the spike even if the answer is no."
+        },
+        {
+          "author": "priya",
+          "body": "The consent question is the whole spike. A travel notice says where you're going; it is not the customer asking us to change anything on the line."
+        },
+        {
+          "author": "samir",
+          "body": "Multi-line makes it worse — the notice is account-level, so an automatic write would have to guess a line, which is exactly the wrong-line risk the confirmation flow exists to prevent."
+        },
+        {
+          "author": "priya",
+          "body": "Recommendation forming: reject. The contact is where the explanation happens and where the customer actually asks us for the change; removing the contact removes the consent."
+        },
+        {
+          "author": "lauren",
+          "date": "2026-07-31",
+          "body": "Compliance ran this against the same replay set used for the confirmation story: a prior travel preference was explicitly not approved as authorization there, and an automatic write has no confirmation event to record at all. That position doesn't bend for volume."
+        },
+        {
+          "author": "diego",
+          "date": "2026-08-01",
+          "body": "Accepted, closing as rejected. If we want the volume win, the honest version is prompting customers to contact us before travel — that's the ROAM-291 pilot, which writes nothing on its own."
+        },
+        {
+          "author": "lauren",
+          "date": "2026-08-01",
+          "body": "For the record so this stays findable: rejected on consent grounds, August 1. Nothing downstream should cite this spike as approval for any automatic allowance change."
+        }
+      ],
+      "transitions": [
+        {
+          "author": "priya",
+          "date": "2026-07-08",
+          "to": "In Progress"
+        },
+        {
+          "author": "diego",
+          "date": "2026-08-01",
+          "to": "Closed"
+        }
+      ],
+      "arc": {
+        "pattern": "D",
+        "role": "dead proposal with a visible declining record; rejection grounded in customer-instruction consent, deliberately silent on the per-enable confirmation question the A3 hold escalates"
+      },
+      "adjudication_role": "rejected"
+    },
+    {
+      "key": "ROAM-261",
+      "ordinal": 30,
+      "project": "ROAM",
+      "summary": "Show prior allowance value in the confirmation review panel",
+      "issuetype": "Story",
+      "status": "In Progress",
+      "resolution": null,
+      "priority": "Medium",
+      "created": "2026-07-08",
+      "updated": "2026-08-08",
+      "reporter": "elena",
+      "assignee": "kenji",
+      "labels": [
+        "carrier-control",
+        "care-flow"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [
+        {
+          "name": "Care 2026.08"
+        }
+      ],
+      "description": "Agents see the selected line and the pending change in the review panel, but not the current allowance value. Showing prior state alongside the pending write makes the explanation step concrete and catches wrong-line selections before the confirmation question.\n\nAcceptance criteria\nThe panel shows the line's current allowance value next to the pending one, reads from the same lookup the write path uses, and never triggers a second lookup that could race the selection.",
+      "comments": [
+        {
+          "author": "kenji",
+          "body": "Reusing the ROAM-248 lookup result avoids the race; the panel just needs the value threaded through."
+        },
+        {
+          "author": "elena",
+          "body": "Design reviewed — prior value renders muted, pending value bold, both labelled with the line's last four digits."
+        },
+        {
+          "author": "kenji",
+          "body": "Behind a flag in staging. One edge open: the panel flashes stale state if the agent reselects lines quickly."
+        },
+        {
+          "author": "nia",
+          "body": "QA holding sign-off on the reselection edge; everything else passes on the three-line fixture."
+        },
+        {
+          "author": "elena",
+          "body": "Still targeting the August release window; the flash fix is in review."
+        }
+      ],
+      "transitions": [
+        {
+          "author": "kenji",
+          "date": "2026-07-13",
+          "to": "In Progress"
+        }
+      ],
+      "arc": {
+        "pattern": "filler",
+        "role": "in-flight release texture reinforcing line-selection and explanation vocabulary without owning any rule"
+      },
+      "adjudication_role": "distractor_current"
+    },
+    {
+      "key": "ROAM-268",
+      "ordinal": 31,
+      "project": "ROAM",
+      "summary": "Alert on allowance writes without a paired confirmation event",
+      "issuetype": "Improvement",
+      "status": "Done",
+      "resolution": "Done",
+      "priority": "High",
+      "created": "2026-07-12",
+      "updated": "2026-08-07",
+      "reporter": "lauren",
+      "assignee": "samir",
+      "labels": [
+        "carrier-control",
+        "consent",
+        "analytics"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [
+        {
+          "name": "Care 2026.08"
+        }
+      ],
+      "description": "The v3 audit schema gives every allowance write a confirmation-reference field. Nothing alerts when the reference is missing, so a write with no recorded pairing would only surface in a manual QA sample.\n\nAcceptance criteria\nA daily check flags any allowance write whose confirmation reference is missing or points at a different line, routes the flag to the care QA queue, and excludes the pre-schema rows marked unknown by ROAM-238.",
+      "comments": [
+        {
+          "author": "samir",
+          "body": "Check is simpler than expected — the v3 schema makes the pairing a join, not a heuristic."
+        },
+        {
+          "author": "lauren",
+          "body": "Route the flags to care QA, not to engineering. A broken pair is a process finding first."
+        },
+        {
+          "author": "samir",
+          "date": "2026-08-02",
+          "body": "Deployed. The July backtest found three writes with no reference recorded at all; all three route to the QA queue with the contact attached."
+        },
+        {
+          "author": "priya",
+          "date": "2026-08-04",
+          "body": "The backtest surfaced a policy question the alert cannot answer: two July writes point at the case-opening consent note instead of a confirmation event of their own. Does an allowance enable need its own customer confirmation event, or does case-level consent cover it? The alert needs a ruling either way."
+        },
+        {
+          "author": "lauren",
+          "date": "2026-08-05",
+          "body": "That question is above this ticket — I have escalated it to the roaming policy council with the two July examples attached. Until the council rules, the check flags missing references only and QA files the case-level ones as notes, unscored. Closing the build side; the policy answer stays with the council."
+        },
+        {
+          "author": "samir",
+          "date": "2026-08-07",
+          "body": "Post-close note: zero missing-reference flags in the first week of August. The two case-level examples are still parked with the council."
+        }
+      ],
+      "transitions": [
+        {
+          "author": "samir",
+          "date": "2026-07-15",
+          "to": "In Progress"
+        },
+        {
+          "author": "lauren",
+          "date": "2026-08-05",
+          "to": "Done"
+        }
+      ],
+      "arc": {
+        "pattern": "F",
+        "for_fact_ids": [
+          "confirm_before_enabling_carrier_roaming"
+        ],
+        "role": "A3 signal — the alert build surfaces the policy question (own confirmation event vs case-level consent) and escalates it to the roaming policy council; no council output exists anywhere in the kit"
+      },
+      "adjudication_role": "supporting_current"
+    },
+    {
+      "key": "ROAM-273",
+      "ordinal": 32,
+      "project": "ROAM",
+      "summary": "Refresh console tooltips and macros after the Traveler Pack gate removal",
+      "issuetype": "Task",
+      "status": "Done",
+      "resolution": "Done",
+      "priority": "Medium",
+      "created": "2026-07-19",
+      "updated": "2026-08-05",
+      "reporter": "tessa",
+      "assignee": "marisol",
+      "labels": [
+        "content",
+        "travel-care",
+        "copy-review"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [
+        {
+          "name": "Care 2026.08"
+        }
+      ],
+      "description": "Work through the copy-only surfaces on the ROAM-214 sheet now that the gate itself is gone.\n\nScope\nRewrite or retire the fifteen inventoried surfaces so no macro, tooltip, or template ties roaming enablement to the Traveler Pack or any purchase. Wording for the customer-facing explanation is owned by ROAM-251 and gets referenced, not restated, here.",
+      "comments": [
+        {
+          "author": "marisol",
+          "body": "Eleven macros rewritten, two retired outright. The archived FAQ gets a redirect rather than an edit — nobody should land on it."
+        },
+        {
+          "author": "tessa",
+          "body": "Tooltip copy approved. The enablement control now points agents at the current explanation instead of embedding a summary of its own."
+        },
+        {
+          "author": "marisol",
+          "body": "Retail handoff card cleared in the same batch: for a consumer line the associate points the customer at care, and the card keeps to the handoff wording itself, leaving the account-side details to the care contact."
+        },
+        {
+          "author": "marisol",
+          "body": "Travel-notice email footer shipped clean this morning — the 'may require a travel add-on' line is gone."
+        },
+        {
+          "author": "priya",
+          "body": "Coaching tie-in: the July QA sample that caught agents quoting the $10 add-on becomes a before/after in the CARE-598 module. Copy can't fix memory, but it stops feeding it."
+        },
+        {
+          "author": "tessa",
+          "body": "Final sweep against the sheet: fifteen of fifteen surfaces clear. Anything still mentioning the Traveler Pack after today is net-new and gets filed fresh."
+        },
+        {
+          "author": "marisol",
+          "body": "Done. Closing with the August release copy freeze."
+        },
+        {
+          "author": "kenji",
+          "body": "Grep across console strings confirms zero Traveler Pack references in production."
+        }
+      ],
+      "transitions": [
+        {
+          "author": "marisol",
+          "date": "2026-07-21",
+          "to": "In Progress"
+        },
+        {
+          "author": "tessa",
+          "date": "2026-08-05",
+          "to": "Done"
+        }
+      ],
+      "arc": {
+        "pattern": "A-support",
+        "for_fact_ids": [
+          "explain_carrier_roaming_needed_when_off"
+        ],
+        "role": "supersession follow-through; dates the copy cleanup and links the stale-quote coaching; the retail handoff card keeps to the handoff itself (enable procedure not narrated — F22 2nd-instance sweep)"
+      },
+      "adjudication_role": "supporting_current"
+    },
+    {
+      "key": "ROAM-283",
+      "ordinal": 33,
+      "project": "ROAM",
+      "summary": "Delayed allowance propagation on the Alpine partner network",
+      "issuetype": "Incident",
+      "status": "Monitoring",
+      "resolution": null,
+      "priority": "High",
+      "created": "2026-07-24",
+      "updated": "2026-08-08",
+      "reporter": "diego",
+      "assignee": "samir",
+      "labels": [
+        "partner-network",
+        "outage",
+        "latency"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [],
+      "description": "Since July 22, allowance enablements for customers on the Alpine partner take up to forty minutes to propagate, against a normal ceiling of about five. Customers rerun the speed test before propagation completes and reasonably report the step as failed.\n\nImpact\nThe workflow itself is behaving correctly — the delay is on the partner's provisioning side. Care contacts in the affected region need the retest framed with the delay in mind while the partner works the fix.",
+      "comments": [
+        {
+          "author": "samir",
+          "body": "Partner confirms a queue backlog on their provisioning gateway. They're draining it; ETA moved twice already."
+        },
+        {
+          "author": "diego",
+          "body": "Care advisory posted for the affected region: run the retest as usual, and if it fails within the delay window, wait and retest before treating the step as failed."
+        },
+        {
+          "author": "maya",
+          "body": "Please keep the advisory scoped to the Alpine footprint. Everywhere else the normal retest timing stands — no global 'wait forty minutes' folklore, we have retired enough folklore this quarter."
+        },
+        {
+          "author": "samir",
+          "body": "Propagation median down to twelve minutes as of August 4. Leaving in monitoring until it holds under ten for a week.",
+          "date": "2026-08-04"
+        },
+        {
+          "author": "diego",
+          "body": "Dashboard tile from ROAM-294 now tracks propagation lag for this partner separately.",
+          "date": "2026-08-05"
+        },
+        {
+          "author": "samir",
+          "body": "Still monitoring; two regressions during the partner's weekend maintenance.",
+          "date": "2026-08-06"
+        },
+        {
+          "author": "diego",
+          "date": "2026-08-06",
+          "body": "Escalating one call to Maya as routing owner: while propagation lags, do abroad-data contacts from the Alpine footprint keep routing through the normal flow, or hold for the partner fix? Care leads are asking, and I would rather have an owner's answer than folklore."
+        },
+        {
+          "author": "maya",
+          "date": "2026-08-07",
+          "body": "Answering the escalation: normal flow, no hold. The advisory's framing covers the delay window, and pulling a region out of the flow for a partner backlog would outlive the backlog. If the median regresses past forty minutes again, re-escalate and I will revisit."
+        },
+        {
+          "author": "diego",
+          "body": "Advisory refreshed August 8 — unchanged in substance, still region-scoped.",
+          "date": "2026-08-08"
+        }
+      ],
+      "transitions": [
+        {
+          "author": "samir",
+          "date": "2026-07-24",
+          "to": "In Progress"
+        },
+        {
+          "author": "diego",
+          "date": "2026-07-31",
+          "to": "Monitoring"
+        }
+      ],
+      "arc": {
+        "pattern": "C",
+        "for_fact_ids": [
+          "rerun_speed_test_after_carrier_step"
+        ],
+        "role": "near-miss scope: a region-scoped retest caveat that visibly does NOT change the general retest rule — maya's comment pins the scope boundary; also the A3 benign twin: diego's route-hold escalation to maya (named routing owner) is answered by her in a later dated comment"
+      },
+      "adjudication_role": "distractor_current"
+    },
+    {
+      "key": "ROAM-288",
+      "ordinal": 34,
+      "project": "ROAM",
+      "summary": "French and Spanish strings for the roaming enablement chat flow",
+      "issuetype": "Task",
+      "status": "Open",
+      "resolution": null,
+      "priority": "Low",
+      "created": "2026-07-27",
+      "updated": "2026-08-05",
+      "reporter": "tessa",
+      "assignee": null,
+      "labels": [
+        "localization",
+        "travel-care",
+        "content"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [],
+      "description": "The August chat flow ships English-first. FR and ES strings for the explanation and confirmation steps are due in the September window, translated from the approved English copy rather than re-drafted.\n\nNotes\nTranslation must preserve the released step order and keep the confirmation prompt a question the customer answers. CARE-611's summer-notification review found tone drift in the FR pass; budget review time for the same risk here.",
+      "comments": [
+        {
+          "author": "tessa",
+          "body": "Source strings frozen with the August release. Sending to the same vendor as the notification batch."
+        },
+        {
+          "author": "elena",
+          "body": "Flagging early: the FR draft of the confirmation prompt came back as a statement, not a question. It has to stay a question the customer answers."
+        },
+        {
+          "author": "tessa",
+          "body": "Vendor re-briefed with the compliance note attached. Revised FR pass due next week."
+        },
+        {
+          "author": "lauren",
+          "body": "Please route the revised prompts through the replay set before sign-off — same bar as the English copy, no shortcuts for translations."
+        },
+        {
+          "author": "tessa",
+          "body": "Scheduled. Nothing ships until the replay pass."
+        }
+      ],
+      "transitions": [],
+      "arc": {
+        "pattern": "filler",
+        "role": "localization texture; incidentally reinforces the confirmation-is-a-question shape in paraphrase"
+      },
+      "adjudication_role": "distractor_current"
+    },
+    {
+      "key": "ROAM-291",
+      "ordinal": 35,
+      "project": "ROAM",
+      "summary": "Pilot a roaming-readiness prompt in the travel notice flow",
+      "issuetype": "Experiment",
+      "status": "In Progress",
+      "resolution": null,
+      "priority": "Medium",
+      "created": "2026-07-29",
+      "updated": "2026-08-08",
+      "reporter": "diego",
+      "assignee": "priya",
+      "labels": [
+        "travel-care",
+        "growth",
+        "automation"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [],
+      "description": "The successor to the ROAM-256 automation idea (see that spike's closing decision): when a customer files a travel notice, show a readiness prompt that checks nothing and changes nothing — it invites the customer to contact care before travel if they want data abroad.\n\nDesign constraints\nThe prompt performs no reads or writes on the line. Anything on the line itself still happens in a care contact, exactly as today. Success metric is the share of enablements that move from mid-trip to pre-trip.",
+      "comments": [
+        {
+          "author": "priya",
+          "body": "Copy draft: 'Traveling soon? If you want mobile data abroad, contact us before you go.' No line state shown, nothing pre-checked."
+        },
+        {
+          "author": "diego",
+          "body": "Baseline captured: 22% of enablements currently happen before departure. Pilot targets the notice-filing cohort only."
+        },
+        {
+          "author": "priya",
+          "date": "2026-08-01",
+          "body": "Edge from the design review: if the customer files a notice for a trip already underway, does the prompt still show? Not in the design note."
+        },
+        {
+          "author": "lauren",
+          "date": "2026-08-03",
+          "body": "Reviewed against the ROAM-256 rejection: because the prompt writes nothing and the contact still owns consent, this stays on the right side of that line."
+        },
+        {
+          "author": "diego",
+          "date": "2026-08-04",
+          "body": "Checked with the notice service: the prompt renders for any active notice window, including trips already underway. Design note updated."
+        },
+        {
+          "author": "priya",
+          "date": "2026-08-06",
+          "body": "Live to 10% of notice filers as of August 6. Early read in two weeks."
+        },
+        {
+          "author": "diego",
+          "body": "One support question already came in asking if the prompt 'turned roaming on' — copy tweak adds 'we won't change anything until you ask us to.'"
+        }
+      ],
+      "transitions": [
+        {
+          "author": "priya",
+          "date": "2026-08-01",
+          "to": "In Progress"
+        }
+      ],
+      "arc": {
+        "pattern": "D-support",
+        "role": "shows the rejected auto-enable proposal staying dead; also carries a benign edge-case question answered two comments later (answered-edge texture)"
+      },
+      "adjudication_role": "distractor_current"
+    },
+    {
+      "key": "ROAM-297",
+      "ordinal": 36,
+      "project": "ROAM",
+      "summary": "Read-only roaming allowance view for retail associates",
+      "issuetype": "Story",
+      "status": "In Review",
+      "resolution": null,
+      "priority": "Medium",
+      "created": "2026-07-31",
+      "updated": "2026-08-08",
+      "reporter": "maya",
+      "assignee": "kenji",
+      "labels": [
+        "carrier-control",
+        "care-flow"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [
+        {
+          "name": "Care 2026.08"
+        }
+      ],
+      "description": "Retail associates field pre-travel questions but have no view of the line's roaming allowance, so they either guess or send the customer to care blind.\n\nAcceptance criteria\nRetail gets a read-only allowance indicator per line. The enablement control stays care-only: retail sees state, explains that care can change it on a care contact, and hands off. No write path, no exceptions.",
+      "comments": [
+        {
+          "author": "kenji",
+          "body": "Implementation is the ROAM-248 lookup behind a retail-scoped permission with the mutation stripped."
+        },
+        {
+          "author": "maya",
+          "body": "Design note: the indicator should say 'care can enable this on a call or chat' rather than looking like a disabled button retail should wish they could press."
+        },
+        {
+          "author": "nia",
+          "body": "QA plan covers permission boundaries — retail token must never reach the write endpoint even by URL surgery."
+        },
+        {
+          "author": "tessa",
+          "body": "Question from the pilot stores: associates also get asked about enterprise fleet lines at the counter — will those show in this view?"
+        },
+        {
+          "author": "kenji",
+          "body": "No. Fleet lines never surface in retail tooling; enterprise roaming is managed account-side in the fleet console. For consumer lines, the handoff wording associates use shipped with the ROAM-273 copy sweep."
+        },
+        {
+          "author": "kenji",
+          "body": "In review. Retail sees state and the handoff hint; the write path rejects the retail scope at the API, not just the UI."
+        }
+      ],
+      "transitions": [
+        {
+          "author": "kenji",
+          "date": "2026-08-04",
+          "to": "In Progress"
+        },
+        {
+          "author": "kenji",
+          "date": "2026-08-08",
+          "to": "In Review"
+        }
+      ],
+      "arc": {
+        "pattern": "filler",
+        "role": "channel-scope texture: who can see versus who can change; part of the F22 2nd-instance wrong-audience complex (retail read-only view; care owns the change); the enterprise-vs-consumer split here resolves to ROAM-273's handoff wording"
+      },
+      "adjudication_role": "distractor_current"
+    },
+    {
+      "key": "ROAM-302",
+      "ordinal": 37,
+      "project": "ROAM",
+      "summary": "Duplicate audit rows from double-submitted allowance changes",
+      "issuetype": "Incident",
+      "status": "Done",
+      "resolution": "Done",
+      "priority": "Medium",
+      "created": "2026-08-02",
+      "updated": "2026-08-07",
+      "reporter": "samir",
+      "assignee": "kenji",
+      "labels": [
+        "carrier-control",
+        "analytics"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [
+        {
+          "name": "Care 2026.08"
+        }
+      ],
+      "description": "Three allowance changes in early August produced two identical audit rows each. The line state is correct — the write is idempotent — but duplicate rows pollute the paired-event check from ROAM-268.\n\nRoot cause\nDouble-click on the confirmation control submitted twice before the button disabled. The second write was a no-op but still logged.",
+      "comments": [
+        {
+          "author": "kenji",
+          "body": "Button now disables on first press and the API dedupes on the confirmation reference. No-op writes stop logging."
+        },
+        {
+          "author": "samir",
+          "body": "Backfilled the three affected contacts — each keeps one row, flagged with a dedupe marker for the record."
+        },
+        {
+          "author": "lauren",
+          "body": "ROAM-268's check stayed quiet through this, correctly: the duplicate rows all carried their references, so nothing looked unpaired. Good failure to have, as failures go."
+        },
+        {
+          "author": "kenji",
+          "body": "Deployed August 6. Telemetry clean since."
+        },
+        {
+          "author": "samir",
+          "body": "Closing. Double-submits never produced duplicate line writes, only duplicate rows, so repeat-contact analysis stays trustworthy."
+        }
+      ],
+      "transitions": [
+        {
+          "author": "kenji",
+          "date": "2026-08-03",
+          "to": "In Progress"
+        },
+        {
+          "author": "samir",
+          "date": "2026-08-07",
+          "to": "Done"
+        }
+      ],
+      "arc": {
+        "pattern": "filler",
+        "role": "recent-incident texture keeping the audit machinery lived-in near the snapshot date"
+      },
+      "adjudication_role": "distractor_closed"
+    },
+    {
+      "key": "CARE-587",
+      "ordinal": 38,
+      "project": "CARE",
+      "summary": "Archive the spring travel FAQ variants",
+      "issuetype": "Task",
+      "status": "Done",
+      "resolution": "Done",
+      "priority": "Low",
+      "created": "2026-07-01",
+      "updated": "2026-07-21",
+      "reporter": "owen",
+      "assignee": "tessa",
+      "labels": [
+        "content",
+        "travel"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [],
+      "description": "Three spring-season FAQ variants are still live and outrank the current travel content in internal search. Archive them and add redirects before the summer peak.\n\nNotes\nOne variant predates the Traveler Pack retirement and answers the cost question wrong for the current world; it goes first.",
+      "comments": [
+        {
+          "author": "tessa",
+          "body": "Redirects staged. The pre-retirement variant is archived as of today — that one was actively harmful in search."
+        },
+        {
+          "author": "owen",
+          "body": "Internal search now surfaces the current travel article first for the top ten travel queries."
+        },
+        {
+          "author": "tessa",
+          "body": "Remaining two variants archived with the July content batch."
+        },
+        {
+          "author": "owen",
+          "body": "Done. Search telemetry holding; no orphaned links from the care console."
+        }
+      ],
+      "transitions": [
+        {
+          "author": "tessa",
+          "date": "2026-07-06",
+          "to": "In Progress"
+        },
+        {
+          "author": "owen",
+          "date": "2026-07-21",
+          "to": "Done"
+        }
+      ],
+      "arc": {
+        "pattern": "A-support",
+        "role": "small supersession-hygiene record; the outdated cost answer is retired by dated archive action, never stamped"
+      },
+      "adjudication_role": "distractor_closed"
+    },
+    {
+      "key": "CARE-598",
+      "ordinal": 39,
+      "project": "CARE",
+      "summary": "Coaching module: carrier-side changes in travel care",
+      "issuetype": "Task",
+      "status": "Done",
+      "resolution": "Done",
+      "priority": "High",
+      "created": "2026-07-08",
+      "updated": "2026-07-28",
+      "reporter": "priya",
+      "assignee": "owen",
+      "labels": [
+        "care-flow",
+        "consent",
+        "qa"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [],
+      "description": "Build the August coaching module for carrier-side changes in abroad-data contacts: which contacts the module covers, who runs it, and how completion feeds QA.\n\nSource material\nThe module teaches from the approved story record and the compliance replay outcomes rather than restating rules in its own words — trainees should learn where the wording lives, not memorize a paraphrase that drifts.\n\nRollout\nTwo cohorts ahead of the August release window, a make-up session for stragglers, and weekly completion reporting into QA calibration.",
+      "comments": [
+        {
+          "author": "owen",
+          "body": "Draft structure: three recorded contacts from the replay archive, stepped through with the console visible. Trainees mark where each contact tracked the released interaction and where it drifted."
+        },
+        {
+          "author": "priya",
+          "body": "Script the walkthrough from the compliance replay patterns rather than waiting for live examples — the patterns are predictable enough to teach ahead of them showing up."
+        },
+        {
+          "author": "lauren",
+          "body": "Reviewed. Keep the module pointing at the story record for wording. The replay outcomes carry the lesson better than any slide paraphrase would."
+        },
+        {
+          "author": "owen",
+          "date": "2026-07-20",
+          "body": "Module recorded; the first cohort runs this week."
+        },
+        {
+          "author": "priya",
+          "date": "2026-07-26",
+          "body": "First two cohorts through. Completion is at 84 percent, with the stragglers booked into next week's make-up session; facilitator notes are attached for calibration."
+        },
+        {
+          "author": "owen",
+          "date": "2026-07-28",
+          "body": "Done. Completion tracking hands off to QA calibration. The stale-fee quotes from the ROAM-229 post-release check stay on the copy track, not in this module — different failure, different fix."
+        }
+      ],
+      "transitions": [
+        {
+          "author": "owen",
+          "date": "2026-07-10",
+          "to": "In Progress"
+        },
+        {
+          "author": "priya",
+          "date": "2026-07-28",
+          "to": "Done"
+        }
+      ],
+      "arc": {
+        "pattern": "B-support",
+        "role": "A3 shell — carrier-side coaching module scoped to logistics and sourcing; deliberately does not state the confirmation gate; teaches from the story record so the absence reads as source discipline, not a gap"
+      },
+      "adjudication_role": "supporting_current"
+    },
+    {
+      "key": "CARE-604",
+      "ordinal": 40,
+      "project": "CARE",
+      "summary": "Travel-notice banner in the care console header",
+      "issuetype": "Improvement",
+      "status": "Done",
+      "resolution": "Done",
+      "priority": "Medium",
+      "created": "2026-07-14",
+      "updated": "2026-08-01",
+      "reporter": "elena",
+      "assignee": "kenji",
+      "labels": [
+        "care-flow",
+        "travel-care"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [
+        {
+          "name": "Care 2026.08"
+        }
+      ],
+      "description": "Show a banner in the console header when the account has an active travel notice, so agents stop discovering mid-contact that the customer is abroad.\n\nAcceptance criteria\nBanner shows destination and trip window from the notice. It is informational only: it triggers nothing, pre-fills nothing, and is not an input to any change flow.",
+      "comments": [
+        {
+          "author": "kenji",
+          "body": "Banner reads from the notice service; no line data involved."
+        },
+        {
+          "author": "elena",
+          "body": "Copy review: banner says 'Travel notice on file' with the dates — deliberately not 'roaming requested' or anything that smells like intent."
+        },
+        {
+          "author": "lauren",
+          "body": "Good instinct on the copy. Nothing in the console should present a travel notice as if it authorized anything."
+        },
+        {
+          "author": "kenji",
+          "body": "Shipped with the August release. Banner is display-only, verified no downstream reads."
+        },
+        {
+          "author": "elena",
+          "body": "Agent feedback positive — the abroad context lands at contact start instead of minute four."
+        },
+        {
+          "author": "priya",
+          "body": "Closing note: the banner is context; the contact is still where the actual work happens."
+        }
+      ],
+      "transitions": [
+        {
+          "author": "kenji",
+          "date": "2026-07-16",
+          "to": "In Progress"
+        },
+        {
+          "author": "elena",
+          "date": "2026-08-01",
+          "to": "Done"
+        }
+      ],
+      "arc": {
+        "pattern": "D-support",
+        "role": "post-rejection hygiene: the travel notice becomes visible context while explicitly not becoming consent"
+      },
+      "adjudication_role": "supporting_current"
+    },
+    {
+      "key": "CARE-613",
+      "ordinal": 41,
+      "project": "CARE",
+      "summary": "A/B test two openings for abroad-data chat contacts",
+      "issuetype": "Experiment",
+      "status": "In Progress",
+      "resolution": null,
+      "priority": "Low",
+      "created": "2026-07-23",
+      "updated": "2026-08-08",
+      "reporter": "owen",
+      "assignee": "diego",
+      "labels": [
+        "care-flow",
+        "analytics",
+        "travel"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [],
+      "description": "Test whether opening abroad-data chats by confirming the country first ('Where are you right now?') beats opening with the symptom ('What's the data doing?') on handle time and first-step accuracy.\n\nNotes\nBoth arms run the identical workflow after the opening; only the first agent message differs.",
+      "comments": [
+        {
+          "author": "diego",
+          "body": "Arms live since July 28, split by contact id parity. Nothing in either arm changes any step ordering."
+        },
+        {
+          "author": "owen",
+          "body": "Early anecdote: country-first surfaces the occasional 'actually I'm on a plane' before any cellular step gets wasted on an airline Wi-Fi case."
+        },
+        {
+          "author": "diego",
+          "body": "Interim read August 6: country-first is 40 seconds faster on median handle, driven mostly by fewer mid-chat pivots."
+        },
+        {
+          "author": "owen",
+          "body": "Holding for the full sample before any rollout call; the novelty effect argument applies to both arms equally."
+        }
+      ],
+      "transitions": [
+        {
+          "author": "diego",
+          "date": "2026-07-28",
+          "to": "In Progress"
+        }
+      ],
+      "arc": {
+        "pattern": "filler",
+        "role": "experiment texture; the airline Wi-Fi anecdote nods at the CARE-623 scope split that case F walks"
+      },
+      "adjudication_role": "distractor_current"
+    },
+    {
+      "key": "CARE-620",
+      "ordinal": 42,
+      "project": "CARE",
+      "summary": "Route working-but-slow abroad cases to the travel desk after the roaming check",
+      "issuetype": "Spike",
+      "status": "Closed",
+      "resolution": "Rejected",
+      "priority": "Medium",
+      "created": "2026-07-25",
+      "updated": "2026-08-04",
+      "reporter": "owen",
+      "assignee": "maya",
+      "labels": [
+        "queue-design",
+        "routing",
+        "travel-care"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [],
+      "description": "Queue-design proposal: once both roaming layers check out, cases that still run slow abroad would move to a dedicated travel desk instead of continuing in the general flow.\n\nBackground\nThe pitch is specialization — abroad slowness sometimes involves partner-network quirks, and a travel desk could build pattern knowledge. The counterargument is that the disposition for this exact shape was already settled with the routing work and is not open for queue design.",
+      "comments": [
+        {
+          "author": "maya",
+          "body": "Context before we spend a week here: the slow-after-roaming disposition was settled in the July routing review and is drawn into the October revision of the recovery map. A dedicated desk would be a second answer to a question that already has one."
+        },
+        {
+          "author": "owen",
+          "body": "The specialization argument only pays if abroad-slow cases resolve differently from domestic-slow ones. Pulling the July numbers."
+        },
+        {
+          "author": "maya",
+          "body": "July data: four of five abroad-slow cases closed on ordinary, non-travel-specific culprits; nothing a specialist desk would have caught. The partner-quirk remainder already has the incident path, see the Alpine ticket."
+        },
+        {
+          "author": "owen",
+          "body": "That kills the volume case. A desk that mostly re-runs the ordinary checks is a queue with extra steps."
+        },
+        {
+          "author": "maya",
+          "body": "Rejecting: the disposition for working-but-slow after the roaming check is already decided, and a separate desk is not part of it. Specialization did not survive the July numbers."
+        },
+        {
+          "author": "jonah",
+          "body": "Agreed and noted for the routing docs: no new queue, no transfer step. Closing."
+        }
+      ],
+      "transitions": [
+        {
+          "author": "maya",
+          "date": "2026-07-28",
+          "to": "In Progress"
+        },
+        {
+          "author": "jonah",
+          "date": "2026-08-04",
+          "to": "Closed"
+        }
+      ],
+      "arc": {
+        "pattern": "D",
+        "role": "dead queue-design proposal; client overlay: carries the paired half of the stale-stamp mechanism — references the October revision of the recovery map for the slow-after-roaming disposition without stating it"
+      },
+      "adjudication_role": "rejected"
+    },
+    {
+      "key": "CARE-631",
+      "ordinal": 43,
+      "project": "CARE",
+      "summary": "Quiet-hours guardrail for travel follow-up messages",
+      "issuetype": "Task",
+      "status": "Open",
+      "resolution": null,
+      "priority": "Low",
+      "created": "2026-07-28",
+      "updated": "2026-08-06",
+      "reporter": "elena",
+      "assignee": null,
+      "labels": [
+        "sms",
+        "travel",
+        "care-flow"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [],
+      "description": "Follow-up messages after travel-care contacts send on the account's home-timezone schedule, which lands at 3 a.m. for customers nine zones away.\n\nProposal\nWhen an active travel notice gives a destination, shift follow-up sends into that destination's daytime window. No content changes, timing only.",
+      "comments": [
+        {
+          "author": "owen",
+          "body": "Scoping note: this reads the travel notice for a timezone, nothing else — no overlap with any enablement logic."
+        },
+        {
+          "author": "elena",
+          "body": "Two complaints this month from overnight sends; small but real."
+        },
+        {
+          "author": "diego",
+          "body": "Backlog for September unless the complaint rate moves. August window is full."
+        },
+        {
+          "author": "elena",
+          "body": "Acceptable. Leaving open with the September tag."
+        }
+      ],
+      "transitions": [],
+      "arc": {
+        "pattern": "filler",
+        "role": "open-backlog texture; another legitimate, clearly-scoped read of the travel notice"
+      },
+      "adjudication_role": "distractor_current"
+    },
+    {
+      "key": "CARE-637",
+      "ordinal": 44,
+      "project": "CARE",
+      "summary": "Speed-test deep link broken in the abroad-data chat macro",
+      "issuetype": "Incident",
+      "status": "Done",
+      "resolution": "Done",
+      "priority": "High",
+      "created": "2026-07-30",
+      "updated": "2026-08-05",
+      "reporter": "nia",
+      "assignee": "diego",
+      "labels": [
+        "care-flow",
+        "outage",
+        "travel-care"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [
+        {
+          "name": "Care 2026.08"
+        }
+      ],
+      "description": "The chat macro that sends customers the speed-test link shipped with a stale URL in the August release candidate. Agents fell back to describing the test verbally, which works but loses the structured result.\n\nImpact window\nJuly 30 to August 1, chat channel only. Phone contacts unaffected.",
+      "comments": [
+        {
+          "author": "diego",
+          "body": "Stale URL came from the macro refresh in the copy sweep — the link was updated everywhere except the chat variant."
+        },
+        {
+          "author": "nia",
+          "body": "For the affected window: agents still ran the retest step, just with self-reported numbers. The observed-result gate held, only the tooling wobbled."
+        },
+        {
+          "author": "diego",
+          "body": "Fixed link deployed August 1. Added the chat macro to the link-check that already covers help articles."
+        },
+        {
+          "author": "nia",
+          "body": "Verified in production chat. Closing after the weekend soak."
+        },
+        {
+          "author": "diego",
+          "body": "Soak clean. Done."
+        }
+      ],
+      "transitions": [
+        {
+          "author": "diego",
+          "date": "2026-07-30",
+          "to": "In Progress"
+        },
+        {
+          "author": "nia",
+          "date": "2026-08-05",
+          "to": "Done"
+        }
+      ],
+      "arc": {
+        "pattern": "filler",
+        "role": "incident texture around the speed-test tooling; explicitly notes the retest gate itself never changed"
+      },
+      "adjudication_role": "distractor_closed"
+    },
+    {
+      "key": "CARE-649",
+      "ordinal": 45,
+      "project": "CARE",
+      "summary": "Fold roaming coaching outcomes into August QA calibration",
+      "issuetype": "Task",
+      "status": "In Progress",
+      "resolution": null,
+      "priority": "Medium",
+      "created": "2026-08-02",
+      "updated": "2026-08-08",
+      "reporter": "priya",
+      "assignee": "owen",
+      "labels": [
+        "qa",
+        "calibration",
+        "care-flow"
+      ],
+      "components": [
+        {
+          "name": "Travel Care"
+        }
+      ],
+      "fixVersions": [],
+      "description": "August QA calibration should score abroad-data contacts against the same anchors the coaching module teaches: the explanation, the carrier-side interaction, and the retest after an enablement.\n\nNotes\nCalibration cases come from real July contacts, anonymized. Reviewers must land within one band of each other on the anchor moments before scoring live August contacts.",
+      "comments": [
+        {
+          "author": "owen",
+          "body": "Calibration set drafted: six contacts, including one clean enablement, one contested carrier-side moment, and one where the agent correctly left a suspended line untouched."
+        },
+        {
+          "author": "priya",
+          "body": "Reviewer dry run Thursday. The suspended-line case is the one people argue about — which is exactly why it's in the set."
+        },
+        {
+          "author": "owen",
+          "body": "Dry run done: agreement within one band on five of six. The disagreement was on tone, not on the anchor moments, which all scored identically."
+        },
+        {
+          "author": "priya",
+          "body": "Good enough to go live for August scoring. Completion tracking from the coaching module lands here weekly."
+        },
+        {
+          "author": "owen",
+          "body": "From the dry-run parking lot — a case we didn't have in the set: if the allowance was already on, do we still ask for a fresh rerun before moving on? Not covered in my references."
+        },
+        {
+          "author": "priya",
+          "body": "Yes — fresh rerun after every carrier-side step, allowance change or not; the rerun is how we judge what the step actually did. I am adding a no-change case to the calibration set so this stops living in parking lots."
+        }
+      ],
+      "transitions": [
+        {
+          "author": "owen",
+          "date": "2026-08-04",
+          "to": "In Progress"
+        }
+      ],
+      "arc": {
+        "pattern": "F",
+        "role": "closing-the-loop texture; the calibration anchors echo the workflow's gates in paraphrase; the dry-run boundary question (fresh rerun when the allowance was already on) is answered in-thread by priya — kit carriage of the restored rerun_speed_test_after_carrier_step"
+      },
+      "adjudication_role": "supporting_current"
+    }
+  ]
+}

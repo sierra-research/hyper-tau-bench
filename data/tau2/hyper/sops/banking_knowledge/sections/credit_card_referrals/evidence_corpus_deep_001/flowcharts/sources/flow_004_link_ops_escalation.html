@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Link operations — escalation lanes</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Segoe UI",Arial,sans-serif;background:#f2f4f7;width:1720px;padding:26px}
+.head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.head h1{font-size:22px;color:#132c49}
+.head .meta{font-size:12.5px;color:#6b7a8a}
+.board{display:grid;grid-template-columns:1fr 1fr 1fr;gap:26px;margin-top:16px}
+.lane{background:#fff;border:1px solid #dfe4ea;border-radius:10px;padding:18px}
+.lane h2{font-size:13px;letter-spacing:.8px;text-transform:uppercase;color:#5a6b7d;margin-bottom:14px}
+.box{border:2px solid #2f6fb8;border-radius:8px;padding:11px 14px;font-size:13.5px;color:#22303e;margin:0 auto 8px;max-width:440px;background:#f6faff;position:relative}
+.box.start{border-color:#1e7a44;background:#effaf2;border-radius:22px}
+.box.decide{border-color:#8a6d1c;background:#fdf9ec}
+.box.stop{border-color:#a62424;background:#fdf1f1;border-radius:22px}
+.chip{position:absolute;top:-9px;right:-9px;background:#132c49;color:#fff;font-size:10.5px;border-radius:9px;padding:2px 8px;letter-spacing:.5px}
+.cite{display:block;font-size:11px;color:#5a6b7d;margin-top:5px}
+.arrow{text-align:center;color:#8296ab;font-size:15px;margin:2px 0 8px}
+.lbl{display:block;text-align:center;font-size:11px;color:#8a94a0;margin-bottom:2px}
+.legend{margin-top:22px;background:#fff;border:1px solid #dfe4ea;border-radius:10px;padding:14px 18px;font-size:12px;color:#5a6b7d;max-width:900px}
+.legend b{color:#22303e}
+.foot{margin-top:14px;font-size:11.5px;color:#7c8b9b}
+</style></head><body>
+<div class="head"><h1>Link operations — escalation lanes, card referrals</h1>
+<div class="meta">Published 2025-11-06 &middot; Owner: B. Campos, support tooling &middot; card-services-console runbook</div></div>
+<div class="board">
+<div class="lane"><h2>Intake</h2>
+<div class="box start"><span class="chip">N01</span>Referral contact reaches the queue (routed or direct)</div>
+<div class="arrow">&darr;</div>
+<div class="box"><span class="chip">N02</span>Identity and account check<span class="cite">standard two-factor before any row is read</span></div>
+<div class="arrow">&darr;</div>
+<div class="box"><span class="chip">N03</span>Program lookup on the named card<span class="cite">read the program directory row: code, governing record, window</span></div>
+<div class="arrow">&darr;</div>
+<div class="box decide"><span class="chip">N04</span>Link guidance in scope on this contact?<span class="cite">handout grammar per CON-REFOPS-2; screening result decides</span></div>
+</div>
+<div class="lane"><h2>Outcomes</h2>
+<div class="box"><span class="chip">N05</span>Declines and denials: reason captured on the case<span class="cite">denial reason from the FLD-534 rows; note which row was read</span></div>
+<div class="arrow">&darr;</div>
+<div class="box decide"><span class="chip">N06</span>Tooling error on a live contact?<span class="cite">active-incident path only: MAC-REF-219 wording while a banner is up</span></div>
+<div class="arrow"><span class="lbl">business account</span>&darr;</div>
+<div class="box"><span class="chip">N07</span>Business-desk handoff with context attached<span class="cite">clock per SLA-REF-BIZ</span></div>
+</div>
+<div class="lane"><h2>Records</h2>
+<div class="box"><span class="chip">N08</span>Case write-back: program code, sources read, outcome<span class="cite">codes cite rows; rows cite records — cases never restate either</span></div>
+<div class="arrow">&darr;</div>
+<div class="box stop"><span class="chip">N09</span>Close; review-feed items land in the weekly queue<span class="cite">VIEW-REF-NOV picks up flagged denials and label mismatches</span></div>
+</div>
+</div>
+<div class="legend"><b>Reading this board.</b> Numbered stations are cited in case notes and channel threads by station id. The board says where a thing is decided or written down, never what the decision is: program terms live in the record the directory row names, status meanings live in the in-app legend, and denial vocabulary is the console's own field. If a station and a record ever disagree, the record wins and the board gets fixed.</div>
+<div class="foot">card-services-console runbook export &middot; station ids are stable references for case notes</div>
+</body></html>

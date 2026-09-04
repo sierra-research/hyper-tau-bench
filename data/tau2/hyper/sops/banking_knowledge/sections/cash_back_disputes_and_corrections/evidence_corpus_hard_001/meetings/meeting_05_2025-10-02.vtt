@@ -1,0 +1,290 @@
+WEBVTT
+
+00:00:04.800 --> 00:00:28.219
+<v Priya Raman>Full house today, good. Welcome to October, everyone. Big agenda: Marcus has the sample on the expected-value field, which decides how I decide the rev B question. Then the rounding thread, which refuses to die. Then Grace has an EcoCard one. Then calibration logistics and the usual housekeeping. Dan, you're back — how was Charlotte?
+
+00:00:28.627 --> 00:00:30.666
+<v Dan Kowalski>Certified. Humbled. There's a binder.
+
+00:00:33.048 --> 00:00:34.846
+<v Alicia Fuentes>We've seen the binder.
+
+00:00:35.871 --> 00:00:41.290
+<v Dan Kowalski>You've seen photos of the binder. In person it has a gravity.
+
+00:00:44.092 --> 00:00:57.431
+<v Priya Raman>The binder can visit the next sync. First, one piece of actual good news, because we earn so little of it: Alicia, the KB. Confirm for the record.
+
+00:00:58.526 --> 00:01:23.675
+<v Alicia Fuentes>Published! KB-2205, the real one, live as of Tuesday morning. The refresh went out on the thirtieth as promised, the old revision retired the same day and archived with the retired-on stamp in the header, exactly like the process said it would. I checked at nine a.m. like I threatened to, and then I checked again at noon because trust is a journey.
+
+00:01:24.054 --> 00:01:39.313
+<v Grace Liu>And the floor noticed — I had two agents link it in case notes by Wednesday. Correctly, even, with the revision visible in the link title. Tunde's little citation crusade is working.
+
+00:01:39.995 --> 00:02:08.158
+<v Priya Raman>Send Tunde that, he'll frame it. Okay. Quarter numbers next sync as always, but headline for today: September closed at two thirty-one, down slightly from August's two forty-six, and October is the month we watch whether the KB moves the points-confusion pile specifically. Grace has the tag running, so by the November sync we'll have a before-and-after that means something.
+
+00:02:08.732 --> 00:02:18.024
+<v Grace Liu>The tag's been on since August, so we'll have a clean comparison. My guess is it halves. My hope is better than halves.
+
+00:02:18.457 --> 00:02:25.974
+<v Priya Raman>On the record, both. Marcus, the sample. Floor's yours, take the time you need, this one matters.
+
+00:02:26.347 --> 00:03:09.830
+<v Marcus Webb>All right. Setup first, so the numbers mean something. I pulled three hundred resolved disputes, all cash-back rate disputes, closed between April and September. For each record I looked at three things: is the expected-rewards field on the dispute filled in at all; if filled, does it match what a fresh recomputation gives from the card, the merchant category as processed, and any promotion live at purchase; and if it doesn't match, which way is it wrong. I'll share the tally sheet — one moment.
+
+00:03:10.900 --> 00:03:14.416
+[Marcus shares a tally spreadsheet.]
+
+00:04:39.710 --> 00:05:17.026
+<v Marcus Webb>Top line, three numbers. Blank: ninety-one of three hundred. That's just about thirty percent — no value in the field at all, nothing for a flow to read. Filled and matching the recomputation: one hundred twenty-six, so about forty-two percent. Filled and wrong: eighty-three. Twenty-eight percent. And I want to be precise about what wrong means here — wrong against the recomputation, where the recomputation follows the published rates and the promo terms for the purchase date.
+
+00:05:17.383 --> 00:05:22.205
+<v Dan Kowalski>So better than a coin flip but nowhere near postable.
+
+00:05:22.715 --> 00:05:52.737
+<v Marcus Webb>Right, and the direction is the damning part. Of the eighty-three wrong ones, seventy-seven are wrong high — the field claims more than the math supports. Which is what you'd expect once you remember who fills it in. And the clustering matches what Grace predicted in September: the wrong-high cases pile up on the exclusions merchants and the promo-window accounts. It's not noise. It's exactly the hard cases.
+
+00:05:53.052 --> 00:06:25.363
+<v Grace Liu>And my companion pull agrees. I took August and September promo-window disputes specifically — forty-one of them. In thirty of those, the customer's expected number assumed the doubling applied somewhere it doesn't, or assumed the bonus rate at an excluded merchant. If a flow had posted those fields as given, we'd have overpaid on thirty of forty-one. That's not a tail you catch with a spot check, that's the body.
+
+00:06:25.566 --> 00:06:36.817
+<v Dan Kowalski>Marcus, the six that were wrong low — you said seventy-seven of eighty-three were wrong high. Who under-claims? I'm curious what that customer looks like.
+
+00:06:38.033 --> 00:07:02.875
+<v Marcus Webb>I read all six. Five of them are promo-window accounts where the customer didn't know the doubling applied — they computed the ordinary rate, disputed some unrelated posting hiccup, and their expected number is actually less than what they're owed. The sixth just misplaced a decimal in their favorite direction, which is to say, against themselves.
+
+00:07:03.845 --> 00:07:26.826
+<v Grace Liu>And those five are the quiet argument nobody makes for the recompute. A flow that posts the field wouldn't just overpay the confident people — it would underpay the timid ones. The recompute fixes both directions. It's not about defending the bank's money, it's that the published rates are the deal, whichever way the field is wrong.
+
+00:07:28.328 --> 00:07:38.612
+<v Dan Kowalski>That reframe is going straight into training, by the way. "The published rate is the deal, both directions." That's the sentence.
+
+00:07:38.736 --> 00:07:49.830
+<v Alicia Fuentes>Practical question while we're here, because it bears on my dead speed argument. What does a recompute actually cost in minutes? When Katya did her week-two correction, how long?
+
+00:07:50.329 --> 00:08:17.520
+<v Grace Liu>With the rates in front of you, ten to fifteen minutes, most of which is confirming what category the charge actually processed under and which promo terms were live on the purchase date. The arithmetic itself is one line. The promo lookup is the slow part, which is why Marcus's crib sheet requirement from last month matters more than the arrow, almost.
+
+00:08:18.551 --> 00:08:34.881
+<v Alicia Fuentes>So if someone made the promo terms one click from the case view, the slow-and-right path gets meaningfully faster without touching the arrow at all. Okay. I'm redirecting my energy there. That's a page problem, and page problems I can actually win.
+
+00:08:35.332 --> 00:09:10.184
+<v Alicia Fuentes>Okay. I want it noted that I asked for the count, so in a sense this is my data too, and my data has betrayed me. But before I fully fold: is there a version where the field survives as a cross-check instead of a source? Flow recomputes, and if the recomputation happens to match the field, fine, and if it disagrees, the case note has to say why. Because the disagreement is signal — it's exactly the thing the customer needs explained in the reply.
+
+00:09:11.965 --> 00:09:40.717
+<v Marcus Webb>As a documentation habit I like that, for what it's worth. As a gate I don't — if the note has to argue with the field every time the field is fantasy, you've built a permanent tax paid to a number nobody validated. But recompute-first, then explain the delta to the customer? That's just... good correspondence.
+
+00:09:41.306 --> 00:09:52.307
+<v Grace Liu>That's how my best agents already write the replies, honestly. Here's what you expected, here's the published rate that applies, here's the arithmetic, here's the difference.
+
+00:09:52.930 --> 00:10:24.560
+<v Priya Raman>All right. I have what I need. For the recording: I'm not deciding in this meeting, deliberately — I said the decision comes in writing and it will. But I'll say the shape out loud so nobody's surprised: the sample kills posting the field, and something recompute-shaped replaces that arrow. Expect my note within two weeks, with the revised diagram attached, and expect the revision letter to move — the draft everyone's marked up stays B, the corrected one won't be.
+
+00:10:26.247 --> 00:10:40.145
+<v Marcus Webb>And when the note lands, my team wires nothing until the diagram it references is actually on the board. Learned that lesson on the fee flows.
+
+00:10:40.268 --> 00:10:49.189
+<v Priya Raman>Correct, and the note will say effective-when, explicitly, with a date. Okay. Rounding. Alicia, you kicked this back awake, go.
+
+00:10:49.620 --> 00:11:14.824
+<v Dan Kowalski>Actually — thirty seconds before rounding, while the tally's still up. Grace, the reply shape for the delta cases. When the recompute disagrees with what the customer expected, what your best agents write. I want to nail the skeleton now, because whatever Priya decides, that reply gets written a thousand times next year. I'm pasting a candidate in the chat.
+
+00:11:15.489 --> 00:11:18.706
+[Dan pastes a draft reply skeleton into the meeting chat; the group reads it.]
+
+00:12:11.518 --> 00:12:35.538
+<v Grace Liu>Reading it... yes, mostly. Your step two says "state the applicable rate." I'd make it "quote the applicable rate from the published page, with the link" — the agent voice shouldn't be the source, the page should. Customers accept a page they can click; they argue with a sentence an agent typed.
+
+00:12:35.896 --> 00:12:47.140
+<v Dan Kowalski>Good, taking that. And step four, the sign-off — too apologetic? It concedes an error before the math has shown one either way.
+
+00:12:47.959 --> 00:13:03.949
+<v Grace Liu>Swap "we apologize for the confusion" for "thanks for flagging this so we could walk through it." An apology belongs only in the cases where we actually got it wrong, and then it should be a real one.
+
+00:13:05.213 --> 00:13:15.329
+<v Alicia Fuentes>Agreed, and the skeleton should say that explicitly — conditional apology, real when earned. Customers can smell a reflex apology from orbit.
+
+00:13:15.575 --> 00:13:19.320
+<v Dan Kowalski>Skeleton updated. That's all I needed, back to rounding.
+
+00:13:19.473 --> 00:14:04.640
+<v Alicia Fuentes>I did, because the FAQ refresh is stuck behind it. So, the earn-math FAQ has a question — "why is my cash back a whole number when my math has decimals" — which is a great question, our customers wrote it for us repeatedly, some of them with screenshots and one of them with, genuinely, a slide. And my draft answer currently says: rewards are rounded to the nearest whole point. And before anyone — I know. I wrote it months ago, before the August cases, and it's sitting in the draft like a landmine, which is why I'm bringing it here instead of shipping it.
+
+00:14:05.680 --> 00:14:57.311
+<v Marcus Webb>I'm glad you didn't ship it, because I can now say slightly more than last month, with the same disclaimer. I've traced four of the five card-program branches in the accrual job. In the four I've read, the fractional remainder at the end of the nightly computation is not rounded to nearest anywhere I can find — what I see is consistent with the fraction simply being dropped. But branch five is the oldest code in the file, it handles two of the card programs through a shared path, and I've been pulled onto ATM claims twice in the last three weeks, so it's not done. I won't sign a customer-facing sentence off four branches out of five.
+
+00:14:57.723 --> 00:15:07.644
+<v Alicia Fuentes>Which I respect, but the FAQ has been "coming soon" since July and the queue keeps generating exactly this call. When?
+
+00:15:08.029 --> 00:15:48.191
+<v Dan Kowalski>Can I make a proposal that actually closes this? The Q4 calibration is in two weeks — October sixteenth. Rewards math is already the headline block; Grace's shortlist is basically fractions and exclusions with a promo garnish. Let me do it properly there: worked examples on real amounts, everyone grading the same cases the same way, and the wording for customers agreed in the room, with Marcus's final branch read in hand by then. Then the FAQ line gets written from the calibration wording, not the other way around. One session, one agreed sentence, everything downstream copies it.
+
+00:15:48.685 --> 00:15:56.623
+<v Marcus Webb>Two weeks is enough to finish branch five, ATM permitting. I'll commit to having it read by the fifteenth.
+
+00:15:56.873 --> 00:16:33.330
+<v Grace Liu>While we're sizing it — the fraction complaints are eleven since July now, for scale. All the same anatomy: customer's arithmetic lands on a decimal, statement shows the whole number below it, customer wants the difference or an explanation. All eleven are holding on Divya's pending wording, and the wording is wearing thin — two customers have replied asking how long confirming takes. So the sixteenth isn't just a training date, it's the date eleven letters unblock.
+
+00:16:35.402 --> 00:17:07.507
+<v Dan Kowalski>Twelve, probably, by then. Which is honestly good for the session — I'd rather calibrate against a live pile than a hypothetical. And a preview, since everyone's here: the session opens with a pulse check on exactly this. A dollar amount, a rate, everyone types the points number they'd expect before anyone talks. I ran it in Charlotte with made-up numbers and the room split three ways, which is precisely the disease calibration treats.
+
+00:17:09.017 --> 00:17:12.880
+<v Alicia Fuentes>Are you going to tell us the answer today?
+
+00:17:13.545 --> 00:17:33.183
+<v Dan Kowalski>No. That's the whole mechanism — if I hand the room the answer today, the sixteenth measures nothing. Everyone comes in cold, everyone commits to a number in front of everyone, then we work it. Fourteen days of suspense builds character.
+
+00:17:34.728 --> 00:17:54.016
+<v Priya Raman>Then that's the plan: FAQ line comes out of the draft today, the question holds for calibration, nobody states a rounding rule to anyone before the sixteenth. Alicia, that includes the funny customer, who I know has a pending case.
+
+00:17:55.092 --> 00:18:00.312
+<v Alicia Fuentes>The half point knows what it did. Fine — pulled, held, agreed.
+
+00:18:00.824 --> 00:18:14.792
+<v Dan Kowalski>And the four pending fraction cases close the week after calibration with whatever wording the session lands on. I'll own those personally, they've waited long enough that they deserve a senior signature.
+
+00:18:15.693 --> 00:18:17.168
+<v Priya Raman>Good. Grace, EcoCard.
+
+00:18:17.537 --> 00:18:49.141
+<v Grace Liu>Yes. CB-2509-0310, and this one's more copy than math, but the math is why it landed in my queue. Customer has an EcoCard, bought a hundred-dollar monthly transit pass, and the app credited five hundred sustainability points. Which is correct — transit's one of the eco categories on the page, green rate applies, hundred dollars, five per dollar, five hundred points. No error anywhere.
+
+00:18:51.848 --> 00:18:53.779
+<v Dan Kowalski>So what's the dispute?
+
+00:18:54.384 --> 00:19:09.286
+<v Grace Liu>The dispute is the page. She went to check the rate and — I'm going to share the page because you have to see it. This is live, right now, on the EcoCard earning page.
+
+00:19:09.745 --> 00:19:12.686
+[Grace shares the EcoCard rewards page.]
+
+00:20:18.200 --> 00:20:49.196
+<v Grace Liu>The earn line. Read it. It says green purchases earn, quote, "$5.00 sustainability points per dollar." Dollar sign, five, decimal, zero zero. And the other line, same thing: "$1.00 sustainability points per dollar" on everything else. So she read that as five dollars per dollar, which would be a hundred percent cash back times five, and filed asking why her five hundred points weren't five hundred dollars.
+
+00:20:49.418 --> 00:21:00.879
+<v Alicia Fuentes>Oh no. The dollar signs are — yeah. That's ours. That formatting has been there since the card launched and I've walked past it a hundred times.
+
+00:21:01.289 --> 00:21:21.474
+<v Marcus Webb>To be fair to her, "$5.00 points" is not a unit that exists in any system I maintain. The stored value is five hundred, denominated in points, end of story. The dollar sign is purely a page decoration, and an actively hostile one.
+
+00:21:22.274 --> 00:21:44.336
+<v Grace Liu>And the worked example under it is fine, weirdly — it says a $100 purchase at a qualifying green merchant earns 100 times 5.00 points. If she'd read the example first, no case. She read the headline rate, like a normal human.
+
+00:21:44.655 --> 00:21:49.115
+<v Priya Raman>Alicia, is this a today fix or a committee fix?
+
+00:21:49.591 --> 00:22:32.765
+<v Alicia Fuentes>It's a — ugh, it's a middle fix. The page copy is mine to change, but the earn-rate phrasing on that page is mirrored from the product content system, so if I hot-patch the page, the next content sync steamrolls it. The right fix goes in at the source, which is a ticket to product content ops, which is... two weeks, optimistically. I'll file it today with the case id attached. In the meantime it's genuinely not wrong, it's just wearing a costume. The rates are right, the example is right.
+
+00:22:33.846 --> 00:22:51.447
+<v Priya Raman>File it, and Grace, close the case with the worked example — it's the one part of the page that says what it means. Which is its own lesson for the reply: quote the example, not the headline.
+
+00:22:55.257 --> 00:23:10.168
+<v Grace Liu>Already drafted exactly that. She gets the hundred-times-five line, her five hundred points are confirmed correct, and there's a sentence acknowledging the page formatting is being tidied so she doesn't think she misread.
+
+00:23:10.388 --> 00:23:46.605
+<v Grace Liu>One more EcoCard thing while the page is up, because an agent asked me this yesterday and I want a sanity check on where I sent him. Customer did a big haul at a garden center that isn't one of the certified green partners — soil, tools, and an EV charger cable in the same cart — and asked why the whole purchase earned at the lower rate when part of it was, arguably, green.
+
+00:23:47.057 --> 00:23:54.301
+<v Alicia Fuentes>The mixed cart thing. The page actually covers that one, doesn't it — further down, under the keep-it-separate tip.
+
+00:23:58.344 --> 00:24:36.386
+<v Grace Liu>It does, which is exactly where I sent him. The page's guidance, reading it: keep green and non-green purchases separate, because a cart that mixes them at a non-partner merchant may earn entirely at the non-green rate. The earn is by merchant and category, not by rummaging through the cart. So the agent's answer is the page's answer: purchase earned correctly, and the tip for next time is split the transaction or use a listed partner.
+
+00:24:36.732 --> 00:24:53.772
+<v Marcus Webb>And mechanically there's nothing to rummage with — the transaction arrives as one merchant, one amount, one category. Nobody sends us the receipt lines. The page tip isn't policy being stingy, it's the only thing the data can actually do.
+
+00:24:54.272 --> 00:25:03.969
+<v Dan Kowalski>That one goes in the training library too. The why-it-works explanation kills the argument better than the rule alone.
+
+00:25:04.708 --> 00:25:12.200
+<v Priya Raman>Good check, right answer. Alicia, the copy ticket covers that section too or just the earn line?
+
+00:25:13.144 --> 00:25:26.750
+<v Alicia Fuentes>The ticket's scoped to the dollar-sign costume. The mixed-cart tip is fine as written — honestly it's the best-written thing on that page, which is faint praise, but I'll take it.
+
+00:25:27.348 --> 00:25:40.012
+<v Dan Kowalski>Good reply shape. Validate first, then show the arithmetic, then the fix promise. I'll lift it for the training library with the numbers scrubbed.
+
+00:25:40.539 --> 00:25:43.059
+<v Priya Raman>Okay, calibration logistics, ten minutes. Dan.
+
+00:25:43.244 --> 00:26:21.018
+<v Dan Kowalski>Right. October sixteenth, ninety minutes, and unlike the spring one this is mandatory for everyone who grades or closes rewards cases — that's both QA analysts, the four class members, the senior agents on the disputes rota, and honestly this room. Format is the new certified format: short pulse checks where everyone answers before anyone discusses, then worked examples, then one full case walked end to end, then we agree the customer wording for the recurring situations. Recording on, for Tunde's records and for the two people who'll inevitably be out.
+
+00:26:21.720 --> 00:26:30.002
+<v Grace Liu>My shortlist went to you Monday. Fractions, the exclusions parade, one promo overlap, and one that's honestly just sad.
+
+00:26:35.318 --> 00:27:00.142
+<v Dan Kowalski>Got it, and it's a good list — I'm building the examples off real amounts from it, numbers people will actually see in the queue. I want the session to feel like Tuesday afternoon, not like a quiz about someone else's bank. Slides done by the fourteenth. Marcus, I'm holding a slot for your branch five verdict, five minutes, plain words.
+
+00:27:02.651 --> 00:27:28.439
+<v Priya Raman>Attendance mechanics, because Tunde asked formally: recording on, auto-transcript on, and an actual attendance list in the meeting notes — not "whoever's in the recording," a list. Dan, that's yours as host. And if any of the mandatory people can't make the sixteenth, they watch the recording and confirm to Dan in writing by end of that week; he keeps the confirmations with the training records.
+
+00:27:29.684 --> 00:27:52.732
+<v Dan Kowalski>Yes to all, and one conflict already: Omar's on the disputes rota that afternoon. I'd rather pull him into the session and backfill the rota with someone senior than have my most active closer learn the wording secondhand. Grace, can you cover the rota those ninety minutes?
+
+00:27:53.973 --> 00:27:58.727
+<v Grace Liu>I can. The queue survives ninety minutes of me.
+
+00:27:59.128 --> 00:28:01.852
+<v Marcus Webb>Five minutes, plain words, appropriately hedged.
+
+00:28:02.253 --> 00:28:10.078
+<v Dan Kowalski>Minimally hedged. It's a calibration, the entire point is that everyone leaves with the same answer.
+
+00:28:12.714 --> 00:28:17.444
+<v Priya Raman>He'll hedge in the footnotes. Housekeeping, quickly. Class status, thirty seconds.
+
+00:28:17.902 --> 00:28:40.345
+<v Dan Kowalski>Shadowing's done, all four are taking calls with training wheels. Katya drew a corrections case in week two, which went to Grace per the plan, and her write-up of it was cleaner than some veterans'. Bea's fast, Hugo asks the best questions, Wes needs another week before he touches anything Business Silver. Normal spread.
+
+00:28:40.773 --> 00:28:46.627
+<v Priya Raman>Good. ATM claims — Marcus, one line, since it keeps eating your calendar.
+
+00:28:47.425 --> 00:29:07.671
+<v Marcus Webb>One line: the migration kickoff was Monday, my team owns the data reconciliation track, and through November assume I'm half-time on anything rewards unless something's on fire. Branch five and the diagram wiring stay committed; everything else queues.
+
+00:29:07.912 --> 00:29:15.646
+<v Priya Raman>Understood, and flagged for capacity planning. Dashboard export slowness — Alicia, you raised it, still slow?
+
+00:29:16.309 --> 00:29:35.225
+<v Alicia Fuentes>Still slow, still survivable, still on Marcus's everything-else queue apparently. It takes forty seconds to spit out a csv that used to take five. I've adapted by starting the export and then having a small existential moment while it runs.
+
+00:29:37.272 --> 00:29:45.663
+<v Marcus Webb>That's the compression change from the cutover, we know the cause, and it's queued behind, well, everything I just said.
+
+00:29:46.948 --> 00:30:06.640
+<v Priya Raman>November problem, then. Holiday schedule previews go out next sync — start thinking about who wants Thanksgiving week versus the New Year stretch, and remember the promo ends mid-November, so that week is all hands regardless. Details in two weeks.
+
+00:30:07.085 --> 00:30:08.083
+<v Dan Kowalski>Ominous.
+
+00:30:08.550 --> 00:30:10.244
+<v Priya Raman>Prepared.
+
+00:30:11.217 --> 00:30:26.346
+<v Alicia Fuentes>Can I pre-register that I had Thanksgiving last year and therefore have moral seniority for the New Year stretch? I have receipts. I have a photo of me at this desk eating a sad little turkey sandwich.
+
+00:30:26.698 --> 00:30:34.880
+<v Grace Liu>You sent that photo to the channel with the caption "living the dream." That undercuts the sadness claim considerably.
+
+00:30:35.421 --> 00:30:38.615
+<v Alicia Fuentes>The caption was ironic. The sandwich was sincere.
+
+00:30:42.945 --> 00:31:21.144
+<v Priya Raman>Moral seniority claims go in the survey like everyone else's. It has a free-text box; the sandwich photo can be an attachment. Recap: Marcus — branch five by the fifteenth, calibration slot, nothing wires until the board changes. Dan — slides by the fourteenth, calibration runs the sixteenth, four fraction cases close the week after with the agreed wording. Alicia — FAQ line held, content ops ticket today, export whining rationed. Grace — EcoCard close with the worked example, keep the shortlist handy. Me — the rev B decision in writing inside two weeks. Anything I missed?
+
+00:31:21.520 --> 00:31:22.864
+<v Grace Liu>Nothing here.
+
+00:31:23.159 --> 00:31:25.412
+<v Alicia Fuentes>The binder. You missed the binder.
+
+00:31:28.380 --> 00:31:32.021
+<v Dan Kowalski>The binder will be at calibration. It's bringing handouts.
+
+00:31:33.172 --> 00:31:36.279
+<v Priya Raman>On that threat, we're done. Thanks, all.
+

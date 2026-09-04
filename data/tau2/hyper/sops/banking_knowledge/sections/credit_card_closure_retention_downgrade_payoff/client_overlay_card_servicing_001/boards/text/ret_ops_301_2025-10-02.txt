@@ -1,0 +1,55 @@
+RET-OPS-301 - rev C
+Retention Operations
+Owner: Silas Brandt
+2025-10-02
+CLOSE / RET - credit card closure and retention
+Legend: rounded box = process step / diamond = decision / green = start or finish / red = stop / dashed box = reference note
+
+# Nodes
+Customer asks to close a credit card account
+Verify the customer's identity (standard verification)
+Confirm closure eligibility before any retention step
+Eligibility gates, in order: 1. pending disputes  2. replacement cards  3. account age  4. outstanding balance
+All gates pass?
+Gate fails: explain what must be resolved - no retention offers
+Run get_closure_reason_history_8293 - before logging a reason or making any offer
+Closure reason records within the past year?
+No offers: thank them for being a Rho-Bank customer - no pressure
+Ask why the customer wants to close, then log the reason with log_credit_card_closure_reason_4521
+Closure reason is annual_fee?
+2+ years as a customer: what may be offered is per the pinned #retention-desk ruling (fee-complaint lane)
+under 2 years: offer a permanent downgrade to a no-annual-fee card - account history preserved
+Address the concern where possible
+Customer still wants to close?
+Customer keeps the card - note the outcome in the case
+make ONE retention offer by card tier
+offer amounts per Retention Offer Card ROC-3 (effective 2025-09-15)
+Offer accepted?
+Offer accepted: process it and note the outcome in the case
+Close: verify identity -> confirm eligibility -> close_credit_card_account_7834
+
+# Edges
+Customer asks to close... -> Verify the customer's identity...
+Verify the customer's identity... -> Confirm closure eligibility before any retention step
+Confirm closure eligibility... -> Eligibility gates, in order...
+Eligibility gates, in order... -> All gates pass?
+All gates pass? -> Gate fails: explain what must be resolved - no retention offers [no - a gate fails]
+All gates pass? -> Run get_closure_reason_history_8293... [yes]
+Run get_closure_reason_history_8293... -> Closure reason records within the past year?
+Closure reason records within the past year? -> No offers: thank them... [records found: offers gated by the pinned #retention-desk ruling - if none allowed, no-offers path]
+Closure reason records within the past year? -> Ask why the customer wants to close... [no records in the past year]
+Ask why the customer wants to close... -> Closure reason is annual_fee?
+Closure reason is annual_fee? -> 2+ years as a customer... [yes]
+Closure reason is annual_fee? -> under 2 years... [yes]
+Closure reason is annual_fee? -> Address the concern where possible [other reasons]
+2+ years as a customer... -> Customer still wants to close?
+under 2 years... -> Customer still wants to close?
+Address the concern where possible -> Customer still wants to close?
+Customer still wants to close? -> Customer keeps the card... [no - keeps the card]
+Customer still wants to close? -> make ONE retention offer by card tier [yes]
+make ONE retention offer by card tier -> Offer accepted?
+Offer accepted? -> Offer accepted: process it and note the outcome in the case [yes]
+Offer accepted? -> Close: verify identity -> confirm eligibility -> close_credit_card_account_7834 [no - proceed with closure]
+No offers: thank them... -> Close: verify identity -> confirm eligibility -> close_credit_card_account_7834 [proceed with closure]
+
+RET-OPS-301 rev C - Retention Operations - 1 of 1

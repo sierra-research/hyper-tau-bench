@@ -1,0 +1,155 @@
+{
+  "id": "telecom/all_defects_v1",
+  "version": 5,
+  "domain": "telecom",
+  "client": {
+    "published_api_version": "3.1.0",
+    "deployed_api_version": "3.1.0+telecom-all-defects.5",
+    "defects": [
+      {
+        "defect_id": "line_resumption_async_v1",
+        "actual_behavior": "POST /v1/customers/{customer_id}/lines/{line_id}/resumptions returns 202 Accepted with a workflow ID, Location, and Retry-After even though the published OpenAPI documents synchronous 200 completion.",
+        "disclosure_conditions": [
+          "The Developer identifies createLineResumption or the line resumptions endpoint and reports the observed 202 response together with its workflow ID or Location URL."
+        ],
+        "expected_remediation": "Follow the returned Location, respect Retry-After, and wait for terminal Active state before reporting restored service; do not resubmit the resumption mutation while pending.",
+        "client_can_deploy_fix": false
+      },
+      {
+        "defect_id": "bill_status_uppercase_v1",
+        "actual_behavior": "GET /v1/bills/{bill_id} returns the overdue status as OVERDUE even though the published schema documents Overdue.",
+        "disclosure_conditions": [
+          "The Developer identifies getBill or GET /v1/bills/{bill_id} and reports observing OVERDUE instead of the documented Overdue value."
+        ],
+        "expected_remediation": "Treat the deployed uppercase value as the documented overdue state, preferably while accepting both representations.",
+        "client_can_deploy_fix": false
+      },
+      {
+        "defect_id": "line_contract_end_datetime_v1",
+        "actual_behavior": "GET /v1/lines/{line_id} emits contract_end_date as a UTC-midnight datetime such as 2025-01-15T00:00:00Z for the selected provisioning cohort even though the published schema specifies an ISO date.",
+        "disclosure_conditions": [
+          "The Developer identifies getLine or GET /v1/lines/{line_id} and reports observing a UTC datetime in contract_end_date while the published schema specifies a date."
+        ],
+        "expected_remediation": "Normalize the deployed UTC-midnight value to its UTC calendar date before applying contract eligibility rules; do not convert through a local timezone that could shift the date.",
+        "client_can_deploy_fix": false
+      },
+      {
+        "defect_id": "paid_bill_projection_lag_v1",
+        "actual_behavior": "After the customer completes a requested payment, GET /v1/bills/{bill_id} and the matching entry in GET /v1/customers/{customer_id}/bills can continue reporting Awaiting Payment for 1.5 to 5 seconds while the authoritative bill is already Paid. The published OpenAPI incorrectly describes these reads as strongly consistent.",
+        "disclosure_conditions": [
+          "The Developer identifies the bill detail or customer bill-list endpoint and reports seeing Awaiting Payment after the customer says the requested payment completed."
+        ],
+        "expected_remediation": "Retry a bill read with bounded delay until Paid is observed before performing an operation that depends on payment propagation, such as resuming a suspended line.",
+        "client_can_deploy_fix": false
+      }
+    ]
+  },
+  "capabilities": [
+    {
+      "id": "telecom_bill_payment_request_v1",
+      "operation_id": "createBillPaymentRequest",
+      "missing_functionality": "Send a payment request for a specified overdue bill so that a suspended line can proceed through the documented payment and resumption workflow."
+    }
+  ],
+  "defects": [
+    {
+      "id": "line_resumption_async_v1",
+      "kind": "async_completion",
+      "operation_id": "createLineResumption",
+      "activation": {
+        "task_ids": [
+          "[service_issue]airplane_mode_on|overdue_bill_suspension[PERSONA:None]",
+          "[service_issue]overdue_bill_suspension|unseat_sim_card[PERSONA:Easy]",
+          "[service_issue]airplane_mode_on|overdue_bill_suspension|unseat_sim_card[PERSONA:Easy]",
+          "[service_issue]airplane_mode_on|break_apn_settings|overdue_bill_suspension[PERSONA:None]",
+          "[service_issue]break_apn_settings|overdue_bill_suspension|unseat_sim_card[PERSONA:Hard]",
+          "[service_issue]airplane_mode_on|break_apn_settings|overdue_bill_suspension|unseat_sim_card[PERSONA:None]",
+          "[service_issue]overdue_bill_suspension[PERSONA:Easy][LEVER:identity_name_dob_lookup]"
+        ],
+        "developer_test": {
+          "exposure_rate": 0.5,
+          "seed": 20260831
+        }
+      },
+      "status_path": "/v1/resumption-workflows/{workflow_id}",
+      "min_delay_seconds": 1.5,
+      "max_delay_seconds": 5.0,
+      "retry_after_seconds": 1,
+      "seed": 10101
+    },
+    {
+      "id": "bill_status_uppercase_v1",
+      "kind": "response_value_map",
+      "operation_id": "getBill",
+      "path": ["status"],
+      "mapping": {
+        "Overdue": "OVERDUE"
+      }
+    },
+    {
+      "id": "line_contract_end_datetime_v1",
+      "kind": "response_date_to_datetime",
+      "operation_id": "getLine",
+      "activation": {
+        "task_ids": [
+          "[service_issue]contract_end_suspension|unseat_sim_card[PERSONA:Hard]",
+          "[service_issue]contract_end_suspension|lock_sim_card_pin[PERSONA:Hard]",
+          "[service_issue]break_apn_settings|contract_end_suspension|lock_sim_card_pin[PERSONA:Hard]",
+          "[service_issue]airplane_mode_on|contract_end_suspension|lock_sim_card_pin|unseat_sim_card[PERSONA:Hard]",
+          "[service_issue]airplane_mode_on|break_apn_settings|contract_end_suspension|unseat_sim_card[PERSONA:Easy]",
+          "[service_issue]airplane_mode_on|break_apn_settings|contract_end_suspension|lock_sim_card_pin[PERSONA:None]",
+          "[service_issue]break_apn_settings|contract_end_suspension|lock_sim_card_pin|unseat_sim_card[PERSONA:Hard]",
+          "[service_issue]airplane_mode_on|break_apn_settings|contract_end_suspension|lock_sim_card_pin|unseat_sim_card[PERSONA:Easy]",
+          "[service_issue]contract_end_suspension|lock_sim_card_pin[PERSONA:Hard][LEVER:transfer_notice_exact_text]"
+        ],
+        "resource_ids": ["L1002"],
+        "developer_test": {
+          "exposure_rate": 0.5,
+          "seed": 20260901
+        }
+      },
+      "path": ["contract_end_date"]
+    },
+    {
+      "id": "paid_bill_projection_lag_v1",
+      "kind": "projection_lag",
+      "operation_id": "getBill",
+      "activation": {
+        "task_ids": [
+          "[service_issue]airplane_mode_on|overdue_bill_suspension[PERSONA:None]",
+          "[service_issue]overdue_bill_suspension|unseat_sim_card[PERSONA:Easy]",
+          "[service_issue]airplane_mode_on|overdue_bill_suspension|unseat_sim_card[PERSONA:Easy]",
+          "[service_issue]airplane_mode_on|break_apn_settings|overdue_bill_suspension[PERSONA:None]",
+          "[service_issue]break_apn_settings|overdue_bill_suspension|unseat_sim_card[PERSONA:Hard]",
+          "[service_issue]airplane_mode_on|break_apn_settings|overdue_bill_suspension|unseat_sim_card[PERSONA:None]",
+          "[service_issue]overdue_bill_suspension[PERSONA:Easy][LEVER:identity_name_dob_lookup]"
+        ],
+        "developer_test": {
+          "exposure_rate": 0.5,
+          "seed": 20260902
+        }
+      },
+      "trigger_operation_ids": ["createBillPaymentRequest"],
+      "capture_timing": "after_trigger",
+      "start_condition": "projection_change",
+      "resource_id_argument": "bill_id",
+      "read_surfaces": [
+        {
+          "operation_id": "getBill",
+          "resource_id_field": "bill_id"
+        },
+        {
+          "operation_id": "listCustomerBills",
+          "resource_id_field": "bill_id",
+          "collection_path": ["bills"],
+          "projected_fields": ["status"]
+        }
+      ],
+      "min_delay_seconds": 1.5,
+      "max_delay_seconds": 5.0,
+      "seed": 20260828,
+      "verification_operation_ids": ["createLineResumption"],
+      "require_trigger_before_verification": true
+    }
+  ]
+}

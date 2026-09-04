@@ -1,0 +1,789 @@
+WEBVTT
+
+NOTE Cloud recording transcript
+NOTE Meeting: Billing request-state review
+NOTE Date: 2026-08-05
+
+1
+00:00:04.000 --> 00:00:05.250
+[recording starts; two participants are still joining]
+
+2
+00:00:06.350 --> 00:00:08.060
+<v Maya Chen>Thanks for joining.
+
+3
+00:00:10.260 --> 00:00:19.953
+<v Maya Chen>Before we get into it, quick check-in: I am back from two days off, mostly caught up,
+
+4
+00:00:21.553 --> 00:00:22.123
+<v Nadia Ford>Mm-hm.
+
+5
+00:00:23.223 --> 00:00:28.355
+<v Maya Chen>and still suspicious of the coffee on this floor.
+
+6
+00:00:29.455 --> 00:00:37.437
+<v Maya Chen>Nadia has to leave at half past, so I put the billing example first.
+
+7
+00:00:38.537 --> 00:00:43.668
+<v Maya Chen>We are not rewriting the whole overdue-balance procedure today.
+
+8
+00:00:45.268 --> 00:00:45.838
+<v Elena Ruiz>Mm-hm.
+
+9
+00:00:45.838 --> 00:00:58.382
+<v Maya Chen>The draft already covers checking the suspension reason, reading recent bills, explaining the amount, confirmation, phone payment, paid-state verification, resume confirmation, reboot,
+
+10
+00:00:59.982 --> 00:01:02.262
+<v Maya Chen>and the status-bar check.
+
+11
+00:01:02.462 --> 00:01:05.883
+<v Maya Chen>The open question is request-state concurrency.
+
+12
+00:01:05.883 --> 00:01:16.146
+<v Maya Chen>Tomorrow we handle ended contracts and the handoff; Friday we close the Closed-line question and do launch signoff.
+
+13
+00:01:17.746 --> 00:01:25.158
+<v Maya Chen>If we drift into plan pricing or renewal eligibility, I will park it.
+
+14
+00:01:25.158 --> 00:01:34.280
+<v Maya Chen>Priya has the QA and compliance call, Jonah owns billing state, and Elena owns contract operations.
+
+15
+00:01:35.880 --> 00:01:37.130
+[notification sound]
+
+16
+00:01:36.830 --> 00:01:39.111
+<v Priya Shah>That matches my agenda.
+
+17
+00:01:39.311 --> 00:01:47.863
+<v Priya Shah>One housekeeping point before Jonah shares: three versions of the trainer slide are still circulating.
+
+18
+00:01:48.563 --> 00:01:49.133
+<v Maya Chen>Mm-hm.
+
+19
+00:01:49.533 --> 00:01:55.805
+<v Priya Shah>Please do not edit whichever copy you happen to have open.
+
+20
+00:01:55.805 --> 00:02:06.638
+<v Priya Shah>Maya will update the current page after we agree, and the older copies keep their dates and forward links.
+
+21
+00:02:08.838 --> 00:02:21.381
+<v Priya Shah>When we review a proposal, I want the condition, the shortcut somebody is asking for, and what the customer would actually experience.
+
+22
+00:02:22.481 --> 00:02:31.604
+<v Priya Shah>That is enough for me to test it without turning the meeting into a wording exercise.
+
+23
+00:02:31.804 --> 00:02:41.496
+<v Priya Shah>I will call out when something is still a proposal and when QA is comfortable closing it.
+
+24
+00:02:41.896 --> 00:02:45.887
+<v Priya Shah>[notification sound] Sorry, that was my calendar.
+
+25
+00:02:47.487 --> 00:02:49.198
+<v Priya Shah>Go ahead, Jonah.
+
+26
+00:02:49.398 --> 00:02:53.389
+<v Jonah Brooks>I have the draft archive on screen.
+
+27
+00:02:54.989 --> 00:03:02.971
+<v Jonah Brooks>The billing route is clean through the point where Send payment request becomes available.
+
+28
+00:03:05.171 --> 00:03:06.882
+<v Elena Ruiz>Sorry, go ahead.
+
+29
+00:03:06.582 --> 00:03:18.555
+<v Jonah Brooks>It tells the reader that the action does not check whether a bill is eligible, so the operator independently verifies Overdue.
+
+30
+00:03:18.555 --> 00:03:28.247
+<v Jonah Brooks>It also says the customer completes a sent request on the phone and Care confirms Paid afterward.
+
+31
+00:03:28.247 --> 00:03:36.229
+<v Jonah Brooks>What is missing on purpose is what to do if another request already exists.
+
+32
+00:03:35.529 --> 00:03:36.100
+<v Nadia Ford>Right.
+
+33
+00:03:36.300 --> 00:03:44.852
+<v Jonah Brooks>The prototype control sometimes appears enabled when a different bill is in the request state,
+
+34
+00:03:45.552 --> 00:03:54.104
+<v Jonah Brooks>because the UI is reading the selected row while the account invariant is enforced downstream.
+
+35
+00:03:55.704 --> 00:03:59.125
+<v Jonah Brooks>That mismatch generated the pilot confusion.
+
+36
+00:04:00.225 --> 00:04:09.348
+<v Jonah Brooks>Before we decide, I want to separate three things: an Overdue bill is a candidate record,
+
+37
+00:04:09.548 --> 00:04:19.810
+<v Jonah Brooks>a sent request moves a bill into Awaiting Payment, and a completed phone payment moves it to Paid.
+
+38
+00:04:22.010 --> 00:04:31.703
+<v Jonah Brooks>Those states are not synonyms, and the second send action cannot be treated as a harmless preview.
+
+39
+00:04:31.903 --> 00:04:35.324
+<v Elena Ruiz>The archive format itself looks usable.
+
+40
+00:04:35.524 --> 00:04:45.216
+<v Elena Ruiz>I searched contract, resume, and status bar; the adjacent articles appear without hiding the four billing articles.
+
+41
+00:04:44.916 --> 00:04:50.048
+<v Priya Shah>Okay—the contract status is the part that matters here.
+
+42
+00:04:50.248 --> 00:04:59.940
+<v Elena Ruiz>The contract-preparation page points readers to this decision series but does not pretend to decide the boundary.
+
+43
+00:04:59.940 --> 00:05:02.791
+<v Elena Ruiz>That is the right separation.
+
+44
+00:05:03.491 --> 00:05:13.754
+<v Elena Ruiz>I did notice the export says Updated August eighth even though this first meeting is on the fifth.
+
+45
+00:05:13.754 --> 00:05:24.587
+<v Elena Ruiz>Maya confirmed that is the scheduled publication date, not a future decision date, so I am comfortable with it.
+
+46
+00:05:25.687 --> 00:05:38.230
+<v Elena Ruiz>One small non-policy item: the related-link list wraps at laptop width, and on my narrow window it drops beneath the footer label.
+
+47
+00:05:38.230 --> 00:05:42.221
+<v Elena Ruiz>That is visual polish, not a blocker.
+
+48
+00:05:44.421 --> 00:05:53.544
+<v Elena Ruiz>More important, none of the device articles says that resetting a phone repairs a contract record.
+
+49
+00:05:53.744 --> 00:05:57.165
+<v Elena Ruiz>We should keep it that way.
+
+50
+00:05:58.265 --> 00:06:10.238
+<v Elena Ruiz>I will bring a recently ended contract example to tomorrow's calibration because training drafts have mixed account state with radio symptoms.
+
+51
+00:06:12.438 --> 00:06:16.999
+<v Jonah Brooks>Here is the concrete billing example from staging.
+
+52
+00:06:17.199 --> 00:06:28.032
+<v Jonah Brooks>The account has April at Paid, May at Awaiting Payment after a request was sent, and June at Overdue.
+
+53
+00:06:29.132 --> 00:06:29.702
+<v Priya Shah>Mm-hm.
+
+54
+00:06:29.902 --> 00:06:37.884
+<v Jonah Brooks>An agent opens June, sees Overdue, and the selected-row control suggests it can send.
+
+55
+00:06:38.084 --> 00:06:45.496
+<v Jonah Brooks>If it sends, the API rejects the mutation because May is already waiting.
+
+56
+00:06:46.196 --> 00:06:58.740
+<v Jonah Brooks>In one pilot transcript the agent kept retrying June, then told the customer there were two requests on the phone even though
+
+57
+00:06:58.940 --> 00:06:59.510
+<v Elena Ruiz>Yep.
+
+58
+00:07:00.610 --> 00:07:02.320
+<v Jonah Brooks>only May existed.
+
+59
+00:07:04.520 --> 00:07:09.652
+<v Jonah Brooks>The bad behavior was not just an error message.
+
+60
+00:07:09.652 --> 00:07:18.774
+<v Jonah Brooks>It created an invented customer state and made it unclear which amount the customer should accept.
+
+61
+00:07:19.474 --> 00:07:29.737
+<v Jonah Brooks>We could patch the UI eventually, but this launch rule needs to survive a stale or misleading control.
+
+62
+00:07:30.837 --> 00:07:35.398
+<v Jonah Brooks>The account-level request state is the gating fact.
+
+63
+00:07:36.498 --> 00:07:47.901
+<v Jonah Brooks>We also need to say what happens after May becomes Paid: then the account no longer has an awaiting request,
+
+64
+00:07:48.301 --> 00:07:54.002
+<v Jonah Brooks>and June can be evaluated under the normal bill procedure.
+
+65
+00:07:54.002 --> 00:08:01.414
+<v Elena Ruiz>Before we debate parallel requests, I want the customer-view detail in the record.
+
+66
+00:08:01.814 --> 00:08:10.367
+<v Elena Ruiz>A sent request is supposed to appear on the phone with the bill and amount,
+
+67
+00:08:10.567 --> 00:08:12.277
+<v Nadia Ford>Sorry, go ahead.
+
+68
+00:08:13.877 --> 00:08:21.289
+<v Elena Ruiz>but a missing notification does not prove the account has no outstanding request.
+
+69
+00:08:22.889 --> 00:08:32.012
+<v Elena Ruiz>The agent can ask the customer to open the payment area and can refresh Care Console,
+
+70
+00:08:33.612 --> 00:08:41.594
+<v Elena Ruiz>yet the bill status remains the carrier-side source for whether a request is awaiting.
+
+71
+00:08:41.794 --> 00:08:54.337
+<v Elena Ruiz>We saw one pilot where a customer had notifications disabled, so the request was present in the app but no banner appeared.
+
+72
+00:08:54.737 --> 00:09:03.289
+<v Elena Ruiz>Sending another request would not repair notifications; it would collide with the existing payment interaction.
+
+73
+00:09:03.289 --> 00:09:11.842
+<v Elena Ruiz>Conversely, a screenshot of an old phone banner does not prove the request is current.
+
+74
+00:09:11.842 --> 00:09:22.675
+<v Elena Ruiz>The operator reads the live bill states, identifies the active request, and keeps customer-facing observations separate from account eligibility.
+
+75
+00:09:23.375 --> 00:09:32.497
+<v Maya Chen>Let me put the permissive proposal on the table so we can dispose of it explicitly.
+
+76
+00:09:32.497 --> 00:09:45.040
+<v Maya Chen>Proposal: allow a second payment request when the bills have different invoice identifiers, as long as the operator explains both amounts and
+
+77
+00:09:45.740 --> 00:09:49.161
+<v Jonah Brooks>Hold on—are we deciding that now?
+
+78
+00:09:49.561 --> 00:09:55.263
+<v Maya Chen>the customer says they can distinguish them on the phone.
+
+79
+00:09:55.463 --> 00:10:01.735
+<v Maya Chen>The appeal is speed for a customer with several overdue months.
+
+80
+00:10:02.135 --> 00:10:07.836
+<v Maya Chen>It also sounds superficially compatible with verifying each bill independently.
+
+81
+00:10:08.936 --> 00:10:09.506
+<v Priya Shah>Okay.
+
+82
+00:10:10.206 --> 00:10:18.759
+<v Maya Chen>If we allowed that, training would say the agent may send June while May awaits,
+
+83
+00:10:18.759 --> 00:10:23.320
+<v Maya Chen>perhaps with a verbal label for the month.
+
+84
+00:10:23.320 --> 00:10:32.442
+<v Maya Chen>I do not like relying on a customer-facing label that the phone UI may not show,
+
+85
+00:10:32.442 --> 00:10:44.986
+<v Maya Chen>but I want Jonah to address whether the platform contract can support it, and Priya to address whether confirmation makes it acceptable.
+
+86
+00:10:44.986 --> 00:10:47.836
+<v Maya Chen>This is a proposal only.
+
+87
+00:10:48.036 --> 00:10:55.448
+<v Maya Chen>Nobody should read it as the current behavior while we are discussing it.
+
+88
+00:10:57.048 --> 00:11:02.750
+<v Priya Shah>Confirmation cannot cure a state the product does not support.
+
+89
+00:11:04.350 --> 00:11:14.613
+<v Priya Shah>The customer can confirm that they want two requests, but the account contract may still prohibit two requests.
+
+90
+00:11:16.813 --> 00:11:17.383
+<v Jonah Brooks>Mm-hm.
+
+91
+00:11:18.983 --> 00:11:26.965
+<v Priya Shah>From QA's side, parallel requests also create an untestable ambiguity after the phone action.
+
+92
+00:11:28.565 --> 00:11:40.538
+<v Priya Shah>If the customer says I paid it, the agent must know which bill to refresh and whether another overdue balance remains.
+
+93
+00:11:40.938 --> 00:11:47.780
+<v Priya Shah>We would be turning a closed bill status into a conversational guess.
+
+94
+00:11:48.180 --> 00:12:00.723
+<v Priya Shah>I also listened back through the calmer calls in last week's review queue: a hurried customer often says yes to the total,
+
+95
+00:12:01.823 --> 00:12:05.244
+<v Priya Shah>not to two distinct request objects.
+
+96
+00:12:05.444 --> 00:12:13.426
+<v Priya Shah>A more skeptical caller may ask why the first amount differs from the second.
+
+97
+00:12:13.426 --> 00:12:16.847
+<v Priya Shah>Neither example changes the platform invariant.
+
+98
+00:12:16.847 --> 00:12:19.698
+<v Priya Shah>So I oppose the proposal.
+
+99
+00:12:19.698 --> 00:12:31.671
+<v Priya Shah>I want the current rule stated at the account level, not as a UI tip: one bill may occupy Awaiting Payment,
+
+100
+00:12:31.871 --> 00:12:38.713
+<v Priya Shah>and while any bill is there, Care does not send another request.
+
+101
+00:12:39.113 --> 00:12:45.955
+<v Jonah Brooks>Agreed, and I am rejecting the parallel-request proposal from the billing side.
+
+102
+00:12:48.155 --> 00:12:56.707
+<v Jonah Brooks>Awaiting Payment is an account-scoped lock even though the state is displayed on one bill.
+
+103
+00:12:58.907 --> 00:13:03.468
+<v Elena Ruiz>Right—the account state, not just the selected bill.
+
+104
+00:13:04.168 --> 00:13:15.571
+<v Jonah Brooks>The service accepts one outstanding customer payment interaction so that the phone, bill record, and action result share one identifier.
+
+105
+00:13:17.771 --> 00:13:22.333
+<v Jonah Brooks>Different invoice IDs do not create separate lanes.
+
+106
+00:13:23.933 --> 00:13:29.634
+<v Jonah Brooks>An agent should first inspect recent bills and request states.
+
+107
+00:13:30.334 --> 00:13:30.904
+<v Maya Chen>Right.
+
+108
+00:13:30.204 --> 00:13:37.616
+<v Jonah Brooks>If one bill is Awaiting Payment, do not send a second payment request.
+
+109
+00:13:39.216 --> 00:13:50.049
+<v Jonah Brooks>Wait for the existing request to resolve through payment or the platform's documented exception path; do not cancel, overwrite,
+
+110
+00:13:50.049 --> 00:13:52.900
+<v Jonah Brooks>or redirect it through troubleshooting.
+
+111
+00:13:55.100 --> 00:14:07.643
+<v Jonah Brooks>Once it is no longer awaiting, any remaining Overdue bill still has to pass the ordinary eligibility, amount explanation, and customer-confirmation sequence.
+
+112
+00:14:07.643 --> 00:14:13.915
+<v Jonah Brooks>[brief crosstalk] Maya, yes, we can phrase it without implementation jargon.
+
+113
+00:14:15.015 --> 00:14:25.278
+<v Jonah Brooks>The important behavior is the single awaiting request and the prohibition on sending another while it is pending.
+
+114
+00:14:25.478 --> 00:14:26.728
+[brief crosstalk]
+
+115
+00:14:28.328 --> 00:14:34.029
+<v Elena Ruiz>I want to test the wording against three nearby cases.
+
+116
+00:14:34.029 --> 00:14:44.862
+<v Elena Ruiz>First, a bill says Disputed, not Awaiting Payment: this meeting is not converting that into an eligible payment request.
+
+117
+00:14:45.962 --> 00:14:46.532
+<v Priya Shah>Yeah.
+
+118
+00:14:48.132 --> 00:14:51.553
+<v Elena Ruiz>The normal article still requires Overdue.
+
+119
+00:14:51.553 --> 00:15:00.106
+<v Elena Ruiz>Second, the customer says they never saw the existing request: the agent can troubleshoot visibility,
+
+120
+00:15:01.206 --> 00:15:08.047
+<v Elena Ruiz>but absence from the customer's screen does not erase the account state.
+
+121
+00:15:08.747 --> 00:15:21.291
+<v Elena Ruiz>Third, the request appears stuck after the customer says they paid: Care refreshes and verifies the bill rather than sending another request
+
+122
+00:15:21.491 --> 00:15:24.341
+<v Elena Ruiz>to force a state change.
+
+123
+00:15:26.541 --> 00:15:32.243
+<v Elena Ruiz>Those are consequences of the rule, not new payment policies.
+
+124
+00:15:32.443 --> 00:15:39.855
+<v Elena Ruiz>We should avoid adding a timeout in minutes because none is approved here.
+
+125
+00:15:40.555 --> 00:15:45.686
+<v Elena Ruiz>Jonah's platform incident process owns a genuine stuck-state investigation.
+
+126
+00:15:45.886 --> 00:15:56.149
+<v Elena Ruiz>I also do not want the transcript to imply that a contract operator can clear the billing lock;
+
+127
+00:15:56.549 --> 00:15:59.400
+<v Elena Ruiz>that is outside our role.
+
+128
+00:15:59.400 --> 00:16:04.531
+<v Elena Ruiz>Priya, is the one-request language sufficiently closed for testing?
+
+129
+00:16:05.231 --> 00:16:13.213
+<v Priya Shah>Let me run the proposed wording through the QA matrix while it is fresh.
+
+130
+00:16:13.913 --> 00:16:26.457
+<v Priya Shah>Account A has one Paid bill and two Overdue bills, with no request waiting: the first selected Overdue bill may proceed only
+
+131
+00:16:28.657 --> 00:16:33.218
+<v Nadia Ford>Right—the account state, not just the selected bill.
+
+132
+00:16:33.918 --> 00:16:38.479
+<v Priya Shah>after its own verification, amount explanation, and confirmation.
+
+133
+00:16:39.579 --> 00:16:52.123
+<v Priya Shah>Account B has one bill Awaiting Payment and another Overdue: the second send is blocked by policy even if the button looks
+
+134
+00:16:54.323 --> 00:16:54.893
+<v Priya Shah>available.
+
+135
+00:16:55.093 --> 00:16:55.663
+<v Elena Ruiz>Yep.
+
+136
+00:16:56.763 --> 00:17:08.166
+<v Priya Shah>Account C has a request awaiting on a bill the customer cannot see: troubleshoot visibility without inventing a new request.
+
+137
+00:17:08.866 --> 00:17:19.129
+<v Priya Shah>Account D shows Paid after the phone interaction: refresh all bills, then decide whether another Overdue bill remains.
+
+138
+00:17:20.229 --> 00:17:28.211
+<v Priya Shah>None of these examples authorizes bulk requests or turns a failed send into payment.
+
+139
+00:17:28.411 --> 00:17:39.814
+<v Priya Shah>This gives us observable tests at each boundary and preserves the archive steps rather than replacing them with a shortcut.
+
+140
+00:17:39.514 --> 00:17:52.057
+<v Maya Chen>Yes, I am recording the final enablement decision with Priya and Jonah's assent: a customer may have only one bill in Awaiting
+
+141
+00:17:52.057 --> 00:17:54.338
+<v Maya Chen>Payment at a time.
+
+142
+00:17:56.538 --> 00:17:58.248
+<v Jonah Brooks>Sorry, go ahead.
+
+143
+00:17:59.348 --> 00:18:06.760
+<v Maya Chen>Before sending a payment request, Care checks the recent bill and request states.
+
+144
+00:18:06.760 --> 00:18:18.733
+<v Maya Chen>If any bill is already Awaiting Payment, the agent does not send a second payment request while that request is pending.
+
+145
+00:18:19.833 --> 00:18:31.237
+<v Maya Chen>The customer asking for speed, confirming both amounts, or failing to see the first request does not create an exception.
+
+146
+00:18:31.237 --> 00:18:42.069
+<v Maya Chen>When the existing request resolves, a remaining Overdue bill can be considered through the published procedure from the beginning;
+
+147
+00:18:42.269 --> 00:18:45.120
+<v Maya Chen>it is not automatically sent.
+
+148
+00:18:45.120 --> 00:18:55.953
+<v Maya Chen>The archive's control-troubleshooting article may point here, but it should not copy a partial version that loses the prohibition.
+
+149
+00:18:58.153 --> 00:19:08.986
+<v Maya Chen>Priya, please confirm that this is current for launch rather than a temporary workaround for the stale selected-row control.
+
+150
+00:19:08.986 --> 00:19:14.688
+<v Priya Shah>Confirmed as current launch policy, not a temporary UI workaround.
+
+151
+00:19:14.688 --> 00:19:26.091
+<v Priya Shah>QA will cover an account with an awaiting request on a different bill and will expect no second send action.
+
+152
+00:19:28.291 --> 00:19:32.852
+<v Jonah Brooks>Right—the account state, not just the selected bill.
+
+153
+00:19:34.452 --> 00:19:46.995
+<v Priya Shah>We will also cover an account with two overdue bills but no awaiting request; that case still processes one verified bill at
+
+154
+00:19:46.995 --> 00:19:52.697
+<v Priya Shah>a time and later rechecks all overdue bills before resumption.
+
+155
+00:19:52.697 --> 00:20:05.240
+<v Priya Shah>I am intentionally not deciding how Billing Operations cancels an abandoned request, because the customer-care tool does not expose that action in
+
+156
+00:20:04.940 --> 00:20:08.361
+<v Nadia Ford>Hold on—are we deciding that now?
+
+157
+00:20:10.561 --> 00:20:11.701
+<v Priya Shah>this scope.
+
+158
+00:20:12.101 --> 00:20:24.074
+<v Priya Shah>The safe customer response is grounded in what the records show: identify the existing request, do not invent a second one,
+
+159
+00:20:26.274 --> 00:20:29.695
+<v Priya Shah>and explain the next supported step.
+
+160
+00:20:30.095 --> 00:20:38.648
+<v Priya Shah>[inaudible] Jonah, your audio cut for a second, but I saw your yes in chat.
+
+161
+00:20:39.048 --> 00:20:43.039
+<v Priya Shah>We have both product and compliance assent.
+
+162
+00:20:44.639 --> 00:20:55.472
+<v Priya Shah>Let's move to contract-ended suspensions, which is a different cause even if the customer also mentions an old balance.
+
+163
+00:20:57.672 --> 00:21:04.513
+<v Jonah Brooks>I will take three implementation follow-ups that do not alter today's decision.
+
+164
+00:21:06.113 --> 00:21:17.517
+<v Jonah Brooks>First, make the selected-row control read the account-level awaiting state so the UI stops offering a mutation the service rejects.
+
+165
+00:21:17.717 --> 00:21:21.137
+<v Elena Ruiz>Wait, which account is on screen?
+
+166
+00:21:20.437 --> 00:21:28.990
+<v Jonah Brooks>Second, adjust the rejection message to name the existing request without exposing an internal identifier.
+
+167
+00:21:30.590 --> 00:21:38.002
+<v Jonah Brooks>Third, correct the dashboard so rejected attempts are not counted as sent requests.
+
+168
+00:21:38.702 --> 00:21:47.824
+<v Jonah Brooks>Those changes make the product clearer, but the operating rule cannot depend on their release date.
+
+169
+00:21:50.024 --> 00:21:58.006
+<v Jonah Brooks>Care checks the record and does not send a second request while one awaits.
+
+170
+00:21:58.006 --> 00:22:07.129
+<v Jonah Brooks>We are not approving a cancel-request tool, a timeout, or an administrator override in this meeting.
+
+171
+00:22:07.529 --> 00:22:17.221
+<v Jonah Brooks>If Billing Operations later exposes one of those capabilities, it needs a separate contract and training review.
+
+172
+00:22:18.321 --> 00:22:28.584
+<v Jonah Brooks>For launch, the only supported exit from the lock is the existing request resolving through its documented lifecycle.
+
+173
+00:22:28.584 --> 00:22:39.417
+<v Jonah Brooks>Before contract, one parked item for the minutes: the dashboard currently counts an API rejection as a request attempt,
+
+174
+00:22:40.517 --> 00:22:43.938
+<v Jonah Brooks>so the pilot metric overstates sends.
+
+175
+00:22:45.038 --> 00:22:46.748
+<v Priya Shah>Sorry, go ahead.
+
+176
+00:22:48.948 --> 00:22:53.510
+<v Jonah Brooks>I will fix the analytics label after launch.
+
+177
+00:22:53.710 --> 00:23:02.262
+<v Jonah Brooks>That metric does not change the care rule and should not appear in the archive.
+
+178
+00:23:02.962 --> 00:23:12.654
+<v Jonah Brooks>The incident banner also uses pending in ordinary English, while the bill status is capitalized Awaiting Payment.
+
+179
+00:23:12.654 --> 00:23:13.225
+<v Elena Ruiz>Right.
+
+180
+00:23:13.425 --> 00:23:25.968
+<v Jonah Brooks>Training should preserve the actual status label when it refers to the record, but we do not need to police ordinary speech
+
+181
+00:23:28.168 --> 00:23:31.589
+<v Jonah Brooks>like while the request is pending.
+
+182
+00:23:31.589 --> 00:23:37.861
+<v Jonah Brooks>[screen-share freezes] My share may be frozen on the June row.
+
+183
+00:23:37.861 --> 00:23:41.281
+<v Jonah Brooks>I am stopping and restarting it.
+
+184
+00:23:41.281 --> 00:23:46.413
+<v Jonah Brooks>Okay, now you should see the contract record tab.
+
+185
+00:23:46.613 --> 00:23:55.735
+<v Jonah Brooks>The example line has Contract status: Ended, Service: Suspended, and an end date from last week.
+
+186
+00:23:55.735 --> 00:24:07.138
+<v Jonah Brooks>There is no overdue bill on this account, so the billing recovery path cannot be used as an accidental substitute.
+
+187
+00:24:07.138 --> 00:24:16.261
+<v Maya Chen>For tomorrow's contract session, I am carrying one unresolved pilot proposal so the history is explicit.
+
+188
+00:24:16.261 --> 00:24:28.804
+<v Maya Chen>A trainer suggested that Care could courtesy-resume a line when the contract ended recently and the customer says they plan to renew,
+
+189
+00:24:28.504 --> 00:24:29.074
+<v Nadia Ford>Yeah.
+
+190
+00:24:28.774 --> 00:24:33.335
+<v Maya Chen>then complete the contract handoff after service returns.
+
+191
+00:24:33.735 --> 00:24:44.568
+<v Maya Chen>The draft used thirty days, apparently from a sales slide, and treated the shared Resume line control as permission.
+
+192
+00:24:45.268 --> 00:24:57.812
+<v Maya Chen>We are not deciding that proposal today; Elena needs to verify contract authority and Jonah needs to confirm what the tool actually
+
+193
+00:24:58.212 --> 00:24:58.782
+<v Maya Chen>guarantees.
+
+194
+00:24:59.182 --> 00:25:08.875
+<v Maya Chen>My concern is that it mixes a customer statement, an unsupported grace period, and a carrier-side mutation.
+
+195
+00:25:09.075 --> 00:25:17.057
+<v Maya Chen>Tomorrow we will either identify an approved source with exact conditions or reject it.
+
+196
+00:25:17.457 --> 00:25:30.000
+<v Maya Chen>Until that review, nobody should treat the proposal as current handling, and the HTML archive will not publish it as a rule.

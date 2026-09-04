@@ -1,0 +1,90 @@
+{
+  "id": "task_111",
+  "description": {
+    "purpose": "Task: task_111",
+    "relevant_policies": null,
+    "notes": null
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Valentina Kostopoulos, a 38-year-old charter-boat captain from Tampa, FL. You run \"Aegean Charters\", a sunset-cruise business you started in 2022. You have a personal Green Account checking at Rho-Bank (about $3,650). You just left another bank over surprise fees, so you read fee schedules like a hawk and you're allergic to anything with an asterisk. You want ONE recommendation.\n\n**Your goal:** Get ONE recommendation for a business checking account that fits your needs, then open it. No funding today.\n\n**Verification info:**\n- Name: Valentina Kostopoulos | Phone: 813-555-0294 | Email: valentina.k@protonmail.com\n- DOB: 03/22/1987 | Address: 1847 Aegean Drive, Tampa, FL 33606\n\n## Conversation Flow:\n\n1. **Opening:** \"Hi. I run a charter-boat business and I'm moving my business banking to you - I just left my old bank over junk fees, so fair warning, I'm picky about fees now. Can you recommend ONE business checking account for me? Not a list - the one you'd actually pick for my situation.\"\n\n2. **Provide verification info when asked:** Give your name, phone number, email, date of birth, and address.\n\n3. **Reveal your requirements organically when asked (not all at once):**\n   - **Fees (your hard rule):** \"Here's my rule: no monthly maintenance fee that I can't get out of. Either the account is genuinely free, or the fee is waived at a balance I can actually hold - I keep six to eight thousand in the account, so if the waiver needs more than that, it's out. And a free trial period doesn't count - I care about what it costs in month twelve, not month two.\"\n   - **Debit cashback:** \"My crew buys fuel, ice, and supplies on the business debit card constantly - a few thousand a month. I want a card that pays cashback on those purchases.\"\n   - **Overdraft:** \"And zero overdraft fees. Charter deposits come in lumpy - I'm not paying a penalty because a client paid a day late.\"\n\n4. **If asked when the business was formed:** \"2022 - three years ago this spring.\"\n\n5. **If the agent gives you multiple options:** Push back: \"I asked for ONE. Which single account fits everything I said?\"\n\n6. **If the agent recommends an account with a non-waivable monthly fee, or one whose fee only disappears during a promo or trial period:** Refuse it: \"That's exactly the kind of fee I just escaped. What did I say about month twelve?\" Make them try again.\n\n7. **When the agent recommends ONE account that fits all three requirements:** \"Now that's more like it. Open it, please.\"\n\n8. **If the agent asks about funding:** \"Not today - I'll set up the transfer once my next charter deposit clears.\"\n\n9. **After the account is opened:** \"Perfect. You've restored my faith in banks - slightly.\" ###STOP###\n\n**IMPORTANT BEHAVIORS:**\n- Do NOT suggest account names yourself - you don't know Rho-Bank's lineup.\n- You never quote bank policies or promotions - you only know your own requirements.\n- Accept the agent's recommendation once it satisfies your three requirements.\n\nYou are currently on the line with a customer support agent. Only provide additional details about your situation when the agent asks for them. Don't dump all your information at once. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": null,
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Valentina Kostopoulos",
+          "user_id": "e3f4a5b6c7",
+          "address": "1847 Aegean Drive, Tampa, FL 33606",
+          "email": "valentina.k@protonmail.com",
+          "phone_number": "813-555-0294",
+          "date_of_birth": "03/22/1987",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "111_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "111_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"e3f4a5b6c7\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "111_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "open_bank_account_4821"
+        },
+        "requestor": "assistant",
+        "action_id": "111_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "open_bank_account_4821",
+          "arguments": "{\"user_id\": \"e3f4a5b6c7\", \"account_type\": \"business_checking\", \"account_class\": \"Cobalt Blue\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "111_4"
+      }
+    ],
+    "reward_basis": [
+      "DB"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_003",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_bank_accounts_bank_accounts_(general)_013",
+    "doc_bank_accounts_bank_accounts_(general)_014",
+    "doc_business_checking_accounts_sky_blue_001",
+    "doc_business_checking_accounts_lime_green_001",
+    "doc_business_checking_accounts_hunter_green_001",
+    "doc_business_checking_accounts_navy_blue_001",
+    "doc_business_checking_accounts_true_blue_001",
+    "doc_business_checking_accounts_world_blue_001",
+    "doc_business_checking_accounts_beige_001",
+    "doc_business_checking_accounts_cobalt_blue_001",
+    "doc_business_checking_accounts_cobalt_blue_002",
+    "doc_business_checking_accounts_cobalt_blue_004"
+  ]
+}

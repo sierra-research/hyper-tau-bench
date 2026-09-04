@@ -1,0 +1,70 @@
+{
+  "id": "banking_credit_card_referrals_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "credit_card_referrals",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_referrals/source.md",
+    "heading": "## Credit-card referral status, restrictions, and link generation"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_referrals/transcript_induction_001.md",
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook requirements from shared context: verify identity before account-specific information, get explicit confirmation before account-modifying actions, and use the exact transfer message when a transfer is performed.",
+      "Support console turns may mention document ids, internal tool results, and eligibility checks; Agent turns should give the customer the customer-visible next step or outcome.",
+      "Do not transform concrete KB tables, thresholds, statuses, fees, amounts, or condition-specific outcomes into vague dependency statements."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "identity verification before account-specific details",
+      "explicit customer confirmation before account-modifying actions",
+      "plain-language customer-facing outcomes",
+      "support-console notes for internal KB/tool evidence"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_002.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_009.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_020.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_silver_rewards_card_011.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_platinum_rewards_card_008.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_ecocard_011.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_credit_cards_business_gold_rewards_card_010.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_credit_cards_silver_zoom_card_011.json"
+    ],
+    "summary": "Checking referral statuses, applying referral restrictions, generating links, and distinguishing personal from business referral programs.",
+    "rules": [
+      "Preserve all values, tables, thresholds, statuses, fees, amounts, eligibility gates, tool/action names, and condition-to-outcome mappings from the source bundle.",
+      "Use the shared banking handbook for identity verification, explicit confirmation before account-modifying actions, discoverable-tool wrapper behavior, schema limits, and transfer wording.",
+      "Do not invent unsupported account fields, undocumented override mechanisms, undocumented tool names, or customer entitlements not present in the source bundle.",
+      "When a source document is internal, represent its internal checks in Support console turns or agent behavior rather than as exposed policy narration."
+    ],
+    "candidate": {
+      "id": "credit_card_referrals",
+      "title": "Credit-card referral status, restrictions, and link generation",
+      "priority": 1,
+      "related_task_ids": [
+        "task_010",
+        "task_014",
+        "task_015",
+        "task_016"
+      ],
+      "recommended_case_count": 5,
+      "losslessness_risks": [
+        "Preserve every referral status and its customer-facing implication.",
+        "Preserve product-specific restrictions and reward timing.",
+        "Do not imply a referral reward is guaranteed before status criteria are met."
+      ]
+    }
+  },
+  "facts": [],
+  "transcripts": []
+}

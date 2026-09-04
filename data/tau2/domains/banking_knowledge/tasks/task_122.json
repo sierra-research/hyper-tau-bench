@@ -1,0 +1,122 @@
+{
+  "id": "task_122",
+  "description": {
+    "purpose": "Task: task_122",
+    "relevant_policies": null,
+    "notes": "REFERRAL BLOCKED - SAME-ADDRESS RESTRICTION. Customer (Bluest Account holder since 03/2022, only 2 referrals this year, none recent) wants to refer her HUSBAND, who would move over about $2,500. Every other gate passes: tenure (3+ years), rolling window (last referral June), annual caps, deposit size ($2,500 >= Bluest's $2,000). But the referrer and referred person cannot be registered at the same address, and they live together - the referral is blocked outright, for ANY account type. The correct outcome is NO submit_referral at all: the agent must surface the restriction and decline. The golden trajectory is read-only apart from verification. If the agent recommends an account, the user WILL submit the referral, diverging the DB - so agents that skip the eligibility check fail."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Rosa Iturralde, a 39-year-old dental hygienist in San Diego. You are upbeat and excited to finally get your husband onto the same bank.\n\n**Verification info:**\n- Name: Rosa Iturralde | Phone: 619-555-0482 | Email: rosa.iturralde@gmail.com\n- DOB: 05/21/1986 | Address: 1735 Catalina Vista Court, San Diego, CA 92107\n\n**Tool usage:** You have access to `submit_referral`. Use it ONLY if the agent recommends an account and confirms you can submit a referral. Call it with your user_id (rd86t3p7v2) and the exact account_type the agent recommends (always include the word \"Account\" at the end, e.g. \"Bluest Account\").\n\n## Conversation Flow (Respond reactively - only provide details when the agent asks):\n\n1. **Opening:** \"Hi! My husband Mateo is FINALLY moving his money over from his old bank - about $2,500. I want to refer him before he opens his account. I have a Bluest account and I heard the Bluest referral pays $75. Can we set that up?\"\n\n2. **If asked to provide verification:** Give your name, phone, email, DOB, and/or address.\n\n3. **If asked about the person you're referring, your relationship, or his address:** \"It's my husband, Mateo Iturralde. We live together - same address as mine, the one I just gave you. He's never banked with Rho-Bank before.\"\n\n4. **If asked about your referral history:** \"I did a couple earlier in the year - April and June, I think. Nothing since then.\"\n\n5. **If agent explains the referral cannot be done because you and Mateo live at the same address:** \"Seriously? That's such a strange rule... okay. So there's no account type that would work for him as a referral from me? ... Alright. Thanks for checking before I got my hopes up.\" ###STOP### Do NOT submit a referral.\n\n6. **If agent recommends an account and tells you to go ahead:** \"Great, let me do that now.\" Then use submit_referral with user_id=\"rd86t3p7v2\" and the account_type the agent recommended.\n\n7. **After submitting:** \"Thanks! I'll tell Mateo tonight.\" ###STOP###\n\nOnly provide additional details about your situation when the agent asks. Never respond as a customer service representative/assistant."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "users": {
+          "data": {
+            "rd86t3p7v2": {
+              "name": "Rosa Iturralde",
+              "user_id": "rd86t3p7v2",
+              "address": "1735 Catalina Vista Court, San Diego, CA 92107",
+              "email": "rosa.iturralde@gmail.com",
+              "phone_number": "619-555-0482",
+              "date_of_birth": "05/21/1986"
+            }
+          }
+        },
+        "accounts": {
+          "data": {
+            "chk_rd86t3p7v2_bluest": {
+              "account_id": "chk_rd86t3p7v2_bluest",
+              "user_id": "rd86t3p7v2",
+              "class": "checking",
+              "level": "Bluest Account",
+              "date_opened": "03/15/2022",
+              "status": "OPEN",
+              "current_holdings": "22400.00"
+            }
+          }
+        },
+        "referrals": {
+          "data": {
+            "ref_ri122_bluest_001": {
+              "referral_id": "ref_ri122_bluest_001",
+              "referrer_id": "rd86t3p7v2",
+              "referred_account_type": "Bluest Account",
+              "referral_status": "COMPLETE",
+              "date": "04/18/2025"
+            },
+            "ref_ri122_bluest_002": {
+              "referral_id": "ref_ri122_bluest_002",
+              "referrer_id": "rd86t3p7v2",
+              "referred_account_type": "Bluest Account",
+              "referral_status": "COMPLETE",
+              "date": "06/27/2025"
+            }
+          }
+        }
+      }
+    }
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Rosa Iturralde",
+          "user_id": "rd86t3p7v2",
+          "address": "1735 Catalina Vista Court, San Diego, CA 92107",
+          "email": "rosa.iturralde@gmail.com",
+          "phone_number": "619-555-0482",
+          "date_of_birth": "05/21/1986",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "122_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "122_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"rd86t3p7v2\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "122_2"
+      },
+      {
+        "name": "get_referrals_by_user",
+        "arguments": {
+          "user_id": "rd86t3p7v2"
+        },
+        "requestor": "assistant",
+        "action_id": "122_3"
+      }
+    ],
+    "nl_assertions": [
+      "The agent does not process any referral and explains that it cannot proceed because the referrer and the referred person are registered at the same address."
+    ],
+    "reward_basis": [
+      "DB",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [
+    "call_discoverable_user_tool",
+    "submit_referral"
+  ],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_047",
+    "doc_bank_accounts_bank_accounts_(general)_048",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_checking_accounts_bluest_account_003"
+  ]
+}

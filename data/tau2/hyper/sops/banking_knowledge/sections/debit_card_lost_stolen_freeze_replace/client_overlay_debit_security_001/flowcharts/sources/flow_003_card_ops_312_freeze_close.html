@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1760">
+<title>Freeze or close - disposition of a debit card</title><style>
+*{box-sizing:border-box} html,body{margin:0;width:1760px;height:1280px;overflow:hidden}
+body{background:#e9edf0;color:#172431;font-family:Arial,Helvetica,sans-serif}
+.sheet{position:relative;width:1712px;height:1232px;margin:24px;background:#fff;border:1px solid #9ba7b1}
+.frame-label{position:absolute;left:-1px;top:-1px;background:#18232d;color:#fff;padding:7px 16px;font-size:12px;font-weight:800;letter-spacing:.3px}
+header{height:154px;margin:0 38px;border-bottom:2px solid #243746;padding:37px 0 18px;display:flex;justify-content:space-between;align-items:flex-start}
+.eyebrow{font-size:13px;font-weight:800;color:#5a6874;letter-spacing:.6px;margin-bottom:10px}
+h1{font-size:36px;line-height:1.06;margin:0 0 10px;letter-spacing:-.4px} .subtitle{font-size:14px;color:#5f6e79}
+.header-meta{display:flex;gap:12px;align-items:flex-start}
+.version{border:1px solid #b6c0c8;padding:10px 13px;font-size:11px;color:#52606b;line-height:1.35}
+.diagram{position:absolute;left:38px;top:174px;width:1636px;height:700px}
+.phase{position:absolute;border:1px solid #9da8b2;background:#fbfcfd;z-index:0}
+.phase.current-zone{background:#f7fbf8;border-color:#84a98f}
+.phase>span{position:absolute;left:-1px;top:-21px;height:21px;background:#505b65;color:white;padding:5px 10px;font-size:10px;font-weight:800;letter-spacing:.3px}
+.phase.current-zone>span{background:#207044}
+svg{position:absolute;inset:0;width:1636px;height:700px;z-index:1;overflow:visible}
+path{fill:none;stroke:#205d8f;stroke-width:2.2;marker-end:url(#arrow)}
+path.loop{stroke:#8b98a4;stroke-dasharray:6 5;marker-end:url(#arrow-gray)}
+path.reject{stroke:#b74242;stroke-dasharray:5 4;marker-end:url(#arrow-red)}
+.node{position:absolute;z-index:3;border:1.5px solid #1f2a33;background:white;padding:10px 12px;display:flex;flex-direction:column;justify-content:center;text-align:center;font-size:11px;line-height:1.25}
+.node small{display:block;margin-bottom:5px;color:#26618b;font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase}
+.node strong{font-size:12px;line-height:1.2} .node p{margin:5px 0 0;color:#4e5b65;font-size:10px;line-height:1.25}
+.node.start{border-color:#2f8c4a;background:#eef8ef;border-radius:28px}
+.node.terminal{border-radius:28px;background:#f1f5f7}
+.node.stop{border-color:#c83e3e;background:#fff1ef;border-radius:5px}
+.node.system{border-color:#6e8ca4;background:#edf5fb;text-align:left;font-family:"Courier New",monospace;overflow-wrap:anywhere}
+.node.system strong{font-size:11px;overflow-wrap:anywhere}
+.node.dialogue{background:#f5f0ff;border-color:#7c68a7;border-radius:5px 5px 20px 5px}
+.node.decision{padding:0;border:none;background:transparent;transform:rotate(45deg)}
+.node.decision:before{content:"";position:absolute;inset:0;border:1.5px solid #347447;background:#fbfffb}
+.decision-content{position:absolute;inset:15px;z-index:1;transform:rotate(-45deg);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.decision-content small{margin:0 0 4px} .decision-content strong{font-size:11px;line-height:1.08} .decision-content p{font-size:8px;line-height:1.12;margin:3px 0 0}
+.edge-label{position:absolute;z-index:4;background:#fff;padding:1px 4px;color:#315a78;font-size:9px;font-weight:800}
+.sticky{position:absolute;z-index:5;padding:10px 11px;box-shadow:0 2px 5px #0003;transform:rotate(-.7deg);font-size:9.5px;line-height:1.3}
+.sticky.yellow{background:#fff098} .sticky.green{background:#c8f2d2} .sticky.blue{background:#cce5fa}
+.sticky b{font-size:9.5px} .sticky p{margin:5px 0 7px} .sticky em{display:block;text-align:right;font-size:8px;color:#59636a}
+.gate-notes{position:absolute;left:38px;right:38px;bottom:34px;height:290px;border:1px solid #8d9aa4;background:#fafbfc;padding:26px 16px 12px}
+.gate-notes h2{position:absolute;left:-1px;top:-21px;margin:0;background:#18232d;color:white;padding:5px 12px;font-size:10px;letter-spacing:.3px}
+.gate-notes>div{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 12px;align-content:start;height:100%}
+.gate-notes article{border-left:3px solid #2975a6;padding:5px 8px;display:grid;grid-template-columns:52px 1fr;gap:7px;align-content:start}
+.gate-notes article b{font-size:10px;color:#225a81} .gate-notes article p{font-size:9.5px;line-height:1.25;margin:0;color:#37434c}
+.watermark{position:absolute;right:42px;bottom:12px;color:#8a949b;font-size:9px}
+</style></head><body><main class="sheet"><div class="frame-label">CARD OPS · FREEZE / CLOSE</div>
+<header><div><div class="eyebrow">RHO BANK · CARD OPERATIONS · DEBIT CARD DESK</div><h1>Freeze or close - disposition of a debit card</h1><div class="subtitle">Applies when a customer wants to close, cancel, or deactivate a debit card - or isn't sure. The first question decides the branch: a freeze can be undone, a close cannot.</div></div>
+<div class="header-meta"><div class="version">Owner: Bettina Sandoval · Card Operations<br>Issued: 2025-08-11<br>Ref: CARD-OPS-312 · v2.4</div></div></header>
+<section class="diagram"><section class='phase' style='left:12px;top:48px;width:560px;height:400px'><span>INTAKE - WHY, BEFORE WHAT</span></section><section class='phase current-zone' style='left:602px;top:48px;width:1022px;height:400px'><span>CLOSE ELIGIBILITY - EVERY GATE, IN ORDER</span></section><section class='phase' style='left:12px;top:478px;width:1612px;height:190px'><span>OUTCOMES · AFTER THE CLOSE</span></section><svg viewBox="0 0 1636 700" aria-hidden="true"><defs>
+<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#205d8f"/></marker>
+<marker id="arrow-gray" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#8b98a4"/></marker>
+<marker id="arrow-red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#b74242"/></marker></defs>
+<path class='flow' d='M145 145 V180'/>
+<path class='flow' d='M215 245 H265'/>
+<path class='flow' d='M340 320 V338 H145 V350'/>
+<path class='flow' d='M410 245 H630'/>
+<path class='flow' d='M755 245 H800'/>
+<path class='flow' d='M925 245 H970'/>
+<path class='flow' d='M1095 245 H1140'/>
+<path class='flow' d='M1265 245 H1310'/>
+<path class='flow' d='M1375 310 V330 H700 V360'/>
+<path class='flow' d='M765 425 H860'/>
+<path class='flow' d='M700 425 V520'/>
+<path class='reject' d='M690 310 V330'/>
+<path class='reject' d='M860 310 V330'/>
+<path class='reject' d='M1030 310 V330'/>
+<path class='reject' d='M1200 310 V330'/>
+<path class='reject' d='M985 460 H1060 V520'/>
+<path class='flow' d='M330 560 H380'/>
+<path class='flow' d='M660 585 H710'/>
+</svg>
+<span class='edge-label' style='left:152px;top:158px'>REASON GIVEN</span>
+<span class='edge-label' style='left:352px;top:322px'>TEMPORARY · STILL LOOKING</span>
+<span class='edge-label' style='left:152px;top:322px'>FREEZE PATH</span>
+<span class='edge-label' style='left:420px;top:214px'>PERMANENT · CONFIRMED GONE · CANCEL</span>
+<span class='edge-label' style='left:762px;top:228px'>YES</span><span class='edge-label' style='left:932px;top:228px'>YES</span><span class='edge-label' style='left:1102px;top:228px'>YES</span><span class='edge-label' style='left:1272px;top:228px'>YES</span>
+<span class='edge-label' style='left:707px;top:338px'>ALL GATES MET</span>
+<span class='edge-label' style='left:698px;top:314px'>NO</span><span class='edge-label' style='left:868px;top:314px'>NO</span><span class='edge-label' style='left:1038px;top:314px'>NO</span><span class='edge-label' style='left:1208px;top:314px'>NO</span>
+<span class='edge-label' style='left:772px;top:408px'>PENDING ITEMS</span>
+<span class='edge-label' style='left:707px;top:492px'>CLOSED</span>
+<article class='node start' style='left:45px;top:80px;width:200px;height:64px'><strong>Close, cancel, or deactivate?</strong><p>Or a misplaced card, or a security worry</p></article>
+<article class='node dialogue' style='left:45px;top:180px;width:200px;height:64px'><strong>ASK THE REASON FIRST</strong><p>The reason decides freeze vs close and drives the eligibility gates</p></article>
+<article class='node decision' style='left:265px;top:170px;width:150px;height:150px'><div class='decision-content'><strong>Temporary lock or permanent close?</strong><p>freeze = reversible · close = permanent, no reversal</p></div></article>
+<article class='node terminal' style='left:45px;top:350px;width:200px;height:76px'><strong>FREEZE PATH</strong><p>Runs on the console freeze flow with its four disclosures; unfreeze available any time</p></article>
+<article class='node decision' style='left:630px;top:180px;width:130px;height:130px'><div class='decision-content'><strong>Customer verified + owner?</strong><p>user_id on the card must match</p></div></article>
+<article class='node decision' style='left:800px;top:180px;width:130px;height:130px'><div class='decision-content'><strong>Status ACTIVE or PENDING?</strong><p>only those two statuses close</p></div></article>
+<article class='node decision' style='left:970px;top:180px;width:130px;height:130px'><div class='decision-content'><strong>Reason permitted?</strong><p>six permitted closing reasons - see notes</p></div></article>
+<article class='node decision' style='left:1140px;top:180px;width:130px;height:130px'><div class='decision-content'><strong>Card active for at least 14 days?</strong><p>bypassed for lost, stolen, fraud_suspected</p></div></article>
+<article class='node system' style='left:1310px;top:190px;width:250px;height:120px'><small>READ</small><strong>Pending-item check</strong><p>Transactions pending or processing? Refunds pending? Both must be clear - or resolved per the notes - before the close.</p></article>
+<article class='node system' style='left:600px;top:360px;width:200px;height:130px'><small>WRITE</small><strong>close_debit_card_4721</strong><p>card_id + reason. Permanent. Confirm the status change on screen before wrapping up.</p></article>
+<article class='node stop' style='left:860px;top:380px;width:250px;height:90px'><strong>DO NOT PROCEED</strong><p>Tell the customer exactly which requirement is unmet and what resolves it - settle-out wait for pending transactions; refund and card-age handling per the closure addendum to CARD-OPS-312.</p></article>
+<article class='node terminal' style='left:600px;top:520px;width:200px;height:70px'><strong>CLOSED - PERMANENT</strong><p>Cannot be reopened by anyone; a new card is a new order</p></article>
+<article class='node system' style='left:960px;top:520px;width:280px;height:70px'><small>CUSTOMER SCRIPT</small><strong>Unmet-requirement wrap-up</strong><p>Document what was unmet and what was told to the customer, then close the contact without the close.</p></article>
+<article class='node dialogue' style='left:60px;top:520px;width:270px;height:90px'><strong>REPLACEMENT CONVERSATION</strong><p>Closed for lost, stolen, fraud, or damaged? Offer the replacement order per the entitlement workbook - ceiling, waiting period, and tier fees quoted before ordering.</p></article>
+<article class='node system' style='left:380px;top:530px;width:180px;height:70px'><small>CROSS-PRODUCT</small><strong>Wallet check</strong><p>Lost or stolen report? The credit-card security check runs before wrap-up.</p></article>
+<aside class='sticky blue' style='left:290px;top:355px;width:250px'><b>WHEN FREEZING IS THE RIGHT CALL</b><p>Misplaced but probably nearby · travel and extra security · suspicious activity being investigated before closing · a temporary spending restriction like budgeting · a family member borrowing the card while the customer wants control of usage.</p><em>desk reference · 08/11</em></aside>
+<aside class='sticky yellow' style='left:1290px;top:365px;width:270px'><b>CONFIRMED LOST OR STOLEN?</b><p>Recommend closing, not freezing. A freeze protects a card that might come back; a card confirmed lost or stolen isn't coming back, and the number needs to die with it.</p><em>D. Havel · Fraud Ops · 08/11</em></aside>
+<aside class='sticky green' style='left:1290px;top:520px;width:270px'><b>ACCOUNT CLOSING?</b><p>If the linked checking account is being closed, all associated debit cards must be closed first - the account closure will not run over an open card.</p><em>B. Sandoval · 08/11</em></aside>
+</section>
+<section class='gate-notes'><h2>CLOSE GATES AND AFTER-CLOSE NOTES</h2><div>
+<article><b>C-312.1</b><p>Permitted closing reasons: lost · stolen · fraud_suspected (suspected fraud or unauthorized transactions) · damaged (customer wants replacement) · no_longer_needed · account_closing.</p></article>
+<article><b>C-312.2</b><p>The customer must be verified, and must be the owner of the debit card - matched on user_id - before it can be closed.</p></article>
+<article><b>C-312.3</b><p>The card must currently be ACTIVE or PENDING. Cards already FROZEN close through the same gates; cards already CLOSED have nothing to close.</p></article>
+<article><b>C-312.4</b><p>No pending or processing transactions: if any exist, the customer must wait for all transactions to settle before closure.</p></article>
+<article><b>C-312.5</b><p>No pending refunds: a pending refund places a closure hold. The resolution path is set out in the closure addendum to CARD-OPS-312.</p></article>
+<article><b>C-312.6</b><p>For reasons other than lost, stolen, or fraud_suspected, the card must have been active for at least 14 days. If it is newer, the card cannot be closed yet - handling per the closure addendum to CARD-OPS-312.</p></article>
+<article><b>C-312.7</b><p>Lost, stolen, and fraud_suspected closures bypass the minimum card-age requirement for security purposes. Nothing else bypasses it.</p></article>
+<article><b>C-312.8</b><p>Any unmet gate: tell the customer what must be resolved and do not proceed with the closure.</p></article>
+<article><b>C-312.9</b><p>After the close: closed cards cannot be reopened - a new card is a new order. Refunds addressed to a closed card are credited to the linked checking account.</p></article>
+</div></section><div class="watermark">Internal working material · not customer-facing · CARD-OPS-312 · v2.4</div></main></body></html>

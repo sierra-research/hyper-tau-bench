@@ -1,0 +1,216 @@
+From: Beatriz Campos <beatriz.campos@rhobank.com>
+To: Nadia Petrov <nadia.petrov@rhobank.com>, Karim Haddad <karim.haddad@rhobank.com>
+Cc: Shreya Banerjee <shreya.banerjee@rhobank.com>, Margo Hale <margo.hale@rhobank.com>
+Date: Fri, 07 Nov 2025 18:47:58 -0500
+Subject: RE: Nov 5 link generation incident - summary and follow-ups
+Message-ID: <07ef63484bc5f03f7c47@rhobank.com>
+In-Reply-To: <63929056d2175a10840b@rhobank.com>
+References: <f22421e551786de67bb8@rhobank.com>
+ <de3af8dce332649fdd96@rhobank.com> <01ed82ad7eb4a9b1c128@rhobank.com>
+ <5d041697565a18cd0c42@rhobank.com> <d2caf37bcce5304804ed@rhobank.com>
+ <fd92643f5239af4f357d@rhobank.com> <d04d5924b5e539979e79@rhobank.com>
+ <18f825e1f9cf7a0ab351@rhobank.com> <50cb6ef458d427cf19dd@rhobank.com>
+ <d74efd6bc9191bc3f7d1@rhobank.com> <b9a41ce21aab2bdebd7f@rhobank.com>
+ <63929056d2175a10840b@rhobank.com>
+Thread-Topic: Nov 5 link generation incident - summary and follow-ups
+Thread-Index: d0462868245ebc7c1159ecacc42829e1
+Accept-Language: en-US
+X-Auto-Response-Suppress: All
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+write-up is filed -- it lives on the linkgen incident page in the
+console, where the incident macro (MAC-REF-219) already points.
+sweep method, the 0602 walk, and the all-clear are all on it. nadia:
+the clip is attached to the same page, timestamps intact. closing my
+half and going home.
+
+beatriz
+
+-----Original Message-----
+From: Nadia Petrov <nadia.petrov@rhobank.com>
+Sent: Fri, 07 Nov 2025 18:35:11 -0500
+To: Beatriz Campos <beatriz.campos@rhobank.com>
+Cc: Karim Haddad <karim.haddad@rhobank.com>, Shreya Banerjee <shreya.banerjee@rhobank.com>
+Subject: RE: Nov 5 link generation incident - summary and follow-ups
+
+When the write-up lands, send the clip my way for the library -- the
+verification walk teaches on its own.
+
+Nadia
+
+-----Original Message-----
+From: Karim Haddad <karim.haddad@rhobank.com>
+Sent: Fri, 07 Nov 2025 18:22:40 -0500
+To: Shreya Banerjee <shreya.banerjee@rhobank.com>
+Cc: Beatriz Campos <beatriz.campos@rhobank.com>, Margo Hale <margo.hale@rhobank.com>
+Subject: RE: Nov 5 link generation incident - summary and follow-ups
+
+Two answers.
+
+The bug itself: the proper fix shipped in this afternoon's config
+train alongside the error-message change -- the rate-limit tightening
+is back in with the scope it should have had, and generation stayed
+clean through the deploy. Beatriz's sweep closes the effect; this
+closes the cause.
+
+Old exports: separate thing, and not something I will rewrite --
+files keep the labels they were cut with. The import flag catches
+those now (TRG-REF-58), so an old file pulled back into the console
+arrives flagged instead of quietly stale. Your lead's October pull is
+exactly what it exists for.
+
+Karim
+
+-----Original Message-----
+From: Shreya Banerjee <shreya.banerjee@rhobank.com>
+Sent: Fri, 07 Nov 2025 17:51:04 -0500
+To: Karim Haddad <karim.haddad@rhobank.com>
+Cc: Beatriz Campos <beatriz.campos@rhobank.com>
+Subject: RE: Nov 5 link generation incident - summary and follow-ups
+
+Good end to the week. One more while we are closing things, a
+different cleanup: will the older exports keep printing the retired
+label forever? One of my leads pulled an October file this week and
+fielded a confused question about it within the hour.
+
+Shreya
+
+-----Original Message-----
+From: Beatriz Campos <beatriz.campos@rhobank.com>
+Sent: Fri, 07 Nov 2025 17:38:19 -0500
+To: Karim Haddad <karim.haddad@rhobank.com>
+Cc: Shreya Banerjee <shreya.banerjee@rhobank.com>, Nadia Petrov <nadia.petrov@rhobank.com>
+Subject: RE: Nov 5 link generation incident - summary and follow-ups
+
+since everyone is clearly still at their desks: verification is
+done. the sweep of the affected window ran thursday and finished
+overnight -- no half-created records, no orphaned rows. one candidate
+got flagged, RFL-2511-0602, and it turned out to be a normal creation
+from before the window. walked it this morning, account column and
+all, and cleared it. write-up to follow.
+
+beatriz
+
+-----Original Message-----
+From: Karim Haddad <karim.haddad@rhobank.com>
+Sent: Fri, 07 Nov 2025 17:12:45 -0500
+To: Shreya Banerjee <shreya.banerjee@rhobank.com>, Margo Hale <margo.hale@rhobank.com>
+Cc: Growth Marketing <growth-marketing@rhobank.com>
+Subject: RE: Nov 5 link generation incident - summary and follow-ups
+
+Closing follow-up one: the truthful error message shipped in this
+afternoon's config release. Generation failures now say what is
+actually happening and when to retry. Two more follow-ups tracked for
+next week.
+
+Karim
+
+-----Original Message-----
+From: Karim Haddad <karim.haddad@rhobank.com>
+Sent: Thu, 06 Nov 2025 09:51:30 -0500
+To: Nadia Petrov <nadia.petrov@rhobank.com>
+Cc: Shreya Banerjee <shreya.banerjee@rhobank.com>
+Subject: RE: Nov 5 link generation incident - summary and follow-ups
+
+None -- clip away. The thread is the teachable object; my summary is
+just the receipt.
+
+Karim
+
+-----Original Message-----
+From: Nadia Petrov <nadia.petrov@rhobank.com>
+Sent: Thu, 06 Nov 2025 09:22:54 -0500
+To: Karim Haddad <karim.haddad@rhobank.com>
+Cc: Shreya Banerjee <shreya.banerjee@rhobank.com>
+Subject: RE: Nov 5 link generation incident - summary and follow-ups
+
+QA request: I want to clip the channel thread into the training set
+next to the kept calls, timestamps intact. It is the first non-call
+artifact that has earned it. Any objection from engineering to it
+being quoted internally?
+
+Nadia
+
+-----Original Message-----
+From: Marcus Bell <marcus.bell@rhobank.com>
+Sent: Wed, 05 Nov 2025 16:10:37 -0500
+To: Shreya Banerjee <shreya.banerjee@rhobank.com>
+Cc: Karim Haddad <karim.haddad@rhobank.com>
+Subject: RE: Nov 5 link generation incident - summary and follow-ups
+
+floor note: the retry-later guidance worked, afternoon customers all
+generated clean on the first try. one of my chats even said thanks for
+not blaming her wifi
+
+-----Original Message-----
+From: Karim Haddad <karim.haddad@rhobank.com>
+Sent: Wed, 05 Nov 2025 15:44:12 -0500
+To: Gideon Frank <gideon.frank@rhobank.com>
+Cc: Margo Hale <margo.hale@rhobank.com>
+Subject: RE: Nov 5 link generation incident - summary and follow-ups
+
+None. Generation is upstream of everything with money attached -- no
+record, no attribution, no obligation in either direction. The
+affected customers lost time, not entitlements.
+
+Karim
+
+-----Original Message-----
+From: Gideon Frank <gideon.frank@rhobank.com>
+Sent: Wed, 05 Nov 2025 15:20:48 -0500
+To: Karim Haddad <karim.haddad@rhobank.com>
+Cc: Margo Hale <margo.hale@rhobank.com>
+Subject: RE: Nov 5 link generation incident - summary and follow-ups
+
+Finance's one question, for the record: any bonus exposure in the
+window? Anything that paid or failed to pay because of it?
+
+Gideon
+
+-----Original Message-----
+From: Shreya Banerjee <shreya.banerjee@rhobank.com>
+Sent: Wed, 05 Nov 2025 14:38:26 -0500
+To: Karim Haddad <karim.haddad@rhobank.com>
+Cc: Margo Hale <margo.hale@rhobank.com>, Growth Marketing <growth-marketing@rhobank.com>
+Subject: RE: Nov 5 link generation incident - summary and follow-ups
+
+Confirming the floor's side: question volume spiked for the morning
+and died within the hour after rollback. And the agent who ran the
+channel thread has been here five weeks -- the escalation pattern is
+learnable, which is the best news of the day.
+
+Shreya
+
+-----Original Message-----
+From: Karim Haddad <karim.haddad@rhobank.com>
+Sent: Wed, 05 Nov 2025 14:05:33 -0500
+To: Shreya Banerjee <shreya.banerjee@rhobank.com>, Margo Hale <margo.hale@rhobank.com>
+Cc: Growth Marketing <growth-marketing@rhobank.com>
+Subject: Nov 5 link generation incident - summary and follow-ups
+
+All,
+
+Summary of this morning for people who were not in the channel thread.
+
+At 09:12 we shipped a backend config change meant to tighten rate
+limiting on an unrelated endpoint. A scoping bug in that change caused
+the link generation service to return errors for a slice of requests.
+Support saw it within minutes and the channel thread ran the
+escalation properly -- timestamps, error strings, affected counts, no
+speculation. We rolled back at 13:30; generation has been clean since.
+
+Blast radius, stated plainly because it was this morning's hardest
+question: the failure was at generation, before any record exists.
+Errored attempts created nothing, existing referrals and statuses were
+never touched, and every affected customer can simply retry. Two
+desk-side portal submissions errored and were resubmitted the same
+day.
+
+Follow-ups I own: a truthful error message for generation failures
+(shipping this week -- it was deprioritized twice and that stops now),
+a documented answer on retry behavior where support can find it, and
+blast-radius language in the first responder message template.
+
+Karim

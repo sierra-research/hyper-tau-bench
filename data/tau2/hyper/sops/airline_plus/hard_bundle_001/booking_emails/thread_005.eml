@@ -1,0 +1,224 @@
+From: Maya Wei <maya.wei@harborpointcx.com>
+To: Theo Beaumont <theo.beaumont@meridianairlines.com>,
+ Elena Marquez <elena.marquez@harborpointcx.com>,
+ Owen Brandt <owen.brandt@meridianairlines.com>,
+ Gene Park <gene.park@clearlinevoice.com>
+Cc: Rina Mehta <rina.mehta@meridianairlines.com>
+Date: Mon, 04 Mar 2024 09:03:08 +0000
+Subject: Search latency in the rehearsal environment
+Message-ID: <96fe08fff734.dde25ced@mail.harborpointcx.com>
+In-Reply-To: <88045c84555b.4949bb79@mail.meridianairlines.com>
+References: <734a8e572a0c.fc005beb@mail.harborpointcx.com>
+ <117ed86cb551.3031ba1e@mail.meridianairlines.com>
+ <769efd3ce28d.b33f1f54@mail.harborpointcx.com>
+ <80734636210f.0d2e745c@mail.meridianairlines.com>
+ <d421bd228ad2.090e616c@mail.meridianairlines.com>
+ <f5fe03480d13.290533d6@mail.clearlinevoice.com>
+ <37ed2633ef30.4b102e54@mail.harborpointcx.com>
+ <f56ea59b6d57.6339e2f0@mail.clearlinevoice.com>
+ <edf682cbfdff.0408b7be@mail.meridianairlines.com>
+ <e382de7efc0a.ae946219@mail.clearlinevoice.com>
+ <88045c84555b.4949bb79@mail.meridianairlines.com>
+Thread-Topic: Search latency in the rehearsal environment
+Thread-Index: Ad50LhLTP1yojPbnNQM+5god+cLCsw==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Full week of clean drills and a quiet probe. Closing this out and moving the =
+timeout troubleshooting steps into the trainer runbook appendix, mostly so fu=
+ture us can enjoy how thorough past us was.
+
+-----Original Message-----
+From: Owen Brandt <owen.brandt@meridianairlines.com>
+Sent: Friday, March 1, 2024 10:22 AM UTC
+To: theo.beaumont@meridianairlines.com, elena.marquez@harborpointcx.com, gene=
+.park@clearlinevoice.com, maya.wei@harborpointcx.com, rina.mehta@meridianairl=
+ines.com
+Subject: Search latency in the rehearsal environment
+Message-ID: <88045c84555b.4949bb79@mail.meridianairlines.com>
+In-Reply-To: <e382de7efc0a.ae946219@mail.clearlinevoice.com>
+References: <734a8e572a0c.fc005beb@mail.harborpointcx.com> <117ed86cb551.3031=
+ba1e@mail.meridianairlines.com> <769efd3ce28d.b33f1f54@mail.harborpointcx.com=
+> <80734636210f.0d2e745c@mail.meridianairlines.com> <d421bd228ad2.090e616c@ma=
+il.meridianairlines.com> <f5fe03480d13.290533d6@mail.clearlinevoice.com> <37e=
+d2633ef30.4b102e54@mail.harborpointcx.com> <f56ea59b6d57.6339e2f0@mail.clearl=
+inevoice.com> <edf682cbfdff.0408b7be@mail.meridianairlines.com> <e382de7efc0a=
+.ae946219@mail.clearlinevoice.com>
+
+Added a synthetic search probe on our side that runs every five minutes again=
+st the rehearsal environment and pages me past two seconds. If this recurs we=
+ will know before a classroom does.
+
+-----Original Message-----
+From: Gene Park <gene.park@clearlinevoice.com>
+Sent: Thursday, February 29, 2024 1:58 PM UTC
+To: theo.beaumont@meridianairlines.com, elena.marquez@harborpointcx.com, owen=
+.brandt@meridianairlines.com, maya.wei@harborpointcx.com, rina.mehta@meridian=
+airlines.com
+Subject: Search latency in the rehearsal environment
+Message-ID: <e382de7efc0a.ae946219@mail.clearlinevoice.com>
+In-Reply-To: <edf682cbfdff.0408b7be@mail.meridianairlines.com>
+References: <734a8e572a0c.fc005beb@mail.harborpointcx.com> <117ed86cb551.3031=
+ba1e@mail.meridianairlines.com> <769efd3ce28d.b33f1f54@mail.harborpointcx.com=
+> <80734636210f.0d2e745c@mail.meridianairlines.com> <d421bd228ad2.090e616c@ma=
+il.meridianairlines.com> <f5fe03480d13.290533d6@mail.clearlinevoice.com> <37e=
+d2633ef30.4b102e54@mail.harborpointcx.com> <f56ea59b6d57.6339e2f0@mail.clearl=
+inevoice.com> <edf682cbfdff.0408b7be@mail.meridianairlines.com>
+
+Those two came from a stale connection pool on one app node that never picked=
+ up the new index endpoint - bounced it and added the endpoint check to our d=
+eploy verification. The other nodes were clean all morning.
+
+-----Original Message-----
+From: Rina Mehta <rina.mehta@meridianairlines.com>
+Sent: Thursday, February 29, 2024 9:15 AM UTC
+To: theo.beaumont@meridianairlines.com, elena.marquez@harborpointcx.com, owen=
+.brandt@meridianairlines.com, gene.park@clearlinevoice.com, maya.wei@harborpo=
+intcx.com
+Subject: Search latency in the rehearsal environment
+Message-ID: <edf682cbfdff.0408b7be@mail.meridianairlines.com>
+In-Reply-To: <f56ea59b6d57.6339e2f0@mail.clearlinevoice.com>
+References: <734a8e572a0c.fc005beb@mail.harborpointcx.com> <117ed86cb551.3031=
+ba1e@mail.meridianairlines.com> <769efd3ce28d.b33f1f54@mail.harborpointcx.com=
+> <80734636210f.0d2e745c@mail.meridianairlines.com> <d421bd228ad2.090e616c@ma=
+il.meridianairlines.com> <f5fe03480d13.290533d6@mail.clearlinevoice.com> <37e=
+d2633ef30.4b102e54@mail.harborpointcx.com> <f56ea59b6d57.6339e2f0@mail.clearl=
+inevoice.com>
+
+One morning of regression: two searches in the nine o'clock block spun past t=
+he timeout again. Trace IDs sent directly to Gene. Flagging here so we don't =
+declare victory in the runbook prematurely.
+
+-----Original Message-----
+From: Gene Park <gene.park@clearlinevoice.com>
+Sent: Wednesday, February 28, 2024 3:30 PM UTC
+To: theo.beaumont@meridianairlines.com, elena.marquez@harborpointcx.com, owen=
+.brandt@meridianairlines.com, maya.wei@harborpointcx.com, rina.mehta@meridian=
+airlines.com
+Subject: Search latency in the rehearsal environment
+Message-ID: <f56ea59b6d57.6339e2f0@mail.clearlinevoice.com>
+In-Reply-To: <37ed2633ef30.4b102e54@mail.harborpointcx.com>
+References: <734a8e572a0c.fc005beb@mail.harborpointcx.com> <117ed86cb551.3031=
+ba1e@mail.meridianairlines.com> <769efd3ce28d.b33f1f54@mail.harborpointcx.com=
+> <80734636210f.0d2e745c@mail.meridianairlines.com> <d421bd228ad2.090e616c@ma=
+il.meridianairlines.com> <f5fe03480d13.290533d6@mail.clearlinevoice.com> <37e=
+d2633ef30.4b102e54@mail.harborpointcx.com>
+
+Confirming from our side: p95 on the availability call dropped from just over=
+ four seconds to around six hundred milliseconds after the index move. The lo=
+ad-test tenant now lives where it can only hurt itself.
+
+-----Original Message-----
+From: Maya Wei <maya.wei@harborpointcx.com>
+Sent: Wednesday, February 28, 2024 8:47 AM UTC
+To: theo.beaumont@meridianairlines.com, elena.marquez@harborpointcx.com, owen=
+.brandt@meridianairlines.com, gene.park@clearlinevoice.com, rina.mehta@meridi=
+anairlines.com
+Subject: Search latency in the rehearsal environment
+Message-ID: <37ed2633ef30.4b102e54@mail.harborpointcx.com>
+In-Reply-To: <f5fe03480d13.290533d6@mail.clearlinevoice.com>
+References: <734a8e572a0c.fc005beb@mail.harborpointcx.com> <117ed86cb551.3031=
+ba1e@mail.meridianairlines.com> <769efd3ce28d.b33f1f54@mail.harborpointcx.com=
+> <80734636210f.0d2e745c@mail.meridianairlines.com> <d421bd228ad2.090e616c@ma=
+il.meridianairlines.com> <f5fe03480d13.290533d6@mail.clearlinevoice.com>
+
+This morning's class ran the same search drills as last week: median response=
+ feels instant, and nobody hit the spinning state that derailed the earlier s=
+ession. Whatever was moved, it worked.
+
+-----Original Message-----
+From: Gene Park <gene.park@clearlinevoice.com>
+Sent: Tuesday, February 27, 2024 2:12 PM UTC
+To: theo.beaumont@meridianairlines.com, elena.marquez@harborpointcx.com, owen=
+.brandt@meridianairlines.com, maya.wei@harborpointcx.com, rina.mehta@meridian=
+airlines.com
+Subject: Search latency in the rehearsal environment
+Message-ID: <f5fe03480d13.290533d6@mail.clearlinevoice.com>
+In-Reply-To: <d421bd228ad2.090e616c@mail.meridianairlines.com>
+References: <734a8e572a0c.fc005beb@mail.harborpointcx.com> <117ed86cb551.3031=
+ba1e@mail.meridianairlines.com> <769efd3ce28d.b33f1f54@mail.harborpointcx.com=
+> <80734636210f.0d2e745c@mail.meridianairlines.com> <d421bd228ad2.090e616c@ma=
+il.meridianairlines.com>
+
+Vendor here - thanks for the traces. The shard in question is sharing an inde=
+x with a load-test tenant, which is our miss. We are moving the rehearsal env=
+ironment to a dedicated index tonight and will report back with before-and-af=
+ter timings.
+
+-----Original Message-----
+From: Owen Brandt <owen.brandt@meridianairlines.com>
+Sent: Friday, February 23, 2024 10:05 AM UTC
+To: theo.beaumont@meridianairlines.com, elena.marquez@harborpointcx.com, gene=
+.park@clearlinevoice.com, maya.wei@harborpointcx.com, rina.mehta@meridianairl=
+ines.com
+Subject: Search latency in the rehearsal environment
+Message-ID: <d421bd228ad2.090e616c@mail.meridianairlines.com>
+In-Reply-To: <80734636210f.0d2e745c@mail.meridianairlines.com>
+References: <734a8e572a0c.fc005beb@mail.harborpointcx.com> <117ed86cb551.3031=
+ba1e@mail.meridianairlines.com> <769efd3ce28d.b33f1f54@mail.harborpointcx.com=
+> <80734636210f.0d2e745c@mail.meridianairlines.com>
+
+Pulled the gateway logs for yesterday's session. The slow searches all crosse=
+d the four-second timeout on the availability call, and every one of them hit=
+ the same regional shard. Opening a ticket with the platform vendor with the =
+trace IDs attached.
+
+-----Original Message-----
+From: Theo Beaumont <theo.beaumont@meridianairlines.com>
+Sent: Thursday, February 22, 2024 10:14 AM UTC
+To: elena.marquez@harborpointcx.com, owen.brandt@meridianairlines.com, gene.p=
+ark@clearlinevoice.com, maya.wei@harborpointcx.com, rina.mehta@meridianairlin=
+es.com
+Subject: Search latency in the rehearsal environment
+Message-ID: <80734636210f.0d2e745c@mail.meridianairlines.com>
+In-Reply-To: <769efd3ce28d.b33f1f54@mail.harborpointcx.com>
+References: <734a8e572a0c.fc005beb@mail.harborpointcx.com> <117ed86cb551.3031=
+ba1e@mail.meridianairlines.com> <769efd3ce28d.b33f1f54@mail.harborpointcx.com>
+
+Good. The allocation change is permanent rather than a loaner, so rehearsal s=
+hould stay snappy through launch.
+
+-----Original Message-----
+From: Elena Marquez <elena.marquez@harborpointcx.com>
+Sent: Thursday, February 22, 2024 9:26 AM UTC
+To: theo.beaumont@meridianairlines.com, owen.brandt@meridianairlines.com, gen=
+e.park@clearlinevoice.com, maya.wei@harborpointcx.com, rina.mehta@meridianair=
+lines.com
+Subject: Search latency in the rehearsal environment
+Message-ID: <769efd3ce28d.b33f1f54@mail.harborpointcx.com>
+In-Reply-To: <117ed86cb551.3031ba1e@mail.meridianairlines.com>
+References: <734a8e572a0c.fc005beb@mail.harborpointcx.com> <117ed86cb551.3031=
+ba1e@mail.meridianairlines.com>
+
+Confirmed from the floor this morning: searches are landing in about a second=
+ and the grumbling has stopped. The furniture line got a laugh in standup.
+
+-----Original Message-----
+From: Theo Beaumont <theo.beaumont@meridianairlines.com>
+Sent: Wednesday, February 21, 2024 6:36 PM UTC
+To: elena.marquez@harborpointcx.com, owen.brandt@meridianairlines.com, gene.p=
+ark@clearlinevoice.com, maya.wei@harborpointcx.com, rina.mehta@meridianairlin=
+es.com
+Subject: Search latency in the rehearsal environment
+Message-ID: <117ed86cb551.3031ba1e@mail.meridianairlines.com>
+In-Reply-To: <734a8e572a0c.fc005beb@mail.harborpointcx.com>
+References: <734a8e572a0c.fc005beb@mail.harborpointcx.com>
+
+Production runs well under two seconds. Rehearsal shares a starved database h=
+ost, which is a known complaint - I bumped its allocation this afternoon and =
+searches should feel normal from tomorrow. Tell the trainees the slowness was=
+ the furniture, not the tool.
+
+-----Original Message-----
+From: Elena Marquez <elena.marquez@harborpointcx.com>
+Sent: Wednesday, February 21, 2024 1:11 PM UTC
+To: theo.beaumont@meridianairlines.com, owen.brandt@meridianairlines.com, gen=
+e.park@clearlinevoice.com, maya.wei@harborpointcx.com, rina.mehta@meridianair=
+lines.com
+Subject: Search latency in the rehearsal environment
+Message-ID: <734a8e572a0c.fc005beb@mail.harborpointcx.com>
+
+Theo - trainees are seeing eight to ten second waits on flight searches in re=
+hearsal, which teaches them to distrust the tool. Production is snappier, rig=
+ht? I don't want the habit forming.

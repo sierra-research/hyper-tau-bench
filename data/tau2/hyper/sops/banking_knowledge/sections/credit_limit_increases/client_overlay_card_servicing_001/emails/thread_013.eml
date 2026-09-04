@@ -1,0 +1,101 @@
+From: Joel Moreau <joel.moreau@rhobank.com>
+To: Farah Idris <farah.idris@rhobank.com>
+Cc: cli-desk <cli-desk@rhobank.com>
+Date: Mon, 10 Nov 2025 16:05:54 -0500
+Subject: RE: New console trigger - cooldown-review flag rollout
+Message-ID: <cli-trigger-007-dfed9a@rhobank.com>
+In-Reply-To: <cli-trigger-006-030f1b@rhobank.com>
+References: <cli-trigger-001-3ffa1b@rhobank.com>
+ <cli-trigger-002-7ec2a8@rhobank.com>
+ <cli-trigger-003-a6e72b@rhobank.com>
+ <cli-trigger-004-f12315@rhobank.com>
+ <cli-trigger-005-16692d@rhobank.com>
+ <cli-trigger-006-030f1b@rhobank.com>
+Thread-Topic: New console trigger - cooldown-review flag rollout
+Thread-Index: 69efb2662775dea6e0c9e0c5bbefb97b
+Accept-Language: en-US
+X-Auto-Response-Suppress: All
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Keep the wide net. One process compliment for the record: incident
+Friday, ruling Monday, seatbelt Tuesday, clean week by the following
+Monday. That sequence is the desk working as designed, and it goes in
+the retro deck exactly in those words.
+
+-----Original Message-----
+From: Farah Idris <farah.idris@rhobank.com>
+Sent: Mon, 10 Nov 2025 15:40:37 -0500
+To: cli-desk <cli-desk@rhobank.com>
+Cc: Joel Moreau <joel.moreau@rhobank.com>
+Subject: RE: New console trigger - cooldown-review flag rollout
+
+Week-one numbers for the trigger: eleven flags, all resolved same-
+shift, zero timing denials issued without the review step, zero
+customer-facing errors since rollout. Volume is tolerable, so the wide
+net stays through month end. Ticket updated with the tallies.
+
+-----Original Message-----
+From: Farah Idris <farah.idris@rhobank.com>
+Sent: Wed, 05 Nov 2025 09:55:41 -0500
+To: Elif Demir <elif.demir@rhobank.com>
+Cc: cli-desk <cli-desk@rhobank.com>, Joel Moreau <joel.moreau@rhobank.com>
+Subject: RE: New console trigger - cooldown-review flag rollout
+
+That's the design case executing. Tuning note from the first day of
+data: the flag currently fires on any prior request in the lookback
+window, which is deliberately wide - I'd rather over-flag for a few
+weeks than under-flag ever. If the review volume gets annoying, we
+narrow with evidence, not vibes.
+
+-----Original Message-----
+From: Elif Demir <elif.demir@rhobank.com>
+Sent: Wed, 05 Nov 2025 09:30:26 -0500
+To: Farah Idris <farah.idris@rhobank.com>
+Cc: cli-desk <cli-desk@rhobank.com>
+Subject: RE: New console trigger - cooldown-review flag rollout
+
+Day-one report: two flags fired on my shift, both resolved in under
+five minutes by reading the pin's worked example against the ledger
+dates. One blocked and one didn't, and the difference between the two
+was exactly the distinction that burned us. The trigger earns its
+keep.
+
+-----Original Message-----
+From: Farah Idris <farah.idris@rhobank.com>
+Sent: Tue, 04 Nov 2025 11:15:20 -0500
+To: Tomas Rivera <tomas.rivera@rhobank.com>
+Cc: cli-desk <cli-desk@rhobank.com>
+Subject: RE: New console trigger - cooldown-review flag rollout
+
+Shared queue, exactly for that reason - the flag routes to the desk's
+review view, first available agent picks it up, and the picker can't
+be the original submitter. Second pair of eyes by construction.
+
+-----Original Message-----
+From: Tomas Rivera <tomas.rivera@rhobank.com>
+Sent: Tue, 04 Nov 2025 10:48:33 -0500
+To: Farah Idris <farah.idris@rhobank.com>
+Cc: cli-desk <cli-desk@rhobank.com>
+Subject: RE: New console trigger - cooldown-review flag rollout
+
+Speaking as the reason it exists: thank you. Question on mechanics -
+when the flag fires, does the request sit in my queue or a shared
+review queue? Asking because Friday's mistake would have been caught
+by literally anyone else's eyes, and I'd vote for shared.
+
+-----Original Message-----
+From: Farah Idris <farah.idris@rhobank.com>
+Sent: Tue, 04 Nov 2025 10:20:18 -0500
+To: cli-desk <cli-desk@rhobank.com>
+Cc: Joel Moreau <joel.moreau@rhobank.com>, Renata Ellis <renata.ellis@rhobank.com>
+Subject: New console trigger - cooldown-review flag rollout
+
+Console change live as of this morning: a new trigger flags any
+incoming credit-limit increase request where the account shows a
+recent prior request, and routes the flagged item to a review step
+instead of letting it sail through. Context is yesterday's pinned
+ruling - the trigger is the seatbelt, the pin is the law. The trigger
+decides nothing; it makes sure a human reads the pin before anything
+gets denied for timing.

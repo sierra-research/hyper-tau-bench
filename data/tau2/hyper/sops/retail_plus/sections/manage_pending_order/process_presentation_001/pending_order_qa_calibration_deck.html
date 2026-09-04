@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Pending-Order Servicing — QA Calibration (Packet 2 of 3)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: #e8eaed; }
+  @page { size: 1280px 720px; margin: 0; }
+  .slide {
+    position: relative; width: 1280px; height: 720px; overflow: hidden;
+    background: #ffffff; page-break-after: always; break-after: page;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color: #20262b;
+  }
+  .slide:last-child { page-break-after: auto; break-after: auto; }
+
+  .topbar { position: absolute; left: 0; top: 0; right: 0; height: 8px; background: #0f4c5c; }
+  .footer {
+    position: absolute; left: 56px; right: 56px; bottom: 22px; display: flex;
+    justify-content: space-between; font-size: 12px; color: #8a959c;
+  }
+  .htitle { position: absolute; left: 56px; top: 44px; font-size: 30px; font-weight: 700; letter-spacing: -0.3px; }
+  .hkicker { position: absolute; left: 56px; top: 84px; font-size: 14px; color: #5a6a72; }
+  .htag {
+    position: absolute; right: 56px; top: 48px; font-size: 11px; font-weight: 700;
+    color: #0f4c5c; border: 1.5px solid #0f4c5c; border-radius: 3px; padding: 5px 10px;
+    letter-spacing: 1px;
+  }
+
+  .rulechip {
+    display: inline-block; background: #0f4c5c; color: #fff; font-weight: 800;
+    font-size: 22px; padding: 8px 16px; border-radius: 6px; letter-spacing: 0.5px;
+  }
+  .mandatory {
+    display: inline-block; background: #b3261e; color: #fff; font-weight: 700;
+    font-size: 12px; padding: 5px 10px; border-radius: 3px; letter-spacing: 1.2px;
+    vertical-align: middle; margin-left: 12px;
+  }
+  .mandatory.gray { background: #55636c; }
+  .rubric {
+    position: absolute; left: 56px; top: 190px; width: 560px; background: #f4f7f8;
+    border: 1px solid #d5dde0; border-left: 6px solid #0f4c5c; border-radius: 6px;
+    padding: 22px 24px; font-size: 17.5px; line-height: 1.5;
+  }
+  .rubric b { color: #0f4c5c; }
+  .gradenote {
+    position: absolute; left: 56px; width: 560px; background: #fff8e8;
+    border: 1px solid #e8d9a8; border-radius: 6px; padding: 14px 18px;
+    font-size: 14px; line-height: 1.45; color: #5f4c12;
+  }
+  .excerpt {
+    position: absolute; right: 56px; top: 190px; width: 560px; background: #ffffff;
+    border: 1px solid #d5dde0; border-radius: 8px; padding: 18px 20px 16px;
+  }
+  .excerpt h4 { font-size: 12px; letter-spacing: 1.2px; color: #8a959c; margin-bottom: 12px; font-weight: 700; }
+  .line { margin-bottom: 10px; font-size: 14.5px; line-height: 1.4; }
+  .line .who { font-weight: 700; color: #0f4c5c; }
+  .line.cust .who { color: #7a4bd6; }
+  .verdict {
+    margin-top: 12px; padding: 10px 14px; border-radius: 6px; font-size: 14px;
+    font-weight: 700;
+  }
+  .verdict.pass { background: #e7f4ec; color: #17693c; border: 1px solid #bfe3cd; }
+  .verdict.fail { background: #fdecea; color: #a02018; border: 1px solid #f3c3be; }
+  .verdict.coach { background: #fff4da; color: #7a5a10; border: 1px solid #ecd9a0; }
+  .verdict span { font-weight: 400; display: block; margin-top: 4px; font-size: 13px; }
+
+  ul.clean { list-style: none; }
+  ul.clean li { position: relative; padding-left: 22px; margin-bottom: 12px; font-size: 16.5px; line-height: 1.45; }
+  ul.clean li::before { content: ""; position: absolute; left: 0; top: 8px; width: 9px; height: 9px; border-radius: 2px; background: #0f4c5c; }
+
+  table.stats { border-collapse: collapse; font-size: 15px; }
+  table.stats th { text-align: left; font-size: 12px; letter-spacing: 0.8px; color: #8a959c; padding: 8px 18px 8px 0; border-bottom: 2px solid #d5dde0; }
+  table.stats td { padding: 8px 18px 8px 0; border-bottom: 1px solid #e6ebee; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  .wsbanner {
+    position: absolute; left: 0; right: 0; top: 8px; height: 34px; background: #7a4a12;
+    color: #ffe9c9; font-weight: 800; letter-spacing: 2px; font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .window {
+    position: absolute; left: 56px; top: 150px; width: 1168px; height: 512px;
+    border: 1px solid #c3ccd1; border-radius: 10px; background: #f7f9fa;
+    box-shadow: 0 2px 8px rgba(20,40,50,0.08);
+  }
+  .titlebar {
+    height: 40px; background: #253b45; color: #dbe7ec; border-radius: 10px 10px 0 0;
+    display: flex; align-items: center; padding: 0 16px; font-size: 13px; gap: 10px;
+  }
+  .dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+  .chatpane {
+    position: absolute; left: 14px; top: 54px; width: 660px; bottom: 14px;
+    background: #ffffff; border: 1px solid #dde4e8; border-radius: 6px; padding: 14px 16px;
+    overflow: hidden;
+  }
+  .chatpane h5, .checkpane h5 { font-size: 11px; letter-spacing: 1.2px; color: #8a959c; margin-bottom: 10px; }
+  .checkpane {
+    position: absolute; right: 14px; top: 54px; width: 466px; bottom: 14px;
+    background: #ffffff; border: 1px solid #dde4e8; border-radius: 6px; padding: 14px 16px;
+  }
+  .checkitem { display: flex; gap: 10px; margin-bottom: 12px; font-size: 13.5px; line-height: 1.4; }
+  .checkbox {
+    flex: 0 0 20px; height: 20px; border-radius: 4px; background: #17693c; color: #fff;
+    font-size: 14px; font-weight: 800; text-align: center; line-height: 20px;
+  }
+  .callout {
+    position: absolute; background: #fffbe6; border: 1.5px solid #d9b93c; border-radius: 6px;
+    padding: 8px 12px; font-size: 12.5px; line-height: 1.35; color: #5f4c12; width: 250px;
+    box-shadow: 0 1px 4px rgba(120,90,10,0.18); z-index: 5;
+  }
+  .callout b { color: #7a5a10; }
+
+  .lanechart { position: absolute; left: 56px; top: 462px; width: 1168px; height: 196px; }
+  .funnelrow { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .funnelbar { height: 30px; background: #0f4c5c; border-radius: 4px; }
+  .funnellabel { font-size: 13.5px; color: #41505a; white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<!-- ============ Slide 1: Cover ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div style="position:absolute; left:56px; top:140px;">
+    <div style="font-size:13px; font-weight:700; letter-spacing:2px; color:#0f4c5c;">NORTHSTAR OUTFITTERS &middot; CX QUALITY &middot; CALIBRATION PACKET 2 OF 3</div>
+    <div style="font-size:50px; font-weight:800; letter-spacing:-1px; margin-top:18px; line-height:1.1;">Pending-Order Servicing<br>QA Calibration</div>
+    <div style="font-size:18px; color:#5a6a72; margin-top:20px;">Rule cards, graded excerpts, and the June calibration exercise<br>for the assisted-servicing pilot (Project Beacon).</div>
+  </div>
+  <div style="position:absolute; left:56px; top:452px; display:flex; gap:40px; font-size:14.5px;">
+    <div><b>Session</b><br>June 16, 2026 &middot; 10:00 ET</div>
+    <div><b>Facilitators</b><br>Noor Danesh (CX Quality) &middot; Bea Sandoval (Enablement)</div>
+    <div><b>Policy reviewer</b><br>Dana Whitfield (Servicing Ops)</div>
+  </div>
+  <div style="position:absolute; left:56px; top:548px; width:900px; background:#f4f7f8; border:1px solid #d5dde0; border-radius:6px; padding:14px 18px; font-size:13.5px; color:#41505a; line-height:1.5;">
+    Exercise verdicts stay sealed until the session floor. Packet copies are numbered and
+    collected at the end of the session — annotate freely, nothing leaves the room. Where a
+    card and your memory disagree, the card — status tag included — wins; where any two
+    artifacts seem to disagree, start from the pointers on the last page.
+  </div>
+  <div class="htag" style="top:44px;">INTERNAL &middot; TRAINING</div>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>1</div></div>
+</div>
+
+<!-- ============ Slide 2: Packet map ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div class="htitle">Packet map and session agenda</div>
+  <div class="hkicker">Three packets, three sessions — nothing in this packet applies outside pending-order contacts</div>
+  <div class="htag">SESSION MATERIAL</div>
+  <div style="position:absolute; left:56px; top:150px; width:560px;">
+    <table class="stats">
+      <tr><th>PACKET</th><th>SCOPE</th><th>SESSION</th></tr>
+      <tr><td>1</td><td>Delivered-order journeys (returns, exchanges)</td><td class="num">June 9 (held)</td></tr>
+      <tr><td><b>2 — this packet</b></td><td><b>Pending-order journeys</b></td><td class="num"><b>June 16</b></td></tr>
+      <tr><td>3</td><td>Profile &amp; identity journeys</td><td class="num">June 23</td></tr>
+    </table>
+    <div style="margin-top:20px; font-size:14px; color:#41505a; line-height:1.5;">
+      Cards from packets 1 and 3 are graded in their own sessions by the same floor. A
+      pending-order contact is never graded against a packet-1 or packet-3 card, and vice
+      versa — misfiled verdicts get regraded, not corrected in place.
+    </div>
+  </div>
+  <div style="position:absolute; right:56px; top:150px; width:560px; background:#f4f7f8; border:1px solid #d5dde0; border-radius:6px; padding:20px 22px; font-size:14.5px; line-height:1.55;">
+    <b>Today's running order.</b><br>
+    10:00 — grading scale refresher (p. 3)<br>
+    10:10 — card walk: G-1, C-2, C-8, G-4, C-5 (pp. 4–8)<br>
+    10:40 — precedent log review (p. 9)<br>
+    10:50 — card walk: A-3, A-6, G-7, I-6, I-9 (pp. 10–14)<br>
+    11:20 — calibration exercises, sealed verdicts (p. 15)<br>
+    11:45 — non-rules, fence, and appendix flip-through (pp. 16–20)<br>
+    11:55 — stats, roster, appeals admin (pp. 21–24)<br><br>
+    Attendance counts toward grader certification (p. 23). Two missed sessions and
+    certification lapses — no exceptions this quarter.
+  </div>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>2</div></div>
+</div>
+
+<!-- ============ Slide 3: How we grade ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div class="htitle">How rule cards are graded</div>
+  <div class="hkicker">Calibration ground rules — grading scale unchanged since May; card statuses re-set at the 6.9.26 quarterly card audit</div>
+  <div class="htag">INTERNAL &middot; TRAINING</div>
+  <div style="position:absolute; left:56px; top:150px; width:560px;">
+    <ul class="clean">
+      <li><b>MEETS</b> — the required conduct happened, in any natural wording. We grade substance, not phrasing; verbatim script matching was retired when servicing dropped it (CR7, 4.20.26) and stays retired (card R-1, appendix).</li>
+      <li><b>COACHING</b> — the conduct happened but out of order, half-done, or so buried the customer plainly missed it.</li>
+      <li><b>AUTO-FAIL</b> — the conduct did not happen and the contact proceeded anyway. One auto-fail fails the whole contact regardless of every other score.</li>
+    </ul>
+  </div>
+  <div style="position:absolute; right:56px; top:150px; width:560px; background:#f4f7f8; border:1px solid #d5dde0; border-radius:6px; padding:20px 22px; font-size:15px; line-height:1.55;">
+    <b>Calibration mechanics.</b> Two graders per excerpt, blind to each other. A split verdict
+    goes to the session floor; the floor's ruling is logged with the excerpt so the next split
+    starts from precedent, not from scratch.<br><br>
+    <b>What the cards are.</b> Each operating card states one mandatory conduct rule, exactly
+    as graded. The card text (or, for console-graded cards, the checklist as displayed) is the
+    standard of record; the excerpt is one graded example, not the rule itself.<br><br>
+    <b>Card status.</b> Re-set at the 6.9.26 quarterly card audit: a card stays operating only
+    where a dated servicing ruling or handbook section owns its conduct. Cards the audit moved
+    to the calibration rotation are tagged CALIBRATION-ONLY in the corner — no current care
+    requirement; they remain to train grader technique.<br><br>
+    <b>Series letters.</b> C/A/I — journey conduct. G — general conduct. W — wholesale pilot
+    only, fenced. R — retired, appendix only. The corner tag, not the series letter, carries a
+    card's status.
+  </div>
+  <div class="gradenote" style="top:544px;">
+    Reminder from May, amended at the June audit: graders flag the <i>rule card</i>, never a
+    paraphrase from memory, and read the corner tag before the card — grading a
+    calibration-only or appendix card as current conduct is itself a calibration error. If a
+    card looks wrong, raise it with Dana, don't improvise a correction mid-audit.
+  </div>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>3</div></div>
+</div>
+
+<!-- ============ Slide 4: G-1 (distractor card) ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div style="position:absolute; left:56px; top:44px;"><span class="rulechip">RULE G-1</span><span class="mandatory gray">CALIBRATION ROTATION</span></div>
+  <div class="hkicker" style="top:96px;">General conduct — documentation hygiene. Calibration rotation since the 6.9.26 card audit (status: p. 3); no current care requirement. Read the card, then the clock strip: the closure line is the rule.</div>
+  <div class="htag">CALIBRATION-ONLY 6.9.26</div>
+  <div class="rubric" style="top:150px; padding:16px 20px; font-size:16px;">
+    Case notes are <b>written before wrap-up, in the contact record, while the customer
+    context is still live</b>. Notes reconstruct what was requested, what was done, and what
+    was promised — enough that a colleague could pick the case up cold tomorrow.
+  </div>
+  <div class="gradenote" style="top:300px; font-size:13px; padding:10px 14px;">
+    Grading note: G-1 is about existence and timing, not literary quality. Bullet fragments
+    are fine; a blank record backfilled from memory two hours later is not. Notes pasted into
+    the wrong customer's record are an automatic escalation to the data-hygiene queue on top
+    of the grade.
+  </div>
+  <div class="excerpt" style="top:150px; padding:14px 16px 12px;">
+    <h4>GRADED EXCERPT &middot; CONTACT 26-05-0861 (CHAT, WRAP-UP VIEW)</h4>
+    <div class="line cust" style="font-size:13px;"><span class="who">Customer:</span> So we're leaving it as is, right? I'll call back about the address once I hear from my sister.</div>
+    <div class="line" style="font-size:13px;"><span class="who">Agent:</span> Exactly — nothing changes today. I'm writing all of this up now so whoever picks up next has the full picture.</div>
+    <div class="line" style="font-size:13px;"><span class="who">Agent (case note, 14:32):</span> Cust asked about delivery window ahead of address decision. Gave standard window, no order changes made. Promised nothing further. Cust will call back if they want the address moved.</div>
+    <div class="line cust" style="font-size:13px;"><span class="who">System:</span> Contact closed 14:33. Note timestamp precedes closure.</div>
+    <div class="verdict pass" style="margin-top:8px;">MEETS — G-1<span>Written before wrap-up, reconstructs request/action/promise, and correctly records that no order change happened.</span></div>
+  </div>
+  <svg width="1168" height="196" viewBox="0 0 1168 196" style="position:absolute; left:56px; top:472px;" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arr4" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#41505a"/></marker>
+    </defs>
+    <text x="0" y="16" font-size="12" font-weight="700" letter-spacing="1.5" fill="#8a959c" font-family="Helvetica">G-1 ON THE CONTACT CLOCK</text>
+    <rect x="0" y="58" width="700" height="56" fill="#e7f4ec" stroke="#bfe3cd"/>
+    <rect x="700" y="58" width="468" height="56" fill="#fdecea" stroke="#f3c3be"/>
+    <line x1="0" y1="86" x2="1150" y2="86" stroke="#41505a" stroke-width="2" marker-end="url(#arr4)"/>
+    <g font-family="Helvetica" font-size="12.5" fill="#20262b" text-anchor="middle">
+      <circle cx="90" cy="86" r="5" fill="#41505a"/><text x="90" y="136">request made</text>
+      <circle cx="280" cy="86" r="5" fill="#41505a"/><text x="280" y="136">work done</text>
+      <circle cx="470" cy="86" r="7" fill="#17693c"/><text x="470" y="136" font-weight="700" fill="#17693c">note written</text>
+      <circle cx="700" cy="86" r="5" fill="#41505a"/><text x="700" y="136">contact closes</text>
+      <circle cx="920" cy="86" r="5" fill="#a02018"/><text x="920" y="136" fill="#a02018">backfill from memory</text>
+    </g>
+    <text x="350" y="48" font-size="12.5" font-weight="700" fill="#17693c" text-anchor="middle" font-family="Helvetica">LIVE ZONE — context is still on the screen</text>
+    <text x="934" y="48" font-size="12.5" font-weight="700" fill="#a02018" text-anchor="middle" font-family="Helvetica">MEMORY ZONE — a note here grades as missing</text>
+    <line x1="700" y1="30" x2="700" y2="120" stroke="#a02018" stroke-width="2" stroke-dasharray="6 4"/>
+    <text x="0" y="176" font-size="12" fill="#5a6a72" font-family="Helvetica">Grader shortcut: compare the note timestamp to the closure stamp. Right of the line, stop reading the note — however good it is, it grades as absent.</text>
+  </svg>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>4</div></div>
+</div>
+
+<!-- ============ Slide 5: C-2 + timeline strip ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div style="position:absolute; left:56px; top:44px;"><span class="rulechip">RULE C-2</span><span class="mandatory">MANDATORY &middot; ALL CANCELLATIONS</span></div>
+  <div class="hkicker" style="top:96px;">Cancellation conduct — reason capture. Read the card, then the timeline: the red zone is the rule.</div>
+  <div class="htag">GRADED SINCE 5.4.26</div>
+  <div class="rubric" style="top:150px; padding:16px 20px; font-size:16px;">
+    On a pending-order cancellation request, the customer's <b>reason must be on record before
+    the agent takes any processing action</b> on the order. Asking after processing has started
+    scores the same as never asking.
+  </div>
+  <div class="gradenote" style="top:296px; font-size:13px; padding:10px 14px;">
+    Looking up the order and checking its status is <i>identification</i>, not processing —
+    C-2 is about acting on the order. Whether the answer clears policy is graded under the
+    servicing rulings; C-2 grades only that the question came first.
+  </div>
+  <div class="excerpt" style="top:150px; padding:14px 16px 12px;">
+    <h4>GRADED EXCERPT &middot; CONTACT 26-05-1187 (AUDIO, TRANSCRIBED)</h4>
+    <div class="line cust" style="font-size:13.5px;"><span class="who">Customer:</span> I need to cancel order #W58… 2231, the one from Monday.</div>
+    <div class="line" style="font-size:13.5px;"><span class="who">Agent:</span> I can help with that. I've found the order and it's still pending, so cancellation is possible. Before I do anything to it — may I ask what's prompting the cancellation?</div>
+    <div class="line cust" style="font-size:13.5px;"><span class="who">Customer:</span> I ordered it by mistake, honestly.</div>
+    <div class="line" style="font-size:13.5px;"><span class="who">Agent:</span> Understood, and it's noted with the request. Give me a moment with the details and I'll walk you through the next part.</div>
+    <div class="line" style="font-size:12.5px; color:#8a959c;"><span class="who" style="color:#8a959c;">Console annotation:</span> lookup and status check only — first order action logged 2m 41s after the reason line.</div>
+    <div class="verdict pass" style="margin-top:8px;">MEETS — C-2<span>The reason question landed before any action on the order.</span></div>
+  </div>
+  <svg width="1168" height="196" viewBox="0 0 1168 196" style="position:absolute; left:56px; top:462px;" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arr5" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#41505a"/></marker>
+    </defs>
+    <text x="0" y="16" font-size="12" font-weight="700" letter-spacing="1.5" fill="#8a959c" font-family="Helvetica">C-2 ON THE CONTACT TIMELINE</text>
+    <rect x="0" y="58" width="640" height="56" fill="#e7f4ec" stroke="#bfe3cd"/>
+    <rect x="640" y="58" width="528" height="56" fill="#fdecea" stroke="#f3c3be"/>
+    <line x1="0" y1="86" x2="1150" y2="86" stroke="#41505a" stroke-width="2" marker-end="url(#arr5)"/>
+    <g font-family="Helvetica" font-size="12.5" fill="#20262b" text-anchor="middle">
+      <circle cx="70" cy="86" r="5" fill="#41505a"/><text x="70" y="136">contact opens</text>
+      <circle cx="230" cy="86" r="5" fill="#41505a"/><text x="230" y="136">order found</text>
+      <circle cx="390" cy="86" r="5" fill="#41505a"/><text x="390" y="136">status checked</text>
+      <circle cx="550" cy="86" r="7" fill="#17693c"/><text x="550" y="136" font-weight="700" fill="#17693c">reason on record</text>
+      <circle cx="800" cy="86" r="5" fill="#a02018"/><text x="800" y="136" fill="#a02018">recap &amp; confirm</text>
+      <circle cx="1000" cy="86" r="5" fill="#a02018"/><text x="1000" y="136" fill="#a02018">cancellation action</text>
+    </g>
+    <text x="320" y="48" font-size="12.5" font-weight="700" fill="#17693c" text-anchor="middle" font-family="Helvetica">IDENTIFICATION ZONE — reason may land anywhere in here</text>
+    <text x="904" y="48" font-size="12.5" font-weight="700" fill="#a02018" text-anchor="middle" font-family="Helvetica">PROCESSING ZONE — enter with no reason on record = AUTO-FAIL</text>
+    <line x1="640" y1="30" x2="640" y2="120" stroke="#a02018" stroke-width="2" stroke-dasharray="6 4"/>
+    <text x="0" y="176" font-size="12" fill="#5a6a72" font-family="Helvetica">Grader shortcut: put your finger on the reason. If anything to its left is already a red-zone step, stop grading — the verdict is decided.</text>
+  </svg>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>5</div></div>
+</div>
+
+<!-- ============ Slide 6: C-8 (distractor card + grader walk tree) ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div style="position:absolute; left:56px; top:44px;"><span class="rulechip">RULE C-8</span><span class="mandatory gray">CALIBRATION ROTATION</span></div>
+  <div class="hkicker" style="top:96px;">Cancellation conduct — acknowledgment before business. Calibration rotation since the 6.9.26 card audit (status: p. 3); no current care requirement. Grade by walking the tree; the N/A exit is real and common.</div>
+  <div class="htag">CALIBRATION-ONLY 6.9.26</div>
+  <div class="rubric" style="top:150px; padding:16px 20px; font-size:15.5px;">
+    When a customer opens a cancellation contact with stated upset — a complaint, a frustration,
+    a "this is the third time" — the agent <b>acknowledges it in their own words before the
+    first business question</b>. One sentence is enough; going straight to the order lookup
+    script as if nothing was said is the violation.
+  </div>
+  <div class="gradenote" style="top:330px; font-size:13px; padding:10px 14px;">
+    C-8 is not a tone card — the tone bullet on p. 16 stands. Graders check that the
+    acknowledgment sentence exists and names the customer's actual complaint, never how warm
+    it sounded. Reading the console while listening is fine; C-8 clocks the first thing
+    <i>said</i>. No stated upset, nothing to acknowledge — N/A, not a miss (PL-047, p. 9).
+  </div>
+  <div class="excerpt" style="left:56px; right:auto; width:560px; top:452px; padding:12px 16px 10px;">
+    <h4>GRADED EXCERPT &middot; CONTACT 26-05-1244 (AUDIO, TRANSCRIBED)</h4>
+    <div class="line cust" style="font-size:13px;"><span class="who">Customer:</span> Third call about this order. Just cancel the thing, I'm done with it.</div>
+    <div class="line" style="font-size:13px;"><span class="who">Agent:</span> Three calls for one order is more than anyone should need — I'm sorry it's come to that. Let's get it finished right now.</div>
+    <div class="line cust" style="font-size:13px;"><span class="who">Customer:</span> Fine. What do you need from me?</div>
+    <div class="verdict pass" style="margin-top:6px; font-size:13px;">MEETS — C-8<span>Named the actual complaint, own words, business only after.</span></div>
+  </div>
+  <svg width="560" height="500" viewBox="0 0 560 500" style="position:absolute; right:56px; top:150px;" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arr6" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#41505a"/></marker>
+    </defs>
+    <text x="0" y="16" font-size="12" font-weight="700" letter-spacing="1.5" fill="#8a959c" font-family="Helvetica">C-8 GRADER WALK — CHECK THE N/A EXIT FIRST</text>
+    <g font-family="Helvetica" font-size="12.5">
+      <polygon points="170,30 320,74 170,118 20,74" fill="#f4f7f8" stroke="#0f4c5c" stroke-width="1.5"/>
+      <text x="170" y="70" text-anchor="middle" fill="#20262b">Did the customer open</text>
+      <text x="170" y="86" text-anchor="middle" font-weight="700" fill="#0f4c5c">with stated upset?</text>
+      <rect x="410" y="46" width="130" height="56" rx="6" fill="#f4f7f8" stroke="#8a959c" stroke-width="1.5"/>
+      <text x="475" y="70" text-anchor="middle" font-weight="800" fill="#5a6a72">N/A</text>
+      <text x="475" y="88" text-anchor="middle" fill="#5a6a72" font-size="11.5">card not graded</text>
+      <line x1="320" y1="74" x2="410" y2="74" stroke="#8a959c" stroke-width="1.5" marker-end="url(#arr6)"/>
+      <text x="352" y="66" fill="#5a6a72" font-size="11.5" font-weight="700">no</text>
+      <polygon points="170,160 320,204 170,248 20,204" fill="#f4f7f8" stroke="#0f4c5c" stroke-width="1.5"/>
+      <text x="170" y="192" text-anchor="middle" fill="#20262b">Acknowledgment before</text>
+      <text x="170" y="208" text-anchor="middle" font-weight="700" fill="#0f4c5c">the first business</text>
+      <text x="170" y="224" text-anchor="middle" font-weight="700" fill="#0f4c5c">question?</text>
+      <polygon points="170,290 320,334 170,378 20,334" fill="#f4f7f8" stroke="#0f4c5c" stroke-width="1.5"/>
+      <text x="170" y="322" text-anchor="middle" fill="#20262b">Own words, naming</text>
+      <text x="170" y="338" text-anchor="middle" font-weight="700" fill="#0f4c5c">the actual complaint?</text>
+      <text x="170" y="354" text-anchor="middle" fill="#5a6a72" font-size="11">unedited macros don't count (PL-046)</text>
+      <line x1="170" y1="118" x2="170" y2="160" stroke="#41505a" stroke-width="1.5" marker-end="url(#arr6)"/>
+      <line x1="170" y1="248" x2="170" y2="290" stroke="#41505a" stroke-width="1.5" marker-end="url(#arr6)"/>
+      <text x="182" y="146" fill="#17693c" font-weight="700">yes</text>
+      <text x="182" y="276" fill="#17693c" font-weight="700">yes</text>
+      <rect x="410" y="176" width="130" height="56" rx="6" fill="#fdecea" stroke="#a02018" stroke-width="1.5"/>
+      <text x="475" y="200" text-anchor="middle" font-weight="800" fill="#a02018">AUTO-FAIL</text>
+      <text x="475" y="218" text-anchor="middle" fill="#a02018" font-size="11.5">none at all</text>
+      <line x1="320" y1="204" x2="410" y2="204" stroke="#a02018" stroke-width="1.5" marker-end="url(#arr6)"/>
+      <text x="352" y="196" fill="#a02018" font-size="11.5" font-weight="700">no</text>
+      <rect x="410" y="306" width="130" height="56" rx="6" fill="#fff4da" stroke="#b78a1c" stroke-width="1.5"/>
+      <text x="475" y="330" text-anchor="middle" font-weight="800" fill="#7a5a10">COACHING</text>
+      <text x="475" y="348" text-anchor="middle" fill="#7a5a10" font-size="11.5">canned or generic</text>
+      <line x1="320" y1="334" x2="410" y2="334" stroke="#b78a1c" stroke-width="1.5" marker-end="url(#arr6)"/>
+      <text x="352" y="326" fill="#7a5a10" font-size="11.5" font-weight="700">no</text>
+      <rect x="110" y="430" width="120" height="34" rx="6" fill="#e7f4ec" stroke="#17693c" stroke-width="1.5"/>
+      <text x="170" y="452" text-anchor="middle" font-weight="800" fill="#17693c">MEETS</text>
+      <line x1="170" y1="378" x2="170" y2="430" stroke="#17693c" stroke-width="1.5" marker-end="url(#arr6)"/>
+      <text x="182" y="410" fill="#17693c" font-weight="700">yes</text>
+      <text x="310" y="446" fill="#5a6a72" font-size="11.5">the business that follows is graded by</text>
+      <text x="310" y="460" fill="#5a6a72" font-size="11.5">its own cards, never by this one</text>
+    </g>
+  </svg>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>6</div></div>
+</div>
+
+<!-- ============ Slide 7: G-4 (distractor card) ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div style="position:absolute; left:56px; top:44px;"><span class="rulechip">RULE G-4</span><span class="mandatory gray">CALIBRATION ROTATION</span></div>
+  <div class="hkicker" style="top:96px;">General conduct — hold and pause etiquette. Calibration rotation since the 6.9.26 card audit (status: p. 3); no current care requirement. Grade by walking the tree; the box is the rule, not the wait.</div>
+  <div class="htag">CALIBRATION-ONLY 6.9.26</div>
+  <div class="rubric" style="top:150px; padding:16px 20px; font-size:15.5px;">
+    A hold is <b>offered, not announced; time-boxed out loud; and refreshed before the box
+    expires</b>. If the stated time passes, the agent returns with an update or a new estimate
+    — silence past the box is the violation, however good the news is on return.
+  </div>
+  <div class="gradenote" style="top:316px; font-size:13px; padding:10px 14px;">
+    Grading note: chat pauses follow the same shape as voice holds — "give me two minutes"
+    starts a two-minute box. G-4 does not grade how long the work actually took; it grades
+    whether the customer ever sat in unexplained silence.
+  </div>
+  <div class="excerpt" style="left:56px; right:auto; width:560px; top:412px; padding:12px 16px 10px;">
+    <h4>GRADED EXCERPT &middot; CONTACT 26-05-0722 (AUDIO, TRANSCRIBED)</h4>
+    <div class="line" style="font-size:13px;"><span class="who">Agent:</span> Mind if I put you on hold for about three minutes while I check that with the warehouse team?</div>
+    <div class="line cust" style="font-size:13px;"><span class="who">Customer:</span> Sure.</div>
+    <div class="line cust" style="font-size:13px;"><span class="who">System:</span> Hold 09:12–09:19 (7m 04s). No refresh.</div>
+    <div class="line" style="font-size:13px;"><span class="who">Agent:</span> Thanks for waiting — good news, it's all sorted.</div>
+    <div class="line cust" style="font-size:13px;"><span class="who">Customer:</span> I was starting to wonder if the call had dropped, honestly.</div>
+    <div class="verdict coach" style="margin-top:6px; font-size:13px;">COACHING — G-4<span>Offered and time-boxed, then the box expired with no refresh.</span></div>
+  </div>
+  <svg width="560" height="500" viewBox="0 0 560 500" style="position:absolute; right:56px; top:150px;" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arr7g" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#41505a"/></marker>
+    </defs>
+    <text x="0" y="16" font-size="12" font-weight="700" letter-spacing="1.5" fill="#8a959c" font-family="Helvetica">G-4 GRADER WALK — THREE QUESTIONS PER HOLD</text>
+    <g font-family="Helvetica" font-size="12.5">
+      <polygon points="170,30 320,74 170,118 20,74" fill="#f4f7f8" stroke="#0f4c5c" stroke-width="1.5"/>
+      <text x="170" y="70" text-anchor="middle" fill="#20262b">Hold offered as a</text>
+      <text x="170" y="86" text-anchor="middle" font-weight="700" fill="#0f4c5c">question, not announced?</text>
+      <polygon points="170,160 320,204 170,248 20,204" fill="#f4f7f8" stroke="#0f4c5c" stroke-width="1.5"/>
+      <text x="170" y="196" text-anchor="middle" fill="#20262b">Time-boxed</text>
+      <text x="170" y="212" text-anchor="middle" font-weight="700" fill="#0f4c5c">out loud?</text>
+      <polygon points="170,290 320,334 170,378 20,334" fill="#f4f7f8" stroke="#0f4c5c" stroke-width="1.5"/>
+      <text x="170" y="322" text-anchor="middle" fill="#20262b">Refresh or return</text>
+      <text x="170" y="338" text-anchor="middle" font-weight="700" fill="#0f4c5c">before the box expired?</text>
+      <line x1="170" y1="118" x2="170" y2="160" stroke="#41505a" stroke-width="1.5" marker-end="url(#arr7g)"/>
+      <line x1="170" y1="248" x2="170" y2="290" stroke="#41505a" stroke-width="1.5" marker-end="url(#arr7g)"/>
+      <text x="182" y="146" fill="#17693c" font-weight="700">yes</text>
+      <text x="182" y="276" fill="#17693c" font-weight="700">yes</text>
+      <rect x="410" y="120" width="130" height="56" rx="6" fill="#fff4da" stroke="#b78a1c" stroke-width="1.5"/>
+      <text x="475" y="144" text-anchor="middle" font-weight="800" fill="#7a5a10">COACHING</text>
+      <text x="475" y="162" text-anchor="middle" fill="#7a5a10" font-size="11.5">structure missed</text>
+      <line x1="320" y1="74" x2="452" y2="120" stroke="#b78a1c" stroke-width="1.5" marker-end="url(#arr7g)"/>
+      <line x1="320" y1="204" x2="440" y2="164" stroke="#b78a1c" stroke-width="1.5" marker-end="url(#arr7g)"/>
+      <text x="352" y="90" fill="#7a5a10" font-size="11.5" font-weight="700">no</text>
+      <text x="352" y="192" fill="#7a5a10" font-size="11.5" font-weight="700">no</text>
+      <rect x="410" y="306" width="130" height="70" rx="6" fill="#fdecea" stroke="#a02018" stroke-width="1.5"/>
+      <text x="475" y="330" text-anchor="middle" font-weight="800" fill="#a02018">AUTO-FAIL</text>
+      <text x="475" y="348" text-anchor="middle" fill="#a02018" font-size="11.5">no return at all —</text>
+      <text x="475" y="362" text-anchor="middle" fill="#a02018" font-size="11.5">customer gave up waiting</text>
+      <line x1="320" y1="334" x2="410" y2="334" stroke="#a02018" stroke-width="1.5" marker-end="url(#arr7g)"/>
+      <text x="348" y="326" fill="#a02018" font-size="11.5" font-weight="700">no*</text>
+      <rect x="110" y="430" width="120" height="34" rx="6" fill="#e7f4ec" stroke="#17693c" stroke-width="1.5"/>
+      <text x="170" y="452" text-anchor="middle" font-weight="800" fill="#17693c">MEETS</text>
+      <line x1="170" y1="378" x2="170" y2="430" stroke="#17693c" stroke-width="1.5" marker-end="url(#arr7g)"/>
+      <text x="182" y="410" fill="#17693c" font-weight="700">yes</text>
+      <text x="290" y="446" fill="#5a6a72" font-size="11.5">* an expired box with a late return grades</text>
+      <text x="290" y="460" fill="#5a6a72" font-size="11.5">COACHING; abandonment is the auto-fail</text>
+    </g>
+  </svg>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>7</div></div>
+</div>
+
+<!-- ============ Slide 8: C-5 + grader decision tree ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div style="position:absolute; left:56px; top:44px;"><span class="rulechip">RULE C-5</span><span class="mandatory">MANDATORY &middot; ALL CANCELLATIONS</span></div>
+  <div class="hkicker" style="top:96px;">Cancellation conduct — recap and confirmation. Grade by walking the tree; there is exactly one path to MEETS.</div>
+  <div class="htag">GRADED SINCE 5.4.26</div>
+  <div class="rubric" style="top:150px; padding:16px 20px; font-size:15.5px;">
+    Before a cancellation is processed, the agent's recap <b>names the order, the dollar total,
+    and the refund destination</b> — and the customer gives <b>an unmistakable yes before
+    processing</b>. A recap without the yes, or a yes without the recap, both fail this card.
+  </div>
+  <div class="gradenote" style="top:296px; font-size:13px; padding:10px 14px;">
+    "Unmistakable" means a reasonable listener would call it consent to <i>this</i>
+    cancellation — "yes, go ahead" qualifies; silence, "uh-huh" mid-sentence, or consent
+    given before the recap existed do not (precedent PL-041, p. 9).
+  </div>
+  <div class="excerpt" style="left:56px; right:auto; width:560px; top:396px; padding:12px 16px 10px;">
+    <h4>GRADED EXCERPT &middot; CONTACT 26-05-0954 (CHAT)</h4>
+    <div class="line cust" style="font-size:13px;"><span class="who">Customer:</span> hey, I need to cancel the camp stove order from last night</div>
+    <div class="line" style="font-size:13px;"><span class="who">Agent:</span> Found it. Happy to cancel that for you right now.</div>
+    <div class="line cust" style="font-size:13px;"><span class="who">Customer:</span> great, do it</div>
+    <div class="line" style="font-size:13px;"><span class="who">Agent:</span> Done! Your order has been cancelled and your refund is on the way.</div>
+    <div class="line cust" style="font-size:13px;"><span class="who">Customer:</span> wait, that was fast — which card does it go back to?</div>
+    <div class="verdict fail" style="margin-top:6px; font-size:13px;">AUTO-FAIL — C-5<span>No recap existed for the "do it" to consent to. First diamond, first exit.</span></div>
+  </div>
+  <svg width="560" height="500" viewBox="0 0 560 500" style="position:absolute; right:56px; top:150px;" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arr7" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#41505a"/></marker>
+    </defs>
+    <text x="0" y="16" font-size="12" font-weight="700" letter-spacing="1.5" fill="#8a959c" font-family="Helvetica">C-5 GRADER WALK — ONE PATH TO MEETS</text>
+    <g font-family="Helvetica" font-size="12.5">
+      <polygon points="170,30 320,70 170,110 20,70" fill="#f4f7f8" stroke="#0f4c5c" stroke-width="1.5"/>
+      <text x="170" y="66" text-anchor="middle" fill="#20262b">Recap named</text>
+      <text x="170" y="82" text-anchor="middle" font-weight="700" fill="#0f4c5c">the order?</text>
+      <polygon points="170,140 320,180 170,220 20,180" fill="#f4f7f8" stroke="#0f4c5c" stroke-width="1.5"/>
+      <text x="170" y="176" text-anchor="middle" fill="#20262b">Recap named</text>
+      <text x="170" y="192" text-anchor="middle" font-weight="700" fill="#0f4c5c">the dollar total?</text>
+      <polygon points="170,250 320,290 170,330 20,290" fill="#f4f7f8" stroke="#0f4c5c" stroke-width="1.5"/>
+      <text x="170" y="286" text-anchor="middle" fill="#20262b">Recap named the</text>
+      <text x="170" y="302" text-anchor="middle" font-weight="700" fill="#0f4c5c">refund destination?</text>
+      <polygon points="170,360 320,400 170,440 20,400" fill="#f4f7f8" stroke="#0f4c5c" stroke-width="1.5"/>
+      <text x="170" y="392" text-anchor="middle" fill="#20262b">Customer's yes came</text>
+      <text x="170" y="408" text-anchor="middle" font-weight="700" fill="#0f4c5c">after that recap,</text>
+      <text x="170" y="424" text-anchor="middle" font-weight="700" fill="#0f4c5c">before processing?</text>
+      <line x1="170" y1="110" x2="170" y2="140" stroke="#41505a" stroke-width="1.5" marker-end="url(#arr7)"/>
+      <line x1="170" y1="220" x2="170" y2="250" stroke="#41505a" stroke-width="1.5" marker-end="url(#arr7)"/>
+      <line x1="170" y1="330" x2="170" y2="360" stroke="#41505a" stroke-width="1.5" marker-end="url(#arr7)"/>
+      <text x="182" y="130" fill="#17693c" font-weight="700">yes</text>
+      <text x="182" y="240" fill="#17693c" font-weight="700">yes</text>
+      <text x="182" y="350" fill="#17693c" font-weight="700">yes</text>
+      <rect x="420" y="200" width="120" height="70" rx="6" fill="#fdecea" stroke="#a02018" stroke-width="1.5"/>
+      <text x="480" y="230" text-anchor="middle" font-weight="800" fill="#a02018">AUTO-FAIL</text>
+      <text x="480" y="248" text-anchor="middle" fill="#a02018" font-size="11.5">any single no</text>
+      <line x1="320" y1="70" x2="452" y2="200" stroke="#a02018" stroke-width="1.5" marker-end="url(#arr7)"/>
+      <line x1="320" y1="180" x2="440" y2="212" stroke="#a02018" stroke-width="1.5" marker-end="url(#arr7)"/>
+      <line x1="320" y1="290" x2="440" y2="252" stroke="#a02018" stroke-width="1.5" marker-end="url(#arr7)"/>
+      <line x1="320" y1="400" x2="452" y2="268" stroke="#a02018" stroke-width="1.5" marker-end="url(#arr7)"/>
+      <text x="352" y="96" fill="#a02018" font-size="11.5" font-weight="700">no</text>
+      <text x="356" y="196" fill="#a02018" font-size="11.5" font-weight="700">no</text>
+      <text x="356" y="278" fill="#a02018" font-size="11.5" font-weight="700">no</text>
+      <text x="352" y="368" fill="#a02018" font-size="11.5" font-weight="700">no</text>
+      <rect x="110" y="462" width="120" height="34" rx="6" fill="#e7f4ec" stroke="#17693c" stroke-width="1.5"/>
+      <text x="170" y="484" text-anchor="middle" font-weight="800" fill="#17693c">MEETS</text>
+      <line x1="170" y1="440" x2="170" y2="462" stroke="#17693c" stroke-width="1.5" marker-end="url(#arr7)"/>
+      <text x="182" y="456" fill="#17693c" font-weight="700">yes</text>
+      <text x="352" y="470" fill="#7a5a10" font-size="11.5">all yes but buried or out of</text>
+      <text x="352" y="484" fill="#7a5a10" font-size="11.5">order &rarr; COACHING (p. 3 scale)</text>
+    </g>
+  </svg>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>8</div></div>
+</div>
+
+<!-- ============ Slide 9: Precedent log ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div class="htitle">Precedent log — floor rulings since April</div>
+  <div class="hkicker">Rulings about grading itself. These bind graders, not agents — none of this is servicing policy.</div>
+  <div class="htag">SESSION MATERIAL</div>
+  <div style="position:absolute; left:56px; top:150px; width:1168px;">
+    <table class="stats" style="width:100%;">
+      <tr><th style="width:90px;">ENTRY</th><th style="width:110px;">DATE</th><th>QUESTION ON THE FLOOR</th><th style="width:420px;">RULING</th></tr>
+      <tr><td>PL-037</td><td class="num">4.30.26</td><td>Does a thumbs-up emoji count as consent in chat?</td><td>Yes, when it directly answers the consent question and nothing else is pending. Split 8–3.</td></tr>
+      <tr><td>PL-041</td><td class="num">5.28.26</td><td>Does an early "just cancel it, whatever it takes" count as the yes?</td><td>No. Consent has to follow the recap it consents to. Unanimous after debate.</td></tr>
+      <tr><td>PL-044</td><td class="num">6.4.26</td><td>May graders grade from a trimmed transcript?</td><td>Never for a verdict that could auto-fail — pull the full contact record first. Split 7–4.</td></tr>
+      <tr><td>PL-045</td><td class="num">6.4.26</td><td>Same contact graded under two cards — do verdicts interact?</td><td>No. Cards are independent; one MEETS never offsets another card's fail.</td></tr>
+      <tr><td>PL-046</td><td class="num">6.9.26</td><td>Does a pasted macro count as "own words" under C-8?</td><td>Only if edited to name the customer's actual complaint. Unedited macro grades COACHING. Split 9–2.</td></tr>
+      <tr><td>PL-047</td><td class="num">6.9.26</td><td>Does C-8 apply when the upset is about the product, not the service?</td><td>Yes — upset is upset. But no stated upset means N/A, never a miss. Unanimous.</td></tr>
+    </table>
+  </div>
+  <div class="gradenote" style="top:544px; width:1168px;">
+    The log is append-only and lives in the CX Quality drive. Quote entries by number in your
+    verdict notes — "per PL-041" saves the floor from re-litigating settled questions, which
+    last quarter consumed 40% of session time.
+  </div>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>9</div></div>
+</div>
+
+<!-- ============ Slide 10: A-3 + swimlane ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div style="position:absolute; left:56px; top:44px;"><span class="rulechip">RULE A-3</span><span class="mandatory">MANDATORY &middot; ADDRESS CHANGES</span></div>
+  <div class="hkicker" style="top:96px;">Address-change conduct — the read-back loop. The swimlane below is the loop; corrections re-enter at step 2, never at step 4.</div>
+  <div class="htag">GRADED SINCE 5.4.26</div>
+  <div class="rubric" style="top:150px; padding:16px 20px; font-size:15.5px;">
+    When a customer moves a pending order to a new shipping address, the agent must
+    <b>repeat every field of the new address back</b> to the customer, and the order is updated
+    <b>only after the customer confirms the read-back</b>. Take the address, echo it, get the
+    confirmation, then change the order — in that order, every time.
+  </div>
+  <div class="gradenote" style="top:322px; font-size:13px; padding:10px 14px;">
+    A correction restarts the loop — fix the field, read the address back again, get a fresh
+    confirmation. Reading back only the corrected field is COACHING; updating with no
+    read-back at all is AUTO-FAIL.
+  </div>
+  <div class="excerpt" style="top:150px; padding:14px 16px 12px;">
+    <h4>GRADED EXCERPT &middot; CONTACT 26-05-1402 (AUDIO, TRANSCRIBED)</h4>
+    <div class="line cust" style="font-size:13px;"><span class="who">Customer:</span> Send it to my sister's place instead — 4415 Rowan Court, Unit 2B, Madison, Wisconsin, 53711.</div>
+    <div class="line" style="font-size:13px;"><span class="who">Agent:</span> Let me make sure I have this exactly: 4415 Rowan Court, Unit 2B, Madison, Wisconsin, 53711, still under your name. Is every part of that correct?</div>
+    <div class="line cust" style="font-size:13px;"><span class="who">Customer:</span> Yes, that's it.</div>
+    <div class="line" style="font-size:13px;"><span class="who">Agent:</span> Updated — the order now shows the Madison address, and nothing else on it changed.</div>
+    <div class="line" style="font-size:12.5px; color:#8a959c;"><span class="who" style="color:#8a959c;">Console annotation:</span> address field edited 0:19 after the customer's yes.</div>
+    <div class="verdict pass" style="margin-top:6px;">MEETS — A-3<span>Full-field echo, a clear yes on the read-back, then the update. Textbook loop.</span></div>
+  </div>
+  <svg width="1168" height="212" viewBox="0 0 1168 212" style="position:absolute; left:56px; top:452px;" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arr9" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#41505a"/></marker>
+      <marker id="arr9r" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#b3261e"/></marker>
+    </defs>
+    <text x="0" y="14" font-size="12" font-weight="700" letter-spacing="1.5" fill="#8a959c" font-family="Helvetica">A-3 AS A SWIMLANE — NUMBERS ARE THE REQUIRED ORDER</text>
+    <rect x="0" y="26" width="1168" height="62" fill="#f8f5ff" stroke="#ddd2f2"/>
+    <rect x="0" y="120" width="1168" height="62" fill="#f4f7f8" stroke="#d5dde0"/>
+    <text x="12" y="62" font-size="12" font-weight="800" fill="#7a4bd6" font-family="Helvetica">CUSTOMER</text>
+    <text x="12" y="156" font-size="12" font-weight="800" fill="#0f4c5c" font-family="Helvetica">AGENT</text>
+    <g font-family="Helvetica" font-size="12.5">
+      <rect x="120" y="36" width="200" height="42" rx="6" fill="#fff" stroke="#7a4bd6"/>
+      <text x="220" y="54" text-anchor="middle" fill="#20262b"><tspan font-weight="800">1</tspan> gives the new address</text>
+      <text x="220" y="70" text-anchor="middle" fill="#5a6a72" font-size="11">all fields</text>
+      <rect x="400" y="130" width="230" height="42" rx="6" fill="#fff" stroke="#0f4c5c"/>
+      <text x="515" y="148" text-anchor="middle"><tspan font-weight="800">2</tspan> echoes every field back</text>
+      <text x="515" y="164" text-anchor="middle" fill="#5a6a72" font-size="11">name, street, unit, city, state, zip</text>
+      <rect x="700" y="36" width="200" height="42" rx="6" fill="#fff" stroke="#7a4bd6"/>
+      <text x="800" y="54" text-anchor="middle"><tspan font-weight="800">3</tspan> confirms — or corrects</text>
+      <text x="800" y="70" text-anchor="middle" fill="#5a6a72" font-size="11">a correction re-enters at 2</text>
+      <rect x="960" y="130" width="196" height="42" rx="6" fill="#e7f4ec" stroke="#17693c"/>
+      <text x="1058" y="148" text-anchor="middle" fill="#17693c"><tspan font-weight="800">4</tspan> updates the order</text>
+      <text x="1058" y="164" text-anchor="middle" fill="#17693c" font-size="11">only now</text>
+      <line x1="320" y1="70" x2="400" y2="140" stroke="#41505a" stroke-width="1.5" marker-end="url(#arr9)"/>
+      <line x1="630" y1="140" x2="700" y2="70" stroke="#41505a" stroke-width="1.5" marker-end="url(#arr9)"/>
+      <line x1="900" y1="66" x2="960" y2="140" stroke="#41505a" stroke-width="1.5" marker-end="url(#arr9)"/>
+      <path d="M 800 78 C 780 110 660 118 632 128" fill="none" stroke="#b3261e" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arr9r)"/>
+      <text x="742" y="112" fill="#b3261e" font-size="11.5" font-weight="700">any correction &rarr; back to 2</text>
+    </g>
+    <text x="0" y="204" font-size="12" fill="#5a6a72" font-family="Helvetica">Skipping 2, or jumping from 1 to 4, is the AUTO-FAIL geometry. Repeating only the corrected field is a short-circuit of 2 and grades COACHING.</text>
+  </svg>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>10</div></div>
+</div>
+
+<!-- ============ Slide 11: A-6 (distractor card + masked-record console) ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div style="position:absolute; left:56px; top:44px;"><span class="rulechip">RULE A-6</span><span class="mandatory gray">CALIBRATION ROTATION</span></div>
+  <div class="hkicker" style="top:96px;">Address-change conduct — stored-address discipline. Calibration rotation since the 6.9.26 card audit (status: p. 3); no current care requirement. Console-graded card: the disclosure log as displayed decides it.</div>
+  <div class="htag">CALIBRATION-ONLY 6.9.26</div>
+  <div class="rubric" style="top:150px; padding:16px 20px; font-size:15.5px;">
+    The address already on an order is <b>confirmed, never volunteered</b>: the customer says
+    where they believe it is going, and the agent confirms or corrects the match. Reading the
+    stored address out loud unprompted — on any channel — is the violation, whoever is asking.
+  </div>
+  <div class="gradenote" style="top:330px; font-size:13px; padding:10px 14px;">
+    A-6 covers the address already on file. The <i>new</i> address a customer is giving you is
+    A-3's card, graded there. The two never conflict: incoming details come from the customer's
+    mouth either way. Reveals in the console are logged per contact; a reveal with no business
+    need on the record is an access review on top of the grade.
+  </div>
+  <div class="excerpt" style="left:56px; right:auto; width:560px; top:438px; padding:12px 16px 10px;">
+    <h4>GRADED EXCERPT &middot; CONTACT 26-05-1310 (CHAT)</h4>
+    <div class="line cust" style="font-size:13px;"><span class="who">Customer:</span> quick check — is that order going to the house, or did it default to my old apartment?</div>
+    <div class="line" style="font-size:13px;"><span class="who">Agent:</span> Tell me the address you're expecting and I'll confirm it against the order.</div>
+    <div class="line cust" style="font-size:13px;"><span class="who">Customer:</span> the Cedar Ridge house</div>
+    <div class="line" style="font-size:13px;"><span class="who">Agent:</span> That matches what's on the order, down to the unit. You're all set.</div>
+    <div class="verdict pass" style="margin-top:6px; font-size:13px;">MEETS — A-6<span>Confirmed by matching; the stored address never crossed the channel.</span></div>
+  </div>
+  <div style="position:absolute; right:56px; top:150px; width:560px; height:500px; border:1px solid #c3ccd1; border-radius:10px; background:#f7f9fa; box-shadow:0 2px 8px rgba(20,40,50,0.08);">
+    <div class="titlebar">
+      <span class="dot" style="background:#e0655a;"></span><span class="dot" style="background:#e5b83c;"></span><span class="dot" style="background:#57b06b;"></span>
+      <span style="margin-left:10px;">Beacon Agent Desktop — order view — contact 26-05-1310</span>
+    </div>
+    <div style="position:absolute; left:14px; right:14px; top:54px; bottom:14px; background:#ffffff; border:1px solid #dde4e8; border-radius:6px; padding:14px 16px; font-size:13px;">
+      <h5 style="font-size:11px; letter-spacing:1.2px; color:#8a959c; margin-bottom:12px;">ORDER RECORD (AGENT VIEW)</h5>
+      <div style="display:flex; justify-content:space-between; border-bottom:1px solid #e6ebee; padding:7px 0;"><span style="color:#8a959c;">STATUS</span><span>pending</span></div>
+      <div style="display:flex; justify-content:space-between; border-bottom:1px solid #e6ebee; padding:7px 0;"><span style="color:#8a959c;">ITEMS</span><span>3 lines</span></div>
+      <div style="display:flex; justify-content:space-between; border-bottom:1px solid #e6ebee; padding:7px 0;"><span style="color:#8a959c;">SHIP TO</span><span style="font-family:monospace; letter-spacing:1px;">&#9608;&#9608;&#9608;&#9608; &#9608;&#9608;&#9608;&#9608;&#9608; &#9608;&#9608;&#9608;&#9608;&#9608;&#9608; &middot; unit &#9608;&#9608; &middot; WI</span></div>
+      <div style="display:flex; justify-content:space-between; padding:7px 0;"><span style="color:#8a959c;">MASKING</span><span>on by default &middot; <span style="color:#0f4c5c; font-weight:700;">[reveal]</span> requires a logged reason</span></div>
+      <div style="margin-top:16px; background:#f4f7f8; border:1px solid #d5dde0; border-radius:6px; padding:10px 12px;">
+        <h5 style="font-size:11px; letter-spacing:1.2px; color:#8a959c; margin-bottom:8px;">DISCLOSURE LOG — THIS CONTACT</h5>
+        <div style="font-family:monospace; font-size:12.5px; color:#41505a;">reveals: 0 &nbsp;&middot;&nbsp; matches run: 1 &nbsp;&middot;&nbsp; match result: CONFIRMED</div>
+      </div>
+      <div style="margin-top:14px; background:#fdecea; border:1px solid #f3c3be; border-radius:6px; padding:10px 12px; font-size:12.5px; color:#a02018; line-height:1.4;">
+        A reveal logged during a contact with no business-need note is an automatic A-6 review,
+        even when the customer passed every check. Matching needs no reveal — the console
+        compares without displaying.
+      </div>
+      <div style="margin-top:14px; font-size:11.5px; color:#8a959c; line-height:1.4;">The disclosure log as displayed is the standard of record for A-6 (see p. 3). The transcript decides what was said; the log decides what was shown.</div>
+    </div>
+  </div>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>11</div></div>
+</div>
+
+<!-- ============ Slide 12: G-7 (distractor card) ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div style="position:absolute; left:56px; top:44px;"><span class="rulechip">RULE G-7</span><span class="mandatory gray">CALIBRATION ROTATION</span></div>
+  <div class="hkicker" style="top:96px;">General conduct — transfer framing. Calibration rotation since the 6.9.26 card audit (status: p. 3); no current care requirement. The swimlane below is the shape; the cold drop skips every numbered beat.</div>
+  <div class="htag">CALIBRATION-ONLY 6.9.26</div>
+  <div class="rubric" style="top:150px; padding:16px 20px; font-size:15.5px;">
+    Before any transfer, the customer hears <b>who they are being moved to, why that desk can
+    do what this one cannot, and what has already been done</b> — so nobody re-explains their
+    situation from zero on the other side.
+  </div>
+  <div class="gradenote" style="top:322px; font-size:13px; padding:10px 14px;">
+    Grading note: G-7 does not grade whether the transfer was the right call — routing
+    correctness belongs to the servicing rulings and their owners. It grades the framing
+    sentence. "Let me transfer you" alone, with a cold drop, is the classic fail shape.
+  </div>
+  <div class="excerpt" style="top:150px; padding:14px 16px 12px;">
+    <h4>GRADED EXCERPT &middot; CONTACT 26-05-0918 (AUDIO, TRANSCRIBED)</h4>
+    <div class="line cust" style="font-size:13px;"><span class="who">Customer:</span> So who actually fixes this? I really don't want to start over with somebody new.</div>
+    <div class="line" style="font-size:13px;"><span class="who">Agent:</span> This one needs our returns specialists — they can open the carrier claim that I can't start from here. I'm sending over my notes so you won't repeat any of this. Okay to move you now?</div>
+    <div class="line cust" style="font-size:13px;"><span class="who">Customer:</span> Yeah, that's fine, thanks for explaining.</div>
+    <div class="verdict pass" style="margin-top:6px;">MEETS — G-7<span>Who, why-that-desk, what's-been-done, and consent to move — all four beats in two sentences.</span></div>
+  </div>
+  <svg width="1168" height="212" viewBox="0 0 1168 212" style="position:absolute; left:56px; top:452px;" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arr12" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#41505a"/></marker>
+      <marker id="arr12r" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#b3261e"/></marker>
+    </defs>
+    <text x="0" y="14" font-size="12" font-weight="700" letter-spacing="1.5" fill="#8a959c" font-family="Helvetica">G-7 AS A SWIMLANE — FOUR BEATS BEFORE THE MOVE</text>
+    <rect x="0" y="26" width="1168" height="62" fill="#f8f5ff" stroke="#ddd2f2"/>
+    <rect x="0" y="120" width="1168" height="62" fill="#f4f7f8" stroke="#d5dde0"/>
+    <text x="12" y="62" font-size="12" font-weight="800" fill="#7a4bd6" font-family="Helvetica">CUSTOMER</text>
+    <text x="12" y="156" font-size="12" font-weight="800" fill="#0f4c5c" font-family="Helvetica">AGENT</text>
+    <g font-family="Helvetica" font-size="12.5">
+      <rect x="120" y="130" width="210" height="42" rx="6" fill="#fff" stroke="#0f4c5c"/>
+      <text x="225" y="148" text-anchor="middle"><tspan font-weight="800">1</tspan> names the desk</text>
+      <text x="225" y="164" text-anchor="middle" fill="#5a6a72" font-size="11">who, and why that desk can act</text>
+      <rect x="400" y="130" width="210" height="42" rx="6" fill="#fff" stroke="#0f4c5c"/>
+      <text x="505" y="148" text-anchor="middle"><tspan font-weight="800">2</tspan> states what's done</text>
+      <text x="505" y="164" text-anchor="middle" fill="#5a6a72" font-size="11">notes travel with the contact</text>
+      <rect x="680" y="36" width="200" height="42" rx="6" fill="#fff" stroke="#7a4bd6"/>
+      <text x="780" y="54" text-anchor="middle"><tspan font-weight="800">3</tspan> consents to the move</text>
+      <text x="780" y="70" text-anchor="middle" fill="#5a6a72" font-size="11">or asks, and 1–2 repeat</text>
+      <rect x="950" y="130" width="206" height="42" rx="6" fill="#e7f4ec" stroke="#17693c"/>
+      <text x="1053" y="148" text-anchor="middle" fill="#17693c"><tspan font-weight="800">4</tspan> transfers, notes attached</text>
+      <text x="1053" y="164" text-anchor="middle" fill="#17693c" font-size="11">only now</text>
+      <line x1="330" y1="151" x2="400" y2="151" stroke="#41505a" stroke-width="1.5" marker-end="url(#arr12)"/>
+      <line x1="610" y1="140" x2="680" y2="70" stroke="#41505a" stroke-width="1.5" marker-end="url(#arr12)"/>
+      <line x1="880" y1="66" x2="950" y2="140" stroke="#41505a" stroke-width="1.5" marker-end="url(#arr12)"/>
+      <path d="M 60 178 C 400 198 800 194 1000 170" fill="none" stroke="#b3261e" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arr12r)"/>
+      <text x="640" y="118" fill="#b3261e" font-size="11.5" font-weight="700" text-anchor="middle">"let me transfer you" + drop — skips 1, 2, and 3 in one move</text>
+    </g>
+    <text x="0" y="210" font-size="12" fill="#5a6a72" font-family="Helvetica">The dashed line is the cold drop. Any missing beat grades COACHING; the full skip with no consent is the AUTO-FAIL geometry.</text>
+  </svg>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>12</div></div>
+</div>
+
+<!-- ============ Slide 13: I-6 console screenshot ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div style="position:absolute; left:56px; top:44px;"><span class="rulechip">RULE I-6</span><span class="mandatory">MANDATORY &middot; ITEM CHANGES</span></div>
+  <div class="hkicker" style="top:96px;">Item-change conduct — the last-call question. Console-graded card: the checklist as displayed is the standard of record.</div>
+  <div class="htag">GRADED SINCE 5.11.26</div>
+  <div class="window">
+    <div class="titlebar">
+      <span class="dot" style="background:#e0655a;"></span><span class="dot" style="background:#e5b83c;"></span><span class="dot" style="background:#57b06b;"></span>
+      <span style="margin-left:10px;">Beacon QA Console v2.3 — contact 26-05-1523 (chat) — grader: R. Calloway — card I-6</span>
+    </div>
+    <div class="chatpane">
+      <h5>CONTACT TRANSCRIPT</h5>
+      <div class="line" style="font-size:13px;"><span class="who">Agent (14:07:12):</span> So the change list is: the tent swaps from the 2-person to the 4-person, and the headlamp goes from gray to red. That's everything on my side — is there anything else you want changed before this goes in?</div>
+      <div class="line cust" style="font-size:13px;"><span class="who">Customer (14:07:41):</span> hmm let me check with my wife, one sec</div>
+      <div class="line" style="font-size:13px;"><span class="who">Agent (14:07:55):</span> Of course — take your time, I won't submit anything until you're back.</div>
+      <div style="border-top:1px dashed #c9d3d8; border-bottom:1px dashed #c9d3d8; padding:6px 0; margin:8px 0; font-size:12px; color:#8a959c; text-align:center;">— no messages for 2m 04s —</div>
+      <div class="line cust" style="font-size:13px;"><span class="who">Customer (14:10:03):</span> ok she says we're good. that's everything</div>
+      <div class="line" style="font-size:13px;"><span class="who">Agent (14:10:18):</span> Submitting now with those two changes.</div>
+      <div class="line" style="font-size:12px; color:#8a959c;"><span class="who" style="color:#8a959c;">System (14:10:19):</span> ITEM_CHANGE_SUBMIT accepted.</div>
+    </div>
+    <div class="checkpane">
+      <h5>RULE I-6 — REQUIRED CONDUCT CHECKLIST</h5>
+      <div class="checkitem"><div class="checkbox">&#10003;</div><div><b>1.</b> Confirm with the customer that the change list is final.<br><span style="color:#8a959c; font-size:12px;">evidence: 14:07:12 "that's everything on my side"</span></div></div>
+      <div class="checkitem"><div class="checkbox">&#10003;</div><div><b>2.</b> Close the recap with a final anything-else question.<br><span style="color:#8a959c; font-size:12px;">evidence: 14:07:12, question form confirmed</span></div></div>
+      <div class="checkitem"><div class="checkbox">&#10003;</div><div><b>3.</b> Hold for the customer's reply before submitting.<br><span style="color:#8a959c; font-size:12px;">evidence: submit at 14:10:18, after 14:10:03 reply. Pause honored: 2m 04s.</span></div></div>
+      <div class="verdict pass" style="margin-top:14px;">MEETS — I-6<span>All three boxes on displayed evidence. Verdict locked 6.2.26, second grader concurred.</span></div>
+      <div style="margin-top:12px; font-size:11.5px; color:#8a959c; line-height:1.4;">Checklist text is the graded standard of record for I-6 (see p. 3). Items grade independently; any unchecked box is an auto-fail for the card.</div>
+    </div>
+  </div>
+  <div class="callout" style="left:392px; top:496px; width:280px;">
+    <b>QA note &uarr; the 2m 04s gap:</b> the pause is the rule. Item 3 fails the instant a
+    submit lands in this gap — even one that guessed the list right.
+  </div>
+  <div class="callout" style="left:96px; top:496px; width:250px;">
+    <b>QA note &uarr; the 14:07:12 recap:</b> item 1 and item 2 both land in this message —
+    legal, common, and still two separate boxes.
+  </div>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>13</div></div>
+</div>
+
+<!-- ============ Slide 14: I-9 (distractor card + suggestion-window strip) ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div style="position:absolute; left:56px; top:44px;"><span class="rulechip">RULE I-9</span><span class="mandatory gray">CALIBRATION ROTATION</span></div>
+  <div class="hkicker" style="top:96px;">Item-change conduct — suggestion discipline. Calibration rotation since the 6.9.26 card audit (status: p. 3); no current care requirement. Read the card, then the strip: the window opens from the customer's side only.</div>
+  <div class="htag">CALIBRATION-ONLY 6.9.26</div>
+  <div class="rubric" style="top:150px; padding:16px 20px; font-size:15.5px;">
+    Product suggestions during an item change are <b>customer-led: offered only after the
+    customer asks, one at a time</b>, and the agent <b>returns to the change in progress the
+    moment the customer declines</b>. An unsolicited pitch in the middle of someone's change
+    is the violation, however relevant the product.
+  </div>
+  <div class="gradenote" style="top:330px; font-size:13px; padding:10px 14px;">
+    I-9 is a conduct fence, not a sales metric — attach numbers live with the merchandising
+    dashboards and never touch a verdict. A suggestion the customer accepts simply joins the
+    change like anything else they asked for, and the rest of the contact is graded by its
+    own cards.
+  </div>
+  <div class="excerpt" style="top:150px; padding:14px 16px 12px;">
+    <h4>GRADED EXCERPT &middot; CONTACT 26-05-1477 (CHAT)</h4>
+    <div class="line cust" style="font-size:13px;"><span class="who">Customer:</span> can you swap the fleece for the same one in medium?</div>
+    <div class="line" style="font-size:13px;"><span class="who">Agent:</span> On it — medium instead of large, same color.</div>
+    <div class="line cust" style="font-size:13px;"><span class="who">Customer:</span> actually while you're in there, is there a warmer version of it?</div>
+    <div class="line" style="font-size:13px;"><span class="who">Agent:</span> There's an insulated one in the same cut — want that instead of the medium fleece?</div>
+    <div class="line cust" style="font-size:13px;"><span class="who">Customer:</span> nah, the fleece is fine</div>
+    <div class="line" style="font-size:13px;"><span class="who">Agent:</span> No problem — back to the swap, then.</div>
+    <div class="verdict pass" style="margin-top:6px; font-size:13px;">MEETS — I-9<span>The customer opened the window, one suggestion, straight back on the decline.</span></div>
+  </div>
+  <svg width="1168" height="196" viewBox="0 0 1168 196" style="position:absolute; left:56px; top:472px;" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arr14" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#41505a"/></marker>
+    </defs>
+    <text x="0" y="16" font-size="12" font-weight="700" letter-spacing="1.5" fill="#8a959c" font-family="Helvetica">I-9 — THE SUGGESTION WINDOW ON AN ITEM-CHANGE CONTACT</text>
+    <rect x="0" y="58" width="420" height="56" fill="#fdecea" stroke="#f3c3be"/>
+    <rect x="420" y="58" width="400" height="56" fill="#e7f4ec" stroke="#bfe3cd"/>
+    <rect x="820" y="58" width="348" height="56" fill="#fdecea" stroke="#f3c3be"/>
+    <line x1="0" y1="86" x2="1150" y2="86" stroke="#41505a" stroke-width="2" marker-end="url(#arr14)"/>
+    <g font-family="Helvetica" font-size="12.5" fill="#20262b" text-anchor="middle">
+      <circle cx="80" cy="86" r="5" fill="#a02018"/><text x="80" y="136" fill="#a02018">change requested</text>
+      <circle cx="260" cy="86" r="5" fill="#a02018"/><text x="260" y="136" fill="#a02018">swap in progress</text>
+      <circle cx="420" cy="86" r="7" fill="#17693c"/><text x="420" y="136" font-weight="700" fill="#17693c">customer asks</text>
+      <circle cx="610" cy="86" r="5" fill="#41505a"/><text x="610" y="136">one suggestion</text>
+      <circle cx="820" cy="86" r="7" fill="#a02018"/><text x="820" y="136" font-weight="700" fill="#a02018">customer declines</text>
+      <circle cx="1010" cy="86" r="5" fill="#a02018"/><text x="1010" y="136" fill="#a02018">back to the change</text>
+    </g>
+    <text x="210" y="48" font-size="12.5" font-weight="700" fill="#a02018" text-anchor="middle" font-family="Helvetica">UNINVITED — a pitch here is the violation</text>
+    <text x="620" y="48" font-size="12.5" font-weight="700" fill="#17693c" text-anchor="middle" font-family="Helvetica">OPEN WINDOW — customer asked</text>
+    <text x="994" y="48" font-size="12.5" font-weight="700" fill="#a02018" text-anchor="middle" font-family="Helvetica">CLOSED — declined means done</text>
+    <line x1="420" y1="30" x2="420" y2="120" stroke="#17693c" stroke-width="2" stroke-dasharray="6 4"/>
+    <line x1="820" y1="30" x2="820" y2="120" stroke="#a02018" stroke-width="2" stroke-dasharray="6 4"/>
+    <text x="0" y="176" font-size="12" fill="#5a6a72" font-family="Helvetica">Grader shortcut: find who opened the window. If the first suggestion sits left of the customer's ask, the card is decided — one red-zone pitch outweighs a polite decline.</text>
+  </svg>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>14</div></div>
+</div>
+
+<!-- ============ Slide 15: Calibration exercise ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div class="htitle">Calibration exercise — score it yourself</div>
+  <div class="hkicker">Two graders per excerpt, verdicts sealed until the session floor. No answer key in this deck.</div>
+  <div class="htag">SESSION MATERIAL</div>
+  <div class="excerpt" style="left:56px; right:auto; width:560px;">
+    <h4>EXERCISE A &middot; CONTACT 26-06-0107 (CHAT, TRIMMED)</h4>
+    <div class="line cust"><span class="who">Customer:</span> cancel my order pls</div>
+    <div class="line"><span class="who">Agent:</span> I can take care of that — mind sharing what changed?</div>
+    <div class="line cust"><span class="who">Customer:</span> found it cheaper somewhere else tbh</div>
+    <div class="line"><span class="who">Agent:</span> Thanks for being straight with me. Give me one moment with the order…</div>
+    <div style="font-size:12.5px; color:#8a959c; margin-top:8px;">[transcript continues — full text in the session packet. Remember PL-044 before grading a trim.]</div>
+  </div>
+  <div class="excerpt" style="width:560px;">
+    <h4>EXERCISE B &middot; CONTACT 26-06-0093 (AUDIO, TRANSCRIBED, TRIMMED)</h4>
+    <div class="line"><span class="who">Agent:</span> New address received. Updating the order now — you should see it reflected in a minute.</div>
+    <div class="line cust"><span class="who">Customer:</span> Hold on, I think I gave you the old zip.</div>
+    <div class="line"><span class="who">Agent:</span> Let's fix that. Read me the whole thing once more and I'll take it from the top.</div>
+    <div style="font-size:12.5px; color:#8a959c; margin-top:8px;">[transcript continues — full text in the session packet]</div>
+  </div>
+  <div style="position:absolute; left:56px; top:520px; width:1168px; background:#f4f7f8; border:1px solid #d5dde0; border-radius:6px; padding:16px 20px; font-size:14px; color:#41505a; line-height:1.5;">
+    Bring your verdicts to the floor with the card number you graded against. Last session's
+    biggest split (Exercise C, the double-correction read-back) went 6–5 before the floor ruled;
+    the ruling is in the precedent log, and yes, we will be referring to it.
+  </div>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>15</div></div>
+</div>
+
+<!-- ============ Slide 16: What we do not grade ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div class="htitle">What we do <span style="color:#b3261e;">not</span> grade</div>
+  <div class="hkicker">Perennial calibration drift — read before every session</div>
+  <div class="htag">INTERNAL &middot; TRAINING</div>
+  <div style="position:absolute; left:56px; top:150px; width:1168px;">
+    <ul class="clean">
+      <li><b>Phrasing.</b> There is no required script for any card in this deck. Exact-wording checks died with CR7 (4.20.26); a grader marking down natural wording is themselves the calibration error.</li>
+      <li><b>Tone adjectives.</b> "Sounded rushed" is coaching-conversation material, not a card. If the required conduct happened, tone does not move the verdict. (C-8 — calibration rotation since 6.9.26 — is not a counterexample: it grades whether the acknowledgment sentence exists, never how it sounded.)</li>
+      <li><b>Speed.</b> Handle time is a workforce metric. No card in this deck trades correctness for pace, and the fastest auto-fail is still an auto-fail.</li>
+      <li><b>Parked proposals.</b> Ideas parked on the servicing board without a ruling are not rules and are never graded. If it isn't a card or a dated ruling, it doesn't exist for QA.</li>
+      <li><b>Wholesale-pilot contacts.</b> The W-series cards on pp. 17–18 exist so wholesale reviewers and consumer graders stop colliding. A wholesale contact graded against a C/A/I card gets regraded, not appealed.</li>
+      <li><b>Policy substance.</b> Whether the order was eligible, where money went, which reasons clear — owned artifacts, p. 25. QA grades conduct against cards and nothing else.</li>
+    </ul>
+  </div>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>16</div></div>
+</div>
+
+<!-- ============ Slide 17: W-2 wholesale card ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div class="wsbanner">WHOLESALE PILOT — SEPARATE REVIEW TRACK</div>
+  <div style="position:absolute; left:56px; top:64px;"><span class="rulechip" style="background:#7a4a12;">RULE W-2</span><span class="mandatory" style="background:#7a4a12;">WHOLESALE ACCOUNTS ONLY</span></div>
+  <div class="hkicker" style="top:116px;">Wholesale conduct — payment-request handoff (graded by wholesale reviewers only)</div>
+  <div class="htag" style="color:#7a4a12; border-color:#7a4a12;">FENCED 5.6.26</div>
+  <div class="rubric" style="top:200px; border-left-color:#7a4a12; background:#fdf8f1;">
+    On a wholesale account, a request to change how an order is paid is <b>handed to the
+    assigned account representative, with the handoff named to the customer</b> — the agent
+    does not work invoice terms, purchase-order fields, or credit-memo questions inline.
+  </div>
+  <div class="gradenote" style="top:384px;">
+    Reviewer note: every box on this card says "wholesale" because a wholesale artifact once
+    drifted into a consumer training doc and cost a week of regrades. If the contact isn't
+    flagged wholesale in the console header, this card does not exist for you.
+  </div>
+  <div class="excerpt" style="top:200px;">
+    <h4>GRADED EXCERPT &middot; WHOLESALE CONTACT 26-05-W031 (EMAIL-IN)</h4>
+    <div class="line cust"><span class="who">Customer (buyer):</span> We need next month's order billed to the new entity, and the credit from the short shipment applied against it.</div>
+    <div class="line"><span class="who">Agent:</span> Both of those live with your account representative, Priya on our side — I've sent her the thread and she'll confirm the entity change and the credit application today. Nothing changes on the order until she does.</div>
+    <div class="line cust"><span class="who">Customer (buyer):</span> Works for us — copy our AP alias when she replies so it lands in the right queue.</div>
+    <div class="verdict pass">MEETS — W-2<span>Named handoff, no inline terms work, expectations set. (Wholesale reviewer verdict.)</span></div>
+  </div>
+  <div class="footer"><div>NorthStar CX Quality — internal training material &middot; wholesale fence</div><div>17</div></div>
+</div>
+
+<!-- ============ Slide 18: W-5 wholesale card ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div class="wsbanner">WHOLESALE PILOT — SEPARATE REVIEW TRACK</div>
+  <div style="position:absolute; left:56px; top:64px;"><span class="rulechip" style="background:#7a4a12;">RULE W-5</span><span class="mandatory" style="background:#7a4a12;">WHOLESALE ACCOUNTS ONLY</span></div>
+  <div class="hkicker" style="top:116px;">Wholesale conduct — order-stop requests on invoiced terms (graded by wholesale reviewers only)</div>
+  <div class="htag" style="color:#7a4a12; border-color:#7a4a12;">FENCED 5.6.26</div>
+  <div class="rubric" style="top:200px; border-left-color:#7a4a12; background:#fdf8f1;">
+    A wholesale request to stop or unwind an order on invoiced terms is <b>captured with the
+    purchase-order reference before anything is promised</b>, because the ledger unwinds by PO
+    line, not by card transaction. No PO reference on file, no commitment on the call.
+  </div>
+  <div class="gradenote" style="top:384px;">
+    Reviewer note: wholesale money moves as ledger entries against invoices — there is no
+    card refund and no gift-card concept anywhere in this lane. If an excerpt mentions either,
+    you are reading a consumer contact against the wrong card.
+  </div>
+  <div class="excerpt" style="top:200px;">
+    <h4>GRADED EXCERPT &middot; WHOLESALE CONTACT 26-05-W047 (AUDIO, TRANSCRIBED)</h4>
+    <div class="line cust"><span class="who">Customer (buyer):</span> Kill the spring restock order before it stages, please.</div>
+    <div class="line"><span class="who">Agent:</span> Can do once I have the PO reference — the unwind posts against those lines. Do you have it handy, or should I pull it from the account file with your confirmation?</div>
+    <div class="line cust"><span class="who">Customer (buyer):</span> PO-88412.</div>
+    <div class="line"><span class="who">Agent:</span> PO-88412, captured. Nothing is promised until the unwind posts against those lines — you'll see it on the account by Thursday.</div>
+    <div class="verdict pass">MEETS — W-5<span>PO captured before any commitment. (Wholesale reviewer verdict.)</span></div>
+  </div>
+  <div class="footer"><div>NorthStar CX Quality — internal training material &middot; wholesale fence</div><div>18</div></div>
+</div>
+
+<!-- ============ Slide 19: R-1 retired card ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div style="position:absolute; left:56px; top:44px;"><span class="rulechip">RULE R-1</span><span class="mandatory gray">SCRIPT FIDELITY</span></div>
+  <div class="hkicker" style="top:96px;">Conduct card — script fidelity (appendix; see the status note under the card)</div>
+  <div class="htag">RETIRED 4.20.26</div>
+  <div class="rubric" style="top:190px;">
+    Agents deliver required wordings <b>word-for-word from the script panel</b>; a paraphrase
+    of a required line is graded as a miss even when the meaning is intact.
+  </div>
+  <div style="position:absolute; left:56px; top:346px; width:1168px; font-size:13.5px; color:#5a6a72; line-height:1.5;">
+    Status note: retired 4.20.26. When servicing dropped verbatim matching (CR7, 4.20.26), a
+    card grading recitation had nothing left to stand on — it had been producing fails on
+    contacts customers rated highest. Verdicts issued under it after that date have been
+    vacated. The card stays in this packet only because appeals on pre-May contacts are graded
+    under the card that was live at the time (PL-044 procedure).
+  </div>
+  <div class="excerpt" style="top:446px; right:auto; left:56px; width:1168px;">
+    <h4>LAST GRADED EXCERPT &middot; CONTACT 26-04-0388 (AUDIO, TRANSCRIBED) &middot; VERDICT SINCE VACATED</h4>
+    <div class="line"><span class="who">Agent:</span> Just so I say this properly — the change you've asked for is the only one this order can take, so please make sure the list is complete.</div>
+    <div class="line cust"><span class="who">Customer:</span> Understood, that's the lot.</div>
+    <div class="verdict coach">COACHING — R-1 (vacated)<span>Accurate in substance, but not the printed line. Under current cards this contact grades MEETS.</span></div>
+  </div>
+  <div class="footer"><div>NorthStar CX Quality — internal training material &middot; appendix</div><div>19</div></div>
+</div>
+
+<!-- ============ Slide 20: R-3 retired card ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div style="position:absolute; left:56px; top:44px;"><span class="rulechip">RULE R-3</span><span class="mandatory gray">REASON CAPTURE &middot; PICK LIST</span></div>
+  <div class="hkicker" style="top:96px;">Conduct card — reason capture from the standard pick list (appendix; see the status note under the card)</div>
+  <div class="htag">RETIRED 4.20.26</div>
+  <div class="rubric" style="top:190px;">
+    The cancellation reason is recorded by <b>selecting from the standard pick list</b>; a
+    reason typed outside the list is graded as a capture miss even when the customer's
+    meaning maps onto a list entry.
+  </div>
+  <div style="position:absolute; left:56px; top:360px; width:1168px; font-size:13.5px; color:#5a6a72; line-height:1.5;">
+    Status note: retired 4.20.26. The pick-list era ended when CR7 (4.20.26) moved capture to
+    working from what the customer actually said, and the CR arc closed soon after by fixing
+    which reasons count (CR8, 4.29.26). The conduct half of reason capture survived as C-2 —
+    the question must still come first — but the pick-list mechanics this card graded no
+    longer exist in the flow. Which entries ever counted, and what clears policy today, is
+    owned by the servicing channel's rulings, not by any QA card in this packet.
+  </div>
+  <div style="position:absolute; left:56px; top:496px; width:1168px; background:#f4f7f8; border:1px solid #d5dde0; border-radius:6px; padding:14px 18px; font-size:13.5px; color:#5a6a72; line-height:1.5;">
+    Appendix hygiene: reading an appendix card as current policy is itself a calibration error
+    — it happened twice in April, both times by graders who skipped the status note. Retired
+    cards keep their number forever; R-numbers are never reissued, so an old verdict note
+    citing R-3 always means this card and no other.
+  </div>
+  <div class="footer"><div>NorthStar CX Quality — internal training material &middot; appendix</div><div>20</div></div>
+</div>
+
+<!-- ============ Slide 21: May audit snapshot ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div class="htitle">May audit snapshot</div>
+  <div class="hkicker">214 graded pending-order contacts &middot; two-grader coverage on 100% &middot; numbers are directional, not targets</div>
+  <div class="htag">INTERNAL &middot; TRAINING</div>
+  <div style="position:absolute; left:56px; top:160px;">
+    <table class="stats">
+      <tr><th>RULE CARD</th><th>MEETS</th><th>COACHING</th><th>AUTO-FAIL</th><th>GRADER SPLITS</th></tr>
+      <tr><td>C-2 — reason first</td><td class="num">91%</td><td class="num">6%</td><td class="num">3%</td><td class="num">4</td></tr>
+      <tr><td>C-5 — recap + yes</td><td class="num">84%</td><td class="num">11%</td><td class="num">5%</td><td class="num">9</td></tr>
+      <tr><td>C-8 — acknowledgment first</td><td class="num">94%</td><td class="num">5%</td><td class="num">1%</td><td class="num">6</td></tr>
+      <tr><td>A-3 — read-back loop</td><td class="num">88%</td><td class="num">9%</td><td class="num">3%</td><td class="num">7</td></tr>
+      <tr><td>A-6 — stored-address discipline</td><td class="num">97%</td><td class="num">2%</td><td class="num">1%</td><td class="num">1</td></tr>
+      <tr><td>I-6 — last call</td><td class="num">79%</td><td class="num">17%</td><td class="num">4%</td><td class="num">11</td></tr>
+      <tr><td>I-9 — suggestion discipline</td><td class="num">90%</td><td class="num">9%</td><td class="num">1%</td><td class="num">3</td></tr>
+      <tr><td>G-1 — case notes</td><td class="num">96%</td><td class="num">3%</td><td class="num">1%</td><td class="num">2</td></tr>
+      <tr><td>G-4 — hold etiquette</td><td class="num">89%</td><td class="num">10%</td><td class="num">1%</td><td class="num">5</td></tr>
+      <tr><td>G-7 — transfer framing</td><td class="num">93%</td><td class="num">5%</td><td class="num">2%</td><td class="num">3</td></tr>
+    </table>
+  </div>
+  <div style="position:absolute; right:56px; top:160px; width:470px; background:#f4f7f8; border:1px solid #d5dde0; border-radius:6px; padding:16px 20px; font-size:13px; line-height:1.5;">
+    <b>Top coaching theme (I-6):</b> asking the anything-else question and submitting before the
+    reply arrives — eleven of the seventeen coaching marks. The pause is the rule, not the
+    question.<br><br>
+    <b>Split driver (C-5):</b> whether an early "just cancel it, whatever it takes" counts as
+    the yes. Settled as PL-041 — consent has to follow the recap it consents to.<br><br>
+    <b>Split driver (C-8):</b> pasted macros claiming to be acknowledgment — six splits in May,
+    settled as PL-046 at the June floor.<br><br>
+    <b>G-series read:</b> stable and boring, exactly as intended. G cards exist to keep general
+    conduct from leaking into journey-card debates.<br><br>
+    <b>Roster note:</b> May rows predate the 6.9.26 card audit; calibration-rotation cards keep
+    them here for reference.
+  </div>
+  <div class="gradenote" style="top:544px; width:1168px;">
+    Denominator note: the 214 excludes contacts that never reached a graded action (status-check
+    only, transfers before conduct began) and every wholesale-pilot contact. June's sample adds
+    weekend-shift coverage for the first time.
+  </div>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>21</div></div>
+</div>
+
+<!-- ============ Slide 22: Sampling methodology ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div class="htitle">How the sample is drawn</div>
+  <div class="hkicker">May methodology — unchanged for June except the weekend stratum</div>
+  <div class="htag">INTERNAL &middot; TRAINING</div>
+  <div style="position:absolute; left:56px; top:160px; width:640px;">
+    <div class="funnelrow"><div class="funnelbar" style="width:520px;"></div><div class="funnellabel"><b class="num">3,120</b> pending-order contacts closed in May</div></div>
+    <div class="funnelrow"><div class="funnelbar" style="width:320px; background:#25707f;"></div><div class="funnellabel"><b class="num">402</b> sampled — stratified by channel and shift</div></div>
+    <div class="funnelrow"><div class="funnelbar" style="width:214px; background:#3d8a97;"></div><div class="funnellabel"><b class="num">214</b> gradable (see denominator note, p. 21)</div></div>
+    <div class="funnelrow"><div class="funnelbar" style="width:62px; background:#e5b83c;"></div><div class="funnellabel"><b class="num">31</b> coaching conversations opened</div></div>
+    <div class="funnelrow"><div class="funnelbar" style="width:24px; background:#b3261e;"></div><div class="funnellabel"><b class="num">8</b> auto-fails &rarr; remediation track</div></div>
+  </div>
+  <div style="position:absolute; right:56px; top:160px; width:470px; background:#f4f7f8; border:1px solid #d5dde0; border-radius:6px; padding:20px 22px; font-size:14.5px; line-height:1.55;">
+    <b>Strata.</b> 60/40 chat/audio to match volume; every agent with 20+ pending-order
+    contacts appears at least twice; no grader receives their own former teammates for
+    ninety days.<br><br>
+    <b>What sampling is not.</b> Not discipline-driven — remediation cases are pulled on top
+    of the sample, never from it, so the stats stay honest.<br><br>
+    <b>June change.</b> One new stratum: weekend shifts, previously invisible to calibration
+    because sessions were scheduled off weekday queues.
+  </div>
+  <div class="gradenote" style="top:520px; width:1168px;">
+    Methodology questions go to Noor before the session, not to the floor during it — the
+    floor rules on verdicts, not on statistics. (This sentence is in the deck because it was
+    needed twice.)
+  </div>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>22</div></div>
+</div>
+
+<!-- ============ Slide 23: Grader roster ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div class="htitle">Grader certification roster</div>
+  <div class="hkicker">Certification requires session attendance and a variance-to-floor under 10% on the trailing quarter</div>
+  <div class="htag">SESSION MATERIAL</div>
+  <div style="position:absolute; left:56px; top:150px; width:1168px;">
+    <table class="stats" style="width:100%;">
+      <tr><th>GRADER</th><th>CERTIFIED SERIES</th><th>LAST SESSION</th><th>VARIANCE TO FLOOR</th><th>STATUS</th></tr>
+      <tr><td>Ruth Calloway</td><td>C, A, I, G</td><td class="num">6.9.26</td><td class="num">4.1%</td><td>Certified</td></tr>
+      <tr><td>Devi Prasad</td><td>C, A, I, G</td><td class="num">6.9.26</td><td class="num">5.8%</td><td>Certified</td></tr>
+      <tr><td>Marco Jimenez</td><td>C, G</td><td class="num">6.9.26</td><td class="num">7.2%</td><td>Certified — A/I shadow-grading</td></tr>
+      <tr><td>Aiko Sato</td><td>C, A, I, G</td><td class="num">5.19.26</td><td class="num">6.6%</td><td>One absence — attendance flag</td></tr>
+      <tr><td>Theo Brandt</td><td>G</td><td class="num">6.9.26</td><td class="num">9.4%</td><td>Certified — variance watch</td></tr>
+      <tr><td>Wholesale reviewers (2)</td><td>W only</td><td class="num">6.2.26 (own track)</td><td class="num">—</td><td>Separate calibration</td></tr>
+    </table>
+    <div style="margin-top:18px; font-size:13.5px; color:#5a6a72; line-height:1.5;">
+      Variance is measured against floor rulings on shared excerpts, not against other graders.
+      Shadow-grading means verdicts are recorded but not binding until two consecutive sessions
+      land under the variance bar. W-series calibration is a separate track with its own
+      precedent log — the two logs do not cite each other.
+    </div>
+  </div>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>23</div></div>
+</div>
+
+<!-- ============ Slide 24: Appeal workflow ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div class="htitle">Appeals — what happens after a verdict</div>
+  <div class="hkicker">Process only. An appeal never edits a card, and a card never changes mid-appeal.</div>
+  <div class="htag">INTERNAL &middot; TRAINING</div>
+  <svg width="1168" height="330" viewBox="0 0 1168 330" style="position:absolute; left:56px; top:170px;" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arr21" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#41505a"/></marker>
+    </defs>
+    <g font-family="Helvetica" font-size="13">
+      <rect x="0" y="40" width="180" height="56" rx="6" fill="#f4f7f8" stroke="#0f4c5c" stroke-width="1.5"/>
+      <text x="90" y="64" text-anchor="middle" font-weight="700">verdict issued</text>
+      <text x="90" y="82" text-anchor="middle" fill="#5a6a72" font-size="11.5">logged with card + evidence</text>
+      <rect x="240" y="40" width="190" height="56" rx="6" fill="#f4f7f8" stroke="#0f4c5c" stroke-width="1.5"/>
+      <text x="335" y="64" text-anchor="middle" font-weight="700">agent appeal window</text>
+      <text x="335" y="82" text-anchor="middle" fill="#5a6a72" font-size="11.5">5 business days, written</text>
+      <rect x="490" y="40" width="200" height="56" rx="6" fill="#f4f7f8" stroke="#0f4c5c" stroke-width="1.5"/>
+      <text x="590" y="64" text-anchor="middle" font-weight="700">blind regrade</text>
+      <text x="590" y="82" text-anchor="middle" fill="#5a6a72" font-size="11.5">second grader, full record only</text>
+      <polygon points="850,28 960,68 850,108 740,68" fill="#f4f7f8" stroke="#0f4c5c" stroke-width="1.5"/>
+      <text x="850" y="64" text-anchor="middle">verdicts</text>
+      <text x="850" y="80" text-anchor="middle" font-weight="700" fill="#0f4c5c">match?</text>
+      <rect x="1010" y="12" width="150" height="50" rx="6" fill="#e7f4ec" stroke="#17693c" stroke-width="1.5"/>
+      <text x="1085" y="33" text-anchor="middle" font-weight="700" fill="#17693c">upheld</text>
+      <text x="1085" y="50" text-anchor="middle" fill="#17693c" font-size="11.5">appeal closes</text>
+      <rect x="1010" y="86" width="150" height="50" rx="6" fill="#fff8e8" stroke="#b78a1c" stroke-width="1.5"/>
+      <text x="1085" y="107" text-anchor="middle" font-weight="700" fill="#7a5a10">to the floor</text>
+      <text x="1085" y="124" text-anchor="middle" fill="#7a5a10" font-size="11.5">next session docket</text>
+      <rect x="740" y="200" width="220" height="56" rx="6" fill="#f4f7f8" stroke="#0f4c5c" stroke-width="1.5"/>
+      <text x="850" y="224" text-anchor="middle" font-weight="700">floor ruling</text>
+      <text x="850" y="242" text-anchor="middle" fill="#5a6a72" font-size="11.5">binding; logged as PL entry</text>
+      <line x1="180" y1="68" x2="240" y2="68" stroke="#41505a" stroke-width="1.5" marker-end="url(#arr21)"/>
+      <line x1="430" y1="68" x2="490" y2="68" stroke="#41505a" stroke-width="1.5" marker-end="url(#arr21)"/>
+      <line x1="690" y1="68" x2="740" y2="68" stroke="#41505a" stroke-width="1.5" marker-end="url(#arr21)"/>
+      <line x1="960" y1="52" x2="1010" y2="37" stroke="#17693c" stroke-width="1.5" marker-end="url(#arr21)"/>
+      <line x1="960" y1="84" x2="1010" y2="104" stroke="#b78a1c" stroke-width="1.5" marker-end="url(#arr21)"/>
+      <text x="972" y="40" fill="#17693c" font-size="11.5" font-weight="700">yes</text>
+      <text x="972" y="102" fill="#b78a1c" font-size="11.5" font-weight="700">no</text>
+      <line x1="1085" y1="136" x2="962" y2="212" stroke="#41505a" stroke-width="1.5" marker-end="url(#arr21)"/>
+      <path d="M 740 236 C 500 300 180 220 96 100" fill="none" stroke="#41505a" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arr21)"/>
+      <text x="380" y="278" fill="#5a6a72" font-size="11.5">ruling updates the precedent log; future verdicts cite it (per p. 9)</text>
+    </g>
+  </svg>
+  <div class="gradenote" style="top:540px; width:1168px;">
+    Appeal rates are a health metric, not a scoreboard: a card drawing appeals from many agents
+    gets a wording review at the next quarterly card audit; a single agent appealing everything
+    gets a coaching conversation instead.
+  </div>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>24</div></div>
+</div>
+
+<!-- ============ Slide 25: Where the rules live ============ -->
+<div class="slide">
+  <div class="topbar"></div>
+  <div class="htitle">Where the rules live</div>
+  <div class="hkicker">This deck grades conduct. Everything else has an owner — cite the owner, not this deck.</div>
+  <div class="htag">INTERNAL &middot; TRAINING</div>
+  <div style="position:absolute; left:56px; top:150px; width:1168px;">
+    <ul class="clean">
+      <li><b>Conduct on pending-order contacts</b> — the operating journey rule cards in this packet, as set at the 6.9.26 card audit. Card text — or the console panels as displayed, for console-graded cards — is the graded standard of record.</li>
+      <li><b>Calibration rotation</b> — cards tagged CALIBRATION-ONLY carry no current care requirement; they stay to train grader technique. Current general conduct lives in the QA standards binder, journey-agnostic by design.</li>
+      <li><b>Eligibility gates, lanes, and the one-time item-change door</b> — the Beacon pending-order servicing board (current revision, frames 1–4). If a grader needs to know whether an order <i>could</i> be serviced, the board owns it.</li>
+      <li><b>Refund amounts, destinations, and timing</b> — the finance workstream's dated email rulings. Agents quoting money facts are checked against those rulings, not against this deck's excerpts.</li>
+      <li><b>Accepted cancellation reasons</b> — the servicing channel's dated rulings. C-2 grades that the question came first; whether the answer clears policy is graded there.</li>
+      <li><b>Wholesale-pilot servicing</b> — the wholesale reviewers' own track (W cards here are the fence, not the manual).</li>
+      <li><b>The handbook</b> — the assisted-servicing source of truth that all of the above decompose. When any two artifacts seem to disagree, the handbook and the newest dated ruling win, in that order, and QA files the discrepancy the same day.</li>
+    </ul>
+  </div>
+  <div style="position:absolute; left:56px; top:600px; width:1168px; font-size:13px; color:#8a959c;">
+    Deck owner: Noor Danesh &middot; last revised 6.12.26 &middot; next calibration session July 14, 2026 &middot; precedent log and session packets live in the CX Quality drive.
+  </div>
+  <div class="footer"><div>NorthStar CX Quality — internal training material</div><div>25</div></div>
+</div>
+
+</body>
+</html>

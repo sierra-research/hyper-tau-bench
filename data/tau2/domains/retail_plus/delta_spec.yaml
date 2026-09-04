@@ -1,0 +1,345 @@
+# retail_plus delta spec — every de-memorization decision, in one reviewable file.
+#
+# Every value change between the canonical retail domain and retail_plus is
+# recorded here (new_tasks_source.json holds the added tasks); the committed
+# data/tau2/domains/retail_plus/ outputs embody these decisions.
+#
+# Design:
+#   - item ids are PERMUTED within each product (derangement): a memorized
+#     id->variant mapping stays a valid id but points at the wrong variant,
+#     so writes succeed and the DB silently diverges.
+#   - every variant price is re-drawn independently (no global scale factor to
+#     reverse out), then re-sorted within its product to preserve the canonical
+#     price ordering, so "cheapest option" style golds keep the same variant.
+#   - all derived amounts in nl_assertions / communicate_info are recomputed by
+#     the generator's engine; user thresholds in instructions are re-set
+#     relative to the recomputed quantities (threshold_rules) so every branch
+#     an instruction takes is preserved.
+
+meta:
+  seed: retail-plus-v1
+  # PR C (2026-08, post-cutover): street addresses (address1 + address2 unit
+  # numbers, users AND orders) and credit-card last_four digits — which the
+  # generator had carried over from canonical retail verbatim — were redrawn
+  # by scripts external to the generator (seed "plus-value-redraw-v1",
+  # per-distinct-string injective maps preserving user==order address
+  # equality, new pools disjoint from the UNION of canonical retail+airline
+  # values). Task texts, gold write args and the storefront artifact were
+  # re-synced atomically. The standalone db is authoritative; disjointness is
+  # gated in tests/test_domains/test_retail_plus/test_standalone_invariants.py.
+  redrawn_value_families: [address1, address2, last_four]
+
+policy_edits:
+  - old: "5 to 7 business days"
+    new: "3 to 6 business days"
+    count: 2
+
+# Canonical retail's cancel_pending_order docstring carries the OLD window;
+# the RetailPlusTools override strips ALL policy content from the tool schema
+# (2026-08-19 lever-criterion slim-down) so neither window appears there.
+# Tests assert the policy carries `new` and the docstring carries neither.
+# Second slim pass (same date, hard client migration): the one-shot lock
+# reveals in modify_pending_order_items ("this function can only be called
+# once") and exchange_delivered_order_items ("return or exchange can be only
+# done once by the agent") are stripped by overrides too — the one-shot rules
+# live in the policy corpus only. return_delivered_order_items carries no
+# once-only reveal in canonical retail, so it is not overridden.
+refund_window:
+  old: "5-7 business days"
+  new: "3-6 business days"
+
+pricing:
+  multiplier_lo: 0.68
+  multiplier_hi: 1.62
+  # no variant may keep (or nearly keep) its canonical price
+  min_abs_delta: 2.0
+  min_rel_delta: 0.04
+  # product_id -> [lo, hi] multiplier window override, for fixing cross-product
+  # relations without hand-pinning single prices
+  product_multiplier_overrides: {}
+  # product_id -> [lo, hi]: ONE multiplier drawn for the whole product, so
+  # within-product price gaps scale exactly. Used where a cross-product
+  # comparison in a task branch needs controlled gap arithmetic (task 19:
+  # water-bottle refund must beat pet-bed+office-chair exchange savings).
+  product_uniform_multiplier:
+    "2747247837": [0.85, 0.95]   # Pet Bed
+    "4794339885": [0.85, 0.95]   # Office Chair
+    "8310926033": [1.35, 1.55]   # Water Bottle
+    # Mechanical Keyboard: new task 117 needs plus-diff < $13 < canonical-diff
+    # ($14.62) for its gift-card boundary probe, so the whole product scales
+    # down uniformly and the within-product gap scales with it.
+    "1656367028": [0.70, 0.78]
+
+gift_cards:
+  # NOTE: this window is SOFT — the solver's sufficiency bounds and pins
+  # legitimately override it (5/234 committed balances sit outside, up to the
+  # 30->1018 gold-charge lower bound). Only min_abs_delta is hard.
+  multiplier_lo: 0.6
+  multiplier_hi: 1.7
+  min_abs_delta: 1.0
+  # pmid -> exact new balance (only if the solver's draw needs pinning)
+  pins:
+    # new task 117 boundary: plus keyboard diff (< ~11.4 under the product's
+    # uniform multiplier) < 13 < canonical diff (14.62)
+    gift_card_6023546: 13.0
+  # extra balance bounds beyond auto-extracted gold sufficiency constraints.
+  # op is applied as: balance <op> expr (evaluated in the task's world).
+  bounds:
+    - task: "40"   # gift card cannot cover the order, so gold switches to visa
+      pm: gift_card_8245350
+      op: "<"
+      expr: "order_payment:#W4923227"
+    - task: "115"  # new task: payment swap to gift card must stay insufficient
+      pm: gift_card_9111522
+      op: "<"
+      expr: "order_payment:#W1090976"
+
+# 30 canonical first/last names -> replacements. Bijective; no overlap with
+# canonical names or product-name tokens (generator enforces).
+first_names:
+  Aarav: Rohan
+  Amelia: Bianca
+  Anya: Greta
+  Ava: Zara
+  Chen: Wei
+  Daiki: Kenji
+  Emma: Clara
+  Ethan: Callum
+  Evelyn: Paloma
+  Fatima: Amira
+  Harper: Rowan
+  Isabella: Carmen
+  Ivan: Viktor
+  James: Magnus
+  Juan: Mateo
+  Lei: Ming
+  Liam: Jonas
+  Lucas: Hugo
+  Mason: Oskar
+  Mei: Hana
+  Mia: Ines
+  Mohamed: Tariq
+  Noah: Anders
+  Olivia: Rosa
+  Omar: Farid
+  Raj: Nikhil
+  Sofia: Lara
+  Sophia: Elena
+  Yara: Nadia
+  Yusuf: Idris
+last_names:
+  Ahmed: Haddad
+  Anderson: Lindqvist
+  Brown: Whitfield
+  Davis: Sherwood
+  Garcia: Delgado
+  Gonzalez: Herrera
+  Hernandez: Fuentes
+  Ito: Nakamura
+  Jackson: Ashford
+  Johansson: Bergstrom
+  Johnson: Caldwell
+  Khan: Rahmani
+  Kim: Choi
+  Kovacs: Molnar
+  Lee: Chung
+  Li: Zhao
+  Lopez: Navarro
+  Martin: Beaumont
+  Moore: Fairbanks
+  Muller: Keller
+  Nguyen: Pham
+  Patel: Mehta
+  Rossi: Moretti
+  Sanchez: Ibarra
+  Santos: Oliveira
+  Silva: Ferreira
+  Smith: Holloway
+  Taylor: Pemberton
+  Thomas: Rutherford
+  Wilson: Langley
+
+# task -> tokens that must NOT be treated as person names in that task's text
+text_name_exceptions: []
+
+# Manual amount-rule overrides where auto-derivation is ambiguous:
+# task -> list of {field: nl_assertions|communicate_info, pos, expr}
+amount_overrides: {}
+
+# Extracted numbers that are NOT dollar amounts (quantities etc.):
+# list of {task, field, index}
+amount_ignores:
+  - {task: "2", field: communicate_info, index: 0}   # count of t-shirt options
+  - {task: "3", field: communicate_info, index: 0}
+  - {task: "4", field: communicate_info, index: 0}
+
+# User-parameter thresholds in instructions text. New value is scaled by the
+# anchor ratio, rounded to the literal's granularity, then nudged along the
+# grid until every relation holds. "threshold:LIT" refers to another literal's
+# new value within the same task (processed in listed order).
+threshold_rules:
+  "36":
+    - literal: "1131"
+      count: 2
+      anchor: "cheapest_swap_total:#W9348897"
+      relations:
+        - {op: ">=", expr: "cheapest_swap_total:#W9348897"}
+        - {op: "<", expr: "order_total_before:#W9348897"}
+    - literal: "1160"
+      count: 1
+      anchor: "order_total_before:#W9348897"
+      relations:
+        - {op: "<", expr: "order_total_before:#W9348897"}
+        - {op: ">", expr: "threshold:1131"}
+  "37":
+    - literal: "1150"
+      count: 2
+      anchor: "cheapest_swap_total:#W9348897"
+      relations:
+        - {op: ">=", expr: "cheapest_swap_total:#W9348897"}
+        - {op: "<", expr: "order_total_before:#W9348897"}
+    - literal: "1160"
+      count: 1
+      anchor: "order_total_before:#W9348897"
+      relations:
+        - {op: "<", expr: "order_total_before:#W9348897"}
+        - {op: ">", expr: "threshold:1150"}
+  "38":
+    - literal: "950"
+      count: 2
+      anchor: "cheapest_swap_total:#W9348897"
+      relations:
+        - {op: "<", expr: "cheapest_swap_total:#W9348897"}
+    - literal: "1100"
+      count: 1
+      anchor: "order_total_before:#W9348897"
+      relations:
+        - {op: "<", expr: "order_total_before:#W9348897"}
+        - {op: ">", expr: "threshold:950"}
+  "62":
+    - literal: "300"
+      count: 1
+      anchor: "variant_price:3254583681"
+      relations:
+        - {op: "<", expr: "variant_price:3254583681"}
+    - literal: "100"
+      count: 2
+      anchor: "cheapest_available:4768869376"
+      relations:
+        - {op: "<", expr: "cheapest_available:4768869376"}
+  "63":
+    - literal: "300"
+      count: 2
+      anchor: "variant_price:3254583681"
+      relations:
+        - {op: "<", expr: "variant_price:3254583681"}
+        - {op: ">", expr: "cheapest_available:4768869376"}
+  "89":   # "less than 200 bucks" — $-less, so only the widened scanner sees it
+    - literal: "200"
+      count: 1
+      anchor: "cheapest_available:1656367028"
+      relations:
+        - {op: "<", expr: "cheapest_available:1656367028"}
+  "90":
+    - literal: "3000"
+      count: 1
+      anchor: "option_swap_price:#W9284598:7195021808:zoom=10x"
+      relations:
+        - {op: "<", expr: "option_swap_price:#W9284598:7195021808:zoom=10x"}
+
+# Money-dependent gold branches that must keep their canonical truth value.
+#
+# NET-SIGN CAVEAT (2026-08-06 audit): the generator recomputes AMOUNTS but not
+# direction WORDS. Task 95's two-exchange net flipped sign under re-pricing
+# (canonical +107.09 payable -> plus -216.30 refund) while its nl_assertion
+# still said "to pay"; fixed post-cutover by rewording the task directly.
+# Tasks 29 and 35 also flip their net sign but never verbalize the net —
+# if an nl/communicate edit ever adds their net amount, add the direction
+# wording (or a relation pinning the sign) with it.
+relations:
+  - task: "19"   # return refund beats hypothetical exchange savings -> gold returns
+    left: "action:19_6:refund"
+    op: ">"
+    right: "hyp_savings:#W2890441:2751999929+8069050545"
+  - task: "36"   # "most expensive item is the camera"
+    kind: max_item_is
+    order: "#W9348897"
+    item: "6117189161"
+  - task: "37"
+    kind: max_item_is
+    order: "#W9348897"
+    item: "6117189161"
+  - task: "38"
+    kind: max_item_is
+    order: "#W9348897"
+    item: "6117189161"
+  - task: "54"   # no cheaper same-size/material boots -> keep the boots order
+    kind: no_cheaper_same_options
+    order: "#W7773202"
+    item: "8277474082"
+    keys: [size, material]
+
+# Canonical-space edits applied BEFORE any transform (community defect fixes;
+# gold_edits operate on evaluation_criteria.actions).
+canonical_fixes:
+  # tau2-bench #89: gold references product 6086499569 which does not exist in
+  # the db. The read gates nothing; drop it.
+  "2":
+    gold_edits:
+      - {op: remove, action_id: "2_1"}
+  "3":
+    gold_edits:
+      - {op: remove, action_id: "3_1"}
+  "4":
+    gold_edits:
+      - {op: remove, action_id: "4_1"}
+  # tau2-bench #316: the scenario insists both orders get returned ("Make sure
+  # to return BOTH orders") after the cross-refund is refused, but the gold had
+  # no returns — a correct agent failed the DB check. Refunds go to each
+  # order's original payment method (the only policy-legal destination here).
+  "10":
+    gold_edits:
+      - op: insert_after
+        action_id: "10_3"
+        action:
+          - action_id: "10_5"
+            name: return_delivered_order_items
+            arguments:
+              order_id: "#W5490111"
+              item_ids: ["4579334072", "1421289881", "6117189161", "4947717507"]
+              payment_method_id: credit_card_3124723
+            info: null
+          - action_id: "10_6"
+            name: return_delivered_order_items
+            arguments:
+              order_id: "#W7387996"
+              item_ids: ["5796612084"]
+              payment_method_id: paypal_9497703
+            info: null
+
+# Post-remap scenario text edits (airline-style pins), applied near the end.
+task_overrides:
+  # tau2-bench #316 (part 2): the canonical scenario asks for a human rep on
+  # refusal AND demands both returns, but the transfer ends the conversation
+  # before any return can happen — the gold returns (10_5/10_6) were
+  # unreachable. Sequence the returns before the transfer request.
+  "10":
+    text_edits:
+      - old: "If not possible, you are angry and swear for a few times, then ask for human representative. Make sure to return BOTH orders."
+        new: "If not possible, you are angry and swear for a few times, but still have the agent return BOTH orders, each refunding to its own original payment method. Only after both returns are confirmed, ask for a human representative to complain."
+        count: 1
+  # tau2-bench #319: the gold pays the jigsaw downgrade refund to PayPal but
+  # the scenario never states a preference (user also holds a credit card).
+  # Pin the sim so gold and user agree. Second pin: the gold requires fixing
+  # BOTH orders' addresses, but "potentially correct all order addresses" gets
+  # compressed by the user sim to "my order" (singular), leaving the reward a
+  # coin flip on agent initiative in canonical retail too (0/2 canonical, 0/3
+  # plus with gpt-5.5 before the pin).
+  "41":
+    text_edits:
+      - old: "you wonder if you can change it to the easiest one with fewest pieces;"
+        new: "you wonder if you can change it to the easiest one with fewest pieces (any price difference should go to your PayPal);"
+        count: 1
+      - old: "You want to check it, and potentially correct all order addresses and your user address."
+        new: "You want to check it, and make sure the addresses on BOTH of your orders and on your user account are corrected."
+        count: 1

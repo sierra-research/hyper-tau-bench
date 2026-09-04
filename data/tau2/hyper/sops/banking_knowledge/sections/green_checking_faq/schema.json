@@ -1,0 +1,250 @@
+{
+  "id": "banking_green_checking_faq_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "green_checking_faq",
+  "display_name": "Green Account checking fees, transfers, and PIN-decline FAQ",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/green_checking_faq/source.md",
+    "heading": "## Green Account checking fees, transfers, and PIN-decline FAQ"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/green_checking_faq/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/green_checking_faq/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/green_checking_faq/evidence_corpus_hard_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/green_checking_faq/client_overlay_deposit_services_001/transformation_pack.json"
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook requirements from shared context, including identity verification before account-specific information.",
+      "Support console turns may contain internal PIN state and fraud-risk protocol details; Agent turns should expose only the relevant customer action or explanation.",
+      "Preserve exact fees, timing, codes, state branches, and mandated customer explanations."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "identity verification before account-specific details",
+      "plain-language customer-facing outcomes",
+      "support-console notes for internal KB and tool evidence"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_green_account_(checking)_010.json"
+    ],
+    "summary": "Green Account fees and timing plus condition-specific handling for PIN-related debit-card decline codes.",
+    "rules": [
+      "Preserve every amount, duration, decline code, state branch, required warning, and retry option.",
+      "Do not unlock a PIN-locked card without the separate fraud-risk protocol.",
+      "Do not treat code 83 as evidence that the PIN was entered incorrectly."
+    ],
+    "candidate": {
+      "id": "green_checking_faq",
+      "title": "Green Account checking fees, transfers, and PIN-decline FAQ",
+      "priority": 1,
+      "related_task_ids": [
+        "task_073"
+      ],
+      "recommended_case_count": 2,
+      "losslessness_risks": [
+        "Do not collapse distinct fees or transfer timing into a generic account-fees fact.",
+        "Keep codes 55, 75, and 83 distinct.",
+        "Preserve the pin_locked and attempts-remaining branches and fraud-risk prerequisite."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "green_checking_faq_journey",
+        "label": "Green Account checking fees, transfers, and PIN-decline FAQ",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "green_checking_faq_path_a",
+        "label": "Green Account checking fees, APY, and transfer timing",
+        "kind": "scenario_branch",
+        "parent_id": "green_checking_faq_journey",
+        "order": 1,
+        "description": "Policy path represented by case A.",
+        "fact_ids": [
+          "F002",
+          "F003",
+          "F004",
+          "F005",
+          "F006",
+          "F007"
+        ]
+      },
+      {
+        "id": "green_checking_faq_path_b",
+        "label": "Green Account debit-card PIN decline codes 55, 75, and 83",
+        "kind": "scenario_branch",
+        "parent_id": "green_checking_faq_journey",
+        "order": 2,
+        "description": "Policy path represented by case B.",
+        "fact_ids": [
+          "F008",
+          "F009",
+          "F010",
+          "F011",
+          "F012",
+          "F013",
+          "F014",
+          "F015",
+          "F016",
+          "F017",
+          "F018",
+          "F019",
+          "F020",
+          "F021",
+          "F022"
+        ]
+      }
+    ],
+    "relations": []
+  },
+  "facts": [
+    {
+      "id": "F002",
+      "statement": "Mailed paper statements for a Green Account checking account cost $2.50 per month."
+    },
+    {
+      "id": "F003",
+      "statement": "A Green Account checking balance earns 0.11% APY."
+    },
+    {
+      "id": "F004",
+      "statement": "Green Account checking out-of-network ATM withdrawals cost $3.00 per withdrawal."
+    },
+    {
+      "id": "F005",
+      "statement": "Green Account checking transfers to external banks generally complete in 3 business days."
+    },
+    {
+      "id": "F006",
+      "statement": "A returned Green Account checking deposit incurs a $17.50 fee."
+    },
+    {
+      "id": "F007",
+      "statement": "An incoming domestic wire to Green Account checking costs $15.00."
+    },
+    {
+      "id": "F008",
+      "statement": "Debit-card decline code 55 means an incorrect PIN was entered."
+    },
+    {
+      "id": "F009",
+      "statement": "For decline code 55, use the debit-card lookup fields pin_locked and pin_attempts_remaining to determine the card's PIN status."
+    },
+    {
+      "id": "F010",
+      "statement": "For code 55 when pin_locked is false and pin_attempts_remaining is low, warn: 'You have [X] PIN attempts remaining before your card is temporarily locked.'"
+    },
+    {
+      "id": "F011",
+      "statement": "For code 55 when the customer has forgotten the PIN and the card is not locked, offer or help with a PIN reset."
+    },
+    {
+      "id": "F012",
+      "statement": "For code 55 when pin_locked is true, follow the Internal: PIN Lock Investigation Protocol - Fraud Risk Scoring before unlocking."
+    },
+    {
+      "id": "F013",
+      "statement": "The PIN-lock investigation requires calculating a fraud risk score using location, time, amount patterns, and other factors."
+    },
+    {
+      "id": "F014",
+      "statement": "Do not unlock a PIN-locked debit card before completing the fraud risk assessment."
+    },
+    {
+      "id": "F015",
+      "statement": "The PIN-lock investigation determines whether to unlock, require enhanced verification, or recommend card closure."
+    },
+    {
+      "id": "F016",
+      "statement": "Debit-card decline code 75 means PIN tries were exceeded and must be handled like code 55 with pin_locked true, including completing the PIN Lock Investigation Protocol before any action."
+    },
+    {
+      "id": "F017",
+      "statement": "Debit-card decline code 83 means the network could not verify the PIN because of a technical issue; it does not mean the PIN was wrong."
+    },
+    {
+      "id": "F018",
+      "statement": "For code 83, explain: 'There was a temporary issue verifying your PIN. This wasn't because your PIN was incorrect - it was a network communication problem.'"
+    },
+    {
+      "id": "F019",
+      "statement": "For code 83, first advise the customer to retry the transaction because retrying usually resolves the issue."
+    },
+    {
+      "id": "F020",
+      "statement": "If code 83 persists and the merchant permits it, the customer can try a signature-based transaction instead of PIN."
+    },
+    {
+      "id": "F021",
+      "statement": "If code 83 persists, the customer can try a different terminal or merchant."
+    },
+    {
+      "id": "F022",
+      "statement": "If code 83 persists, the customer can wait 10-15 minutes and retry."
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Green Account checking fees, APY, and transfer timing",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007"
+      ],
+      "case_spec": "A verified customer asks for a compact Green Account checking fee and timing review. Preserve every amount and the 3-business-day external-transfer timing."
+    },
+    {
+      "id": "B",
+      "title": "Green Account debit-card PIN decline codes 55, 75, and 83",
+      "included_fact_ids": [
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F017",
+        "F018",
+        "F019",
+        "F020",
+        "F021",
+        "F022"
+      ],
+      "case_spec": "A verified customer asks how each PIN decline code is handled. Keep code 55's unlocked and locked branches distinct, treat code 75 as the locked branch, and treat code 83 as a technical network-verification issue with its ordered retry options."
+    }
+  ]
+}

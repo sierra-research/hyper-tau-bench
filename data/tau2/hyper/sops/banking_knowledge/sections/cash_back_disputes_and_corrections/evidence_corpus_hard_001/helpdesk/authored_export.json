@@ -1,0 +1,433 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "Rho Helpdesk",
+    "account": "rho-bank-consumer-and-business",
+    "workspace": "card-rewards",
+    "environment": "production",
+    "exported_at": "2025-11-12T16:40:00-05:00",
+    "timezone": "America/New_York",
+    "export_version": "2025.46",
+    "requested_by": "dan.kowalski@rho-bank.com"
+  },
+  "cover_email": "From: Helpdesk Administration <helpdesk-admin@rho-bank.com>\nTo: Dan Kowalski <dan.kowalski@rho-bank.com>\nDate: Wed, 12 Nov 2025 16:52:19 -0500\nSubject: card-rewards workspace export (2025.46)\nMessage-ID: <hd-export-2025-46-cardrewards@rho-bank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nDan,\n\nAttached is the production export of the card-rewards helpdesk workspace you asked for ahead of the enablement refresh. This is the full macro/trigger/field snapshot as of this afternoon; drafts and disabled objects are included with their status flags, so expect to see the old cash-back auto-responder pair in there — it has been off since March and is kept for history only.\n\nTwo things still worth checking on your side: the CSAT follow-up macro is mid-edit (marked draft), and the queue names in the routing views were renamed last month, so any training material that references the old queue names should be updated.\n\nHelpdesk Administration",
+  "macros": [
+    {
+      "macro_id": "MAC-3101",
+      "name": "Rewards question — general acknowledgement",
+      "description": "First-touch acknowledgement for rewards questions routed to the card-rewards queue.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2024-06-11",
+      "updated_at": "2025-09-08",
+      "usage_30d": 412,
+      "usage_90d": 1268,
+      "superseded_by": null,
+      "steps": [
+        "Set ticket type = rewards_question",
+        "Insert acknowledgement text (queue SLA phrasing)",
+        "Assign group = Card Rewards Tier 1"
+      ]
+    },
+    {
+      "macro_id": "MAC-3102",
+      "name": "Cash-back discrepancy — route to dispute flow",
+      "description": "Standard reply pointing a cash-back discrepancy ticket to the self-service dispute submission flow; see the agent KB and current training records for the flow itself.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-03-24",
+      "updated_at": "2025-10-22",
+      "usage_30d": 187,
+      "usage_90d": 553,
+      "superseded_by": null,
+      "steps": [
+        "Set ticket type = cash_back_discrepancy",
+        "Insert routing reply (self-service dispute flow pointer, no manual recalculation promise)",
+        "Set status = pending-customer"
+      ]
+    },
+    {
+      "macro_id": "MAC-2870",
+      "name": "Cash-back discrepancy — manual review acknowledgement (LEGACY)",
+      "description": "Legacy reply used before the self-service dispute flow rollout. Promised a manual queue review of the reported amount. Disabled 2025-03-24 with TRG-1907.",
+      "active": false,
+      "environment": "production",
+      "status": "disabled_legacy",
+      "effective_at": "2023-08-02",
+      "updated_at": "2025-03-24",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "MAC-3102",
+      "steps": [
+        "Set ticket type = cash_back_discrepancy",
+        "Insert legacy manual-review acknowledgement (10-business-day review promise — retired wording)",
+        "Assign group = Rewards Manual Review (retired group)"
+      ]
+    },
+    {
+      "macro_id": "MAC-3120",
+      "name": "Statement copy request",
+      "description": "Sends the statement-copy instructions and sets the document-request fields.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2024-02-19",
+      "updated_at": "2025-07-30",
+      "usage_30d": 96,
+      "usage_90d": 301,
+      "superseded_by": null,
+      "steps": [
+        "Set ticket type = document_request",
+        "Insert statement-copy instructions",
+        "Set status = pending-customer"
+      ]
+    },
+    {
+      "macro_id": "MAC-3131",
+      "name": "Card replacement status",
+      "description": "Reply template for replacement-card shipping status questions.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2024-09-05",
+      "updated_at": "2025-10-02",
+      "usage_30d": 264,
+      "usage_90d": 803,
+      "superseded_by": null,
+      "steps": [
+        "Set ticket type = card_replacement",
+        "Insert shipping status reply with tracking placeholder",
+        "Set status = solved-pending-close"
+      ]
+    },
+    {
+      "macro_id": "MAC-3140",
+      "name": "CSAT follow-up (draft)",
+      "description": "Draft follow-up for low-CSAT rewards tickets; copy under review with the enablement team.",
+      "active": false,
+      "environment": "production",
+      "status": "draft",
+      "effective_at": null,
+      "updated_at": "2025-11-05",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": null,
+      "steps": [
+        "Insert follow-up text (draft copy v2)",
+        "Set tag = csat-followup"
+      ]
+    },
+    {
+      "macro_id": "MAC-3055",
+      "name": "EcoCard partner list pointer",
+      "description": "Points customers asking about green-merchant qualification to the published EcoCard page; long-form reply retained because branch staff reuse it in secure messages.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2024-04-15",
+      "updated_at": "2025-08-19",
+      "usage_30d": 58,
+      "usage_90d": 172,
+      "superseded_by": null,
+      "steps": [
+        "Set ticket type = rewards_question",
+        "Insert EcoCard page pointer reply (page link placeholder, no rate restatement)",
+        "Set tag = ecocard"
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "TRG-2011",
+      "name": "Route rewards keywords to card-rewards queue",
+      "description": "Keyword and product-code routing into the Card Rewards Tier 1 group.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 4,
+      "effective_at": "2024-06-11",
+      "updated_at": "2025-09-08",
+      "usage_30d": 693,
+      "conditions": [
+        "channel is email OR webform",
+        "subject/body contains any: cash back, rewards, points, redemption",
+        "product_code starts with CARD-"
+      ],
+      "actions": [
+        "set group = Card Rewards Tier 1",
+        "set ticket type = rewards_question"
+      ]
+    },
+    {
+      "trigger_id": "TRG-1907",
+      "name": "Auto-reply: cash-back discrepancy (RETIRED)",
+      "description": "Fired MAC-2870 automatically on inbound cash-back discrepancy tickets. Disabled 2025-03-24 when the self-service dispute flow shipped; retained for audit history.",
+      "active": false,
+      "environment": "production",
+      "status": "disabled_legacy",
+      "priority": 3,
+      "effective_at": "2023-08-02",
+      "updated_at": "2025-03-24",
+      "usage_30d": 0,
+      "conditions": [
+        "channel is email OR webform",
+        "subject/body contains any: missing cash back, wrong cash back, cash back amount"
+      ],
+      "actions": [
+        "apply macro MAC-2870",
+        "assign group = Rewards Manual Review (retired group)"
+      ]
+    },
+    {
+      "trigger_id": "TRG-2044",
+      "name": "Escalate aged rewards tickets",
+      "description": "Escalates rewards tickets breaching 48 business hours without agent touch.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 6,
+      "effective_at": "2024-10-01",
+      "updated_at": "2025-06-17",
+      "usage_30d": 41,
+      "conditions": [
+        "ticket type = rewards_question OR cash_back_discrepancy",
+        "hours since last agent update > 48 (business)"
+      ],
+      "actions": [
+        "set priority = high",
+        "notify group lead (card-rewards)"
+      ]
+    },
+    {
+      "trigger_id": "TRG-2060",
+      "name": "Tag replacement-card tickets",
+      "description": "Applies shipping tags for replacement tickets so the views split them by carrier.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 8,
+      "effective_at": "2025-01-13",
+      "updated_at": "2025-10-02",
+      "usage_30d": 250,
+      "conditions": [
+        "ticket type = card_replacement"
+      ],
+      "actions": [
+        "set tag = replacement",
+        "set tag by carrier field"
+      ]
+    }
+  ],
+  "policy_contracts": [
+    {
+      "contract_id": "CON-0450",
+      "name": "card-rewards workspace routing scope",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Helpdesk Administration",
+      "scope": "Ticket routing and macros for the card-rewards workspace at this snapshot. Routing configuration only; product terms, rates, and dispute-handling policy are owned by the published product pages, the agent knowledge base, and rewards-operations records.",
+      "required_fields": [
+        "ticket_type",
+        "group",
+        "status"
+      ],
+      "closed_world": false,
+      "effective_at": "2024-06-11",
+      "updated_at": "2025-09-08"
+    }
+  ],
+  "field_columns": [
+    "row_id",
+    "field_key",
+    "field_name",
+    "field_type",
+    "option_value",
+    "active",
+    "status",
+    "environment",
+    "updated_at"
+  ],
+  "fields": [
+    {
+      "row_id": "F-001",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "rewards_question",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-06-11"
+    },
+    {
+      "row_id": "F-002",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "cash_back_discrepancy",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-24"
+    },
+    {
+      "row_id": "F-003",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "document_request",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-02-19"
+    },
+    {
+      "row_id": "F-004",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "card_replacement",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-09-05"
+    },
+    {
+      "row_id": "F-005",
+      "field_key": "group",
+      "field_name": "Assignment group",
+      "field_type": "picklist",
+      "option_value": "Card Rewards Tier 1",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-06-11"
+    },
+    {
+      "row_id": "F-006",
+      "field_key": "group",
+      "field_name": "Assignment group",
+      "field_type": "picklist",
+      "option_value": "Rewards Manual Review",
+      "active": false,
+      "status": "retired",
+      "environment": "production",
+      "updated_at": "2025-03-24"
+    },
+    {
+      "row_id": "F-007",
+      "field_key": "group",
+      "field_name": "Assignment group",
+      "field_type": "picklist",
+      "option_value": "Card Services Tier 2",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-01-13"
+    },
+    {
+      "row_id": "F-008",
+      "field_key": "status",
+      "field_name": "Ticket status",
+      "field_type": "picklist",
+      "option_value": "pending-customer",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-02-19"
+    },
+    {
+      "row_id": "F-009",
+      "field_key": "status",
+      "field_name": "Ticket status",
+      "field_type": "picklist",
+      "option_value": "solved-pending-close",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-02-19"
+    },
+    {
+      "row_id": "F-010",
+      "field_key": "tag",
+      "field_name": "Tag",
+      "field_type": "tag",
+      "option_value": "ecocard",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-04-15"
+    },
+    {
+      "row_id": "F-011",
+      "field_key": "tag",
+      "field_name": "Tag",
+      "field_type": "tag",
+      "option_value": "csat-followup",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-11-05"
+    },
+    {
+      "row_id": "F-012",
+      "field_key": "tag",
+      "field_name": "Tag",
+      "field_type": "tag",
+      "option_value": "replacement",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-01-13"
+    }
+  ],
+  "sla_policies": [
+    {
+      "name": "Card rewards — email first response",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "8 business hours first response",
+      "applies_to": "group = Card Rewards Tier 1",
+      "updated_at": "2025-02-03",
+      "policy_id": "SLA-210"
+    },
+    {
+      "name": "Card rewards — secure message update cadence",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "1 business day update cadence",
+      "applies_to": "ticket type in (rewards_question, cash_back_discrepancy)",
+      "updated_at": "2025-02-03",
+      "policy_id": "SLA-214"
+    }
+  ],
+  "views": [
+    {
+      "view_id": "VW-77",
+      "name": "Card rewards — open queue",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "group = Card Rewards Tier 1",
+        "status != solved-pending-close"
+      ],
+      "updated_at": "2025-10-06"
+    },
+    {
+      "view_id": "VW-81",
+      "name": "Replacements by carrier",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "ticket type = card_replacement",
+        "tag = replacement"
+      ],
+      "updated_at": "2025-10-06"
+    }
+  ]
+}

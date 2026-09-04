@@ -1,0 +1,87 @@
+From: Maya Chen <maya.chen@northline.example>
+To: Elena Ruiz <elena.ruiz@northline.example>,
+ Samir Patel <samir.patel@northline.example>,
+ Lauren Kim <lauren.kim@northline.example>,
+ Jonah Brooks <jonah.brooks@northline.example>
+Date: Fri, 10 Jul 2026 10:18:00 -0700
+Subject: RE: DECISION: name lookup verification inputs
+Message-ID: <d5f197fb00cadb2f73d2@mail.northline.example>
+In-Reply-To: <ec1111a38b1816222150@mail.northline.example>
+References: <5d1d1b2531bda3e14ac0@mail.northline.example>
+ <2f18d2c4ebc33ed9f719@mail.northline.example>
+ <ada63da22bbde1c6f8a1@mail.northline.example>
+ <ec1111a38b1816222150@mail.northline.example>
+Thread-Topic: DECISION: name lookup verification inputs
+Thread-Index: AZqJdRcF6qO9KdZen8t4nTGurW9xpQ==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Final decision for the August archive: when looking up an account by name, us=
+e the customer's full name together with date of birth. Date of birth is requ=
+ired in that path for verification. The name-plus-postal-code pilot remains r=
+ejected and must not appear as a fallback.
+
+-----Original Message-----
+Message-ID: <ec1111a38b1816222150@mail.northline.example>
+In-Reply-To: <ada63da22bbde1c6f8a1@mail.northline.example>
+References: <5d1d1b2531bda3e14ac0@mail.northline.example> <2f18d2c4ebc33ed9f7=
+19@mail.northline.example> <ada63da22bbde1c6f8a1@mail.northline.example>
+From: Jonah Brooks <jonah.brooks@northline.example>
+Sent: Thu, 09 Jul 2026 14:05:00 -0700
+To: Elena Ruiz <elena.ruiz@northline.example>, Samir Patel <samir.patel@north=
+line.example>, Lauren Kim <lauren.kim@northline.example>, Maya Chen <maya.che=
+n@northline.example>
+Subject: RE: DECISION: name lookup verification inputs
+
+Care Enablement can train three lookup paths without adding a decision tree t=
+o the opening script: phone number, customer ID, or full name with DOB. I wil=
+l remove the pilot slide that showed name plus postal code; it was never enab=
+led in production.
+
+-----Original Message-----
+Message-ID: <ada63da22bbde1c6f8a1@mail.northline.example>
+In-Reply-To: <2f18d2c4ebc33ed9f719@mail.northline.example>
+References: <5d1d1b2531bda3e14ac0@mail.northline.example> <2f18d2c4ebc33ed9f7=
+19@mail.northline.example>
+From: Lauren Kim <lauren.kim@northline.example>
+Sent: Thu, 09 Jul 2026 08:36:00 -0700
+To: Elena Ruiz <elena.ruiz@northline.example>, Samir Patel <samir.patel@north=
+line.example>, Jonah Brooks <jonah.brooks@northline.example>, Maya Chen <maya=
+.chen@northline.example>
+Subject: RE: DECISION: name lookup verification inputs
+
+Privacy supports that design. A broad name-only result list exposes unrelated=
+ subscribers, while full name plus DOB gives the verification gate a stable i=
+nput already covered by the customer-support notice. Please keep the screen c=
+opy explicit that DOB is required for verification.
+
+-----Original Message-----
+Message-ID: <2f18d2c4ebc33ed9f719@mail.northline.example>
+In-Reply-To: <5d1d1b2531bda3e14ac0@mail.northline.example>
+References: <5d1d1b2531bda3e14ac0@mail.northline.example>
+From: Samir Patel <samir.patel@northline.example>
+Sent: Wed, 08 Jul 2026 11:42:00 -0700
+To: Elena Ruiz <elena.ruiz@northline.example>, Lauren Kim <lauren.kim@northli=
+ne.example>, Jonah Brooks <jonah.brooks@northline.example>, Maya Chen <maya.c=
+hen@northline.example>
+Subject: RE: DECISION: name lookup verification inputs
+
+The production search service supports a full-name query only when date of bi=
+rth is also present. The DOB is evaluated as the verification input before re=
+sults are released; city, postal code, and email are not substitutes in this =
+lookup path.
+
+-----Original Message-----
+Message-ID: <5d1d1b2531bda3e14ac0@mail.northline.example>
+From: Elena Ruiz <elena.ruiz@northline.example>
+Sent: Wed, 08 Jul 2026 09:14:00 -0700
+To: Samir Patel <samir.patel@northline.example>, Lauren Kim <lauren.kim@north=
+line.example>, Jonah Brooks <jonah.brooks@northline.example>, Maya Chen <maya=
+.chen@northline.example>
+Subject: RE: DECISION: name lookup verification inputs
+
+The calibration team found agents entering names alone when callers could not=
+ locate a phone number. Search returned several plausible accounts, so we nee=
+d a launch decision on the minimum name-based input. Please include the purpo=
+se of any second field rather than treating it as optional refinement.

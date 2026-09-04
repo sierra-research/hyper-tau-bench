@@ -1,0 +1,172 @@
+{
+  "id": "052_banking_knowledge_construction_client_debit_security_client_seeded_performance_medium",
+  "source_domain": "banking_knowledge",
+  "task_type": "construction",
+  "task_description": "Build the complete Banking Knowledge customer service domain from the canonical handbook, the raw knowledge base minus documents represented through transformed evidence, banking-safe response phrasing rules, and the debit-security subdomain A/B evidence surface with the client overlay bundles swapped in: 25 held facts across debit lost/stolen/freeze/replace, debit disputes/declines/PIN limits, personal account closure, and transfer/recovery boundaries are shed from the kit and owned by the Client via client_knowledge members (client arm; the Client settles held and contested policy questions on request); scored on the banking_debit_security task partition.",
+  "sop_variant_manifest_path": "tau2/hyper/sops/banking_knowledge/variants/debit_security_sections_hard_client_001.json",
+  "knowledge_base_path": "tau2/domains/banking_knowledge/documents",
+  "composition_pipeline": [
+    {
+      "stage": "information_distribution",
+      "variant_manifest_path": "tau2/hyper/sops/banking_knowledge/variants/debit_security_sections_hard_client_001.json",
+      "transformed_sections": [
+        "business_checking_opening_promotions",
+        "business_credit_card_selection_promos",
+        "business_savings_opening_promotions",
+        "cash_back_disputes_and_corrections",
+        "checking_atm_fee_rebates_and_credits",
+        "checking_referral_programs_and_optimization",
+        "credit_card_closure_retention_downgrade_payoff",
+        "credit_card_declines_and_backend_incidents",
+        "credit_card_referrals",
+        "credit_card_replacements",
+        "credit_card_transaction_disputes",
+        "credit_limit_increases",
+        "debit_card_disputes_declines_pin_limits",
+        "debit_card_lost_stolen_freeze_replace",
+        "direct_deposit_delay_and_escalation",
+        "green_checking_faq",
+        "mobile_check_deposit",
+        "personal_account_closure_and_debit_cleanup",
+        "personal_checking_opening_recommendation",
+        "personal_credit_card_account_services",
+        "personal_credit_card_application_recommendation",
+        "personal_credit_card_rewards_and_promos",
+        "personal_savings_opening_recommendation",
+        "savings_apy_boosts_interest_discrepancies",
+        "transfer_and_account_recovery_boundaries"
+      ]
+    }
+  ],
+  "test_task_ids": [
+    "task_004",
+    "task_005",
+    "task_012",
+    "task_077",
+    "task_078",
+    "task_079",
+    "task_080",
+    "task_081",
+    "task_082",
+    "task_084",
+    "task_085",
+    "task_086",
+    "task_087",
+    "task_088",
+    "task_089",
+    "task_090",
+    "task_091",
+    "task_092",
+    "task_142",
+    "task_143",
+    "task_144",
+    "task_145",
+    "task_146"
+  ],
+  "interaction_mode": "sandbox",
+  "client_api_mode": "rest",
+  "sandbox_config": {
+    "max_time_seconds": 28800,
+    "command_timeout": 120,
+    "docker_image": "tau2-construction-runtime:contract-v7",
+    "docker_memory": "4g",
+    "docker_cpus": "2"
+  },
+  "performance_profile": {
+    "medium": {
+      "budget": 0.6,
+      "models": [
+        {
+          "model": "gpt-5.6-terra",
+          "constraints": {
+            "reasoning_effort": "none"
+          }
+        },
+        {
+          "model": "anthropic/claude-sonnet-5",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          },
+          "credit_rates": {
+            "input_per_million": 0.5,
+            "output_per_million": 3.2,
+            "rate_card_date": "2026-08-23",
+            "pricing_basis": "capability_bucket_median_list_price"
+          }
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "constraints": {
+            "reasoning_effort": "none"
+          }
+        },
+        {
+          "model": "anthropic/claude-haiku-4-5",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          },
+          "credit_rates": {
+            "input_per_million": 0.25,
+            "output_per_million": 1.6,
+            "rate_card_date": "2026-08-23",
+            "pricing_basis": "capability_bucket_median_list_price"
+          }
+        },
+        {
+          "model": "google/gemini-3-flash-preview",
+          "constraints": {
+            "reasoning_effort": "minimal"
+          }
+        },
+        {
+          "model": "moonshotai/kimi-k2.6",
+          "constraints": {
+            "extra_body": {
+              "thinking": {
+                "type": "disabled"
+              }
+            }
+          }
+        },
+        {
+          "model": "qwen/qwen3.8-27b",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          }
+        },
+        {
+          "model": "google/gemma-4-31b-it",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "effort": "low"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "user_llm": "gpt-5.5",
+  "user_reasoning_effort": "none",
+  "client_enabled": true,
+  "client_sections": [
+    "debit_card_disputes_declines_pin_limits",
+    "debit_card_lost_stolen_freeze_replace",
+    "personal_account_closure_and_debit_cleanup",
+    "transfer_and_account_recovery_boundaries"
+  ],
+  "starting_workspace_path": "tau2/hyper/workspaces/banking_knowledge/gen_sonnet5_stateless_dsec_medium_001"
+}

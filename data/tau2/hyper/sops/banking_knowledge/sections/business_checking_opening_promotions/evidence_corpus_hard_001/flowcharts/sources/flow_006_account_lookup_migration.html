@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1760">
+<title>Account evidence retrieval - worksheet and service paths</title><style>
+*{box-sizing:border-box} html,body{margin:0;width:1760px;height:1280px;overflow:hidden}
+body{background:#e9edf0;color:#172431;font-family:Arial,Helvetica,sans-serif}
+.sheet{position:relative;width:1712px;height:1232px;margin:24px;background:#fff;border:1px solid #9ba7b1}
+.frame-label{position:absolute;left:-1px;top:-1px;background:#18232d;color:#fff;padding:7px 16px;font-size:12px;font-weight:800;letter-spacing:.3px}
+header{height:154px;margin:0 38px;border-bottom:2px solid #243746;padding:37px 0 18px;display:flex;justify-content:space-between;align-items:flex-start}
+.eyebrow{font-size:13px;font-weight:800;color:#5a6874;letter-spacing:.6px;margin-bottom:10px}
+h1{font-size:36px;line-height:1.06;margin:0 0 10px;letter-spacing:-.4px} .subtitle{font-size:14px;color:#5f6e79}
+.header-meta{display:flex;gap:12px;align-items:flex-start}
+.version{border:1px solid #b6c0c8;padding:10px 13px;font-size:11px;color:#52606b;line-height:1.35}
+.diagram{position:absolute;left:38px;top:174px;width:1636px;height:790px}
+.phase{position:absolute;border:1px solid #9da8b2;background:#fbfcfd;z-index:0}
+.phase.retired-zone{border-style:dashed;background:repeating-linear-gradient(135deg,#fbfaf7,#fbfaf7 12px,#f3f0e8 12px,#f3f0e8 24px)}
+.phase.current-zone{background:#f7fbf8;border-color:#84a98f}
+.phase>span{position:absolute;left:-1px;top:-21px;height:21px;background:#505b65;color:white;padding:5px 10px;font-size:10px;font-weight:800;letter-spacing:.3px}
+.phase.retired-zone>span{background:#8e6d19} .phase.current-zone>span{background:#207044}
+svg{position:absolute;inset:0;width:1636px;height:790px;z-index:1;overflow:visible}
+path{fill:none;stroke:#205d8f;stroke-width:2.2;marker-end:url(#arrow)}
+path.loop{stroke:#8b98a4;stroke-dasharray:6 5;marker-end:url(#arrow-gray)}
+path.reject{stroke:#b74242;stroke-dasharray:5 4;marker-end:url(#arrow-red)}
+path.history-edge{stroke:#9c8242;stroke-dasharray:4 5;marker-end:url(#arrow-gold)}
+.node{position:absolute;z-index:3;border:1.5px solid #1f2a33;background:white;padding:10px 12px;display:flex;flex-direction:column;justify-content:center;text-align:center;font-size:11px;line-height:1.25}
+.node small{display:block;margin-bottom:5px;color:#26618b;font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase}
+.node strong{font-size:12px;line-height:1.2} .node p{margin:5px 0 0;color:#4e5b65;font-size:10px;line-height:1.25}
+.node.start{border-color:#2f8c4a;background:#eef8ef;border-radius:28px}
+.node.terminal{border-radius:28px;background:#f1f5f7}
+.node.stop{border-color:#c83e3e;background:#fff1ef;border-radius:5px}
+.node.system{border-color:#6e8ca4;background:#edf5fb;text-align:left;font-family:"Courier New",monospace;overflow-wrap:anywhere}
+.node.system strong{font-size:11px;overflow-wrap:anywhere}
+.node.dialogue{background:#f5f0ff;border-color:#7c68a7;border-radius:5px 5px 20px 5px}
+.node.handoff{background:#eef7f1;border-color:#418357;border-radius:4px}
+.node.retired{border-style:dashed;border-color:#9e8a61;background:#f7f4ec;color:#685f50}
+.node.rejected{border:2px solid #bf3838;background:#fff0f0;color:#7b2525}
+.node.decision{padding:0;border:none;background:transparent;transform:rotate(45deg)}
+.node.decision:before{content:"";position:absolute;inset:0;border:1.5px solid #347447;background:#fbfffb}
+.node.decision.reject-decision:before{border-color:#be3b3b;background:#fff7f7}
+.decision-content{position:absolute;inset:15px;z-index:1;transform:rotate(-45deg);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.decision-content small{margin:0 0 4px} .decision-content strong{font-size:11px;line-height:1.08} .decision-content p{font-size:8px;line-height:1.12;margin:3px 0 0}
+.edge-label{position:absolute;z-index:4;background:#fff;padding:1px 4px;color:#315a78;font-size:9px;font-weight:800}
+.sticky{position:absolute;z-index:5;padding:10px 11px;box-shadow:0 2px 5px #0003;transform:rotate(-.7deg);font-size:9.5px;line-height:1.3}
+.sticky.yellow{background:#fff098} .sticky.green{background:#c8f2d2} .sticky.blue{background:#cce5fa} .sticky.red{background:#ffd1d1}
+.sticky b{font-size:9.5px} .sticky p{margin:5px 0 7px} .sticky em{display:block;text-align:right;font-size:8px;color:#59636a}
+.control-definitions{position:absolute;left:38px;right:38px;bottom:34px;height:222px;border:1px solid #8d9aa4;background:#fafbfc;padding:26px 16px 12px}
+.control-definitions h2,.history h2{position:absolute;left:-1px;top:-21px;margin:0;background:#18232d;color:white;padding:5px 12px;font-size:10px;letter-spacing:.3px}
+.control-definitions>div{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 12px;height:100%}
+.control-definitions article{border-left:3px solid #2975a6;padding:5px 8px;display:grid;grid-template-columns:38px 1fr;gap:7px;align-content:start}
+.control-definitions article b{font-size:10px;color:#225a81} .control-definitions article p{font-size:9.5px;line-height:1.25;margin:0;color:#37434c}
+.history{position:absolute;left:38px;right:38px;bottom:34px;height:222px;border:1px solid #9a8c67;background:#fbfaf7;padding:20px 14px}
+.history article{position:absolute;top:27px;height:166px;border:1px dashed #9b8f72;background:#f6f3ec;padding:11px}
+.history article b{display:inline-block;background:#496578;color:#fff;padding:4px 7px;font-size:9px;letter-spacing:.3px}
+.history article.history-current b{background:#207044}
+.history article small{float:right;color:#6d6558;font-size:9px;padding-top:4px} .history article p{font-size:9.5px;line-height:1.35;color:#5b554c}
+.watermark{position:absolute;right:42px;bottom:12px;color:#8a949b;font-size:9px}
+</style></head><body><main class="sheet"><div class="frame-label">FRAME 6 · ACCOUNT LOOKUP MIGRATION STUDY</div>
+<header><div><div class="eyebrow">RHO BANK · BUSINESS CHECKING OPERATIONS</div><h1>Account evidence retrieval - worksheet and service paths</h1><div class="subtitle">Migration-review map comparing manual data assembly with structured account retrieval and downstream routing.</div></div>
+<div class="header-meta"><div class="version">Owner: Deposit Operations / Risk Controls<br>Updated: 2025-11-14<br>Ref: BC-DATA-06 · v1.2</div></div></header>
+<section class="diagram"><section class='phase ' style='left:12px;top:48px;width:1612px;height:250px'><span>MANUAL ASSEMBLY PATH</span></section><section class='phase ' style='left:12px;top:330px;width:1612px;height:250px'><span>STRUCTURED SERVICE PATH</span></section><svg viewBox="0 0 1636 790" aria-hidden="true"><defs>
+<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#205d8f"/></marker>
+<marker id="arrow-gray" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#8b98a4"/></marker>
+<marker id="arrow-red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#b74242"/></marker>
+<marker id="arrow-gold" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#9c8242"/></marker></defs><path class='flow' d='M230 156 H280'/><path class='flow' d='M462 156 H512'/><path class='flow' d='M688 156 H742'/><path class='flow' d='M868 155 H918'/><path class='flow' d='M1102 156 H1152'/><path class='flow' d='M1336 156 H1390'/><path class='loop' d='M805 218 V245 H420 V197'/><path class='flow' d='M230 449 H300'/><path class='flow' d='M546 449 H616'/><path class='flow' d='M854 449 H922'/><path class='loop' d='M1048 447 H1110'/><path class='loop' d='M1272 451 H1330'/><path class='reject' d='M985 510 V535 H1110'/><path class='flow' d='M985 384 V350 H1430 V398'/></svg><span class='edge-label' style='left:878px;top:138px'>NO</span><span class='edge-label' style='left:520px;top:228px'>YES - CONTINUE WITH SHEET</span><span class='edge-label' style='left:1060px;top:430px'>NO</span><span class='edge-label' style='left:1274px;top:434px'>RETRY OK</span><span class='edge-label' style='left:997px;top:522px'>2ND FAILURE</span><span class='edge-label' style='left:1190px;top:333px'>YES</span><article id='legacy-query' class='node system' style='left:40px;top:115px;width:190px;height:82px'><small>profile query</small><strong>LEGACY PROFILE QUERY</strong><p>partial account rows</p></article><article id='copy' class='node dialogue' style='left:280px;top:115px;width:182px;height:82px'><strong>Copy rows to worksheet</strong><p>agent re-keys status and balance</p></article><article id='count' class='node dialogue' style='left:512px;top:115px;width:176px;height:82px'><strong>Manually count accounts</strong><p>filter by account_type</p></article><article id='match' class='node decision' style='left:742px;top:92px;width:126px;height:126px'><div class='decision-content'><strong>Totals match profile?</strong><p>manual check</p></div></article><article id='email' class='node handoff' style='left:918px;top:115px;width:184px;height:82px'><strong>Email manager</strong><p>resolve mismatch asynchronously</p></article><article id='override' class='node dialogue' style='left:1152px;top:115px;width:184px;height:82px'><strong>Copy approved values</strong><p>worksheet becomes decision input</p></article><article id='legacy-end' class='node terminal' style='left:1390px;top:115px;width:190px;height:82px'><strong>Worksheet result available</strong><p>Return assembled values to the review case</p></article><article id='collect' class='node dialogue' style='left:40px;top:408px;width:190px;height:82px'><small>agent</small><strong>Collect customer user_id</strong><p>single required identifier</p></article><article id='current-call' class='node system' style='left:300px;top:398px;width:246px;height:102px'><small>service call</small><strong>GET_ALL_USER_ACCOUNTS_BY_USER_ID_3847</strong><p>server-side retrieval · checking + savings</p></article><article id='current-return' class='node system' style='left:616px;top:398px;width:238px;height:102px'><small>structured payload</small><strong>STRUCTURED RESPONSE</strong><p>IDs · type · class · status · balance · opened date</p></article><article id='current-ok' class='node decision' style='left:922px;top:384px;width:126px;height:126px'><div class='decision-content'><strong>Response usable?</strong><p>same-customer snapshot</p></div></article><article id='retry' class='node system' style='left:1110px;top:414px;width:162px;height:76px'><strong>Retry once</strong><p>preserve request ID</p></article><article id='route' class='node handoff' style='left:1330px;top:398px;width:200px;height:102px'><strong>Route structured evidence</strong><p>opening · closure · inquiry</p></article><article id='data-ops' class='node handoff' style='left:1110px;top:535px;width:162px;height:66px'><strong>Data Operations</strong><p>second failure</p></article><aside class='sticky red' style='left:55px;top:220px;width:260px'><b>AUDIT FINDING</b><p>The worksheet mixed snapshots, hid filter assumptions, and created a second source of truth.</p><em>Internal Audit · 09/12</em></aside><aside class='sticky yellow' style='left:630px;top:220px;width:250px'><b>MISMATCH LOOP</b><p>Manager email did not repair the underlying record; it only approved which copied value to use.</p><em>Migration review</em></aside><aside class='sticky blue' style='left:1290px;top:510px;width:270px'><b>SERVICE DESIGN NOTE</b><p>One read action returns typed fields. Downstream journeys consume the same response without re-keying.</p><em>Platform Ops review · 10/01</em></aside></section>
+<section class='history'><h2>MIGRATION REVIEW RECORD</h2><article class='' style='left:20px;width:300px'><b>BASELINE</b><small>2025-06-01</small><p>Document the partial profile query and local spreadsheet workflow.</p></article><article class='' style='left:340px;width:300px'><b>AUDIT FINDING</b><small>2025-09-12</small><p>Stale snapshots and re-key errors made manual totals unreliable.</p></article><article class='' style='left:660px;width:300px'><b>MIGRATION REHEARSAL</b><small>2025-10-01</small><p>Compare structured retrieval with the worksheet outputs and routing needs.</p></article><article class='' style='left:980px;width:570px'><b>RECORDS HANDOFF</b><small>2025-11-14</small><p>Migration artifacts indexed under BC-DATA-06 for records reconciliation.</p></article></section><div class="watermark">Internal working material · not customer-facing · BC-DATA-06 · v1.2</div></main></body></html>

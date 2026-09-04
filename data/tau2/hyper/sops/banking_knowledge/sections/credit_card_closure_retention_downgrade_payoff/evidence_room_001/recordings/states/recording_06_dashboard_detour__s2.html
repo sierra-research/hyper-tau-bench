@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Queue health — filtered</title>
+<style>
+*{box-sizing:border-box;margin:0}
+body{background:#f3f6f9;color:#1b2a3a;font:15px/1.5 -apple-system,'Segoe UI',Arial,sans-serif}
+.top{height:56px;background:#092a4e;color:#fff;display:flex;align-items:center;gap:24px;padding:0 28px}
+.brand{font-size:19px;font-weight:700;white-space:nowrap}
+.search{background:#173f67;color:#c8d9ea;border-radius:7px;padding:9px 18px;flex:1;font-size:14px}
+.user{white-space:nowrap;font-size:14px}
+.shell{display:grid;grid-template-columns:220px 1fr}
+.side{background:#fff;border-right:1px solid #dfe6ee;padding:18px 12px;min-height:calc(100vh - 56px)}
+.side div{padding:9px 12px;border-radius:7px;margin:2px 0;color:#4c5c6e;font-size:14px}
+.side .active{background:#e8f1fb;color:#0b4f91;font-weight:600}
+.main{padding:22px 30px;max-width:1180px}
+.crumb{font-size:12px;color:#6d7c8c;letter-spacing:.04em;text-transform:uppercase;margin-bottom:12px}
+.titlebar{display:flex;align-items:flex-start;gap:16px;margin-bottom:6px}
+h1{font-size:26px;font-weight:650}
+.sub{color:#657486;margin-top:2px}
+.chip{margin-left:auto;padding:5px 12px;border-radius:13px;font-size:12px;font-weight:600;white-space:nowrap}
+.chip.ok{border:1px solid #7bbb96;background:#eaf7ef;color:#17643a}
+.chip.neutral{border:1px solid #b9c4d0;background:#eef2f6;color:#4c5c6e}
+.chip.warn{border:1px solid #d9b25f;background:#fdf3dd;color:#7a5a10}
+.meta{display:flex;gap:12px;margin:14px 0 4px}
+.meta div{background:#fff;border:1px solid #dfe6ee;border-radius:8px;padding:10px 14px;font-size:13px}
+.meta b{display:block;font-size:11px;color:#68788a;font-weight:600;letter-spacing:.03em;text-transform:uppercase;margin-bottom:3px}
+.blocks{display:grid;grid-template-columns:repeat(auto-fit,minmax(430px,1fr));gap:14px;margin-top:16px}
+.card{background:#fff;border:1px solid #dfe6ee;border-radius:10px;padding:16px 18px;box-shadow:0 1px 5px #17324c0a}
+.card.wide{grid-column:1/-1}
+.card h2{font-size:14px;font-weight:650;color:#20374f;margin-bottom:10px}
+dl.kv div{display:flex;gap:12px;padding:6px 0;border-bottom:1px solid #f0f3f7}
+dl.kv div:last-child{border-bottom:0}
+dl.kv dt{width:44%;color:#5a6b7d;font-size:13.5px}
+dl.kv dd{flex:1;font-weight:550}
+dl.kv .note{display:block;font-weight:400;font-size:12.5px;color:#7b8a99;margin-top:1px}
+.actionid{font-size:12.5px;color:#5a6b7d;margin-bottom:10px}
+.actionid code{background:#eef2f6;border:1px solid #dfe6ee;border-radius:5px;padding:2px 7px;font-size:12px;color:#0b4f91}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12.5px;font-weight:600;color:#41556a;margin-bottom:4px}
+.field input{width:100%;border:1px solid #c4cfdb;border-radius:7px;padding:8px 11px;font:inherit;background:#fff}
+.field .help{font-size:12.5px;color:#7b8a99;margin-top:3px}
+.formfoot{display:flex;align-items:center;gap:12px;margin-top:14px}
+.btn{border:0;border-radius:7px;padding:9px 18px;font:600 14px inherit;font-family:inherit}
+.btn.primary{background:#0b5cab;color:#fff}
+.btn.disabled{background:#dfe6ee;color:#8595a5}
+.subnote{font-size:12.5px;color:#7b8a99}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-size:12px;color:#68788a;text-align:left;letter-spacing:.03em;text-transform:uppercase;padding:6px 10px 6px 0;border-bottom:1px solid #dfe6ee}
+td{padding:7px 10px 7px 0;border-bottom:1px solid #f0f3f7;vertical-align:top}
+ul.plain{padding-left:19px}
+ul.plain li{margin:5px 0}
+ul.tl{list-style:none}
+ul.tl li{display:flex;gap:12px;padding:6px 0;border-bottom:1px solid #f0f3f7}
+ul.tl li:last-child{border-bottom:0}
+ul.tl .t{color:#68788a;font-size:12.5px;white-space:nowrap;padding-top:1px}
+.callout{border-radius:8px;padding:11px 14px;font-size:13.5px}
+.callout.info{background:#e8f1fb;border:1px solid #b5d2ef;color:#164a7e}
+.callout.warn{background:#fdf3dd;border:1px solid #e6cd90;color:#6d500e}
+body.video .main{max-width:1180px;padding:18px 30px}
+</style></head><body class="video">
+<div class="top"><div class="brand">RHO · CareDesk</div><div class="search">Search customers, accounts, tools, and product reference</div><div class="user">Amira C. &#9662;</div></div>
+<div class="shell"><aside class="side"><div class="">Customer overview</div><div class="">Accounts</div><div class="">Account actions</div><div class="">Cards</div><div class="">Payments</div><div class="">Disputes</div><div class="">Cases</div><div class="">Product reference</div><div class="active">Team tools</div></aside>
+<main class="main"><div class="crumb">Care Desk / Team tools</div>
+<div class="titlebar"><div><h1>Queue health — filtered</h1></div><div class="chip neutral">Loading</div></div>
+
+<div class="blocks"><section class="card wide" data-cue="block:Filter"><h2>Filter</h2><div><div class="field" data-cue="field:Search"><label>Search</label><input value="card closures week 30" placeholder="Filter queues and tags" readonly></div></div><div class="formfoot"><button class="btn primary" data-cue="submit:Filter">Refresh</button></div></section><div class="callout info card wide" data-cue="callout:Widget loading — large d">Widget loading — large date range selected.</div></div>
+</main></div></body></html>

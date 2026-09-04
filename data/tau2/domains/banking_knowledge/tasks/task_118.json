@@ -1,0 +1,197 @@
+{
+  "id": "task_118",
+  "description": {
+    "purpose": "Task: task_118",
+    "relevant_policies": null,
+    "notes": "GOLD SAVINGS APY - ADDITIVE VS MULTIPLICATIVE BONUS MISCONCEPTION WITH A SMALL REAL ERROR. Customer has a Gold Account (savings) with $72,000 and a Gold Rewards Card. He believes the Gold Rewards Card relationship bonus is a MULTIPLIER (5.5% x 1.025 = 5.6375%) and demands $8.25 (72,000 x 0.1375/1200). Per the documentation the bonus is ADDITIVE, not a multiplier: correct APY = 5.5 + 0.025 = 5.525%. There IS a real system error: October interest was paid at the flat base 5.5% ($330.00) instead of 5.525% ($331.50), because the relationship bonus was never applied. The agent must correct the customer's multiplicative math, find the genuine $1.50 shortfall, credit exactly $1.50 (NOT $8.25), and submit an interest discrepancy report (expected 5.525, actual 5.5). An agent that trusts the customer's math and credits $8.25 diverges the DB and fails."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Oskar Lindqvist, a 40-year-old small-business owner in Minneapolis. You read a personal-finance blog post about Rho-Bank's card relationship bonuses and you came in with your own math already done. You are confident but not unreasonable - documentation convinces you.\n\n**Verification info:**\n- Name: Oskar Lindqvist | Phone: 612-555-0177 | Email: oskar.lindqvist@outlook.com\n- DOB: 02/27/1985 | Address: 4512 Lyndale Avenue South, Minneapolis, MN 55419\n\n## Conversation Flow (Respond reactively - only provide details when the agent asks):\n\n1. **Opening:** \"Hi. I need an interest adjustment on my Gold savings account. I have $72,000 in it and I hold your Gold Rewards Card, which comes with the relationship bonus. The way I understand it, that bonus is a 1.025 multiplier on the rate - 5.5% times 1.025 is 5.6375%, which on $72,000 is $338.25 a month. You paid me $330.00 in October. You owe me $8.25 and I'd like it credited today.\"\n\n2. **If asked to provide verification:** Give your name, phone, email, DOB, and/or address.\n\n3. **If agent asks about your accounts or cards:** \"Just the Gold savings account with $72,000 and the Gold Rewards Card. No checking accounts with you.\"\n\n4. **If agent corrects you that the bonus is additive (5.5 + 0.025 = 5.525%), not a multiplier:** \"Hm. Additive, not multiplicative? If that's what the documents say, fine. But then my October interest still doesn't match 5.525%, does it? Check the numbers.\"\n\n5. **If agent identifies that you were actually paid at the flat 5.5% and the 0.025% bonus was never applied:** \"So you DO owe me something - just not what I calculated. Alright, credit me the correct difference then.\"\n\n6. **If agent offers to submit a report so the bonus applies going forward:** \"Yes, absolutely. I don't want to redo this every month.\"\n\n7. **If agent applies the credit and submits the report:** \"Good. I'll re-read that blog post with a more skeptical eye. Thanks.\" ###STOP###\n\n8. **If agent simply agrees with your math and credits $8.25:** Accept it without protest.\n\nOnly provide additional details about your situation when the agent asks. Never respond as a customer service representative/assistant."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "users": {
+          "data": {
+            "ol87m3x9d4": {
+              "name": "Oskar Lindqvist",
+              "user_id": "ol87m3x9d4",
+              "address": "4512 Lyndale Avenue South, Minneapolis, MN 55419",
+              "email": "oskar.lindqvist@outlook.com",
+              "phone_number": "612-555-0177",
+              "date_of_birth": "02/27/1985"
+            }
+          }
+        },
+        "accounts": {
+          "data": {
+            "sav_ol87m3x9d4_gold": {
+              "account_id": "sav_ol87m3x9d4_gold",
+              "user_id": "ol87m3x9d4",
+              "class": "saving",
+              "level": "Gold Account",
+              "date_opened": "05/20/2024",
+              "status": "OPEN",
+              "current_holdings": "72000.00"
+            }
+          }
+        },
+        "credit_card_accounts": {
+          "data": {
+            "cc_ol87m3x9d4_gold": {
+              "account_id": "cc_ol87m3x9d4_gold",
+              "user_id": "ol87m3x9d4",
+              "card_type": "Gold Rewards Card",
+              "date_of_account_open": "05/20/2024",
+              "current_balance": "$780.15",
+              "credit_limit": "$14,000.00",
+              "reward_points": "19630 points",
+              "account_status": "ACTIVE",
+              "past_due_amount": "$0.00",
+              "card_last_4_digits": "2249"
+            }
+          }
+        },
+        "bank_account_transaction_history": {
+          "data": {
+            "btxn_ol118_int_oct": {
+              "transaction_id": "btxn_ol118_int_oct",
+              "account_id": "sav_ol87m3x9d4_gold",
+              "date": "10/31/2025",
+              "description": "MONTHLY INTEREST CREDIT",
+              "amount": 330.0,
+              "type": "interest_credit",
+              "status": "posted"
+            },
+            "btxn_ol118_int_sep": {
+              "transaction_id": "btxn_ol118_int_sep",
+              "account_id": "sav_ol87m3x9d4_gold",
+              "date": "09/30/2025",
+              "description": "MONTHLY INTEREST CREDIT",
+              "amount": 330.0,
+              "type": "interest_credit",
+              "status": "posted"
+            },
+            "btxn_ol118_ach_aug": {
+              "transaction_id": "btxn_ol118_ach_aug",
+              "account_id": "sav_ol87m3x9d4_gold",
+              "date": "08/12/2025",
+              "description": "ACH TRANSFER IN - BUSINESS DISTRIBUTION",
+              "amount": 12000.0,
+              "type": "ach_transfer_in",
+              "status": "posted"
+            }
+          }
+        }
+      }
+    }
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Oskar Lindqvist",
+          "user_id": "ol87m3x9d4",
+          "address": "4512 Lyndale Avenue South, Minneapolis, MN 55419",
+          "email": "oskar.lindqvist@outlook.com",
+          "phone_number": "612-555-0177",
+          "date_of_birth": "02/27/1985",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "118_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "118_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"ol87m3x9d4\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "118_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_bank_account_transactions_9173"
+        },
+        "requestor": "assistant",
+        "action_id": "118_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_bank_account_transactions_9173",
+          "arguments": "{\"account_id\": \"sav_ol87m3x9d4_gold\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "118_4"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "apply_savings_account_credit_6831"
+        },
+        "requestor": "assistant",
+        "action_id": "118_5"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "apply_savings_account_credit_6831",
+          "arguments": "{\"account_id\": \"sav_ol87m3x9d4_gold\", \"amount\": 1.50, \"credit_type\": \"interest_correction\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "118_6"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "submit_interest_discrepancy_report_7294"
+        },
+        "requestor": "assistant",
+        "action_id": "118_7"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "submit_interest_discrepancy_report_7294",
+          "arguments": "{\"account_id\": \"sav_ol87m3x9d4_gold\", \"user_id\": \"ol87m3x9d4\", \"expected_apy\": 5.525, \"actual_apy\": 5.5, \"amount_difference\": 1.50}"
+        },
+        "requestor": "assistant",
+        "action_id": "118_8"
+      }
+    ],
+    "nl_assertions": [
+      "The agent explains that the 0.025% relationship bonus is added to the base APY rather than multiplying it, and does not credit the customer's requested $8.25."
+    ],
+    "reward_basis": [
+      "DB",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [
+    "call_discoverable_user_tool",
+    "request_human_agent_transfer"
+  ],
+  "required_documents": [
+    "doc_savings_accounts_gold_account_002",
+    "doc_savings_accounts_gold_account_013",
+    "doc_savings_accounts_gold_account_014",
+    "doc_bank_accounts_bank_accounts_(general)_043",
+    "doc_bank_accounts_bank_accounts_(general)_044",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_bank_accounts_bank_accounts_(general)_018"
+  ]
+}

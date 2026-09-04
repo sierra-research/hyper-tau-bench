@@ -1,0 +1,360 @@
+{
+  "id": "retail_beacon_slack_mcp_dump_001_service_foundations",
+  "representation": "slack_mcp_dump",
+  "section_id": "service_foundations",
+  "scoped_from": "eval_manifest.json",
+  "artifacts": [
+    {
+      "filename": "beacon_servicing_slack_mcp_capture.json",
+      "authoritative_fact_ids": [
+        "cannot_change_order_quantity",
+        "cannot_change_profile_email",
+        "cannot_split_shipments"
+      ]
+    }
+  ],
+  "tool_call_count": 76,
+  "thread_count": 67,
+  "message_count": 460,
+  "current_evidence_phrases": {
+    "cannot_change_order_quantity": "does not change item quantities on an order",
+    "cannot_change_profile_email": "the email address on a profile cannot be changed by customer care",
+    "cannot_split_shipments": "does not split an order into separate shipments"
+  },
+  "current_claim_occurrences": {
+    "cannot_change_order_quantity": 3,
+    "cannot_change_profile_email": 3,
+    "cannot_split_shipments": 3
+  },
+  "historical_claim_occurrences": {
+    "split the delayed item into its own shipment": 3,
+    "a verified email correction is fine after the identity check": 3,
+    "splits only when everything ships from one warehouse": 3,
+    "email corrections are on hold": 3,
+    "quantity edits are off the table": 3
+  },
+  "decision_history": [
+    {
+      "arc_id": "quantity_and_splits",
+      "decision_id": "QS1",
+      "thread_key": "decision_qs1_split_pilot",
+      "thread_ts": "1771604760.201060",
+      "channel_id": "C09BCFUL03",
+      "channel_name": "beacon-fulfillment-scope",
+      "decision_timestamp": "2026-02-20T16:26:00Z",
+      "status": "superseded",
+      "summary": "Six-week pilot: agents may split a delayed line into its own shipment.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1771606615.302456"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1771604760.201060"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1771608687.007014"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1771611242.619621"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1771613721.249747"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "split the delayed item into its own shipment",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_qs1_fanout",
+        "thread_ts": "1773065760.525976",
+        "timestamp": "2026-03-09T14:16:00Z",
+        "trigger_summary": "Split orders drove 18% more where-is-my-order contacts and broke billing reconciliation on multi-warehouse cases."
+      }
+    },
+    {
+      "arc_id": "quantity_and_splits",
+      "decision_id": "QS2",
+      "thread_key": "decision_qs2_single_warehouse",
+      "thread_ts": "1773255120.450718",
+      "channel_id": "C09BCFUL03",
+      "channel_name": "beacon-fulfillment-scope",
+      "decision_timestamp": "2026-03-11T18:52:00Z",
+      "status": "superseded",
+      "summary": "Split pilot narrowed to single-warehouse, same-day-dispatch orders; quantity-trim prototype commissioned.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1773257022.042011"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1773255120.450718"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1773259535.823961"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1773262158.638765"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1773264681.415437"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "splits only when everything ships from one warehouse",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_qs2_carrier_sla",
+        "thread_ts": "1775049720.668339",
+        "timestamp": "2026-04-01T13:22:00Z",
+        "trigger_summary": "Carrier minimums erased SLA credits on 40% of gated splits and the trim prototype showed money-history rewrites."
+      }
+    },
+    {
+      "arc_id": "quantity_and_splits",
+      "decision_id": "QS3",
+      "thread_key": "decision_qs3_no_quantity",
+      "thread_ts": "1775144640.679789",
+      "channel_id": "C09BCFUL03",
+      "channel_name": "beacon-fulfillment-scope",
+      "decision_timestamp": "2026-04-02T15:44:00Z",
+      "status": "superseded",
+      "summary": "Quantity edits ruled out after the prototype readout; gated split pilot runs one final cycle.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1775146383.015481"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1775144640.679789"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1775148806.319003"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1775151329.749146"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1775153574.611199"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "quantity edits are off the table",
+      "reopened_by": {
+        "mode": "inline_successor_root",
+        "trigger_summary": "The steering readout received the final gated-cycle economics."
+      }
+    },
+    {
+      "arc_id": "quantity_and_splits",
+      "decision_id": "QS4",
+      "thread_key": "decision_qs4_final",
+      "thread_ts": "1777303140.739126",
+      "channel_id": "C09BCFUL03",
+      "channel_name": "beacon-fulfillment-scope",
+      "decision_timestamp": "2026-04-27T15:19:00Z",
+      "status": "final_current",
+      "summary": "Customer care neither changes item quantities nor splits orders into separate shipments; quantity asks become cancel-and-reorder, delay asks go to the carrier flow.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1777305227.481669"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1777303140.739126"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1777307591.758692"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1777310050.387010"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1777312486.164799"
+        }
+      ],
+      "authoritative_fact_ids": [
+        "cannot_change_order_quantity",
+        "cannot_split_shipments"
+      ],
+      "evidence_phrases": {
+        "cannot_change_order_quantity": "does not change item quantities on an order",
+        "cannot_split_shipments": "does not split an order into separate shipments"
+      }
+    },
+    {
+      "arc_id": "profile_email",
+      "decision_id": "EM1",
+      "thread_key": "decision_em1_workshop",
+      "thread_ts": "1772207520.181792",
+      "channel_id": "C09BCIDN04",
+      "channel_name": "beacon-identity-profile",
+      "decision_timestamp": "2026-02-27T15:52:00Z",
+      "status": "superseded",
+      "summary": "Verified typo-grade email corrections allowed in the assisted flow after the identity check.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1772209258.280401"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1772211790.239053"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1772213413.229787"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1772207520.181792"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1772215826.945488"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "a verified email correction is fine after the identity check",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_em1_takeover",
+        "thread_ts": "1773836820.386321",
+        "timestamp": "2026-03-18T12:27:00Z",
+        "trigger_summary": "Log review caught an attempted account takeover routed through the verified email-correction path."
+      }
+    },
+    {
+      "arc_id": "profile_email",
+      "decision_id": "EM2",
+      "thread_key": "decision_em2_pause",
+      "thread_ts": "1774029780.898687",
+      "channel_id": "C09BCIDN04",
+      "channel_name": "beacon-identity-profile",
+      "decision_timestamp": "2026-03-20T18:03:00Z",
+      "status": "superseded",
+      "summary": "Email corrections on hold; requests queue to the specialist desk during the account-security review.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1774031413.966998"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1774033687.572655"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1774035902.677053"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1774029780.898687"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1774038229.363752"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "email corrections are on hold",
+      "reopened_by": {
+        "mode": "inline_successor_root",
+        "trigger_summary": "The pulled-forward account-security review closed with its finding."
+      }
+    },
+    {
+      "arc_id": "profile_email",
+      "decision_id": "EM3",
+      "thread_key": "decision_em3_final",
+      "thread_ts": "1775831160.969354",
+      "channel_id": "C09BCIDN04",
+      "channel_name": "beacon-identity-profile",
+      "decision_timestamp": "2026-04-10T14:26:00Z",
+      "status": "final_current",
+      "summary": "Profile email cannot be changed by customer care.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1775833140.835893"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1775835593.998766"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1775838031.065654"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1775831160.969354"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1775840395.508139"
+        }
+      ],
+      "authoritative_fact_ids": [
+        "cannot_change_profile_email"
+      ],
+      "evidence_phrases": {
+        "cannot_change_profile_email": "the email address on a profile cannot be changed by customer care"
+      }
+    }
+  ],
+  "notes": [
+    "Section-scoped view of eval_manifest.json; the delivered capture is shared by three retail sections."
+  ]
+}

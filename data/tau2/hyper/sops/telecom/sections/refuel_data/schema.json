@@ -1,0 +1,364 @@
+{
+  "id": "telecom_refuel_data_policy_fact_schema_001",
+  "domain": "telecom",
+  "display_name": "Refuel a line's data",
+  "global_rules_path": "tau2/hyper/sops/telecom/global_rules.json",
+  "section_id": "refuel_data",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/telecom_sop.md",
+    "heading": "## Data Refueling"
+  },
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": [
+      {
+        "section_id": "customer_identity",
+        "fact_ids": [
+          "identify_customer_before_technical_support",
+          "open_account_for_carrier_side_information",
+          "open_account_for_carrier_side_change",
+          "carrier_side_workflow_examples",
+          "lookup_account_or_line_by_phone_number",
+          "phone_lookup_covers_contact_and_line_numbers",
+          "lookup_account_by_customer_id",
+          "lookup_account_by_name_requires_dob",
+          "dob_required_for_verification",
+          "account_change_requires_identity_line_and_confirmation"
+        ],
+        "relationship": "global_prerequisite",
+        "description": "Usage review and refueling are carrier-side work that starts only after the customer and affected line are identified."
+      },
+      {
+        "section_id": "service_foundations",
+        "fact_ids": [
+          "can_add_one_time_data_refuel",
+          "can_guide_customer_side_checks",
+          "data_blocked_at_or_above_limit_plus_refueled",
+          "customer_records_contents",
+          "records_are_source_of_truth_for_account_decisions",
+          "ground_responses_in_customer_reports_records_and_phone_checks",
+          "responses_concise_accurate_no_speculation",
+          "one_customer_care_action_at_a_time",
+          "wait_for_result_before_next_step",
+          "carrier_side_change_requires_exact_explanation_and_confirmation",
+          "close_case_only_after_final_check_shows_resolved",
+          "speed_test_fails_without_mobile_data"
+        ],
+        "relationship": "shared_reference",
+        "description": "Refueling uses the shared data-availability arithmetic, record model, confirmation controls, and speed-test semantics."
+      }
+    ]
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "refuel_data",
+        "label": "Refuel a line's data",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "exhaustion_check",
+        "label": "Verify the line has exhausted available data",
+        "kind": "blocking_gate",
+        "parent_id": "refuel_data",
+        "order": 1,
+        "fact_ids": [
+          "exhausted_data_blocks_data_despite_signal",
+          "check_usage_and_plan_before_refuel",
+          "explain_exhausted_when_at_or_above_available"
+        ]
+      },
+      {
+        "id": "refuel_offer",
+        "label": "Offer refueling instead of a plan change",
+        "kind": "decision",
+        "parent_id": "refuel_data",
+        "order": 2,
+        "fact_ids": [
+          "offer_refuel_versus_plan_change",
+          "skip_offer_when_amount_already_agreed"
+        ]
+      },
+      {
+        "id": "refuel_terms",
+        "label": "Size and price the refuel",
+        "kind": "product_rule",
+        "parent_id": "refuel_data",
+        "order": 3,
+        "fact_ids": [
+          "total_refueled_data_may_not_exceed_two_gb",
+          "charge_is_per_gb_price_times_amount"
+        ]
+      },
+      {
+        "id": "refuel_confirmation",
+        "label": "Confirm the GB amount and dollar charge",
+        "kind": "confirmation_gate",
+        "parent_id": "refuel_data",
+        "order": 4,
+        "fact_ids": [
+          "confirm_gb_amount_and_dollar_charge"
+        ]
+      },
+      {
+        "id": "apply_refuel",
+        "label": "Apply the refuel",
+        "kind": "record_mutation",
+        "parent_id": "refuel_data",
+        "order": 5,
+        "fact_ids": [
+          "apply_refuel_after_confirmation"
+        ]
+      },
+      {
+        "id": "post_refuel_verification",
+        "label": "Rerun the speed test",
+        "kind": "verification_gate",
+        "parent_id": "refuel_data",
+        "order": 6,
+        "fact_ids": [
+          "rerun_speed_test_after_refuel"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "refuel_offer",
+        "type": "requires",
+        "target_id": "exhaustion_check"
+      },
+      {
+        "source_id": "refuel_confirmation",
+        "type": "uses_input_from",
+        "target_id": "refuel_terms"
+      },
+      {
+        "source_id": "apply_refuel",
+        "type": "requires",
+        "target_id": "refuel_confirmation"
+      },
+      {
+        "source_id": "post_refuel_verification",
+        "type": "uses_result_from",
+        "target_id": "apply_refuel"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "exhausted_data_blocks_data_despite_signal",
+      "category": "refuel_gate",
+      "statement": "If a line has used all data available under its plan, mobile data can become unavailable even when the phone has signal."
+    },
+    {
+      "id": "check_usage_and_plan_before_refuel",
+      "category": "refuel_gate",
+      "statement": "Check the line's data usage and plan after the customer and affected line are identified."
+    },
+    {
+      "id": "explain_exhausted_when_at_or_above_available",
+      "category": "refuel_gate",
+      "statement": "If used data is at or above the plan limit plus any previously refueled data, explain that the line has exhausted available data."
+    },
+    {
+      "id": "offer_refuel_versus_plan_change",
+      "category": "refuel_offer",
+      "statement": "Ask whether the customer wants to refuel data instead of changing plans."
+    },
+    {
+      "id": "skip_offer_when_amount_already_agreed",
+      "category": "refuel_offer",
+      "statement": "If the customer has already agreed to a specific refuel amount, continue without re-asking whether they want to refuel instead of changing plans."
+    },
+    {
+      "id": "total_refueled_data_may_not_exceed_two_gb",
+      "category": "refuel_terms",
+      "statement": "The total amount refueled on a line may not exceed 2 GB; check any data already refueled and do not apply an amount that would take the total above 2 GB."
+    },
+    {
+      "id": "charge_is_per_gb_price_times_amount",
+      "category": "refuel_terms",
+      "statement": "The refuel charge is calculated from the plan's per-GB refuel price and the requested amount."
+    },
+    {
+      "id": "confirm_gb_amount_and_dollar_charge",
+      "category": "refuel_confirmation",
+      "statement": "Before applying the refuel, confirm both the GB amount and the dollar charge with the customer."
+    },
+    {
+      "id": "apply_refuel_after_confirmation",
+      "category": "refuel_apply",
+      "statement": "After the GB amount and the dollar charge are confirmed, apply the refuel."
+    },
+    {
+      "id": "rerun_speed_test_after_refuel",
+      "category": "refuel_verification",
+      "statement": "After applying the refuel, ask the customer to rerun the speed test."
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/telecom/hard_bundle_001/refuel_data_transformation_pack.json"
+    }
+  ],
+  "transformations": [
+    {
+      "id": "telecom_refuel_data_explicit_rules",
+      "representation": "explicit_rules"
+    },
+    {
+      "id": "telecom_refuel_data_care_console_recording",
+      "representation": "interactive_screen_recording",
+      "stub_path": "tau2/hyper/sops/telecom/sections/refuel_data/bundles/recording_communications_automation/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/refuel_data/interactive_screen_recording_001_data_refuel/assisted_data_refuel.mp4",
+          "kit_filename": "care_console_walkthrough.mp4",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/refuel_data/interactive_screen_recording_001_data_refuel/timeline.md",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/refuel_data/interactive_screen_recording_001_data_refuel/eval_manifest.json",
+          "duration_seconds": 58,
+          "included_fact_ids": [
+            "check_usage_and_plan_before_refuel",
+            "apply_refuel_after_confirmation",
+            "rerun_speed_test_after_refuel"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "telecom_refuel_data_email_archive",
+      "representation": "email_thread_archive",
+      "stub_path": "tau2/hyper/sops/telecom/sections/refuel_data/bundles/recording_communications_automation/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/telecom/sections/refuel_data/email_thread_archive_001/eval_manifest.json",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/refuel_data/email_thread_archive_001/thread_01.eml",
+          "kit_filename": "refuel_decisions_01.eml",
+          "included_fact_ids": [
+            "skip_offer_when_amount_already_agreed",
+            "confirm_gb_amount_and_dollar_charge"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/refuel_data/email_thread_archive_001/thread_02.eml",
+          "kit_filename": "refuel_decisions_02.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/refuel_data/email_thread_archive_001/thread_03.eml",
+          "kit_filename": "refuel_decisions_03.eml",
+          "included_fact_ids": []
+        }
+      ]
+    },
+    {
+      "id": "telecom_refuel_data_support_transcripts",
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/telecom/sections/refuel_data/bundles/recording_communications_automation/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/refuel_data/support_transcripts_001/case_001.md",
+          "included_fact_ids": [
+            "exhausted_data_blocks_data_despite_signal",
+            "explain_exhausted_when_at_or_above_available"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/refuel_data/support_transcripts_001/case_002.md",
+          "included_fact_ids": [
+            "offer_refuel_versus_plan_change"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/refuel_data/support_transcripts_001/case_003.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/refuel_data/support_transcripts_001/case_004.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/refuel_data/support_transcripts_001/case_005.md",
+          "included_fact_ids": []
+        }
+      ]
+    },
+    {
+      "id": "telecom_refuel_data_helpdesk_export",
+      "representation": "helpdesk_automation_export",
+      "stub_path": "tau2/hyper/sops/telecom/sections/refuel_data/bundles/recording_communications_automation/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/telecom/sections/refuel_data/helpdesk_automation_export_001/eval_manifest.json",
+      "fact_map_path": "tau2/hyper/sops/telecom/sections/refuel_data/helpdesk_automation_export_001/fact_map.json",
+      "object_adjudication_path": "tau2/hyper/sops/telecom/sections/refuel_data/helpdesk_automation_export_001/object_adjudication.csv",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/refuel_data/helpdesk_automation_export_001/authored_export.json",
+          "kit_filename": "northline_refuel_data_admin_export_2026-08-08.zip",
+          "display_name": "northline_refuel_data_admin_export_2026-08-08.zip",
+          "included_fact_ids": [
+            "total_refueled_data_may_not_exceed_two_gb",
+            "charge_is_per_gb_price_times_amount"
+          ]
+        }
+      ]
+    }
+  ],
+  "transformation_bundles": [
+    {
+      "id": "refuel_data_recording_communications_automation",
+      "description": "A Care Console recording owns the usage check, confirmation-gated application, and post-write verification while showing blocked over-limit and unconfirmed attempts; email owns the agreed-intent and final-readback decisions; support cases own exhaustion and choice explanation; and the production helpdesk export owns the cumulative limit and deterministic pricing rule among realistic administrative noise.",
+      "stub_path": "tau2/hyper/sops/telecom/sections/refuel_data/bundles/recording_communications_automation/stub.md",
+      "fact_ids": [
+        "exhausted_data_blocks_data_despite_signal",
+        "check_usage_and_plan_before_refuel",
+        "explain_exhausted_when_at_or_above_available",
+        "offer_refuel_versus_plan_change",
+        "skip_offer_when_amount_already_agreed",
+        "total_refueled_data_may_not_exceed_two_gb",
+        "charge_is_per_gb_price_times_amount",
+        "confirm_gb_amount_and_dollar_charge",
+        "apply_refuel_after_confirmation",
+        "rerun_speed_test_after_refuel"
+      ],
+      "members": [
+        {
+          "transformation_id": "telecom_refuel_data_care_console_recording",
+          "primary": true,
+          "authoritative_fact_ids": [
+            "check_usage_and_plan_before_refuel",
+            "apply_refuel_after_confirmation",
+            "rerun_speed_test_after_refuel"
+          ]
+        },
+        {
+          "transformation_id": "telecom_refuel_data_email_archive",
+          "authoritative_fact_ids": [
+            "skip_offer_when_amount_already_agreed",
+            "confirm_gb_amount_and_dollar_charge"
+          ]
+        },
+        {
+          "transformation_id": "telecom_refuel_data_support_transcripts",
+          "authoritative_fact_ids": [
+            "exhausted_data_blocks_data_despite_signal",
+            "explain_exhausted_when_at_or_above_available",
+            "offer_refuel_versus_plan_change"
+          ],
+          "depends_on_fact_ids": [
+            "check_usage_and_plan_before_refuel",
+            "confirm_gb_amount_and_dollar_charge",
+            "total_refueled_data_may_not_exceed_two_gb"
+          ]
+        },
+        {
+          "transformation_id": "telecom_refuel_data_helpdesk_export",
+          "authoritative_fact_ids": [
+            "total_refueled_data_may_not_exceed_two_gb",
+            "charge_is_per_gb_price_times_amount"
+          ]
+        }
+      ]
+    }
+  ]
+}

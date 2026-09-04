@@ -1,0 +1,2226 @@
+{
+ "id": "cc_replacements_deep_join_ledger_001",
+ "author_side_only": true,
+ "design_contract": "docs/banking-hard-cc-replacements-plan.md",
+ "axis": "referential depth: keyed indirection + cross-artifact certification joins; history stays flat, nothing delivered is false - mis-joins produce wrong answers from true rows",
+ "vocabulary_ban_reminder": "nothing delivered may say join/hop/binding/registry/key chain/mis-join; keys appear as ordinary operational identifiers",
+ "key_classes": {
+  "card_tier_code": {
+   "grammar": "CT-[EMP][0-9]",
+   "binding_registry": "website/pages/screen_010_card_directory_2025-11-09.html (card product directory: every product -> tier code, incl. products outside the replacement schedule)",
+   "keys": {
+    "CT-E1": {
+     "binds": "current entry tier (Bronze Rewards, Bronze Rewards Card, EcoCard, Business Bronze, Business Bronze Rewards Card)",
+     "fact_relevant": true
+    },
+    "CT-E2": {
+     "binds": "legacy entry tier, closed to new issuance (Silver Classic, Everyday Card) - still serviced, same entry-tier schedule treatment via directory note",
+     "fact_relevant": false
+    },
+    "CT-M1": {
+     "binds": "current mid tier (Silver Rewards, Silver Rewards Card, Business Silver, Business Silver Rewards Card, Green Rewards, Green Rewards Card, Silver Zoom, Silver Zoom Card)",
+     "fact_relevant": true
+    },
+    "CT-M2": {
+     "binds": "mid tier, invitation-only (Gold Starter, Cobalt Preferred) - not listed on the public fee rows; directory marks them schedule-equivalent to CT-M1",
+     "fact_relevant": false
+    },
+    "CT-P1": {
+     "binds": "premium tier and above (Gold, Gold Rewards Card, Business Gold Rewards Card, Platinum, Platinum Rewards Card, Business Platinum Rewards Card, Diamond Elite, Diamond Elite Card)",
+     "fact_relevant": true
+    },
+    "CT-P2": {
+     "binds": "private-banking premium (Onyx Reserve) - serviced by a dedicated desk, replacement schedule not applicable per directory note",
+     "fact_relevant": false
+    },
+    "CT-X1": {
+     "binds": "retired products (Voyager Card, Voyager Plus) - replacements no longer issued; upgrade path instead",
+     "fact_relevant": false
+    },
+    "CT-S1": {
+     "binds": "secured cards (Foundation Secured) - replacement handled through the secured-card desk, standard schedule not applicable",
+     "fact_relevant": false
+    }
+   },
+   "near_miss_pairs": [
+    [
+     "CT-E1",
+     "CT-E2"
+    ],
+    [
+     "CT-M1",
+     "CT-M2"
+    ],
+    [
+     "CT-P1",
+     "CT-P2"
+    ]
+   ],
+   "trap_names": "EcoCard is CT-E1 despite green branding; Green Rewards is CT-M1; Silver Zoom is CT-M1 despite the premium-sounding name; Silver Classic is CT-E2 (legacy entry) despite the silver name; Gold Starter is CT-M2 (mid) despite the gold name"
+  },
+  "error_rule_id": {
+   "grammar": "ERR-(5765|7291)-[0-9]{3}",
+   "binding_registry": "api_pack/authored_contract.json error_rules table (native class: ERR-5765-400/401/403/504 exist in core); the order tool's own ERR-7291-* rules live in a zero-fact KB quick-reference article (context)",
+   "keys": {
+    "ERR-7291-400": {
+     "binds": "order tool: malformed argument set",
+     "fact_relevant": false
+    },
+    "ERR-7291-403": {
+     "binds": "order tool: role lacks permission",
+     "fact_relevant": false
+    },
+    "ERR-7291-409": {
+     "binds": "order tool: open replacement already exists",
+     "fact_relevant": false
+    },
+    "ERR-7291-429": {
+     "binds": "order tool: rate limited, retry-safe",
+     "fact_relevant": false
+    },
+    "ERR-5765-400": {
+     "binds": "malformed / invalid credit_card_account_id",
+     "fact_relevant": true
+    },
+    "ERR-5765-401": {
+     "binds": "authentication expired or missing",
+     "fact_relevant": true
+    },
+    "ERR-5765-403": {
+     "binds": "role lacks tool permission",
+     "fact_relevant": true
+    },
+    "ERR-5765-404": {
+     "binds": "account resolves but replacement-order history not provisioned (legacy cores) - NOT an empty-success, NOT retry-safe",
+     "fact_relevant": true
+    },
+    "ERR-5765-409": {
+     "binds": "concurrent replacement submission conflict",
+     "fact_relevant": false
+    },
+    "ERR-5765-503": {
+     "binds": "orders-store shard failover in progress, retry-safe",
+     "fact_relevant": false
+    },
+    "ERR-5765-504": {
+     "binds": "gateway timeout, retry-safe",
+     "fact_relevant": true
+    }
+   },
+   "near_miss_pairs": [
+    [
+     "ERR-5765-401",
+     "ERR-5765-403"
+    ],
+    [
+     "ERR-5765-404",
+     "ERR-5765-400"
+    ],
+    [
+     "ERR-5765-503",
+     "ERR-5765-504"
+    ],
+    [
+     "ERR-5765-403",
+     "ERR-7291-403"
+    ]
+   ]
+  },
+  "endpoint_version": {
+   "grammar": "v1\\.[0-9](-rc)?",
+   "binding_registry": "api_pack/authored_contract.json version_lifecycle table (v1.2 superseded 2025-09-24, v1.3 production, v1.4-rc non-production review)",
+   "keys": {
+    "v1.0": {
+     "binds": "pre-gateway pilot (card-services batch job, 2024), archived in lifecycle table only",
+     "fact_relevant": false
+    },
+    "v1.1": {
+     "binds": "first gateway release (2025-02-19), superseded: bare array of records, no envelope, no latest_event_at; no-pending-orders returned HTTP 404 - the legacy shape old saved examples still show",
+     "fact_relevant": true
+    },
+    "v1.2": {
+     "binds": "superseded (2025-05-07): envelope with echoed credit_card_account_id, latest_event_at added, empty orders collection became the success shape",
+     "fact_relevant": true
+    },
+    "v1.3": {
+     "binds": "production contract since 2025-09-24: 504 behavior documented, card-level Postman example, empty-success clarified",
+     "fact_relevant": true
+    },
+    "v1.4-rc": {
+     "binds": "review candidate: adds cancellation_reason; NOT production, behaviors must not be relied on",
+     "fact_relevant": false
+    }
+   },
+   "near_miss_pairs": [
+    [
+     "v1.1",
+     "v1.2"
+    ],
+    [
+     "v1.2",
+     "v1.3"
+    ],
+    [
+     "v1.3",
+     "v1.4-rc"
+    ]
+   ]
+  },
+  "helpdesk_object_id": {
+   "grammar": "(MAC-5[0-9]{3}|TRG-3[0-9]{3}|CON-[A-Z]+-[0-9]+|FLD-8[0-9]{2})",
+   "binding_registry": "helpdesk/authored_export.json (macros / triggers / policy_contracts / fields tables; ids instance-global across banking)",
+   "keys": {
+    "MAC-5244": {
+     "binds": "replacement order case documentation scaffold (native)",
+     "fact_relevant": true
+    },
+    "MAC-5240": {
+     "binds": "ineligible replacement next-steps note (native)",
+     "fact_relevant": true
+    },
+    "MAC-5108": {
+     "binds": "expedite-everything macro, retired (native)",
+     "fact_relevant": false
+    },
+    "MAC-5251": {
+     "binds": "closure-precheck outcome note (timestamp + outcome into case record)",
+     "fact_relevant": true
+    },
+    "MAC-5263": {
+     "binds": "delivery-tracking status update note",
+     "fact_relevant": false
+    },
+    "TRG-3301": {
+     "binds": "replacement tag -> replacement queue view (native)",
+     "fact_relevant": false
+    },
+    "TRG-3318": {
+     "binds": "missing fee acknowledgement -> flag for review (native)",
+     "fact_relevant": true
+    },
+    "TRG-3140": {
+     "binds": "auto-expedite on fraud keyword, retired (native)",
+     "fact_relevant": false
+    },
+    "TRG-3327": {
+     "binds": "second replacement request while one open -> block + route to review",
+     "fact_relevant": true
+    },
+    "CON-DTOOL-9": {
+     "binds": "discoverable tool access contract: unlock conditions, role scope, environment (native)",
+     "fact_relevant": true
+    },
+    "CON-RPLC-12": {
+     "binds": "replacement order tool argument contract (native)",
+     "fact_relevant": true
+    },
+    "CON-CASE-5": {
+     "binds": "replacement case record completeness contract (native)",
+     "fact_relevant": true
+    },
+    "FLD-831": {
+     "binds": "replacement_reason option fraud_suspected (native)",
+     "fact_relevant": true
+    },
+    "FLD-832": {
+     "binds": "replacement_reason option lost (native)",
+     "fact_relevant": true
+    },
+    "FLD-833": {
+     "binds": "replacement_reason option stolen (native)",
+     "fact_relevant": true
+    },
+    "FLD-834": {
+     "binds": "replacement_reason option damaged (native)",
+     "fact_relevant": true
+    },
+    "FLD-836": {
+     "binds": "replacement_reason option expired (native)",
+     "fact_relevant": true
+    },
+    "FLD-837": {
+     "binds": "replacement_reason option other (native)",
+     "fact_relevant": true
+    },
+    "FLD-829": {
+     "binds": "replacement_reason option not_received - deactivated 2025-08-02, description says folded into other",
+     "fact_relevant": false
+    },
+    "FLD-838": {
+     "binds": "shipping_speed option standard (native)",
+     "fact_relevant": true
+    },
+    "FLD-839": {
+     "binds": "shipping_speed option expedited (native)",
+     "fact_relevant": true
+    },
+    "FLD-830": {
+     "binds": "fee_acknowledged checkbox (native)",
+     "fact_relevant": true
+    },
+    "FLD-835": {
+     "binds": "next_step text field (native; CON-CASE-5 required)",
+     "fact_relevant": true
+    },
+    "FLD-851": {
+     "binds": "precheck_outcome case field (deep, per CCR-OPS-208 documentation gate)",
+     "fact_relevant": true
+    },
+    "FLD-852": {
+     "binds": "precheck_timestamp case field (deep)",
+     "fact_relevant": true
+    },
+    "VIEW-1024": {
+     "binds": "replacement orders view (native)",
+     "fact_relevant": false
+    },
+    "VIEW-1031": {
+     "binds": "fee review view (native)",
+     "fact_relevant": false
+    },
+    "VIEW-980": {
+     "binds": "aging card cases view (native)",
+     "fact_relevant": false
+    },
+    "SLA-RPLC-STD": {
+     "binds": "replacement request handling SLA (native)",
+     "fact_relevant": false
+    },
+    "SLA-STD-CARD": {
+     "binds": "standard card-support response SLA (native; deliberately instance-global)",
+     "fact_relevant": false
+    },
+    "FLD-846": {
+     "binds": "tracking_number free-text field",
+     "fact_relevant": false
+    },
+    "FLD-848": {
+     "binds": "address_verified checkbox",
+     "fact_relevant": false
+    },
+    "FLD-853": {
+     "binds": "delivery_exception dropdown",
+     "fact_relevant": false
+    },
+    "FLD-861": {
+     "binds": "fee_waiver_code field (retention desk only)",
+     "fact_relevant": false
+    },
+    "MAC-5218": {
+     "binds": "delivery-exception apology + reship note",
+     "fact_relevant": false
+    },
+    "MAC-5270": {
+     "binds": "travel-notice cross-sell note",
+     "fact_relevant": false
+    },
+    "TRG-3310": {
+     "binds": "expedite tag -> logistics queue view",
+     "fact_relevant": false
+    },
+    "TRG-3333": {
+     "binds": "delivery-exception tag -> logistics escalation",
+     "fact_relevant": false
+    }
+   },
+   "near_miss_pairs": [
+    [
+     "FLD-837",
+     "FLD-829"
+    ],
+    [
+     "MAC-5244",
+     "MAC-5251"
+    ],
+    [
+     "TRG-3318",
+     "TRG-3327"
+    ],
+    [
+     "CON-RPLC-12",
+     "CON-DTOOL-9"
+    ]
+   ]
+  },
+  "board_node_id": {
+   "grammar": "CCR-OPS-208/N[0-9]{2}",
+   "binding_registry": "flowcharts/sources/* (CCR-OPS-208 closure-precheck board: numbered nodes; adjacent severity board is context)",
+   "keys": {
+    "CCR-OPS-208/N01": {
+     "binds": "locate credit_card_account_id from account record",
+     "fact_relevant": true
+    },
+    "CCR-OPS-208/N02": {
+     "binds": "invoke get_pending_replacement_orders_5765",
+     "fact_relevant": true
+    },
+    "CCR-OPS-208/N03": {
+     "binds": "review response: empty-valid vs orders present",
+     "fact_relevant": true
+    },
+    "CCR-OPS-208/N04": {
+     "binds": "document result in case record",
+     "fact_relevant": true
+    },
+    "CCR-OPS-208/N05": {
+     "binds": "per-order finality walk",
+     "fact_relevant": true
+    },
+    "CCR-OPS-208/N06": {
+     "binds": "hold-and-monitor branch",
+     "fact_relevant": true
+    },
+    "CCR-OPS-208/N07": {
+     "binds": "escalation branch to support engineering",
+     "fact_relevant": false
+    },
+    "CCR-OPS-214/N01": {
+     "binds": "adjacent severity board (context): intake severity sort",
+     "fact_relevant": false
+    },
+    "CCR-OPS-214/N02": {
+     "binds": "severity board: card-compromise fast lane",
+     "fact_relevant": false
+    },
+    "CCR-OPS-214/N03": {
+     "binds": "severity board: bulk-reissue event path",
+     "fact_relevant": false
+    },
+    "CCR-OPS-214/N04": {
+     "binds": "severity board: logistics exception loop",
+     "fact_relevant": false
+    },
+    "CCR-OPS-214/N05": {
+     "binds": "severity board: wrap-up and reporting",
+     "fact_relevant": false
+    }
+   },
+   "near_miss_pairs": [
+    [
+     "CCR-OPS-208/N03",
+     "CCR-OPS-208/N05"
+    ],
+    [
+     "CCR-OPS-208",
+     "CCR-OPS-214"
+    ]
+   ]
+  },
+  "order_status": {
+   "grammar": "(pending|printed|shipped|delivered|cancelled|returned)",
+   "binding_registry": "api_pack/authored_contract.json status_semantics table: finality column (final: delivered, cancelled; non-final: pending, shipped); the ops ledger extract's own columns block declares the fulfillment-side vocabulary (adds printed, returned), and the pack's record notes say the tool's vocabulary is open-ended by design",
+   "keys": {
+    "pending": {
+     "binds": "non-final",
+     "fact_relevant": true
+    },
+    "shipped": {
+     "binds": "non-final (physical delivery outstanding)",
+     "fact_relevant": true
+    },
+    "delivered": {
+     "binds": "final",
+     "fact_relevant": true
+    },
+    "cancelled": {
+     "binds": "final",
+     "fact_relevant": true
+    },
+    "printed": {
+     "binds": "fulfillment-internal (card produced, not yet with the carrier); appears in the ops extract only, never certified final - a closure reader must treat it as not-clearly-final",
+     "fact_relevant": false
+    },
+    "returned": {
+     "binds": "fulfillment-internal (carrier handed the shipment back); looks done in a ledger sort but is neither delivered nor cancelled",
+     "fact_relevant": false
+    }
+   },
+   "near_miss_pairs": [
+    [
+     "shipped",
+     "delivered"
+    ],
+    [
+     "printed",
+     "pending"
+    ],
+    [
+     "returned",
+     "delivered"
+    ]
+   ]
+  }
+ },
+ "floors": {
+  "certify_2_plus_min": 20,
+  "certify_3_min": 8,
+  "locate_only_max": 18,
+  "near_miss_per_registry_min": 2,
+  "key_reuse_min": 2,
+  "distinct_keys_min": 40,
+  "fact_irrelevant_key_share_min": 0.45,
+  "cross_family_fact_share_min": 0.6
+ },
+ "class_counts": {
+  "certify-1": [
+   "F005",
+   "F008",
+   "F011",
+   "F012",
+   "F020",
+   "F022",
+   "F025",
+   "F026",
+   "F028",
+   "F029",
+   "F030",
+   "F032",
+   "F038",
+   "F039",
+   "F040",
+   "F041",
+   "F047",
+   "F049",
+   "F052",
+   "F053",
+   "F054",
+   "F055",
+   "F056",
+   "F060",
+   "F061",
+   "F066",
+   "F069",
+   "F073",
+   "F075"
+  ],
+  "certify-2": [
+   "F006",
+   "F013",
+   "F014",
+   "F015",
+   "F024",
+   "F031",
+   "F042",
+   "F043",
+   "F044",
+   "F045",
+   "F048",
+   "F050",
+   "F051",
+   "F062",
+   "F063",
+   "F064",
+   "F068",
+   "F071",
+   "F076"
+  ],
+  "certify-3": [
+   "F021",
+   "F023",
+   "F027",
+   "F057",
+   "F058",
+   "F059",
+   "F070",
+   "F072"
+  ],
+  "locate-only": [
+   "F002",
+   "F003",
+   "F004",
+   "F007",
+   "F009",
+   "F016",
+   "F017",
+   "F018",
+   "F019",
+   "F033",
+   "F034",
+   "F035",
+   "F036",
+   "F037",
+   "F046",
+   "F065",
+   "F067",
+   "F074"
+  ]
+ },
+ "facts": [
+  {
+   "fact_id": "F002",
+   "owner_transformation": "ccrpl_hard_working_sessions_001",
+   "statement": "Before ordering a replacement credit card, the agent must verify the customer's identity using standard verification procedures.",
+   "owner_anchors": [
+    {
+     "family": "meetings",
+     "file": "meeting_01_preorder_calibration.vtt",
+     "anchor": "identity first, with the standard verification procedures"
+    }
+   ],
+   "join_class": "locate-only",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [],
+   "misjoin_trace": null,
+   "notes": "identity-verification duty; spoken in full on the calibration tape; mesh cites CON-CASE-5 for the case-record side"
+  },
+  {
+   "fact_id": "F003",
+   "owner_transformation": "ccrpl_hard_working_sessions_001",
+   "statement": "Before ordering a replacement credit card, the agent must look up the customer's credit card account.",
+   "owner_anchors": [
+    {
+     "family": "meetings",
+     "file": "meeting_01_preorder_calibration.vtt",
+     "anchor": "look up the customer's credit card account"
+    }
+   ],
+   "join_class": "locate-only",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F004",
+   "owner_transformation": "ccrpl_hard_working_sessions_001",
+   "statement": "Before ordering a replacement credit card, the agent must confirm the shipping address with the customer, using either a primary or alternate address and including any unit or suite information.",
+   "owner_anchors": [
+    {
+     "family": "meetings",
+     "file": "meeting_01_preorder_calibration.vtt",
+     "anchor": "you confirm the shipping address with the customer every single time. Primary or alternate, either is fine, and you read back the unit or suite information"
+    }
+   ],
+   "join_class": "locate-only",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [],
+   "misjoin_trace": null,
+   "notes": "primary/alternate address duty stays on tape; the directory page is not involved (addresses are account data, not corpus data)"
+  },
+  {
+   "fact_id": "F005",
+   "owner_transformation": "ccrpl_hard_working_sessions_001",
+   "statement": "Before ordering a replacement credit card, the agent must ask for the replacement reason and record exactly one of: fraud_suspected, lost, stolen, damaged, expired, or other.",
+   "owner_anchors": [
+    {
+     "family": "meetings",
+     "file": "meeting_01_preorder_calibration.vtt",
+     "anchor": "You ask for the replacement reason, and you record exactly one of the six values: fraud_suspected, lost, stolen, damaged, expired, or other."
+    }
+   ],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "FLD-831..834, FLD-836, FLD-837",
+     "resolve_in": "helpdesk export fields table",
+     "purpose": "certify the six current reason options; FLD-829 (not_received) is deactivated and its row says so"
+    }
+   ],
+   "misjoin_trace": "reader who takes the intake dropdown history at face value records not_received as a seventh valid reason; FLD-829's deactivated row (folded into other) refutes it",
+   "notes": null
+  },
+  {
+   "fact_id": "F006",
+   "owner_transformation": "ccrpl_hard_working_sessions_001",
+   "statement": "Before ordering a replacement credit card, the agent must ask whether the customer wants expedited shipping and advise on possible fees by card tier.",
+   "owner_anchors": [
+    {
+     "family": "meetings",
+     "file": "meeting_01_preorder_calibration.vtt",
+     "anchor": "You ask whether the customer wants expedited shipping, and you advise on the possible fees by card tier"
+    }
+   ],
+   "join_class": "certify-2",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CT-E1/CT-M1/CT-P1",
+     "resolve_in": "card product directory",
+     "purpose": "resolve the asked-about card name to its tier code"
+    },
+    {
+     "key": "fee row per CT code",
+     "resolve_in": "fees & delivery page rev 4 (deep replacement)",
+     "purpose": "certify which fee row the advice must quote"
+    }
+   ],
+   "misjoin_trace": "advising the Silver Zoom holder from the premium row ($0) because the name sounds premium; directory binds Silver Zoom -> CT-M1 -> $10 row",
+   "notes": null
+  },
+  {
+   "fact_id": "F007",
+   "owner_transformation": "ccrpl_hard_working_sessions_001",
+   "statement": "Before proceeding with a replacement credit card order, the agent must confirm eligibility for replacement in the knowledge base.",
+   "owner_anchors": [
+    {
+     "family": "meetings",
+     "file": "meeting_01_preorder_calibration.vtt",
+     "anchor": "you confirm eligibility for replacement in the knowledge base"
+    }
+   ],
+   "join_class": "locate-only",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [],
+   "misjoin_trace": null,
+   "notes": "eligibility-confirmation duty; KB router mesh is the locate surface"
+  },
+  {
+   "fact_id": "F008",
+   "owner_transformation": "ccrpl_hard_working_sessions_001",
+   "statement": "The agent must not unlock or call the replacement credit card ordering tool unless the customer is eligible for replacement.",
+   "owner_anchors": [
+    {
+     "family": "meetings",
+     "file": "meeting_01_preorder_calibration.vtt",
+     "anchor": "you do not unlock the ordering tool, and you do not call it, unless the customer is eligible for a replacement"
+    }
+   ],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CON-DTOOL-9",
+     "resolve_in": "helpdesk policy_contracts table",
+     "purpose": "certify the unlock precondition (eligibility confirmed) that the tape's prohibition rests on"
+    }
+   ],
+   "misjoin_trace": "treating unlock as a convenience step that can precede the eligibility check; CON-DTOOL-9's scope row names confirmed eligibility as the unlock condition",
+   "notes": null
+  },
+  {
+   "fact_id": "F009",
+   "owner_transformation": "ccrpl_hard_working_sessions_001",
+   "statement": "If the customer is not eligible for a replacement credit card, the agent must explain next steps per the knowledge base.",
+   "owner_anchors": [
+    {
+     "family": "meetings",
+     "file": "meeting_01_preorder_calibration.vtt",
+     "anchor": "when they're not eligible, you explain the next steps per the knowledge base"
+    }
+   ],
+   "join_class": "locate-only",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F011",
+   "owner_transformation": "ccrpl_hard_website_screenshots_001",
+   "statement": "Standard replacement credit card delivery takes 7\u201310 business days and has no fee for all cardholders.",
+   "owner_anchors": [],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CT-* (all schedule tiers)",
+     "resolve_in": "card product directory",
+     "purpose": "certify that the no-fee standard row spans every schedule tier incl. CT-E2/CT-M2 equivalents"
+    }
+   ],
+   "misjoin_trace": "assuming legacy CT-E2 cards pay a standard-delivery fee because they sit outside the public fee rows; the directory's schedule-equivalence note plus the rev 4 all-tiers row refute it",
+   "notes": null
+  },
+  {
+   "fact_id": "F012",
+   "owner_transformation": "ccrpl_hard_website_screenshots_001",
+   "statement": "Expedited replacement credit card shipping takes 2\u20133 business days.",
+   "owner_anchors": [],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "shipping_speed=expedited",
+     "resolve_in": "helpdesk FLD-839 option row",
+     "purpose": "certify the 2-3 business day window is the expedited option's window, not a promise attached to any fee row"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F013",
+   "owner_transformation": "ccrpl_hard_website_screenshots_001",
+   "statement": "Entry-tier expedited replacement credit card shipping costs $15.00; the exact entry-tier names source-listed for this fee row are Bronze Rewards, Bronze Rewards Card, EcoCard, Business Bronze, and Business Bronze Rewards Card.",
+   "owner_anchors": [],
+   "join_class": "certify-2",
+   "value_rule": "fee row carries the $15.00 value AND the exact five entry-tier names verbatim (fact enumerates them); the CT-E1 key on the row is what the joins certify",
+   "certification_chain": [
+    {
+     "key": "CT-E1",
+     "resolve_in": "card product directory",
+     "purpose": "certify row membership for the asked-about card"
+    },
+    {
+     "key": "CT-E2",
+     "resolve_in": "card product directory schedule-equivalence note",
+     "purpose": "certify that legacy entry cards take the CT-E1 row without being name-listed on it"
+    }
+   ],
+   "misjoin_trace": "quoting the $15 entry fee for Silver Classic by matching 'Silver' to the mid row ($10); directory binds Silver Classic -> CT-E2 -> entry-row treatment",
+   "notes": null
+  },
+  {
+   "fact_id": "F014",
+   "owner_transformation": "ccrpl_hard_website_screenshots_001",
+   "statement": "Mid-tier expedited replacement credit card shipping costs $10.00; the exact mid-tier names source-listed for this fee row are Silver Rewards, Silver Rewards Card, Business Silver, Business Silver Rewards Card, Green Rewards, Green Rewards Card, Silver Zoom, and Silver Zoom Card.",
+   "owner_anchors": [],
+   "join_class": "certify-2",
+   "value_rule": "fee row carries $10.00 and the exact eight mid-tier names verbatim",
+   "certification_chain": [
+    {
+     "key": "CT-M1",
+     "resolve_in": "card product directory",
+     "purpose": "certify membership (Silver Zoom, Green Rewards live here despite their names)"
+    },
+    {
+     "key": "CT-M2",
+     "resolve_in": "card product directory",
+     "purpose": "certify invitation-only mid products take this row though unlisted"
+    }
+   ],
+   "misjoin_trace": "Silver Zoom read as premium (fee $0) or EcoCard read as mid; directory rows refute both",
+   "notes": null
+  },
+  {
+   "fact_id": "F015",
+   "owner_transformation": "ccrpl_hard_website_screenshots_001",
+   "statement": "Premium-tier and above expedited replacement credit card shipping costs $0.00 and is complimentary; the exact premium-tier-and-above names source-listed for this fee row are Gold, Gold Rewards Card, Business Gold Rewards Card, Platinum, Platinum Rewards Card, Business Platinum Rewards Card, Diamond Elite, and Diamond Elite Card.",
+   "owner_anchors": [],
+   "join_class": "certify-2",
+   "value_rule": "fee row carries $0.00/complimentary and the exact eight premium-and-above names verbatim",
+   "certification_chain": [
+    {
+     "key": "CT-P1",
+     "resolve_in": "card product directory",
+     "purpose": "certify membership"
+    },
+    {
+     "key": "CT-P2",
+     "resolve_in": "card product directory dedicated-desk note",
+     "purpose": "certify Onyx Reserve is NOT served by this schedule at all"
+    }
+   ],
+   "misjoin_trace": "extending the complimentary row to Onyx Reserve because it is premium; the directory's CT-P2 note routes it off-schedule",
+   "notes": null
+  },
+  {
+   "fact_id": "F016",
+   "owner_transformation": "ccrpl_hard_support_cases_carrier_001",
+   "statement": "If the replacement reason is fraud_suspected, the agent must strongly recommend expedited shipping to minimize exposure or reduce the window for potential misuse.",
+   "owner_anchors": [
+    {
+     "family": "support_cases",
+     "file": "case_009.md",
+     "anchor": "Since we're marking it fraud_suspected, I strongly recommend expedited shipping \u2014 it reduces the window for potential misuse"
+    }
+   ],
+   "join_class": "locate-only",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F017",
+   "owner_transformation": "ccrpl_hard_support_cases_carrier_001",
+   "statement": "If the replacement reason is stolen, the agent must strongly recommend expedited shipping to minimize exposure or reduce the window for potential misuse.",
+   "owner_anchors": [
+    {
+     "family": "support_cases",
+     "file": "case_003.md",
+     "anchor": "because your card was stolen, I'd strongly recommend the expedited shipping \u2014 it shortens the window anyone has to try misusing anything"
+    }
+   ],
+   "join_class": "locate-only",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F018",
+   "owner_transformation": "ccrpl_hard_support_cases_carrier_001",
+   "statement": "If the replacement reason is fraud_suspected, the agent must remind the customer to review recent transactions for unauthorized activity.",
+   "owner_anchors": [
+    {
+     "family": "support_cases",
+     "file": "case_009.md",
+     "anchor": "review your recent transactions for unauthorized activity \u2014 scroll back over the last two weeks"
+    }
+   ],
+   "join_class": "locate-only",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F019",
+   "owner_transformation": "ccrpl_hard_support_cases_carrier_001",
+   "statement": "If the replacement reason is stolen, the agent must remind the customer to review recent transactions for unauthorized activity.",
+   "owner_anchors": [
+    {
+     "family": "support_cases",
+     "file": "case_003.md",
+     "anchor": "pull up your recent transactions and review them \u2014 everything from the last few days, not just today"
+    }
+   ],
+   "join_class": "locate-only",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F020",
+   "owner_transformation": "ccrpl_hard_support_cases_carrier_001",
+   "statement": "If the customer has upcoming travel or urgent payment needs, expedited shipping can help ensure the customer receives the replacement card within the accelerated timeframe.",
+   "owner_anchors": [
+    {
+     "family": "support_cases",
+     "file": "case_006.md",
+     "anchor": "With your trip coming up, expedited shipping is how we make sure the replacement card is in your hands within the accelerated timeframe"
+    }
+   ],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CT code cited on tape",
+     "resolve_in": "fees & delivery rev 4 keyed rows",
+     "purpose": "the kept call quotes the fee row by tier code; certifying the advice means resolving that code"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F021",
+   "owner_transformation": "ccrpl_hard_helpdesk_export_001",
+   "statement": "After eligibility is confirmed and before calling the order tool, the agent must unlock the discoverable replacement order tool using unlock_discoverable_agent_tool with tool_name order_replacement_credit_card_7291.",
+   "owner_anchors": [
+    {
+     "family": "helpdesk",
+     "file": "authored_export.json",
+     "anchor": "After eligibility is confirmed and before calling the order tool, the agent unlocks the discoverable replacement order tool using unlock_discoverable_agent_tool with tool_name order_replacement_credit_card_7291."
+    }
+   ],
+   "join_class": "certify-3",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CON-DTOOL-9",
+     "resolve_in": "policy_contracts table",
+     "purpose": "unlock contract and its eligibility precondition"
+    },
+    {
+     "key": "access_grants rows",
+     "resolve_in": "helpdesk access_grants table (deep addition)",
+     "purpose": "certify which console roles carry the order-tool grant"
+    },
+    {
+     "key": "tool_catalog rows",
+     "resolve_in": "helpdesk tool_catalog table (deep addition)",
+     "purpose": "certify the unlock duty attaches to 7291 (discoverable) and not to 5765 (directly callable, read-only)"
+    }
+   ],
+   "misjoin_trace": "extending the unlock ritual to get_pending_replacement_orders_5765; the tool_catalog marks it directly callable read-only, no unlock row exists for it",
+   "notes": null
+  },
+  {
+   "fact_id": "F022",
+   "owner_transformation": "ccrpl_hard_helpdesk_export_001",
+   "statement": "After unlocking the discoverable replacement order tool, the agent must call it using call_discoverable_agent_tool with tool_name order_replacement_credit_card_7291.",
+   "owner_anchors": [
+    {
+     "family": "helpdesk",
+     "file": "authored_export.json",
+     "anchor": "After unlocking, the agent calls it using call_discoverable_agent_tool with tool_name order_replacement_credit_card_7291."
+    }
+   ],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CON-RPLC-12",
+     "resolve_in": "policy_contracts wrapper_rule",
+     "purpose": "certify the call_discovered_tool wrapper requirement"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F023",
+   "owner_transformation": "ccrpl_hard_helpdesk_export_001",
+   "statement": "The replacement credit card order tool call must include the customer credit card account identifier, such as account_id or card_id from the account lookup.",
+   "owner_anchors": [
+    {
+     "family": "helpdesk",
+     "file": "authored_export.json",
+     "anchor": "The customer credit card account identifier, such as account_id or card_id from the account lookup."
+    }
+   ],
+   "join_class": "certify-3",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CON-RPLC-12 argument_contract",
+     "resolve_in": "policy_contracts table",
+     "purpose": "required-argument list; its spec says either identifier level resolves for the ORDER tool - true, and the seed of the near-miss"
+    },
+    {
+     "key": "identifier level rows",
+     "resolve_in": "api_pack identifier glossary",
+     "purpose": "certify the either-level allowance is 7291-specific; 5765 is account-level only"
+    },
+    {
+     "key": "ERR-5765-400",
+     "resolve_in": "api_pack error_rules",
+     "purpose": "certify the card-level-identifier failure mode (the 400 rule's condition names card-level identifiers) that makes the distinction load-bearing"
+    }
+   ],
+   "misjoin_trace": "carrying the order tool's either-level allowance over to the pending-orders check; the glossary level column and the 400 rule's condition refute it for 5765",
+   "notes": null
+  },
+  {
+   "fact_id": "F024",
+   "owner_transformation": "ccrpl_hard_helpdesk_export_001",
+   "statement": "The replacement credit card order tool call must include the replacement reason as one of: fraud_suspected, lost, stolen, damaged, expired, or other.",
+   "owner_anchors": [
+    {
+     "family": "helpdesk",
+     "file": "authored_export.json",
+     "anchor": "Exactly one of: fraud_suspected, lost, stolen, damaged, expired, or other."
+    }
+   ],
+   "join_class": "certify-2",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "FLD-831..834, FLD-836, FLD-837",
+     "resolve_in": "fields table",
+     "purpose": "certify the current reason enum"
+    },
+    {
+     "key": "FLD-829",
+     "resolve_in": "fields table status row",
+     "purpose": "certify the deactivated sixth option is not valid"
+    }
+   ],
+   "misjoin_trace": "treating not_received as a valid reason from an old case transcript; FLD-829's deactivated row refutes it",
+   "notes": null
+  },
+  {
+   "fact_id": "F025",
+   "owner_transformation": "ccrpl_hard_helpdesk_export_001",
+   "statement": "The replacement credit card order tool call must include shipping_address as the confirmed address.",
+   "owner_anchors": [
+    {
+     "family": "helpdesk",
+     "file": "authored_export.json",
+     "anchor": "The confirmed address \u2014 primary or alternate as confirmed with the customer in this interaction, including any unit or suite information."
+    }
+   ],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CON-RPLC-12 shipping_address row",
+     "resolve_in": "argument_contract",
+     "purpose": "certify confirmed-address requirement"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F026",
+   "owner_transformation": "ccrpl_hard_helpdesk_export_001",
+   "statement": "The replacement credit card order tool call must include shipping_speed as standard or expedited.",
+   "owner_anchors": [
+    {
+     "family": "helpdesk",
+     "file": "authored_export.json",
+     "anchor": "standard or expedited."
+    }
+   ],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "FLD-838 / FLD-839",
+     "resolve_in": "fields table",
+     "purpose": "certify the two shipping_speed options"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F027",
+   "owner_transformation": "ccrpl_hard_helpdesk_export_001",
+   "statement": "The replacement credit card order tool call must include expedited_fee_acknowledgement with customer consent captured if a fee applies based on card tier.",
+   "owner_anchors": [
+    {
+     "family": "helpdesk",
+     "file": "authored_export.json",
+     "anchor": "Customer consent captured if a fee applies based on card tier."
+    }
+   ],
+   "join_class": "certify-3",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "FLD-830",
+     "resolve_in": "fields table",
+     "purpose": "the fee_acknowledged checkbox"
+    },
+    {
+     "key": "fee row per CT code",
+     "resolve_in": "fees & delivery rev 4",
+     "purpose": "certify which customers have a fee to acknowledge ($0 premium row makes it vacuous)"
+    },
+    {
+     "key": "TRG-3318",
+     "resolve_in": "triggers table",
+     "purpose": "certify the missing-acknowledgement flag that enforces it"
+    }
+   ],
+   "misjoin_trace": "requiring a fee acknowledgement from a CT-P1 holder whose fee is $0; the fee row plus TRG-3318's condition (fee > 0) refute it",
+   "notes": null
+  },
+  {
+   "fact_id": "F028",
+   "owner_transformation": "ccrpl_hard_helpdesk_export_001",
+   "statement": "The replacement credit card order tool call must include notes for any relevant context, such as travel dates, fraud report reference, or delivery instructions.",
+   "owner_anchors": [
+    {
+     "family": "helpdesk",
+     "file": "authored_export.json",
+     "anchor": "Any relevant context, such as travel dates, fraud report reference, or delivery instructions."
+    }
+   ],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CON-CASE-5 required_fields",
+     "resolve_in": "policy_contracts table",
+     "purpose": "certify notes is a completeness field, not optional decoration"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F029",
+   "owner_transformation": "ccrpl_hard_website_screenshots_001",
+   "statement": "When a replacement credit card order is submitted, the current or old card is cancelled for security and can no longer be used for new purchases.",
+   "owner_anchors": [],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "card-level identifier",
+     "resolve_in": "api_pack identifier glossary",
+     "purpose": "certify cancellation applies to the card, not the account"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F030",
+   "owner_transformation": "ccrpl_hard_website_screenshots_001",
+   "statement": "When a replacement credit card is ordered, a new card is created with a different card number and CVV.",
+   "owner_anchors": [],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "card_id vs account_id",
+     "resolve_in": "api_pack identifier glossary",
+     "purpose": "certify the new-number claim is card-level"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F031",
+   "owner_transformation": "ccrpl_hard_website_screenshots_001",
+   "statement": "When a replacement credit card is ordered, the account number remains unchanged, so recurring payments linked to the account continue without interruption.",
+   "owner_anchors": [],
+   "join_class": "certify-2",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "account-level identifier",
+     "resolve_in": "api_pack identifier glossary",
+     "purpose": "certify the account number is the unchanged level"
+    },
+    {
+     "key": "saved-card update duty",
+     "resolve_in": "device_ui checklist (core-kept)",
+     "purpose": "certify the recurring-payments claim coexists with the update-saved-details duty (merchant tokens are card-level)"
+    }
+   ],
+   "misjoin_trace": "telling the customer nothing needs updating because the account number is unchanged; the checklist's update-saved-details step (card-level tokens) refutes the overreach",
+   "notes": null
+  },
+  {
+   "fact_id": "F032",
+   "owner_transformation": "ccrpl_hard_support_cases_carrier_001",
+   "statement": "After submitting a replacement credit card order, the agent must communicate the expected delivery window based on the selected shipping method: standard is 7\u201310 business days and expedited is 2\u20133 business days.",
+   "owner_anchors": [
+    {
+     "family": "support_cases",
+     "file": "case_014.md",
+     "anchor": "with standard delivery the new card arrives in seven to ten business days \u2014 if you'd taken expedited it would be two to three"
+    }
+   ],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "shipping_speed row",
+     "resolve_in": "FLD-838/839 + fees page delivery windows",
+     "purpose": "certify the promised window matches the ordered speed"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F033",
+   "owner_transformation": "ccrpl_hard_support_cases_carrier_001",
+   "statement": "The customer receives an email when the replacement order is placed and another email when the card ships, and after submitting the order the agent must advise the customer to watch or track email for these notifications and updates.",
+   "owner_anchors": [
+    {
+     "family": "support_cases",
+     "file": "case_014.md",
+     "anchor": "you'll get an email now confirming the order was placed, and another email when the card ships \u2014 watch your inbox for both"
+    }
+   ],
+   "join_class": "locate-only",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F034",
+   "owner_transformation": "ccrpl_hard_device_ui_001",
+   "statement": "The customer should follow any activation instructions included with the new replacement card.",
+   "owner_anchors": [
+    {
+     "family": "device_ui",
+     "file": "sources/device_screen_001_post_delivery_checklist_2025-11-08.html",
+     "anchor": "activation instructions included with your new card"
+    }
+   ],
+   "join_class": "locate-only",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F035",
+   "owner_transformation": "ccrpl_hard_device_ui_001",
+   "statement": "After receiving the new replacement card, the customer should update any saved card details with merchants.",
+   "owner_anchors": [
+    {
+     "family": "device_ui",
+     "file": "sources/device_screen_001_post_delivery_checklist_2025-11-08.html",
+     "anchor": "Update saved card details with merchants"
+    }
+   ],
+   "join_class": "locate-only",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F036",
+   "owner_transformation": "ccrpl_hard_support_cases_carrier_001",
+   "statement": "For a fraud_suspected replacement after submission, the agent must remind the customer to review recent transactions and dispute any unauthorized charges in the app or website; the suspected-fraud next-step guidance also instructs the customer to review recent transactions in the Rho-Bank app or website and report any unauthorized charges.",
+   "owner_anchors": [
+    {
+     "family": "support_cases",
+     "file": "case_009.md",
+     "anchor": "review the recent transactions in the Rho-Bank app or website and report any unauthorized charges \u2014 anything new you don't recognize, dispute it right there in the app or on the website"
+    }
+   ],
+   "join_class": "locate-only",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F037",
+   "owner_transformation": "ccrpl_hard_support_cases_carrier_001",
+   "statement": "If the replacement reason is stolen, the agent must remind the customer to review recent transactions and dispute any unauthorized charges in the app or website.",
+   "owner_anchors": [
+    {
+     "family": "support_cases",
+     "file": "case_003.md",
+     "anchor": "review the recent transactions every day or so until the new card lands, and if anything shows up that isn't yours, dispute it right from the app or the website"
+    }
+   ],
+   "join_class": "locate-only",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F038",
+   "owner_transformation": "ccrpl_hard_support_cases_carrier_001",
+   "statement": "After submitting a replacement credit card order, the agent must document the interaction and replacement order details in the customer record.",
+   "owner_anchors": [
+    {
+     "family": "support_cases",
+     "file": "case_014.md",
+     "anchor": "interaction and replacement order details recorded in customer record"
+    }
+   ],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "MAC-5244",
+     "resolve_in": "helpdesk macros table",
+     "purpose": "the documentation duty is executed through the scaffold macro; near-miss MAC-5251 is the closure-precheck note, not the order scaffold"
+    }
+   ],
+   "misjoin_trace": "documenting a replacement order with MAC-5251 (closure-precheck note) because both mention case documentation; MAC-5244's description names the order scaffold",
+   "notes": null
+  },
+  {
+   "fact_id": "F039",
+   "owner_transformation": "ccrpl_hard_slack_captures_001",
+   "statement": "A customer cannot submit another replacement credit card request while an existing replacement request is still being processed.",
+   "owner_anchors": [
+    {
+     "family": "slack",
+     "file": "slack/capture_01.json",
+     "anchor": "cannot submit another replacement request while an existing replacement request is still being processed"
+    }
+   ],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "TRG-3327",
+     "resolve_in": "helpdesk triggers table",
+     "purpose": "the pinned one-at-a-time ruling cites the blocking trigger"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F040",
+   "owner_transformation": "ccrpl_hard_slack_captures_001",
+   "statement": "When an existing replacement request is still being processed, the customer must wait until the current replacement is delivered or cancelled before submitting a new replacement request.",
+   "owner_anchors": [
+    {
+     "family": "slack",
+     "file": "slack/capture_01.json",
+     "anchor": "wait until the current replacement is delivered or cancelled before submitting a new replacement request"
+    }
+   ],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "order_status finality",
+     "resolve_in": "api_pack status_semantics",
+     "purpose": "certify what 'until the current one resolves' means (reaches a final status)"
+    }
+   ],
+   "misjoin_trace": "treating shipped as resolved because the card left the building; the finality column marks shipped non-final",
+   "notes": null
+  },
+  {
+   "fact_id": "F041",
+   "owner_transformation": "ccrpl_hard_website_screenshots_001",
+   "statement": "Replacement credit card requests are limited within a 60-day period to help protect the account.",
+   "owner_anchors": [],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "60-day window row",
+     "resolve_in": "limits FAQ keyed table",
+     "purpose": "window is uniform across tiers; the row spans all CT codes"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F042",
+   "owner_transformation": "ccrpl_hard_website_screenshots_001",
+   "statement": "Entry-tier cardholders are limited to up to 2 replacement credit card requests per 60-day period.",
+   "owner_anchors": [],
+   "join_class": "certify-2",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CT-E1",
+     "resolve_in": "card product directory",
+     "purpose": "membership"
+    },
+    {
+     "key": "limit row CT-E1",
+     "resolve_in": "limits FAQ",
+     "purpose": "the 2-per-60 value"
+    }
+   ],
+   "misjoin_trace": "reading the EcoCard as mid (3) because of the Green Rewards adjacency; directory binds EcoCard -> CT-E1 -> 2",
+   "notes": null
+  },
+  {
+   "fact_id": "F043",
+   "owner_transformation": "ccrpl_hard_website_screenshots_001",
+   "statement": "Mid-tier cardholders are limited to up to 3 replacement credit card requests per 60-day period.",
+   "owner_anchors": [],
+   "join_class": "certify-2",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CT-M1",
+     "resolve_in": "card product directory",
+     "purpose": "membership"
+    },
+    {
+     "key": "limit row CT-M1",
+     "resolve_in": "limits FAQ",
+     "purpose": "the 3-per-60 value"
+    }
+   ],
+   "misjoin_trace": "Silver Classic matched to the mid row by name; directory binds it CT-E2 -> entry treatment (2)",
+   "notes": null
+  },
+  {
+   "fact_id": "F044",
+   "owner_transformation": "ccrpl_hard_website_screenshots_001",
+   "statement": "Premium-tier and above cardholders are limited to up to 4 replacement credit card requests per 60-day period.",
+   "owner_anchors": [],
+   "join_class": "certify-2",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CT-P1",
+     "resolve_in": "card product directory",
+     "purpose": "membership"
+    },
+    {
+     "key": "limit row CT-P1",
+     "resolve_in": "limits FAQ",
+     "purpose": "the 4-per-60 value"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F045",
+   "owner_transformation": "ccrpl_hard_website_screenshots_001",
+   "statement": "A replacement credit card request is rejected or the customer is not eligible when the customer has exceeded the replacement limit for the applicable card tier within the 60-day period.",
+   "owner_anchors": [],
+   "join_class": "certify-2",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "limit row per CT code",
+     "resolve_in": "limits FAQ",
+     "purpose": "the applicable ceiling"
+    },
+    {
+     "key": "request-count rows",
+     "resolve_in": "ledger extract (reconciliation rows instantiate the ceilings)",
+     "purpose": "certify what 'exceeded' looks like against real request histories, incl. rows that fit the rejected flat-3 draft but not the tier ladder"
+    }
+   ],
+   "misjoin_trace": "applying a flat 3-per-60 cutoff (the rejected draft) - it fits some ledger rows; entry-tier rows rejected at the 3rd request within 60 days separate the live ladder from the dead draft",
+   "notes": null
+  },
+  {
+   "fact_id": "F046",
+   "owner_transformation": "ccrpl_hard_website_screenshots_001",
+   "statement": "If the customer believes they have a legitimate need for an additional replacement beyond the tier limit, the next step is to contact customer support to request a manual review of the case.",
+   "owner_anchors": [],
+   "join_class": "locate-only",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [],
+   "misjoin_trace": null,
+   "notes": "manual-review path; FAQ row links the support route"
+  },
+  {
+   "fact_id": "F047",
+   "owner_transformation": "ccrpl_hard_api_pack_001",
+   "statement": "To check whether a credit card account has pending replacement card orders, use the get_pending_replacement_orders_5765 tool.",
+   "owner_anchors": [
+    {
+     "family": "api_pack",
+     "file": "authored_contract.json",
+     "anchor": "To check whether a credit card account has pending replacement card orders, use the get_pending_replacement_orders_5765 tool."
+    }
+   ],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "v1.3",
+     "resolve_in": "version_lifecycle table",
+     "purpose": "certify which contract version is production"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F048",
+   "owner_transformation": "ccrpl_hard_api_pack_001",
+   "statement": "The get_pending_replacement_orders_5765 tool must be called with credit_card_account_id to check for outstanding replacement card orders for that account.",
+   "owner_anchors": [
+    {
+     "family": "api_pack",
+     "file": "authored_contract.json",
+     "anchor": "It must be called with `credit_card_account_id` to check for outstanding replacement card orders for that account."
+    }
+   ],
+   "join_class": "certify-2",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "credit_card_account_id",
+     "resolve_in": "identifier glossary",
+     "purpose": "account-level requirement"
+    },
+    {
+     "key": "ERR-5765-400",
+     "resolve_in": "error_rules",
+     "purpose": "the card-level rejection that enforces it (INVALID_ACCOUNT_ID)"
+    }
+   ],
+   "misjoin_trace": "calling with card_id from the card record; glossary level column + the 400 rule's condition refute",
+   "notes": null
+  },
+  {
+   "fact_id": "F049",
+   "owner_transformation": "ccrpl_hard_email_archive_001",
+   "statement": "The pending replacement order check is important before processing account closures because accounts with pending replacement orders cannot be closed until the replacement is delivered or the order is cancelled.",
+   "owner_anchors": [
+    {
+     "family": "emails",
+     "file": "thread_002.eml",
+     "anchor": "accounts with pending replacement orders cannot be closed until the replacement is delivered or the order is cancelled"
+    }
+   ],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CCR-OPS-208",
+     "resolve_in": "board reference in the directive email",
+     "purpose": "the precheck-before-closure rationale is implemented by the board"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F050",
+   "owner_transformation": "ccrpl_hard_api_pack_001",
+   "statement": "A prerequisite for using get_pending_replacement_orders_5765 is having the correct credit_card_account_id.",
+   "owner_anchors": [
+    {
+     "family": "api_pack",
+     "file": "authored_contract.json",
+     "anchor": "**The correct `credit_card_account_id`.** This is the account-level identifier"
+    }
+   ],
+   "join_class": "certify-2",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "credit_card_account_id",
+     "resolve_in": "identifier glossary",
+     "purpose": "which lookup yields it"
+    },
+    {
+     "key": "account lookup step",
+     "resolve_in": "CCR-OPS-208/N01",
+     "purpose": "certify the procedure sources the id from the account record"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F051",
+   "owner_transformation": "ccrpl_hard_api_pack_001",
+   "statement": "A prerequisite for using get_pending_replacement_orders_5765 is having permission to use the tool.",
+   "owner_anchors": [
+    {
+     "family": "api_pack",
+     "file": "authored_contract.json",
+     "anchor": "**Permission to use the tool.** The gateway checks the caller's role"
+    }
+   ],
+   "join_class": "certify-2",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "ERR-5765-403",
+     "resolve_in": "error_rules",
+     "purpose": "permission failure mode"
+    },
+    {
+     "key": "role scope",
+     "resolve_in": "helpdesk CON-DTOOL-9 roles",
+     "purpose": "which roles carry the permission"
+    }
+   ],
+   "misjoin_trace": "reading ERR-5765-401 (auth) as the permission rule; the 401/403 pair is the native near-miss",
+   "notes": null
+  },
+  {
+   "fact_id": "F052",
+   "owner_transformation": "ccrpl_hard_api_pack_001",
+   "statement": "A prerequisite for using get_pending_replacement_orders_5765 is being able to authenticate to the internal environment where the tool is available.",
+   "owner_anchors": [
+    {
+     "family": "api_pack",
+     "file": "authored_contract.json",
+     "anchor": "the caller must be able to authenticate to the internal environment where the tool is available"
+    }
+   ],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "ERR-5765-401",
+     "resolve_in": "error_rules",
+     "purpose": "authentication prerequisite"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F053",
+   "owner_transformation": "ccrpl_hard_flowcharts_001",
+   "statement": "The first procedure step for checking pending replacement card orders is to locate the credit_card_account_id for the account being reviewed.",
+   "owner_anchors": [],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CCR-OPS-208/N01",
+     "resolve_in": "board node + api_pack glossary citation",
+     "purpose": "id sourced from account record"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F054",
+   "owner_transformation": "ccrpl_hard_flowcharts_001",
+   "statement": "The second procedure step for checking pending replacement card orders is to invoke get_pending_replacement_orders_5765 with the credit_card_account_id parameter.",
+   "owner_anchors": [],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CCR-OPS-208/N02",
+     "resolve_in": "board node + version_lifecycle citation",
+     "purpose": "invoke the production endpoint"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F055",
+   "owner_transformation": "ccrpl_hard_flowcharts_001",
+   "statement": "The third procedure step for checking pending replacement card orders is to review the response for any outstanding replacement card orders.",
+   "owner_anchors": [],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CCR-OPS-208/N03",
+     "resolve_in": "board node + response schema citation",
+     "purpose": "review against empty-valid semantics"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F056",
+   "owner_transformation": "ccrpl_hard_flowcharts_001",
+   "statement": "The fourth procedure step for checking pending replacement card orders is to document the result in the customer's case notes before proceeding with any account closure steps.",
+   "owner_anchors": [],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CCR-OPS-208/N04",
+     "resolve_in": "board node + MAC-5251 citation",
+     "purpose": "document via the closure-precheck note macro"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F057",
+   "owner_transformation": "ccrpl_hard_api_pack_001",
+   "statement": "A successful get_pending_replacement_orders_5765 response contains orders as a collection of replacement order records, or an empty collection if none are pending.",
+   "owner_anchors": [
+    {
+     "family": "api_pack",
+     "file": "authored_contract.json",
+     "anchor": "A successful response contains `orders` as a collection of replacement order records, or an empty collection if none are pending."
+    }
+   ],
+   "join_class": "certify-3",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "v1.3",
+     "resolve_in": "version_lifecycle",
+     "purpose": "production shape"
+    },
+    {
+     "key": "orders collection",
+     "resolve_in": "response schema v1.3",
+     "purpose": "collection-of-records shape"
+    },
+    {
+     "key": "v1.1 delta row",
+     "resolve_in": "version delta table",
+     "purpose": "certify the shape claim is the production envelope, not the superseded v1.1 bare array"
+    }
+   ],
+   "misjoin_trace": "describing the response from a v1.1-era saved example (bare array, no latest_event_at); the delta table marks the envelope and the field as introduced in v1.2",
+   "notes": null
+  },
+  {
+   "fact_id": "F058",
+   "owner_transformation": "ccrpl_hard_api_pack_001",
+   "statement": "Typical replacement order record fields are order_id, status with examples including pending, shipped, delivered, and cancelled, created_at, latest_event_at, and optional notes.",
+   "owner_anchors": [
+    {
+     "family": "api_pack",
+     "file": "authored_contract.json",
+     "anchor": "examples include `pending`, `shipped`, `delivered`, `cancelled`"
+    }
+   ],
+   "join_class": "certify-3",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "field table rows",
+     "resolve_in": "shared field table",
+     "purpose": "order_id / status / created_at / latest_event_at / notes"
+    },
+    {
+     "key": "order_status enum",
+     "resolve_in": "status_semantics table",
+     "purpose": "the four status values"
+    },
+    {
+     "key": "latest_event_at introduced-in row",
+     "resolve_in": "version delta table",
+     "purpose": "certify the field list is the production list (latest_event_at introduced in v1.2, absent from v1.1 examples)"
+    }
+   ],
+   "misjoin_trace": "adding cancellation_reason to the typical fields from the v1.4-rc sheet; its introduced-in row marks it non-production",
+   "notes": null
+  },
+  {
+   "fact_id": "F059",
+   "owner_transformation": "ccrpl_hard_api_pack_001",
+   "statement": "A successful get_pending_replacement_orders_5765 response with an empty collection of orders is the source's empty-collection case for no pending orders.",
+   "owner_anchors": [
+    {
+     "family": "api_pack",
+     "file": "authored_contract.json",
+     "anchor": "A 200 with an empty `orders` collection is the successful no-pending-orders response."
+    }
+   ],
+   "join_class": "certify-3",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "v1.3 empty-success row",
+     "resolve_in": "response schema",
+     "purpose": "empty orders collection = valid no-pending state"
+    },
+    {
+     "key": "v1.1 delta row",
+     "resolve_in": "version delta table",
+     "purpose": "certify why the claim needs stating (v1.1 returned HTTP 404 when nothing was pending)"
+    },
+    {
+     "key": "ERR-5765-404",
+     "resolve_in": "error_rules",
+     "purpose": "certify the unprovisioned-history error that must NOT be read as empty-success"
+    }
+   ],
+   "misjoin_trace": "treating an ERR-5765-404 as no-pending-orders; the error rule marks it unprovisioned history, escalation path applies",
+   "notes": null
+  },
+  {
+   "fact_id": "F060",
+   "owner_transformation": "ccrpl_hard_flowcharts_001",
+   "statement": "If there are no pending replacement orders, the agent may proceed with account closure checks per standard procedures.",
+   "owner_anchors": [],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CCR-OPS-208/N03 empty branch",
+     "resolve_in": "board + response schema",
+     "purpose": "empty-valid gate to closure checks"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F061",
+   "owner_transformation": "ccrpl_hard_flowcharts_001",
+   "statement": "If one or more replacement orders are returned, treat the account as having pending replacement activity unless every order is clearly delivered or cancelled.",
+   "owner_anchors": [],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CCR-OPS-208/N05",
+     "resolve_in": "board node",
+     "purpose": "orders-present branch"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F062",
+   "owner_transformation": "ccrpl_hard_flowcharts_001",
+   "statement": "If one or more replacement orders are returned, do not proceed with account closure until every returned replacement order is clearly delivered or cancelled.",
+   "owner_anchors": [],
+   "join_class": "certify-2",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CCR-OPS-208/N05 exit condition",
+     "resolve_in": "board node",
+     "purpose": "'every order final' gate"
+    },
+    {
+     "key": "order_status finality",
+     "resolve_in": "api_pack status_semantics",
+     "purpose": "certify final set"
+    }
+   ],
+   "misjoin_trace": "closing with one order shipped; finality column marks shipped non-final",
+   "notes": null
+  },
+  {
+   "fact_id": "F063",
+   "owner_transformation": "ccrpl_hard_flowcharts_001",
+   "statement": "If any replacement order is in a non-final state, such as pending or shipped, consider the account blocked from closure.",
+   "owner_anchors": [],
+   "join_class": "certify-2",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "non-final statuses",
+     "resolve_in": "status_semantics",
+     "purpose": "pending/shipped classification"
+    },
+    {
+     "key": "CCR-OPS-208/N06",
+     "resolve_in": "board hold-and-monitor node",
+     "purpose": "the consider-open consequence"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F064",
+   "owner_transformation": "ccrpl_hard_flowcharts_001",
+   "statement": "If all replacement orders are final with delivered or cancelled status, proceed with standard closure checks.",
+   "owner_anchors": [],
+   "join_class": "certify-2",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "final statuses",
+     "resolve_in": "status_semantics",
+     "purpose": "delivered/cancelled classification"
+    },
+    {
+     "key": "CCR-OPS-208/N05 exit",
+     "resolve_in": "board",
+     "purpose": "proceed-with-closure consequence"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F065",
+   "owner_transformation": "ccrpl_hard_email_archive_001",
+   "statement": "If replacement orders are pending, inform the relevant team that the account cannot be closed.",
+   "owner_anchors": [
+    {
+     "family": "emails",
+     "file": "thread_002.eml",
+     "anchor": "inform the relevant team that the account cannot be closed"
+    }
+   ],
+   "join_class": "locate-only",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F066",
+   "owner_transformation": "ccrpl_hard_email_archive_001",
+   "statement": "If replacement orders are pending, monitor until delivery or confirm cancellation of the order.",
+   "owner_anchors": [
+    {
+     "family": "emails",
+     "file": "thread_002.eml",
+     "anchor": "monitor until delivery or confirm cancellation of the order"
+    }
+   ],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "order_status finality",
+     "resolve_in": "api_pack status_semantics",
+     "purpose": "'until delivery or cancellation' = until a final status"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F067",
+   "owner_transformation": "ccrpl_hard_flowcharts_001",
+   "statement": "If no replacement orders are pending, note the check outcome in the case record and continue with the closure process.",
+   "owner_anchors": [],
+   "join_class": "locate-only",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F068",
+   "owner_transformation": "ccrpl_hard_kb_export_001",
+   "statement": "If get_pending_replacement_orders_5765 returns an invalid credit_card_account_id issue, re-verify that the identifier is an account-level identifier, not a card-level identifier.",
+   "owner_anchors": [
+    {
+     "family": "kb",
+     "file": "knowledge_archive.html",
+     "anchor": "Re-verify that the identifier is an account-level identifier, not a card-level identifier."
+    }
+   ],
+   "join_class": "certify-2",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "ERR-5765-400",
+     "resolve_in": "api_pack error_rules",
+     "purpose": "the invalid-id rule the triage row answers (condition includes card-level identifiers)"
+    },
+    {
+     "key": "account-level identifier",
+     "resolve_in": "identifier glossary",
+     "purpose": "the re-verify target"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F069",
+   "owner_transformation": "ccrpl_hard_kb_export_001",
+   "statement": "If get_pending_replacement_orders_5765 returns an invalid credit_card_account_id issue, confirm the identifier format and source.",
+   "owner_anchors": [
+    {
+     "family": "kb",
+     "file": "knowledge_archive.html",
+     "anchor": "Confirm the identifier format and source"
+    }
+   ],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "identifier format row",
+     "resolve_in": "api_pack glossary",
+     "purpose": "format + source confirmation"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F070",
+   "owner_transformation": "ccrpl_hard_kb_export_001",
+   "statement": "If get_pending_replacement_orders_5765 returns permission or access denied, ensure the agent's role has access to run get_pending_replacement_orders_5765.",
+   "owner_anchors": [
+    {
+     "family": "kb",
+     "file": "knowledge_archive.html",
+     "anchor": "Ensure your role has access to run <code>get_pending_replacement_orders_5765</code>"
+    }
+   ],
+   "join_class": "certify-3",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "ERR-5765-403",
+     "resolve_in": "error_rules",
+     "purpose": "permission rule"
+    },
+    {
+     "key": "CON-DTOOL-9 roles",
+     "resolve_in": "helpdesk policy_contracts",
+     "purpose": "which roles have access"
+    },
+    {
+     "key": "environment column",
+     "resolve_in": "helpdesk export",
+     "purpose": "production contract is the binding one"
+    }
+   ],
+   "misjoin_trace": "fixing a 403 by re-authenticating (the 401 remedy); the 401/403 rule pair plus the roles table separate the remedies",
+   "notes": null
+  },
+  {
+   "fact_id": "F071",
+   "owner_transformation": "ccrpl_hard_kb_export_001",
+   "statement": "If get_pending_replacement_orders_5765 returns permission or access denied, re-authenticate if the session may have expired.",
+   "owner_anchors": [
+    {
+     "family": "kb",
+     "file": "knowledge_archive.html",
+     "anchor": "Re-authenticate if the session may have expired."
+    }
+   ],
+   "join_class": "certify-2",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "ERR-5765-401",
+     "resolve_in": "error_rules",
+     "purpose": "auth rule"
+    },
+    {
+     "key": "re-auth remedy row",
+     "resolve_in": "KB triage row citing the rule",
+     "purpose": "remedy binding"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F072",
+   "owner_transformation": "ccrpl_hard_kb_export_001",
+   "statement": "If get_pending_replacement_orders_5765 returns an empty response that is not the valid successful response with an empty orders collection, or returns an ambiguous response, retry the call.",
+   "owner_anchors": [
+    {
+     "family": "kb",
+     "file": "knowledge_archive.html",
+     "anchor": "an empty body that isn't the valid successful empty-collection response, or a response you can't read confidently.</p>\n<ol>\n<li>Retry the call once.</li>"
+    }
+   ],
+   "join_class": "certify-3",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "v1.3 empty-success",
+     "resolve_in": "response schema",
+     "purpose": "what the valid empty looks like"
+    },
+    {
+     "key": "v1.1 delta row",
+     "resolve_in": "version delta table",
+     "purpose": "why ambiguous empties exist at all (legacy bare-array/404 shapes in old saved examples)"
+    },
+    {
+     "key": "ERR-5765-503/504",
+     "resolve_in": "error_rules",
+     "purpose": "retry-safe classification that licenses the retry"
+    }
+   ],
+   "misjoin_trace": "retrying an ERR-5765-404 because 'retry on ambiguity'; 404 is not retry-safe (unprovisioned history), the retry-safe column licenses only 503/504",
+   "notes": null
+  },
+  {
+   "fact_id": "F073",
+   "owner_transformation": "ccrpl_hard_kb_export_001",
+   "statement": "If ambiguity in a get_pending_replacement_orders_5765 response persists after retry, escalate to the support engineering queue with the call context and the credit_card_account_id.",
+   "owner_anchors": [
+    {
+     "family": "kb",
+     "file": "knowledge_archive.html",
+     "anchor": "If ambiguity persists after retry, escalate to the support engineering queue with the call context and the <code>credit_card_account_id</code> you used."
+    }
+   ],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CCR-OPS-208/N07",
+     "resolve_in": "board escalation node",
+     "purpose": "the escalate-after-retry path"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F074",
+   "owner_transformation": "ccrpl_hard_email_archive_001",
+   "statement": "Best practice is to always run the pending replacement order check immediately before initiating any account closure workflow.",
+   "owner_anchors": [
+    {
+     "family": "emails",
+     "file": "thread_002.eml",
+     "anchor": "run the pending replacement order check immediately before initiating any account closure workflow"
+    }
+   ],
+   "join_class": "locate-only",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F075",
+   "owner_transformation": "ccrpl_hard_email_archive_001",
+   "statement": "Best practice is to record the timestamp and outcome of the pending replacement order check in the customer record.",
+   "owner_anchors": [
+    {
+     "family": "emails",
+     "file": "thread_002.eml",
+     "anchor": "record the timestamp and outcome of the pending replacement order check in the customer record"
+    }
+   ],
+   "join_class": "certify-1",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "FLD-851 / FLD-852",
+     "resolve_in": "helpdesk fields table (deep rows)",
+     "purpose": "the outcome+timestamp fields the practice writes into"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  },
+  {
+   "fact_id": "F076",
+   "owner_transformation": "ccrpl_hard_flowcharts_001",
+   "statement": "If multiple replacement orders appear, review each status and proceed only when all orders are delivered or cancelled.",
+   "owner_anchors": [],
+   "join_class": "certify-2",
+   "value_rule": "complete fact value stays inside the owning family's artifacts; hops certify applicability only",
+   "certification_chain": [
+    {
+     "key": "CCR-OPS-208/N05 per-order walk",
+     "resolve_in": "board",
+     "purpose": "review each status"
+    },
+    {
+     "key": "order_status finality",
+     "resolve_in": "status_semantics",
+     "purpose": "all-final requirement"
+    }
+   ],
+   "misjoin_trace": null,
+   "notes": null
+  }
+ ],
+ "family_envelopes": {
+  "website": {
+   "deep_action": "replace fees&delivery rev4 (screen_001), limits FAQ (screen_002), what-happens rev B (screen_003) with plan-code-keyed versions; ADD screen_010 card product directory HC-4340 (binding registry, zero facts); keep 6 core pages",
+   "growth": "1.3-1.5x visible words in replaced pages (measured); +1 page",
+   "delivered": 10
+  },
+  "helpdesk": {
+   "deep_action": "replace authored_export.json: tool_catalog + access_grants GRT-2201..2204, MAC-5251/5263/5218/5270, TRG-3327/3310/3333, FLD-829 deactivated + precheck/logistics/waiver fields, VIEW-1037/1042, dated change_log, cover email extended",
+   "growth": "~2.6x objects (measured 34->89)",
+   "delivered": 1
+  },
+  "api_pack": {
+   "deep_action": "replace authored_contract.json: version_lifecycle v1.0-v1.4-rc, version_deltas, status_lifecycle finality, error_rules + 404/409/503/504 rows with retry_safe column, worked_responses incl. v1.1 bare array and both 404s, identifier/era/retry/roles notes, 2 postman items",
+   "growth": "~1.9x words (measured 1069->2016)",
+   "delivered": 1
+  },
+  "kb": {
+   "deep_action": "replace knowledge_archive.html: 4 -> 9 articles (adds KB-3395 plan codes, KB-3403 precheck documentation, KB-3418 era reading, KB-3421 7291 quick reference, KB-3424 SUPENG intake); routers stay zero-fact and honest",
+   "growth": "~2.2x viswords (measured 934->2037)",
+   "delivered": 1
+  },
+  "ledger": {
+   "deep_action": "replace extract: plan_code + exception_ref columns on all rows; per-tier request histories that instantiate the 60-day ceilings, exception cluster CS-31958, legacy-core account absent by design",
+   "growth": "~2.3x rows (measured 35->81)",
+   "delivered": 1
+  },
+  "flowcharts": {
+   "deep_action": "replace CCR-OPS-208 board (node ids N01-N07, cite lines to contract tables, escalation node, re-check loop); ADD CCR-OPS-214 intake severity board (context, zero facts); keep 3 core boards",
+   "growth": "~1.7x visible words on CCR-OPS-208 (measured); +1 board",
+   "delivered": 5
+  },
+  "meetings": {
+   "deep_action": "ADD meeting_08 lookup office hours (2025-11-07): support-engineering walk of the version-era, 404-vs-404, and retry-license chains; ADD meeting_09 November ops review (2025-11-14): reads the extended quarterly extract aloud (plan-code mix, exception column, fulfillment statuses); both own nothing and defer to the tables",
+   "growth": "+2 sessions (6.9 min office hours, ~21 min ops review)",
+   "delivered": 9
+  },
+  "support_cases": {
+   "deep_action": "replace 1 (case_006, denser: plan-code read + trailing-60d beat); ADD 4 (case_017 phone: Silver Zoom fee mis-join corrected on-call; case_018 internal chat: ERR-5765-404 legacy-core escalation; case_019 chat: CT-E1 over-limit manual review CS-31958; case_020 chat+desk: zero-fact delivery-exception saga on the logistics apparatus)",
+   "growth": "~1.5x family words",
+   "delivered": 20
+  },
+  "emails": {
+   "deep_action": "ADD 3 threads: thread_015 card-directory publication (2025-05-27), thread_016 era-reading of old lookup responses (2025-10-14), thread_017 FLD-829 not_received deactivation (2025-08-01); thread_018 quarterly-extract column asks (2025-11-12); all zero-fact warrant/interlock threads",
+   "growth": "+5 threads (7/6/5/8/7 msgs)",
+   "delivered": 19
+  },
+  "slack": {
+   "deep_action": "replace 2 captures: capture_03 + near-miss Silver Classic thread adjudicated by the directory (2025-11-05); capture_04 + legacy-core prefix and two-tools-403 conflation thread (2025-11-10)",
+   "growth": "capture_03 29->47 distinct msgs, capture_04 40->54 distinct msgs",
+   "delivered": 4
+  },
+  "device_ui": {
+   "deep_action": "core-kept (checklist facts do not want keys)",
+   "growth": "1x",
+   "delivered": 3
+  }
+ }
+}

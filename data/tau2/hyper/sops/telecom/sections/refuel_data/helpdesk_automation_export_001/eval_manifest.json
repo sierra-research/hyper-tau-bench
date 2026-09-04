@@ -1,0 +1,52 @@
+{
+  "representation": "helpdesk_automation_export",
+  "filename": "northline_refuel_data_admin_export_2026-08-08.zip",
+  "authoritative_fact_ids": [
+    "total_refueled_data_may_not_exceed_two_gb",
+    "charge_is_per_gb_price_times_amount"
+  ],
+  "authority_rule": {
+    "environment": "production",
+    "active": true,
+    "status": "published",
+    "effective_at_or_before": "2026-08-08T16:30:00-07:00",
+    "superseded_by": null,
+    "usage_role": "corroborating_only"
+  },
+  "fact_evidence": [
+    {
+      "fact_id": "total_refueled_data_may_not_exceed_two_gb",
+      "file": "triggers.json",
+      "object_ids": [
+        "TRG-7562",
+        "CONTRACT-2346"
+      ],
+      "locations": [
+        "triggers[]",
+        "policy_contracts[]"
+      ],
+      "claim_type": "deterministic_machine_rule",
+      "files": [
+        "triggers.json",
+        "policy_contracts.json"
+      ]
+    },
+    {
+      "fact_id": "charge_is_per_gb_price_times_amount",
+      "file": "macros.json",
+      "object_ids": [
+        "MAC-5203",
+        "TRG-7566"
+      ],
+      "locations": [
+        "macros[]",
+        "triggers[]"
+      ],
+      "claim_type": "deterministic_machine_rule",
+      "files": [
+        "macros.json",
+        "triggers.json"
+      ]
+    }
+  ]
+}

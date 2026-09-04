@@ -1,0 +1,901 @@
+{
+  "format": "api_contract_pack_v1",
+  "release": {
+    "contract_id": "CONTRACT-CARDCORE-V42",
+    "environment": "production",
+    "status": "published",
+    "current": true,
+    "effective_at": "2025-10-14T09:00:00-04:00",
+    "snapshot_at": "2025-10-14T14:05:00-04:00",
+    "superseded_by": null
+  },
+  "cover_email": "From: Margit Alcott <margit.alcott@rhobank.com>\nTo: Card Ops Agents <card-ops-agents@rhobank.com>\nCc: Support Engineering <support-eng@rhobank.com>\nDate: Tue, 14 Oct 2025 14:12:41 -0400\nSubject: CardCore servicing contract pack v4.2 (production)\nMessage-ID: <a71c40e9d2b8f356c04e@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nTeam,\n\nCardCore v4.2 is live on the production gateway as of this morning and\nthis pack is the published contract for the four servicing services the\ndesk touches: the debit-card lookup, the bank-account transaction\nhistory, the credit-card accounts lookup, and the dispute filing\nservice. The OpenAPI document, the Postman collection, and the\nerror-behavior table in this pack are exported from the gateway's\ncontract registry, not typed by hand.\n\nTwo things worth reading before you file this away: the record-contract\nnotes call out the date-format split between the card records and the\ntransaction records (it bites every new integration), and the\nerror-behavior table is the authority on what an empty result means -\nfor both lookups an empty collection is a successful answer, not a\nfailure.\n\nDocumentation Control keeps the library copy; work from the library,\nnot a saved download.\n\nMargit Alcott\nCard Operations Documentation Control\n",
+  "openapi": {
+    "openapi": "3.1.0",
+    "info": {
+      "title": "CardCore — card servicing services",
+      "version": "4.2.0",
+      "description": "Production contract for the CardCore servicing services used by card-support consoles: get_debit_cards_by_account_id_7823, get_bank_account_transactions_9173, get_credit_card_accounts_by_user, and file_debit_card_transaction_dispute_6281. Read services return records exactly as stored; the dispute filing service is the only write in this pack."
+    },
+    "servers": [
+      {
+        "url": "https://gateway.internal.rhobank.com/cardcore/v4",
+        "description": "Internal production gateway. Reachable only from the internal environment; callers must be able to authenticate to the internal environment where the tools are available."
+      }
+    ],
+    "paths": {
+      "/debit-cards": {
+        "get": {
+          "operationId": "get_debit_cards_by_account_id_7823",
+          "summary": "Retrieve all debit cards associated with a specific checking account",
+          "description": "get_debit_cards_by_account_id_7823(account_id) retrieves all debit cards associated with a specific checking account. The service only returns debit cards for checking accounts; savings accounts do not have debit cards. When to call it, per the desk conventions: before ordering a new debit card, to check whether the customer already has an active or pending card for the account; before activating a debit card, to look up issue_reason to determine which activation tool to use; before freezing or unfreezing a debit card, to verify the card exists and check its current status; before closing a debit card, to confirm card_id and current status; and for customer inquiries about debit-card details, whenever the customer asks about their debit card.",
+          "parameters": [
+            {
+              "name": "account_id",
+              "in": "query",
+              "required": true,
+              "description": "The checking account whose debit cards are being retrieved. Account-level identifier.",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "security": [
+            {
+              "internalSso": [
+                "cardcore.debit-cards.read"
+              ]
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success. The body carries cards as a collection of debit card records. The lookup may return multiple cards when the account has card history, such as old closed cards plus a current active card. If no debit cards exist for the account, the lookup returns an empty list — a successful answer, not an error.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/DebitCardsResponse"
+                  },
+                  "examples": {
+                    "card_history": {
+                      "summary": "Account with card history",
+                      "value": {
+                        "account_id": "RB-4471820",
+                        "cards": [
+                          {
+                            "card_id": "DBC-880341",
+                            "account_id": "RB-4471820",
+                            "user_id": "USR-273904",
+                            "card_number_last_4": "6613",
+                            "status": "ACTIVE",
+                            "issue_reason": "expired",
+                            "expiration_date": "09/29",
+                            "date_issued": "2025-09-12",
+                            "card_design": "CLASSIC",
+                            "daily_purchase_limit": 2500,
+                            "daily_atm_limit": 500
+                          },
+                          {
+                            "card_id": "DBC-771205",
+                            "account_id": "RB-4471820",
+                            "user_id": "USR-273904",
+                            "card_number_last_4": "9024",
+                            "status": "CLOSED",
+                            "issue_reason": "first_card",
+                            "expiration_date": "09/25",
+                            "date_issued": "2021-09-03",
+                            "card_design": "CLASSIC",
+                            "daily_purchase_limit": 2500,
+                            "daily_atm_limit": 500
+                          }
+                        ]
+                      }
+                    },
+                    "empty": {
+                      "summary": "No cards on the account (successful empty list)",
+                      "value": {
+                        "account_id": "RB-9932744",
+                        "cards": []
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "INVALID_ACCOUNT_ID — the identifier did not resolve to a bank account. See the error-behavior table."
+            },
+            "401": {
+              "description": "UNAUTHENTICATED — no valid internal-environment session accompanies the call."
+            },
+            "403": {
+              "description": "PERMISSION_DENIED — the authenticated caller's role lacks cardcore.debit-cards.read."
+            }
+          }
+        }
+      },
+      "/bank-accounts/transactions": {
+        "get": {
+          "operationId": "get_bank_account_transactions_9173",
+          "summary": "Retrieve transaction history for a checking or savings bank account",
+          "description": "get_bank_account_transactions_9173(account_id) retrieves transaction history for a customer's checking or savings bank account. Returns all transactions for that account in reverse chronological order, most recent first. Desk use: reviewing account activity, verifying fees, checking applied rebates, and investigating customer inquiries.",
+          "parameters": [
+            {
+              "name": "account_id",
+              "in": "query",
+              "required": true,
+              "description": "The bank account ID. Checking and savings accounts both resolve.",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "security": [
+            {
+              "internalSso": [
+                "cardcore.transactions.read"
+              ]
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success. Transactions are returned in reverse chronological order, most recent first. An account with no activity returns an empty collection.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/TransactionsResponse"
+                  },
+                  "examples": {
+                    "recent_activity": {
+                      "summary": "Recent account activity",
+                      "value": {
+                        "account_id": "RB-4471820",
+                        "transactions": [
+                          {
+                            "transaction_id": "TXN-90417738",
+                            "account_id": "RB-4471820",
+                            "date": "10/31/2025",
+                            "description": "GREENWAY MARKET #204",
+                            "amount": -84.19,
+                            "type": "debit_card_purchase",
+                            "status": "pending"
+                          },
+                          {
+                            "transaction_id": "TXN-90416002",
+                            "account_id": "RB-4471820",
+                            "date": "10/30/2025",
+                            "description": "PAYROLL — STACKPOLE ENG",
+                            "amount": 2410.55,
+                            "type": "direct_deposit",
+                            "status": "posted"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "INVALID_ACCOUNT_ID — the identifier did not resolve to a bank account. See the error-behavior table."
+            },
+            "401": {
+              "description": "UNAUTHENTICATED — no valid internal-environment session accompanies the call."
+            },
+            "403": {
+              "description": "PERMISSION_DENIED — the authenticated caller's role lacks cardcore.transactions.read."
+            }
+          }
+        }
+      },
+      "/credit-card-accounts": {
+        "get": {
+          "operationId": "get_credit_card_accounts_by_user",
+          "summary": "Retrieve credit card accounts for a customer",
+          "description": "get_credit_card_accounts_by_user retrieves any credit card accounts for the customer. Returns all active and closed credit card accounts for the customer. Desk use includes the lost-or-stolen cross-product security check, where the agent needs to know what credit cards the customer holds before offering protection.",
+          "parameters": [
+            {
+              "name": "user_id",
+              "in": "query",
+              "required": true,
+              "description": "The customer's unique identifier.",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "security": [
+            {
+              "internalSso": [
+                "cardcore.credit-accounts.read"
+              ]
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success. All active and closed credit card accounts for the customer; a customer with no credit relationship returns an empty collection.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CreditCardAccountsResponse"
+                  },
+                  "examples": {
+                    "one_card": {
+                      "summary": "Customer with one active card",
+                      "value": {
+                        "user_id": "USR-311876",
+                        "credit_card_accounts": [
+                          {
+                            "credit_card_account_id": "CCA-58-2277",
+                            "product_name": "Rho Everyday Card",
+                            "status": "ACTIVE",
+                            "card_number_last_4": "2277",
+                            "opened": "2022-04-19"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "UNAUTHENTICATED — no valid internal-environment session accompanies the call."
+            },
+            "403": {
+              "description": "PERMISSION_DENIED — the authenticated caller's role lacks cardcore.credit-accounts.read."
+            },
+            "404": {
+              "description": "UNKNOWN_USER — the user_id did not resolve. See the error-behavior table."
+            }
+          }
+        }
+      },
+      "/debit-card-disputes": {
+        "post": {
+          "operationId": "file_debit_card_transaction_dispute_6281",
+          "summary": "File a debit-card transaction dispute",
+          "description": "file_debit_card_transaction_dispute_6281 files a dispute against a debit-card transaction. The only write service in this pack. Intake conduct — what qualifies, category selection, and the card-action decision — is governed by the dispute desk's operating records, not this contract; this page carries the argument contract the gateway enforces.",
+          "security": [
+            {
+              "internalSso": [
+                "cardcore.disputes.write"
+              ]
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DisputeFiling"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Dispute created. The body returns the dispute record with its assigned dispute_id.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "required": [
+                      "dispute_id",
+                      "status"
+                    ],
+                    "properties": {
+                      "dispute_id": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "UNAUTHENTICATED — no valid internal-environment session accompanies the call."
+            },
+            "403": {
+              "description": "PERMISSION_DENIED — the authenticated caller's role lacks cardcore.disputes.write."
+            },
+            "422": {
+              "description": "MISSING_REQUIRED_FIELD — one or more required dispute fields absent or malformed. See the error-behavior table."
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "DebitCardsResponse": {
+          "type": "object",
+          "required": [
+            "account_id",
+            "cards"
+          ],
+          "properties": {
+            "account_id": {
+              "type": "string"
+            },
+            "cards": {
+              "type": "array",
+              "description": "Collection of debit card records for the checking account. Empty when no debit cards exist for the account.",
+              "items": {
+                "$ref": "#/components/schemas/DebitCardRecord"
+              }
+            }
+          }
+        },
+        "DebitCardRecord": {
+          "type": "object",
+          "required": [
+            "card_id",
+            "account_id",
+            "user_id",
+            "card_number_last_4",
+            "status",
+            "issue_reason",
+            "expiration_date",
+            "date_issued",
+            "card_design",
+            "daily_purchase_limit",
+            "daily_atm_limit"
+          ],
+          "properties": {
+            "card_id": {
+              "type": "string",
+              "description": "The unique identifier for the debit card."
+            },
+            "account_id": {
+              "type": "string",
+              "description": "The checking account ID the card is linked to."
+            },
+            "user_id": {
+              "type": "string",
+              "description": "The user ID of the cardholder."
+            },
+            "card_number_last_4": {
+              "type": "string",
+              "description": "The last 4 digits of the card number. For privacy, full debit-card numbers are never returned by the lookup; only the last 4 digits are returned."
+            },
+            "status": {
+              "type": "string",
+              "description": "The current status of the card.",
+              "enum": [
+                "ACTIVE",
+                "PENDING",
+                "FROZEN",
+                "CLOSED"
+              ]
+            },
+            "issue_reason": {
+              "type": "string",
+              "description": "Why the card was issued.",
+              "enum": [
+                "new_account",
+                "first_card",
+                "lost",
+                "stolen",
+                "fraud",
+                "expired",
+                "damaged",
+                "upgrade",
+                "bank_reissue"
+              ]
+            },
+            "expiration_date": {
+              "type": "string",
+              "description": "Card expiration in MM/YY format.",
+              "pattern": "^(0[1-9]|1[0-2])/[0-9]{2}$"
+            },
+            "date_issued": {
+              "type": "string",
+              "format": "date",
+              "description": "The date the card was issued."
+            },
+            "card_design": {
+              "type": "string",
+              "description": "The design type of the card.",
+              "enum": [
+                "CLASSIC",
+                "PREMIUM",
+                "CUSTOM"
+              ]
+            },
+            "daily_purchase_limit": {
+              "type": "number",
+              "description": "The maximum daily purchase amount."
+            },
+            "daily_atm_limit": {
+              "type": "number",
+              "description": "The maximum daily ATM withdrawal amount."
+            }
+          }
+        },
+        "TransactionsResponse": {
+          "type": "object",
+          "required": [
+            "account_id",
+            "transactions"
+          ],
+          "properties": {
+            "account_id": {
+              "type": "string"
+            },
+            "transactions": {
+              "type": "array",
+              "description": "All transactions for the account in reverse chronological order, most recent first.",
+              "items": {
+                "$ref": "#/components/schemas/TransactionRecord"
+              }
+            }
+          }
+        },
+        "TransactionRecord": {
+          "type": "object",
+          "required": [
+            "transaction_id",
+            "account_id",
+            "date",
+            "description",
+            "amount",
+            "type",
+            "status"
+          ],
+          "properties": {
+            "transaction_id": {
+              "type": "string",
+              "description": "The unique identifier for the transaction."
+            },
+            "account_id": {
+              "type": "string",
+              "description": "The bank account ID the transaction belongs to."
+            },
+            "date": {
+              "type": "string",
+              "description": "Transaction date in MM/DD/YYYY format.",
+              "pattern": "^(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])/[0-9]{4}$"
+            },
+            "description": {
+              "type": "string"
+            },
+            "amount": {
+              "type": "number",
+              "description": "Amount in USD. Positive values are credits and negative values are debits."
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "direct_deposit",
+                "debit_card_purchase",
+                "atm_withdrawal",
+                "atm_balance_inquiry",
+                "atm_fee",
+                "ach_transfer_in",
+                "ach_transfer_out",
+                "wire_transfer_in",
+                "wire_transfer_out",
+                "check_deposit",
+                "mobile_deposit",
+                "bill_pay",
+                "everyonepay",
+                "monthly_fee",
+                "overdraft_fee",
+                "fee_rebate",
+                "interest_credit",
+                "rebate_credit",
+                "fee_refund"
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "posted",
+                "pending"
+              ]
+            }
+          }
+        },
+        "CreditCardAccountsResponse": {
+          "type": "object",
+          "required": [
+            "user_id",
+            "credit_card_accounts"
+          ],
+          "properties": {
+            "user_id": {
+              "type": "string"
+            },
+            "credit_card_accounts": {
+              "type": "array",
+              "description": "All active and closed credit card accounts for the customer.",
+              "items": {
+                "type": "object",
+                "required": [
+                  "credit_card_account_id",
+                  "product_name",
+                  "status",
+                  "card_number_last_4",
+                  "opened"
+                ],
+                "properties": {
+                  "credit_card_account_id": {
+                    "type": "string"
+                  },
+                  "product_name": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "ACTIVE",
+                      "CLOSED"
+                    ]
+                  },
+                  "card_number_last_4": {
+                    "type": "string"
+                  },
+                  "opened": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "DisputeFiling": {
+          "type": "object",
+          "required": [
+            "transaction_id",
+            "account_id",
+            "card_id",
+            "user_id",
+            "dispute_category",
+            "transaction_date",
+            "discovery_date",
+            "disputed_amount",
+            "transaction_type",
+            "card_in_possession",
+            "pin_compromised",
+            "contacted_merchant",
+            "police_report_filed",
+            "written_statement_provided",
+            "provisional_credit_eligible",
+            "card_action"
+          ],
+          "properties": {
+            "transaction_id": {
+              "type": "string",
+              "description": "The disputed transaction, found using get_bank_account_transactions_9173."
+            },
+            "account_id": {
+              "type": "string",
+              "description": "The checking account linked to the debit card."
+            },
+            "card_id": {
+              "type": "string",
+              "description": "The debit card ID."
+            },
+            "user_id": {
+              "type": "string",
+              "description": "The customer's Rho-Bank user ID."
+            },
+            "dispute_category": {
+              "type": "string",
+              "description": "Dispute category per the dispute desk's operating records."
+            },
+            "transaction_date": {
+              "type": "string",
+              "description": "MM/DD/YYYY.",
+              "pattern": "^(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])/[0-9]{4}$"
+            },
+            "discovery_date": {
+              "type": "string",
+              "description": "MM/DD/YYYY.",
+              "pattern": "^(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])/[0-9]{4}$"
+            },
+            "disputed_amount": {
+              "type": "number",
+              "description": "The dollar amount being disputed."
+            },
+            "transaction_type": {
+              "type": "string"
+            },
+            "card_in_possession": {
+              "type": "boolean"
+            },
+            "pin_compromised": {
+              "type": "boolean"
+            },
+            "contacted_merchant": {
+              "type": "boolean"
+            },
+            "police_report_filed": {
+              "type": "boolean"
+            },
+            "written_statement_provided": {
+              "type": "boolean"
+            },
+            "provisional_credit_eligible": {
+              "type": "boolean"
+            },
+            "card_action": {
+              "type": "string",
+              "description": "Card action selected at intake per the dispute desk's operating records."
+            }
+          }
+        }
+      },
+      "securitySchemes": {
+        "internalSso": {
+          "type": "oauth2",
+          "description": "Internal SSO. Scopes are provisioned per support role.",
+          "flows": {
+            "clientCredentials": {
+              "tokenUrl": "https://sso.internal.rhobank.com/token",
+              "scopes": {
+                "cardcore.debit-cards.read": "Read debit card records",
+                "cardcore.transactions.read": "Read bank account transactions",
+                "cardcore.credit-accounts.read": "Read credit card accounts",
+                "cardcore.disputes.write": "File debit-card transaction disputes"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "postman_collection": {
+    "info": {
+      "_postman_id": "3b8e5f21-9a47-4c06-b1d2-77e08c94a6f3",
+      "name": "CardCore servicing services v4.2",
+      "description": "Requests against the internal production gateway. Set the {{gateway}} variable and sign on through the internal SSO helper before running anything; unauthenticated calls return 401 by design.",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+      {
+        "key": "gateway",
+        "value": "https://gateway.internal.rhobank.com/cardcore/v4"
+      }
+    ],
+    "item": [
+      {
+        "name": "Debit cards — account with card history",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "url": {
+            "raw": "{{gateway}}/debit-cards?account_id=RB-4471820",
+            "host": [
+              "{{gateway}}"
+            ],
+            "path": [
+              "debit-cards"
+            ],
+            "query": [
+              {
+                "key": "account_id",
+                "value": "RB-4471820"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "Debit cards — empty list (no cards)",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "url": {
+            "raw": "{{gateway}}/debit-cards?account_id=RB-9932744",
+            "host": [
+              "{{gateway}}"
+            ],
+            "path": [
+              "debit-cards"
+            ],
+            "query": [
+              {
+                "key": "account_id",
+                "value": "RB-9932744"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "Transactions — recent activity",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "url": {
+            "raw": "{{gateway}}/bank-accounts/transactions?account_id=RB-4471820",
+            "host": [
+              "{{gateway}}"
+            ],
+            "path": [
+              "bank-accounts",
+              "transactions"
+            ],
+            "query": [
+              {
+                "key": "account_id",
+                "value": "RB-4471820"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "Credit card accounts — by user",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "url": {
+            "raw": "{{gateway}}/credit-card-accounts?user_id=USR-311876",
+            "host": [
+              "{{gateway}}"
+            ],
+            "path": [
+              "credit-card-accounts"
+            ],
+            "query": [
+              {
+                "key": "user_id",
+                "value": "USR-311876"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "File dispute — full payload",
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "url": {
+            "raw": "{{gateway}}/debit-card-disputes",
+            "host": [
+              "{{gateway}}"
+            ],
+            "path": [
+              "debit-card-disputes"
+            ]
+          },
+          "body": {
+            "mode": "raw",
+            "raw": "{\"transaction_id\":\"TXN-90211405\",\"account_id\":\"RB-4471820\",\"card_id\":\"DBC-880341\",\"user_id\":\"USR-273904\",\"dispute_category\":\"unauthorized_transaction\",\"transaction_date\":\"11/02/2025\",\"discovery_date\":\"11/04/2025\",\"disputed_amount\":211.42,\"transaction_type\":\"debit_card_purchase\",\"card_in_possession\":true,\"pin_compromised\":false,\"contacted_merchant\":false,\"police_report_filed\":false,\"written_statement_provided\":true,\"provisional_credit_eligible\":true,\"card_action\":\"keep_active\"}"
+          }
+        }
+      }
+    ]
+  },
+  "error_behavior_columns": [
+    "rule_id",
+    "status",
+    "environment",
+    "audience",
+    "http_status",
+    "condition",
+    "response_code",
+    "notes",
+    "updated_at",
+    "superseded_by"
+  ],
+  "error_behavior": [
+    {
+      "rule_id": "ERR-7823-400",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 400,
+      "condition": "account_id does not resolve to a bank account (wrong format or unknown account)",
+      "response_code": "INVALID_ACCOUNT_ID",
+      "notes": "A savings account_id resolves — it simply carries no debit cards, so the response is a successful empty list, not this error. Savings accounts do not have debit cards.",
+      "updated_at": "2025-10-14T09:00:00-04:00",
+      "superseded_by": null
+    },
+    {
+      "rule_id": "ERR-7823-200E",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 200,
+      "condition": "the account has no debit cards",
+      "response_code": "OK_EMPTY",
+      "notes": "The empty list is the answer. Do not retry, do not treat as failure.",
+      "updated_at": "2025-10-14T09:00:00-04:00",
+      "superseded_by": null
+    },
+    {
+      "rule_id": "ERR-9173-400",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 400,
+      "condition": "account_id does not resolve to a bank account",
+      "response_code": "INVALID_ACCOUNT_ID",
+      "notes": "The service validates the identifier before touching the transaction store; nothing is queried on a 400.",
+      "updated_at": "2025-10-14T09:00:00-04:00",
+      "superseded_by": null
+    },
+    {
+      "rule_id": "ERR-CCACC-404",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 404,
+      "condition": "user_id does not resolve to a customer",
+      "response_code": "UNKNOWN_USER",
+      "notes": "A customer with no credit cards is a 200 with an empty collection — all active and closed credit card accounts are in scope, and none is a valid answer.",
+      "updated_at": "2025-10-14T09:00:00-04:00",
+      "superseded_by": null
+    },
+    {
+      "rule_id": "ERR-6281-422",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 422,
+      "condition": "one or more of the sixteen required dispute fields is absent or malformed",
+      "response_code": "MISSING_REQUIRED_FIELD",
+      "notes": "The response names the first failing field only; fix and resubmit. Date fields validate as MM/DD/YYYY.",
+      "updated_at": "2025-10-14T09:00:00-04:00",
+      "superseded_by": null
+    },
+    {
+      "rule_id": "ERR-GW-401",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 401,
+      "condition": "no valid internal-environment session accompanies the call (any endpoint)",
+      "response_code": "UNAUTHENTICATED",
+      "notes": "Sessions expire on the gateway's schedule, not the tool's; a previously working session can 401 later in the same shift.",
+      "updated_at": "2025-10-14T09:00:00-04:00",
+      "superseded_by": null
+    },
+    {
+      "rule_id": "ERR-GW-403",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 403,
+      "condition": "the authenticated caller's role lacks the endpoint's scope (any endpoint)",
+      "response_code": "PERMISSION_DENIED",
+      "notes": "Role grants are provisioned per support role; the service does not distinguish missing role from suspended role in the response.",
+      "updated_at": "2025-10-14T09:00:00-04:00",
+      "superseded_by": null
+    }
+  ],
+  "record_contract_notes": "# Record-contract notes — CardCore v4.2\n\nMaintained by Support Engineering with Documentation Control; these notes travel with the pack.\n\n## Identifiers\n\nThe debit-card lookup takes an account-level identifier and returns card-level records. card_id is the unique identifier for the debit card; account_id is the checking account ID the card is linked to; user_id is the user ID of the cardholder. Every write service that touches a card (freeze, unfreeze, close, activate, order — contracts held in the console workspace) takes card_id, so the lookup is almost always the first call of a card contact.\n\n## The date-format split\n\nCard records and transaction records do not share a date format, and this bites every new integration. On a debit card record, expiration_date is MM/YY and date_issued is a calendar date. On a transaction record, date is MM/DD/YYYY. The dispute filing service follows the transaction convention: transaction_date and discovery_date are MM/DD/YYYY.\n\n## Privacy\n\nFor privacy, full debit-card numbers are never returned by the debit-card lookup; only the last 4 digits are returned (card_number_last_4). There is no elevated scope that changes this; the full PAN does not cross the gateway.\n\n## Empty collections\n\nBoth lookups treat an empty collection as a successful answer. If no debit cards exist for the account, the debit-card lookup returns an empty list. The lookup may return multiple cards when the account has card history — old closed cards plus a current active card is the classic shape, and consumers should filter on status rather than assuming one row.\n\n## Amount signs\n\nTransaction amount is USD with positive values as credits and negative values as debits. Consumers rendering customer-facing views must not flip signs; the store's convention is the display convention.\n\n## Scope boundaries\n\nThis pack carries service contracts — arguments, records, and error behavior. Conduct rules (when an agent may freeze, what clears a security hold, dispute intake conduct, replacement entitlements) are governed by the desk's boards, workbooks, and console flow cards, and are deliberately not restated here.\n"
+}

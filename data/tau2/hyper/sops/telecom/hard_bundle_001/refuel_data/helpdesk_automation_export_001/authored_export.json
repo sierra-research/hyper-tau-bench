@@ -1,0 +1,804 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "Northline Care Admin",
+    "account": "northline-care-prod",
+    "environment": "production",
+    "exported_at": "2026-08-10T16:30:00-07:00",
+    "timezone": "America/Los_Angeles",
+    "export_version": "2026.08.3"
+  },
+  "cover_email": "From: Maya Chen <maya.chen@northline.example>\nTo: Care Launch Review <care-launch@northline.example>\nDate: Mon, 10 Aug 2026 16:37:00 -0700\nSubject: Northline Care production admin export — refuel data (full families)\nMessage-ID: <1e9e2cf1f7a76ebd3d7f@mail.northline.example>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nX-Export-Environment: production\n\nAttached is Northline Care Admin export version 2026.08.3. Saturday's 08.2 job was trimmed to the launch checklist; Wednesday's calibration asked for the families as the admin export ships them by default, so this run carries the receipt and headroom automation, the review views, and the retained sandbox drafts alongside the launch objects. Same seven members, same fields.csv layout. I spot-checked macros, triggers, and policy contracts after the 16:30 snapshot; dashboard counts refresh at 17:00 and do not change the exported object definitions.\n",
+  "macros": [
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Build refuel price readback",
+      "usage_30d": 509,
+      "steps": [
+        {
+          "type": "calculate",
+          "expression": "plan.refuel_price_per_gb * requested_refuel_gb",
+          "store_as": "quoted_charge"
+        },
+        {
+          "type": "show_agent_readback",
+          "body": "Refuel {requested_refuel_gb} GB for ${quoted_charge}."
+        }
+      ],
+      "internal_notes": "This macro creates a quote only. Confirmation and apply are separate controls.",
+      "macro_id": "MAC-5203"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Escalation handoff note",
+      "usage_30d": 1307,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Record the current queue, last observed customer symptom, and the most recent completed diagnostic step."
+        },
+        {
+          "type": "copy_field",
+          "source": "case.callback_window",
+          "target": "handoff.callback_preference"
+        },
+        {
+          "type": "add_tag",
+          "value": "handoff_context_recorded"
+        }
+      ],
+      "internal_notes": "Operational case hygiene only; this macro does not authorize account access or a transaction.",
+      "macro_id": "MAC-5190"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Callback preference summary",
+      "usage_30d": 438,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Summarize the customer's stated callback window and contact channel without promising a completion time."
+        },
+        {
+          "type": "copy_field",
+          "source": "case.channel",
+          "target": "callback.contact_channel"
+        }
+      ],
+      "internal_notes": "Used by scheduling teams after the customer has already requested follow-up.",
+      "macro_id": "MAC-5194"
+    },
+    {
+      "active": false,
+      "environment": "sandbox",
+      "status": "archived",
+      "effective_at": "2026-05-12T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": "removed",
+      "name": "Retired pilot shortcut",
+      "usage_30d": 0,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Historical pilot object retained for migration audit."
+        }
+      ],
+      "internal_notes": "Never enabled in production.",
+      "macro_id": "MAC-5152"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Refuel confirmation readback",
+      "usage_30d": 466,
+      "steps": [
+        {
+          "type": "show_agent_readback",
+          "body": "Confirm: add {requested_refuel_gb} GB to this cycle for ${quoted_charge} total — yes to both?"
+        },
+        {
+          "type": "set_field",
+          "field": "confirmation.recorded",
+          "value": true
+        }
+      ],
+      "internal_notes": "Reads the amount and the calculated charge together. Apply remains a separate control behind the recorded confirmation.",
+      "macro_id": "MAC-5206"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Duplicate charge notification reply",
+      "usage_30d": 57,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Compare receipt numbers before replying; one receipt number means one purchase, however many notifications delivered."
+        },
+        {
+          "type": "send_email",
+          "template": "duplicate_notification_reply"
+        }
+      ],
+      "internal_notes": "Covers delivery retries that resend the same receipt.",
+      "macro_id": "MAC-5196"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Post-refuel connection check",
+      "usage_30d": 341,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Ask for a fresh speed test with Wi-Fi off after an applied refuel; record the number the app measures now, not a saved result."
+        },
+        {
+          "type": "copy_field",
+          "source": "speed_test.result",
+          "target": "case.resolution_note"
+        }
+      ],
+      "internal_notes": "Closing check for assisted refuels.",
+      "macro_id": "MAC-5201"
+    },
+    {
+      "active": false,
+      "environment": "sandbox",
+      "status": "archived",
+      "effective_at": "2026-04-20T09:00:00-07:00",
+      "updated_at": "2026-06-04T11:15:00-07:00",
+      "superseded_by": "removed",
+      "name": "Draft: refuel eligibility quick answer",
+      "usage_30d": 0,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Quick answer for eligibility questions: each refuel can be up to 2 GB."
+        }
+      ],
+      "internal_notes": "Drafted from the launch quick card; never published.",
+      "macro_id": "MAC-5145"
+    }
+  ],
+  "triggers": [
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Enforce cycle refuel ceiling",
+      "usage_30d": 512,
+      "conditions": [
+        {
+          "field": "action.kind",
+          "operator": "is",
+          "value": "data_refuel"
+        }
+      ],
+      "actions": [
+        {
+          "type": "calculate",
+          "expression": "line.refueled_gb_this_cycle + requested_refuel_gb",
+          "store_as": "resulting_refueled_gb"
+        },
+        {
+          "type": "reject_if",
+          "expression": "resulting_refueled_gb > 2.0"
+        }
+      ],
+      "trigger_id": "TRG-7562"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Calculate refuel charge",
+      "usage_30d": 512,
+      "conditions": [
+        {
+          "field": "requested_refuel_gb",
+          "operator": "greater_than",
+          "value": 0
+        }
+      ],
+      "actions": [
+        {
+          "type": "calculate",
+          "expression": "plan.refuel_price_per_gb * requested_refuel_gb",
+          "store_as": "quoted_charge"
+        }
+      ],
+      "trigger_id": "TRG-7566"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Tag reopened Care contacts",
+      "usage_30d": 782,
+      "conditions": [
+        {
+          "field": "case.status",
+          "operator": "is",
+          "value": "reopened"
+        }
+      ],
+      "actions": [
+        {
+          "type": "add_tag",
+          "value": "reopened_contact"
+        }
+      ],
+      "trigger_id": "TRG-7554"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Route scheduled callbacks",
+      "usage_30d": 491,
+      "conditions": [
+        {
+          "field": "case.callback_window",
+          "operator": "is_not_empty",
+          "value": true
+        },
+        {
+          "field": "case.channel",
+          "operator": "is",
+          "value": "voice"
+        }
+      ],
+      "actions": [
+        {
+          "type": "add_tag",
+          "value": "scheduled_callback"
+        },
+        {
+          "type": "route_to_group",
+          "value": "care_callback_queue"
+        }
+      ],
+      "trigger_id": "TRG-7555"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Mark calibration exports",
+      "usage_30d": 238,
+      "conditions": [
+        {
+          "field": "case.qa_sample",
+          "operator": "is",
+          "value": true
+        },
+        {
+          "field": "case.archive_batch",
+          "operator": "is_not_empty",
+          "value": true
+        }
+      ],
+      "actions": [
+        {
+          "type": "add_tag",
+          "value": "calibration_export"
+        },
+        {
+          "type": "suppress_customer_notification",
+          "value": true
+        }
+      ],
+      "trigger_id": "TRG-7556"
+    },
+    {
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Sandbox callback timer",
+      "usage_30d": 0,
+      "conditions": [
+        {
+          "field": "case.channel",
+          "operator": "is",
+          "value": "voice"
+        }
+      ],
+      "actions": [
+        {
+          "type": "set_field",
+          "field": "callback_experiment",
+          "value": "eligible"
+        }
+      ],
+      "trigger_id": "TRG-7560"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-06-12T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Compute remaining cycle headroom",
+      "usage_30d": 498,
+      "conditions": [
+        {
+          "field": "action.kind",
+          "operator": "is",
+          "value": "data_refuel"
+        }
+      ],
+      "actions": [
+        {
+          "type": "calculate",
+          "expression": "2.0 - line.refueled_gb_this_cycle",
+          "store_as": "remaining_cycle_gb"
+        }
+      ],
+      "trigger_id": "TRG-7488"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Send charge receipt on apply",
+      "usage_30d": 507,
+      "conditions": [
+        {
+          "field": "action.kind",
+          "operator": "is",
+          "value": "data_refuel"
+        },
+        {
+          "field": "quoted_charge",
+          "operator": "is_not_empty",
+          "value": true
+        }
+      ],
+      "actions": [
+        {
+          "type": "send_customer_receipt",
+          "value": true
+        }
+      ],
+      "trigger_id": "TRG-7558"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-05-22T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Flag repeat refuel lines",
+      "usage_30d": 129,
+      "conditions": [
+        {
+          "field": "action.kind",
+          "operator": "is",
+          "value": "data_refuel"
+        },
+        {
+          "field": "line.refueled_gb_this_cycle",
+          "operator": "greater_than",
+          "value": 0
+        }
+      ],
+      "actions": [
+        {
+          "type": "add_tag",
+          "value": "repeat_refuel_review"
+        }
+      ],
+      "trigger_id": "TRG-7480"
+    },
+    {
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "effective_at": "2026-07-07T09:00:00-07:00",
+      "updated_at": "2026-07-09T13:40:00-07:00",
+      "superseded_by": null,
+      "name": "Sandbox: 3 GB ceiling variant",
+      "usage_30d": 0,
+      "conditions": [
+        {
+          "field": "action.kind",
+          "operator": "is",
+          "value": "data_refuel"
+        }
+      ],
+      "actions": [
+        {
+          "type": "calculate",
+          "expression": "line.refueled_gb_this_cycle + requested_refuel_gb",
+          "store_as": "resulting_refueled_gb"
+        },
+        {
+          "type": "reject_if",
+          "expression": "resulting_refueled_gb > 3.0"
+        }
+      ],
+      "trigger_id": "TRG-7494"
+    }
+  ],
+  "policy_contracts": [
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Per-cycle data-refuel limit",
+      "usage_30d": 0,
+      "contract_scope": "data_refuel",
+      "rules": [
+        "Previously refueled GB plus requested refuel GB must be less than or equal to 2.0 GB for the line and cycle."
+      ],
+      "catalog_coverage": {
+        "complete_listing": true,
+        "unlisted_request_handling": "reject_transaction"
+      },
+      "contract_id": "CONTRACT-2346"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Case export metadata",
+      "usage_30d": 0,
+      "contract_scope": "case_export",
+      "rules": [
+        "Preserve the ticket identifier, archive timestamp, originating channel, and owning queue in offline exports.",
+        "Keep internal-note authorship and event ordering when an export is rebuilt for calibration.",
+        "Exclude attachments marked customer-sensitive from the offline calibration package.",
+        "Record the archive batch on every case included in the same export job."
+      ],
+      "catalog_coverage": {
+        "complete_listing": false,
+        "unlisted_request_handling": "allow"
+      },
+      "contract_id": "CONTRACT-2339"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Case workspace lifecycle",
+      "usage_30d": 0,
+      "contract_scope": "case_workspace",
+      "rules": [
+        "A reopened contact retains its original ticket identifier and receives a new event timestamp.",
+        "A scheduled callback records the customer's requested window without promising a resolution deadline.",
+        "Calibration selection does not change customer-visible status or send a notification.",
+        "Archive and reporting fields remain administrative metadata and do not authorize customer-account changes."
+      ],
+      "catalog_coverage": {
+        "complete_listing": false,
+        "unlisted_request_handling": "review"
+      },
+      "contract_id": "CONTRACT-2340"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Transaction receipt messaging",
+      "usage_30d": 0,
+      "contract_scope": "transaction_receipts",
+      "rules": [
+        "Send a receipt for every applied assisted transaction showing the amount added and the charge posted.",
+        "Receipts reference the quote the customer confirmed; a delivery retry reuses the original receipt number."
+      ],
+      "catalog_coverage": {
+        "complete_listing": false,
+        "unlisted_request_handling": "allow"
+      },
+      "contract_id": "CONTRACT-2344"
+    }
+  ],
+  "field_columns": [
+    "row_id",
+    "field_key",
+    "label",
+    "type",
+    "active",
+    "environment",
+    "status",
+    "description"
+  ],
+  "fields": [
+    {
+      "row_id": "FLD-45",
+      "field_key": "case.status",
+      "label": "Case status",
+      "type": "enum",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Current assisted-care case lifecycle state."
+    },
+    {
+      "row_id": "FLD-46",
+      "field_key": "case.channel",
+      "label": "Contact channel",
+      "type": "enum",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Voice or messaging source for reporting."
+    },
+    {
+      "row_id": "FLD-47",
+      "field_key": "case.callback_window",
+      "label": "Callback window",
+      "type": "text",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Optional customer scheduling preference."
+    },
+    {
+      "row_id": "FLD-48",
+      "field_key": "case.qa_sample",
+      "label": "QA sample",
+      "type": "boolean",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Marks a case selected for calibration."
+    },
+    {
+      "row_id": "FLD-49",
+      "field_key": "case.archive_batch",
+      "label": "Archive batch",
+      "type": "text",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Offline export batch identifier."
+    },
+    {
+      "row_id": "FLD-50",
+      "field_key": "action.kind",
+      "label": "Action kind",
+      "type": "enum",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Transaction family presented to the refuel controls."
+    },
+    {
+      "row_id": "FLD-51",
+      "field_key": "requested_refuel_gb",
+      "label": "Requested refuel GB",
+      "type": "decimal",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Data amount requested in the current refuel quote."
+    },
+    {
+      "row_id": "FLD-52",
+      "field_key": "line.refueled_gb_this_cycle",
+      "label": "Previously refueled GB",
+      "type": "decimal",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Data already added to the selected line in this billing cycle."
+    },
+    {
+      "row_id": "FLD-53",
+      "field_key": "plan.refuel_price_per_gb",
+      "label": "Refuel price per GB",
+      "type": "currency",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Current plan-specific unit price used by the quote calculator."
+    },
+    {
+      "row_id": "FLD-54",
+      "field_key": "quoted_charge",
+      "label": "Quoted refuel charge",
+      "type": "currency",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Calculated charge shown to the adviser before confirmation."
+    },
+    {
+      "row_id": "FLD-55",
+      "field_key": "resulting_refueled_gb",
+      "label": "Resulting refueled GB",
+      "type": "decimal",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Sum of prior and requested refuel amounts for cycle-limit validation."
+    },
+    {
+      "row_id": "FLD-67",
+      "field_key": "remaining_cycle_gb",
+      "label": "Remaining cycle GB",
+      "type": "decimal",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Cycle limit minus data already added; read before pricing a new amount."
+    },
+    {
+      "row_id": "FLD-68",
+      "field_key": "speed_test.result",
+      "label": "Speed test result",
+      "type": "text",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Customer-reported measurement captured during the closing check."
+    },
+    {
+      "row_id": "FLD-69",
+      "field_key": "confirmation.recorded",
+      "label": "Confirmation recorded",
+      "type": "boolean",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Set when the customer has confirmed the amount and the charge together."
+    }
+  ],
+  "sla_policies": [
+    {
+      "policy_id": "SLA-18",
+      "name": "Care standard response",
+      "active": true,
+      "environment": "production",
+      "first_response_minutes": 20,
+      "resolution_hours": 24
+    },
+    {
+      "policy_id": "SLA-19",
+      "name": "Disabled launch-week priority",
+      "active": false,
+      "environment": "sandbox",
+      "first_response_minutes": 5,
+      "resolution_hours": 8
+    },
+    {
+      "policy_id": "SLA-29",
+      "name": "Billing dispute follow-up",
+      "active": true,
+      "environment": "production",
+      "first_response_minutes": 30,
+      "resolution_hours": 48
+    }
+  ],
+  "views": [
+    {
+      "view_id": "VIEW-40",
+      "name": "Open assisted-care cases",
+      "active": true,
+      "environment": "production",
+      "filters": [
+        {
+          "field": "case.status",
+          "operator": "is_not",
+          "value": "closed"
+        }
+      ]
+    },
+    {
+      "view_id": "VIEW-41",
+      "name": "August calibration samples",
+      "active": true,
+      "environment": "production",
+      "filters": [
+        {
+          "field": "case.qa_sample",
+          "operator": "is",
+          "value": true
+        }
+      ]
+    },
+    {
+      "view_id": "VIEW-51",
+      "name": "Repeat refuel review",
+      "active": true,
+      "environment": "production",
+      "filters": [
+        {
+          "field": "line.refueled_gb_this_cycle",
+          "operator": "greater_than",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "view_id": "VIEW-52",
+      "name": "Scheduled callbacks",
+      "active": true,
+      "environment": "production",
+      "filters": [
+        {
+          "field": "case.callback_window",
+          "operator": "is_not_empty",
+          "value": true
+        }
+      ]
+    },
+    {
+      "view_id": "VIEW-53",
+      "name": "Sandbox drafts",
+      "active": false,
+      "environment": "sandbox",
+      "filters": [
+        {
+          "field": "case.status",
+          "operator": "is_not",
+          "value": "closed"
+        }
+      ]
+    }
+  ]
+}

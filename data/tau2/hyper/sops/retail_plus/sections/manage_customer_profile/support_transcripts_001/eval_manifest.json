@@ -1,0 +1,154 @@
+{
+  "id": "retail_manage_customer_profile_support_transcripts_001",
+  "representation": "support_transcripts",
+  "section_id": "manage_customer_profile",
+  "registration_status": "registered",
+  "registration_note": "Declared in the section schema as retail_manage_customer_profile_support_transcripts by register_transformations.py (rerun after editing case fact ownership here), and grouped with the storefront Addresses capture into the full-coverage manage_customer_profile_multimodal bundle by register_bundles.py. First plus-first artifact set: no canonical-retail counterpart exists (2026-08-04 standalone cutover).",
+  "case_count": 8,
+  "canonical_fact_text": {
+    "default_address_update_allowed": "The agent can update the customer's default shipping address on the profile.",
+    "default_address_requires_readback_and_confirmation": "For a default shipping address update, the customer gives the new address, the agent reads it back, gets confirmation, and then updates the profile.",
+    "existing_order_addresses_changed_individually": "Existing orders have their own shipping addresses; if an existing order address needs to be changed, it has to be changed individually if the order remains eligible for that change.",
+    "default_address_affects_future_orders_only": "The default shipping address is pre-filled on future orders and does not change the shipping address on existing orders."
+  },
+  "authoritative_facts": [
+    {
+      "id": "default_address_update_allowed",
+      "case": "case_002.md",
+      "evidence_phrases": [
+        "updating the default delivery address saved on a profile is one of the standard changes support handles"
+      ],
+      "normative_force": "The agent states the capability as a standing rule of what support handles, in answer to a direct is-this-allowed question, inside a QA-approved record."
+    },
+    {
+      "id": "default_address_requires_readback_and_confirmation",
+      "case": "case_002.md",
+      "evidence_phrases": [
+        "you give me the complete new address, I read the entire thing back to you, and I only save it to the profile after you've confirmed it's correct"
+      ],
+      "normative_force": "The agent verbalizes the gate as the general procedure (\"the way it works\") before performing it, then the case shows a correction loop and a second full read-back before the save."
+    },
+    {
+      "id": "existing_order_addresses_changed_individually",
+      "case": "case_004.md",
+      "evidence_phrases": [
+        "made order by order, and only while an order is still at a point where its address can be edited"
+      ],
+      "normative_force": "The agent states the per-order rule in generalized language, then the case shows both branches: one order edited individually, one no longer eligible."
+    }
+  ],
+  "permitted_supporting_echoes": {
+    "default_address_affects_future_orders_only": "Owned by the storefront Addresses page (service_foundations full-site capture, page 047). Echoed exactly once, in case_004.md, as 'it doesn't reach back and rewrite orders that were already in flight' — the case cannot cohere without the default-vs-order contrast. Wording is disjoint from the page's evidence text ('We'll use this address for new orders unless you choose another one. Changing it won't update orders you've already placed.')."
+  },
+  "excluded_claims": {
+    "identity_verification_mechanics": "Every case depicts verification behaviorally through support-console lines (account identifier plus matching email or name+zip; email alone; name+zip alone; and two failed matches in case_003). No case verbalizes the lookup or verification rules — those facts belong to customer_identity.",
+    "pending_order_change_mechanics": "case_004 performs a pending-order address edit with a terse single-line confirmation and shows a processed order refusing the edit via a console line. The agent never states the pending-order change rules in general language, and the wording avoids the QA calibration deck's evidence phrases ('repeat every field of the new address back', 'only after the customer confirms the read-back').",
+    "profile_scope_rules": "No case states what support cannot edit (email changes, payment methods) — those prohibitions are owned by service_foundations artifacts. Distractor requests stay inside mundane, unowned territory (delivery instructions, self-service edits, delivery-scan reads)."
+  },
+  "cases": [
+    {
+      "filename": "case_001.md",
+      "case_letter": "D",
+      "channel": "chat",
+      "role": "distractor",
+      "authoritative_fact_ids": [],
+      "sketch": "Gated-community delivery instructions added self-service; verification by account identifier plus name and zip."
+    },
+    {
+      "filename": "case_002.md",
+      "case_letter": "K",
+      "channel": "phone call",
+      "role": "fact_bearing",
+      "authoritative_fact_ids": [
+        "default_address_update_allowed",
+        "default_address_requires_readback_and_confirmation"
+      ],
+      "sketch": "Columbus-to-Portland move; capability stated as a rule, read-back gate verbalized then performed with a 3E/3C correction loop; verification by email."
+    },
+    {
+      "filename": "case_003.md",
+      "case_letter": "A",
+      "channel": "phone call",
+      "role": "distractor",
+      "authoritative_fact_ids": [],
+      "sketch": "Verification dead-end: work email and post-move zip both fail to match; profile never opened; caller defers to retrieve the signup email."
+    },
+    {
+      "filename": "case_004.md",
+      "case_letter": "R",
+      "channel": "chat",
+      "role": "fact_bearing",
+      "authoritative_fact_ids": [
+        "existing_order_addresses_changed_individually"
+      ],
+      "sketch": "Default already self-updated after a move; per-order rule stated in general language; one pending order edited, one processed order ineligible; declared echo of the future-orders fact; verification by email."
+    },
+    {
+      "filename": "case_005.md",
+      "case_letter": "F",
+      "channel": "chat",
+      "role": "distractor",
+      "authoritative_fact_ids": [],
+      "sketch": "Duplicate address-book museum cleaned up self-service; default tag located; verification by account identifier plus email."
+    },
+    {
+      "filename": "case_006.md",
+      "case_letter": "N",
+      "channel": "phone call",
+      "role": "distractor",
+      "authoritative_fact_ids": [],
+      "sketch": "Delivered-photo mystery traced through the carrier scan to a new building package room; order-id transposition near-miss; verification by name and zip."
+    },
+    {
+      "filename": "case_007.md",
+      "case_letter": "T",
+      "channel": "chat",
+      "role": "distractor",
+      "authoritative_fact_ids": [],
+      "sketch": "City renumbered the building; saved entry corrected self-service to the official line; verification by email."
+    },
+    {
+      "filename": "case_008.md",
+      "case_letter": "H",
+      "channel": "phone call",
+      "role": "distractor",
+      "authoritative_fact_ids": [],
+      "sketch": "Street-spelling tiebreak read letter by letter from the profile against the lease; call cut off mid-sentence by dog and courier; verification by account identifier plus email."
+    }
+  ],
+  "distribution": {
+    "fact_bearing_cases": 2,
+    "distractor_cases": 6,
+    "channels": {
+      "chat": 4,
+      "phone call": 4
+    },
+    "unresolved_or_cut": [
+      "case_003.md",
+      "case_008.md"
+    ]
+  },
+  "synthetic_entities": {
+    "note": "Entities invented for these case records, deliberately absent from both data/tau2/domains/retail/db.json and data/tau2/domains/retail_plus/db.json (check_artifact.py enforces the absence and that this declaration matches the case files exactly). Tree-level grounding gates treat tokens listed here as declared synthetic rather than ungrounded.",
+    "user_ids": [
+      "felix_arroyo_9152",
+      "lena_fischer_6620",
+      "marcus_okafor_5521",
+      "priya_raman_3307",
+      "teresa_vance_2210"
+    ],
+    "order_ids": [
+      "#W2214508",
+      "#W5817236",
+      "#W5817263",
+      "#W7731162"
+    ]
+  },
+  "haystack_uniformity": [
+    "Every case shares the same header block, turn markup, and support-console interleaving style; console lines appear in fact-bearing and distractor cases alike.",
+    "Fact-bearing cases sit mid-distribution in length; a distractor (case_006.md) is the longest record and a distractor (case_007.md) is the shortest.",
+    "Case letters are arbitrary and do not order or group by ownership; kit pooling renumbers titles anyway.",
+    "Near-miss texture (corrected apartment letter, transposed order id, typo'd unit, failed verification) appears in both fact-bearing and distractor cases.",
+    "All customer identifiers, emails, and order ids are invented and verified absent from both data/tau2/domains/retail/db.json and data/tau2/domains/retail_plus/db.json (enforced by check_artifact.py)."
+  ]
+}

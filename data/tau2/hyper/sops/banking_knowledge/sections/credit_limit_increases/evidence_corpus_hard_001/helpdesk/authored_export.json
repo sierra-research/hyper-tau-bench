@@ -1,0 +1,528 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "rho-helpdesk",
+    "account": "rho-bank-card-support",
+    "workspace": "cli-desk-console",
+    "environment": "production",
+    "exported_at": "2025-11-12T09:04:12-05:00",
+    "timezone": "America/New_York",
+    "export_version": "2025.46",
+    "requested_by": "farah.idris"
+  },
+  "cover_email": "From: Helpdesk Administration <helpdesk-admin@rhobank.com>\nTo: Farah Idris <farah.idris@rhobank.com>\nDate: Wed, 12 Nov 2025 09:10:22 -0500\nSubject: cli-desk-console workspace export (2025.46)\nMessage-ID: <hd-export-2025-46-clidesk@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nFarah,\n\nFull production export of the cli-desk-console workspace — macros, triggers, field definitions, contracts, SLAs, and views, current as of 09:04 today. Per your note for the transition audit file: the disabled back-office auto-approve macro and its trigger are included with lifecycle metadata rather than scrubbed, and the four decisioning macros reflect the workspace as rebuilt for the 10/27 cutover.\n\nHelpdesk Administration\n",
+  "macros": [
+    {
+      "macro_id": "MAC-7305",
+      "name": "CLI request — confirm amount, then submit",
+      "description": "Submission macro for credit-limit increase requests. After the customer confirms a valid increase amount within the card-tier limit, submit the credit-limit increase request using submit_credit_limit_increase_request_7392 with credit_card_account_id as a required string, user_id as a required string, and requested_increase_amount as a required integer dollar amount by which to increase the credit limit. Amount-gate and step-order conduct: J. Moreau's cutover directive (2025-10-27). Field-by-field argument reference: the submit_7392 rows in the field definitions below.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-10-27T08:00:00-04:00",
+      "updated_at": "2025-11-05T10:12:30-05:00",
+      "usage_30d": 512,
+      "usage_90d": 540,
+      "superseded_by": null,
+      "steps": [
+        "Verify identity and confirm the requester is permitted to act on the account (permission rule: the cutover directive, 2025-10-27)",
+        "Confirm the requested amount with the customer (amount gate and counter-offer conduct: the directive and the kept counter-offer call)",
+        "Submit via submit_credit_limit_increase_request_7392 and record the request reference in the case",
+        "Continue with the eligibility checklist per the directive — the submission must exist first"
+      ]
+    },
+    {
+      "macro_id": "MAC-7308",
+      "name": "CLI eligibility — cooldown history check",
+      "description": "Cooldown leg of the basic-eligibility checklist, using get_credit_limit_increase_history_4829 with credit_card_account_id as a required string to check whether the customer has submitted a request within the card-tier cooldown period; if a request exists within this period, deny the new request and inform the customer when they will be eligible to submit again. Which prior requests start a cooldown clock, and from what date, is governed by the pinned #cli-desk ruling of 2025-11-03 — read the pin, not folklore.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-10-27T08:00:00-04:00",
+      "updated_at": "2025-11-03T16:40:11-05:00",
+      "usage_30d": 498,
+      "usage_90d": 522,
+      "superseded_by": null,
+      "steps": [
+        "Run get_credit_limit_increase_history_4829 with the credit_card_account_id",
+        "Apply the cooldown ruling pinned in #cli-desk (2025-11-03) to the returned request dates",
+        "If a blocking request exists, record the denial and tell the customer their next eligible submission date",
+        "Continue the remaining checklist items per the cutover directive"
+      ]
+    },
+    {
+      "macro_id": "MAC-7312",
+      "name": "CLI decision — approve and apply",
+      "description": "Approval leg of the decision step. If all requirements are met and the requested amount is within limits, use approve_credit_limit_increase_5847 to approve and apply the increase with credit_card_account_id as a required string, user_id as a required string, and new_credit_limit as a required float for the new total credit limit to set. Communication conduct after processing: the kept approval call in the QA library.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-10-27T08:00:00-04:00",
+      "updated_at": "2025-10-27T08:00:00-04:00",
+      "usage_30d": 301,
+      "usage_90d": 322,
+      "superseded_by": null,
+      "steps": [
+        "Confirm every checklist item and the payment-history verification are complete and recorded",
+        "Call approve_credit_limit_increase_5847 with the account id, user id, and the new total credit limit",
+        "Record the approval in the case, then communicate the decision per the kept approval call"
+      ]
+    },
+    {
+      "macro_id": "MAC-7313",
+      "name": "CLI decision — record a denial",
+      "description": "Denial leg of the decision step. If any credit-limit increase requirements are not met, use deny_credit_limit_increase_5848 to record the denial with credit_card_account_id as a required string, user_id as a required string, and denial_reason as a required string that must be exactly one of: 'insufficient_account_age', 'cooldown_period_active', 'pending_disputes', 'pending_replacement_card', 'past_due_balance', 'high_utilization', 'insufficient_payment_history', 'requested_amount_exceeds_limit', or 'other'. The dropdown is the contract: the console rejects any value not in the deny_5848.denial_reason rows below. Denial-communication conduct: the kept denial call in the QA library.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-10-27T08:00:00-04:00",
+      "updated_at": "2025-10-27T08:00:00-04:00",
+      "usage_30d": 214,
+      "usage_90d": 230,
+      "superseded_by": null,
+      "steps": [
+        "Identify the unmet requirement from the recorded checklist results",
+        "Call deny_credit_limit_increase_5848 with the account id, user id, and the matching denial_reason dropdown value",
+        "Record the denial in the case, then communicate the decision per the kept denial call"
+      ]
+    },
+    {
+      "macro_id": "MAC-7320",
+      "name": "Pay credit card from checking — unlock and call",
+      "description": "Direct payment of a credit card balance from a Rho Bank checking account. Wrapper rule: to pay a credit card from checking, use unlock_discoverable_agent_tool to enable pay_credit_card_from_checking_9182 for the session, then pass the arguments through call_discoverable_agent_tool exactly as listed. The tool requires user_id as a string, checking_account_id as a string, credit_card_account_id as a string, and amount as a float payment amount in dollars. On success the tool debits the specified amount from the checking account and reduces the credit card balance by the same amount. Consent and confirmation conduct: the kept pay-from-checking call in the QA library. Field-by-field argument reference: the pay_9182 rows below.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-06-16T09:00:00-04:00",
+      "updated_at": "2025-10-14T11:20:45-04:00",
+      "usage_30d": 187,
+      "usage_90d": 605,
+      "superseded_by": null,
+      "steps": [
+        "Verify identity and look up both accounts (prerequisite and ordering conduct: the kept pay-from-checking call)",
+        "When passing arguments, ensure the account IDs and user_id match the authenticated customer and the amount is authorized",
+        "Unlock the tool: unlock_discoverable_agent_tool with tool_name pay_credit_card_from_checking_9182",
+        "Call the tool: call_discoverable_agent_tool with the tool name and a JSON string containing all required arguments",
+        "Read the confirmation back to the customer and record both new balances in the case"
+      ]
+    },
+    {
+      "macro_id": "MAC-7220",
+      "name": "Auto-approve increases under $500 (back-office legacy)",
+      "description": "Legacy back-office shortcut: automatically approved credit-limit increase requests under $500 for accounts in good standing without running the full checklist. Disabled at the decisioning-desk cutover; the retirement rationale is recorded in the cutover directive thread (2025-10-27) and ticket CLIT-1207.",
+      "active": false,
+      "environment": "production",
+      "status": "disabled",
+      "effective_at": "2023-04-03T09:00:00-04:00",
+      "updated_at": "2025-10-27T08:00:00-04:00",
+      "usage_30d": 0,
+      "usage_90d": 168,
+      "superseded_by": "MAC-7312",
+      "steps": [
+        "Match request amount under $500",
+        "Confirm account standing flag",
+        "Auto-approve and notify"
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "TRG-8112",
+      "name": "Route CLI requests to the decisioning queue",
+      "description": "Routes new credit-limit increase contacts to the cli-desk decisioning queue with the CLI request form attached.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 4,
+      "effective_at": "2025-10-27T08:00:00-04:00",
+      "updated_at": "2025-10-27T08:00:00-04:00",
+      "usage_30d": 640,
+      "conditions": ["contact.topic == 'credit_limit_increase'"],
+      "actions": ["assign_queue cli-decisioning", "attach_form cli_request_v3"]
+    },
+    {
+      "trigger_id": "TRG-8117",
+      "name": "Flag possible cooldown before decisioning",
+      "description": "Adds a cooldown-review flag when the account's request history shows a submission in the last 120 days, so the agent runs MAC-7308 before deciding. The flag is a prompt, not a determination — the ruling pinned in #cli-desk governs what actually blocks.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 6,
+      "effective_at": "2025-11-04T09:00:00-05:00",
+      "updated_at": "2025-11-04T09:00:00-05:00",
+      "usage_30d": 92,
+      "conditions": ["cli_history.recent_submission_within_days <= 120"],
+      "actions": ["add_flag cooldown-review"]
+    },
+    {
+      "trigger_id": "TRG-8105",
+      "name": "Auto-run MAC-7220 on small CLI requests (retired)",
+      "description": "Auto-executed the legacy under-$500 auto-approve macro on qualifying back-office requests. Retired with the macro at the decisioning-desk cutover (ticket CLIT-1207).",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "priority": 5,
+      "effective_at": "2023-04-03T09:00:00-04:00",
+      "updated_at": "2025-10-27T08:00:00-04:00",
+      "usage_30d": 0,
+      "conditions": ["request.amount < 500", "account.standing == 'good'"],
+      "actions": ["run_macro MAC-7220"]
+    }
+  ],
+  "policy_contracts": [
+    {
+      "contract_id": "CON-DTOOL-7",
+      "name": "Discoverable agent tool access",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "card-support-operations",
+      "scope": "All discoverable agent tools surfaced in card-support consoles, including pay_credit_card_from_checking_9182. These are internal agent tools, not user tools — they are never handed to customers to run.",
+      "required_fields": ["tool_name"],
+      "closed_world": true,
+      "wrapper_rule": "Each discoverable tool must be unlocked with unlock_discoverable_agent_tool before executing it with call_discoverable_agent_tool; the console rejects call attempts on tools that were not unlocked in the same interaction.",
+      "effective_at": "2025-05-20T09:00:00-04:00",
+      "updated_at": "2025-11-10T14:18:03-05:00"
+    },
+    {
+      "contract_id": "CON-CLIF-3",
+      "name": "CLI decision form completeness",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "cli-desk",
+      "scope": "Decision records written by MAC-7312 and MAC-7313. Every decision must reference a submitted request and a completed checklist; the denial_reason field is closed-world against the deny_5848.denial_reason dropdown rows.",
+      "required_fields": ["request_reference", "checklist_complete", "decision"],
+      "closed_world": true,
+      "wrapper_rule": "Decision tools execute directly in the console session; the pay-from-checking tool is the only discoverable-wrapper tool in this workspace.",
+      "effective_at": "2025-10-27T08:00:00-04:00",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    }
+  ],
+  "field_columns": [
+    "row_id",
+    "field_key",
+    "field_name",
+    "field_type",
+    "option_value",
+    "option_description",
+    "active",
+    "status",
+    "environment",
+    "updated_at"
+  ],
+  "fields": [
+    {
+      "row_id": "FLD-910",
+      "field_key": "submit_7392.credit_card_account_id",
+      "field_name": "Submit argument: credit_card_account_id",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Required. A string containing the credit card account ID.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-911",
+      "field_key": "submit_7392.user_id",
+      "field_name": "Submit argument: user_id",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Required. A string containing the customer's unique identifier.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-912",
+      "field_key": "submit_7392.requested_increase_amount",
+      "field_name": "Submit argument: requested_increase_amount",
+      "field_type": "number",
+      "option_value": null,
+      "option_description": "Required. An integer dollar amount by which to increase the credit limit.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-915",
+      "field_key": "history_4829.credit_card_account_id",
+      "field_name": "History-check argument: credit_card_account_id",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Required. A string containing the credit card account ID whose request history is checked.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-920",
+      "field_key": "approve_5847.credit_card_account_id",
+      "field_name": "Approve argument: credit_card_account_id",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Required. A string containing the credit card account ID.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-921",
+      "field_key": "approve_5847.user_id",
+      "field_name": "Approve argument: user_id",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Required. A string containing the customer's unique identifier.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-922",
+      "field_key": "approve_5847.new_credit_limit",
+      "field_name": "Approve argument: new_credit_limit",
+      "field_type": "number",
+      "option_value": null,
+      "option_description": "Required. A float for the new total credit limit to set.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-925",
+      "field_key": "deny_5848.credit_card_account_id",
+      "field_name": "Deny argument: credit_card_account_id",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Required. A string containing the credit card account ID.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-926",
+      "field_key": "deny_5848.user_id",
+      "field_name": "Deny argument: user_id",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Required. A string containing the customer's unique identifier.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-927",
+      "field_key": "deny_5848.denial_reason",
+      "field_name": "Deny argument: denial_reason",
+      "field_type": "dropdown",
+      "option_value": "insufficient_account_age",
+      "option_description": "Permitted denial_reason value: insufficient_account_age.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-928",
+      "field_key": "deny_5848.denial_reason",
+      "field_name": "Deny argument: denial_reason",
+      "field_type": "dropdown",
+      "option_value": "cooldown_period_active",
+      "option_description": "Permitted denial_reason value: cooldown_period_active.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-929",
+      "field_key": "deny_5848.denial_reason",
+      "field_name": "Deny argument: denial_reason",
+      "field_type": "dropdown",
+      "option_value": "pending_disputes",
+      "option_description": "Permitted denial_reason value: pending_disputes.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-930",
+      "field_key": "deny_5848.denial_reason",
+      "field_name": "Deny argument: denial_reason",
+      "field_type": "dropdown",
+      "option_value": "pending_replacement_card",
+      "option_description": "Permitted denial_reason value: pending_replacement_card.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-931",
+      "field_key": "deny_5848.denial_reason",
+      "field_name": "Deny argument: denial_reason",
+      "field_type": "dropdown",
+      "option_value": "past_due_balance",
+      "option_description": "Permitted denial_reason value: past_due_balance.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-932",
+      "field_key": "deny_5848.denial_reason",
+      "field_name": "Deny argument: denial_reason",
+      "field_type": "dropdown",
+      "option_value": "high_utilization",
+      "option_description": "Permitted denial_reason value: high_utilization.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-933",
+      "field_key": "deny_5848.denial_reason",
+      "field_name": "Deny argument: denial_reason",
+      "field_type": "dropdown",
+      "option_value": "insufficient_payment_history",
+      "option_description": "Permitted denial_reason value: insufficient_payment_history.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-934",
+      "field_key": "deny_5848.denial_reason",
+      "field_name": "Deny argument: denial_reason",
+      "field_type": "dropdown",
+      "option_value": "requested_amount_exceeds_limit",
+      "option_description": "Permitted denial_reason value: requested_amount_exceeds_limit.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-935",
+      "field_key": "deny_5848.denial_reason",
+      "field_name": "Deny argument: denial_reason",
+      "field_type": "dropdown",
+      "option_value": "other",
+      "option_description": "Permitted denial_reason value: other.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-940",
+      "field_key": "pay_9182.user_id",
+      "field_name": "Payment argument: user_id",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Required. A string containing the customer's unique identifier.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-06-16T09:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-941",
+      "field_key": "pay_9182.checking_account_id",
+      "field_name": "Payment argument: checking_account_id",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Required. A string containing the checking account ID the payment is drawn from.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-06-16T09:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-942",
+      "field_key": "pay_9182.credit_card_account_id",
+      "field_name": "Payment argument: credit_card_account_id",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Required. A string containing the credit card account ID the payment is applied to.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-06-16T09:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-943",
+      "field_key": "pay_9182.amount",
+      "field_name": "Payment argument: amount",
+      "field_type": "number",
+      "option_value": null,
+      "option_description": "Required. A float payment amount in dollars. The amount must be positive and cannot exceed the checking account balance or the credit card outstanding balance.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-06-16T09:00:00-04:00"
+    }
+  ],
+  "sla_policies": [
+    {
+      "policy_id": "SLA-410",
+      "name": "CLI decision communication",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "Decision notification sent within 3 business days of submission",
+      "applies_to": "cli-decisioning queue",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    },
+    {
+      "policy_id": "SLA-215",
+      "name": "Card payment same-session completion",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "Pay-from-checking requests completed within the contact session",
+      "applies_to": "card-support queues",
+      "updated_at": "2025-06-16T09:00:00-04:00"
+    }
+  ],
+  "views": [
+    {
+      "view_id": "VIEW-71",
+      "name": "CLI decisioning queue",
+      "active": true,
+      "status": "current",
+      "filters": ["queue == cli-decisioning", "status != closed"],
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    },
+    {
+      "view_id": "VIEW-72",
+      "name": "Cooldown-review flagged",
+      "active": true,
+      "status": "current",
+      "filters": ["flag == cooldown-review"],
+      "updated_at": "2025-11-04T09:00:00-05:00"
+    },
+    {
+      "view_id": "VIEW-58",
+      "name": "Back-office legacy (read-only archive)",
+      "active": false,
+      "status": "archived",
+      "filters": ["queue == backoffice-credit"],
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    }
+  ]
+}

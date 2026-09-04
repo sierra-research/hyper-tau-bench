@@ -1,0 +1,63 @@
+Frame 2 - Cancellation of a pending order: current flow plus milestone
+history. Header note: reflects CR8 (final, 4.29.26), #beacon-order-servicing.
+
+Cancellation flow:
+1. Pending order confirmed (Frame 1 gate passed) - customer wants to cancel.
+2. Ask why the customer wants to cancel - the reason question comes before
+   any processing, every time.
+3. Reason on the accepted list? Accepted list per CR8: "no longer needed" -
+   the customer's own wording counts, e.g. "I don't want it anymore" - and
+   "ordered by mistake". Two entries; that's the whole list.
+   - No (cheaper elsewhere, shipping too slow, changed my mind about the
+     brand, anything else): do not process the cancellation. Tell the
+     customer politely, and offer a transfer if they want to escalate.
+4. Recap before processing: the order, the total, and where the refund will
+   land - then get an explicit confirmation (a clear "yes", not silence).
+   - Customer hesitates or says no: nothing is processed; the order stays
+     pending; pick the conversation back up whenever they're ready.
+5. Process the cancellation: order status flips to cancelled and the full
+   amount goes back to the payment method that paid.
+6. Original payment method?
+   - Gift card: balance is restored to that same gift card immediately.
+   - Credit card / PayPal: refund clears in 3 to 6 business days - say that
+     timeline to the customer out loud, don't make them ask.
+7. End - order cancelled, refund on its way.
+
+Multi-charge callout (red-circled on the board): if the payment history shows
+more than one charge - say an initial payment plus a top-up from an earlier
+item modification - each charge is refunded separately - in the same amount,
+back to the method that made that charge. Separate refunds land as separate
+payment-history lines. Never collapse them into one net refund, even when
+both charges used the same method. Margin note: top escalation driver in May;
+agents netted the two refunds into one line and reconciliation flagged every
+single one.
+
+Milestone 1 history strip (all superseded/killed/parked - context only;
+current policy is the flow above plus CR8):
+- Superseded 2.17.26 (CR2): reason captured as free text, pilot month only.
+- Superseded 3.30.26 (CR5): M2-era five-option reason pick list; screenshots
+  of that picker still floating around the wiki are stale.
+- Killed 3.16.26 (CR4): M2.5 price-match counteroffer on cheaper-elsewhere
+  cancels; the interim escalation queue is also gone (see CR5).
+- Superseded 4.20.26 (CR7): M3-era verbatim matching; CR7 replaced it with
+  mapping the customer's own phrasing.
+- Parked, no decision: auto-approve cancels under $25 with no reason
+  question; the reason question still comes first at every amount.
+- Sticky: pull the five-reason picker and counteroffer script from new-hire
+  decks; train on CR8 material only (Lena Ortiz).
+
+Milestone 4 box - refund execution, current (shipped 5.11.26, live): the
+submitted cancellation writes status cancelled (exact status string,
+lowercase), runs one refund job per charge in payment history, and sends the
+customer notification email. Timelines surface from the refund job: gift card
+immediate restore, card / PayPal the 3-to-6-business-day window quoted
+upstream. No agent-side overrides; the RD2-era "rush refund" button no longer
+exists.
+
+Stickies and cards (commentary): explicit confirmation survived every
+milestone unchanged since M1 (Hank Fischer); the M4 notification email also
+restates the refund timeline since 5.19 (Noor Danesh); "refund to a different
+card" is a refund-destination ask about returns (RD5 arc, different board) -
+cancel refunds always retrace the original charges (Priya Shah); parked with
+no decision: goodwill cancel refunds to a brand-new gift card with +5% bonus,
+floated 5.28.26 in #beacon-payments-risk and parked the same day.

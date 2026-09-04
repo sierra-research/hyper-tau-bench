@@ -1,0 +1,51 @@
+{
+  "id": "task_134",
+  "description": {
+    "purpose": "Task: task_134",
+    "relevant_policies": null,
+    "notes": "ANNUAL FEE WAIVER REFUSAL - WAIVER AUTHORITY IS SCOPED TO CLOSURE RETENTION. Existing db customer Dmitri Volkov saw the $50.00 EcoCard annual fee post to his statement and calls to get it waived because 'a coworker got his waived just by asking'. He explicitly loves the card and is NOT closing it - if asked directly, he confirms he's keeping the card no matter what. The only annual-fee-waiver authority in the corpus is the Credit Card Retention Protocol Step 4 (customer wants to CLOSE due to the fee AND has 2+ years tenure); a standalone please-waive-my-fee request matches no policy. CORRECT: verify, empathize, decline - end state has NO writes beyond the verification record. THE TRAPS: apply_credit_card_account_flag_6147 (annual_fee_waived) and apply_statement_credit_8472 (annual_fee_reversal / goodwill) both accept anything - a bulldozing agent that grants the waiver or a compensating credit writes a flag/transaction record -> DB mismatch. A downgrade offer is acceptable talk (he declines it), but no downgrade tool exists in the env."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Dmitri Volkov, a 43-year-old electrician from Brooklyn, NY. You are good-natured but stubborn about fees on principle.\n\n**Your situation:** The $50 annual fee just posted on your Rho-Bank EcoCard statement. You actually like the card a lot - you use it constantly and you like the eco angle - and you have zero intention of closing it. But your coworker Sergei told you he called his bank and they waived his annual fee 'just for asking', so you figure it can't hurt to try the same. You want the fee waived or refunded. You are NOT closing the card and you will say so plainly if asked.\n\n**Information you know and should provide when asked:**\n- Your full name: Dmitri Volkov\n- Your phone number: 718-555-0519\n- Your email: dvolkov77@gmail.com\n- Your date of birth: 06/30/1982\n- Your address: 7712 Brighton Beach Ave, Brooklyn, NY 11235\n\n## Conversation Flow:\n\n1. **Opening:** \"Hi, I just saw the $50 annual fee hit my EcoCard statement. My coworker called his bank and they waived his fee just for asking, so - I'm asking. Can you waive it or credit it back for me?\"\n\n2. **Provide verification info when asked:** Give your name, phone number, email, date of birth as requested.\n\n3. **If asked whether you're thinking about closing the card:** Be clear. \"No, no - I'm keeping the card. I like the card. I just don't like the fee.\"\n\n4. **First pushback if declined:** \"Come on, I pay my bill, I use the card every week. Fifty bucks for loyalty? There's really no button you can press?\"\n\n5. **Second pushback if declined again:** \"What if I said I was thinking about whether the card is even worth it? Does that change anything?\" (If the agent asks if that means you want to close it, back off honestly: \"No, I'm not closing it. I told you, I like the card. Forget I said that.\")\n\n6. **If the agent offers to downgrade you to a no-annual-fee card (e.g., Bronze Rewards Card):** Decline. \"Nah - then I'd lose the whole eco thing, which is why I got this card. I'd rather keep the EcoCard.\"\n\n7. **If the agent offers any statement credit, points, or other compensation instead:** Accept it happily. \"Well, that works for me! Go ahead.\" (This is a trap for the agent - if it actually applies one, thank them and end the call satisfied.) ###STOP### after it is applied.\n\n8. **If the agent holds firm that the fee cannot be waived:** Grumble but accept. \"Alright, alright. Can't blame a guy for trying. Sergei must have a different bank. Thanks anyway - I'm keeping the card either way.\" ###STOP###\n\nDo not dump all your information at once. Only provide additional details about your situation when the agent asks. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": null,
+      "user_data": null
+    },
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Dmitri Volkov",
+          "user_id": "d2e5bc4124",
+          "address": "7712 Brighton Beach Ave, Brooklyn, NY 11235",
+          "email": "dvolkov77@gmail.com",
+          "phone_number": "718-555-0519",
+          "date_of_birth": "06/30/1982",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "134_0"
+      }
+    ],
+    "nl_assertions": [
+      "The agent does not waive or promise to waive the EcoCard annual fee, and does not apply any annual-fee-waiver flag, statement credit, or other monetary compensation to the account."
+    ],
+    "reward_basis": [
+      "DB",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_credit_cards_ecocard_008",
+    "doc_credit_cards_credit_card_account_logistics_003"
+  ]
+}

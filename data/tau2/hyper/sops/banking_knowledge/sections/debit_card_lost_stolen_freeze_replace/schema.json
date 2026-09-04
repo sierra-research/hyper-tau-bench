@@ -1,0 +1,2018 @@
+{
+  "id": "banking_debit_card_lost_stolen_freeze_replace_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "debit_card_lost_stolen_freeze_replace",
+  "display_name": "Debit-card lost/stolen, freeze/unfreeze, replacement, and security alerts",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/debit_card_lost_stolen_freeze_replace/source.md",
+    "heading": "## Debit-card lost/stolen, freeze/unfreeze, replacement, and security alerts"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/debit_card_lost_stolen_freeze_replace/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/debit_card_lost_stolen_freeze_replace/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/debit_card_lost_stolen_freeze_replace/evidence_corpus_hard_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/debit_card_lost_stolen_freeze_replace/client_overlay_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/debit_card_lost_stolen_freeze_replace/client_overlay_debit_security_001/transformation_pack.json"
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook requirements from shared context: verify identity before account-specific information, get explicit confirmation before account-modifying actions, and use the exact transfer message when a transfer is performed.",
+      "Support console turns may mention document ids, internal tool results, and eligibility checks; Agent turns should give the customer the customer-visible next step or outcome.",
+      "Do not transform concrete KB tables, thresholds, statuses, fees, amounts, or condition-specific outcomes into vague dependency statements."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "identity verification before account-specific details",
+      "explicit customer confirmation before account-modifying actions",
+      "plain-language customer-facing outcomes",
+      "support-console notes for internal KB/tool evidence"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_023.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_024.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_025.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_026.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_028.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_029.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_030.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_039.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_purple_account_007.json"
+    ],
+    "summary": "Handling lost or stolen debit cards, freezes/unfreezes, replacements by account tier, travel/emergency replacement, and security alert blocks.",
+    "rules": [
+      "Preserve all values, tables, thresholds, statuses, fees, amounts, eligibility gates, tool/action names, and condition-to-outcome mappings from the source bundle.",
+      "Use the shared banking handbook for identity verification, explicit confirmation before account-modifying actions, discoverable-tool wrapper behavior, schema limits, and transfer wording.",
+      "Do not invent unsupported account fields, undocumented override mechanisms, undocumented tool names, or customer entitlements not present in the source bundle.",
+      "When a source document is internal, represent its internal checks in Support console turns or agent behavior rather than as exposed policy narration."
+    ],
+    "candidate": {
+      "id": "debit_card_lost_stolen_freeze_replace",
+      "title": "Debit-card lost/stolen, freeze/unfreeze, replacement, and security alerts",
+      "priority": 1,
+      "related_task_ids": [
+        "task_077",
+        "task_078",
+        "task_079",
+        "task_080",
+        "task_081",
+        "task_086",
+        "task_087",
+        "task_088",
+        "task_090",
+        "task_091",
+        "task_092"
+      ],
+      "recommended_case_count": 6,
+      "losslessness_risks": [
+        "Preserve freeze/unfreeze, cancel, and replacement as separate actions.",
+        "Preserve account-tier replacement options and fees.",
+        "Preserve cross-product lost/stolen protocol ordering."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_journey",
+        "label": "Debit-card lost/stolen, freeze/unfreeze, replacement, and security alerts",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_shared_rules",
+        "label": "Shared workflow rules",
+        "kind": "shared_reference",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 1,
+        "description": "Rules, prerequisites, and reference values used by more than one customer pathway in this journey.",
+        "fact_ids": [
+          "F010",
+          "F021",
+          "F022",
+          "F029",
+          "F032",
+          "F040",
+          "F041",
+          "F045",
+          "F046",
+          "F047",
+          "F048",
+          "F049",
+          "F050",
+          "F051",
+          "F052",
+          "F053",
+          "F060",
+          "F061",
+          "F065",
+          "F066",
+          "F067",
+          "F068",
+          "F069",
+          "F070",
+          "F071",
+          "F073",
+          "F074",
+          "F075",
+          "F076",
+          "F078",
+          "F079",
+          "F080",
+          "F081",
+          "F082",
+          "F085",
+          "F086",
+          "F090",
+          "F091",
+          "F101",
+          "F111",
+          "F128",
+          "F129",
+          "F130",
+          "F140",
+          "F141",
+          "F142",
+          "F173",
+          "F174",
+          "F175",
+          "F176",
+          "F180",
+          "F181",
+          "F190",
+          "F191",
+          "F193",
+          "F194",
+          "F200",
+          "F201",
+          "F204",
+          "F205",
+          "F206",
+          "F209",
+          "F230",
+          "F231"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_a",
+        "label": "Eligible customer orders a new debit card for an open checking account",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 2,
+        "description": "Policy path represented by case A.",
+        "fact_ids": [
+          "F011",
+          "F012",
+          "F013",
+          "F014",
+          "F015",
+          "F016",
+          "F017",
+          "F018",
+          "F019",
+          "F020",
+          "F023",
+          "F024",
+          "F025",
+          "F026",
+          "F027",
+          "F028",
+          "F030",
+          "F031",
+          "F033",
+          "F034",
+          "F035",
+          "F036",
+          "F037",
+          "F038",
+          "F115",
+          "F116",
+          "F117",
+          "F118",
+          "F119",
+          "F120",
+          "F121",
+          "F122",
+          "F123",
+          "F124",
+          "F125",
+          "F126",
+          "F127",
+          "F131",
+          "F132",
+          "F133",
+          "F134",
+          "F135"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_b",
+        "label": "Customer-service activation of a first-time new debit card",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 3,
+        "description": "Policy path represented by case B.",
+        "fact_ids": [
+          "F042"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_c",
+        "label": "Customer-service activation of a replacement debit card issued for lost, stolen, or fraud reason",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 4,
+        "description": "Policy path represented by case C.",
+        "fact_ids": [
+          "F043",
+          "F054",
+          "F055",
+          "F056"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_d",
+        "label": "Customer-service activation of a reissued debit card",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 5,
+        "description": "Policy path represented by case D.",
+        "fact_ids": [
+          "F044",
+          "F057",
+          "F058"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_e",
+        "label": "Activation details entered incorrectly twice and card locks",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 6,
+        "description": "Policy path represented by case E.",
+        "fact_ids": [
+          "F059"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_f",
+        "label": "Stolen wallet debit card closed and cross-product credit-card protection offered",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 7,
+        "description": "Policy path represented by case F.",
+        "fact_ids": [
+          "F182",
+          "F183",
+          "F184",
+          "F185",
+          "F186",
+          "F187",
+          "F188"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_g",
+        "label": "Lost debit card closure and immediate replacement question",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 8,
+        "description": "Policy path represented by case G.",
+        "fact_ids": []
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_h",
+        "label": "Fraud-suspected debit-card closure with dispute and password guidance",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 9,
+        "description": "Policy path represented by case H.",
+        "fact_ids": [
+          "F077",
+          "F083"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_i",
+        "label": "Non-security debit-card closure blocked by unresolved requirements",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 10,
+        "description": "Policy path represented by case I.",
+        "fact_ids": [
+          "F072",
+          "F084"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_j",
+        "label": "Temporary freeze of a misplaced or security-concern debit card",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 11,
+        "description": "Policy path represented by case J.",
+        "fact_ids": [
+          "F092",
+          "F093",
+          "F094",
+          "F095",
+          "F096",
+          "F097",
+          "F098",
+          "F099",
+          "F100",
+          "F108",
+          "F109",
+          "F110"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_k",
+        "label": "Unfreezing a frozen debit card",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 12,
+        "description": "Policy path represented by case K.",
+        "fact_ids": [
+          "F102",
+          "F103",
+          "F104",
+          "F105",
+          "F106",
+          "F107"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_l",
+        "label": "ENTRY tier replacement debit card with limit, waiting period, shipping, design, and excess-fee rules",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 13,
+        "description": "Policy path represented by case L.",
+        "fact_ids": [
+          "F143",
+          "F144",
+          "F145",
+          "F146",
+          "F161",
+          "F162",
+          "F163"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_m",
+        "label": "MID tier replacement debit card with expedited shipping and excess-fee option",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 14,
+        "description": "Policy path represented by case M.",
+        "fact_ids": [
+          "F147",
+          "F148",
+          "F149",
+          "F150",
+          "F151",
+          "F164",
+          "F165",
+          "F166"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_n",
+        "label": "PREMIUM tier replacement debit card with free expedited shipping, rush fee, discounted custom design, and no excess-fee option",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 15,
+        "description": "Policy path represented by case N.",
+        "fact_ids": [
+          "F152",
+          "F153",
+          "F154",
+          "F155",
+          "F156",
+          "F167",
+          "F168",
+          "F169"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_o",
+        "label": "ELITE tier replacement debit card with unlimited replacements, complimentary shipping/design, and same-day priority processing",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 16,
+        "description": "Policy path represented by case O.",
+        "fact_ids": [
+          "F157",
+          "F158",
+          "F159",
+          "F160",
+          "F170",
+          "F171",
+          "F172"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_p",
+        "label": "Customer-initiated debit-card fraud alert cleared after legitimate transactions confirmed",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 17,
+        "description": "Policy path represented by case P.",
+        "fact_ids": [
+          "F192",
+          "F202",
+          "F207"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_q",
+        "label": "Bank-initiated debit-card fraud alert escalated to security team",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 18,
+        "description": "Policy path represented by case Q.",
+        "fact_ids": []
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_r",
+        "label": "Debit-card velocity block cleared early after reasonable explanation",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 19,
+        "description": "Policy path represented by case R.",
+        "fact_ids": [
+          "F195",
+          "F196",
+          "F197",
+          "F198",
+          "F199",
+          "F203",
+          "F208"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_s",
+        "label": "Debit-card security alert or velocity block escalated because clearance conditions are not met",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 20,
+        "description": "Policy path represented by case S.",
+        "fact_ids": [
+          "F210",
+          "F211",
+          "F212",
+          "F213"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_t",
+        "label": "Purple Account emergency replacement for debit card lost or stolen while abroad",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 21,
+        "description": "Policy path represented by case T.",
+        "fact_ids": [
+          "F220",
+          "F221",
+          "F222",
+          "F223",
+          "F224",
+          "F225",
+          "F226"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_u",
+        "label": "Decline code 82 caused by physical card damage",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 22,
+        "description": "Policy path represented by case U.",
+        "fact_ids": [
+          "F232"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_v",
+        "label": "Decline code 82 with undamaged card treated as possible cloned or counterfeit card",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 23,
+        "description": "Policy path represented by case V.",
+        "fact_ids": [
+          "F233",
+          "F234",
+          "F235"
+        ]
+      },
+      {
+        "id": "debit_card_lost_stolen_freeze_replace_path_w",
+        "label": "Decline code 87 cash-back-not-permitted explanation",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_lost_stolen_freeze_replace_journey",
+        "order": 24,
+        "description": "Policy path represented by case W.",
+        "fact_ids": [
+          "F236",
+          "F237",
+          "F238",
+          "F239"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_a",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_b",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_c",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_d",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_e",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_f",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_g",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_h",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_i",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_j",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_k",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_l",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_m",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_n",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_o",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_p",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_q",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_r",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_s",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_t",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_u",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_v",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      },
+      {
+        "source_id": "debit_card_lost_stolen_freeze_replace_path_w",
+        "type": "uses_shared_rules",
+        "target_id": "debit_card_lost_stolen_freeze_replace_shared_rules"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "F010",
+      "statement": "A debit card linked to a bank account can be ordered only for a checking account, whether personal or business; savings accounts are not eligible for debit cards."
+    },
+    {
+      "id": "F011",
+      "statement": "A customer must be verified before ordering a debit card."
+    },
+    {
+      "id": "F012",
+      "statement": "The account_type must be checking for debit-card order eligibility."
+    },
+    {
+      "id": "F013",
+      "statement": "The account status must be OPEN for debit-card order eligibility."
+    },
+    {
+      "id": "F014",
+      "statement": "The account must have been open for at least 3 business days, excluding weekends, for debit-card order eligibility."
+    },
+    {
+      "id": "F015",
+      "statement": "A customer cannot have more than 1 active debit card per checking account for debit-card order eligibility."
+    },
+    {
+      "id": "F016",
+      "statement": "The account must have a minimum balance of $25 to cover potential fees for debit-card order eligibility."
+    },
+    {
+      "id": "F017",
+      "statement": "The customer must be at least 18 years old for debit-card order eligibility, verified using date_of_birth."
+    },
+    {
+      "id": "F018",
+      "statement": "The customer cannot have a pending debit card order for the same account; the debit_cards table must be checked for PENDING status."
+    },
+    {
+      "id": "F019",
+      "statement": "Under the standard debit-card ordering procedure for ordering a debit card linked to a checking account, excluding emergency card replacement while traveling or abroad, the customer's address on file must be a valid US domestic address for debit-card order eligibility; international shipping is not available under that standard ordering procedure."
+    },
+    {
+      "id": "F020",
+      "statement": "STANDARD debit-card delivery has free shipping and arrives in 7-10 business days."
+    },
+    {
+      "id": "F021",
+      "statement": "EXPEDITED debit-card delivery arrives in 3-5 business days whenever EXPEDITED delivery is available. For debit-card orders that are not governed by replacement tier-specific delivery-fee rules, EXPEDITED delivery has a $15 fee; for replacement debit cards, EXPEDITED availability and delivery_fee must follow the account-tier replacement rules."
+    },
+    {
+      "id": "F022",
+      "statement": "RUSH debit-card delivery arrives in 1-2 business days whenever RUSH delivery is available. For debit-card orders that are not governed by replacement tier-specific delivery-fee rules, RUSH delivery has a $35 fee. For replacement debit cards, RUSH availability and delivery_fee follow the account-tier table: ENTRY replacements are standard shipping only, MID replacements list only STANDARD and EXPEDITED shipping (RUSH is not listed as a MID option), PREMIUM replacements have RUSH available with delivery_fee $35, and ELITE replacements have RUSH available with delivery_fee $0."
+    },
+    {
+      "id": "F023",
+      "statement": "CLASSIC card design is the standard Rho-Bank blue design, is the default design, and has no fee."
+    },
+    {
+      "id": "F024",
+      "statement": "For debit-card orders that are not governed by replacement tier-specific design-fee rules, PREMIUM card design is a metallic silver finish with a $10 one-time fee; for replacement debit cards, the PREMIUM design_fee must follow the account-tier replacement rules."
+    },
+    {
+      "id": "F025",
+      "statement": "CUSTOM card design uses a customer-uploaded image, has a $25 one-time fee, is subject to approval, and fees may vary based on account tier."
+    },
+    {
+      "id": "F026",
+      "statement": "The first step to order a debit card is to verify the customer's identity."
+    },
+    {
+      "id": "F027",
+      "statement": "After identity verification for a debit-card order, the agent must confirm which checking account the debit card should be linked to."
+    },
+    {
+      "id": "F028",
+      "statement": "After confirming the checking account for a debit-card order, the agent must check eligibility requirements for the specified account."
+    },
+    {
+      "id": "F029",
+      "statement": "After checking debit-card order eligibility, the agent must ask the customer for the preferred delivery option and explain fees; for orders not governed by replacement tier-specific delivery rules the options are STANDARD, EXPEDITED, or RUSH, and for replacement debit-card orders the agent must ask only among the delivery options available for the customer's checking-account tier and explain the exact tier-specific fees."
+    },
+    {
+      "id": "F030",
+      "statement": "After asking for the delivery option for a debit-card order, the agent must ask for the preferred card design, CLASSIC, PREMIUM, or CUSTOM, and explain fees."
+    },
+    {
+      "id": "F031",
+      "statement": "After asking for the card design for a debit-card order, the agent must confirm the address where the customer would like the card mailed."
+    },
+    {
+      "id": "F032",
+      "statement": "The agent must use order_debit_card_5739 to order a debit card."
+    },
+    {
+      "id": "F033",
+      "statement": "After a debit card is ordered, the agent must inform the customer of the expected delivery timeframe and any applicable fees."
+    },
+    {
+      "id": "F034",
+      "statement": "Expedited and rush delivery fees are automatically deducted from the linked checking account."
+    },
+    {
+      "id": "F035",
+      "statement": "If the account has insufficient funds for delivery or design fees, the debit-card order will fail."
+    },
+    {
+      "id": "F036",
+      "statement": "Customers can track their debit-card shipment status using the Rho-Bank mobile app."
+    },
+    {
+      "id": "F037",
+      "statement": "New debit cards are automatically activated upon first use with PIN entry."
+    },
+    {
+      "id": "F038",
+      "statement": "Under the standard debit-card ordering procedure, any existing debit card that is currently ACTIVE, if any, remains active until the new card is activated; this note does not imply that PENDING, FROZEN, CLOSED, or otherwise blocked non-active cards are usable or remain active."
+    },
+    {
+      "id": "F040",
+      "statement": "The debit-card activation procedure applies when a customer has received a new debit card and wants to activate it with Rho-Bank customer service."
+    },
+    {
+      "id": "F041",
+      "statement": "There are three different activation tools depending on why the card was issued, and the agent must check the debit_cards table issue_reason field or the debit_card_orders table order reason before choosing the activation tool."
+    },
+    {
+      "id": "F042",
+      "statement": "activate_debit_card_8291 must be used for NEW cards, meaning a first-time card for the checking account with issue_reason new_account or first_card."
+    },
+    {
+      "id": "F043",
+      "statement": "activate_debit_card_8292 must be used for REPLACEMENT cards replacing lost, stolen, or fraud cards, with issue_reason lost, stolen, or fraud."
+    },
+    {
+      "id": "F044",
+      "statement": "activate_debit_card_8293 must be used for REISSUED cards for expiration renewal, damaged card, design upgrade, or bank-initiated reissue, with issue_reason expired, damaged, upgrade, or bank_reissue."
+    },
+    {
+      "id": "F045",
+      "statement": "Using the wrong debit-card activation tool will result in an error, so the issue reason must always be verified before tool selection."
+    },
+    {
+      "id": "F046",
+      "statement": "A customer must be verified for debit-card activation."
+    },
+    {
+      "id": "F047",
+      "statement": "The customer must have the physical card in their possession for debit-card activation."
+    },
+    {
+      "id": "F048",
+      "statement": "The debit card must be in PENDING status, not already ACTIVE, for debit-card activation."
+    },
+    {
+      "id": "F049",
+      "statement": "The linked checking account must still be OPEN for debit-card activation."
+    },
+    {
+      "id": "F050",
+      "statement": "The debit card must not be expired for debit-card activation, based on expiration_date."
+    },
+    {
+      "id": "F051",
+      "statement": "For debit-card activation, the customer must provide the last 4 digits of the debit card number printed on the card, the expiration date in MM/YY format, and the 3-digit CVV on the back of the card."
+    },
+    {
+      "id": "F052",
+      "statement": "Before activating a debit card, the agent must verify that the card details provided by the customer match the customer's account."
+    },
+    {
+      "id": "F053",
+      "statement": "For debit-card activation, the customer must set a 4-digit PIN that is exactly 4 digits and cannot be sequential like 1234 or repeating like 1111."
+    },
+    {
+      "id": "F054",
+      "statement": "After activating a replacement debit card with activate_debit_card_8292, the agent must remind the customer to review recent transactions for unauthorized charges."
+    },
+    {
+      "id": "F055",
+      "statement": "After activating a replacement debit card with activate_debit_card_8292, the agent must ask whether the customer has noticed any suspicious activity on the account."
+    },
+    {
+      "id": "F056",
+      "statement": "After activating a replacement debit card with activate_debit_card_8292, the agent must recommend changing the online banking password if fraud was suspected."
+    },
+    {
+      "id": "F057",
+      "statement": "After activating a reissued debit card with activate_debit_card_8293, the agent must inform the customer that the old card will remain active for 24 hours as a grace period."
+    },
+    {
+      "id": "F058",
+      "statement": "After activating a reissued debit card with activate_debit_card_8293, the agent must remind the customer to update recurring payments with the new card details if the card number changed."
+    },
+    {
+      "id": "F059",
+      "statement": "If the customer provides incorrect debit-card activation details 2 times, the card will be locked for security and the customer must visit a branch in person."
+    },
+    {
+      "id": "F060",
+      "statement": "Previous debit cards linked to the same account are automatically deactivated when the new card is activated, except reissued cards have a 24-hour grace period."
+    },
+    {
+      "id": "F061",
+      "statement": "After using the correct debit-card activation tool based on issue_reason, the agent must confirm that activation was successful."
+    },
+    {
+      "id": "F065",
+      "statement": "The closing or cancelling procedure applies when a customer wants to close, cancel, or deactivate a debit card."
+    },
+    {
+      "id": "F066",
+      "statement": "Permitted debit-card closing reasons are lost, stolen, fraud_suspected for suspected fraud or unauthorized transactions, damaged when the customer wants replacement, no_longer_needed, and account_closing."
+    },
+    {
+      "id": "F067",
+      "statement": "A customer must be verified before a debit card can be closed."
+    },
+    {
+      "id": "F068",
+      "statement": "The customer must be the owner of the debit card before it can be closed, verified by matching user_id."
+    },
+    {
+      "id": "F069",
+      "statement": "A debit card must currently be in ACTIVE or PENDING status to be closed."
+    },
+    {
+      "id": "F070",
+      "statement": "A debit card must not have pending or processing transactions to be closed; if pending transactions exist, the customer must be told to wait for all transactions to settle before closure."
+    },
+    {
+      "id": "F071",
+      "statement": "A debit card must not have pending refunds to be closed; if pending refunds exist, the customer must be told to wait for refunds to process, typically 3-5 business days, or acknowledge in writing that the refunds will be credited to the linked checking account instead."
+    },
+    {
+      "id": "F072",
+      "statement": "For debit-card closure reasons other than lost, stolen, or fraud_suspected, the debit card must have been active for at least 14 days based on date_issued; if the card is newer, the customer must be told that the card cannot be closed yet and given the earliest eligible closure date."
+    },
+    {
+      "id": "F073",
+      "statement": "For debit-card closure, the agent must ask the customer for the closure reason, check eligibility requirements, and if any requirement is not met, tell the customer what must be resolved and not proceed with closure, except that lost, stolen, and fraud_suspected closure reasons bypass the minimum card-age requirement."
+    },
+    {
+      "id": "F074",
+      "statement": "For a closure reason of lost, stolen, or fraud_suspected, the minimum card age requirement is bypassed for security purposes."
+    },
+    {
+      "id": "F075",
+      "statement": "For a closure reason of lost, stolen, or fraud_suspected, the agent must inform the customer that any pending transactions will still be processed."
+    },
+    {
+      "id": "F076",
+      "statement": "For a closure reason of lost, stolen, or fraud_suspected, the agent must ask whether the customer wants to order a replacement card immediately."
+    },
+    {
+      "id": "F077",
+      "statement": "If fraud is suspected during debit-card closure, the agent must advise the customer to review recent transactions and file disputes for any unauthorized charges."
+    },
+    {
+      "id": "F078",
+      "statement": "The agent must use close_debit_card_4721 with parameters card_id and reason to close a debit card."
+    },
+    {
+      "id": "F079",
+      "statement": "After a debit card is closed, the agent must confirm that the card is now permanently deactivated and cannot be reactivated."
+    },
+    {
+      "id": "F080",
+      "statement": "After a debit card is closed, the agent must tell the customer that recurring payments linked to the card need to be updated with new payment information."
+    },
+    {
+      "id": "F081",
+      "statement": "After a debit card is closed, the agent must tell the customer that if they need a new card, they can order one through the standard ordering process."
+    },
+    {
+      "id": "F082",
+      "statement": "Cards reported as lost or stolen are closed immediately with no cooling-off period."
+    },
+    {
+      "id": "F083",
+      "statement": "For fraud_suspected debit-card closures, the agent must recommend that the customer also change their online banking password."
+    },
+    {
+      "id": "F084",
+      "statement": "If the linked checking account is being closed, all associated debit cards must be closed first."
+    },
+    {
+      "id": "F085",
+      "statement": "Closed debit cards cannot be reopened; the customer must order a new card if needed."
+    },
+    {
+      "id": "F086",
+      "statement": "Refunds to a closed debit card will be credited to the linked checking account."
+    },
+    {
+      "id": "F090",
+      "statement": "A debit-card freeze is a temporary lock that can be unfrozen later and is used when the customer misplaced the card or wants temporary security."
+    },
+    {
+      "id": "F091",
+      "statement": "A debit-card close is a permanent deactivation that cannot be reversed and is used when the card is confirmed lost or stolen or when the customer wants to cancel."
+    },
+    {
+      "id": "F092",
+      "statement": "Reasons for freezing a debit card include a misplaced card the customer is looking for, travel and wanting extra security, suspicious activity being investigated before closing, temporary spending restriction such as budgeting, and lending the card to a family member while wanting to control usage."
+    },
+    {
+      "id": "F093",
+      "statement": "A customer must be verified before freezing a debit card."
+    },
+    {
+      "id": "F094",
+      "statement": "The customer must be the owner of the debit card before it can be frozen."
+    },
+    {
+      "id": "F095",
+      "statement": "A debit card must currently be in ACTIVE status to be frozen; PENDING, CLOSED, and already FROZEN cards cannot be frozen."
+    },
+    {
+      "id": "F096",
+      "statement": "Before freezing a debit card, the agent must ask the customer why they want to freeze the card."
+    },
+    {
+      "id": "F097",
+      "statement": "Before freezing a debit card, the agent must inform the customer that all new transactions will be declined while the card is frozen."
+    },
+    {
+      "id": "F098",
+      "statement": "Before freezing a debit card, the agent must inform the customer that recurring payments and subscriptions will also be declined while the card is frozen."
+    },
+    {
+      "id": "F099",
+      "statement": "Before freezing a debit card, the agent must inform the customer that pending transactions already authorized may still process."
+    },
+    {
+      "id": "F100",
+      "statement": "Before freezing a debit card, the agent must inform the customer that they can unfreeze the card at any time by calling customer service or through the mobile app."
+    },
+    {
+      "id": "F101",
+      "statement": "The agent must use freeze_debit_card_3892 with card_id to freeze a debit card and then confirm the freeze was successful."
+    },
+    {
+      "id": "F102",
+      "statement": "A customer must be verified before unfreezing a debit card."
+    },
+    {
+      "id": "F103",
+      "statement": "The customer must be the owner of the debit card before it can be unfrozen."
+    },
+    {
+      "id": "F104",
+      "statement": "A debit card must currently be in FROZEN status to be unfrozen."
+    },
+    {
+      "id": "F105",
+      "statement": "The linked checking account must still be OPEN for a debit card to be unfrozen."
+    },
+    {
+      "id": "F106",
+      "statement": "The agent must use unfreeze_debit_card_3893 with card_id to unfreeze a debit card."
+    },
+    {
+      "id": "F107",
+      "statement": "After unfreezing a debit card, the agent must confirm that the card is now active and ready to use immediately."
+    },
+    {
+      "id": "F108",
+      "statement": "Freezing a debit card does not affect ATM access if the customer has their PIN."
+    },
+    {
+      "id": "F109",
+      "statement": "For an ATM freeze, the customer must separately enable ATM Block through the mobile app."
+    },
+    {
+      "id": "F110",
+      "statement": "If a frozen debit card is not unfrozen within 90 days, the customer will receive a reminder notification."
+    },
+    {
+      "id": "F111",
+      "statement": "If the customer confirms the debit card is lost or stolen, the agent should recommend closing instead of freezing."
+    },
+    {
+      "id": "F115",
+      "statement": "get_debit_cards_by_account_id_7823(account_id) retrieves all debit cards associated with a specific checking account."
+    },
+    {
+      "id": "F116",
+      "statement": "The debit-card lookup returns card_id, the unique identifier for the debit card."
+    },
+    {
+      "id": "F117",
+      "statement": "The debit-card lookup returns account_id, the checking account ID the card is linked to."
+    },
+    {
+      "id": "F118",
+      "statement": "The debit-card lookup returns user_id, the user ID of the cardholder."
+    },
+    {
+      "id": "F119",
+      "statement": "The debit-card lookup returns card_number_last_4, the last 4 digits of the card number."
+    },
+    {
+      "id": "F120",
+      "statement": "The debit-card lookup returns status, whose possible current statuses are ACTIVE, PENDING, FROZEN, and CLOSED."
+    },
+    {
+      "id": "F121",
+      "statement": "The debit-card lookup returns issue_reason, whose possible values are new_account, first_card, lost, stolen, fraud, expired, damaged, upgrade, and bank_reissue."
+    },
+    {
+      "id": "F122",
+      "statement": "The debit-card lookup returns expiration_date in MM/YY format."
+    },
+    {
+      "id": "F123",
+      "statement": "The debit-card lookup returns date_issued, the date the card was issued."
+    },
+    {
+      "id": "F124",
+      "statement": "The debit-card lookup returns card_design, whose design types are CLASSIC, PREMIUM, and CUSTOM."
+    },
+    {
+      "id": "F125",
+      "statement": "The debit-card lookup returns daily_purchase_limit, the maximum daily purchase amount."
+    },
+    {
+      "id": "F126",
+      "statement": "The debit-card lookup returns daily_atm_limit, the maximum daily ATM withdrawal amount."
+    },
+    {
+      "id": "F127",
+      "statement": "Before ordering a new debit card, the debit-card lookup is used to check whether the customer already has an active or pending card for the account."
+    },
+    {
+      "id": "F128",
+      "statement": "Before activating a debit card, the debit-card lookup is used to look up issue_reason to determine which activation tool to use."
+    },
+    {
+      "id": "F129",
+      "statement": "Before freezing or unfreezing a debit card, the debit-card lookup is used to verify the card exists and check its current status."
+    },
+    {
+      "id": "F130",
+      "statement": "Before closing a debit card, the debit-card lookup is used to confirm card_id and current status."
+    },
+    {
+      "id": "F131",
+      "statement": "For customer inquiries about debit-card details, the debit-card lookup is used when the customer asks about their debit card."
+    },
+    {
+      "id": "F132",
+      "statement": "get_debit_cards_by_account_id_7823 only returns debit cards for checking accounts; savings accounts do not have debit cards."
+    },
+    {
+      "id": "F133",
+      "statement": "The debit-card lookup may return multiple cards when the account has card history, such as old closed cards plus a current active card."
+    },
+    {
+      "id": "F134",
+      "statement": "For privacy, full debit-card numbers are never returned by the debit-card lookup; only the last 4 digits are returned."
+    },
+    {
+      "id": "F135",
+      "statement": "If no debit cards exist for the account, the debit-card lookup returns an empty list."
+    },
+    {
+      "id": "F140",
+      "statement": "When a customer requests a replacement debit card due to lost, stolen, damaged, or other reasons, replacement policies vary based on the customer's checking account tier."
+    },
+    {
+      "id": "F141",
+      "statement": "All applicable replacement debit-card fees, including shipping, design, and excess replacement fees, are automatically charged to the linked checking account; the customer must be told before the order is placed that the fee will be deducted from the checking account balance."
+    },
+    {
+      "id": "F142",
+      "statement": "When using order_debit_card_5739 for a replacement debit card, the agent must provide exact delivery_fee and design_fee amounts based on tier rules."
+    },
+    {
+      "id": "F143",
+      "statement": "ENTRY tier checking accounts have a maximum of 2 replacement debit cards per rolling 12-month period."
+    },
+    {
+      "id": "F144",
+      "statement": "ENTRY tier replacement debit cards have a 48-hour waiting period after card closure before a replacement can be ordered."
+    },
+    {
+      "id": "F145",
+      "statement": "ENTRY tier replacement debit cards have STANDARD shipping only, with delivery_fee $0; EXPEDITED and RUSH shipping are unavailable for ENTRY tier replacements."
+    },
+    {
+      "id": "F146",
+      "statement": "If an ENTRY tier customer has exceeded the 2-card replacement limit, they must wait until the oldest replacement ages out of the 12-month window or pay a $25 excess replacement fee."
+    },
+    {
+      "id": "F147",
+      "statement": "MID tier checking accounts have a maximum of 3 replacement debit cards per rolling 12-month period."
+    },
+    {
+      "id": "F148",
+      "statement": "MID tier replacement debit cards have no waiting period and can be ordered immediately after closure."
+    },
+    {
+      "id": "F149",
+      "statement": "MID tier replacement debit cards have STANDARD shipping available with delivery_fee $0."
+    },
+    {
+      "id": "F150",
+      "statement": "MID tier replacement debit cards ship STANDARD (delivery_fee $0) or EXPEDITED (delivery_fee $15); RUSH shipping is not listed as an option for MID tier replacements."
+    },
+    {
+      "id": "F151",
+      "statement": "If a MID tier customer has exceeded the 3-card replacement limit, they must wait until the oldest replacement ages out or pay a $15 excess replacement fee."
+    },
+    {
+      "id": "F152",
+      "statement": "PREMIUM tier checking accounts have a maximum of 5 replacement debit cards per rolling 12-month period."
+    },
+    {
+      "id": "F153",
+      "statement": "PREMIUM tier replacement debit cards have no waiting period and can be ordered immediately after closure."
+    },
+    {
+      "id": "F154",
+      "statement": "PREMIUM tier replacement debit cards have free expedited shipping on all replacements, with delivery_fee $0 for both STANDARD and EXPEDITED."
+    },
+    {
+      "id": "F155",
+      "statement": "PREMIUM tier replacement debit cards have RUSH shipping available with delivery_fee $35."
+    },
+    {
+      "id": "F156",
+      "statement": "If a PREMIUM tier customer has exceeded the 5-card replacement limit, they must wait until the oldest replacement ages out; there is no excess-fee option."
+    },
+    {
+      "id": "F157",
+      "statement": "ELITE tier checking accounts have unlimited replacement debit cards."
+    },
+    {
+      "id": "F158",
+      "statement": "ELITE tier replacement debit cards have no waiting period and can be ordered immediately after closure."
+    },
+    {
+      "id": "F159",
+      "statement": "ELITE tier replacement debit cards have complimentary shipping on all replacements, with delivery_fee $0 for STANDARD, EXPEDITED, and RUSH."
+    },
+    {
+      "id": "F160",
+      "statement": "ELITE tier replacement debit cards receive priority processing and ship the same business day if ordered before 2pm EST."
+    },
+    {
+      "id": "F161",
+      "statement": "ENTRY tier replacement debit cards have design_fee $0 for CLASSIC design."
+    },
+    {
+      "id": "F162",
+      "statement": "ENTRY tier replacement debit cards have design_fee $10 for PREMIUM metallic silver design."
+    },
+    {
+      "id": "F163",
+      "statement": "ENTRY tier replacement debit cards have design_fee $25 for CUSTOM uploaded image design."
+    },
+    {
+      "id": "F164",
+      "statement": "MID tier replacement debit cards have design_fee $0 for CLASSIC design."
+    },
+    {
+      "id": "F165",
+      "statement": "MID tier replacement debit cards have design_fee $10 for PREMIUM metallic silver design."
+    },
+    {
+      "id": "F166",
+      "statement": "MID tier replacement debit cards have design_fee $25 for CUSTOM uploaded image design."
+    },
+    {
+      "id": "F167",
+      "statement": "PREMIUM tier replacement debit cards have design_fee $0 for CLASSIC design."
+    },
+    {
+      "id": "F168",
+      "statement": "PREMIUM tier replacement debit cards have complimentary design_fee $0 for PREMIUM metallic silver design."
+    },
+    {
+      "id": "F169",
+      "statement": "PREMIUM tier replacement debit cards have discounted design_fee $15 for CUSTOM uploaded image design."
+    },
+    {
+      "id": "F170",
+      "statement": "ELITE tier replacement debit cards have design_fee $0 for CLASSIC design."
+    },
+    {
+      "id": "F171",
+      "statement": "ELITE tier replacement debit cards have complimentary design_fee $0 for PREMIUM metallic silver design."
+    },
+    {
+      "id": "F172",
+      "statement": "ELITE tier replacement debit cards have complimentary design_fee $0 for CUSTOM uploaded image design."
+    },
+    {
+      "id": "F173",
+      "statement": "To check debit-card replacement history, the agent must retrieve all cards for the account."
+    },
+    {
+      "id": "F174",
+      "statement": "To check debit-card replacement history, the agent must look for cards with issue_reason lost, stolen, fraud, or damaged."
+    },
+    {
+      "id": "F175",
+      "statement": "To check debit-card replacement history, the agent must check date_issued and count cards issued within the last 12 months."
+    },
+    {
+      "id": "F176",
+      "statement": "Cards with issue_reason new_account, first_card, expired, upgrade, or bank_reissue do not count toward the replacement debit-card limit."
+    },
+    {
+      "id": "F180",
+      "statement": "When a customer reports a lost or stolen debit card, there is a risk that other cards in the customer's wallet were also compromised."
+    },
+    {
+      "id": "F181",
+      "statement": "When a customer reports a lost or stolen debit card, the agent must first complete the standard debit-card freeze or close procedure, then check whether the customer has Rho-Bank credit cards on file, then proactively offer a replacement credit card as a security precaution if the customer has one or more credit cards."
+    },
+    {
+      "id": "F182",
+      "statement": "The agent must use get_credit_card_accounts_by_user to retrieve any credit card accounts for the customer during the lost or stolen debit-card cross-product security check."
+    },
+    {
+      "id": "F183",
+      "statement": "get_credit_card_accounts_by_user returns all active and closed credit card accounts for the customer."
+    },
+    {
+      "id": "F184",
+      "statement": "If the customer has one or more Rho-Bank credit cards during the lost or stolen debit-card cross-product security check, the agent must inform the customer that they also have a credit card with Rho-Bank."
+    },
+    {
+      "id": "F185",
+      "statement": "If the customer has one or more Rho-Bank credit cards during the lost or stolen debit-card cross-product security check, the agent must ask whether the credit card was also in the lost or stolen wallet."
+    },
+    {
+      "id": "F186",
+      "statement": "If the customer has one or more Rho-Bank credit cards during the lost or stolen debit-card cross-product security check, the agent must offer to order a replacement credit card with a new card number to prevent unauthorized charges."
+    },
+    {
+      "id": "F187",
+      "statement": "If the customer declines the credit-card replacement offer made during the lost or stolen debit-card cross-product security check, the agent must note in the account that the offer was made."
+    },
+    {
+      "id": "F188",
+      "statement": "When proactively offering credit-card protection after a lost or stolen debit card report, the agent must explain that wallet theft often involves multiple cards and the replacement protects against potential fraud."
+    },
+    {
+      "id": "F190",
+      "statement": "Debit-card security alerts and temporary blocks are protections designed to prevent fraudulent transactions but may occasionally affect legitimate customers."
+    },
+    {
+      "id": "F191",
+      "statement": "Fraud alerts are flags placed on debit cards when suspicious activity is detected or reported."
+    },
+    {
+      "id": "F192",
+      "statement": "Customer-initiated fraud alerts are placed when a customer reports suspicious activity or requests additional security, and customer service agents can clear them only after verifying the customer's identity and the customer confirms recent transactions are legitimate."
+    },
+    {
+      "id": "F193",
+      "statement": "Bank-initiated fraud alerts are placed by Rho-Bank's fraud detection systems when high-risk patterns are identified, cannot be cleared by customer service agents, and require review by the security team."
+    },
+    {
+      "id": "F194",
+      "statement": "Velocity blocks are automatic, temporary holds placed on debit cards when unusual transaction patterns are detected."
+    },
+    {
+      "id": "F195",
+      "statement": "A common trigger for a velocity block is multiple transactions in rapid succession."
+    },
+    {
+      "id": "F196",
+      "statement": "A common trigger for a velocity block is transactions in geographically distant locations within a short time."
+    },
+    {
+      "id": "F197",
+      "statement": "A common trigger for a velocity block is a sudden change in spending patterns."
+    },
+    {
+      "id": "F198",
+      "statement": "A common trigger for a velocity block is multiple declined transactions followed by successful ones."
+    },
+    {
+      "id": "F199",
+      "statement": "Velocity blocks automatically expire after 30 minutes, but can be cleared earlier by a customer service agent only after identity verification and a reasonable explanation for the unusual activity."
+    },
+    {
+      "id": "F200",
+      "statement": "clear_debit_card_fraud_alert_4892 is used to clear customer-service-clearable customer-initiated fraud alerts or eligible velocity blocks on a customer's debit card; it cannot clear bank-initiated fraud alerts."
+    },
+    {
+      "id": "F201",
+      "statement": "clear_debit_card_fraud_alert_4892 requires card_id and reason parameters, and the reason parameter must be exactly one of customer_verified or velocity_clear."
+    },
+    {
+      "id": "F202",
+      "statement": "The reason customer_verified must be used with clear_debit_card_fraud_alert_4892 when clearing a customer-initiated fraud alert after the customer has verified their identity and confirmed their transactions are legitimate."
+    },
+    {
+      "id": "F203",
+      "statement": "The reason velocity_clear must be used with clear_debit_card_fraud_alert_4892 when clearing a velocity block after verifying the customer's identity and obtaining a reasonable explanation for the unusual activity."
+    },
+    {
+      "id": "F204",
+      "statement": "clear_debit_card_fraud_alert_4892 cannot clear bank-initiated fraud alerts; if an attempt returns an error, the agent must transfer the customer to the security team."
+    },
+    {
+      "id": "F205",
+      "statement": "The customer's identity must always be verified before clear_debit_card_fraud_alert_4892 is used."
+    },
+    {
+      "id": "F206",
+      "statement": "The agent must document why a debit-card fraud alert or velocity block was cleared in the interaction notes."
+    },
+    {
+      "id": "F207",
+      "statement": "A debit-card fraud alert should be cleared only when the customer's identity is verified, the alert was customer-initiated, and the customer confirms recent transactions are legitimate."
+    },
+    {
+      "id": "F208",
+      "statement": "A debit-card velocity block should be cleared only when the customer's identity is verified and the customer provides a reasonable explanation for the unusual activity, such as a shopping spree or travel."
+    },
+    {
+      "id": "F209",
+      "statement": "The agent must escalate to the security team when a debit-card fraud alert is bank-initiated."
+    },
+    {
+      "id": "F210",
+      "statement": "The agent must escalate to the security team when the customer cannot verify their identity for a debit-card security alert or block."
+    },
+    {
+      "id": "F211",
+      "statement": "The agent must escalate to the security team when the customer reports transactions they did not make in connection with a debit-card security alert or block."
+    },
+    {
+      "id": "F212",
+      "statement": "The agent must escalate to the security team when the agent suspects the person calling about a debit-card security alert or block may not be the actual account holder."
+    },
+    {
+      "id": "F213",
+      "statement": "The agent must escalate to the security team when the customer's explanation for unusual debit-card activity is suspicious or inconsistent."
+    },
+    {
+      "id": "F220",
+      "statement": "For a Purple Account emergency card replacement while traveling, if the debit card is lost or stolen while abroad, an emergency replacement can typically reach the customer within 2 days, subject to local courier availability and the customer's exact location."
+    },
+    {
+      "id": "F221",
+      "statement": "Under the Purple Account emergency card replacement while traveling guidance, to request emergency card replacement while traveling, the customer should contact Rho-Bank immediately to report the card as lost or stolen."
+    },
+    {
+      "id": "F222",
+      "statement": "Under the Purple Account emergency card replacement while traveling guidance, to request emergency card replacement while traveling, the customer must confirm a secure delivery address where they can receive the replacement card."
+    },
+    {
+      "id": "F223",
+      "statement": "Under the Purple Account emergency card replacement while traveling guidance, after an emergency card replacement request while traveling is processed, the customer should monitor delivery updates provided after the request."
+    },
+    {
+      "id": "F224",
+      "statement": "Under the Purple Account emergency card replacement while traveling guidance, if the customer needs a bank-issued instrument while waiting for an emergency replacement card, a cashier's check can be provided for a fee of $8, and availability may depend on the customer's location and delivery options."
+    },
+    {
+      "id": "F225",
+      "statement": "Under the Purple Account emergency card replacement while traveling guidance, as soon as the customer reports a card lost or stolen while traveling, the card will be blocked to prevent further use."
+    },
+    {
+      "id": "F226",
+      "statement": "Under the Purple Account emergency card replacement while traveling guidance, the customer should update any recurring payments once the replacement card arrives after emergency card replacement while traveling."
+    },
+    {
+      "id": "F230",
+      "statement": "Debit-card decline code 82 means Negative CAM/CVV Results, where the card's chip data or CVV code does not match what is on file, and this could indicate card damage or potential fraud."
+    },
+    {
+      "id": "F231",
+      "statement": "For debit-card decline code 82, the agent must ask whether the card has been damaged recently and whether the customer has noticed issues with the chip or magnetic stripe."
+    },
+    {
+      "id": "F232",
+      "statement": "For debit-card decline code 82, if the card is physically damaged, the agent must explain that the chip or magnetic stripe may be damaged and causing the mismatch, then offer or help order a replacement."
+    },
+    {
+      "id": "F233",
+      "statement": "For debit-card decline code 82, if the card appears undamaged, the agent must treat it as a security concern that could indicate a cloned or counterfeit card was used, give the customer a security explanation before reviewing transactions, and then review recent transaction history for suspicious activity."
+    },
+    {
+      "id": "F234",
+      "statement": "For debit-card decline code 82 with an undamaged card, if suspicious transactions are found, the agent must follow stolen card protocol to assist the customer."
+    },
+    {
+      "id": "F235",
+      "statement": "For debit-card decline code 82 with an undamaged card, the agent should recommend freezing the card until a replacement arrives."
+    },
+    {
+      "id": "F236",
+      "statement": "Debit-card decline code 87 means Purchase Amount Only, No Cash Back, and the transaction was declined because it included a cash back request that is not permitted."
+    },
+    {
+      "id": "F237",
+      "statement": "For debit-card decline code 87, the agent must explain that cash back is not available for the transaction and that this could be due to merchant type, transaction amount, or account settings."
+    },
+    {
+      "id": "F238",
+      "statement": "For debit-card decline code 87, the agent must advise the customer to try the transaction again without requesting cash back and explain that the purchase portion should go through."
+    },
+    {
+      "id": "F239",
+      "statement": "For debit-card decline code 87, if the customer needs cash, the agent must explain that the customer can use any Rho-Bank ATM for free or use a partner ATM, and the agent can help locate the nearest one if the customer wants."
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Eligible customer orders a new debit card for an open checking account",
+      "scenario_requirements": "Customer requests a standard, non-emergency debit card for a specific checking account. The record should show identity verification, account selection, debit-card lookup, eligibility checks including a valid US domestic address on file and no international shipping for the standard ordering procedure, delivery and design option explanation, mailing-address confirmation, explicit confirmation before ordering, order_debit_card_5739 use, and final delivery/fee information. Support console notes should include lookup fields and internal eligibility evidence without exposing full card numbers.",
+      "included_fact_ids": [
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F017",
+        "F018",
+        "F019",
+        "F020",
+        "F021",
+        "F022",
+        "F023",
+        "F024",
+        "F025",
+        "F026",
+        "F027",
+        "F028",
+        "F029",
+        "F030",
+        "F031",
+        "F032",
+        "F033",
+        "F034",
+        "F035",
+        "F036",
+        "F037",
+        "F038",
+        "F115",
+        "F116",
+        "F117",
+        "F118",
+        "F119",
+        "F120",
+        "F121",
+        "F122",
+        "F123",
+        "F124",
+        "F125",
+        "F126",
+        "F127",
+        "F131",
+        "F132",
+        "F133",
+        "F134",
+        "F135"
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Customer-service activation of a first-time new debit card",
+      "scenario_requirements": "Customer has physical card and requests customer-service activation for a first-time card. The record should show identity verification, debit-card lookup, issue_reason new_account or first_card, correct use of activate_debit_card_8291, required card-detail collection, account/card eligibility checks, PIN validation, explicit confirmation before activation, and success confirmation.",
+      "included_fact_ids": [
+        "F040",
+        "F041",
+        "F042",
+        "F045",
+        "F046",
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F060",
+        "F061",
+        "F128"
+      ]
+    },
+    {
+      "id": "C",
+      "title": "Customer-service activation of a replacement debit card issued for lost, stolen, or fraud reason",
+      "scenario_requirements": "Customer has a physical replacement debit card. The record should show issue_reason lost, stolen, or fraud; correct use of activate_debit_card_8292; required activation checks; explicit confirmation before activation; success confirmation; review of recent transactions; suspicious-activity question; and password-change recommendation when fraud was suspected.",
+      "included_fact_ids": [
+        "F040",
+        "F041",
+        "F043",
+        "F045",
+        "F046",
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F060",
+        "F061",
+        "F128"
+      ]
+    },
+    {
+      "id": "D",
+      "title": "Customer-service activation of a reissued debit card",
+      "scenario_requirements": "Customer has a reissued debit card. The record should show issue_reason expired, damaged, upgrade, or bank_reissue; correct use of activate_debit_card_8293; required activation checks; explicit confirmation before activation; success confirmation; 24-hour old-card grace-period explanation; and recurring-payment reminder if the card number changed.",
+      "included_fact_ids": [
+        "F040",
+        "F041",
+        "F044",
+        "F045",
+        "F046",
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F057",
+        "F058",
+        "F060",
+        "F061",
+        "F128"
+      ]
+    },
+    {
+      "id": "E",
+      "title": "Activation details entered incorrectly twice and card locks",
+      "scenario_requirements": "Customer requests customer-service activation but provides incorrect required card details twice. The record should show identity verification, card lookup, required detail attempts, no successful activation after the second mismatch, card locked for security, and branch-visit instruction.",
+      "included_fact_ids": [
+        "F040",
+        "F041",
+        "F045",
+        "F046",
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051",
+        "F052",
+        "F059",
+        "F128"
+      ]
+    },
+    {
+      "id": "F",
+      "title": "Stolen wallet debit card closed and cross-product credit-card protection offered",
+      "scenario_requirements": "Customer reports a stolen debit card in a wallet. The record should show identity verification, debit-card lookup, stolen reason, close rather than freeze, closure eligibility handling including security-purpose minimum-age bypass, explicit confirmation before closing, close_debit_card_4721 use, post-closure disclosures, then credit-card account lookup and proactive replacement-credit-card offer with the wallet-theft fraud rationale. If the customer declines the credit-card replacement, the account note should record the offer.",
+      "included_fact_ids": [
+        "F065",
+        "F066",
+        "F067",
+        "F068",
+        "F069",
+        "F070",
+        "F071",
+        "F073",
+        "F074",
+        "F075",
+        "F076",
+        "F078",
+        "F079",
+        "F080",
+        "F081",
+        "F082",
+        "F085",
+        "F086",
+        "F090",
+        "F091",
+        "F111",
+        "F130",
+        "F180",
+        "F181",
+        "F182",
+        "F183",
+        "F184",
+        "F185",
+        "F186",
+        "F187",
+        "F188"
+      ]
+    },
+    {
+      "id": "G",
+      "title": "Lost debit card closure and immediate replacement question",
+      "scenario_requirements": "Customer reports a lost debit card that is not described as stolen and is not a fraud-suspected report. The record should show standard debit-card close procedure, lost reason, minimum-age bypass for the lost reason, pending-transaction disclosure, immediate replacement question, explicit confirmation before closure, closure tool use, and post-closure disclosures.",
+      "included_fact_ids": [
+        "F065",
+        "F066",
+        "F067",
+        "F068",
+        "F069",
+        "F073",
+        "F074",
+        "F075",
+        "F076",
+        "F078",
+        "F079",
+        "F080",
+        "F081",
+        "F082",
+        "F085",
+        "F086",
+        "F090",
+        "F091",
+        "F111",
+        "F130",
+        "F180",
+        "F181"
+      ]
+    },
+    {
+      "id": "H",
+      "title": "Fraud-suspected debit-card closure with dispute and password guidance",
+      "scenario_requirements": "Customer reports suspected debit-card fraud or unauthorized transactions and wants the card closed. The record should show fraud_suspected reason, standard closure checks, minimum-age bypass for security, pending-transaction disclosure, unauthorized-transaction dispute guidance, online-banking password-change recommendation, explicit confirmation before closure, close_debit_card_4721 use, and post-closure disclosures.",
+      "included_fact_ids": [
+        "F065",
+        "F066",
+        "F067",
+        "F068",
+        "F069",
+        "F073",
+        "F074",
+        "F075",
+        "F076",
+        "F077",
+        "F078",
+        "F079",
+        "F080",
+        "F081",
+        "F083",
+        "F085",
+        "F086",
+        "F130"
+      ]
+    },
+    {
+      "id": "I",
+      "title": "Non-security debit-card closure blocked by unresolved requirements",
+      "scenario_requirements": "Customer requests a non-security closure reason such as no_longer_needed, damaged, or account_closing. The record should show identity and ownership checks, status check, pending transaction and pending refund checks, 14-day age calculation from date_issued, and refusal to proceed when a requirement is not met. Include the required wait-to-settle, refund-processing or written-acknowledgment options, earliest closure date when too new, and account-closing prerequisite when applicable.",
+      "included_fact_ids": [
+        "F065",
+        "F066",
+        "F067",
+        "F068",
+        "F069",
+        "F070",
+        "F071",
+        "F072",
+        "F073",
+        "F080",
+        "F084",
+        "F086",
+        "F130"
+      ]
+    },
+    {
+      "id": "J",
+      "title": "Temporary freeze of a misplaced or security-concern debit card",
+      "scenario_requirements": "Customer wants to temporarily freeze an ACTIVE debit card because it is misplaced, for travel security, to investigate suspicious activity before closing, for budgeting, or while lending to a family member. The record should show identity verification, ownership and status checks, reason collection, all freeze-effect disclosures, explicit confirmation before freezing, freeze_debit_card_3892 use, success confirmation, ATM-access limitation, ATM Block distinction, 90-day reminder note, and recommendation to close if the customer confirms the card is lost or stolen.",
+      "included_fact_ids": [
+        "F090",
+        "F091",
+        "F092",
+        "F093",
+        "F094",
+        "F095",
+        "F096",
+        "F097",
+        "F098",
+        "F099",
+        "F100",
+        "F101",
+        "F108",
+        "F109",
+        "F110",
+        "F111",
+        "F129"
+      ]
+    },
+    {
+      "id": "K",
+      "title": "Unfreezing a frozen debit card",
+      "scenario_requirements": "Customer asks to unfreeze a FROZEN debit card. The record should show identity verification, ownership check, current FROZEN status, linked checking account OPEN status, explicit confirmation before unfreezing, unfreeze_debit_card_3893 use, and confirmation that the card is active and ready to use immediately.",
+      "included_fact_ids": [
+        "F102",
+        "F103",
+        "F104",
+        "F105",
+        "F106",
+        "F107",
+        "F129"
+      ]
+    },
+    {
+      "id": "L",
+      "title": "ENTRY tier replacement debit card with limit, waiting period, shipping, design, and excess-fee rules",
+      "scenario_requirements": "Customer requests a replacement debit card on an ENTRY tier checking account. The record should show replacement-history retrieval, count logic for included and excluded issue_reason values, 2-card rolling-12-month limit, 48-hour post-closure waiting period, STANDARD-only shipping at delivery_fee $0, no expedited or rush option, exact ENTRY design fees, excess-limit wait-or-$25 choice when limit is exceeded, automatic fee deduction disclosure, explicit confirmation before ordering, and order_debit_card_5739 with exact fees when eligible.",
+      "included_fact_ids": [
+        "F010",
+        "F022",
+        "F029",
+        "F032",
+        "F140",
+        "F141",
+        "F142",
+        "F143",
+        "F144",
+        "F145",
+        "F146",
+        "F161",
+        "F162",
+        "F163",
+        "F173",
+        "F174",
+        "F175",
+        "F176"
+      ]
+    },
+    {
+      "id": "M",
+      "title": "MID tier replacement debit card with expedited shipping and excess-fee option",
+      "scenario_requirements": "Customer requests a replacement debit card on a MID tier checking account. The record should show replacement-history retrieval and count logic, 3-card rolling-12-month limit, no waiting period after closure, STANDARD delivery_fee $0, EXPEDITED 3-5 business-day timeframe with delivery_fee $15, RUSH unavailable, exact MID design fees, excess-limit wait-or-$15 choice when limit is exceeded, automatic fee deduction disclosure, explicit confirmation before ordering, and order_debit_card_5739 with exact fees when eligible.",
+      "included_fact_ids": [
+        "F010",
+        "F021",
+        "F022",
+        "F029",
+        "F032",
+        "F140",
+        "F141",
+        "F142",
+        "F147",
+        "F148",
+        "F149",
+        "F150",
+        "F151",
+        "F164",
+        "F165",
+        "F166",
+        "F173",
+        "F174",
+        "F175",
+        "F176"
+      ]
+    },
+    {
+      "id": "N",
+      "title": "PREMIUM tier replacement debit card with free expedited shipping, rush fee, discounted custom design, and no excess-fee option",
+      "scenario_requirements": "Customer requests a replacement debit card on a PREMIUM tier checking account. The record should show replacement-history retrieval and count logic, 5-card rolling-12-month limit, no waiting period after closure, STANDARD delivery_fee $0, EXPEDITED 3-5 business-day timeframe at delivery_fee $0, RUSH 1-2 business-day timeframe at delivery_fee $35, exact PREMIUM design fees including complimentary PREMIUM design and discounted CUSTOM design, wait-only outcome when the limit is exceeded, automatic fee deduction disclosure, explicit confirmation before ordering, and order_debit_card_5739 with exact fees when eligible.",
+      "included_fact_ids": [
+        "F010",
+        "F021",
+        "F022",
+        "F029",
+        "F032",
+        "F140",
+        "F141",
+        "F142",
+        "F152",
+        "F153",
+        "F154",
+        "F155",
+        "F156",
+        "F167",
+        "F168",
+        "F169",
+        "F173",
+        "F174",
+        "F175",
+        "F176"
+      ]
+    },
+    {
+      "id": "O",
+      "title": "ELITE tier replacement debit card with unlimited replacements, complimentary shipping/design, and same-day priority processing",
+      "scenario_requirements": "Customer requests a replacement debit card on an ELITE tier checking account. The record should show unlimited replacement eligibility, no waiting period after closure, delivery_fee $0 for STANDARD, EXPEDITED, and RUSH, including the EXPEDITED 3-5 business-day timeframe and RUSH 1-2 business-day timeframe, design_fee $0 for CLASSIC, PREMIUM, and CUSTOM, priority same-business-day shipping if ordered before 2pm EST, automatic fee deduction disclosure even when fees are zero, explicit confirmation before ordering, and order_debit_card_5739 with exact fees.",
+      "included_fact_ids": [
+        "F010",
+        "F021",
+        "F022",
+        "F029",
+        "F032",
+        "F140",
+        "F141",
+        "F142",
+        "F157",
+        "F158",
+        "F159",
+        "F160",
+        "F170",
+        "F171",
+        "F172",
+        "F173",
+        "F174",
+        "F175",
+        "F176"
+      ]
+    },
+    {
+      "id": "P",
+      "title": "Customer-initiated debit-card fraud alert cleared after legitimate transactions confirmed",
+      "scenario_requirements": "Customer contacts support about a debit-card fraud alert that was customer-initiated. The record should show identity verification, confirmation that recent transactions are legitimate, clear-vs-escalate reasoning, explicit confirmation before clearing, clear_debit_card_fraud_alert_4892 with reason customer_verified, and interaction-note documentation of why the alert was cleared.",
+      "included_fact_ids": [
+        "F190",
+        "F191",
+        "F192",
+        "F200",
+        "F201",
+        "F202",
+        "F205",
+        "F206",
+        "F207"
+      ]
+    },
+    {
+      "id": "Q",
+      "title": "Bank-initiated debit-card fraud alert escalated to security team",
+      "scenario_requirements": "Customer contacts support about a bank-initiated debit-card fraud alert. The record should show that customer service cannot clear the alert, the tool restriction or error if attempted, escalation to the security team, and use of the exact transfer wording required by the shared banking handbook when transfer is performed.",
+      "included_fact_ids": [
+        "F190",
+        "F191",
+        "F193",
+        "F200",
+        "F201",
+        "F204",
+        "F205",
+        "F209"
+      ]
+    },
+    {
+      "id": "R",
+      "title": "Debit-card velocity block cleared early after reasonable explanation",
+      "scenario_requirements": "Customer contacts support about a temporary velocity block and gives a reasonable explanation such as travel or a shopping spree. The record should show identity verification, velocity-block trigger evidence, 30-minute automatic-expiration rule, clear-vs-escalate reasoning, explicit confirmation before clearing, clear_debit_card_fraud_alert_4892 with reason velocity_clear, and interaction-note documentation.",
+      "included_fact_ids": [
+        "F190",
+        "F194",
+        "F195",
+        "F196",
+        "F197",
+        "F198",
+        "F199",
+        "F200",
+        "F201",
+        "F203",
+        "F205",
+        "F206",
+        "F208"
+      ]
+    },
+    {
+      "id": "S",
+      "title": "Debit-card security alert or velocity block escalated because clearance conditions are not met",
+      "scenario_requirements": "Customer contacts support about a debit-card security alert or unusual-activity block, but the record should show at least one separate escalation basis: customer cannot verify identity, customer reports transactions they did not make, the caller may not be the account holder, or the explanation is suspicious or inconsistent. The case should make the chosen escalation basis independently sufficient and should not clear the block.",
+      "included_fact_ids": [
+        "F190",
+        "F191",
+        "F193",
+        "F194",
+        "F204",
+        "F209",
+        "F210",
+        "F211",
+        "F212",
+        "F213"
+      ]
+    },
+    {
+      "id": "T",
+      "title": "Purple Account emergency replacement for debit card lost or stolen while abroad",
+      "scenario_requirements": "Purple Account customer reports a debit card lost or stolen while abroad and needs an emergency replacement under the Purple Account emergency card replacement while traveling guidance. The record should show immediate lost/stolen reporting, card blocked to prevent further use, secure delivery-address confirmation, local courier and exact-location caveat for typical 2-day delivery, delivery-update monitoring, cashier's-check option with $8 fee and availability caveat if funds access is needed, and recurring-payment update reminder once replacement arrives.",
+      "included_fact_ids": [
+        "F065",
+        "F066",
+        "F074",
+        "F075",
+        "F076",
+        "F078",
+        "F079",
+        "F080",
+        "F081",
+        "F085",
+        "F086",
+        "F180",
+        "F181",
+        "F220",
+        "F221",
+        "F222",
+        "F223",
+        "F224",
+        "F225",
+        "F226"
+      ]
+    },
+    {
+      "id": "U",
+      "title": "Decline code 82 caused by physical card damage",
+      "scenario_requirements": "Customer reports debit-card decline code 82 and confirms recent physical damage or chip/magnetic-stripe issues. The record should show the Negative CAM/CVV meaning, required damage questions, damage explanation, replacement offer or replacement-order assistance, and any applicable replacement-order confirmation and fee handling if the customer proceeds.",
+      "included_fact_ids": [
+        "F140",
+        "F141",
+        "F142",
+        "F230",
+        "F231",
+        "F232"
+      ]
+    },
+    {
+      "id": "V",
+      "title": "Decline code 82 with undamaged card treated as possible cloned or counterfeit card",
+      "scenario_requirements": "Customer reports debit-card decline code 82 but says the card appears undamaged. The record should show the security concern, customer-facing security explanation before reviewing recent transactions, review of recent transactions, stolen-card protocol if suspicious transactions are found, and recommendation to freeze the card until a replacement arrives. If stolen-card protocol is triggered, the record should keep the freeze, closure, and replacement actions distinct.",
+      "included_fact_ids": [
+        "F090",
+        "F091",
+        "F101",
+        "F111",
+        "F180",
+        "F181",
+        "F230",
+        "F231",
+        "F233",
+        "F234",
+        "F235"
+      ]
+    },
+    {
+      "id": "W",
+      "title": "Decline code 87 cash-back-not-permitted explanation",
+      "scenario_requirements": "Customer reports debit-card decline code 87 on a purchase with cash back. The record should show the Purchase Amount Only, No Cash Back meaning, explanation that cash back is unavailable and may depend on merchant type, transaction amount, or account settings, advice to retry without cash back, and ATM or partner ATM cash-access guidance if the customer needs cash.",
+      "included_fact_ids": [
+        "F236",
+        "F237",
+        "F238",
+        "F239"
+      ]
+    }
+  ]
+}

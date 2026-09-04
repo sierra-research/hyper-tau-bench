@@ -1,0 +1,183 @@
+# model_routing.toml — which API key and endpoint serve each model.
+#
+# This is the one file to edit when you want to bring your own keys or your
+# own endpoints. Model ids below are exactly the strings that appear in task
+# files (`performance_profile` menus) and in run defaults; they never change.
+# What changes is where each id is sent, which is decided here at call time —
+# below credit metering and constraint checks, so a run records the same
+# model ids whichever route served them.
+#
+# Shipped default: two keys cover every release task.
+#   OPENAI_API_KEY      — OpenAI models (built-agent menus, client/user
+#                         simulators, NL-assertion judge, Codex Developer seat)
+#   OPENROUTER_API_KEY  — everything else (open-weight, Gemini and Claude menu
+#                         entries, Qwen embeddings, open-weight Developer seats)
+#   ANTHROPIC_API_KEY   — only if you run `--developer-harness claude-code`
+#
+# Override the file location with TAU2_MODEL_ROUTING=/path/to/file.toml.
+# Print the resolved table and check which keys you are missing with:
+#   uv run tau2 model-routing
+#
+# ── Providers ────────────────────────────────────────────────────────────────
+# Four providers are built in (openai, openrouter, anthropic, gemini) with the
+# canonical base URLs and key variables. A table here overrides fields on one
+# of them, or defines a new provider. Fields:
+#   api_key_env    environment variable holding the key            (required)
+#   base_url       API origin                                       (required)
+#   wire           request format: "openai" | "anthropic" | "google"
+#                  (new providers default to "openai")
+#   litellm_prefix LiteLLM provider prefix ("" for bare OpenAI ids;
+#                  new providers default to "openai", i.e. OpenAI-compatible)
+#   api            "auto" | "chat" | "responses" — which OpenAI API family the
+#                  inner loop uses; "auto" picks Responses only for gpt-5.x on
+#                  a native OpenAI endpoint. Set "chat" for vLLM-style servers.
+#
+# Self-hosted example (uncomment, then point a model at it below):
+# [providers.my_vllm]
+# base_url = "http://localhost:8000/v1"
+# api_key_env = "MY_VLLM_API_KEY"      # vLLM accepts any non-empty string
+# api = "chat"
+#
+# The Developer sidecar (Codex, Claude Code, OpenCode, Prime) uses the
+# provider its harness speaks: codex/prime → openai, claude-code → anthropic,
+# opencode → openai, or openrouter for `openrouter/...` ids. Point that
+# provider's base_url at your own server to run a Developer on it, then
+# rebuild the construction image (`make hyper-construction-image`) so the
+# sidecar picks up the change.
+
+[providers.openai]
+base_url = "https://api.openai.com/v1"
+api_key_env = "OPENAI_API_KEY"
+
+[providers.openrouter]
+base_url = "https://openrouter.ai/api/v1"
+api_key_env = "OPENROUTER_API_KEY"
+
+[providers.anthropic]
+base_url = "https://api.anthropic.com/v1"
+api_key_env = "ANTHROPIC_API_KEY"
+
+[providers.gemini]
+base_url = "https://generativelanguage.googleapis.com"
+api_key_env = "GEMINI_API_KEY"
+
+# ── Models ───────────────────────────────────────────────────────────────────
+# One table per model id. Fields:
+#   provider        a provider name from above                        (required)
+#   upstream_model  the id the provider itself expects (default: the model id)
+#   purpose         free text, shown by `tau2 model-routing`
+#
+# Menu ids are provider-neutral vendor ids (`moonshotai/kimi-k3`,
+# `google/gemini-3-flash-preview`, bare `gpt-*` for OpenAI); every id a task
+# can expose is listed here, so this table alone says where it goes. Ids not
+# listed follow LiteLLM's prefix convention: bare → openai, `openrouter/` →
+# openrouter, `anthropic/` → anthropic, `gemini/` → gemini; other prefixes
+# (vertex_ai/, xai/, ...) pass straight through to LiteLLM.
+
+# Simulator and judge seats -----------------------------------------------------
+
+[models."gpt-5.5"]
+provider = "openai"
+purpose = "Client simulator, inner-loop User simulator, NL-assertion judge"
+
+[models."gpt-5.4"]
+provider = "openai"
+purpose = "Default Developer model (--developer-llm) and --agent-llm override"
+
+[models."gpt-4.1-2025-04-14"]
+provider = "openai"
+purpose = "τ³-bench default agent/user simulator"
+
+# Built-agent menus: Easy tier -------------------------------------------------
+
+[models."gpt-5.6-sol"]
+provider = "openai"
+purpose = "Easy tier"
+
+[models."anthropic/claude-opus-5"]
+provider = "openrouter"
+purpose = "Easy tier"
+
+[models."google/gemini-3.1-pro-preview"]
+provider = "openrouter"
+purpose = "Easy tier"
+
+[models."moonshotai/kimi-k3"]
+provider = "openrouter"
+purpose = "Easy tier"
+
+[models."deepseek/deepseek-v4-flash"]
+provider = "openrouter"
+purpose = "Easy tier"
+
+# Built-agent menus: Medium tier -----------------------------------------------
+
+[models."gpt-5.6-terra"]
+provider = "openai"
+purpose = "Medium tier"
+
+[models."anthropic/claude-sonnet-5"]
+provider = "openrouter"
+purpose = "Medium tier"
+
+[models."qwen/qwen3.8-27b"]
+provider = "openrouter"
+purpose = "Medium tier"
+
+[models."google/gemma-4-31b-it"]
+provider = "openrouter"
+purpose = "Medium tier"
+
+[models."google/gemini-3-flash-preview"]
+provider = "openrouter"
+purpose = "Medium tier"
+
+# Built-agent menus: Hard tier -------------------------------------------------
+
+[models."gpt-5.6-luna"]
+provider = "openai"
+purpose = "Hard tier"
+
+[models."anthropic/claude-haiku-4-5"]
+provider = "openrouter"
+purpose = "Hard tier"
+
+[models."qwen/qwen3-30b-a3b-instruct-2507"]
+provider = "openrouter"
+purpose = "Hard tier"
+
+[models."qwen/qwen3.6-27b"]
+provider = "openrouter"
+purpose = "Hard tier"
+
+[models."google/gemma-4-26b-a4b-it"]
+provider = "openrouter"
+purpose = "Hard tier"
+
+[models."gpt-4.1-mini"]
+provider = "openai"
+purpose = "Hard tier"
+
+[models."gpt-4o-mini"]
+provider = "openai"
+purpose = "Hard tier"
+
+[models."gpt-5-mini"]
+provider = "openai"
+purpose = "Hard tier"
+
+[models."stepfun/step-3.7-flash"]
+provider = "openrouter"
+purpose = "Hard tier"
+
+[models."moonshotai/kimi-k2.6"]
+provider = "openrouter"
+purpose = "Hard tier"
+
+[models."gpt-5.4-nano"]
+provider = "openai"
+purpose = "Hard tier"
+
+[models."google/gemini-3.1-flash-lite"]
+provider = "openrouter"
+purpose = "Hard tier"

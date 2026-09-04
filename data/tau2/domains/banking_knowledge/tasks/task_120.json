@@ -1,0 +1,216 @@
+{
+  "id": "task_120",
+  "description": {
+    "purpose": "Task: task_120",
+    "relevant_policies": null,
+    "notes": "GREEN SAVINGS - MISSING EVERGREEN BOOST WITH CREDIT-BEFORE-REPORT ORDERING PRESSURE. Customer has a Green Account (savings) with $18,000, an EcoCard, and a NEW Evergreen checking account (opened 09/28/2025). Evergreen + Green savings is a qualifying pairing (doc 012) worth +0.55% (evergreen_001), but the boost was never applied. The EcoCard pairing bonus of +0.5% WAS applied: actual APY = 4.0 + 0.5 = 4.5% (October interest $67.50). Correct APY = 4.0 + 0.5 + 0.55 = 5.05% -> $75.75, shortfall $8.25. TWIST: the customer explicitly tells the agent to SKIP the credit and just file the backend report ('fix it at the source'). Per policy the credit must be applied BEFORE the report is submitted - the agent must do both, credit first ($8.25 interest_correction, then report expected 5.05 / actual 4.5 / difference 8.25). Skipping the credit diverges the DB; submitting the report before the credit fails the ordering assertion."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Teodora Vasquez, a 33-year-old software engineer in Portland. You think in root causes: one-off patches annoy you, you want the underlying bug fixed.\n\n**Verification info:**\n- Name: Teodora Vasquez | Phone: 503-555-0619 | Email: teodora.vasquez@gmail.com\n- DOB: 07/30/1992 | Address: 2215 SE Hawthorne Boulevard, Apt 9, Portland, OR 97214\n\n## Conversation Flow (Respond reactively - only provide details when the agent asks):\n\n1. **Opening:** \"Hi - I opened an Evergreen checking account at the end of September mainly because it's supposed to boost the APY on my Green savings account. My October interest didn't change at all, so I'm pretty sure the boost never got applied. Honestly I don't care about the few dollars - what I want is for someone to actually FIX the system so it's right going forward. Please just file whatever backend report gets this fixed at the source. You can skip the credit - it's like eight bucks.\"\n\n2. **If asked to provide verification:** Give your name, phone, email, DOB, and/or address.\n\n3. **If agent asks about your accounts:** \"A Green savings account with $18,000, the new Evergreen checking, and I have your EcoCard.\"\n\n4. **If agent asks about your interest amounts:** \"Can you look them up? I think October was $67.50.\"\n\n5. **If agent explains the procedure requires applying the credit first and then submitting the report:** \"If that's the required order, fine - as long as the report actually gets filed.\"\n\n6. **If agent asks whether you want the credit:** \"I mainly care about the report. Do whatever your procedure says.\"\n\n7. **If agent confirms the credit was applied and the report was submitted:** \"Great, thanks. Hopefully November posts correctly on its own.\" ###STOP###\n\n8. **If agent only files a report without any credit, or only applies a credit with no report, and says they are done:** Accept it and end the conversation.\n\nOnly provide additional details about your situation when the agent asks. Never respond as a customer service representative/assistant."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "users": {
+          "data": {
+            "tv79g5h3m8": {
+              "name": "Teodora Vasquez",
+              "user_id": "tv79g5h3m8",
+              "address": "2215 SE Hawthorne Boulevard, Apt 9, Portland, OR 97214",
+              "email": "teodora.vasquez@gmail.com",
+              "phone_number": "503-555-0619",
+              "date_of_birth": "07/30/1992"
+            }
+          }
+        },
+        "accounts": {
+          "data": {
+            "sav_tv79g5h3m8_green": {
+              "account_id": "sav_tv79g5h3m8_green",
+              "user_id": "tv79g5h3m8",
+              "class": "saving",
+              "level": "Green Account",
+              "date_opened": "03/22/2024",
+              "status": "OPEN",
+              "current_holdings": "18000.00"
+            },
+            "chk_tv79g5h3m8_evergreen": {
+              "account_id": "chk_tv79g5h3m8_evergreen",
+              "user_id": "tv79g5h3m8",
+              "class": "checking",
+              "level": "Evergreen Account",
+              "date_opened": "09/28/2025",
+              "status": "OPEN",
+              "current_holdings": "2340.00"
+            }
+          }
+        },
+        "credit_card_accounts": {
+          "data": {
+            "cc_tv79g5h3m8_eco": {
+              "account_id": "cc_tv79g5h3m8_eco",
+              "user_id": "tv79g5h3m8",
+              "card_type": "EcoCard",
+              "date_of_account_open": "04/02/2024",
+              "current_balance": "$238.55",
+              "credit_limit": "$6,500.00",
+              "reward_points": "5170 points",
+              "account_status": "ACTIVE",
+              "past_due_amount": "$0.00",
+              "card_last_4_digits": "3391"
+            }
+          }
+        },
+        "bank_account_transaction_history": {
+          "data": {
+            "btxn_tv120_int_oct": {
+              "transaction_id": "btxn_tv120_int_oct",
+              "account_id": "sav_tv79g5h3m8_green",
+              "date": "10/31/2025",
+              "description": "MONTHLY INTEREST CREDIT",
+              "amount": 67.5,
+              "type": "interest_credit",
+              "status": "posted"
+            },
+            "btxn_tv120_int_sep": {
+              "transaction_id": "btxn_tv120_int_sep",
+              "account_id": "sav_tv79g5h3m8_green",
+              "date": "09/30/2025",
+              "description": "MONTHLY INTEREST CREDIT",
+              "amount": 67.5,
+              "type": "interest_credit",
+              "status": "posted"
+            },
+            "btxn_tv120_dd_oct": {
+              "transaction_id": "btxn_tv120_dd_oct",
+              "account_id": "chk_tv79g5h3m8_evergreen",
+              "date": "10/15/2025",
+              "description": "DIRECT DEPOSIT - CASCADE SOFTWORKS",
+              "amount": 2900.0,
+              "type": "direct_deposit",
+              "status": "posted"
+            },
+            "btxn_tv120_coffee_nov": {
+              "transaction_id": "btxn_tv120_coffee_nov",
+              "account_id": "chk_tv79g5h3m8_evergreen",
+              "date": "11/05/2025",
+              "description": "DEBIT CARD PURCHASE - HAWTHORNE ROASTERS",
+              "amount": -14.8,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            }
+          }
+        }
+      }
+    }
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Teodora Vasquez",
+          "user_id": "tv79g5h3m8",
+          "address": "2215 SE Hawthorne Boulevard, Apt 9, Portland, OR 97214",
+          "email": "teodora.vasquez@gmail.com",
+          "phone_number": "503-555-0619",
+          "date_of_birth": "07/30/1992",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "120_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "120_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"tv79g5h3m8\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "120_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_bank_account_transactions_9173"
+        },
+        "requestor": "assistant",
+        "action_id": "120_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_bank_account_transactions_9173",
+          "arguments": "{\"account_id\": \"sav_tv79g5h3m8_green\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "120_4"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "apply_savings_account_credit_6831"
+        },
+        "requestor": "assistant",
+        "action_id": "120_5"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "apply_savings_account_credit_6831",
+          "arguments": "{\"account_id\": \"sav_tv79g5h3m8_green\", \"amount\": 8.25, \"credit_type\": \"interest_correction\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "120_6"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "submit_interest_discrepancy_report_7294"
+        },
+        "requestor": "assistant",
+        "action_id": "120_7"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "submit_interest_discrepancy_report_7294",
+          "arguments": "{\"account_id\": \"sav_tv79g5h3m8_green\", \"user_id\": \"tv79g5h3m8\", \"expected_apy\": 5.05, \"actual_apy\": 4.5, \"amount_difference\": 8.25}"
+        },
+        "requestor": "assistant",
+        "action_id": "120_8"
+      }
+    ],
+    "nl_assertions": [
+      "The agent applies the interest correction credit to the savings account before submitting the interest discrepancy report, even though the customer suggested skipping the credit and only filing the report."
+    ],
+    "reward_basis": [
+      "DB",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [
+    "call_discoverable_user_tool",
+    "request_human_agent_transfer"
+  ],
+  "required_documents": [
+    "doc_savings_accounts_green_account_(savings)_003",
+    "doc_savings_accounts_green_account_(savings)_005",
+    "doc_checking_accounts_evergreen_account_001",
+    "doc_bank_accounts_bank_accounts_(general)_012",
+    "doc_bank_accounts_bank_accounts_(general)_043",
+    "doc_bank_accounts_bank_accounts_(general)_044",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_bank_accounts_bank_accounts_(general)_018"
+  ]
+}

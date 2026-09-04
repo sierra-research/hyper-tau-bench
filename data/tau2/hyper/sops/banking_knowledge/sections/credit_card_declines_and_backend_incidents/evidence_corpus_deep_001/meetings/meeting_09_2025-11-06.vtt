@@ -1,0 +1,115 @@
+WEBVTT
+
+00:00:02.322 --> 00:00:39.802
+<v Tom Okafor>Post-incident review for the October alert-delay advisory, recording on, and it files to the training library like the rest of the series. Scope is the twenty-first of October through the second of November. Nobody lost money, nobody lost an alert, and we still have a page of lessons, which is the best kind of retro. Greg has the engineering half, Asha the comms half, and Sandra brought a proposal I want the room to hear at the end.
+
+00:00:46.720 --> 00:01:15.149
+<v Greg Malone>Root cause in one breath: the notification-queue migration on the twenty-first left the webhook consumer under-provisioned, so alerts queued instead of delivering. Everything eventually went out, correct and in order - just late, sometimes by hours. Peak backlog was three point one million queued events on the Sunday. Drain finished on the second at fifteen fifty-five and Monday came back clean.
+
+00:01:19.259 --> 00:01:41.690
+<v Lena Ferro>The part that stings is the middle. We knew the consumer was undersized by the second day. The re-scale request then sat four days in capacity approval because it was filed as routine. Twelve days of advisory, and roughly half of that was waiting on a form.
+
+00:01:46.543 --> 00:02:04.204
+<v Greg Malone>So the first action item, and it is already drafted: a pre-approved burst-capacity envelope for the notification tier, usable during any open advisory without a fresh approval cycle. Finance saw the draft Tuesday and did not flinch.
+
+00:02:10.845 --> 00:02:34.327
+<v Tom Okafor>Take the envelope through the normal channel but flag it against this review so the paper trail connects. Before we leave the engineering half - walk the timeline once for the recording, because the library version of this meeting is the one the next cohort studies.
+
+00:02:39.914 --> 00:03:41.051
+<v Greg Malone>Twenty-first, morning: migration completes, consumer starts falling behind within the hour, ticket opens by nine. Same day: advisory goes up, floor guidance lands on the ticket by eleven thirty, history entry on the status page by one. Twenty-second: the day-one floor question gets answered once on the ticket instead of forty times in the channel, and the console pointer goes live. Twenty-third: undersizing confirmed, re-scale request filed. Twenty-fourth through the twenty-eighth: the request sits in the approval queue while the backlog climbs to its Sunday peak. Twenty-ninth: approval lands. Second of November: capacity deployed in the morning, backlog drained by fifteen fifty-five, advisory down the same day. Third: floor confirms a clean Monday, and the loop closes on the ops side.
+
+00:03:49.450 --> 00:04:02.951
+<v Lena Ferro>Hearing it read out loud, the shape is obvious: two days of engineering, five days of queue, one day of fix. That ratio is the whole retro.
+
+00:04:10.121 --> 00:04:28.408
+<v Tom Okafor>Which is why the envelope is action item one. Next: classification. I want it on the record why this ran as an advisory and not an incident, because the floor asked more than once.
+
+00:04:36.245 --> 00:05:05.358
+<v Lena Ferro>Because the system was telling customers the truth slowly, not telling them something false. Balances and transactions were always right when viewed directly. The moment a system starts asserting wrong things to customers or to anyone outside the bank, you are in different territory with different obligations, and comms and legal sit much closer to it.
+
+00:05:14.345 --> 00:05:36.848
+<v Nick Delgado>Which is also why there was no legal gate on the October wording. Nothing needed review beyond the standard pass, and the escalation matrix never fired. That is worth a line in the minutes precisely because it will not always be true.
+
+00:05:41.185 --> 00:05:44.229
+<v Tom Okafor>Noted, and written down. Asha, comms.
+
+00:05:51.024 --> 00:06:32.639
+<v Asha Patel>Three things worked and one thing I would redo. Worked: we used the status-page history entry plus the in-app notice instead of a red banner, which matched the actual severity - people who looked stayed calm. Worked: one copy source, mirrored, so no drift between page and app. Worked: the wording. We said notifications were delivered later than usual, and we named the alert types. Saying delayed without naming the types was the draft version, and the test read of that draft had people assuming payments themselves were delayed.
+
+00:06:37.409 --> 00:06:54.934
+<v Monica Reyes>Can confirm from the floor. The contacts we did get almost all opened with the alert came late, is my payment okay. The named-types wording answered half the call before we said anything.
+
+00:07:01.419 --> 00:07:26.661
+<v Asha Patel>The redo: the history entry went up at one o'clock but the in-app notice lagged it by three hours because it rode the normal content release. Same copy, different clocks. I want advisory notices on the expedited path by default, and that is my action item.
+
+00:07:36.145 --> 00:07:39.968
+<v Tom Okafor>Monica, floor numbers while we are there.
+
+00:07:46.787 --> 00:08:24.829
+<v Monica Reyes>Fifty-eight contacts over the whole window that we tagged to the advisory, single digits most days, a small bump on payday. The ticket carried a floor answer from day one and it held up - nobody improvised. One late report came in the day after the advisory closed; the Monday check confirmed the queue was clean by then, so it was logged and verified as an ordinary notification question rather than a continuation. Quiet as these things go.
+
+00:08:29.431 --> 00:09:07.841
+<v Farah Idris>Console side, one lifecycle lesson. We stood up a pointer macro on the twenty-second so agents could send the advisory reference in one click. Useful, used, fine. But it outlived its usefulness by exactly zero days only because someone remembered to retire it on the second with the change-log row. Nothing in the console forces that. If nobody had remembered, agents would have kept sending customers a pointer to a closed advisory.
+
+00:09:14.877 --> 00:09:35.522
+<v Sandra Liu>Which happens. I have seen the stale-macro version of this at my last shop and it is ugly - the customer gets an official-looking reference to something that ended weeks earlier and reasonably concludes nobody is minding the store.
+
+00:09:43.348 --> 00:10:05.410
+<v Farah Idris>So my ask: an expiry-owner field on time-boxed macros. When you create one against a dated advisory, you name the person who retires it and the console nags them when the date passes. I will scope it with the console vendor and bring a cost back.
+
+00:10:11.839 --> 00:10:38.109
+<v Tom Okafor>Take it. Parked until the cost comes back, but parked with your name on it. Now the read-ack question, because I promised the leads I would raise it: the closure note got acknowledged by about sixty percent of the floor inside a day and the rest never. Is that a problem?
+
+00:10:45.258 --> 00:10:52.930
+<v Lena Ferro>Genuine question - does anything downstream actually consume the acks, or is it a comfort metric?
+
+00:11:02.388 --> 00:11:18.769
+<v Tom Okafor>Today, comfort metric. Whether it should gate anything is a bigger conversation than this room. I am leaving it on the list unresolved rather than inventing an answer at four thirty on a Thursday.
+
+00:11:26.388 --> 00:12:07.963
+<v Sandra Liu>Then my proposal fits here, because it is the enforcement mechanism that is not a checkbox. QA sampled nine advisory-tagged contacts across the window - all clean, for the record. But clean handling during a live advisory tells you people can follow a page that is in front of them. It tells you nothing about the week after the page comes down. That transition is where I would bet on mistakes, and we have never once rehearsed it.
+
+00:12:13.622 --> 00:12:16.509
+<v Tom Okafor>Say the shape of the rehearsal.
+
+00:12:24.501 --> 00:13:04.008
+<v Sandra Liu>A quarterly tabletop in the training sandbox. Synthetic profiles, one runner who does not know the scenario in advance, one observer, and the session record files to the QA library like any other case so the cohort can study it. First theme writes itself after this month: something that looks like it belongs to a closed window arrives after the window closes, and we watch whether the handling actually reverts to standard or whether muscle memory keeps running the special play.
+
+00:13:10.805 --> 00:13:16.091
+<v Greg Malone>I like that it costs one afternoon and no production risk.
+
+00:13:22.289 --> 00:13:41.573
+<v Monica Reyes>Question on mechanics: does the runner know it is a drill at all? Because a runner who knows it is synthetic will take risks a live contact would never see, and then the record teaches the wrong lesson.
+
+00:13:49.986 --> 00:14:32.894
+<v Sandra Liu>They know it is sandbox - that is unavoidable, the tooling says so on every screen. What they do not know is the scenario. And the observer grades against the same rubric QA uses on live sampled contacts, so cowboy behavior costs them exactly what it would cost on a live call. It is not perfect fidelity, but the failure I am hunting is not recklessness, it is autopilot - and autopilot shows up fine in a sandbox.
+
+00:14:37.744 --> 00:14:39.702
+<v Monica Reyes>Good enough for me.
+
+00:14:46.654 --> 00:15:10.257
+<v Nick Delgado>And the record goes to the library, which is half the value - the cohort reading it cold afterward, wobbles included. On that: if a session goes genuinely badly, does it still file? Because a library that only keeps the flattering ones is a brochure, not a library.
+
+00:15:18.070 --> 00:15:31.566
+<v Sandra Liu>It files. Same rule as live kept calls - the library keeps what is instructive, and a faceplant with a good debrief is more instructive than a clean run.
+
+00:15:40.717 --> 00:16:08.056
+<v Tom Okafor>Adopted as a quarterly program, QA owns it, first session this cycle. File it against the resilience line so it survives budget season - sandbox time is free until the calendar says otherwise. Sandra, get the first one scheduled in the next couple of weeks while the theme is fresh.
+
+00:16:12.407 --> 00:16:29.073
+<v Sandra Liu>Filing the ticket Monday. I need a runner who genuinely does not know the scenario, so leads, do not brief your people - the brief stays sealed until the session starts.
+
+00:16:33.469 --> 00:16:42.244
+<v Monica Reyes>The October cohort has three or four candidates who would treat it as a compliment. I will send names.
+
+00:16:51.546 --> 00:17:18.659
+<v Tom Okafor>Then the lesson list as it stands: burst-capacity envelope, Greg, drafted. Expedited path for advisory notices, Asha. Macro expiry owners, Farah, pending vendor cost. Read-acks, unresolved on purpose. Drill program, adopted, Sandra. Greg files the drain-curve summary to the ticket and the minutes close the email thread against it. Anything for the good of the order?
+
+00:17:28.018 --> 00:17:45.734
+<v Greg Malone>Only that the migration itself was the right call - the new queue is why the backlog drained in hours once capacity landed instead of days. The lesson is sizing, not direction.
+
+00:17:53.014 --> 00:18:09.072
+<v Asha Patel>And one housekeeping note for the minutes: the advisory copy, both versions, is archived with the ticket, so the next person writing one of these starts from tested wording instead of a blank page.
+
+00:18:14.539 --> 00:18:34.785
+<v Tom Okafor>A retro that ends with the change being right and the rollout being humbling. Correct shape. Minutes to the library, thanks all - and twelve days from now I do not want to be back in this room for the sequel.

@@ -1,0 +1,448 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "Rho Helpdesk",
+    "account": "rho-bank-consumer-and-business",
+    "workspace": "opening-console",
+    "environment": "production",
+    "exported_at": "2025-11-13T17:05:00-05:00",
+    "timezone": "America/New_York",
+    "export_version": "2025.46",
+    "requested_by": "devon.park@rhobank.com"
+  },
+  "cover_email": "From: Helpdesk Administration <helpdesk-admin@rhobank.com>\nTo: Devon Park <devon.park@rhobank.com>\nDate: Thu, 13 Nov 2025 17:18:44 -0500\nSubject: opening-console workspace export (2025.46)\nMessage-ID: <hd-export-2025-46-openingconsole@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nDevon,\n\nHere is the full production export of the opening-console workspace for the end-of-cycle review — macros, triggers, tool contracts, field definitions, SLAs, and views as of this afternoon. Objects ship with their status flags as stored; nothing is filtered from the file.\n\nSecond half of your request — the deposit-console file went out earlier this afternoon.\n\nHelpdesk Administration",
+  "macros": [
+    {
+      "macro_id": "MAC-6012",
+      "name": "Open personal savings account — guided",
+      "description": "Guided run of the account-opening tool for an agent who has cleared the gates board and confirmed the selection; mirrors the current opening-sequence board.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2024-11-11",
+      "updated_at": "2025-10-07",
+      "usage_30d": 264,
+      "usage_90d": 587,
+      "superseded_by": null,
+      "steps": [
+        "Confirm the gates checklist and the confirmed selection are on the case (SAV-OPS-201/-202, current revisions)",
+        "Run open_bank_account_4821 with user_id, account_type, account_class per contract CON-0812",
+        "Confirm the tool result — the expected outcome is creation of a new personal savings account for the customer",
+        "Insert opening-confirmation reply (account details and funding position placeholders)",
+        "Set ticket type = account_opening",
+        "Set status = solved-pending-close"
+      ]
+    },
+    {
+      "macro_id": "MAC-6041",
+      "name": "Opening deposit — immediate transfer",
+      "description": "Runs the opening-deposit transfer for a just-opened personal savings account. Fires in the opening-deposit step only if the customer authorizes an immediate transfer for the opening deposit; a deferred funding choice is noted on the case instead.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-04-22",
+      "updated_at": "2025-10-07",
+      "usage_30d": 198,
+      "usage_90d": 442,
+      "superseded_by": null,
+      "steps": [
+        "Record the customer's authorization read-back on the case",
+        "Run transfer_funds_between_bank_accounts_7291 with source_account_id, destination_account_id, amount per contract CON-0813",
+        "Confirm the tool result — the expected outcome is moving funds from checking to savings to complete the opening deposit",
+        "Insert funding-confirmation reply (amount and destination placeholders)",
+        "Set ticket type = funding_transfer",
+        "Set status = solved-pending-close"
+      ]
+    },
+    {
+      "macro_id": "MAC-6033",
+      "name": "Auto-fund starter deposit",
+      "description": "Moves a $25.00 starter deposit from the linked checking account into a newly opened savings account at open time.",
+      "active": false,
+      "environment": "production",
+      "status": "disabled",
+      "effective_at": "2024-06-24",
+      "disabled_at": "2025-04-22",
+      "updated_at": "2025-04-22",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "MAC-6041",
+      "steps": [
+        "Transfer $25.00 from the linked checking account into the new savings account at open",
+        "Insert starter-deposit confirmation reply",
+        "Set tag = starter-deposit"
+      ]
+    },
+    {
+      "macro_id": "MAC-6055",
+      "name": "Eligibility question — point to the gates board",
+      "description": "Reply for eligibility questions on personal savings openings; links the gates board and the customer's profile rather than restating gate values.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2024-11-11",
+      "updated_at": "2025-10-27",
+      "usage_30d": 173,
+      "usage_90d": 388,
+      "superseded_by": null,
+      "steps": [
+        "Insert gates-pointer reply (board and profile link placeholders)",
+        "Set ticket type = eligibility_question",
+        "Set status = solved-pending-close"
+      ]
+    },
+    {
+      "macro_id": "MAC-6068",
+      "name": "Deferred funding — reminder",
+      "description": "Reminder for accounts opened without same-day funding; pulls the account's funding deadline from the account record.",
+      "active": false,
+      "environment": "production",
+      "status": "draft",
+      "effective_at": null,
+      "updated_at": "2025-11-12",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": null,
+      "steps": [
+        "Insert funding-reminder reply (deadline placeholder from the account record)",
+        "Set tag = deferred-funding"
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "TRG-5203",
+      "name": "Route new-account requests to New Accounts Tier 1",
+      "description": "Keyword routing for inbound account-opening requests.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 4,
+      "effective_at": "2024-11-11",
+      "updated_at": "2025-10-07",
+      "usage_30d": 512,
+      "conditions": [
+        "channel is email OR webform OR chat",
+        "subject/body contains any: open savings, new account, add account, second savings"
+      ],
+      "actions": [
+        "set group = New Accounts Tier 1",
+        "set ticket type = account_opening"
+      ]
+    },
+    {
+      "trigger_id": "TRG-5108",
+      "name": "Auto-fund starter deposit at open",
+      "description": "Fires the starter-deposit macro when a savings opening ticket completes.",
+      "active": false,
+      "environment": "production",
+      "status": "disabled",
+      "priority": 5,
+      "effective_at": "2024-06-24",
+      "disabled_at": "2025-04-22",
+      "updated_at": "2025-04-22",
+      "usage_30d": 0,
+      "conditions": [
+        "ticket type = account_opening",
+        "new account_type = savings"
+      ],
+      "actions": [
+        "apply macro MAC-6033"
+      ]
+    },
+    {
+      "trigger_id": "TRG-5231",
+      "name": "Escalate aged opening tickets",
+      "description": "Escalates account-opening tickets breaching 24 business hours without agent touch.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 6,
+      "effective_at": "2025-03-24",
+      "updated_at": "2025-10-27",
+      "usage_30d": 41,
+      "conditions": [
+        "ticket type = account_opening",
+        "hours since last agent update > 24 (business)"
+      ],
+      "actions": [
+        "set priority = high",
+        "notify group lead (new accounts)"
+      ]
+    }
+  ],
+  "policy_contracts": [
+    {
+      "contract_id": "CON-0810",
+      "name": "opening-console workspace scope",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Helpdesk Administration",
+      "scope": "Ticket routing, macros, tool contracts, and console field handling for the opening-console workspace at this snapshot. Console configuration only; eligibility gates and the opening sequence are owned by the deposit desk's SAV-OPS boards, product terms are owned by the Account Opening Profiles and the comparison one-pagers, and account-lookup contracts are published in the developer portal's account-services pack.",
+      "required_fields": [
+        "ticket_type",
+        "group",
+        "status"
+      ],
+      "closed_world": false,
+      "effective_at": "2024-11-11",
+      "updated_at": "2025-10-07"
+    },
+    {
+      "contract_id": "CON-0812",
+      "name": "open_bank_account_4821 — production tool contract",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Deposit Console Engineering / Helpdesk Administration",
+      "scope": "Parameter contract for the account-opening tool as enforced by console validation at this snapshot. open_bank_account_4821 takes user_id, account_type, and account_class as parameters; the three listed parameters are the complete production set, and calls carrying an unlisted parameter are rejected by validation.",
+      "source_of_truth": "opening console production tool registry",
+      "complete": true,
+      "unlisted_value_behavior": "reject",
+      "required_fields": [
+        "user_id",
+        "account_type",
+        "account_class"
+      ],
+      "closed_world": true,
+      "effective_at": "2024-11-11",
+      "updated_at": "2025-10-07"
+    },
+    {
+      "contract_id": "CON-0813",
+      "name": "transfer_funds_between_bank_accounts_7291 — production tool contract",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Deposit Console Engineering / Helpdesk Administration",
+      "scope": "Parameter contract for the funds-transfer tool as enforced by console validation at this snapshot. transfer_funds_between_bank_accounts_7291 takes source_account_id, destination_account_id, and amount as parameters; the three listed parameters are the complete production set.",
+      "source_of_truth": "opening console production tool registry",
+      "complete": true,
+      "unlisted_value_behavior": "reject",
+      "required_fields": [
+        "source_account_id",
+        "destination_account_id",
+        "amount"
+      ],
+      "closed_world": true,
+      "effective_at": "2024-11-11",
+      "updated_at": "2025-10-07"
+    }
+  ],
+  "field_columns": [
+    "row_id",
+    "field_key",
+    "field_name",
+    "field_type",
+    "option_value",
+    "option_description",
+    "active",
+    "status",
+    "environment",
+    "updated_at"
+  ],
+  "fields": [
+    {
+      "row_id": "T-301",
+      "field_key": "open_bank_account_4821.user_id",
+      "field_name": "Opening tool — user_id",
+      "field_type": "tool_parameter (string, required)",
+      "option_value": null,
+      "option_description": "The authenticated customer's user identifier.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-11"
+    },
+    {
+      "row_id": "T-302",
+      "field_key": "open_bank_account_4821.account_type",
+      "field_name": "Opening tool — account_type",
+      "field_type": "tool_parameter (string, required)",
+      "option_value": "savings",
+      "option_description": "The account_type value for personal savings accounts.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-11"
+    },
+    {
+      "row_id": "T-303",
+      "field_key": "open_bank_account_4821.account_class",
+      "field_name": "Opening tool — account_class",
+      "field_type": "tool_parameter (string, required)",
+      "option_value": null,
+      "option_description": "The full official account name ending with 'Account', exactly as confirmed with the customer.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-11"
+    },
+    {
+      "row_id": "T-311",
+      "field_key": "transfer_funds_between_bank_accounts_7291.source_account_id",
+      "field_name": "Transfer tool — source_account_id",
+      "field_type": "tool_parameter (string, required)",
+      "option_value": null,
+      "option_description": "The customer's Rho-Bank checking account to be debited.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-11"
+    },
+    {
+      "row_id": "T-312",
+      "field_key": "transfer_funds_between_bank_accounts_7291.destination_account_id",
+      "field_name": "Transfer tool — destination_account_id",
+      "field_type": "tool_parameter (string, required)",
+      "option_value": null,
+      "option_description": "The newly opened personal savings account to be credited.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-11"
+    },
+    {
+      "row_id": "T-313",
+      "field_key": "transfer_funds_between_bank_accounts_7291.amount",
+      "field_name": "Transfer tool — amount",
+      "field_type": "tool_parameter (number, required)",
+      "option_value": null,
+      "option_description": "The required opening deposit amount confirmed with the customer.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-11"
+    },
+    {
+      "row_id": "F-320",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "account_opening",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-11"
+    },
+    {
+      "row_id": "F-321",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "funding_transfer",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-11"
+    },
+    {
+      "row_id": "F-322",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "eligibility_question",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-11"
+    },
+    {
+      "row_id": "F-330",
+      "field_key": "group",
+      "field_name": "Assignment group",
+      "field_type": "picklist",
+      "option_value": "New Accounts Tier 1",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-11"
+    },
+    {
+      "row_id": "F-331",
+      "field_key": "group",
+      "field_name": "Assignment group",
+      "field_type": "picklist",
+      "option_value": "Deposit Desk Tier 1",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-11"
+    },
+    {
+      "row_id": "F-340",
+      "field_key": "tag",
+      "field_name": "Tag",
+      "field_type": "tag",
+      "option_value": "starter-deposit",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-06-24"
+    },
+    {
+      "row_id": "F-341",
+      "field_key": "tag",
+      "field_name": "Tag",
+      "field_type": "tag",
+      "option_value": "deferred-funding",
+      "option_description": "Applied to openings left unfunded at close of call so the funding view catches them.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-11-12"
+    }
+  ],
+  "sla_policies": [
+    {
+      "name": "New accounts — opening requests first response",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "8 business hours first response",
+      "applies_to": "group = New Accounts Tier 1",
+      "updated_at": "2025-10-07",
+      "policy_id": "SLA-521"
+    },
+    {
+      "name": "Funding follow-up cadence",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "24 business hours between agent touches on open account_opening tickets",
+      "applies_to": "ticket type = account_opening",
+      "updated_at": "2025-11-03",
+      "policy_id": "SLA-524"
+    }
+  ],
+  "views": [
+    {
+      "view_id": "VW-82",
+      "name": "New accounts — open opening requests",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "ticket type = account_opening",
+        "status != solved-pending-close"
+      ],
+      "updated_at": "2025-10-07"
+    },
+    {
+      "view_id": "VW-85",
+      "name": "Deferred funding — follow-ups",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "tag = deferred-funding"
+      ],
+      "updated_at": "2025-11-12"
+    }
+  ]
+}

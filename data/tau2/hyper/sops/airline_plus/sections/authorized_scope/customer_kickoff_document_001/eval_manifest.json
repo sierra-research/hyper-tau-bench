@@ -1,0 +1,78 @@
+{
+  "id": "airline_authorized_scope_customer_discovery_intake_001",
+  "representation": "customer_kickoff_document",
+  "artifact_path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/customer_kickoff_document_001/airline_agent_discovery_intake.md",
+  "authoritative_facts": [
+    {
+      "id": "cannot_add_payment_method",
+      "statement": "Customer service cannot add a new payment method to a customer account.",
+      "evidence_locations": [
+        "Agent Scoping > Initial candidate requests > Candidate #1",
+        "Engagement Planning > Stakeholder callouts > Payments Operations"
+      ],
+      "scope_boundary": "This does not by itself establish the separate rule governing whether an unsaved payment method may be accepted for a transaction."
+    },
+    {
+      "id": "cannot_change_passenger_count_existing_reservation",
+      "statement": "Customer service cannot change the number of passengers on an existing reservation.",
+      "evidence_locations": [
+        "Agent Scoping > Initial candidate requests > Candidate #2",
+        "Engagement Planning > Stakeholder callouts > Reservation Operations"
+      ],
+      "scope_boundary": "This applies after a reservation exists and does not establish the maximum number of passengers permitted during a new booking."
+    }
+  ],
+  "related_domain_facts": [
+    {
+      "section_id": "booking_flight",
+      "fact_id": "payment_methods_saved_only",
+      "relationship": "compatible_but_not_equivalent",
+      "notes": "The booking fact restricts transaction inputs to saved methods; this document establishes only that customer service cannot add a method to the account."
+    },
+    {
+      "section_id": "modifying_reservation",
+      "fact_id": "passenger_count_cannot_change",
+      "relationship": "semantic_duplicate",
+      "notes": "Both sources prohibit changing passenger count after a reservation exists."
+    },
+    {
+      "section_id": "modifying_reservation",
+      "fact_id": "supervisor_cannot_change_passenger_count",
+      "relationship": "compatible_extension_not_established_here",
+      "notes": "The discovery intake does not state what a human supervisor can or cannot do."
+    },
+    {
+      "section_id": "booking_flight",
+      "fact_id": "max_passengers_per_reservation",
+      "relationship": "different_lifecycle_stage",
+      "notes": "The booking limit applies while creating a reservation; this document addresses changes to an existing one."
+    }
+  ],
+  "excluded_claims": [
+    "The artifact does not establish whether an unsaved payment method can be accepted for a charge.",
+    "The artifact does not establish payment-method count or combination limits.",
+    "The artifact does not establish the maximum number of passengers for a new reservation.",
+    "The artifact does not establish whether a supervisor can change passenger count.",
+    "The artifact does not establish exact transfer conditions or customer-facing transfer wording.",
+    "The artifact does not authorize or prohibit any third candidate request type."
+  ],
+  "non_policy_context": [
+    "Directional contact volumes",
+    "Pilot goals and unapproved metrics",
+    "Synthetic account-team conversation notes",
+    "Incomplete stakeholder mapping and ownership",
+    "Technical discovery placeholders",
+    "Timing assumptions, risks, and open decisions",
+    "Brand-review and collaboration notes"
+  ],
+  "distribution": {
+    "delivered_artifacts": [
+      "uploaded_materials/ (generic pooled intake_form*.md name)"
+    ],
+    "author_only_artifacts": [
+      "eval_manifest.json",
+      "schema fact assignments"
+    ],
+    "notes": "The Developer receives the discovery intake without fact ids, coverage labels, or this evaluation manifest."
+  }
+}

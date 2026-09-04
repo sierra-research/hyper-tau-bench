@@ -1,0 +1,65 @@
+{
+  "id": "airline_booking_flight_website_screenshot_001",
+  "representation": "website_screenshot",
+  "context": "initial_booking_checkout_before_reservation_creation",
+  "agent_facing_artifact": "travel_insurance_checkout.png",
+  "author_source_artifact": "travel_insurance_checkout.html",
+  "canonical_fact_ids": [
+    "insurance_cost_per_passenger",
+    "insurance_refund_health_weather"
+  ],
+  "target_facts": [
+    {
+      "id": "insurance_cost_per_passenger",
+      "statement": "Travel insurance costs $45 per passenger."
+    },
+    {
+      "id": "insurance_refund_health_weather",
+      "statement": "Travel insurance enables a full refund if the customer later needs to cancel for health or weather reasons."
+    }
+  ],
+  "static_image_contract": {
+    "coverage": "domain_facts_only",
+    "workflow_fact_ids_covered": [],
+    "workflow_handling": "Required questions, sequencing, confirmations, and action or tool procedures remain in explicit rules or transcripts."
+  },
+  "related_but_not_covered_fact": {
+    "id": "ask_insurance_during_initial_booking",
+    "statement": "During initial booking, ask whether the customer wants travel insurance before creating the reservation.",
+    "reason": "The checkout choice supports the context but does not clearly teach a customer-service agent that asking is a required workflow step."
+  },
+  "grounded_distractors": {
+    "source_path": "data/tau2/domains/airline_plus/db.json",
+    "reservation_id": "EFDWA0",
+    "visible_values": [
+      "LAS to ATL round trip",
+      "May 19 to May 29",
+      "MER394 and MER575",
+      "Economy",
+      "Haruto Keller and Wei Keller",
+      "Passenger dates of birth",
+      "haruto.keller6214@example.com",
+      "Saved Visa ending in 5322",
+      "$674 airfare",
+      "$90 trip protection",
+      "$764 total"
+    ]
+  },
+  "excluded_claims": [
+    "Insurance can be added after booking",
+    "A new payment method can be added during checkout",
+    "Aircraft type",
+    "Taxes or fees not present in the domain data",
+    "Traveler age classification",
+    "A new rewards-program capability"
+  ],
+  "distribution": {
+    "expose_to_developer_agent": [
+      "travel_insurance_checkout.png"
+    ],
+    "keep_author_side": [
+      "travel_insurance_checkout.html",
+      "eval_manifest.json"
+    ]
+  }
+}

@@ -1,0 +1,64 @@
+RHO BANK RETENTION OPERATIONS - JOB AID
+DISPUTE HISTORY LOOKUP
+Rev A | 2025-10-13 | Retention Operations with Learning & Development
+
+PURPOSE
+get_user_dispute_history_7291 retrieves a user's credit card dispute history, including dispute dates, statuses, and transaction details.
+
+WHEN
+  - You need a consolidated list of all credit card disputes filed by a specific user.
+  - You are reviewing the current status or historical progression of a user's disputes.
+  - You need transaction-level context for each dispute.
+
+PREREQUISITES
+The tool requires user_id, the user's canonical internal identifier. Make sure the user_id is correct and current before making the call.
+
+PROCEDURE
+  1. Obtain the user_id.
+  2. Invoke get_user_dispute_history_7291 with user_id.
+  3. Review the returned list of disputes and associated transaction details.
+
+READING THE RESULTS
+  - Verify the list is complete for the queried user_id.
+  - Use dispute_date and last_updated_at to understand timeline and recency.
+  - Use status to determine whether action is needed.
+  - Review transaction details to confirm the disputed transaction context.
+
+WORKED READ - THREE DISPUTES RETURN
+  A lookup returns three disputes. The newest row shows a closed status;
+  an older dispute, filed in the spring, still shows open. The read is
+  the whole list, not the newest row: the open spring dispute is the one
+  that matters. A list is only as settled as its least-final entry.
+
+WORKED READ - ONE DISPUTE, RECENTLY MOVED
+  A lookup returns a single dispute whose record moved this week. Read
+  the date fields together: the dispute itself is months old and only
+  the movement is new. Describe what moved from the
+  dates on the screen, not from memory.
+
+IF THE RESULT LOOKS WRONG
+  - Empty result while the customer describes a dispute: do not treat
+    the empty list as an answer yet - the handling row for an empty
+    result is printed on the pack card; follow the card.
+  - Any error string: the pack card prints an error table with a
+    handling row per string. Open the card and follow its row.
+
+SCOPE
+The tool returns only credit card disputes associated with the specified user_id.
+
+RECORD IT
+Note in the case record that the history was reviewed and which disputes, if any, remain open.
+
+PRIVACY
+Always handle user data from this tool in accordance with internal data handling and privacy requirements.
+
+WHEN TO OPEN THE PACK CARD
+  Open contract pack CP-CARD-7 whenever the question is about the record
+  itself: the shape of a returned record, a field's exact name, or what
+  an error string means. This aid covers how the desk runs the lookup;
+  the pack card covers what the tool returns. If you are copying field
+  names off this page, you are on the wrong page - the card prints those
+  at the record level.
+
+Record shapes and error handling live in contract pack CP-CARD-7.
+Retention Operations | Rev A 2025-10-13

@@ -1,0 +1,946 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "Rho Helpdesk",
+    "account": "rho-bank-consumer-and-business",
+    "workspace": "customer-support-core",
+    "environment": "production",
+    "exported_at": "2025-11-12T09:40:00-05:00",
+    "timezone": "America/New_York",
+    "export_version": "2025.46",
+    "requested_by": "priya.natarajan@rhobank.com"
+  },
+  "cover_email": "From: Helpdesk Administration <helpdesk-admin@rhobank.com>\nTo: Priya Natarajan <priya.natarajan@rhobank.com>\nDate: Wed, 12 Nov 2025 14:21:05 -0500\nSubject: RE: customer-support-core workspace export (2025.46) -- with object histories\nMessage-ID: <hd-export-2025-46-supportcore-r2@rhobank.com>\nIn-Reply-To: <hd-export-2025-46-supportcore@rhobank.com>\nReferences: <hd-export-2025-46-supportcore@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nPriya,\n\nRe-sending the 2025.46 export with the expanded packaging you asked for on this thread: same objects as this morning's file, plus the workspace change log and the comment histories on the recovery-macro family and the transfer guards. Nothing was re-exported -- the snapshot timestamp is unchanged; the histories are additive.\n\nSame caveats as always, doubled for the histories: this is configuration and its audit trail, not policy. The change log records when objects changed and who asked; why they changed is owned by the published ops boards, the dated Security Operations issuances, and the floor records the log entries cite. Comment threads are working chatter and quote requests verbatim -- treat names and dates in them as the record of the request, not as guidance.\n\nField option rows remain one row per picklist value; transfer_reason still accounts for most of the CSV, and selection guidance still lives on the floor board, not here.\n\nIf a history row looks off, same offer as before: reply here and I will pull the raw object version.\n\nHelpdesk Administration\n",
+  "macros": [
+    {
+      "macro_id": "MAC-7412",
+      "name": "Human transfer — reason-coded handoff",
+      "description": "Packages a human-agent handoff: applies the selected transfer reason code, carries the contact summary, and invokes transfer_to_human_agents. Reason-code selection is governed by the floor routing board XFER-OPS-101; this macro is the application step only.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-03-17",
+      "updated_at": "2025-10-14",
+      "usage_30d": 1418,
+      "usage_90d": 4276,
+      "superseded_by": null,
+      "steps": [
+        "Set ticket_type = human_transfer_request",
+        "Set transfer_reason to the selected reason code (picklist; one value required)",
+        "Populate the transfer summary field from the contact record",
+        "Invoke transfer_to_human_agents with the reason code and summary",
+        "Deliver the scripted transfer line to the customer and set status = transferred"
+      ]
+    },
+    {
+      "macro_id": "MAC-7515",
+      "name": "Account recovery — bypass code logging",
+      "description": "Logs identity verification for an Account Recovery Bypass Code event through the log_verification tool. When using log_verification for an Account Recovery Bypass Code, enter the bypass code in place of personal information so the system records that a bypass method was used.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-10-22",
+      "updated_at": "2025-10-23",
+      "usage_30d": 4,
+      "usage_90d": 9,
+      "superseded_by": null,
+      "steps": [
+        "Set log_verification.name = 9K2X7M4P1N8Q3R5T6A",
+        "Set log_verification.user_id = 9K2X7M4P1N8Q3R5T6A",
+        "Set log_verification.address = 9K2X7M4P1N8Q3R5T6A",
+        "Set log_verification.email = 9K2X7M4P1N8Q3R5T6A",
+        "Set log_verification.phone_number = 9K2X7M4P1N8Q3R5T6A",
+        "Set log_verification.date_of_birth = 9K2X7M4P1N8Q3R5T6A",
+        "Set log_verification.time_verified = the actual verification timestamp",
+        "Submit the log_verification entry and return to the recovery workflow"
+      ]
+    },
+    {
+      "macro_id": "MAC-7301",
+      "name": "Recovery verification — profile prefill (LEGACY)",
+      "description": "Prefilled the log_verification identity fields from the located customer profile (name, address, email, phone, date of birth) before submission. Retired from the recovery workflow in October 2025; see the change notice on the workspace change log for the replacement.",
+      "active": false,
+      "environment": "production",
+      "status": "disabled_legacy",
+      "effective_at": "2025-04-02",
+      "updated_at": "2025-10-22",
+      "usage_30d": 0,
+      "usage_90d": 11,
+      "superseded_by": "MAC-7515",
+      "steps": [
+        "Locate the customer profile on the recovery contact",
+        "Copy profile name, address, email, phone_number, and date_of_birth into the log_verification fields",
+        "Set log_verification.time_verified = submission time",
+        "Submit the log_verification entry"
+      ]
+    },
+    {
+      "macro_id": "MAC-7610",
+      "name": "Recovery handoff — shift re-verification prompt",
+      "description": "Fires the re-verification checklist when a recovery contact changes assignee before the recovery is complete. Handoff conduct policy is owned by the pinned recovery-desk ruling of 2025-10-21; this macro is the prompt and the checklist rendering only.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-10-24",
+      "updated_at": "2025-10-24",
+      "usage_30d": 3,
+      "usage_90d": 3,
+      "superseded_by": null,
+      "steps": [
+        "Detect assignee change on an open recovery contact",
+        "Render the re-verification checklist to the receiving agent",
+        "Require verification_method to be set fresh by the receiving agent",
+        "Append a handoff entry to the contact timeline"
+      ]
+    },
+    {
+      "macro_id": "MAC-7618",
+      "name": "Recovery close-out packet",
+      "description": "Assembles the close-out packet when a recovery contact is solved: contact timeline, verification record reference, and disposition. Packet contents are references only; note-content standards are owned by the pinned ruling.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-11-03",
+      "updated_at": "2025-11-03",
+      "usage_30d": 2,
+      "usage_90d": 2,
+      "superseded_by": null,
+      "steps": [
+        "Collect contact timeline and disposition",
+        "Attach the verification record reference (never the record contents)",
+        "Set status = solved-pending-close and notify the assignee"
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "TRG-6220",
+      "name": "Guard: transfer reason required",
+      "description": "Validation guard on the human-transfer macro; blocks handoffs submitted without a reason code.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 2,
+      "effective_at": "2025-03-17",
+      "updated_at": "2025-03-17",
+      "usage_30d": 37,
+      "conditions": [
+        "macro MAC-7412 submitted",
+        "transfer_reason is empty"
+      ],
+      "actions": [
+        "reject submission — a transfer reason code is required",
+        "notify submitting agent with the validation message"
+      ]
+    },
+    {
+      "trigger_id": "TRG-6294",
+      "name": "Guard: bypass log completeness",
+      "description": "Validation guard on the bypass logging macro; blocks partial submissions.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 1,
+      "effective_at": "2025-10-22",
+      "updated_at": "2025-10-22",
+      "usage_30d": 1,
+      "conditions": [
+        "macro MAC-7515 submitted",
+        "any log_verification identity field is empty or time_verified is empty"
+      ],
+      "actions": [
+        "reject submission — all seven log_verification fields must be populated",
+        "route the contact to the Security Operations review queue"
+      ]
+    },
+    {
+      "trigger_id": "TRG-6180",
+      "name": "Route: recovery contacts to recovery queue",
+      "description": "Assigns account recovery tickets to the recovery specialist group.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 4,
+      "effective_at": "2025-01-20",
+      "updated_at": "2025-06-09",
+      "usage_30d": 61,
+      "conditions": [
+        "ticket_type = account_recovery"
+      ],
+      "actions": [
+        "set group = Recovery Desk",
+        "apply SLA-341"
+      ]
+    },
+    {
+      "trigger_id": "TRG-6301",
+      "name": "Guard: catch-all transfer requires summary",
+      "description": "Validation guard on the human-transfer macro for the catch-all reason; blocks submissions with an empty transfer summary. Mechanical check only — what a sufficient summary contains is owned by the pinned floor ruling of 2025-10-27.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 2,
+      "effective_at": "2025-10-28",
+      "updated_at": "2025-10-28",
+      "usage_30d": 2,
+      "conditions": [
+        "macro MAC-7412 submitted",
+        "transfer_reason = other",
+        "transfer_summary is empty"
+      ],
+      "actions": [
+        "reject submission — the catch-all reason requires a transfer summary",
+        "notify submitting agent with the validation message"
+      ]
+    },
+    {
+      "trigger_id": "TRG-6318",
+      "name": "Route: business-account transfers to business banking",
+      "description": "Routes specialized-department transfers on business-class accounts to the business banking group.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 3,
+      "effective_at": "2025-06-30",
+      "updated_at": "2025-06-30",
+      "usage_30d": 9,
+      "conditions": [
+        "ticket_type = human_transfer_request",
+        "transfer_reason = specialized_department_required",
+        "account_class = business"
+      ],
+      "actions": [
+        "set group = Business Banking",
+        "apply SLA-352"
+      ]
+    },
+    {
+      "trigger_id": "TRG-6325",
+      "name": "Notify: recovery first-response warning",
+      "description": "Notifies the recovery desk lead when an open recovery contact reaches 75 percent of the SLA-341 first-response window.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 5,
+      "effective_at": "2025-06-09",
+      "updated_at": "2025-06-09",
+      "usage_30d": 6,
+      "conditions": [
+        "group = Recovery Desk",
+        "first response pending",
+        "elapsed >= 75% of SLA-341 window"
+      ],
+      "actions": [
+        "notify Recovery Desk lead"
+      ]
+    }
+  ],
+  "policy_contracts": [
+    {
+      "contract_id": "CON-0904",
+      "name": "customer-support-core workspace configuration scope",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Helpdesk Administration",
+      "scope": "Ticket routing, macros, and validation guards for the customer-support-core workspace at this snapshot. Configuration only; transfer reason-code selection policy, account-recovery verification procedure, and interaction-level operating rules are owned by the published ops boards, the dated Security Operations issuances, and the floor records.",
+      "required_fields": [
+        "ticket_type",
+        "transfer_reason"
+      ],
+      "closed_world": {
+        "complete": false,
+        "unlisted_behavior": "review"
+      },
+      "effective_at": "2025-01-20",
+      "updated_at": "2025-10-22"
+    }
+  ],
+  "field_columns": [
+    "row_id",
+    "field_key",
+    "field_name",
+    "field_type",
+    "option_value",
+    "active",
+    "status",
+    "environment",
+    "updated_at"
+  ],
+  "fields": [
+    {
+      "row_id": "F-001",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "human_transfer_request",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-002",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "account_recovery",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-01-20"
+    },
+    {
+      "row_id": "F-003",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "general_servicing",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-18"
+    },
+    {
+      "row_id": "F-010",
+      "field_key": "transfer_reason",
+      "field_name": "Transfer reason",
+      "field_type": "picklist",
+      "option_value": "fraud_or_security_concern",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-011",
+      "field_key": "transfer_reason",
+      "field_name": "Transfer reason",
+      "field_type": "picklist",
+      "option_value": "account_closure_request",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-012",
+      "field_key": "transfer_reason",
+      "field_name": "Transfer reason",
+      "field_type": "picklist",
+      "option_value": "deceased_account_holder",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-013",
+      "field_key": "transfer_reason",
+      "field_name": "Transfer reason",
+      "field_type": "picklist",
+      "option_value": "legal_or_regulatory_matter",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-014",
+      "field_key": "transfer_reason",
+      "field_name": "Transfer reason",
+      "field_type": "picklist",
+      "option_value": "account_ownership_dispute",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-015",
+      "field_key": "transfer_reason",
+      "field_name": "Transfer reason",
+      "field_type": "picklist",
+      "option_value": "complex_billing_dispute",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-016",
+      "field_key": "transfer_reason",
+      "field_name": "Transfer reason",
+      "field_type": "picklist",
+      "option_value": "abusive_customer_behavior",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-017",
+      "field_key": "transfer_reason",
+      "field_name": "Transfer reason",
+      "field_type": "picklist",
+      "option_value": "third_party_inquiry",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-018",
+      "field_key": "transfer_reason",
+      "field_name": "Transfer reason",
+      "field_type": "picklist",
+      "option_value": "technical_system_error",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-019",
+      "field_key": "transfer_reason",
+      "field_name": "Transfer reason",
+      "field_type": "picklist",
+      "option_value": "customer_demands_after_unavailable_offer_refusal",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-020",
+      "field_key": "transfer_reason",
+      "field_name": "Transfer reason",
+      "field_type": "picklist",
+      "option_value": "unconfirmed_external_communication",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-021",
+      "field_key": "transfer_reason",
+      "field_name": "Transfer reason",
+      "field_type": "picklist",
+      "option_value": "kb_search_unsuccessful_customer_requests_transfer",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-022",
+      "field_key": "transfer_reason",
+      "field_name": "Transfer reason",
+      "field_type": "picklist",
+      "option_value": "specialized_department_required",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-023",
+      "field_key": "transfer_reason",
+      "field_name": "Transfer reason",
+      "field_type": "picklist",
+      "option_value": "accessibility_or_special_needs",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-024",
+      "field_key": "transfer_reason",
+      "field_name": "Transfer reason",
+      "field_type": "picklist",
+      "option_value": "customer_frustrated_demands_human",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-025",
+      "field_key": "transfer_reason",
+      "field_name": "Transfer reason",
+      "field_type": "picklist",
+      "option_value": "supervisor_request_service_complaint",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-026",
+      "field_key": "transfer_reason",
+      "field_name": "Transfer reason",
+      "field_type": "picklist",
+      "option_value": "customer_requests_human_no_specific_reason",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-027",
+      "field_key": "transfer_reason",
+      "field_name": "Transfer reason",
+      "field_type": "picklist",
+      "option_value": "request_completed_customer_wants_human_followup",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-028",
+      "field_key": "transfer_reason",
+      "field_name": "Transfer reason",
+      "field_type": "picklist",
+      "option_value": "other",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-030",
+      "field_key": "verification_method",
+      "field_name": "Verification method",
+      "field_type": "picklist",
+      "option_value": "standard_two_factor",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-01-20"
+    },
+    {
+      "row_id": "F-031",
+      "field_key": "verification_method",
+      "field_name": "Verification method",
+      "field_type": "picklist",
+      "option_value": "bypass_code",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-22"
+    },
+    {
+      "row_id": "F-032",
+      "field_key": "transfer_summary",
+      "field_name": "Transfer summary",
+      "field_type": "text",
+      "option_value": "",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-03-17"
+    },
+    {
+      "row_id": "F-034",
+      "field_key": "account_class",
+      "field_name": "Account class",
+      "field_type": "picklist",
+      "option_value": "consumer",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-06-30"
+    },
+    {
+      "row_id": "F-035",
+      "field_key": "account_class",
+      "field_name": "Account class",
+      "field_type": "picklist",
+      "option_value": "business",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-06-30"
+    },
+    {
+      "row_id": "F-037",
+      "field_key": "callback_number_source",
+      "field_name": "Callback number source",
+      "field_type": "picklist",
+      "option_value": "profile",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-09-08"
+    },
+    {
+      "row_id": "F-038",
+      "field_key": "callback_number_source",
+      "field_name": "Callback number source",
+      "field_type": "picklist",
+      "option_value": "provided_on_call",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-09-08"
+    }
+  ],
+  "sla_policies": [
+    {
+      "policy_id": "SLA-337",
+      "name": "Support core — transfer handoff pickup",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "15 minutes to human pickup after transfer",
+      "applies_to": "ticket_type = human_transfer_request",
+      "updated_at": "2025-05-12"
+    },
+    {
+      "policy_id": "SLA-341",
+      "name": "Recovery desk — first response",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "4 business hours first response",
+      "applies_to": "group = Recovery Desk",
+      "updated_at": "2025-06-09"
+    },
+    {
+      "policy_id": "SLA-352",
+      "name": "Business banking — transfer pickup",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "30 minutes to business-banking pickup after transfer",
+      "applies_to": "group = Business Banking",
+      "updated_at": "2025-06-30"
+    }
+  ],
+  "views": [
+    {
+      "view_id": "VW-104",
+      "name": "Support core — open transfers",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "ticket_type = human_transfer_request",
+        "status != transferred"
+      ],
+      "updated_at": "2025-10-14"
+    },
+    {
+      "view_id": "VW-118",
+      "name": "Recovery desk — working queue",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "group = Recovery Desk",
+        "status != solved-pending-close"
+      ],
+      "updated_at": "2025-06-09"
+    },
+    {
+      "view_id": "VW-127",
+      "name": "Recovery desk — bypass events, trailing 30 days",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "verification_method = bypass_code",
+        "created > -30d"
+      ],
+      "updated_at": "2025-10-29"
+    },
+    {
+      "view_id": "VW-131",
+      "name": "Support core — catch-all transfers",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "ticket_type = human_transfer_request",
+        "transfer_reason = other"
+      ],
+      "updated_at": "2025-10-28"
+    }
+  ],
+  "change_log_columns": [
+    "change_id",
+    "object_id",
+    "change_type",
+    "changed_at",
+    "requested_by",
+    "note"
+  ],
+  "change_log": [
+    {
+      "change_id": "CHG-4409",
+      "object_id": "MAC-7412",
+      "change_type": "description_update",
+      "changed_at": "2025-10-14T11:20:00-04:00",
+      "requested_by": "darnell.reeves@rhobank.com",
+      "note": "Board reference in the description updated to XFER-OPS-101 rev B, published this morning. No step changes."
+    },
+    {
+      "change_id": "CHG-4468",
+      "object_id": "MAC-7515",
+      "change_type": "created",
+      "changed_at": "2025-10-22T15:05:00-04:00",
+      "requested_by": "victor.osei@rhobank.com",
+      "note": "Replacement recovery-logging macro per the Security Operations issuance of this week. Field mapping mirrors the issuance language deliberately."
+    },
+    {
+      "change_id": "CHG-4471",
+      "object_id": "MAC-7301",
+      "change_type": "disabled",
+      "changed_at": "2025-10-22T15:12:00-04:00",
+      "requested_by": "victor.osei@rhobank.com",
+      "note": "Profile-prefill macro disabled and marked legacy; superseded_by set to MAC-7515. Notice CHG-4471 emailed to the recovery distribution and posted to #recovery-desk."
+    },
+    {
+      "change_id": "CHG-4474",
+      "object_id": "MAC-7515",
+      "change_type": "description_update",
+      "changed_at": "2025-10-23T09:31:00-04:00",
+      "requested_by": "priya.natarajan@rhobank.com",
+      "note": "Description tightened after the cutover-morning read-through. Steps unchanged."
+    },
+    {
+      "change_id": "CHG-4477",
+      "object_id": "TRG-6294",
+      "change_type": "created",
+      "changed_at": "2025-10-22T15:20:00-04:00",
+      "requested_by": "victor.osei@rhobank.com",
+      "note": "Completeness guard for the new logging macro. Rejects partial submissions; routes to the Security Operations review queue."
+    },
+    {
+      "change_id": "CHG-4480",
+      "object_id": "F-031",
+      "change_type": "option_added",
+      "changed_at": "2025-10-22T15:24:00-04:00",
+      "requested_by": "victor.osei@rhobank.com",
+      "note": "verification_method gains bypass_code so downstream records can distinguish the method without reading note text."
+    },
+    {
+      "change_id": "CHG-5201",
+      "object_id": "MAC-7610",
+      "change_type": "created",
+      "changed_at": "2025-10-24T10:02:00-04:00",
+      "requested_by": "darnell.reeves@rhobank.com",
+      "note": "Shift-handoff re-verification prompt per line five of the pinned desk ruling. Prompt only; the ruling owns the conduct."
+    },
+    {
+      "change_id": "CHG-5204",
+      "object_id": "VW-127",
+      "change_type": "created",
+      "changed_at": "2025-10-29T09:15:00-04:00",
+      "requested_by": "ingrid.halvorsen@rhobank.com",
+      "note": "Sampling view for the two-week wide-sampling window announced on the incident thread."
+    },
+    {
+      "change_id": "CHG-5207",
+      "object_id": "TRG-6301",
+      "change_type": "created",
+      "changed_at": "2025-10-28T14:40:00-04:00",
+      "requested_by": "darnell.reeves@rhobank.com",
+      "note": "Mechanical floor for pin one of 2025-10-27: catch-all cannot travel with an empty summary. The pin owns what a real summary is; this only stops the empty ones."
+    },
+    {
+      "change_id": "CHG-5209",
+      "object_id": "VW-131",
+      "change_type": "created",
+      "changed_at": "2025-10-28T14:52:00-04:00",
+      "requested_by": "ingrid.halvorsen@rhobank.com",
+      "note": "Catch-all sampling view, same request as the pin work."
+    },
+    {
+      "change_id": "CHG-5215",
+      "object_id": "MAC-7618",
+      "change_type": "created",
+      "changed_at": "2025-11-03T11:08:00-05:00",
+      "requested_by": "priya.natarajan@rhobank.com",
+      "note": "Close-out packet automation. References only; the packet never carries verification record contents."
+    },
+    {
+      "change_id": "CHG-5219",
+      "object_id": "TRG-6220",
+      "change_type": "no_change_review",
+      "changed_at": "2025-11-04T16:44:00-05:00",
+      "requested_by": "darnell.reeves@rhobank.com",
+      "note": "Reviewed at floor request following an email thread about a supposed approval step on high-tier transfers. Confirmed: conditions are reason-present only; no approval or sign-off logic exists on this guard or anywhere in the workspace. Closing with no change."
+    },
+    {
+      "change_id": "CHG-5222",
+      "object_id": "SLA-352",
+      "change_type": "created",
+      "changed_at": "2025-06-30T10:15:00-04:00",
+      "requested_by": "helpdesk-admin@rhobank.com",
+      "note": "Business-banking pickup target created with the business routing trigger, same request."
+    }
+  ],
+  "comment_histories": [
+    {
+      "object_id": "MAC-7301",
+      "comments": [
+        {
+          "comment_id": "CMT-7301-1",
+          "author": "priya.natarajan@rhobank.com",
+          "created_at": "2025-10-21T18:40:00-04:00",
+          "body": "Requesting disable per the incident thread in #recovery-desk. The prefill drops profile fields next to the log_verification boxes and the floor has been copying them forward. Replacement macro lands tomorrow with the issuance."
+        },
+        {
+          "comment_id": "CMT-7301-2",
+          "author": "helpdesk-admin@rhobank.com",
+          "created_at": "2025-10-21T19:02:00-04:00",
+          "body": "Acknowledged. Scheduling disable for tomorrow afternoon so it lands with the replacement, not before it. Nothing worse than a gap with neither macro."
+        },
+        {
+          "comment_id": "CMT-7301-3",
+          "author": "helpdesk-admin@rhobank.com",
+          "created_at": "2025-10-22T15:12:00-04:00",
+          "body": "Disabled. Status set to disabled_legacy, superseded_by MAC-7515. Change notice CHG-4471 issued to the recovery distribution."
+        },
+        {
+          "comment_id": "CMT-7301-4",
+          "author": "felix.ortega@rhobank.com",
+          "created_at": "2025-10-23T08:47:00-04:00",
+          "body": "My saved shortcut hit MACRO_DISABLED this morning — expected per the notice, rebuilt off the palette macro. Logging here so the breakage report has a closure note."
+        },
+        {
+          "comment_id": "CMT-7301-5",
+          "author": "priya.natarajan@rhobank.com",
+          "created_at": "2025-10-23T09:05:00-04:00",
+          "body": "That was the only breakage in the report. Keeping the object visible in exports on purpose: the audit trail wants the retired shape next to its replacement."
+        }
+      ]
+    },
+    {
+      "object_id": "MAC-7515",
+      "comments": [
+        {
+          "comment_id": "CMT-7515-1",
+          "author": "victor.osei@rhobank.com",
+          "created_at": "2025-10-22T15:06:00-04:00",
+          "body": "Created to the issuance's mapping. The description repeats the issuance language on purpose — one wording everywhere, no local paraphrase drift."
+        },
+        {
+          "comment_id": "CMT-7515-2",
+          "author": "priya.natarajan@rhobank.com",
+          "created_at": "2025-10-23T09:31:00-04:00",
+          "body": "Description touch-up after the cutover read-through; steps untouched. Guard TRG-6294 verified firing on partial submissions in staging."
+        }
+      ]
+    },
+    {
+      "object_id": "TRG-6220",
+      "comments": [
+        {
+          "comment_id": "CMT-6220-1",
+          "author": "darnell.reeves@rhobank.com",
+          "created_at": "2025-11-04T16:20:00-05:00",
+          "body": "Please confirm on the record what this guard checks. A business-desk email thread has people believing some transfers need a supervisor sign-off before they move."
+        },
+        {
+          "comment_id": "CMT-6220-2",
+          "author": "helpdesk-admin@rhobank.com",
+          "created_at": "2025-11-04T16:44:00-05:00",
+          "body": "Confirmed and logged as CHG-5219: the guard checks that a reason code is present. That is the whole condition set. There is no approval step, no sign-off state, and no supervisor role reference on this guard or any active object in the workspace."
+        },
+        {
+          "comment_id": "CMT-6220-3",
+          "author": "darnell.reeves@rhobank.com",
+          "created_at": "2025-11-04T17:01:00-05:00",
+          "body": "Thank you. Pointing the email thread at this comment rather than paraphrasing it."
+        }
+      ]
+    },
+    {
+      "object_id": "TRG-6301",
+      "comments": [
+        {
+          "comment_id": "CMT-6301-1",
+          "author": "darnell.reeves@rhobank.com",
+          "created_at": "2025-10-28T14:41:00-04:00",
+          "body": "Mechanical floor only. The pin owns the standard; this stops the empty ones at the door so QA reads fewer blank pages."
+        },
+        {
+          "comment_id": "CMT-6301-2",
+          "author": "ingrid.halvorsen@rhobank.com",
+          "created_at": "2025-11-05T09:22:00-05:00",
+          "body": "One week of VW-131 sampling since the guard went live: zero empty summaries reached review, and the summaries that do arrive are being written for a reader. Whether that second part is the guard or the pin is unknowable and does not matter — leaving this note so nobody later credits the trigger with work the pin did."
+        },
+        {
+          "comment_id": "CMT-6301-3",
+          "author": "helpdesk-admin@rhobank.com",
+          "created_at": "2025-11-05T09:40:00-05:00",
+          "body": "Noted for the object history. No configuration change requested or made; condition set remains summary-non-empty, nothing else."
+        }
+      ]
+    },
+    {
+      "object_id": "MAC-7610",
+      "comments": [
+        {
+          "comment_id": "CMT-7610-1",
+          "author": "priya.natarajan@rhobank.com",
+          "created_at": "2025-10-24T10:20:00-04:00",
+          "body": "Staged and timed before enable: the checklist adds well under two minutes to a handoff, which was the usability bar the desk asked for on the incident thread."
+        },
+        {
+          "comment_id": "CMT-7610-2",
+          "author": "tara.whitcomb@rhobank.com",
+          "created_at": "2025-11-01T23:15:00-04:00",
+          "body": "First overnight with a real mid-recovery handoff since the prompt landed: it fired at the handoff event, the receiving agent worked the checklist top to bottom, and nobody had to remember anything at 2am. This is what the fix looks like from the swing side. No changes requested."
+        },
+        {
+          "comment_id": "CMT-7610-3",
+          "author": "priya.natarajan@rhobank.com",
+          "created_at": "2025-11-03T08:50:00-05:00",
+          "body": "Logging the same from telemetry: prompt has fired on every handoff-typed recovery event since enable, zero dismiss-without-complete. Object considered settled; further notes belong on the ruling thread, which owns the conduct this prompt renders."
+        }
+      ]
+    },
+    {
+      "object_id": "MAC-7618",
+      "comments": [
+        {
+          "comment_id": "CMT-7618-1",
+          "author": "priya.natarajan@rhobank.com",
+          "created_at": "2025-11-03T11:15:00-05:00",
+          "body": "Design note for the history: the packet carries references — contact id, case ids, the remediation ticket number where one exists — and never carries verification record contents. That boundary is inherited from the incident close-out, not invented here; if the packet ever needs more, the ask goes to Security Operations first."
+        },
+        {
+          "comment_id": "CMT-7618-2",
+          "author": "aditi.rao@rhobank.com",
+          "created_at": "2025-11-03T14:02:00-05:00",
+          "body": "Compliance reviewed the packet template against the retention memo: references-only is exactly right, and the packet's own retention rides the parent case. Approved as configured."
+        }
+      ]
+    },
+    {
+      "object_id": "VW-127",
+      "comments": [
+        {
+          "comment_id": "CMT-127-1",
+          "author": "ingrid.halvorsen@rhobank.com",
+          "created_at": "2025-11-12T10:05:00-05:00",
+          "body": "Two-week wide-sampling window closed today. The view stays — trailing-30-days is the right steady-state lens for the desk — but sampling cadence drops back to standard per the announcement on the incident thread. Recording the date here so the view's history shows when wide became normal."
+        },
+        {
+          "comment_id": "CMT-127-2",
+          "author": "tara.whitcomb@rhobank.com",
+          "created_at": "2025-11-12T22:48:00-05:00",
+          "body": "Question for the history rather than a request: swing shift pulls this view at start-of-shift to see what the day desk touched. Is that an intended use, or are we leaning on a review instrument for a handoff briefing? Asking because if it's the wrong lens we'd rather hear it now than after someone builds a habit on it."
+        },
+        {
+          "comment_id": "CMT-127-3",
+          "author": "ingrid.halvorsen@rhobank.com",
+          "created_at": "2025-11-13T08:30:00-05:00",
+          "body": "Intended is a strong word, but it's harmless and I'd rather you read this than keep a private tally. The view shows events, not judgments — nothing in it grades anyone. If swing ever needs a briefing-shaped version, ask for a separate view and we'll build it; don't reshape this one, because its filters are load-bearing for the review side."
+        }
+      ]
+    }
+  ]
+}

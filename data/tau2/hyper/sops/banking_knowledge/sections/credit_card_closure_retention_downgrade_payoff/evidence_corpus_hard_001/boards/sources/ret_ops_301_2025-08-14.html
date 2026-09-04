@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>RET-OPS-301 - rev A</title>
+<style>
+  body{margin:0;background:#e7ebef;font-family:"Segoe UI",Arial,sans-serif}
+  .canvas{position:relative;width:1500px;height:1400px;background:#fbfcfd;overflow:hidden}
+  .titleblock{position:absolute;left:24px;top:20px;width:270px;border:1px solid #b3bcc6;background:#ffffff;border-radius:6px;padding:10px 14px;box-sizing:border-box}
+  .tb1{font-size:16px;font-weight:700;color:#2c3a48;margin-bottom:2px}
+  .tb2{font-size:12px;color:#4a5a68;line-height:1.5}
+  .bt{position:absolute;left:340px;top:38px;font-size:21px;font-weight:600;color:#2c3a48}
+  .legend{position:absolute;left:1080px;top:26px;width:396px;border:1px solid #b3bcc6;background:#ffffff;border-radius:6px;padding:8px 12px;font-size:11.5px;color:#4a5a68;box-sizing:border-box;line-height:1.5}
+  .node{position:absolute;box-sizing:border-box;background:#ffffff;border:2px solid #4a6076;border-radius:10px;padding:9px 13px;font-size:13px;color:#22303c;line-height:1.4;white-space:pre-wrap}
+  .start{border-color:#3e7a5e;background:#eef7f2}
+  .stop{border-color:#9c4a4a;background:#fbeeec}
+  .aside{position:absolute;box-sizing:border-box;border:1.5px dashed #8a97a4;background:#f5f7f9;border-radius:8px;padding:8px 12px;font-size:12px;color:#44525f;line-height:1.4}
+  .dwrap{position:absolute}
+  .dshape{position:absolute;left:15%;top:15%;width:70%;height:70%;transform:rotate(45deg);background:#fdf6ea;border:2px solid #a8763b;box-sizing:border-box}
+  .dlabel{position:absolute;left:8%;right:8%;top:0;bottom:0;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;color:#5a4326;line-height:1.3}
+  .eh{position:absolute;height:2px;background:#5b6c7c}
+  .ev{position:absolute;width:2px;background:#5b6c7c}
+  .ar-r{position:absolute;width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:8px solid #5b6c7c}
+  .ar-l{position:absolute;width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-right:8px solid #5b6c7c}
+  .ar-d{position:absolute;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:8px solid #5b6c7c}
+  .ar-u{position:absolute;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:8px solid #5b6c7c}
+  .elbl{position:absolute;font-size:11.5px;color:#4f6070;background:#fbfcfd;padding:1px 5px;line-height:1.35}
+  .foot{position:absolute;left:24px;bottom:8px;font-size:11px;color:#7c8894}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <div class="ev" style="left:259px;top:198px;height:30px"></div><div class="ar-d" style="left:254px;top:220px"></div>
+  <div class="ev" style="left:259px;top:276px;height:30px"></div><div class="ar-d" style="left:254px;top:298px"></div>
+  <div class="ev" style="left:259px;top:354px;height:30px"></div><div class="ar-d" style="left:254px;top:376px"></div>
+  <div class="ev" style="left:259px;top:452px;height:28px"></div><div class="ar-d" style="left:254px;top:472px"></div>
+  <div class="eh" style="left:340px;top:559px;width:212px"></div><div class="ar-r" style="left:552px;top:555px"></div>
+  <div class="ev" style="left:259px;top:640px;height:30px"></div><div class="ar-d" style="left:254px;top:662px"></div>
+  <div class="ev" style="left:259px;top:742px;height:30px"></div><div class="ar-d" style="left:254px;top:764px"></div>
+  <div class="ev" style="left:259px;top:824px;height:30px"></div><div class="ar-d" style="left:254px;top:846px"></div>
+  <div class="ev" style="left:259px;top:902px;height:30px"></div><div class="ar-d" style="left:254px;top:924px"></div>
+  <div class="eh" style="left:345px;top:1016px;width:207px"></div><div class="ar-r" style="left:552px;top:1012px"></div>
+  <div class="ev" style="left:259px;top:1102px;height:30px"></div><div class="ar-d" style="left:254px;top:1124px"></div>
+  <div class="eh" style="left:400px;top:1155px;width:30px"></div>
+  <div class="ev" style="left:429px;top:1155px;height:30px"></div>
+  <div class="eh" style="left:430px;top:1184px;width:362px"></div><div class="ar-r" style="left:784px;top:1180px"></div>
+  <div class="ev" style="left:874px;top:1082px;height:28px"></div><div class="ar-u" style="left:869px;top:1082px"></div>
+  <div class="eh" style="left:950px;top:1184px;width:42px"></div><div class="ar-r" style="left:992px;top:1180px"></div>
+  <div class="ev" style="left:1189px;top:1221px;height:75px"></div>
+  <div class="eh" style="left:968px;top:1295px;width:222px"></div><div class="ar-l" style="left:968px;top:1291px"></div>
+  <div class="ev" style="left:1089px;top:1221px;height:139px"></div>
+  <div class="eh" style="left:270px;top:1360px;width:820px"></div>
+  <div class="ev" style="left:270px;top:1324px;height:36px"></div><div class="ar-u" style="left:265px;top:1324px"></div>
+  <div class="eh" style="left:480px;top:1297px;width:80px"></div><div class="ar-l" style="left:480px;top:1293px"></div>
+
+  <div class="elbl" style="left:352px;top:538px">no - a gate fails</div>
+  <div class="elbl" style="left:270px;top:644px">yes</div>
+  <div class="elbl" style="left:357px;top:996px">no - keeps the card</div>
+  <div class="elbl" style="left:270px;top:1106px">yes</div>
+  <div class="elbl" style="left:886px;top:1092px">yes</div>
+  <div class="elbl" style="left:1200px;top:1236px">records found</div>
+  <div class="elbl" style="left:1100px;top:1330px">no records - proceed</div>
+
+  <div class="titleblock">
+    <div class="tb1">RET-OPS-301 - rev A</div>
+    <div class="tb2">Retention Operations</div>
+    <div class="tb2">Owner: Silas Brandt</div>
+    <div class="tb2">2025-08-14</div>
+  </div>
+  <div class="bt">CLOSE / RET - credit card closure and retention</div>
+  <div class="legend">Legend: rounded box = process step / diamond = decision / green = start or finish / red = stop / dashed box = reference note</div>
+
+  <div class="node start" style="left:60px;top:150px;width:400px">Customer asks to close a credit card account</div>
+  <div class="node" style="left:60px;top:228px;width:400px">Verify the customer's identity</div>
+  <div class="node" style="left:60px;top:306px;width:400px">Check closure eligibility</div>
+  <div class="node" style="left:60px;top:384px;width:420px">Eligibility gates: pending disputes, replacement cards, account age, outstanding balance</div>
+  <div class="dwrap" style="left:180px;top:480px;width:160px;height:160px"><div class="dshape"></div><div class="dlabel">All gates pass?</div></div>
+  <div class="node stop" style="left:560px;top:534px;width:320px">A gate fails: walk the customer through what needs resolving first</div>
+  <div class="node" style="left:60px;top:670px;width:420px">Ask why the customer wants to close and record the reason (log_credit_card_closure_reason_4521)</div>
+  <div class="node" style="left:60px;top:772px;width:420px">Annual fee complaints: offer a fee waiver or a downgrade per the offer card</div>
+  <div class="node" style="left:60px;top:854px;width:420px">Address the concern where possible</div>
+  <div class="dwrap" style="left:175px;top:932px;width:170px;height:170px"><div class="dshape"></div><div class="dlabel">Customer still wants to close?</div></div>
+  <div class="node start" style="left:560px;top:990px;width:300px">Customer keeps the card - note the outcome in the case</div>
+  <div class="node" style="left:60px;top:1132px;width:340px">make ONE retention offer by card tier</div>
+  <div class="aside" style="left:440px;top:1104px;width:300px">offer amounts per Retention Offer Card ROC-2 (effective 2025-02-10)</div>
+  <div class="dwrap" style="left:800px;top:1110px;width:150px;height:150px"><div class="dshape"></div><div class="dlabel">Offer accepted?</div></div>
+  <div class="node start" style="left:740px;top:1030px;width:280px">process the accepted offer and note the outcome</div>
+  <div class="node" style="left:1000px;top:1149px;width:380px">Run get_closure_reason_history_8293 - check for closure records within the past year</div>
+  <div class="node" style="left:560px;top:1260px;width:400px">records found within the past year: note repeat closure activity in the case - do not press further</div>
+  <div class="node start" style="left:60px;top:1272px;width:420px">Close the account with close_credit_card_account_7834</div>
+
+  <div class="foot">RET-OPS-301 rev A - Retention Operations - 1 of 1</div>
+</div>
+</body>
+</html>

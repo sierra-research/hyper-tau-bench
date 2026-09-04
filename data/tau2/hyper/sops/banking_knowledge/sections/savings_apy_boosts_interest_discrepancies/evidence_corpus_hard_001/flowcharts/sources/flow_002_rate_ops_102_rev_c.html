@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>RATE-OPS-102 rev C — Interest discrepancies — investigate, credit, report</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 1360px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #4a5568; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #cdd6e0; }
+  .node { position: absolute; width: 300px; box-sizing: border-box; border: 2px solid #4a5b6d; border-radius: 6px; background: #fff; padding: 10px 12px; font-size: 13px; line-height: 1.35; color: #1d2733; }
+  .node .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding: 1px 6px; border-radius: 3px; margin-bottom: 6px; }
+  .entry { border-color: #1d6a44; } .entry .tag { background: #d9efe3; color: #17573a; }
+  .read { border-color: #2b5f8f; } .read .tag { background: #dcebf7; color: #234d73; }
+  .work { border-color: #4a5b6d; } .work .tag { background: #e6ebf0; color: #3a4a5a; }
+  .terminal { border-color: #1d6a44; background: #f2faf5; } .terminal .tag { background: #d9efe3; color: #17573a; }
+  .decision { position: absolute; width: 300px; box-sizing: border-box; }
+  .decision .diamond { width: 280px; height: 132px; margin: 0 auto; background: #fff8e8; border: 2px solid #b08a1f; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 8px 16px; box-sizing: border-box; font-size: 12.5px; text-align: center; color: #4b3d10; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+  svg.edges { position: absolute; left: 0; top: 0; width: 1560px; height: 1360px; pointer-events: none; }
+  svg.edges path { stroke: #51606f; stroke-width: 2; fill: none; marker-end: url(#arrowb); }
+  .edge-label { position: absolute; font-size: 11px; font-weight: 600; color: #38424d; background: #fbfcfdcc; padding: 0 4px; border-radius: 2px; }
+  .sticky { position: absolute; width: 280px; box-sizing: border-box; padding: 10px 12px; font-size: 12px; line-height: 1.35; box-shadow: 2px 3px 6px rgba(0,0,0,0.12); }
+  .sticky.yellow { background: #fdf3c0; } .sticky.green { background: #d9efe3; }
+  .control-definitions { position: absolute; left: 24px; top: 1190px; width: 1512px; box-sizing: border-box; border: 2px solid #4a5568; background: #f4f8fc; border-radius: 6px; padding: 14px 18px; }
+  .control-definitions h2 { margin: 0 0 8px; font-size: 14px; letter-spacing: 0.4px; color: #4a5568; }
+  .control-definitions dl { margin: 0; font-size: 12.5px; line-height: 1.45; color: #1d2733; }
+  .control-definitions dt { font-weight: 700; font-family: "Consolas", monospace; margin-top: 7px; }
+  .control-definitions dd { margin: 1px 0 0 14px; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>Interest discrepancies — investigate, credit, report</h1>
+    <div class="meta">RATE-OPS-102 rev C &nbsp;·&nbsp; Approved 2025-10-08 (M. Osei, Rate Operations) &nbsp;·&nbsp; Supersedes rev B (and rev A of 2025-09-30) &nbsp;·&nbsp; Mandatory for all interest-calculation complaints</div>
+  </div>
+
+  <svg class="edges" viewBox="0 0 1560 1360">
+    <defs><marker id="arrowb" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#51606f"></path></marker></defs>
+    <!-- entry -> step1 -->
+    <path d="M 190 208 L 190 262"></path>
+    <!-- step1 -> step2 -->
+    <path d="M 190 380 L 190 436"></path>
+    <!-- step2 -> step3 -->
+    <path d="M 190 570 L 190 626"></path>
+    <!-- step3 -> step4 (across) -->
+    <path d="M 340 700 L 448 700 L 448 640"></path>
+    <!-- step4 -> step5 (up) -->
+    <path d="M 598 512 L 598 436 L 598 400"></path>
+    <!-- step5 -> step6 (across) -->
+    <path d="M 748 300 L 898 300"></path>
+    <!-- step6 -> diamond -->
+    <path d="M 1048 400 L 1048 470"></path>
+    <!-- diamond no -> explain terminal -->
+    <path d="M 1198 538 L 1330 538 L 1330 600"></path>
+    <!-- diamond yes -> credit first -->
+    <path d="M 1048 606 L 1048 680"></path>
+    <!-- credit first -> report -->
+    <path d="M 1048 852 L 1048 920"></path>
+    <!-- report -> terminal -->
+    <path d="M 1048 1058 L 1048 1120"></path>
+  </svg>
+
+  <span class="edge-label" style="left:1212px;top:514px">no — components reconcile</span>
+  <span class="edge-label" style="left:1058px;top:634px">yes — discrepancy exists</span>
+
+  <article class="node entry" style="left:40px;top:100px"><span class="tag">ENTRY — MANDATE</span>
+    A customer's savings account interest calculation is incorrect, or the customer
+    disputes the amount credited. Agents must submit an interest discrepancy report
+    to the backend team for investigation — this flow is how.
+  </article>
+
+  <article class="node read" style="left:40px;top:266px"><span class="tag">STEP 1 — VERIFY</span>
+    Verify the customer's identity and account ownership.
+  </article>
+
+  <article class="node read" style="left:40px;top:440px"><span class="tag">STEP 2 — ACCOUNTS</span>
+    Look up the customer's accounts using get_all_user_accounts_by_user_id_3847.
+    Note every open checking account, savings account, and card on the profile.
+  </article>
+
+  <article class="node read" style="left:40px;top:630px"><span class="tag">STEP 3 — TRANSACTIONS</span>
+    Check transaction history using get_bank_account_transactions_9173 to find the
+    interest credit in question.
+  </article>
+
+  <article class="node work" style="left:448px;top:512px"><span class="tag">STEP 4 — DOCUMENTATION</span>
+    Review documentation for the savings account type to determine all applicable
+    APY components: base rate, tier rate, linked checking boost, credit card
+    bonuses, and relationship bonus.
+  </article>
+
+  <article class="node work" style="left:448px;top:266px"><span class="tag">STEP 5 — EXPECTED APY</span>
+    Calculate the expected APY by adding all applicable APY components.
+  </article>
+
+  <article class="node work" style="left:898px;top:266px"><span class="tag">STEP 6 — DISCREPANCY</span>
+    Calculate the discrepancy between expected interest and actual interest.
+  </article>
+
+  <div class="decision" style="left:898px;top:470px"><div class="diamond">Discrepancy between expected and actual interest?</div></div>
+
+  <article class="node work" style="left:898px;top:684px"><span class="tag">STEP 7 — CREDIT FIRST</span>
+    If an interest discrepancy exists, first apply a credit using
+    apply_savings_account_credit_6831 to correct the customer's account
+    (RATE-OPS-101 checks apply).
+  </article>
+
+  <article class="node work" style="left:898px;top:924px"><span class="tag">STEP 8 — REPORT</span>
+    After applying the credit, submit the discrepancy report using
+    submit_interest_discrepancy_report_7294.
+  </article>
+
+  <article class="node terminal" style="left:898px;top:1124px"><span class="tag">TERMINAL — CLOSED TO BACKEND</span>
+    Customer informed; backend investigation open. Attach the component arithmetic
+    to the case.
+  </article>
+
+  <article class="node terminal" style="left:1180px;top:604px"><span class="tag">TERMINAL — NO DISCREPANCY</span>
+    Walk the customer through the components; no credit, no report.
+  </article>
+
+  <aside class="sticky green" style="left:1250px;top:780px">
+    <strong>Ordering — Credit first, always.</strong> The credit must always be
+    applied to the customer's account before the interest discrepancy report is
+    submitted: the report is for backend investigation to fix the underlying
+    system issue, while the credit immediately resolves the customer's concern.
+  </aside>
+
+  <aside class="sticky yellow" style="left:390px;top:100px">
+    <strong>Component review is not optional.</strong> Most October-run
+    discrepancies were a missing component, not bad arithmetic — pull the product
+    documentation every time.
+  </aside>
+
+  <div class="control-definitions">
+    <h2>TOOL REFERENCE</h2>
+    <dl>
+      <dt>submit_interest_discrepancy_report_7294</dt>
+      <dd>Creates an interest discrepancy report for the backend team. Parameter
+      contract and field definitions live in the deposit-console workspace export;
+      this board does not restate signatures.</dd>
+      <dt>get_all_user_accounts_by_user_id_3847 / get_bank_account_transactions_9173</dt>
+      <dd>Profile and transaction lookups (steps 2–3). Contracts are published in
+      the developer portal's account-services pack.</dd>
+    </dl>
+  </div>
+</div>
+</body>
+</html>

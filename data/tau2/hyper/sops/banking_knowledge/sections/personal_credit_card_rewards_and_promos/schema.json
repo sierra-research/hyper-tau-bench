@@ -1,0 +1,1019 @@
+{
+  "id": "banking_personal_credit_card_rewards_and_promos_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "personal_credit_card_rewards_and_promos",
+  "display_name": "Personal credit-card rewards, promos, and reward-type representation",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/personal_credit_card_rewards_and_promos/source.md",
+    "heading": "## Personal credit-card rewards, promos, and reward-type representation"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/personal_credit_card_rewards_and_promos/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/personal_credit_card_rewards_and_promos/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook requirements from shared context: verify identity before account-specific information, get explicit confirmation before account-modifying actions, and use the exact transfer message when a transfer is performed.",
+      "Support console turns may mention document ids, internal tool results, and eligibility checks; Agent turns should give the customer the customer-visible next step or outcome.",
+      "Do not transform concrete KB tables, thresholds, statuses, fees, amounts, or condition-specific outcomes into vague dependency statements."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "identity verification before account-specific details",
+      "explicit customer confirmation before account-modifying actions",
+      "plain-language customer-facing outcomes",
+      "support-console notes for internal KB/tool evidence"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_006.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_007.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_silver_rewards_card_002.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_platinum_rewards_card_002.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_platinum_rewards_card_007.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_ecocard_002.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_ecocard_009.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_crypto-cash_back_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_crypto-cash_back_002.json"
+    ],
+    "summary": "Explaining reward rates, promo eligibility, points-vs-cash-back representation, rounding, and product-specific reward mechanics.",
+    "rules": [
+      "Preserve all values, tables, thresholds, statuses, fees, amounts, eligibility gates, tool/action names, and condition-to-outcome mappings from the source bundle.",
+      "Use the shared banking handbook for identity verification, explicit confirmation before account-modifying actions, discoverable-tool wrapper behavior, schema limits, and transfer wording.",
+      "Do not invent unsupported account fields, undocumented override mechanisms, undocumented tool names, or customer entitlements not present in the source bundle.",
+      "When a source document is internal, represent its internal checks in Support console turns or agent behavior rather than as exposed policy narration."
+    ],
+    "candidate": {
+      "id": "personal_credit_card_rewards_and_promos",
+      "title": "Personal credit-card rewards, promos, and reward-type representation",
+      "priority": 1,
+      "related_task_ids": [
+        "task_002",
+        "task_003",
+        "task_006",
+        "task_007",
+        "task_017",
+        "task_018",
+        "task_019",
+        "task_022",
+        "task_023"
+      ],
+      "recommended_case_count": 5,
+      "losslessness_risks": [
+        "Preserve reward rates, promo conditions, and rounding policy exactly.",
+        "Keep cash back, sustainability points, and crypto rewards distinct.",
+        "Do not make promo eligibility broader than the source docs."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "personal_credit_card_rewards_and_promos_journey",
+        "label": "Personal credit-card rewards, promos, and reward-type representation",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "personal_credit_card_rewards_and_promos_shared_rules",
+        "label": "Shared workflow rules",
+        "kind": "shared_reference",
+        "parent_id": "personal_credit_card_rewards_and_promos_journey",
+        "order": 1,
+        "description": "Rules, prerequisites, and reference values used by more than one customer pathway in this journey.",
+        "fact_ids": [
+          "F008",
+          "F016",
+          "F017",
+          "F018",
+          "F019",
+          "F020",
+          "F025",
+          "F026",
+          "F027",
+          "F028",
+          "F029",
+          "F030",
+          "F031",
+          "F032",
+          "F033",
+          "F069",
+          "F078",
+          "F080",
+          "F081",
+          "F082",
+          "F085",
+          "F086",
+          "F087"
+        ]
+      },
+      {
+        "id": "personal_credit_card_rewards_and_promos_path_a",
+        "label": "General reward representation and rounding",
+        "kind": "scenario_branch",
+        "parent_id": "personal_credit_card_rewards_and_promos_journey",
+        "order": 2,
+        "description": "Policy path represented by case A.",
+        "fact_ids": [
+          "F002",
+          "F003",
+          "F004",
+          "F005",
+          "F006",
+          "F007",
+          "F009",
+          "F010",
+          "F011",
+          "F012",
+          "F013",
+          "F014",
+          "F015",
+          "F021",
+          "F022"
+        ]
+      },
+      {
+        "id": "personal_credit_card_rewards_and_promos_path_b",
+        "label": "Silver Rewards Card travel enhanced-rate case",
+        "kind": "scenario_branch",
+        "parent_id": "personal_credit_card_rewards_and_promos_journey",
+        "order": 3,
+        "description": "Policy path represented by case B.",
+        "fact_ids": [
+          "F023"
+        ]
+      },
+      {
+        "id": "personal_credit_card_rewards_and_promos_path_c",
+        "label": "Silver Rewards Card software/SaaS enhanced-rate case",
+        "kind": "scenario_branch",
+        "parent_id": "personal_credit_card_rewards_and_promos_journey",
+        "order": 4,
+        "description": "Policy path represented by case C.",
+        "fact_ids": [
+          "F024"
+        ]
+      },
+      {
+        "id": "personal_credit_card_rewards_and_promos_path_d",
+        "label": "Platinum Rewards Card point-of-sale purchase earning and redemption",
+        "kind": "scenario_branch",
+        "parent_id": "personal_credit_card_rewards_and_promos_journey",
+        "order": 5,
+        "description": "Policy path represented by case D.",
+        "fact_ids": [
+          "F034",
+          "F035",
+          "F037",
+          "F038",
+          "F039",
+          "F040",
+          "F043"
+        ]
+      },
+      {
+        "id": "personal_credit_card_rewards_and_promos_path_e",
+        "label": "Platinum Rewards Card online purchase and premium benefits",
+        "kind": "scenario_branch",
+        "parent_id": "personal_credit_card_rewards_and_promos_journey",
+        "order": 6,
+        "description": "Policy path represented by case E.",
+        "fact_ids": [
+          "F036",
+          "F041",
+          "F042",
+          "F044",
+          "F045",
+          "F046",
+          "F047",
+          "F048",
+          "F049",
+          "F050",
+          "F051"
+        ]
+      },
+      {
+        "id": "personal_credit_card_rewards_and_promos_path_f",
+        "label": "EcoCard qualifying green merchant earning",
+        "kind": "scenario_branch",
+        "parent_id": "personal_credit_card_rewards_and_promos_journey",
+        "order": 7,
+        "description": "Policy path represented by case F.",
+        "fact_ids": [
+          "F052",
+          "F054",
+          "F055",
+          "F056",
+          "F059"
+        ]
+      },
+      {
+        "id": "personal_credit_card_rewards_and_promos_path_g",
+        "label": "EcoCard non-green, mixed-cart, and refund earning",
+        "kind": "scenario_branch",
+        "parent_id": "personal_credit_card_rewards_and_promos_journey",
+        "order": 8,
+        "description": "Policy path represented by case G.",
+        "fact_ids": [
+          "F053",
+          "F057",
+          "F058",
+          "F060"
+        ]
+      },
+      {
+        "id": "personal_credit_card_rewards_and_promos_path_h",
+        "label": "EcoCard new customer promotion",
+        "kind": "scenario_branch",
+        "parent_id": "personal_credit_card_rewards_and_promos_journey",
+        "order": 9,
+        "description": "Policy path represented by case H.",
+        "fact_ids": [
+          "F061",
+          "F062",
+          "F063",
+          "F064",
+          "F065",
+          "F066",
+          "F067",
+          "F068"
+        ]
+      },
+      {
+        "id": "personal_credit_card_rewards_and_promos_path_i",
+        "label": "Crypto-Cash Back earning and setup",
+        "kind": "scenario_branch",
+        "parent_id": "personal_credit_card_rewards_and_promos_journey",
+        "order": 10,
+        "description": "Policy path represented by case I.",
+        "fact_ids": [
+          "F070",
+          "F071",
+          "F072",
+          "F073",
+          "F074",
+          "F075",
+          "F076",
+          "F077",
+          "F079"
+        ]
+      },
+      {
+        "id": "personal_credit_card_rewards_and_promos_path_j",
+        "label": "Crypto-Cash Back direct wallet integration redemption",
+        "kind": "scenario_branch",
+        "parent_id": "personal_credit_card_rewards_and_promos_journey",
+        "order": 11,
+        "description": "Policy path represented by case J.",
+        "fact_ids": [
+          "F083",
+          "F088"
+        ]
+      },
+      {
+        "id": "personal_credit_card_rewards_and_promos_path_k",
+        "label": "Crypto-Cash Back manual wallet fallback and threshold troubleshooting",
+        "kind": "scenario_branch",
+        "parent_id": "personal_credit_card_rewards_and_promos_journey",
+        "order": 12,
+        "description": "Policy path represented by case K.",
+        "fact_ids": [
+          "F084",
+          "F089",
+          "F090"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "personal_credit_card_rewards_and_promos_path_a",
+        "type": "uses_shared_rules",
+        "target_id": "personal_credit_card_rewards_and_promos_shared_rules"
+      },
+      {
+        "source_id": "personal_credit_card_rewards_and_promos_path_b",
+        "type": "uses_shared_rules",
+        "target_id": "personal_credit_card_rewards_and_promos_shared_rules"
+      },
+      {
+        "source_id": "personal_credit_card_rewards_and_promos_path_c",
+        "type": "uses_shared_rules",
+        "target_id": "personal_credit_card_rewards_and_promos_shared_rules"
+      },
+      {
+        "source_id": "personal_credit_card_rewards_and_promos_path_d",
+        "type": "uses_shared_rules",
+        "target_id": "personal_credit_card_rewards_and_promos_shared_rules"
+      },
+      {
+        "source_id": "personal_credit_card_rewards_and_promos_path_e",
+        "type": "uses_shared_rules",
+        "target_id": "personal_credit_card_rewards_and_promos_shared_rules"
+      },
+      {
+        "source_id": "personal_credit_card_rewards_and_promos_path_f",
+        "type": "uses_shared_rules",
+        "target_id": "personal_credit_card_rewards_and_promos_shared_rules"
+      },
+      {
+        "source_id": "personal_credit_card_rewards_and_promos_path_g",
+        "type": "uses_shared_rules",
+        "target_id": "personal_credit_card_rewards_and_promos_shared_rules"
+      },
+      {
+        "source_id": "personal_credit_card_rewards_and_promos_path_h",
+        "type": "uses_shared_rules",
+        "target_id": "personal_credit_card_rewards_and_promos_shared_rules"
+      },
+      {
+        "source_id": "personal_credit_card_rewards_and_promos_path_i",
+        "type": "uses_shared_rules",
+        "target_id": "personal_credit_card_rewards_and_promos_shared_rules"
+      },
+      {
+        "source_id": "personal_credit_card_rewards_and_promos_path_j",
+        "type": "uses_shared_rules",
+        "target_id": "personal_credit_card_rewards_and_promos_shared_rules"
+      },
+      {
+        "source_id": "personal_credit_card_rewards_and_promos_path_k",
+        "type": "uses_shared_rules",
+        "target_id": "personal_credit_card_rewards_and_promos_shared_rules"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "F002",
+      "statement": "Due to a legacy backend migration that has not yet been completed, all credit card rewards in the transaction database are stored as \"points\" regardless of whether the card is a cash back card or a points-based card.",
+      "source": "doc_credit_cards_credit_cards_(general)_006"
+    },
+    {
+      "id": "F003",
+      "statement": "For the Bronze Rewards Card, stored \"points\" should be interpreted as cash back with a conversion rate of 1 point = $0.01 when redeemed as a statement credit or as a credit to the user's Rho-Bank checking account.",
+      "source": "doc_credit_cards_credit_cards_(general)_006"
+    },
+    {
+      "id": "F004",
+      "statement": "For the Silver Rewards Card, stored \"points\" should be interpreted as cash back with a conversion rate of 1 point = $0.01 when redeemed as a statement credit or as a credit to the user's Rho-Bank checking account.",
+      "source": "doc_credit_cards_credit_cards_(general)_006"
+    },
+    {
+      "id": "F005",
+      "statement": "For the Gold Rewards Card, stored \"points\" should be interpreted as cash back with a conversion rate of 1 point = $0.01 when redeemed as a statement credit or as a credit to the user's Rho-Bank checking account.",
+      "source": "doc_credit_cards_credit_cards_(general)_006"
+    },
+    {
+      "id": "F006",
+      "statement": "For the Platinum Rewards Card, stored \"points\" should be interpreted as cash back with a conversion rate of 1 point = $0.01 when redeemed as a statement credit or as a credit to the user's Rho-Bank checking account.",
+      "source": "doc_credit_cards_credit_cards_(general)_006"
+    },
+    {
+      "id": "F007",
+      "statement": "For the Diamond Elite Card, stored \"points\" should be interpreted as cash back with a conversion rate of 1 point = $0.01 when redeemed as a statement credit or as a credit to the user's Rho-Bank checking account.",
+      "source": "doc_credit_cards_credit_cards_(general)_006"
+    },
+    {
+      "id": "F008",
+      "statement": "For Crypto-Cash Back, stored \"points\" should be interpreted as cash back with a conversion rate of 1 point = $0.01 when redeemed as a statement credit or as a credit to the user's Rho-Bank checking account.",
+      "source": "doc_credit_cards_credit_cards_(general)_006"
+    },
+    {
+      "id": "F009",
+      "statement": "For the Business Bronze Rewards Card, stored \"points\" should be interpreted as cash back with a conversion rate of 1 point = $0.01 when redeemed as a statement credit or as a credit to the user's Rho-Bank checking account.",
+      "source": "doc_credit_cards_credit_cards_(general)_006"
+    },
+    {
+      "id": "F010",
+      "statement": "For the Business Silver Rewards Card, stored \"points\" should be interpreted as cash back with a conversion rate of 1 point = $0.01 when redeemed as a statement credit or as a credit to the user's Rho-Bank checking account.",
+      "source": "doc_credit_cards_credit_cards_(general)_006"
+    },
+    {
+      "id": "F011",
+      "statement": "For the Green Rewards Card, stored \"points\" should be interpreted as cash back with a conversion rate of 1 point = $0.01 when redeemed as a statement credit or as a credit to the user's Rho-Bank checking account.",
+      "source": "doc_credit_cards_credit_cards_(general)_006"
+    },
+    {
+      "id": "F012",
+      "statement": "For the Silver Zoom Card, stored \"points\" should be interpreted as cash back with a conversion rate of 1 point = $0.01 when redeemed as a statement credit or as a credit to the user's Rho-Bank checking account.",
+      "source": "doc_credit_cards_credit_cards_(general)_006"
+    },
+    {
+      "id": "F013",
+      "statement": "For the Business Gold Rewards Card, stored \"points\" should be interpreted as cash back with a conversion rate of 1 point = $0.01 when redeemed as a statement credit or as a credit to the user's Rho-Bank checking account.",
+      "source": "doc_credit_cards_credit_cards_(general)_006"
+    },
+    {
+      "id": "F014",
+      "statement": "For the Business Platinum Rewards Card, stored \"points\" should be interpreted as cash back with a conversion rate of 1 point = $0.01 when redeemed as a statement credit or as a credit to the user's Rho-Bank checking account.",
+      "source": "doc_credit_cards_credit_cards_(general)_006"
+    },
+    {
+      "id": "F015",
+      "statement": "For cash back representation, 250 points equals $2.50 in cash back, which matches a 2.5% cash back rate on a $100 purchase.",
+      "source": "doc_credit_cards_credit_cards_(general)_006"
+    },
+    {
+      "id": "F016",
+      "statement": "The only true points-based card is the EcoCard.",
+      "source": "doc_credit_cards_credit_cards_(general)_006"
+    },
+    {
+      "id": "F017",
+      "statement": "The EcoCard earns sustainability points: 5 points per dollar on green purchases and 1 point per dollar on other purchases, and those points redeem at $0.01 per point when redeemed as a statement credit or checking account credit.",
+      "source": "doc_credit_cards_credit_cards_(general)_006"
+    },
+    {
+      "id": "F018",
+      "statement": "All credit card rewards points are rounded down to the nearest whole number.",
+      "source": "doc_credit_cards_credit_cards_(general)_007"
+    },
+    {
+      "id": "F019",
+      "statement": "When calculating points earned on a purchase, the system always truncates or floors fractional points rather than rounding to the nearest integer.",
+      "source": "doc_credit_cards_credit_cards_(general)_007"
+    },
+    {
+      "id": "F020",
+      "statement": "The rewards rounding policy applies consistently across all credit card types and reward categories.",
+      "source": "doc_credit_cards_credit_cards_(general)_007"
+    },
+    {
+      "id": "F021",
+      "statement": "Under the rounding policy, a $126.77 purchase on a 1% cash back card earns 126 points, not 127.",
+      "source": "doc_credit_cards_credit_cards_(general)_007"
+    },
+    {
+      "id": "F022",
+      "statement": "Under the rounding policy, a $99.99 purchase at 2.5% cash back calculates to 249.975 points but awards 249 points.",
+      "source": "doc_credit_cards_credit_cards_(general)_007"
+    },
+    {
+      "id": "F023",
+      "statement": "A Silver Rewards Card customer earns 4.0% back when paying with the card for eligible travel transactions.",
+      "source": "doc_credit_cards_silver_rewards_card_002"
+    },
+    {
+      "id": "F024",
+      "statement": "A Silver Rewards Card customer earns 4.0% back when paying with the card for eligible software transactions.",
+      "source": "doc_credit_cards_silver_rewards_card_002"
+    },
+    {
+      "id": "F025",
+      "statement": "To help ensure Silver Rewards Card rewards earn properly, the customer should use the card directly with the merchant because third-party wallets and processors may alter merchant classification.",
+      "source": "doc_credit_cards_silver_rewards_card_002"
+    },
+    {
+      "id": "F026",
+      "statement": "For the Silver Rewards Card enhanced rate, the merchant must be categorized in a travel or software/SaaS merchant category, and rewards are based on the merchant's submitted category.",
+      "source": "doc_credit_cards_silver_rewards_card_002"
+    },
+    {
+      "id": "F027",
+      "statement": "Silver Rewards Card rewards are calculated after transactions post, not at authorization.",
+      "source": "doc_credit_cards_silver_rewards_card_002"
+    },
+    {
+      "id": "F028",
+      "statement": "Silver Rewards Card customers should keep receipts and invoices because if a purchase is misclassified, they may be asked to provide documentation during a rewards review.",
+      "source": "doc_credit_cards_silver_rewards_card_002"
+    },
+    {
+      "id": "F029",
+      "statement": "Silver Rewards Card transactions that typically do not qualify include gift cards, person-to-person payments, fees, interest, and insurance premiums charged by the bank.",
+      "source": "doc_credit_cards_silver_rewards_card_002"
+    },
+    {
+      "id": "F030",
+      "statement": "Returned or refunded Silver Rewards Card purchases are transactions that typically do not qualify, and rewards are reversed when credits post.",
+      "source": "doc_credit_cards_silver_rewards_card_002"
+    },
+    {
+      "id": "F031",
+      "statement": "For the Silver Rewards Card, pending earnings are visible soon after posting.",
+      "source": "doc_credit_cards_silver_rewards_card_002"
+    },
+    {
+      "id": "F032",
+      "statement": "For the Silver Rewards Card, final reward amounts may adjust if the merchant updates the transaction or issues a credit.",
+      "source": "doc_credit_cards_silver_rewards_card_002"
+    },
+    {
+      "id": "F033",
+      "statement": "The Platinum Rewards Card earns 10.0% cash back on all eligible purchases.",
+      "source": "doc_credit_cards_platinum_rewards_card_002"
+    },
+    {
+      "id": "F034",
+      "statement": "For the Platinum Rewards Card, returns or credits reduce previously earned rewards on a per-transaction basis.",
+      "source": "doc_credit_cards_platinum_rewards_card_002"
+    },
+    {
+      "id": "F035",
+      "statement": "For the Platinum Rewards Card, point-of-sale purchases posted to the account are eligible transactions.",
+      "source": "doc_credit_cards_platinum_rewards_card_002"
+    },
+    {
+      "id": "F036",
+      "statement": "For the Platinum Rewards Card, online purchases posted to the account are eligible transactions.",
+      "source": "doc_credit_cards_platinum_rewards_card_002"
+    },
+    {
+      "id": "F037",
+      "statement": "For the Platinum Rewards Card, cash advances, balance transfers, fees, interest, and other cash-equivalent transactions are not eligible for rewards.",
+      "source": "doc_credit_cards_platinum_rewards_card_002"
+    },
+    {
+      "id": "F038",
+      "statement": "For the Platinum Rewards Card, rewards accrue when transactions post to the account and typically become available after the purchase posts and clears any return window.",
+      "source": "doc_credit_cards_platinum_rewards_card_002"
+    },
+    {
+      "id": "F039",
+      "statement": "A Platinum Rewards Card customer can redeem once the available rewards balance reaches at least $15.",
+      "source": "doc_credit_cards_platinum_rewards_card_002"
+    },
+    {
+      "id": "F040",
+      "statement": "Common Platinum Rewards Card redemption options include statement credits or other available channels in the account dashboard.",
+      "source": "doc_credit_cards_platinum_rewards_card_002"
+    },
+    {
+      "id": "F041",
+      "statement": "A Platinum Rewards Card customer can use the card for everyday spend to capture 10.0% on all categories.",
+      "source": "doc_credit_cards_platinum_rewards_card_002"
+    },
+    {
+      "id": "F042",
+      "statement": "A Platinum Rewards Card customer can set the card as the default payment method at frequently used merchants to maximize earnings.",
+      "source": "doc_credit_cards_platinum_rewards_card_002"
+    },
+    {
+      "id": "F043",
+      "statement": "A Platinum Rewards Card customer should consider net rewards after the $200.00 annual fee when planning large purchases.",
+      "source": "doc_credit_cards_platinum_rewards_card_002"
+    },
+    {
+      "id": "F044",
+      "statement": "Using the Platinum Rewards Card for daily purchases earns 10.0% on all categories without rotating caps.",
+      "source": "doc_credit_cards_platinum_rewards_card_007"
+    },
+    {
+      "id": "F045",
+      "statement": "The Platinum Rewards Card has 0% foreign transaction fees when traveling or purchasing from foreign merchants.",
+      "source": "doc_credit_cards_platinum_rewards_card_007"
+    },
+    {
+      "id": "F046",
+      "statement": "A Platinum Rewards Card customer can earn a $150.00 rebate on the annual fee by meeting a monthly spend threshold of $7500.00.",
+      "source": "doc_credit_cards_platinum_rewards_card_007"
+    },
+    {
+      "id": "F047",
+      "statement": "A Platinum Rewards Card customer can automate large, predictable expenses on the card to help consistently meet the monthly spend threshold for the annual fee rebate.",
+      "source": "doc_credit_cards_platinum_rewards_card_007"
+    },
+    {
+      "id": "F048",
+      "statement": "For the Platinum Rewards Card, smart redemption is to redeem rewards once the balance reaches at least $15.",
+      "source": "doc_credit_cards_platinum_rewards_card_007"
+    },
+    {
+      "id": "F049",
+      "statement": "For eligible Platinum Rewards Card purchase protection items, customers should keep receipts and documentation to leverage purchase protection for up to 135 days after purchase.",
+      "source": "doc_credit_cards_platinum_rewards_card_007"
+    },
+    {
+      "id": "F050",
+      "statement": "For Platinum Rewards Card purchase protection, the maximum coverage per claim is $17,500, subject to policy terms and exclusions.",
+      "source": "doc_credit_cards_platinum_rewards_card_007"
+    },
+    {
+      "id": "F051",
+      "statement": "A Platinum Rewards Card customer can channel recurring bills, travel, and major purchases through the card to earn at the flat rate, avoid foreign fees, and meet the monthly threshold for the annual fee rebate.",
+      "source": "doc_credit_cards_platinum_rewards_card_007"
+    },
+    {
+      "id": "F052",
+      "statement": "EcoCard green purchases earn $5.00 sustainability points per dollar spent at qualifying green merchants and categories.",
+      "source": "doc_credit_cards_ecocard_002"
+    },
+    {
+      "id": "F053",
+      "statement": "EcoCard other purchases earn $1.00 sustainability points per dollar.",
+      "source": "doc_credit_cards_ecocard_002"
+    },
+    {
+      "id": "F054",
+      "statement": "EcoCard customers can receive the higher earn rate by using the card at certified green partners and eco-friendly categories, such as public transit, EV charging, and renewable energy subscriptions.",
+      "source": "doc_credit_cards_ecocard_002"
+    },
+    {
+      "id": "F055",
+      "statement": "When shopping online with the EcoCard, the customer should check that the merchant is listed as a qualifying green merchant before checkout.",
+      "source": "doc_credit_cards_ecocard_002"
+    },
+    {
+      "id": "F056",
+      "statement": "For EcoCard examples, a $100 purchase at a qualifying green merchant earns 100 × $5.00 points.",
+      "source": "doc_credit_cards_ecocard_002"
+    },
+    {
+      "id": "F057",
+      "statement": "For EcoCard examples, a $100 purchase at a non-green merchant earns 100 × $1.00 points.",
+      "source": "doc_credit_cards_ecocard_002"
+    },
+    {
+      "id": "F058",
+      "statement": "EcoCard customers should keep transactions separate because if a cart mixes green and non-green items at a non-partner merchant, the entire purchase may earn at the non-green rate.",
+      "source": "doc_credit_cards_ecocard_002"
+    },
+    {
+      "id": "F059",
+      "statement": "EcoCard customers should save receipts for purchases they believe should qualify as green because receipts help resolve earn-rate disputes.",
+      "source": "doc_credit_cards_ecocard_002"
+    },
+    {
+      "id": "F060",
+      "statement": "If an EcoCard transaction is returned or refunded, the corresponding points are reversed at the original earn rate.",
+      "source": "doc_credit_cards_ecocard_002"
+    },
+    {
+      "id": "F061",
+      "statement": "The EcoCard new customer promotion runs from 2025-08-01 through 2025-12-15.",
+      "source": "doc_credit_cards_ecocard_009"
+    },
+    {
+      "id": "F062",
+      "statement": "To qualify for the EcoCard new customer promotion, the customer must spend at least $5,000 in eligible purchases within the first 1 month of account opening.",
+      "source": "doc_credit_cards_ecocard_009"
+    },
+    {
+      "id": "F063",
+      "statement": "To qualify for the EcoCard new customer promotion, the customer must be a new customer and the account must be open and in good standing when the bonus is awarded.",
+      "source": "doc_credit_cards_ecocard_009"
+    },
+    {
+      "id": "F064",
+      "statement": "The EcoCard new customer promotion bonus amount is $2,000 sustainability points once the customer qualifies by meeting the spending threshold within the qualifying period, being a new customer, having the account open and in good standing when the bonus is awarded, and satisfying the promotion offer-window and exclusion rules.",
+      "source": "doc_credit_cards_ecocard_009"
+    },
+    {
+      "id": "F065",
+      "statement": "EcoCard new customer promotion bonus points typically post after the qualifying period closes and the customer's transactions have cleared.",
+      "source": "doc_credit_cards_ecocard_009"
+    },
+    {
+      "id": "F066",
+      "statement": "For the EcoCard new customer promotion, returns, chargebacks, and disputed transactions reduce qualifying spend.",
+      "source": "doc_credit_cards_ecocard_009"
+    },
+    {
+      "id": "F067",
+      "statement": "For the EcoCard new customer promotion, balance transfers, cash equivalents, and fees do not count toward the $5,000 threshold.",
+      "source": "doc_credit_cards_ecocard_009"
+    },
+    {
+      "id": "F068",
+      "statement": "EcoCard customers can track progress in the Rewards section to ensure they meet the $5,000 requirement on time.",
+      "source": "doc_credit_cards_ecocard_009"
+    },
+    {
+      "id": "F069",
+      "statement": "Crypto redemption availability on the Crypto-Cash Back account is Yes.",
+      "source": "doc_credit_cards_crypto-cash_back_001"
+    },
+    {
+      "id": "F070",
+      "statement": "Purchase protection on the Crypto-Cash Back card is No.",
+      "source": "doc_credit_cards_crypto-cash_back_001"
+    },
+    {
+      "id": "F071",
+      "statement": "Crypto-Cash Back customers earn rewards at 2.0% on eligible purchases made with the card.",
+      "source": "doc_credit_cards_crypto-cash_back_001"
+    },
+    {
+      "id": "F072",
+      "statement": "Crypto-Cash Back customers can track their reward balance in the app and can prepare for crypto redemption once the balance reaches at least 30 dollars.",
+      "source": "doc_credit_cards_crypto-cash_back_001"
+    },
+    {
+      "id": "F073",
+      "statement": "Virtual card management availability for Crypto-Cash Back is Yes.",
+      "source": "doc_credit_cards_crypto-cash_back_001"
+    },
+    {
+      "id": "F074",
+      "statement": "Crypto-Cash Back customers who prefer to segregate spending for specific projects or merchants can use virtual cards, when available, to organize and monitor reward accrual.",
+      "source": "doc_credit_cards_crypto-cash_back_001"
+    },
+    {
+      "id": "F075",
+      "statement": "Crypto-Cash Back customers can set a personal target for the first crypto redemption that meets or exceeds 30.",
+      "source": "doc_credit_cards_crypto-cash_back_001"
+    },
+    {
+      "id": "F076",
+      "statement": "Crypto-Cash Back customers can plan larger purchases strategically to accelerate reaching the redemption threshold while staying within budget.",
+      "source": "doc_credit_cards_crypto-cash_back_001"
+    },
+    {
+      "id": "F077",
+      "statement": "Crypto-Cash Back customers can review merchant processing categories in statements to confirm which transactions earned rewards at the 2.0% rate.",
+      "source": "doc_credit_cards_crypto-cash_back_001"
+    },
+    {
+      "id": "F078",
+      "statement": "When ready to redeem Crypto-Cash Back rewards to crypto, the customer should verify the reward balance has met the 30 requirement.",
+      "source": "doc_credit_cards_crypto-cash_back_001"
+    },
+    {
+      "id": "F079",
+      "statement": "When ready to redeem Crypto-Cash Back rewards to crypto, the customer should proceed to the crypto redemption flow in the app to choose the cryptocurrency and destination wallet.",
+      "source": "doc_credit_cards_crypto-cash_back_001"
+    },
+    {
+      "id": "F080",
+      "statement": "For Crypto-Cash Back crypto redemption, the customer opens Rewards in the app and chooses Redeem to Crypto.",
+      "source": "doc_credit_cards_crypto-cash_back_002"
+    },
+    {
+      "id": "F081",
+      "statement": "For Crypto-Cash Back crypto redemption, the customer confirms the current reward balance meets the 30 threshold.",
+      "source": "doc_credit_cards_crypto-cash_back_002"
+    },
+    {
+      "id": "F082",
+      "statement": "For Crypto-Cash Back crypto redemption, the customer selects a cryptocurrency from the available list, and the available list can include up to 12 options.",
+      "source": "doc_credit_cards_crypto-cash_back_002"
+    },
+    {
+      "id": "F083",
+      "statement": "For Crypto-Cash Back crypto redemption, direct wallet integration availability is Yes.",
+      "source": "doc_credit_cards_crypto-cash_back_002"
+    },
+    {
+      "id": "F084",
+      "statement": "For Crypto-Cash Back crypto redemption, if direct wallet integration is not available, the customer uses manual wallet address entry.",
+      "source": "doc_credit_cards_crypto-cash_back_002"
+    },
+    {
+      "id": "F085",
+      "statement": "For Crypto-Cash Back crypto redemption, the customer reviews the estimated conversion, and a conversion fee of 1.25% applies to the rewards converted.",
+      "source": "doc_credit_cards_crypto-cash_back_002"
+    },
+    {
+      "id": "F086",
+      "statement": "For Crypto-Cash Back crypto redemption, the customer confirms the wallet address and submits the redemption request.",
+      "source": "doc_credit_cards_crypto-cash_back_002"
+    },
+    {
+      "id": "F087",
+      "statement": "For Crypto-Cash Back crypto redemption, the 1.25% conversion fee is applied at the time of conversion.",
+      "source": "doc_credit_cards_crypto-cash_back_002"
+    },
+    {
+      "id": "F088",
+      "statement": "If a Crypto-Cash Back customer cannot proceed with crypto redemption, they should ensure redemption is enabled: Yes.",
+      "source": "doc_credit_cards_crypto-cash_back_002"
+    },
+    {
+      "id": "F089",
+      "statement": "If a Crypto-Cash Back customer's redemption threshold is not met, the customer must accumulate more rewards until reaching 30.",
+      "source": "doc_credit_cards_crypto-cash_back_002"
+    },
+    {
+      "id": "F090",
+      "statement": "For Crypto-Cash Back crypto redemption troubleshooting, if integration is unavailable and Yes is False, the customer enters the wallet address manually and confirms accuracy before submitting.",
+      "source": "doc_credit_cards_crypto-cash_back_002"
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "General reward representation and rounding",
+      "case_spec": "Future support case record covers internal transaction-database representation of rewards as points, cash-back point conversion for the listed cash-back card products, EcoCard as the only true points-based card, and the floor/truncation rounding policy with the provided examples. Internal representation facts should appear in support-console/internal evidence rather than as unnecessary customer-facing narration.",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F017",
+        "F018",
+        "F019",
+        "F020",
+        "F021",
+        "F022"
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Silver Rewards Card travel enhanced-rate case",
+      "case_spec": "Future support case record demonstrates Silver Rewards Card 4.0% back for an eligible travel transaction without relying on software/SaaS eligibility as a confounding sufficient condition. The case also covers merchant category dependence, direct merchant payment guidance, posting timing, documentation, exclusions, refunds, and reward visibility.",
+      "included_fact_ids": [
+        "F023",
+        "F025",
+        "F026",
+        "F027",
+        "F028",
+        "F029",
+        "F030",
+        "F031",
+        "F032"
+      ]
+    },
+    {
+      "id": "C",
+      "title": "Silver Rewards Card software/SaaS enhanced-rate case",
+      "case_spec": "Future support case record demonstrates Silver Rewards Card 4.0% back for an eligible software or SaaS merchant category without relying on travel eligibility as a confounding sufficient condition. The case also covers merchant category dependence, direct merchant payment guidance, posting timing, documentation, exclusions, refunds, and reward visibility.",
+      "included_fact_ids": [
+        "F024",
+        "F025",
+        "F026",
+        "F027",
+        "F028",
+        "F029",
+        "F030",
+        "F031",
+        "F032"
+      ]
+    },
+    {
+      "id": "D",
+      "title": "Platinum Rewards Card point-of-sale purchase earning and redemption",
+      "case_spec": "Future support case record demonstrates Platinum Rewards Card 10.0% cash back for a point-of-sale purchase posted to the account, with ineligible transaction types, return or credit adjustment, posting/return-window availability, $15 redemption minimum, redemption channels, and annual fee consideration.",
+      "included_fact_ids": [
+        "F033",
+        "F034",
+        "F035",
+        "F037",
+        "F038",
+        "F039",
+        "F040",
+        "F043"
+      ]
+    },
+    {
+      "id": "E",
+      "title": "Platinum Rewards Card online purchase and premium benefits",
+      "case_spec": "Future support case record demonstrates Platinum Rewards Card 10.0% cash back for an online purchase posted to the account, without relying on point-of-sale eligibility as a confounding sufficient condition. The case also covers everyday earning, no rotating caps, default payment guidance, foreign transaction fees, annual fee rebate threshold, smart redemption, purchase protection timing and limit, and putting recurring bills/travel/major purchases together.",
+      "included_fact_ids": [
+        "F033",
+        "F036",
+        "F041",
+        "F042",
+        "F044",
+        "F045",
+        "F046",
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051"
+      ]
+    },
+    {
+      "id": "F",
+      "title": "EcoCard qualifying green merchant earning",
+      "case_spec": "Future support case record demonstrates EcoCard green-purchase earning at a qualifying green merchant or category, including the higher sustainability-points rate, online merchant qualification check, example calculation, receipt retention for disputes, EcoCard point nature, redemption value, and general rounding applicability.",
+      "included_fact_ids": [
+        "F016",
+        "F017",
+        "F018",
+        "F019",
+        "F020",
+        "F052",
+        "F054",
+        "F055",
+        "F056",
+        "F059"
+      ]
+    },
+    {
+      "id": "G",
+      "title": "EcoCard non-green, mixed-cart, and refund earning",
+      "case_spec": "Future support case record demonstrates EcoCard non-green purchase earning without relying on a qualifying green merchant as a confounding sufficient condition. The case also covers mixed green/non-green carts at non-partner merchants, refund reversal at original earn rate, EcoCard point nature, redemption value, and general rounding applicability.",
+      "included_fact_ids": [
+        "F016",
+        "F017",
+        "F018",
+        "F019",
+        "F020",
+        "F053",
+        "F057",
+        "F058",
+        "F060"
+      ]
+    },
+    {
+      "id": "H",
+      "title": "EcoCard new customer promotion",
+      "case_spec": "Future support case record covers the EcoCard new customer promotion offer window, $5,000 eligible-purchase threshold within the first 1 month of account opening, new-customer and good-standing requirements, $2,000 sustainability-points bonus, posting timeline, spend reductions, threshold exclusions, and Rewards-section progress tracking.",
+      "included_fact_ids": [
+        "F061",
+        "F062",
+        "F063",
+        "F064",
+        "F065",
+        "F066",
+        "F067",
+        "F068"
+      ]
+    },
+    {
+      "id": "I",
+      "title": "Crypto-Cash Back earning and setup",
+      "case_spec": "Future support case record covers Crypto-Cash Back earning at 2.0% on eligible purchases, crypto redemption availability, absence of purchase protection, app balance tracking, 30-dollar preparation threshold, virtual card availability and use for segregated spending, first redemption target, larger-purchase planning, merchant category review, and moving to the redemption flow.",
+      "included_fact_ids": [
+        "F008",
+        "F069",
+        "F070",
+        "F071",
+        "F072",
+        "F073",
+        "F074",
+        "F075",
+        "F076",
+        "F077",
+        "F078",
+        "F079"
+      ]
+    },
+    {
+      "id": "J",
+      "title": "Crypto-Cash Back direct wallet integration redemption",
+      "case_spec": "Future support case record demonstrates Crypto-Cash Back crypto redemption where direct wallet integration is available, without relying on the manual wallet fallback as a confounding path. The case covers opening Rewards, choosing Redeem to Crypto, confirming the 30 threshold, selecting from up to 12 cryptocurrencies, 1.25% conversion fee, wallet confirmation, submission, and enabled-redemption troubleshooting.",
+      "included_fact_ids": [
+        "F069",
+        "F078",
+        "F080",
+        "F081",
+        "F082",
+        "F083",
+        "F085",
+        "F086",
+        "F087",
+        "F088"
+      ]
+    },
+    {
+      "id": "K",
+      "title": "Crypto-Cash Back manual wallet fallback and threshold troubleshooting",
+      "case_spec": "Future support case record demonstrates Crypto-Cash Back crypto redemption when wallet integration is unavailable, without relying on direct wallet integration as a confounding path. The case covers manual wallet address entry, confirming accuracy before submission, the 30 threshold, accumulating more rewards if below threshold, cryptocurrency selection, fee review, wallet confirmation, and submission.",
+      "included_fact_ids": [
+        "F069",
+        "F080",
+        "F081",
+        "F082",
+        "F084",
+        "F085",
+        "F086",
+        "F087",
+        "F089",
+        "F090"
+      ]
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/personal_credit_card_rewards_and_promos/evidence_corpus_hard_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/personal_credit_card_rewards_and_promos/evidence_corpus_deep_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/personal_credit_card_rewards_and_promos/client_overlay_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/personal_credit_card_rewards_and_promos/client_overlay_card_selection_001/transformation_pack.json"
+    }
+  ]
+}

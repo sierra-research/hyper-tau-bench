@@ -1,0 +1,88 @@
+From: Marisol Vega <marisol.vega@rho-bank.com>
+To: Rafael Ortiz <rafael.ortiz@rho-bank.com>
+Cc: Sandra Whitcomb <sandra.whitcomb@rho-bank.com>,
+ Sola Okafor <sola.okafor@rho-bank.com>
+Date: Wed, 08 Oct 2025 11:14:29 -0400
+Subject: RE: SLV-RWD-041 rev A - decision
+Message-ID: <f7261c0e68e9ceb6c343@rho-bank.com>
+In-Reply-To: <e0ff6881a1a26dbe4b5e@rho-bank.com>
+References: <0f05c753489a9fe3a2f5@rho-bank.com>
+ <8263133af78235f99207@rho-bank.com> <e70f7e0780d8f9c2561c@rho-bank.com>
+ <e0ff6881a1a26dbe4b5e@rho-bank.com>
+Thread-Topic: SLV-RWD-041 rev A - decision
+Thread-Index: 03a3c72b2fc13d853951ac645b20df48
+Accept-Language: en-US
+X-Auto-Response-Suppress: All
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Logged for QA calibration. Samples from the 9th forward get read against
+rev B.
+
+Marisol
+
+-----Original Message-----
+From: Rafael Ortiz <rafael.ortiz@rho-bank.com>
+Sent: Wed, 08 Oct 2025 10:31:57 -0400
+To: Sandra Whitcomb <sandra.whitcomb@rho-bank.com>,
+ Sola Okafor <sola.okafor@rho-bank.com>
+Cc: Marisol Vega <marisol.vega@rho-bank.com>
+Subject: RE: SLV-RWD-041 rev A - decision
+
+Recording the decision from yesterday's walkthrough.
+
+SLV-RWD-041 rev A is rejected. It computed rewards at authorization, and
+Sandra's category-change example showed exactly where that breaks. Rev
+B, which runs the calculation after the transaction posts, is approved
+and goes effective tomorrow, 2025-10-09.
+
+From tomorrow, rev B is the board servicing works from. Thanks, Sandra,
+for the example that settled it.
+
+Rafael
+
+-----Original Message-----
+From: Sandra Whitcomb <sandra.whitcomb@rho-bank.com>
+Sent: Wed, 08 Oct 2025 09:05:12 -0400
+To: Rafael Ortiz <rafael.ortiz@rho-bank.com>
+Cc: Sola Okafor <sola.okafor@rho-bank.com>,
+ Marisol Vega <marisol.vega@rho-bank.com>
+Subject: RE: SLV-RWD-041 rev A - decision
+
+No objection here. For the record, the case I walked through was a
+merchant recode between authorization and posting -- the category the
+auth carried was not the category the transaction settled with. Any
+board that computes at authorization gets that case wrong.
+
+Sandra
+
+-----Original Message-----
+From: Sola Okafor <sola.okafor@rho-bank.com>
+Sent: Wed, 08 Oct 2025 08:23:36 -0400
+To: Rafael Ortiz <rafael.ortiz@rho-bank.com>
+Cc: Sandra Whitcomb <sandra.whitcomb@rho-bank.com>,
+ Marisol Vega <marisol.vega@rho-bank.com>
+Subject: RE: SLV-RWD-041 rev A - decision
+
+None from platform. The rev B sequencing matches how the engine actually
+behaves -- the reward math runs once the transaction posts, not when the
+authorization comes through. Rev A never matched production on that
+point.
+
+Sola
+
+-----Original Message-----
+From: Rafael Ortiz <rafael.ortiz@rho-bank.com>
+Sent: Tue, 07 Oct 2025 17:12:44 -0400
+To: Sandra Whitcomb <sandra.whitcomb@rho-bank.com>,
+ Sola Okafor <sola.okafor@rho-bank.com>
+Cc: Marisol Vega <marisol.vega@rho-bank.com>
+Subject: SLV-RWD-041 rev A - decision
+
+Following this afternoon's walkthrough of the Silver board: I want the
+outcome recorded in email tomorrow morning, not just in meeting memory.
+Before I write it up -- any final objections, on either the servicing or
+the platform side, by 10:00 tomorrow.
+
+Rafael

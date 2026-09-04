@@ -1,0 +1,70 @@
+{
+  "id": "airline_booking_flight_website_screenshot_002",
+  "representation": "website_screenshot",
+  "context": "initial_booking_search_with_passenger_limit_note",
+  "agent_facing_artifact": "passenger_selector_maximum_with_images.png",
+  "author_source_artifact": "passenger_selector_maximum.html",
+  "visual_distractor_assets": {
+    "generation_mode": "built_in_imagegen",
+    "rendering_mode": "browser_rendered_html",
+    "assets": [
+      "../../../website_assets/coastal_escape.png",
+      "../../../website_assets/city_waterfront.png",
+      "../../../website_assets/mountain_lake.png",
+      "../../../website_assets/text_backdrop_city_guide.png"
+    ],
+    "purpose": "Add varied policy-irrelevant destination imagery and a text-dense raster background while keeping all domain-fact text deterministic in HTML."
+  },
+  "canonical_fact_id": "max_passengers_per_reservation",
+  "target_facts": [
+    {
+      "id": "max_passengers_per_reservation",
+      "statement": "A reservation can have at most 4 passengers."
+    }
+  ],
+  "permitted_supporting_implication": {
+    "derived_from_fact_id": "max_passengers_per_reservation",
+    "statement": "The four-passenger limit applies while selecting passengers for a new reservation.",
+    "scope_boundary": "The image does not establish rules for changing passenger count on an existing reservation."
+  },
+  "grounded_distractors": {
+    "source_path": "none",
+    "visible_values": [
+      "Flight search fields are empty",
+      "Round trip is the selected search tab",
+      "The passenger selector is closed and shows one passenger",
+      "California coast destination photograph",
+      "Waterfront city destination photograph",
+      "Mountain lake destination photograph",
+      "California coast",
+      "Waterfront weekends",
+      "Mountain escapes",
+      "Text-dense CITY GUIDE magazine spread in the hero background"
+    ]
+  },
+  "excluded_claims": [
+    "Passengers can be added to an existing reservation",
+    "Passenger details can be changed after booking",
+    "Passenger age classifications",
+    "Fare or baggage pricing",
+    "A group-booking process",
+    "A supervisor can override the passenger limit",
+    "The generated destination or editorial imagery establishes served routes, prices, or recommendations"
+  ],
+  "distribution": {
+    "expose_to_developer_agent": [
+      "passenger_selector_maximum_with_images.png"
+    ],
+    "keep_author_side": [
+      "passenger_selector_maximum.html",
+      "passenger_selector_maximum.png",
+      "eval_manifest.json"
+    ],
+    "shared_author_assets": [
+      "../../../website_assets/coastal_escape.png",
+      "../../../website_assets/city_waterfront.png",
+      "../../../website_assets/mountain_lake.png",
+      "../../../website_assets/text_backdrop_city_guide.png"
+    ]
+  }
+}

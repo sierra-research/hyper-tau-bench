@@ -1,0 +1,132 @@
+{
+  "id": "task_127",
+  "description": {
+    "purpose": "Task: task_127",
+    "relevant_policies": null,
+    "notes": "MOBILE CHECK DEPOSIT - AGENT CANNOT DEPOSIT ON BEHALF + AVAILABILITY TIMING. Customer has never used mobile deposit and asks the agent to deposit her $940.00 insurance reimbursement check for her over the phone. Per policy the agent CANNOT deposit checks on behalf of the customer: the correct flow is to give the customer the deposit_check_3847 tool (give_discoverable_user_tool), guide her through endorsement and photo capture, and have HER call deposit_check_3847(account_id, check_amount) against her Blue Account. The customer then asks when the funds will be available - the agent must state the standard availability window of 1-2 business days (COMMUNICATE token). Golden: verification, account lookup, give the tool, user deposits $940.00 (balance 1,214.55 -> 2,154.55)."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Marisol Fuentes-Cabrera, a 29-year-old veterinary technician in Tucson. You are friendly but a little tech-shy: you have never deposited a check with your phone and you'd rather someone else just handle it.\n\n**Verification info:**\n- Name: Marisol Fuentes-Cabrera | Phone: 520-555-0348 | Email: marisol.fuentes@gmail.com\n- DOB: 06/23/1996 | Address: 3327 East Calle Alarcon, Tucson, AZ 85716\n\n**Tool usage:** You have access to `call_discoverable_user_tool`. Your Blue Account's account ID (you can see it in your mobile app) is chk_mf90u3l6h4_blue. Only AFTER the agent gives you the deposit_check_3847 tool and walks you through the deposit, call deposit_check_3847 with account_id=\"chk_mf90u3l6h4_blue\" and check_amount=940.00. Do not call it before the agent has given it to you.\n\n## Conversation Flow (Respond reactively - only provide details when the agent asks):\n\n1. **Opening:** \"Hi! I have an insurance reimbursement check for $940 and I've never deposited a check with my phone before. Honestly, I'd rather you just do it for me - can't you enter it on your end while I'm on the phone with you?\"\n\n2. **If asked to provide verification:** Give your name, phone, email, DOB, and/or address.\n\n3. **If agent explains they cannot deposit it for you and offers to guide you through mobile deposit:** \"Okay, fine, I'll do it myself if you talk me through it step by step.\"\n\n4. **Follow the agent's instructions** (endorsing the back, photographing front and back, entering the amount). When the agent gives you the tool and tells you to submit the deposit, call deposit_check_3847 as described in Tool usage.\n\n5. **After the deposit goes through, ask:** \"It says it worked! When will the money actually be available?\"\n\n6. **Once the agent answers the availability question:** \"Perfect. Thanks for walking me through it - that was less scary than I thought.\" ###STOP###\n\nOnly provide additional details about your situation when the agent asks. Never respond as a customer service representative/assistant."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "users": {
+          "data": {
+            "mf90u3l6h4": {
+              "name": "Marisol Fuentes-Cabrera",
+              "user_id": "mf90u3l6h4",
+              "address": "3327 East Calle Alarcon, Tucson, AZ 85716",
+              "email": "marisol.fuentes@gmail.com",
+              "phone_number": "520-555-0348",
+              "date_of_birth": "06/23/1996"
+            }
+          }
+        },
+        "accounts": {
+          "data": {
+            "chk_mf90u3l6h4_blue": {
+              "account_id": "chk_mf90u3l6h4_blue",
+              "user_id": "mf90u3l6h4",
+              "class": "checking",
+              "level": "Blue Account",
+              "date_opened": "07/22/2024",
+              "status": "OPEN",
+              "current_holdings": "1214.55"
+            }
+          }
+        },
+        "bank_account_transaction_history": {
+          "data": {
+            "btxn_mf127_dd_oct30": {
+              "transaction_id": "btxn_mf127_dd_oct30",
+              "account_id": "chk_mf90u3l6h4_blue",
+              "date": "10/30/2025",
+              "description": "DIRECT DEPOSIT - SAGUARO VETERINARY CLINIC",
+              "amount": 1850.0,
+              "type": "direct_deposit",
+              "status": "posted"
+            },
+            "btxn_mf127_pur_1108": {
+              "transaction_id": "btxn_mf127_pur_1108",
+              "account_id": "chk_mf90u3l6h4_blue",
+              "date": "11/08/2025",
+              "description": "DEBIT CARD PURCHASE - DESERT BLOOM GROCERY",
+              "amount": -76.2,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            }
+          }
+        }
+      }
+    }
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Marisol Fuentes-Cabrera",
+          "user_id": "mf90u3l6h4",
+          "address": "3327 East Calle Alarcon, Tucson, AZ 85716",
+          "email": "marisol.fuentes@gmail.com",
+          "phone_number": "520-555-0348",
+          "date_of_birth": "06/23/1996",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "127_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "127_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"mf90u3l6h4\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "127_2"
+      },
+      {
+        "name": "give_discoverable_user_tool",
+        "arguments": {
+          "discoverable_tool_name": "deposit_check_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "127_3"
+      },
+      {
+        "name": "call_discoverable_user_tool",
+        "arguments": {
+          "discoverable_tool_name": "deposit_check_3847",
+          "arguments": "{\"account_id\": \"chk_mf90u3l6h4_blue\", \"check_amount\": 940.00}"
+        },
+        "requestor": "user",
+        "action_id": "127_4"
+      }
+    ],
+    "communicate_info": [
+      "1-2 business days"
+    ],
+    "reward_basis": [
+      "DB",
+      "COMMUNICATE"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [
+    "call_discoverable_user_tool"
+  ],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_011",
+    "doc_bank_accounts_bank_accounts_(general)_009"
+  ]
+}

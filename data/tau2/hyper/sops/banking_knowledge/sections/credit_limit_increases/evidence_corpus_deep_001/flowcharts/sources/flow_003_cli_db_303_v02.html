@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CLI-DB-303 — Mixed-ask warm handoff (v0.2, in review)</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 900px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #5a6b7d; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #d5dde5; }
+  .node { position: absolute; box-sizing: border-box; background: #fff; border: 2px solid #35506e; border-radius: 8px; padding: 10px 12px; font-size: 13.5px; color: #1d2833; line-height: 1.35; }
+  .start { border-color: #2e7d54; background: #f2faf5; }
+  .decision { border-color: #a2662a; background: #fdf7ee; }
+  .step { border-color: #35506e; }
+  .ghost { border-style: dashed; color: #7b8794; border-color: #9aa6b2; background: #f7f9fb; }
+  .note { position: absolute; box-sizing: border-box; background: #fffbe8; border: 1px solid #d9c98a; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; color: #4c4630; line-height: 1.35; }
+  .edge { position: absolute; background: #55677a; }
+  .h { height: 2px; } .v { width: 2px; }
+  .lbl { position: absolute; font-size: 11.5px; color: #55677a; background: #fbfcfd; padding: 0 4px; }
+  .foot { position: absolute; left: 24px; bottom: 12px; font-size: 11.5px; color: #7b8794; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>CLI-DB-303 &mdash; Mixed-ask warm handoff (v0.2, in review)</h1>
+    <div class="meta">CLI Desk &middot; T. Rivera &middot; circulated 2025-11-10 for cross-desk review &middot; ticket CLIT-1222</div>
+  </div>
+
+  <div class="node start" style="left:56px; top:120px; width:320px;">Contact mixes a limit-increase ask with a dispute question</div>
+
+  <div class="node step" style="left:56px; top:230px; width:320px;">Finish or park the limit-increase beat cleanly &mdash; tell the customer what happens next on our side</div>
+  <div class="edge v" style="left:216px; top:176px; height:54px;"></div>
+
+  <div class="node step" style="left:56px; top:340px; width:320px;">Consent beat: agree the transfer and a possible queue wait before any intro is sent</div>
+  <div class="edge v" style="left:216px; top:296px; height:44px;"></div>
+
+  <div class="node step" style="left:56px; top:450px; width:320px;">Capture the callback number while consent is fresh</div>
+  <div class="edge v" style="left:216px; top:406px; height:44px;"></div>
+
+  <div class="node step" style="left:480px; top:340px; width:330px;">Warm intro to the disputes queue with the template note: context summary, callback, consent noted, destination</div>
+  <div class="edge h" style="left:376px; top:372px; width:104px;"></div>
+  <div class="lbl" style="left:396px; top:356px;">send</div>
+
+  <div class="node step" style="left:480px; top:470px; width:330px;">Clean exit: we do not answer dispute questions from adjacent memory &mdash; the transfer is the answer</div>
+  <div class="edge v" style="left:640px; top:412px; height:58px;"></div>
+
+  <div class="node decision ghost" style="left:920px; top:340px; width:360px;">OPEN LANE &mdash; who keys the dispute intake fields on a warm transfer? Their floor lead to confirm staffing; lane stays drawn open until then</div>
+  <div class="edge h" style="left:810px; top:372px; width:110px;"></div>
+  <div class="lbl" style="left:830px; top:356px;">open</div>
+
+  <div class="note" style="left:920px; top:490px; width:360px;">Their desk's objection, logged 11/11: partial intake from our side creates half-filled records their QA has to chase. Their preference: clean warm intro, they key everything. Ruling on the review thread 11/12: their fields, their call.</div>
+
+  <div class="note" style="left:56px; top:580px; width:380px;">v0.1 &rarr; v0.2 changes: consent beat moved ahead of the intro; callback capture explicit; the open question drawn as a lane instead of hidden in a footnote.</div>
+
+  <div class="node ghost" style="left:480px; top:600px; width:330px;">Template + field family staged inactive in the console until this board leaves review</div>
+
+  <div class="foot">CLI-DB-303 v0.2 &middot; in review with the disputes desk &middot; internal &mdash; not customer-facing</div>
+</div>
+</body>
+</html>

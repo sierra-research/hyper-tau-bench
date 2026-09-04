@@ -1,0 +1,93 @@
+From: Grace Ott <grace.ott@rhobank.com>
+To: Toby Lang <toby.lang@rhobank.com>
+Date: Tue, 14 Oct 2025 10:05:33 -0400
+Subject: RE: Runbook 3412 rev 4 published - retry guidance changed
+Message-ID: <b5ba383ea5a8a5caec9d@rhobank.com>
+In-Reply-To: <5f746d453014e8f79618@rhobank.com>
+References: <f2b5a9b289065bfe1c3d@rhobank.com>
+ <1089ed035e23b4513789@rhobank.com> <dfdfc9a0f015bda91fe6@rhobank.com>
+ <9aabffd651e8a9e8106e@rhobank.com> <5f746d453014e8f79618@rhobank.com>
+Thread-Topic: Runbook 3412 rev 4 published - retry guidance changed
+Thread-Index: c1f82656ab99a8505d40a795f49c2b36
+Accept-Language: en-US
+X-Auto-Response-Suppress: All
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Confirmed in this morning's export, thanks for the fast turn. October
+sample will tell us if the storms die.
+
+-----Original Message-----
+From: Toby Lang <toby.lang@rhobank.com>
+Sent: Tue, 14 Oct 2025 09:31:56 -0400
+To: Card Ops Leads <card-ops-leads@rhobank.com>
+Cc: Grace Ott <grace.ott@rhobank.com>, Yuki Tanaka <yuki.tanaka@rhobank.com>, Brian Holt <brian.holt@rhobank.com>, Selma Ruiz <selma.ruiz@rhobank.com>
+Subject: RE: Runbook 3412 rev 4 published - retry guidance changed
+
+Runbook 3412 rev 4 is published as of this morning and rev 3 is
+retired to the archive with its banner set. If you keep local notes or
+bookmarks, they should point at rev 4 - the retry posture changed, and
+following the old text is now a QA finding rather than a defensible
+reading.
+
+Toby
+
+-----Original Message-----
+From: Yuki Tanaka <yuki.tanaka@rhobank.com>
+Sent: Mon, 13 Oct 2025 16:44:22 -0400
+To: Toby Lang <toby.lang@rhobank.com>
+Cc: Grace Ott <grace.ott@rhobank.com>, Brian Holt <brian.holt@rhobank.com>
+Subject: RE: Runbook 3412 rev 4 published - retry guidance changed
+
+Capture list reviewed - it's what my queue actually needs, especially
+both raw responses when the second attempt differs from the first.
+Ship it.
+
+Yuki
+
+-----Original Message-----
+From: Toby Lang <toby.lang@rhobank.com>
+Sent: Mon, 13 Oct 2025 14:08:45 -0400
+To: Grace Ott <grace.ott@rhobank.com>
+Cc: Brian Holt <brian.holt@rhobank.com>, Yuki Tanaka <yuki.tanaka@rhobank.com>, Selma Ruiz <selma.ruiz@rhobank.com>
+Subject: RE: Runbook 3412 rev 4 published - retry guidance changed
+
+Agreed on the diagnosis. Rev 4 drafted: the retry stance tightens to a
+single retry, and the escalation step gets explicit about what to
+capture so support engineering isn't playing twenty questions. Yuki,
+sanity-check the capture list before I publish? Targeting tomorrow.
+
+Toby
+
+-----Original Message-----
+From: Brian Holt <brian.holt@rhobank.com>
+Sent: Mon, 13 Oct 2025 11:36:17 -0400
+To: Grace Ott <grace.ott@rhobank.com>
+Cc: Toby Lang <toby.lang@rhobank.com>, Yuki Tanaka <yuki.tanaka@rhobank.com>
+Subject: RE: Runbook 3412 rev 4 published - retry guidance changed
+
+Gateway logs agree - retry storms on that endpoint cluster in
+September, several bursts of four-plus identical calls inside ten
+minutes. Beyond the wasted time it's noisy enough to trip our rate
+alarms, so the current guidance costs us twice.
+
+Brian
+
+-----Original Message-----
+From: Grace Ott <grace.ott@rhobank.com>
+Sent: Mon, 13 Oct 2025 10:22:51 -0400
+To: Toby Lang <toby.lang@rhobank.com>
+Cc: Yuki Tanaka <yuki.tanaka@rhobank.com>, Brian Holt <brian.holt@rhobank.com>, Selma Ruiz <selma.ruiz@rhobank.com>
+Subject: Runbook 3412 rev 4 published - retry guidance changed
+
+Toby,
+
+September QA sample turned up a pattern worth a runbook change: three
+internal cases where a failed pending-orders call got retried over and
+over on the same identifiers. Worst one retried five times and burned
+about forty minutes before anyone escalated. The current runbook text
+legitimately reads as 'retry until it works' if you're stressed and
+skimming - the agents were following it, which is the problem.
+
+Grace

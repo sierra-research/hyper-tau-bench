@@ -1,0 +1,118 @@
+WEBVTT
+
+00:00:03.218 --> 00:00:21.470
+<v Grace Liu>Recording on. This is the July eighteenth ops sync, and yes, I'm recording it on purpose — there's a decision on the agenda today and I want it on tape, not reconstructed from four people's notes in September. Who's here... Sanjay, Dan, Tunde, Marcus, Priya, and I can hear somebody's dishwasher.
+
+00:00:22.906 --> 00:00:25.187
+<v Tunde Adeyemi>Dryer. Sorry. Moving rooms.
+
+00:00:27.554 --> 00:00:44.312
+<v Grace Liu>Agenda's short: queue stats, then the approved-disputes item from the email thread — that's the decision — then whatever's left of the dashboard complaint, then August coverage. Sanjay, stats first, and keep it to the highlights, we all saw the sheet.
+
+00:00:45.930 --> 00:01:13.605
+<v Sanjay Rao>Highlights. Dispute volume's flat week over week, mid-forties. Median time from filing to resolution is holding just under six days. The queue itself is healthy — the thing that isn't healthy is what happens after, which is the agenda item, so I'll stop there instead of stealing my own thunder.
+
+00:01:14.211 --> 00:01:16.049
+<v Dan Kowalski>Professional restraint.
+
+00:01:17.702 --> 00:01:34.884
+<v Grace Liu>Noted and appreciated. Okay. The item. Everyone's read the thread, but the tape hasn't, so Sanjay — walk it once, from the top, like we're new.
+
+00:01:36.517 --> 00:02:29.930
+<v Sanjay Rao>From the top. A customer files a cash-back dispute, review team works it, and some of those resolve as approved — meaning yes, the rewards on the original transaction were wrong. The letter goes out saying so. And then, for some of these cases, that's... it. The letter is the last thing that happens. Nobody goes back to the transaction and fixes the points. I found it because customers called back — three in June — saying, in effect, you agreed with me in writing and my history still shows the old number. When I pulled everything since March I found nineteen approved disputes total. Eleven had been fixed by hand, mostly after a callback. Eight are still sitting there, approved on paper, wrong in the ledger.
+
+00:02:31.183 --> 00:02:33.914
+<v Dan Kowalski>Eight that we know of.
+
+00:02:35.166 --> 00:02:59.845
+<v Sanjay Rao>Eight since March, and March is just where I stopped digging. And to be clear about the mechanics, because this surprised me too — there is nothing downstream of the dispute queue that touches the transaction. Approving the dispute updates the dispute record. It does not update anything else. Whatever fixes the transaction is a person, or it's nobody.
+
+00:03:01.271 --> 00:03:13.108
+<v Grace Liu>Marcus, the sweep theory got half the thread believing corrections happen at cycle close. On tape, please, once and for all.
+
+00:03:14.550 --> 00:03:44.462
+<v Marcus Webb>There is no sweep. There was a goodwill batch job on the old ledger — it went away with the old ledger in 2023, and even that never did what people think it did; it handled fee reversals, not rewards. Today, nothing scheduled, nightly, or monthly writes rewards values based on dispute outcomes. I checked again this morning so I could say this without hedging: if no human updates the transaction, the transaction stays wrong forever.
+
+00:03:45.987 --> 00:03:48.190
+<v Priya Raman>Forever is a long time.
+
+00:03:49.397 --> 00:03:52.615
+<v Marcus Webb>Forever, or until the customer calls, whichever comes first.
+
+00:03:54.729 --> 00:04:22.877
+<v Tunde Adeyemi>And the finance angle, since it's why I crashed this meeting: the cost model accrues for an approved dispute when it's approved. So for those eight cases the money is already counted as owed — we've booked the expense — and the customer never sees it. Month-end reconciliation shows me a delta; it does not show me which cases. I can tell you we're wrong, I can't tell you where. That's an uncomfortable sentence to say near an auditor.
+
+00:04:24.304 --> 00:04:26.150
+<v Dan Kowalski>Don't say it near one, then.
+
+00:04:27.716 --> 00:04:49.023
+<v Grace Liu>That's the whole case for why this can't stay informal. Before I say the decision — the automation idea from the thread. Sanjay proposed a nightly job that copies the dispute record's expected value onto the transaction. Marcus pushed back in writing. Thirty seconds each, then it's parked.
+
+00:04:50.556 --> 00:05:07.294
+<v Sanjay Rao>Mine's simple: hand work doesn't scale and hand work is what got us eight stale cases. If the number's already in the dispute record, use it. That's the whole pitch. I know what Marcus is going to say.
+
+00:05:08.470 --> 00:05:34.019
+<v Marcus Webb>Then I'll say it slowly. The values in those dispute-record fields come from the customer's filing. They're claims. Some are right, plenty aren't, and a job that writes claims straight into the ledger with nobody looking is not a corrections process, it's a vulnerability with a cron schedule. If ops wants automation, we design it in Q4 with controls people in the room. Not as a summer patch.
+
+00:05:35.480 --> 00:05:39.868
+<v Sanjay Rao>He said it slowly and he's right, which is annoying.
+
+00:05:41.383 --> 00:06:02.941
+<v Grace Liu>Parked for Q4, then, and I'll put it on the controls agenda myself. Which brings us to the actual decision. Priya, this next part is for the notes as decided, not as proposed — and it's why the recorder's on.
+
+00:06:04.475 --> 00:06:44.128
+<v Grace Liu>Here it is. After a cash-back dispute is resolved and approved, the affected transaction or transactions must be updated with the correct rewards value. That's the rule. Applying the correction is part of resolving the case — it is not a favor we do for the customers who happen to call back, and a case isn't finished because a letter went out. If the dispute says we owed points, the transaction gets the right points, every time, before anyone calls it done.
+
+00:06:45.706 --> 00:06:47.203
+<v Dan Kowalski>Clean. No notes.
+
+00:06:48.834 --> 00:06:50.365
+<v Sanjay Rao>Finally. Yes.
+
+00:06:52.020 --> 00:07:07.373
+<v Tunde Adeyemi>Works for finance. The accrual and the ledger stop drifting apart, which is the entire thing I wanted. I'll flag it at month-end as a process change so nobody thinks the delta closing is a miracle.
+
+00:07:08.918 --> 00:07:27.836
+<v Priya Raman>In the notes verbatim, and I'm keeping this recording with them — the decision log entry will point at both. One request from records: when the queue stands up, give it a name that will still make sense in two years. Not "Sanjay's list."
+
+00:07:29.351 --> 00:07:31.822
+<v Sanjay Rao>It's a great list, though.
+
+00:07:33.470 --> 00:08:00.213
+<v Grace Liu>Mechanics, quickly, because a rule without a queue is a wish. Corrections sit with rewards ops. Approved disputes land in a correction queue — Sanjay owns standing it up this month, and the eight stale cases are the pilot batch; I want those corrected and confirmed by end of next week. Dan, your side: the floor needs to know the queue exists so callbacks get routed instead of hand-patched at the desk.
+
+00:08:01.842 --> 00:08:22.290
+<v Dan Kowalski>Can do. One thing for the tape though — the how. When somebody works one of these, what are they actually doing? Because the eleven hand fixes were eleven agents improvising, and two of them improvised differently, which is its own small horror story I'll tell you offline.
+
+00:08:23.855 --> 00:08:53.918
+<v Grace Liu>And that's deliberately not today's decision. The how — the lookup, the recalculation, the write, the checks around it — that needs to be written down properly, walked, and argued about, and I'd rather it be argued about in front of a diagram than in this recording. We'll draft the working procedure over the next couple of months and review it in the fall. Today establishes that the correction is owed. The procedure doc will establish how it's paid.
+
+00:08:55.480 --> 00:08:58.017
+<v Dan Kowalski>Fair. I'll hold my seventeen questions.
+
+00:08:59.632 --> 00:09:04.187
+<v Marcus Webb>Put the seventeen questions in writing, they're useful for the draft.
+
+00:09:05.844 --> 00:09:27.792
+<v Grace Liu>They genuinely are. Okay — dashboard complaint, still on the agenda, still broken. The disputes-by-age view sorts by filing date descending no matter what the header says. Marcus says it's a display bug, the vendor says it's a feature request, and I say it's Thursday. Marcus, where did that land?
+
+00:09:29.376 --> 00:09:50.101
+<v Marcus Webb>Vendor ticket's open, severity three, which in vendor means "eventually." Workaround stands: export and sort in the sheet. I know. I filed the strongest-worded ticket their form allows, which is "inconvenient," a word I had to select from a dropdown.
+
+00:09:51.560 --> 00:09:53.348
+<v Priya Raman>The dropdown of feelings.
+
+00:09:55.013 --> 00:10:15.618
+<v Grace Liu>We've all lived in that dropdown. Last item — August coverage. I'm out the first week of August, Dan's out the second. Sanjay runs this sync on the first, Tunde said he'd rather die than chair a meeting so he's excused, and Priya has the second. Queue pilot updates go in the channel either way, don't save them for the sync.
+
+00:10:17.230 --> 00:10:19.011
+<v Sanjay Rao>First week. Got it.
+
+00:10:20.671 --> 00:10:38.849
+<v Grace Liu>That's everything on mine. For the record since it's taped: decision on approved-dispute corrections as stated, queue and pilot with Sanjay, automation parked to Q4 controls, procedure draft to follow in the fall. Anything anyone wants on the tape before I stop it?
+
+00:10:40.409 --> 00:10:43.170
+<v Tunde Adeyemi>Only that the dryer's done. Thanks all.
+
+00:10:44.804 --> 00:10:46.512
+<v Grace Liu>Perfect timing. Stopping the recording.

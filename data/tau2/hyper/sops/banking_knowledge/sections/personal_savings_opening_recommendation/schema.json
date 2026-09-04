@@ -1,0 +1,1546 @@
+{
+  "id": "banking_personal_savings_opening_recommendation_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "personal_savings_opening_recommendation",
+  "display_name": "Personal savings opening and product recommendation",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/personal_savings_opening_recommendation/source.md",
+    "heading": "## Personal savings opening and product recommendation"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/personal_savings_opening_recommendation/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/personal_savings_opening_recommendation/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook requirements from shared context: verify identity before account-specific information, get explicit confirmation before account-modifying actions, and use the exact transfer message when a transfer is performed.",
+      "Support console turns may mention document ids, internal tool results, and eligibility checks; Agent turns should give the customer the customer-visible next step or outcome.",
+      "Do not transform concrete KB tables, thresholds, statuses, fees, amounts, or condition-specific outcomes into vague dependency statements."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "identity verification before account-specific details",
+      "explicit customer confirmation before account-modifying actions",
+      "plain-language customer-facing outcomes",
+      "support-console notes for internal KB/tool evidence"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_002.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_009.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_bronze_account_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_silver_account_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_silver_plus_account_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_silver_plus_account_002.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_green_account_(savings)_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_gold_account_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_gold_plus_account_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_gold_plus_account_002.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_platinum_account_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_platinum_plus_account_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_platinum_plus_account_002.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_diamond_elite_account_001.json"
+    ],
+    "summary": "Choosing and opening a savings account from balance, existing accounts, product tiers, fee preferences, and desired APY/benefits.",
+    "rules": [
+      "Preserve all values, tables, thresholds, statuses, fees, amounts, eligibility gates, tool/action names, and condition-to-outcome mappings from the source bundle.",
+      "Use the shared banking handbook for identity verification, explicit confirmation before account-modifying actions, discoverable-tool wrapper behavior, schema limits, and transfer wording.",
+      "Do not invent unsupported account fields, undocumented override mechanisms, undocumented tool names, or customer entitlements not present in the source bundle.",
+      "When a source document is internal, represent its internal checks in Support console turns or agent behavior rather than as exposed policy narration."
+    ],
+    "candidate": {
+      "id": "personal_savings_opening_recommendation",
+      "title": "Personal savings opening and product recommendation",
+      "priority": 1,
+      "related_task_ids": [
+        "task_055",
+        "task_058",
+        "task_059",
+        "task_060",
+        "task_061",
+        "task_063",
+        "task_064",
+        "task_065",
+        "task_066",
+        "task_067",
+        "task_068",
+        "task_069",
+        "task_093",
+        "task_094",
+        "task_095",
+        "task_096",
+        "task_097"
+      ],
+      "recommended_case_count": 6,
+      "losslessness_risks": [
+        "Preserve APY, minimums, and account-tier differences from each product doc.",
+        "Preserve customer profile/account lookup before personalized recommendations.",
+        "Do not combine Plus, Platinum, and Diamond Elite eligibility into a vague premium-tier rule."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "personal_savings_opening_recommendation_journey",
+        "label": "Personal savings opening and product recommendation",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "personal_savings_opening_recommendation_shared_rules",
+        "label": "Shared workflow rules",
+        "kind": "shared_reference",
+        "parent_id": "personal_savings_opening_recommendation_journey",
+        "order": 1,
+        "description": "Rules, prerequisites, and reference values used by more than one customer pathway in this journey.",
+        "fact_ids": [
+          "F007",
+          "F008",
+          "F009",
+          "F010",
+          "F011",
+          "F012",
+          "F013",
+          "F014",
+          "F015",
+          "F016",
+          "F017",
+          "F018",
+          "F019",
+          "F020",
+          "F021",
+          "F022",
+          "F024",
+          "F025",
+          "F026",
+          "F031",
+          "F033",
+          "F034",
+          "F035",
+          "F036",
+          "F037",
+          "F038",
+          "F039",
+          "F040",
+          "F052",
+          "F053",
+          "F054",
+          "F055",
+          "F056",
+          "F057",
+          "F058",
+          "F059",
+          "F060",
+          "F061",
+          "F062",
+          "F063"
+        ]
+      },
+      {
+        "id": "personal_savings_opening_recommendation_path_a",
+        "label": "Eligible customer receives a personalized Silver Account recommendation and opens with immediate funding",
+        "kind": "scenario_branch",
+        "parent_id": "personal_savings_opening_recommendation_journey",
+        "order": 2,
+        "description": "Policy path represented by case A.",
+        "fact_ids": [
+          "F023",
+          "F027",
+          "F041",
+          "F042",
+          "F043",
+          "F044",
+          "F045",
+          "F046",
+          "F064",
+          "F065",
+          "F076",
+          "F077",
+          "F078",
+          "F079",
+          "F080",
+          "F081",
+          "F082",
+          "F083",
+          "F084",
+          "F085",
+          "F086",
+          "F160"
+        ]
+      },
+      {
+        "id": "personal_savings_opening_recommendation_path_b",
+        "label": "Eligible customer compares Bronze and Green Account options and defers funding",
+        "kind": "scenario_branch",
+        "parent_id": "personal_savings_opening_recommendation_journey",
+        "order": 3,
+        "description": "Policy path represented by case B.",
+        "fact_ids": [
+          "F028",
+          "F029",
+          "F030",
+          "F032",
+          "F067",
+          "F068",
+          "F069",
+          "F070",
+          "F071",
+          "F072",
+          "F073",
+          "F074",
+          "F075",
+          "F097",
+          "F098",
+          "F099",
+          "F100",
+          "F101",
+          "F102",
+          "F103",
+          "F104",
+          "F105",
+          "F106",
+          "F107",
+          "F108"
+        ]
+      },
+      {
+        "id": "personal_savings_opening_recommendation_path_c",
+        "label": "Eligible customer evaluates Silver Plus Account tiering and opening requirements",
+        "kind": "scenario_branch",
+        "parent_id": "personal_savings_opening_recommendation_journey",
+        "order": 4,
+        "description": "Policy path represented by case C.",
+        "fact_ids": [
+          "F087",
+          "F088",
+          "F089",
+          "F090",
+          "F091",
+          "F092",
+          "F093",
+          "F094",
+          "F095",
+          "F096",
+          "F165",
+          "F166",
+          "F167",
+          "F168",
+          "F169",
+          "F170",
+          "F171"
+        ]
+      },
+      {
+        "id": "personal_savings_opening_recommendation_path_d",
+        "label": "Eligible customer compares Gold Savings Account and Gold Plus Account requirements",
+        "kind": "scenario_branch",
+        "parent_id": "personal_savings_opening_recommendation_journey",
+        "order": 5,
+        "description": "Policy path represented by case D.",
+        "fact_ids": [
+          "F109",
+          "F110",
+          "F111",
+          "F112",
+          "F113",
+          "F114",
+          "F115",
+          "F116",
+          "F117",
+          "F118",
+          "F119",
+          "F120",
+          "F121",
+          "F122",
+          "F123",
+          "F124",
+          "F125",
+          "F126",
+          "F127",
+          "F128",
+          "F172",
+          "F173",
+          "F174",
+          "F175",
+          "F176",
+          "F177",
+          "F178"
+        ]
+      },
+      {
+        "id": "personal_savings_opening_recommendation_path_e",
+        "label": "Eligible customer compares Platinum Savings Account and Platinum Plus Account requirements",
+        "kind": "scenario_branch",
+        "parent_id": "personal_savings_opening_recommendation_journey",
+        "order": 6,
+        "description": "Policy path represented by case E.",
+        "fact_ids": [
+          "F129",
+          "F130",
+          "F131",
+          "F132",
+          "F133",
+          "F134",
+          "F135",
+          "F136",
+          "F137",
+          "F138",
+          "F139",
+          "F140",
+          "F141",
+          "F142",
+          "F143",
+          "F144",
+          "F145",
+          "F161",
+          "F162",
+          "F163",
+          "F164"
+        ]
+      },
+      {
+        "id": "personal_savings_opening_recommendation_path_f",
+        "label": "Customer asks about Diamond Elite Savings Account benefits and limits",
+        "kind": "scenario_branch",
+        "parent_id": "personal_savings_opening_recommendation_journey",
+        "order": 7,
+        "description": "Policy path represented by case F.",
+        "fact_ids": [
+          "F146",
+          "F147",
+          "F148",
+          "F149",
+          "F150",
+          "F151",
+          "F152",
+          "F153",
+          "F154",
+          "F155",
+          "F156",
+          "F157"
+        ]
+      },
+      {
+        "id": "personal_savings_opening_recommendation_path_g",
+        "label": "Opening request denied because customer already has 5 personal savings accounts",
+        "kind": "scenario_branch",
+        "parent_id": "personal_savings_opening_recommendation_journey",
+        "order": 8,
+        "description": "Policy path represented by case G.",
+        "fact_ids": [
+          "F047",
+          "F048"
+        ]
+      },
+      {
+        "id": "personal_savings_opening_recommendation_path_h",
+        "label": "Opening request denied because checking account tenure is fewer than 14 days",
+        "kind": "scenario_branch",
+        "parent_id": "personal_savings_opening_recommendation_journey",
+        "order": 9,
+        "description": "Policy path represented by case H.",
+        "fact_ids": [
+          "F049"
+        ]
+      },
+      {
+        "id": "personal_savings_opening_recommendation_path_i",
+        "label": "Opening request denied because an account is in collections",
+        "kind": "scenario_branch",
+        "parent_id": "personal_savings_opening_recommendation_journey",
+        "order": 10,
+        "description": "Policy path represented by case I.",
+        "fact_ids": [
+          "F050"
+        ]
+      },
+      {
+        "id": "personal_savings_opening_recommendation_path_j",
+        "label": "Opening request denied because an account has a negative balance",
+        "kind": "scenario_branch",
+        "parent_id": "personal_savings_opening_recommendation_journey",
+        "order": 11,
+        "description": "Policy path represented by case J.",
+        "fact_ids": [
+          "F051"
+        ]
+      },
+      {
+        "id": "personal_savings_opening_recommendation_path_k",
+        "label": "Opening request denied because customer lacks an active Rho-Bank checking account",
+        "kind": "scenario_branch",
+        "parent_id": "personal_savings_opening_recommendation_journey",
+        "order": 12,
+        "description": "Policy path represented by case K.",
+        "fact_ids": []
+      },
+      {
+        "id": "personal_savings_opening_recommendation_path_l",
+        "label": "Opening request stops before account-specific eligibility review because identity is not verified",
+        "kind": "scenario_branch",
+        "parent_id": "personal_savings_opening_recommendation_journey",
+        "order": 13,
+        "description": "Policy path represented by case L.",
+        "fact_ids": []
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "personal_savings_opening_recommendation_path_a",
+        "type": "uses_shared_rules",
+        "target_id": "personal_savings_opening_recommendation_shared_rules"
+      },
+      {
+        "source_id": "personal_savings_opening_recommendation_path_b",
+        "type": "uses_shared_rules",
+        "target_id": "personal_savings_opening_recommendation_shared_rules"
+      },
+      {
+        "source_id": "personal_savings_opening_recommendation_path_c",
+        "type": "uses_shared_rules",
+        "target_id": "personal_savings_opening_recommendation_shared_rules"
+      },
+      {
+        "source_id": "personal_savings_opening_recommendation_path_d",
+        "type": "uses_shared_rules",
+        "target_id": "personal_savings_opening_recommendation_shared_rules"
+      },
+      {
+        "source_id": "personal_savings_opening_recommendation_path_e",
+        "type": "uses_shared_rules",
+        "target_id": "personal_savings_opening_recommendation_shared_rules"
+      },
+      {
+        "source_id": "personal_savings_opening_recommendation_path_f",
+        "type": "uses_shared_rules",
+        "target_id": "personal_savings_opening_recommendation_shared_rules"
+      },
+      {
+        "source_id": "personal_savings_opening_recommendation_path_g",
+        "type": "uses_shared_rules",
+        "target_id": "personal_savings_opening_recommendation_shared_rules"
+      },
+      {
+        "source_id": "personal_savings_opening_recommendation_path_h",
+        "type": "uses_shared_rules",
+        "target_id": "personal_savings_opening_recommendation_shared_rules"
+      },
+      {
+        "source_id": "personal_savings_opening_recommendation_path_i",
+        "type": "uses_shared_rules",
+        "target_id": "personal_savings_opening_recommendation_shared_rules"
+      },
+      {
+        "source_id": "personal_savings_opening_recommendation_path_j",
+        "type": "uses_shared_rules",
+        "target_id": "personal_savings_opening_recommendation_shared_rules"
+      },
+      {
+        "source_id": "personal_savings_opening_recommendation_path_k",
+        "type": "uses_shared_rules",
+        "target_id": "personal_savings_opening_recommendation_shared_rules"
+      },
+      {
+        "source_id": "personal_savings_opening_recommendation_path_l",
+        "type": "uses_shared_rules",
+        "target_id": "personal_savings_opening_recommendation_shared_rules"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "F007",
+      "statement": "The internal opening-personal-savings procedure applies to opening personal savings accounts."
+    },
+    {
+      "id": "F008",
+      "statement": "A customer must be verified before a personal savings account opening may proceed."
+    },
+    {
+      "id": "F009",
+      "statement": "A customer must already have at least one active Rho-Bank checking account before a personal savings account opening may proceed."
+    },
+    {
+      "id": "F010",
+      "statement": "A customer must currently hold fewer than 5 personal savings accounts before a personal savings account opening may proceed. The source states this limit in two phrasings: the eligibility requirement says the customer \"cannot have more than 5 personal savings accounts\" while the eligibility checklist requires that the customer \"currently holds fewer than 5 personal savings accounts\"; the checklist phrasing is the operative pre-opening check."
+    },
+    {
+      "id": "F011",
+      "statement": "A customer must have no accounts in collections before a personal savings account opening may proceed."
+    },
+    {
+      "id": "F012",
+      "statement": "A customer must have no negative balances before a personal savings account opening may proceed."
+    },
+    {
+      "id": "F013",
+      "statement": "The customer's checking account tenure must be at least 14 days before a personal savings account opening may proceed."
+    },
+    {
+      "id": "F014",
+      "statement": "Do not proceed with opening a personal savings account if any eligibility checklist item is not met."
+    },
+    {
+      "id": "F015",
+      "statement": "The personal savings account opening procedure order is to verify identity, check eligibility requirements, confirm account selection with the customer, use open_bank_account_4821 to open the account, arrange the opening deposit, and confirm completion."
+    },
+    {
+      "id": "F016",
+      "statement": "Step 1 of the opening procedure is to authenticate the customer and confirm identity verification status on file."
+    },
+    {
+      "id": "F017",
+      "statement": "Step 2 of the opening procedure includes confirming that an active checking account exists and meets the 14-day tenure requirement."
+    },
+    {
+      "id": "F018",
+      "statement": "Step 2 of the opening procedure includes counting existing personal savings accounts and ensuring the customer is below the 5-account limit."
+    },
+    {
+      "id": "F019",
+      "statement": "Step 2 of the opening procedure includes reviewing account status to confirm there is no collections activity and no negative balance."
+    },
+    {
+      "id": "F020",
+      "statement": "Step 3 of the opening procedure includes discussing available personal savings account options with the customer."
+    },
+    {
+      "id": "F021",
+      "statement": "Step 3 of the opening procedure includes capturing the exact account_class string."
+    },
+    {
+      "id": "F022",
+      "statement": "The account_class string for opening a personal savings account must be the full official account name ending with \"Account\"."
+    },
+    {
+      "id": "F023",
+      "statement": "The source gives \"Silver Plus Account\" and \"Gold Account\" as examples of full official account_class strings ending with \"Account\"."
+    },
+    {
+      "id": "F024",
+      "statement": "The agent calls open_bank_account_4821 only after identity verification, eligibility checking, and account selection confirmation are complete."
+    },
+    {
+      "id": "F025",
+      "statement": "When opening a personal savings account with open_bank_account_4821, account_type must be set to \"savings\" and account_class must be the confirmed account_class."
+    },
+    {
+      "id": "F026",
+      "statement": "After the savings account is opened, the agent must ask whether the customer wants the opening deposit transferred from the customer's checking account now."
+    },
+    {
+      "id": "F027",
+      "statement": "If the customer wants to transfer the opening deposit now, the agent uses transfer_funds_between_bank_accounts_7291 to transfer the required amount from the customer's checking account to the newly opened savings account."
+    },
+    {
+      "id": "F028",
+      "statement": "If the customer does not want to transfer the opening deposit now, the agent must inform the customer that they have 30 days to fund the account."
+    },
+    {
+      "id": "F029",
+      "statement": "If the customer does not want to transfer the opening deposit now, the agent must inform the customer that funding can be completed by internal transfer or external deposit."
+    },
+    {
+      "id": "F030",
+      "statement": "If the customer does not fund the new savings account within the 30-day funding window, the account will be closed."
+    },
+    {
+      "id": "F031",
+      "statement": "Completion confirmation for a newly opened personal savings account must provide the new account details and confirm either the funding status or the funding deadline."
+    },
+    {
+      "id": "F032",
+      "statement": "If a customer defers funding, the agent must document the customer's acknowledgment of the 30-day funding window and closure consequence in the interaction notes."
+    },
+    {
+      "id": "F033",
+      "statement": "The agent calls internal tools directly to perform actions on behalf of the customer."
+    },
+    {
+      "id": "F034",
+      "statement": "The agent must not ask the customer to call tools."
+    },
+    {
+      "id": "F035",
+      "statement": "The agent must not ask the customer to provide tool parameters."
+    },
+    {
+      "id": "F036",
+      "statement": "The open_bank_account_4821 tool takes user_id, account_type, and account_class as parameters."
+    },
+    {
+      "id": "F037",
+      "statement": "For open_bank_account_4821, user_id is the authenticated customer's user identifier."
+    },
+    {
+      "id": "F038",
+      "statement": "For open_bank_account_4821, account_type is \"savings\" for personal savings accounts."
+    },
+    {
+      "id": "F039",
+      "statement": "For open_bank_account_4821, account_class is the full official account name ending with \"Account\" exactly as confirmed with the customer."
+    },
+    {
+      "id": "F040",
+      "statement": "The expected outcome of open_bank_account_4821 is creation of a new personal savings account for the customer."
+    },
+    {
+      "id": "F041",
+      "statement": "The transfer_funds_between_bank_accounts_7291 tool takes source_account_id, destination_account_id, and amount as parameters."
+    },
+    {
+      "id": "F042",
+      "statement": "The transfer_funds_between_bank_accounts_7291 tool is called in the opening-deposit step only if the customer authorizes an immediate transfer for the opening deposit."
+    },
+    {
+      "id": "F043",
+      "statement": "For transfer_funds_between_bank_accounts_7291, source_account_id is the customer's Rho-Bank checking account to be debited."
+    },
+    {
+      "id": "F044",
+      "statement": "For transfer_funds_between_bank_accounts_7291, destination_account_id is the newly opened personal savings account to be credited."
+    },
+    {
+      "id": "F045",
+      "statement": "For transfer_funds_between_bank_accounts_7291, amount is the required opening deposit amount confirmed with the customer."
+    },
+    {
+      "id": "F046",
+      "statement": "The expected outcome of transfer_funds_between_bank_accounts_7291 is moving funds from checking to savings to complete the opening deposit."
+    },
+    {
+      "id": "F047",
+      "statement": "If the customer already has 5 personal savings accounts, do not open a new personal savings account."
+    },
+    {
+      "id": "F048",
+      "statement": "If the customer already has 5 personal savings accounts, inform the customer that they have reached the maximum."
+    },
+    {
+      "id": "F049",
+      "statement": "If the checking account has been open fewer than 14 days, advise the customer when they will become eligible."
+    },
+    {
+      "id": "F050",
+      "statement": "If the customer has accounts in collections, those issues must be resolved first and opening must not proceed until all accounts are in good standing."
+    },
+    {
+      "id": "F051",
+      "statement": "If the customer has negative balances, those issues must be resolved first and opening must not proceed until all accounts are in good standing."
+    },
+    {
+      "id": "F052",
+      "statement": "Use get_all_user_accounts_by_user_id_3847 to retrieve a customer's bank accounts, including checking accounts and savings accounts."
+    },
+    {
+      "id": "F053",
+      "statement": "get_all_user_accounts_by_user_id_3847 requires the customer's user_id."
+    },
+    {
+      "id": "F054",
+      "statement": "get_all_user_accounts_by_user_id_3847 returns account_id."
+    },
+    {
+      "id": "F055",
+      "statement": "get_all_user_accounts_by_user_id_3847 returns account_type."
+    },
+    {
+      "id": "F056",
+      "statement": "get_all_user_accounts_by_user_id_3847 returns account_class."
+    },
+    {
+      "id": "F057",
+      "statement": "get_all_user_accounts_by_user_id_3847 returns status."
+    },
+    {
+      "id": "F058",
+      "statement": "get_all_user_accounts_by_user_id_3847 returns balance."
+    },
+    {
+      "id": "F059",
+      "statement": "get_all_user_accounts_by_user_id_3847 returns date_opened."
+    },
+    {
+      "id": "F060",
+      "statement": "get_all_user_accounts_by_user_id_3847 is essential for checking existing account status when determining eligibility for opening new accounts."
+    },
+    {
+      "id": "F061",
+      "statement": "get_all_user_accounts_by_user_id_3847 is essential for checking balances when determining eligibility for opening new accounts."
+    },
+    {
+      "id": "F062",
+      "statement": "get_all_user_accounts_by_user_id_3847 is essential for checking account tenure when determining eligibility for opening new accounts."
+    },
+    {
+      "id": "F063",
+      "statement": "get_all_user_accounts_by_user_id_3847 is essential for checking the number of accounts when determining eligibility for opening new accounts."
+    },
+    {
+      "id": "F064",
+      "statement": "get_all_user_accounts_by_user_id_3847 is essential for verifying pre-closure requirements when closing accounts."
+    },
+    {
+      "id": "F065",
+      "statement": "get_all_user_accounts_by_user_id_3847 is essential for looking up account details for customer service inquiries."
+    },
+    {
+      "id": "F067",
+      "statement": "The Bronze Savings Account annual percentage yield is 2.0%."
+    },
+    {
+      "id": "F068",
+      "statement": "The Bronze Savings Account monthly maintenance fee is $0.00."
+    },
+    {
+      "id": "F069",
+      "statement": "The Bronze Savings Account minimum opening deposit is $0."
+    },
+    {
+      "id": "F070",
+      "statement": "To open a Bronze Savings Account, fund the account with at least $0."
+    },
+    {
+      "id": "F071",
+      "statement": "Funds can be added immediately after a Bronze Savings Account is opened."
+    },
+    {
+      "id": "F072",
+      "statement": "Bronze Savings Account interest accrues automatically once the account is funded, with no additional action required."
+    },
+    {
+      "id": "F073",
+      "statement": "If the Bronze Savings Account monthly maintenance fee value is $0, no monthly maintenance fee will be charged."
+    },
+    {
+      "id": "F074",
+      "statement": "The Bronze Savings Account practical guidance is to keep the account funded to consistently earn 2.0% APY."
+    },
+    {
+      "id": "F075",
+      "statement": "The Bronze Savings Account practical guidance is to review statements to confirm posted interest and any fees."
+    },
+    {
+      "id": "F076",
+      "statement": "The Silver Account minimum opening deposit is $500."
+    },
+    {
+      "id": "F077",
+      "statement": "The Silver Account ongoing minimum balance is $1,000."
+    },
+    {
+      "id": "F078",
+      "statement": "The Silver Account provides 10 free withdrawals per statement cycle."
+    },
+    {
+      "id": "F079",
+      "statement": "The Silver Account interest compounding is daily."
+    },
+    {
+      "id": "F080",
+      "statement": "The Silver Account balance threshold for the higher APY tier is $10,000."
+    },
+    {
+      "id": "F081",
+      "statement": "To open a Silver Account, fund at least $500 when opening the account."
+    },
+    {
+      "id": "F082",
+      "statement": "For a Silver Account, maintain at least $1,000 each statement cycle to meet account requirements and avoid monthly fees."
+    },
+    {
+      "id": "F083",
+      "statement": "For a Silver Account, transactions beyond 10 withdrawals in a cycle may incur an excess withdrawal fee as described in the account disclosures."
+    },
+    {
+      "id": "F084",
+      "statement": "For a Silver Account, keeping the balance at or above $10,000 qualifies the account for the higher APY tier."
+    },
+    {
+      "id": "F085",
+      "statement": "For a Silver Account, setting balance alerts can help the customer stay above $1,000 and, if desired, above $10,000."
+    },
+    {
+      "id": "F086",
+      "statement": "For a Silver Account, if frequent withdrawals are expected, spacing withdrawals can help the customer remain within 10 withdrawals per cycle."
+    },
+    {
+      "id": "F087",
+      "statement": "The Silver Plus Account minimum opening deposit is $1,000."
+    },
+    {
+      "id": "F088",
+      "statement": "The Silver Plus Account ongoing minimum balance is $2,500."
+    },
+    {
+      "id": "F089",
+      "statement": "The Silver Plus Account interest compounding is daily."
+    },
+    {
+      "id": "F090",
+      "statement": "The Silver Plus Account Tier 2 balance threshold is $15,000."
+    },
+    {
+      "id": "F091",
+      "statement": "The Silver Plus Account provides 15 free withdrawals per month."
+    },
+    {
+      "id": "F092",
+      "statement": "To open a Silver Plus Account, fund the new account with at least $1,000."
+    },
+    {
+      "id": "F093",
+      "statement": "For a Silver Plus Account, keep the balance at or above $2,500 to meet the ongoing requirement."
+    },
+    {
+      "id": "F094",
+      "statement": "For a Silver Plus Account, balances at or above $15,000 qualify for Tier 2 interest."
+    },
+    {
+      "id": "F095",
+      "statement": "For a Silver Plus Account, balances below $15,000 earn the Tier 1 rate."
+    },
+    {
+      "id": "F096",
+      "statement": "For a Silver Plus Account, transactions beyond the 15-free-withdrawal monthly limit may be subject to an excess withdrawal fee per the fee schedule."
+    },
+    {
+      "id": "F097",
+      "statement": "The Green Account (savings) minimum opening deposit is $100."
+    },
+    {
+      "id": "F098",
+      "statement": "The Green Account (savings) ongoing minimum balance is $500."
+    },
+    {
+      "id": "F099",
+      "statement": "The Green Account (savings) maximum free withdrawals per month is 8."
+    },
+    {
+      "id": "F100",
+      "statement": "The Green Account (savings) interest compounding frequency is daily."
+    },
+    {
+      "id": "F101",
+      "statement": "The Green Account (savings) requires paperless statements."
+    },
+    {
+      "id": "F102",
+      "statement": "The Green Account (savings) debit card is made from recycled ocean plastic."
+    },
+    {
+      "id": "F103",
+      "statement": "To open a Green Account (savings), fund the account with at least $100."
+    },
+    {
+      "id": "F104",
+      "statement": "To open a Green Account (savings), enroll in paperless statements."
+    },
+    {
+      "id": "F105",
+      "statement": "For a Green Account (savings), keep the balance at or above $500."
+    },
+    {
+      "id": "F106",
+      "statement": "For a Green Account (savings), plan withdrawals to stay within 8 each month."
+    },
+    {
+      "id": "F107",
+      "statement": "Green Account (savings) interest is compounded daily."
+    },
+    {
+      "id": "F108",
+      "statement": "The Green Account (savings) debit card material is recycled ocean plastic."
+    },
+    {
+      "id": "F109",
+      "statement": "The Gold Savings Account requires maintaining at least $10,000 to keep the account in good standing."
+    },
+    {
+      "id": "F110",
+      "statement": "For a Gold Savings Account, if the end-of-day balance falls below $10,000, the customer may incur the monthly charge described for the account."
+    },
+    {
+      "id": "F111",
+      "statement": "The Gold Savings Account earns 5.5% APY on the balance maintained."
+    },
+    {
+      "id": "F112",
+      "statement": "Gold Savings Account interest accrues on eligible balances and is tied directly to the 5.5% APY."
+    },
+    {
+      "id": "F113",
+      "statement": "The Gold Savings Account monthly maintenance fee is $10.00, charged only if the balance drops below $10,000 during the statement period."
+    },
+    {
+      "id": "F114",
+      "statement": "The Gold Savings Account has transfer fees."
+    },
+    {
+      "id": "F115",
+      "statement": "The Gold Savings Account allows up to 20 withdrawals per month."
+    },
+    {
+      "id": "F116",
+      "statement": "For a Gold Savings Account, exceeding the monthly withdrawal limit may result in transaction denials or delays until the next period resets."
+    },
+    {
+      "id": "F117",
+      "statement": "The Gold Savings Account has internal transfer fees."
+    },
+    {
+      "id": "F118",
+      "statement": "For a Gold Savings Account, transfers can be initiated from the Transfers section in online or mobile banking and details can be confirmed before submitting."
+    },
+    {
+      "id": "F119",
+      "statement": "The Gold Plus Account opening deposit minimum is $10,000."
+    },
+    {
+      "id": "F120",
+      "statement": "The Gold Plus Account minimum balance to maintain is $25,000."
+    },
+    {
+      "id": "F121",
+      "statement": "The Gold Plus Account interest compounding frequency is daily."
+    },
+    {
+      "id": "F122",
+      "statement": "The Gold Plus Account automatic investment sweep threshold is $50,000."
+    },
+    {
+      "id": "F123",
+      "statement": "The Gold Plus Account monthly withdrawal limit is 25 withdrawals."
+    },
+    {
+      "id": "F124",
+      "statement": "To open a Gold Plus Account, fund the account with at least $10,000 at opening."
+    },
+    {
+      "id": "F125",
+      "statement": "For a Gold Plus Account, maintain a balance of at least $25,000 to keep account benefits active."
+    },
+    {
+      "id": "F126",
+      "statement": "For a Gold Plus Account, when the end-of-day available balance exceeds $50,000, excess funds may be moved automatically to the linked investment account according to sweep settings."
+    },
+    {
+      "id": "F127",
+      "statement": "For a Gold Plus Account, plan cash flows so the account does not exceed 25 withdrawals in a month."
+    },
+    {
+      "id": "F128",
+      "statement": "For a Gold Plus Account, interest accrues daily and keeping funds on deposit helps the customer benefit from compounding."
+    },
+    {
+      "id": "F129",
+      "statement": "The Platinum Savings Account requires maintaining at least $50,000 to preserve Platinum benefits."
+    },
+    {
+      "id": "F130",
+      "statement": "For a Platinum Savings Account, if the balance dips below $50,000, a monthly maintenance fee of $25.00 may apply until the required balance is restored."
+    },
+    {
+      "id": "F131",
+      "statement": "The Platinum Savings Account earns 6.5% APY on the balance maintained."
+    },
+    {
+      "id": "F132",
+      "statement": "The Platinum Savings Account monthly withdrawal limit is -1, which indicates unlimited withdrawals for Platinum."
+    },
+    {
+      "id": "F133",
+      "statement": "Domestic wire transfer fees are waived for the Platinum Savings Account."
+    },
+    {
+      "id": "F134",
+      "statement": "For a Platinum Savings Account, for time-sensitive disbursements, a domestic wire can be considered because fees are waived and settlement is typically faster than standard external transfers."
+    },
+    {
+      "id": "F135",
+      "statement": "For a Platinum Savings Account, recipient details must always be confirmed before sending wires because wires generally cannot be reversed."
+    },
+    {
+      "id": "F136",
+      "statement": "A dedicated personal banker is available for the Platinum Savings Account."
+    },
+    {
+      "id": "F137",
+      "statement": "For a Platinum Savings Account, the dedicated personal banker can be used to request tailored support for complex transactions or financial planning within secure messaging."
+    },
+    {
+      "id": "F138",
+      "statement": "For a Platinum Savings Account, the dedicated personal banker can be used to ask for proactive account check-ins or portfolio reviews based on customer preferences."
+    },
+    {
+      "id": "F139",
+      "statement": "For a Platinum Savings Account, setting balance alerts can help the customer stay above $50,000."
+    },
+    {
+      "id": "F140",
+      "statement": "For a Platinum Savings Account, if a large withdrawal is anticipated, timing additional deposits can help maintain the required balance and avoid the $25.00 charge."
+    },
+    {
+      "id": "F141",
+      "statement": "The Platinum Plus Account initial deposit to open is $50,000."
+    },
+    {
+      "id": "F142",
+      "statement": "The Platinum Plus Account minimum balance to maintain the account is $100,000."
+    },
+    {
+      "id": "F143",
+      "statement": "The Platinum Plus Account monthly withdrawal limit is -1, meaning there is no cap on the number of withdrawals."
+    },
+    {
+      "id": "F144",
+      "statement": "The Platinum Plus Account interest is compounded daily."
+    },
+    {
+      "id": "F145",
+      "statement": "For a Platinum Plus Account, if balance or activity changes, standard account terms apply based on the stated requirements."
+    },
+    {
+      "id": "F146",
+      "statement": "The Diamond Elite Savings Account balance accrues at 7.5%."
+    },
+    {
+      "id": "F147",
+      "statement": "The Diamond Elite Savings Account APY is 7.5%."
+    },
+    {
+      "id": "F148",
+      "statement": "Diamond Elite Savings Account mobile check deposits are permitted up to $100,000 per day."
+    },
+    {
+      "id": "F149",
+      "statement": "Diamond Elite Savings Account outbound transfers are permitted up to $500,000 per day."
+    },
+    {
+      "id": "F150",
+      "statement": "Diamond Elite Savings Account external bank transfers complete in 0 business days."
+    },
+    {
+      "id": "F151",
+      "statement": "For the Diamond Elite Savings Account, all wire transfer fees are waived."
+    },
+    {
+      "id": "F152",
+      "statement": "Diamond Elite Savings Account withdrawals are not capped monthly, and the system reflects this as -1."
+    },
+    {
+      "id": "F153",
+      "statement": "The Diamond Elite Savings Account monthly maintenance fee is $0.00."
+    },
+    {
+      "id": "F154",
+      "statement": "The Diamond Elite Savings Account source lists wire transfer fees as Yes."
+    },
+    {
+      "id": "F155",
+      "statement": "Access to a dedicated private banker is available for the Diamond Elite Savings Account."
+    },
+    {
+      "id": "F156",
+      "statement": "Complimentary investment advisory is included with the Diamond Elite Savings Account."
+    },
+    {
+      "id": "F157",
+      "statement": "Invitations to exclusive events are provided with the Diamond Elite Savings Account."
+    },
+    {
+      "id": "F160",
+      "statement": "The Silver Account requirements instruct the customer to track withdrawal activity."
+    },
+    {
+      "id": "F161",
+      "statement": "The Platinum Plus Account earns 7.0% APY on balances."
+    },
+    {
+      "id": "F162",
+      "statement": "Dedicated banker support is included with the Platinum Plus Account."
+    },
+    {
+      "id": "F163",
+      "statement": "VIP event access is included with the Platinum Plus Account."
+    },
+    {
+      "id": "F164",
+      "statement": "The Platinum Plus Account includes 4 hours of complimentary wealth-guidance consultation per quarter."
+    },
+    {
+      "id": "F165",
+      "statement": "Silver Plus Tier 1 earns 3.0% APY for balances below the Tier 2 threshold."
+    },
+    {
+      "id": "F166",
+      "statement": "Silver Plus Tier 2 earns 4.5% APY for balances at or above the Tier 2 threshold."
+    },
+    {
+      "id": "F167",
+      "statement": "Silver Plus includes up to 15 free withdrawals per month."
+    },
+    {
+      "id": "F168",
+      "statement": "Silver Plus provides up to 25 ATM fee rebates each month."
+    },
+    {
+      "id": "F169",
+      "statement": "Silver Plus paper statements are available with a $0.00 monthly fee and can be enabled in account settings."
+    },
+    {
+      "id": "F170",
+      "statement": "Silver Plus does not require paperless statements, unlike Green Account (savings)."
+    },
+    {
+      "id": "F171",
+      "statement": "Silver Plus adds a 0.025% relationship APY bonus when the relationship criteria are met."
+    },
+    {
+      "id": "F172",
+      "statement": "The Gold Plus source expresses the eligible-balance APY as the literal value '6.0% percent'."
+    },
+    {
+      "id": "F173",
+      "statement": "Gold Plus automatic investment sweep is available and is designed to move surplus funds to investments when available."
+    },
+    {
+      "id": "F174",
+      "statement": "Gold Plus includes quarterly financial reviews with a dedicated specialist."
+    },
+    {
+      "id": "F175",
+      "statement": "Gold Plus has an enhanced priority-support tier for faster routing and resolution."
+    },
+    {
+      "id": "F176",
+      "statement": "When Gold Plus automatic surplus allocation is active, it reduces idle cash."
+    },
+    {
+      "id": "F177",
+      "statement": "Gold Plus structured quarterly check-ins help the customer fine-tune the approach."
+    },
+    {
+      "id": "F178",
+      "statement": "Gold Plus provides an elevated service experience through its enhanced support level."
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "type": "transcript_spec",
+      "title": "Eligible customer receives a personalized Silver Account recommendation and opens with immediate funding",
+      "support_case_spec": "A verified customer asks for a savings recommendation based on current balances, existing accounts, fee preferences, and interest goals. The support record retrieves all customer accounts with get_all_user_accounts_by_user_id_3847 before making the recommendation, confirms the customer has an active Rho-Bank checking account older than 14 days, fewer than 5 personal savings accounts, no collections, and no negative balances, applies the shared banking handbook context as a whole from tau2/hyper/sops/banking_sop.md, discusses Silver Account requirements including tracking withdrawal activity, captures an exact account_class ending with Account, opens the savings account with open_bank_account_4821, obtains authorization for the required opening-deposit transfer, performs transfer_funds_between_bank_accounts_7291, and confirms the new account details and funded status.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F017",
+        "F018",
+        "F019",
+        "F020",
+        "F021",
+        "F022",
+        "F023",
+        "F024",
+        "F025",
+        "F026",
+        "F027",
+        "F031",
+        "F033",
+        "F034",
+        "F035",
+        "F036",
+        "F037",
+        "F038",
+        "F039",
+        "F040",
+        "F041",
+        "F042",
+        "F043",
+        "F044",
+        "F045",
+        "F046",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F057",
+        "F058",
+        "F059",
+        "F060",
+        "F061",
+        "F062",
+        "F063",
+        "F064",
+        "F065",
+        "F076",
+        "F077",
+        "F078",
+        "F079",
+        "F080",
+        "F081",
+        "F082",
+        "F083",
+        "F084",
+        "F085",
+        "F086",
+        "F160"
+      ]
+    },
+    {
+      "id": "B",
+      "type": "transcript_spec",
+      "title": "Eligible customer compares Bronze and Green Account options and defers funding",
+      "support_case_spec": "A verified customer with all opening eligibility requirements met asks for a low-fee or values-based savings option. The support record covers Bronze Savings Account terms and Green Account (savings) terms, including Green paperless enrollment and debit-card material. The customer selects the Green Account (savings), the agent confirms the account selection, opens the account, asks about the opening deposit, the customer declines immediate funding, and the agent records the 30-day funding deadline, accepted funding methods, closure consequence, and acknowledgment in interaction notes.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F017",
+        "F018",
+        "F019",
+        "F020",
+        "F021",
+        "F022",
+        "F024",
+        "F025",
+        "F026",
+        "F028",
+        "F029",
+        "F030",
+        "F031",
+        "F032",
+        "F033",
+        "F034",
+        "F035",
+        "F036",
+        "F037",
+        "F038",
+        "F039",
+        "F040",
+        "F067",
+        "F068",
+        "F069",
+        "F070",
+        "F071",
+        "F072",
+        "F073",
+        "F074",
+        "F075",
+        "F097",
+        "F098",
+        "F099",
+        "F100",
+        "F101",
+        "F102",
+        "F103",
+        "F104",
+        "F105",
+        "F106",
+        "F107",
+        "F108"
+      ]
+    },
+    {
+      "id": "C",
+      "type": "transcript_spec",
+      "title": "Eligible customer evaluates Silver Plus Account tiering and opening requirements",
+      "support_case_spec": "A verified eligible customer asks for a savings option with a higher balance tier and more free withdrawals than a basic account. The support record demonstrates a recommendation or selection of Silver Plus Account without combining it with other Plus or premium-tier products, preserving the $1,000 opening deposit, $2,500 ongoing balance, $15,000 Tier 2 threshold, 3.0% and 4.5% APY tiers, daily compounding, 15 free withdrawals per month, 25 monthly ATM fee rebates, optional $0.00 paper statements, non-paperless requirement, 0.025% relationship APY bonus, and possible excess-withdrawal fee above the free limit.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F020",
+        "F021",
+        "F022",
+        "F024",
+        "F025",
+        "F087",
+        "F088",
+        "F089",
+        "F090",
+        "F091",
+        "F092",
+        "F093",
+        "F094",
+        "F095",
+        "F096",
+        "F165",
+        "F166",
+        "F167",
+        "F168",
+        "F169",
+        "F170",
+        "F171"
+      ]
+    },
+    {
+      "id": "D",
+      "type": "transcript_spec",
+      "title": "Eligible customer compares Gold Savings Account and Gold Plus Account requirements",
+      "support_case_spec": "A verified eligible customer asks for higher-balance savings options. The support record treats Gold Savings Account and Gold Plus Account as distinct products and preserves each product's balance requirements, fees, APY where stated, withdrawal limits, transfer-fee rules, Gold Plus opening deposit, sweep threshold, daily compounding, source-exact '6.0% percent' APY wording, automatic surplus allocation, quarterly specialist reviews, and enhanced priority support.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F020",
+        "F021",
+        "F022",
+        "F024",
+        "F025",
+        "F109",
+        "F110",
+        "F111",
+        "F112",
+        "F113",
+        "F114",
+        "F115",
+        "F116",
+        "F117",
+        "F118",
+        "F119",
+        "F120",
+        "F121",
+        "F122",
+        "F123",
+        "F124",
+        "F125",
+        "F126",
+        "F127",
+        "F128",
+        "F172",
+        "F173",
+        "F174",
+        "F175",
+        "F176",
+        "F177",
+        "F178"
+      ]
+    },
+    {
+      "id": "E",
+      "type": "transcript_spec",
+      "title": "Eligible customer compares Platinum Savings Account and Platinum Plus Account requirements",
+      "support_case_spec": "A verified eligible customer asks for premium savings choices with high balances and wire or withdrawal benefits. The support record keeps Platinum Savings Account and Platinum Plus Account separate, preserving Platinum's $50,000 benefit-preservation balance, possible $25.00 maintenance fee below that balance, 6.5% APY, unlimited-withdrawal encoding, domestic wire fee waiver, personal banker benefits, and guidance. Separately preserve Platinum Plus's $50,000 initial deposit, $100,000 minimum balance, no withdrawal cap, daily compounding, 7.0% APY, dedicated banker, VIP event access, 4 hours of quarterly wealth guidance, and standard-terms note.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F020",
+        "F021",
+        "F022",
+        "F024",
+        "F025",
+        "F129",
+        "F130",
+        "F131",
+        "F132",
+        "F133",
+        "F134",
+        "F135",
+        "F136",
+        "F137",
+        "F138",
+        "F139",
+        "F140",
+        "F141",
+        "F142",
+        "F143",
+        "F144",
+        "F145",
+        "F161",
+        "F162",
+        "F163",
+        "F164"
+      ]
+    },
+    {
+      "id": "F",
+      "type": "transcript_spec",
+      "title": "Customer asks about Diamond Elite Savings Account benefits and limits",
+      "support_case_spec": "A customer asks about the Diamond Elite Savings Account as a distinct premium product. The support record preserves Diamond Elite's 7.5% accrual and APY, $100,000 daily mobile deposit limit, $500,000 daily outbound-transfer limit, 0-business-day external transfer processing time, wire-fee waiver statement, separate source listing of wire transfer fees as Yes, uncapped monthly withdrawals reflected as -1, $0.00 monthly maintenance fee, private banker access, complimentary investment advisory, and exclusive event invitations.",
+      "included_fact_ids": [
+        "F146",
+        "F147",
+        "F148",
+        "F149",
+        "F150",
+        "F151",
+        "F152",
+        "F153",
+        "F154",
+        "F155",
+        "F156",
+        "F157"
+      ]
+    },
+    {
+      "id": "G",
+      "type": "transcript_spec",
+      "title": "Opening request denied because customer already has 5 personal savings accounts",
+      "support_case_spec": "A verified customer requests a new personal savings account, and account lookup shows the customer already has 5 personal savings accounts while other facts are not used to obscure the account-limit reason. The support record shows the agent does not open a new account and informs the customer that the maximum has been reached.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F010",
+        "F014",
+        "F018",
+        "F047",
+        "F048",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F057",
+        "F058",
+        "F059",
+        "F063"
+      ]
+    },
+    {
+      "id": "H",
+      "type": "transcript_spec",
+      "title": "Opening request denied because checking account tenure is fewer than 14 days",
+      "support_case_spec": "A verified customer has an active Rho-Bank checking account, but account lookup shows the checking account has been open fewer than 14 days and no other ineligibility reason is introduced. The support record shows the agent does not open a savings account and advises when the customer will become eligible.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F013",
+        "F014",
+        "F017",
+        "F049",
+        "F052",
+        "F053",
+        "F059",
+        "F062"
+      ]
+    },
+    {
+      "id": "I",
+      "type": "transcript_spec",
+      "title": "Opening request denied because an account is in collections",
+      "support_case_spec": "A verified customer requests a personal savings account and account lookup shows an account in collections, without adding a negative balance or other independent denial reason. The support record shows the agent does not proceed and indicates the collections issue must be resolved first before all accounts are in good standing.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F011",
+        "F014",
+        "F019",
+        "F050",
+        "F052",
+        "F053",
+        "F057",
+        "F060"
+      ]
+    },
+    {
+      "id": "J",
+      "type": "transcript_spec",
+      "title": "Opening request denied because an account has a negative balance",
+      "support_case_spec": "A verified customer requests a personal savings account and account lookup shows a negative balance, without adding collections or another independent denial reason. The support record shows the agent does not proceed and indicates the negative-balance issue must be resolved first before all accounts are in good standing.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F012",
+        "F014",
+        "F019",
+        "F051",
+        "F052",
+        "F053",
+        "F058",
+        "F061"
+      ]
+    },
+    {
+      "id": "K",
+      "type": "transcript_spec",
+      "title": "Opening request denied because customer lacks an active Rho-Bank checking account",
+      "support_case_spec": "A verified customer requests a personal savings account, and account lookup shows no active Rho-Bank checking account while no other ineligibility reason is introduced. The support record shows the agent does not proceed because the active-checking eligibility requirement is not met.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F014",
+        "F017",
+        "F052",
+        "F053",
+        "F055",
+        "F057",
+        "F060"
+      ]
+    },
+    {
+      "id": "L",
+      "type": "transcript_spec",
+      "title": "Opening request stops before account-specific eligibility review because identity is not verified",
+      "support_case_spec": "A customer requests a personal savings account, but identity verification cannot be completed or verified in the bank systems. The support record shows the opening workflow stops before proceeding with account-specific eligibility or account-modifying actions, preserving the identity prerequisite without combining it with another eligibility failure.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F014",
+        "F016"
+      ]
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/personal_savings_opening_recommendation/evidence_corpus_hard_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/personal_savings_opening_recommendation/client_overlay_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/personal_savings_opening_recommendation/client_overlay_deposit_opening_001/transformation_pack.json"
+    }
+  ]
+}

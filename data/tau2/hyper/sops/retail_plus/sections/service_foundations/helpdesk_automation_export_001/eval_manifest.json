@@ -1,0 +1,443 @@
+{
+  "representation": "helpdesk_automation_export",
+  "filename": "northstar_care_admin_export_2026-06-05.zip",
+  "authoritative_fact_ids": [
+    "authorized_actions_are_closed_scope",
+    "cancellation_reason_values_are_closed_and_exact",
+    "cancelled_order_optional_field",
+    "cancelled_orders_have_no_further_action",
+    "cancelled_status_meaning",
+    "cannot_modify_or_cancel_shipped_order",
+    "customer_information_lookup_allowed",
+    "delivered_order_allowed_actions",
+    "delivered_status_meaning",
+    "exchange_optional_fields",
+    "exchange_requested_status_meaning",
+    "optional_order_fields_are_closed",
+    "order_status_values_are_closed_and_exact",
+    "pending_item_modification_adds_no_fields",
+    "pending_item_modification_appends_payment_history",
+    "pending_item_modification_replaces_items_in_place",
+    "pending_item_modification_sets_exact_status",
+    "pending_items_modified_status_meaning",
+    "pending_order_allowed_actions",
+    "pending_status_meaning",
+    "processed_orders_wait_until_delivered",
+    "processed_status_meaning",
+    "profile_default_address_allowed_action",
+    "return_optional_fields",
+    "return_requested_status_meaning"
+  ],
+  "authority_rule": {
+    "environment": "production",
+    "active": true,
+    "status": "published",
+    "effective_at_or_before": "2026-06-05T18:00:00-04:00",
+    "superseded_by": null,
+    "usage_role": "corroborating_only"
+  },
+  "fact_evidence": [
+    {
+      "fact_id": "authorized_actions_are_closed_scope",
+      "file": "macros.json",
+      "object_ids": [
+        "CONTRACT-1001",
+        "MAC-1005",
+        "MAC-1012",
+        "MAC-1020",
+        "MAC-1060"
+      ],
+      "locations": [
+        "policy_contracts[].closed_world",
+        "macros[].steps"
+      ],
+      "claim_type": "closed_world_policy",
+      "closure_object_ids": [
+        "CONTRACT-1001"
+      ],
+      "files": [
+        "policy_contracts.json",
+        "macros.json"
+      ]
+    },
+    {
+      "fact_id": "cancellation_reason_values_are_closed_and_exact",
+      "file": "fields.csv",
+      "object_ids": [
+        "CONTRACT-1002",
+        "FLD-CANCEL-01",
+        "FLD-CANCEL-02"
+      ],
+      "locations": [
+        "policy_contracts[].closed_world",
+        "field_key=order.cancel_reason",
+        "option_value"
+      ],
+      "claim_type": "closed_world_policy",
+      "closure_object_ids": [
+        "CONTRACT-1002"
+      ],
+      "files": [
+        "policy_contracts.json",
+        "fields.csv"
+      ]
+    },
+    {
+      "fact_id": "cancelled_order_optional_field",
+      "file": "fields.csv",
+      "object_ids": [
+        "FLD-OPT-01"
+      ],
+      "locations": [
+        "field_key",
+        "required_when"
+      ],
+      "claim_type": "conditional_schema_rule"
+    },
+    {
+      "fact_id": "cancelled_orders_have_no_further_action",
+      "file": "macros.json",
+      "object_ids": [
+        "CONTRACT-1001",
+        "MAC-1040"
+      ],
+      "locations": [
+        "policy_contracts[].closed_world",
+        "macros[].steps",
+        "policy_contracts[].information_access"
+      ],
+      "claim_type": "closed_world_policy",
+      "closure_object_ids": [
+        "CONTRACT-1001"
+      ],
+      "files": [
+        "policy_contracts.json",
+        "macros.json"
+      ]
+    },
+    {
+      "fact_id": "cancelled_status_meaning",
+      "file": "fields.csv",
+      "object_ids": [
+        "FLD-STATUS-04"
+      ],
+      "locations": [
+        "operational_definition"
+      ],
+      "claim_type": "authoritative_definition"
+    },
+    {
+      "fact_id": "cannot_modify_or_cancel_shipped_order",
+      "file": "macros.json",
+      "object_ids": [
+        "CONTRACT-1001",
+        "MAC-1050"
+      ],
+      "locations": [
+        "policy_contracts[].closed_world",
+        "macros[].steps"
+      ],
+      "claim_type": "closed_world_policy",
+      "closure_object_ids": [
+        "CONTRACT-1001"
+      ],
+      "files": [
+        "policy_contracts.json",
+        "macros.json"
+      ]
+    },
+    {
+      "fact_id": "customer_information_lookup_allowed",
+      "file": "policy_contracts.json",
+      "object_ids": [
+        "CONTRACT-1001"
+      ],
+      "locations": [
+        "policy_contracts[].information_access"
+      ],
+      "claim_type": "positive_capability"
+    },
+    {
+      "fact_id": "delivered_order_allowed_actions",
+      "file": "macros.json",
+      "object_ids": [
+        "MAC-1010",
+        "MAC-1011",
+        "MAC-1012"
+      ],
+      "locations": [
+        "macros[].steps",
+        "macros[].integration_action"
+      ],
+      "claim_type": "positive_capability"
+    },
+    {
+      "fact_id": "delivered_status_meaning",
+      "file": "fields.csv",
+      "object_ids": [
+        "FLD-STATUS-03"
+      ],
+      "locations": [
+        "operational_definition"
+      ],
+      "claim_type": "authoritative_definition"
+    },
+    {
+      "fact_id": "exchange_optional_fields",
+      "file": "fields.csv",
+      "object_ids": [
+        "FLD-OPT-04",
+        "FLD-OPT-05",
+        "FLD-OPT-06",
+        "FLD-OPT-07"
+      ],
+      "locations": [
+        "field_key",
+        "required_when"
+      ],
+      "claim_type": "conditional_schema_rule"
+    },
+    {
+      "fact_id": "exchange_requested_status_meaning",
+      "file": "fields.csv",
+      "object_ids": [
+        "FLD-STATUS-07"
+      ],
+      "locations": [
+        "operational_definition"
+      ],
+      "claim_type": "authoritative_definition"
+    },
+    {
+      "fact_id": "optional_order_fields_are_closed",
+      "file": "fields.csv",
+      "object_ids": [
+        "CONTRACT-1002",
+        "FLD-OPT-01",
+        "FLD-OPT-02",
+        "FLD-OPT-03",
+        "FLD-OPT-04",
+        "FLD-OPT-05",
+        "FLD-OPT-06",
+        "FLD-OPT-07"
+      ],
+      "locations": [
+        "policy_contracts[].closed_world",
+        "group_name=conditional_order_fields"
+      ],
+      "claim_type": "closed_world_policy",
+      "closure_object_ids": [
+        "CONTRACT-1002"
+      ],
+      "files": [
+        "policy_contracts.json",
+        "fields.csv"
+      ]
+    },
+    {
+      "fact_id": "order_status_values_are_closed_and_exact",
+      "file": "fields.csv",
+      "object_ids": [
+        "CONTRACT-1002",
+        "FLD-STATUS-01",
+        "FLD-STATUS-02",
+        "FLD-STATUS-03",
+        "FLD-STATUS-04",
+        "FLD-STATUS-05",
+        "FLD-STATUS-06",
+        "FLD-STATUS-07"
+      ],
+      "locations": [
+        "policy_contracts[].closed_world",
+        "field_key=order.status",
+        "option_value"
+      ],
+      "claim_type": "closed_world_policy",
+      "closure_object_ids": [
+        "CONTRACT-1002"
+      ],
+      "files": [
+        "policy_contracts.json",
+        "fields.csv"
+      ]
+    },
+    {
+      "fact_id": "pending_item_modification_adds_no_fields",
+      "file": "triggers.json",
+      "object_ids": [
+        "CONTRACT-1003",
+        "TRG-2005"
+      ],
+      "locations": [
+        "policy_contracts[].closed_world",
+        "triggers[].write_contract"
+      ],
+      "claim_type": "closed_world_policy",
+      "closure_object_ids": [
+        "CONTRACT-1003"
+      ],
+      "files": [
+        "policy_contracts.json",
+        "triggers.json"
+      ]
+    },
+    {
+      "fact_id": "pending_item_modification_appends_payment_history",
+      "file": "triggers.json",
+      "object_ids": [
+        "TRG-2004"
+      ],
+      "locations": [
+        "triggers[].actions"
+      ],
+      "claim_type": "deterministic_machine_rule"
+    },
+    {
+      "fact_id": "pending_item_modification_replaces_items_in_place",
+      "file": "triggers.json",
+      "object_ids": [
+        "TRG-2002"
+      ],
+      "locations": [
+        "triggers[].actions"
+      ],
+      "claim_type": "deterministic_machine_rule"
+    },
+    {
+      "fact_id": "pending_item_modification_sets_exact_status",
+      "file": "triggers.json",
+      "object_ids": [
+        "TRG-2003"
+      ],
+      "locations": [
+        "triggers[].actions"
+      ],
+      "claim_type": "deterministic_machine_rule"
+    },
+    {
+      "fact_id": "pending_items_modified_status_meaning",
+      "file": "fields.csv",
+      "object_ids": [
+        "CONTRACT-1001",
+        "FLD-STATUS-05"
+      ],
+      "locations": [
+        "policy_contracts[].closed_world",
+        "operational_definition"
+      ],
+      "claim_type": "closed_world_policy",
+      "closure_object_ids": [
+        "CONTRACT-1001"
+      ],
+      "files": [
+        "policy_contracts.json",
+        "fields.csv"
+      ]
+    },
+    {
+      "fact_id": "pending_order_allowed_actions",
+      "file": "macros.json",
+      "object_ids": [
+        "MAC-1001",
+        "MAC-1002",
+        "MAC-1003",
+        "MAC-1004",
+        "MAC-1005"
+      ],
+      "locations": [
+        "macros[].steps",
+        "macros[].integration_action"
+      ],
+      "claim_type": "positive_capability"
+    },
+    {
+      "fact_id": "pending_status_meaning",
+      "file": "fields.csv",
+      "object_ids": [
+        "FLD-STATUS-01"
+      ],
+      "locations": [
+        "operational_definition"
+      ],
+      "claim_type": "authoritative_definition"
+    },
+    {
+      "fact_id": "processed_orders_wait_until_delivered",
+      "file": "macros.json",
+      "object_ids": [
+        "CONTRACT-1001",
+        "MAC-1030",
+        "MAC-1031",
+        "MAC-1032"
+      ],
+      "locations": [
+        "policy_contracts[].closed_world",
+        "macros[].steps"
+      ],
+      "claim_type": "closed_world_policy",
+      "closure_object_ids": [
+        "CONTRACT-1001"
+      ],
+      "files": [
+        "policy_contracts.json",
+        "macros.json"
+      ]
+    },
+    {
+      "fact_id": "processed_status_meaning",
+      "file": "fields.csv",
+      "object_ids": [
+        "FLD-STATUS-02"
+      ],
+      "locations": [
+        "operational_definition"
+      ],
+      "claim_type": "authoritative_definition"
+    },
+    {
+      "fact_id": "profile_default_address_allowed_action",
+      "file": "macros.json",
+      "object_ids": [
+        "MAC-1020"
+      ],
+      "locations": [
+        "macros[].steps",
+        "macros[].integration_action"
+      ],
+      "claim_type": "positive_capability"
+    },
+    {
+      "fact_id": "return_optional_fields",
+      "file": "fields.csv",
+      "object_ids": [
+        "FLD-OPT-02",
+        "FLD-OPT-03"
+      ],
+      "locations": [
+        "field_key",
+        "required_when"
+      ],
+      "claim_type": "conditional_schema_rule"
+    },
+    {
+      "fact_id": "return_requested_status_meaning",
+      "file": "fields.csv",
+      "object_ids": [
+        "FLD-STATUS-06"
+      ],
+      "locations": [
+        "operational_definition"
+      ],
+      "claim_type": "authoritative_definition"
+    }
+  ],
+  "expected_counts": {
+    "macros": 60,
+    "triggers": 25,
+    "policy_contracts": 8,
+    "field_rows": 55,
+    "sla_policies": 6,
+    "views": 12,
+    "zip_members": 7
+  }
+}

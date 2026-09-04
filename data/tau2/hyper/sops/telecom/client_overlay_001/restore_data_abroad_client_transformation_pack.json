@@ -1,0 +1,192 @@
+{
+  "id": "telecom_restore_data_abroad_client_overlay_pack_001",
+  "section_id": "restore_data_abroad",
+  "transformations": [
+    {
+      "id": "telecom_restore_data_abroad_roaming_recovery_maps_client_001",
+      "representation": "process_flowchart",
+      "stub_path": "tau2/hyper/sops/telecom/sections/restore_data_abroad/bundles/jira_flowchart/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_data_abroad/process_flowchart_001_roaming_recovery/roaming_recovery_01_intake_phone.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_data_abroad/process_flowchart_001_roaming_recovery/roaming_recovery_01_intake_phone.txt",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/client_overlay_001/restore_data_abroad/sidecars/telecom_restore_data_abroad_roaming_recovery_maps_client_001/eval_manifest.json",
+          "kit_filename": "roaming_recovery_01_intake_phone.png",
+          "reference_id": "roaming-recovery-map-v3-01",
+          "artifact_ref": "roaming-recovery-map-v3-01",
+          "included_fact_ids": [
+            "roaming_has_phone_and_carrier_layers",
+            "abroad_data_requires_layers_active_line_data_usage",
+            "applies_to_abroad_customer_with_bad_data",
+            "check_phone_side_roaming_first",
+            "phone_roaming_off_enable_and_rerun"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/client_overlay_001/restore_data_abroad/flowchart/roaming_recovery_02_outcomes.png",
+          "text_source_path": "tau2/hyper/sops/telecom/client_overlay_001/restore_data_abroad/flowchart/roaming_recovery_02_outcomes.txt",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/client_overlay_001/restore_data_abroad/sidecars/telecom_restore_data_abroad_roaming_recovery_maps_client_001/eval_manifest.json",
+          "kit_filename": "roaming_recovery_02_outcomes.png",
+          "reference_id": "roaming-recovery-map-v3-02",
+          "artifact_ref": "roaming-recovery-map-v3-02",
+          "included_fact_ids": [
+            "close_when_both_layers_on_and_excellent"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "telecom_restore_data_abroad_jira_decision_export_client_001",
+      "representation": "jira_issue_export",
+      "stub_path": "tau2/hyper/sops/telecom/sections/restore_data_abroad/bundles/jira_flowchart/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/telecom/client_overlay_001/restore_data_abroad/sidecars/telecom_restore_data_abroad_jira_decision_export_client_001/jira_eval_manifest.json",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/client_overlay_001/restore_data_abroad/jira/jira_issue_export.json",
+          "kit_filename": "jira_issue_export.json",
+          "reference_id": "northline-travel-care-jira-snapshot",
+          "artifact_ref": "northline-travel-care-jira-snapshot",
+          "included_fact_ids": [
+            "explain_carrier_roaming_needed_when_off",
+            "identify_line_before_carrier_roaming_check",
+            "rerun_speed_test_after_carrier_step"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "telecom_restore_data_abroad_support_transcripts_client_001",
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/telecom/sections/restore_data_abroad/bundles/jira_flowchart/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/telecom/client_overlay_001/restore_data_abroad/sidecars/telecom_restore_data_abroad_support_transcripts_client_001/eval_manifest.json",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/client_overlay_001/restore_data_abroad/transcripts/case_001.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/hard_bundle_001/restore_data_abroad/support_transcripts_001/case_002.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/client_overlay_001/restore_data_abroad/transcripts/case_003.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/hard_bundle_001/restore_data_abroad/support_transcripts_001/case_004.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/hard_bundle_001/restore_data_abroad/support_transcripts_001/case_005.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/client_overlay_001/restore_data_abroad/transcripts/case_006.md",
+          "included_fact_ids": []
+        }
+      ]
+    },
+    {
+      "id": "telecom_restore_data_abroad_client_knowledge_001",
+      "representation": "client_knowledge",
+      "stub_path": "tau2/hyper/sops/telecom/client_overlay_001/restore_data_abroad/bundles/restore_data_abroad_jira_flowchart_archive_hard_client_001/stub.md",
+      "fact_ids": [
+        "confirm_before_enabling_carrier_roaming",
+        "enable_carrier_roaming_after_confirmation",
+        "unavailable_with_both_layers_on_returns_to_mobile_data_settings",
+        "working_but_slow_returns_to_slow_data_steps"
+      ],
+      "confirmable_fact_ids": [
+        "explain_carrier_roaming_needed_when_off"
+      ],
+      "discovery_tiers": {
+        "confirm_before_enabling_carrier_roaming": "pointer",
+        "enable_carrier_roaming_after_confirmation": "pointer",
+        "unavailable_with_both_layers_on_returns_to_mobile_data_settings": "pointer",
+        "working_but_slow_returns_to_slow_data_steps": "caveat"
+      }
+    }
+  ],
+  "transformation_bundles": [
+    {
+      "id": "restore_data_abroad_jira_flowchart_archive_hard_client_001",
+      "client_overlay_of": "restore_data_abroad_jira_flowchart_archive_hard_001",
+      "member_substitutions": {
+        "telecom_restore_data_abroad_roaming_recovery_maps_hard_001": "telecom_restore_data_abroad_roaming_recovery_maps_client_001",
+        "telecom_restore_data_abroad_jira_decision_export_hard_001": "telecom_restore_data_abroad_jira_decision_export_client_001",
+        "telecom_restore_data_abroad_support_transcripts_hard_001": "telecom_restore_data_abroad_support_transcripts_client_001"
+      },
+      "description": "Client-knowledge overlay of restore_data_abroad_jira_flowchart_archive_hard_001: 4 facts are held by the Client simulator and carved out of the substituted members.",
+      "stub_path": "tau2/hyper/sops/telecom/client_overlay_001/restore_data_abroad/bundles/restore_data_abroad_jira_flowchart_archive_hard_client_001/stub.md",
+      "fact_ids": [
+        "roaming_has_phone_and_carrier_layers",
+        "abroad_data_requires_layers_active_line_data_usage",
+        "applies_to_abroad_customer_with_bad_data",
+        "check_phone_side_roaming_first",
+        "phone_roaming_off_enable_and_rerun",
+        "identify_line_before_carrier_roaming_check",
+        "explain_carrier_roaming_needed_when_off",
+        "confirm_before_enabling_carrier_roaming",
+        "enable_carrier_roaming_after_confirmation",
+        "rerun_speed_test_after_carrier_step",
+        "close_when_both_layers_on_and_excellent",
+        "working_but_slow_returns_to_slow_data_steps",
+        "unavailable_with_both_layers_on_returns_to_mobile_data_settings"
+      ],
+      "members": [
+        {
+          "transformation_id": "telecom_restore_data_abroad_roaming_recovery_maps_client_001",
+          "primary": true,
+          "authoritative_fact_ids": [
+            "roaming_has_phone_and_carrier_layers",
+            "abroad_data_requires_layers_active_line_data_usage",
+            "applies_to_abroad_customer_with_bad_data",
+            "check_phone_side_roaming_first",
+            "phone_roaming_off_enable_and_rerun",
+            "close_when_both_layers_on_and_excellent"
+          ],
+          "depends_on_fact_ids": [
+            "identify_line_before_carrier_roaming_check",
+            "explain_carrier_roaming_needed_when_off",
+            "confirm_before_enabling_carrier_roaming",
+            "enable_carrier_roaming_after_confirmation",
+            "rerun_speed_test_after_carrier_step"
+          ]
+        },
+        {
+          "transformation_id": "telecom_restore_data_abroad_jira_decision_export_client_001",
+          "authoritative_fact_ids": [
+            "identify_line_before_carrier_roaming_check",
+            "explain_carrier_roaming_needed_when_off",
+            "rerun_speed_test_after_carrier_step"
+          ],
+          "depends_on_fact_ids": [
+            "check_phone_side_roaming_first",
+            "phone_roaming_off_enable_and_rerun"
+          ]
+        },
+        {
+          "transformation_id": "telecom_restore_data_abroad_support_transcripts_client_001",
+          "authoritative_fact_ids": [],
+          "depends_on_fact_ids": [
+            "confirm_before_enabling_carrier_roaming",
+            "enable_carrier_roaming_after_confirmation",
+            "explain_carrier_roaming_needed_when_off",
+            "identify_line_before_carrier_roaming_check",
+            "unavailable_with_both_layers_on_returns_to_mobile_data_settings",
+            "working_but_slow_returns_to_slow_data_steps"
+          ]
+        },
+        {
+          "transformation_id": "telecom_restore_data_abroad_client_knowledge_001",
+          "authoritative_fact_ids": [
+            "confirm_before_enabling_carrier_roaming",
+            "enable_carrier_roaming_after_confirmation",
+            "unavailable_with_both_layers_on_returns_to_mobile_data_settings",
+            "working_but_slow_returns_to_slow_data_steps"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CCD-PC-201 rev B — Provisional credit eligibility decision board</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 1360px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #23405f; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #c3d2e2; }
+  .lane { position: absolute; border: 1px dashed #b9c4cf; border-radius: 8px; }
+  .lanelabel { position: absolute; font-size: 12px; font-weight: 600; color: #6b7885; letter-spacing: .6px; text-transform: uppercase; }
+  .node { position: absolute; box-sizing: border-box; background: #fff; border: 2px solid #35506e; border-radius: 8px; padding: 10px 12px; font-size: 13.5px; color: #1d2833; line-height: 1.35; }
+  .start { border-color: #2e7d54; background: #f2faf5; }
+  .decision { border-color: #a2662a; background: #fdf7ee; }
+  .step { border-color: #35506e; }
+  .warn { border-color: #9d3535; background: #fdf1f1; }
+  .good { border-color: #2e7d54; background: #f2faf5; }
+  .note { position: absolute; box-sizing: border-box; background: #fffbe8; border: 1px solid #d9c98a; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; color: #4c4630; line-height: 1.35; }
+  .edge { position: absolute; background: #55677a; }
+  .h { height: 2px; } .v { width: 2px; }
+  .lbl { position: absolute; font-size: 11.5px; color: #55677a; background: #fbfcfd; padding: 0 4px; }
+  .foot { position: absolute; left: 24px; bottom: 12px; font-size: 11.5px; color: #7b8794; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>CCD-PC-201 rev B — Provisional credit eligibility decision board</h1>
+    <div class="meta">Dispute Operations &middot; owner: P. Raman &middot; published 2025-10-29 &middot; box definitions per the 2025-10-28 norming session &middot; board of record for the eligibility determination</div>
+  </div>
+
+  <div class="lane" style="left:24px; top:92px; width:760px; height:1180px;"></div>
+  <div class="lanelabel" style="left:40px; top:100px;">The five boxes — walk in order, stop at the first red</div>
+
+  <div class="node start" style="left:56px; top:140px; width:330px;">Dispute filed or being filed &mdash; run the provisional-credit determination</div>
+
+  <div class="node decision" style="left:56px; top:236px; width:330px;">Box 1 &mdash; Account standing: has the credit card account been open for at least 60 days?</div>
+
+  <div class="node decision" style="left:56px; top:356px; width:330px;">Box 2 &mdash; Reason category: does the dispute reason satisfy the eligible category? (see category panel, right)</div>
+
+  <div class="node decision" style="left:56px; top:476px; width:330px;">Box 3 &mdash; Amount: is the disputed transaction amount at least $25.00 and not above the card tier&rsquo;s maximum provisional credit limit?</div>
+
+  <div class="node decision" style="left:56px; top:610px; width:330px;">Box 4 &mdash; Dispute history: does the customer&rsquo;s dispute count pass the previous-disputes criterion? (see history panel, right)</div>
+
+  <div class="node decision" style="left:56px; top:730px; width:330px;">Box 5 &mdash; Merchant contact (non-fraud only): for any dispute reason other than unauthorized_fraudulent_charge, the customer must have attempted to resolve the issue with the merchant first. Fraud disputes skip this box.</div>
+
+  <div class="node good" style="left:56px; top:890px; width:330px;">All five boxes green &mdash; customer is ELIGIBLE. Pass eligible_for_provisional_credit accordingly on the filing.</div>
+
+  <div class="node warn" style="left:470px; top:520px; width:280px;">Any box red &mdash; NOT ELIGIBLE. Stop at the first red box; the remaining boxes do not rescue the determination. File the dispute either way &mdash; eligibility gates only the temporary credit.</div>
+
+  <div class="edge v" style="left:220px; top:196px; height:40px;"></div>
+  <div class="edge v" style="left:220px; top:312px; height:44px;"></div>
+  <div class="lbl" style="left:228px; top:322px;">yes</div>
+  <div class="edge v" style="left:220px; top:432px; height:44px;"></div>
+  <div class="lbl" style="left:228px; top:442px;">satisfied</div>
+  <div class="edge v" style="left:220px; top:556px; height:54px;"></div>
+  <div class="lbl" style="left:228px; top:570px;">in range</div>
+  <div class="edge v" style="left:220px; top:686px; height:44px;"></div>
+  <div class="lbl" style="left:228px; top:696px;">passes</div>
+  <div class="edge v" style="left:220px; top:830px; height:60px;"></div>
+  <div class="lbl" style="left:228px; top:848px;">satisfied / skipped (fraud)</div>
+  <div class="edge h" style="left:386px; top:560px; width:84px;"></div>
+  <div class="lbl" style="left:392px; top:544px;">any red</div>
+
+  <div class="lane" style="left:820px; top:92px; width:716px; height:1180px;"></div>
+  <div class="lanelabel" style="left:836px; top:100px;">Box definitions &amp; deference panels</div>
+
+  <div class="node step" style="left:852px; top:140px; width:650px;">Category panel (Box 2). The reason-category criterion is satisfied only by: unauthorized_fraudulent_charge; duplicate_charge; or goods_services_not_received with the additional condition that the purchase was made more than 30 days ago. Every other dispute reason fails the category criterion.</div>
+
+  <div class="note" style="left:852px; top:296px; width:650px;">Category panel notes, per the 2025-10-28 norming session: goods_services_not_received inside the 30-day window fails the box today and may pass it later &mdash; diarize and re-run the determination. The category list is closed; the code on the filing is the code that counts.</div>
+
+  <div class="node step" style="left:852px; top:420px; width:650px;">Amount panel (Box 3). The floor is $25.00. The ceiling is the card&rsquo;s maximum provisional credit limit for its tier &mdash; caps and tier card lists live in the Card Program Matrices workbook (2025 v4, effective 07/01/2025). Compare the single disputed transaction amount; never net or combine.</div>
+
+  <div class="note" style="left:852px; top:556px; width:650px;">History panel (Box 4). The previous-disputes criterion is stated in the floor ruling pinned in the disputes-desk channel on 2025-10-26 &mdash; this board defers to the pin and does not restate the count. Pull the customer&rsquo;s dispute history and count it yourself; never take the customer&rsquo;s number.</div>
+
+  <div class="note" style="left:852px; top:676px; width:650px;">Merchant-contact panel (Box 5). Contact satisfies exactly one box &mdash; it does not repair a failed category or amount box. Fraud is exempt because we never send a customer to negotiate with their thief (norming session, case eight).</div>
+
+  <div class="note" style="left:852px; top:800px; width:650px;">Provenance. Box walk and the ten worked failure cases: norming session recording, 2025-10-28, training library. Intake questions and filing arguments: calibration session recording, 2025-10-24, and the console filing macro. This board is the decision spine only.</div>
+
+  <div class="node step" style="left:852px; top:930px; width:650px;">Record the determination and the box that failed (if any) in the case note before filing. The determination is binary and it is the agent&rsquo;s own &mdash; guidelines, not guesswork.</div>
+
+  <div class="note" style="left:56px; top:1010px; width:694px;">History: rev A (2025-10-27 working copy) drew the boxes in a different order and left the fraud exemption implicit; superseded by this rev B on publication, 2025-10-29. The retired copy lives in the design-history folder.</div>
+
+  <div class="foot">CCD-PC-201 rev B &middot; Dispute Operations &middot; internal — not customer-facing</div>
+</div>
+</body>
+</html>

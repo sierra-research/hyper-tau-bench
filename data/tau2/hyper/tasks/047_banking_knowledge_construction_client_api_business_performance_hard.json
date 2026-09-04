@@ -1,0 +1,181 @@
+{
+  "id": "047_banking_knowledge_construction_client_api_business_performance_hard",
+  "source_domain": "banking_knowledge",
+  "task_type": "construction",
+  "task_description": "Build a Banking Knowledge customer service agent scoped to the business-banking journey (business checking and savings account opening promotions and business credit card selection) against a client-owned REST API. The initial OpenAPI document exposes baseline operations; retrieved procedures and evidence document additional directly callable operations.",
+  "sop_variant_manifest_path": "tau2/hyper/sops/banking_knowledge/variants/core_evidence_bundle_001.json",
+  "knowledge_base_path": "tau2/domains/banking_knowledge/documents",
+  "knowledge_base_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_002.json",
+    "doc_bank_accounts_bank_accounts_(general)_003.json",
+    "doc_bank_accounts_bank_accounts_(general)_004.json",
+    "doc_bank_accounts_bank_accounts_(general)_005.json",
+    "doc_bank_accounts_bank_accounts_(general)_006.json",
+    "doc_bank_accounts_bank_accounts_(general)_009.json",
+    "doc_bank_accounts_bank_accounts_(general)_010.json",
+    "doc_bank_accounts_bank_accounts_(general)_013.json",
+    "doc_bank_accounts_bank_accounts_(general)_014.json",
+    "doc_bank_accounts_bank_accounts_(general)_015.json",
+    "doc_bank_accounts_bank_accounts_(general)_016.json",
+    "doc_business_checking_accounts_beige_001.json",
+    "doc_business_checking_accounts_cobalt_blue_001.json",
+    "doc_business_checking_accounts_cobalt_blue_002.json",
+    "doc_business_checking_accounts_cobalt_blue_004.json",
+    "doc_business_checking_accounts_cobalt_blue_006.json",
+    "doc_business_checking_accounts_hunter_green_001.json",
+    "doc_business_checking_accounts_hunter_green_010.json",
+    "doc_business_checking_accounts_lime_green_001.json",
+    "doc_business_checking_accounts_lime_green_007.json",
+    "doc_business_checking_accounts_navy_blue_001.json",
+    "doc_business_checking_accounts_sky_blue_001.json",
+    "doc_business_checking_accounts_sky_blue_007.json",
+    "doc_business_checking_accounts_sky_blue_010.json",
+    "doc_business_checking_accounts_true_blue_001.json",
+    "doc_business_checking_accounts_world_blue_001.json",
+    "doc_business_credit_cards_business_bronze_rewards_card_001.json",
+    "doc_business_credit_cards_business_bronze_rewards_card_002.json",
+    "doc_business_credit_cards_business_bronze_rewards_card_006.json",
+    "doc_business_credit_cards_business_bronze_rewards_card_010.json",
+    "doc_business_credit_cards_business_platinum_rewards_card_001.json",
+    "doc_business_credit_cards_business_platinum_rewards_card_002.json",
+    "doc_business_credit_cards_business_platinum_rewards_card_008.json",
+    "doc_business_credit_cards_business_platinum_rewards_card_011.json",
+    "doc_business_credit_cards_business_silver_rewards_card_001.json",
+    "doc_business_credit_cards_business_silver_rewards_card_002.json",
+    "doc_business_credit_cards_business_silver_rewards_card_005.json",
+    "doc_business_credit_cards_business_silver_rewards_card_012.json",
+    "doc_business_savings_accounts_bronze_saver_account_001.json",
+    "doc_business_savings_accounts_diamond_vault_001.json",
+    "doc_business_savings_accounts_emerald_saver_001.json",
+    "doc_business_savings_accounts_gold_plus_saver_001.json",
+    "doc_business_savings_accounts_gold_plus_saver_006.json",
+    "doc_business_savings_accounts_gold_saver_account_001.json",
+    "doc_business_savings_accounts_gold_saver_account_006.json",
+    "doc_business_savings_accounts_platinum_reserve_account_001.json",
+    "doc_business_savings_accounts_silver_plus_saver_001.json",
+    "doc_business_savings_accounts_silver_plus_saver_002.json",
+    "doc_business_savings_accounts_silver_plus_saver_003.json",
+    "doc_business_savings_accounts_silver_plus_saver_006.json",
+    "doc_business_savings_accounts_silver_saver_account_001.json",
+    "doc_savings_accounts_silver_plus_account_001.json",
+    "doc_savings_accounts_silver_plus_account_002.json",
+    "doc_savings_accounts_silver_plus_account_004.json"
+  ],
+  "composition_pipeline": [
+    {
+      "stage": "information_distribution",
+      "variant_manifest_path": "tau2/hyper/sops/banking_knowledge/variants/core_evidence_bundle_001.json",
+      "transformed_sections": [
+        "business_checking_opening_promotions",
+        "business_savings_opening_promotions",
+        "business_credit_card_selection_promos"
+      ]
+    }
+  ],
+  "test_task_ids": [
+    "task_024",
+    "task_025",
+    "task_056",
+    "task_062",
+    "task_070",
+    "task_071",
+    "task_103",
+    "task_104",
+    "task_105",
+    "task_106",
+    "task_107",
+    "task_108",
+    "task_109",
+    "task_110",
+    "task_111",
+    "task_112",
+    "task_113",
+    "task_114",
+    "task_115",
+    "task_116"
+  ],
+  "interaction_mode": "sandbox",
+  "client_api_mode": "rest",
+  "sandbox_config": {
+    "max_time_seconds": 28800,
+    "command_timeout": 120,
+    "docker_image": "tau2-construction-runtime:contract-v7",
+    "docker_memory": "4g",
+    "docker_cpus": "2"
+  },
+  "performance_profile": {
+    "hard": {
+      "budget": 0.05,
+      "models": [
+        {
+          "model": "gpt-5.6-luna",
+          "constraints": {
+            "reasoning_effort": "none"
+          }
+        },
+        {
+          "model": "anthropic/claude-haiku-4-5",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          },
+          "credit_rates": {
+            "input_per_million": 0.25,
+            "output_per_million": 1.6,
+            "rate_card_date": "2026-08-23",
+            "pricing_basis": "capability_bucket_median_list_price"
+          }
+        },
+        {
+          "model": "google/gemini-3-flash-preview",
+          "constraints": {
+            "reasoning_effort": "minimal"
+          }
+        },
+        {
+          "model": "moonshotai/kimi-k2.6",
+          "constraints": {
+            "extra_body": {
+              "thinking": {
+                "type": "disabled"
+              }
+            }
+          }
+        },
+        {
+          "model": "gpt-5.4-nano",
+          "constraints": {
+            "reasoning_effort": "none"
+          }
+        },
+        {
+          "model": "google/gemini-3.1-flash-lite",
+          "constraints": {
+            "reasoning_effort": "minimal"
+          }
+        },
+        {
+          "model": "qwen/qwen3.6-27b",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          }
+        },
+        {
+          "model": "stepfun/step-3.7-flash",
+          "constraints": {
+            "reasoning_effort": "medium"
+          }
+        }
+      ]
+    }
+  },
+  "user_llm": "gpt-5.5",
+  "user_reasoning_effort": "none"
+}

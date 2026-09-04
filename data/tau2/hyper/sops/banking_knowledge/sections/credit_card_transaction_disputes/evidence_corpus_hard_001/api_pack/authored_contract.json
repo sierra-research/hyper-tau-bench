@@ -1,0 +1,338 @@
+{
+  "format": "api_contract_pack_v1",
+  "release": {
+    "contract_id": "CONTRACT-DISPHIST-V2",
+    "environment": "production",
+    "status": "published",
+    "current": true,
+    "effective_at": "2025-08-18T09:00:00-04:00",
+    "snapshot_at": "2025-11-14T12:00:00-05:00",
+    "superseded_by": null
+  },
+  "cover_email": "From: Devon Park <devon.park@rhobank.com>\nTo: card-support-leads <card-support-leads@rhobank.com>\nDate: Mon, 18 Aug 2025 09:14:22 -0400\nSubject: Dispute-history record contract v2.3 - published pack\nMessage-ID: <disphist-pack-v23-2025@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nLeads,\n\nAttached is the published contract pack for the dispute-history service as of today: the OpenAPI document, a ready-to-run Postman collection, the error-behavior table, and the record-contract notes. This pack is the reference for what the service accepts and returns. It deliberately does not tell the floor how to handle customers - conduct lives with Dispute Operations' own records.\n\nTwo standing requests. First, when someone quotes the service from memory in a channel, point them here instead. Second, the v1 path in the document is retained deprecated for audit replays only - nothing new should call it.\n\nDevon\nSupport Engineering",
+  "openapi": {
+    "openapi": "3.1.0",
+    "info": {
+      "title": "Rho Bank Dispute History Service",
+      "version": "2.3.0",
+      "description": "Published production contract for the card-support dispute-history export backing the get_user_dispute_history_7291 agent tool. The v1 path is retained deprecated for audit replays only."
+    },
+    "servers": [
+      {
+        "url": "https://internal.rhobank.example/card-support",
+        "description": "production (internal service mesh)"
+      }
+    ],
+    "paths": {
+      "/v2/users/{user_id}/card-disputes": {
+        "get": {
+          "operationId": "getUserCardDisputeHistoryV2",
+          "summary": "List all credit card disputes filed by a user",
+          "description": "Backing endpoint for get_user_dispute_history_7291. Returns the full list of credit card dispute records for the supplied user_id: dispute dates, statuses, and transaction details. Returns only credit card disputes; debit disputes live in the debit servicing platform.",
+          "parameters": [
+            {
+              "name": "user_id",
+              "in": "path",
+              "required": true,
+              "description": "The user's canonical internal identifier. The caller is responsible for passing an id that is correct and current.",
+              "schema": {
+                "type": "string",
+                "pattern": "^usr_[a-z0-9]{12}$"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "List of dispute records for the specified user. An empty list is a successful response and a valid state.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/DisputeHistoryResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid or malformed user_id.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorEnvelope"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Missing or invalid service credential.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorEnvelope"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Caller lacks the disputes-desk privilege set required to view dispute histories.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorEnvelope"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal error. On very long histories this has historically surfaced as partial or truncated payloads.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorEnvelope"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/v1/users/{user_id}/disputes": {
+        "get": {
+          "operationId": "getUserDisputeHistoryV1",
+          "summary": "DEPRECATED - combined credit and debit dispute rows",
+          "description": "Retired 2025-03. The v1 projection mixed credit card and debit card dispute rows in one list and is retained solely so historical audit replays keep resolving. Nothing new may call this path; the v2 contract above is the current production surface.",
+          "deprecated": true,
+          "parameters": [
+            {
+              "name": "user_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "410": {
+              "description": "Gone for interactive callers; replay gateway only."
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "DisputeHistoryResponse": {
+          "type": "object",
+          "required": ["user_id", "disputes"],
+          "properties": {
+            "user_id": {
+              "type": "string"
+            },
+            "disputes": {
+              "type": "array",
+              "description": "All credit card dispute records for the user, newest first.",
+              "items": {
+                "$ref": "#/components/schemas/DisputeRecord"
+              }
+            }
+          }
+        },
+        "DisputeRecord": {
+          "type": "object",
+          "required": [
+            "dispute_id",
+            "dispute_date",
+            "status",
+            "last_updated_at",
+            "transaction_id",
+            "transaction_date",
+            "merchant_name",
+            "amount",
+            "currency",
+            "card_last4"
+          ],
+          "properties": {
+            "dispute_id": {
+              "type": "string",
+              "description": "Dispute identifier."
+            },
+            "dispute_date": {
+              "type": "string",
+              "format": "date",
+              "description": "Date the dispute was filed."
+            },
+            "status": {
+              "type": "string",
+              "enum": ["open", "under_review", "closed"],
+              "description": "Current dispute status."
+            },
+            "last_updated_at": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Timestamp of the most recent change to the record."
+            },
+            "transaction_id": {
+              "type": "string",
+              "description": "Disputed transaction identifier."
+            },
+            "transaction_date": {
+              "type": "string",
+              "format": "date",
+              "description": "Date of the disputed transaction."
+            },
+            "merchant_name": {
+              "type": "string",
+              "description": "Merchant on the disputed transaction."
+            },
+            "amount": {
+              "type": "number",
+              "description": "Disputed transaction amount."
+            },
+            "currency": {
+              "type": "string",
+              "description": "ISO currency code of the disputed transaction."
+            },
+            "card_last4": {
+              "type": "string",
+              "description": "Last four digits of the card the transaction was made under."
+            },
+            "reason_code": {
+              "type": "string",
+              "description": "Dispute reason category, when recorded."
+            },
+            "outcome": {
+              "type": "string",
+              "description": "Final outcome, present on closed disputes when adjudicated."
+            },
+            "notes": {
+              "type": "string",
+              "description": "Internal comments attached to the dispute, when present."
+            }
+          }
+        },
+        "ErrorEnvelope": {
+          "type": "object",
+          "required": ["error_code", "message"],
+          "properties": {
+            "error_code": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "postman_collection": {
+    "info": {
+      "name": "Rho dispute-history service v2.3",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+      "description": "Ready-to-run requests against the production dispute-history contract. Uses the service-mesh credential from your console profile."
+    },
+    "variable": [
+      {
+        "key": "base_url",
+        "value": "https://internal.rhobank.example/card-support"
+      },
+      {
+        "key": "user_id",
+        "value": "usr_4k9d2m7pq1xz"
+      }
+    ],
+    "item": [
+      {
+        "name": "List card disputes for a user (v2)",
+        "request": {
+          "method": "GET",
+          "url": "{{base_url}}/v2/users/{{user_id}}/card-disputes",
+          "description": "Returns every credit card dispute record for the user_id, newest first. An empty disputes array is a successful call."
+        }
+      },
+      {
+        "name": "Example - empty history (new customer)",
+        "request": {
+          "method": "GET",
+          "url": "{{base_url}}/v2/users/usr_8t2wq0c4hn5e/card-disputes",
+          "description": "Known-good id with no filed disputes; demonstrates the empty-list success shape. Example ids are fixtures, not policy."
+        }
+      }
+    ]
+  },
+  "error_behavior_columns": [
+    "rule_id",
+    "status",
+    "environment",
+    "audience",
+    "http_status",
+    "condition",
+    "response_code",
+    "notes",
+    "updated_at",
+    "superseded_by"
+  ],
+  "error_behavior": [
+    {
+      "rule_id": "DH-200E",
+      "status": "published",
+      "environment": "production",
+      "audience": "card-support",
+      "http_status": "200",
+      "condition": "user_id resolves but the user has no credit card disputes on file",
+      "response_code": "ok_empty_list",
+      "notes": "Empty list is a success shape, not an error. Interpretation and floor triage: pinned note in the support-eng channel (2025-11-03) until SE-4417 ships a runbook.",
+      "updated_at": "2025-11-03T10:00:00-05:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "DH-400",
+      "status": "published",
+      "environment": "production",
+      "audience": "card-support",
+      "http_status": "400",
+      "condition": "user_id fails the canonical id format",
+      "response_code": "malformed_user_id",
+      "notes": "Legacy case-note id formats (suffix variants) are the common source. Floor handling: the pinned triage note.",
+      "updated_at": "2025-08-18T09:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "DH-401",
+      "status": "published",
+      "environment": "production",
+      "audience": "platform",
+      "http_status": "401",
+      "condition": "Missing or invalid service credential",
+      "response_code": "authentication_failed",
+      "notes": "Transport control; not a card-support policy surface.",
+      "updated_at": "2025-08-18T09:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "DH-403",
+      "status": "published",
+      "environment": "production",
+      "audience": "card-support",
+      "http_status": "403",
+      "condition": "Caller profile lacks the disputes-desk privilege set",
+      "response_code": "permission_denied",
+      "notes": "Privilege sets follow console queue assignment. Access requests go through the caller's lead; handling per the pinned triage note.",
+      "updated_at": "2025-08-18T09:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "DH-500P",
+      "status": "published",
+      "environment": "production",
+      "audience": "card-support",
+      "http_status": "500",
+      "condition": "Internal error on very long histories; may surface as partial or truncated payloads",
+      "response_code": "internal_error",
+      "notes": "Pagination edge on histories above five records fixed in the 2025-11-07 deploy; escalations with request context remain the correct path per the pinned triage note.",
+      "updated_at": "2025-11-07T15:30:00-05:00",
+      "superseded_by": ""
+    }
+  ],
+  "record_contract_notes": "# Rho Bank dispute-history record contract - v2.3\n\nContract: CONTRACT-DISPHIST-V2 | production | published and current | effective 2025-08-18 | superseded by: none\nOwner: Support Engineering (D. Park). Distribution: card-support leads, disputes desk, console administration.\n\n## Purpose\n\nTo retrieve a user's credit card dispute history, use the get_user_dispute_history_7291 tool. Call it with the user's user_id to get a list of all disputes filed by that user, including dispute dates, statuses, and transaction details. The tool fronts the /v2 endpoint in this pack; the record shapes below are the contract for what comes back.\n\n## When to use\n\n- When a consolidated list of all credit card disputes filed by a specific user is needed.\n- When reviewing the current status or historical progression of a user's disputes.\n- When transaction-level context for each dispute is needed.\n\n## Required input\n\nThe required input is user_id, the user's canonical internal identifier. Before calling, ensure that the user_id is correct and current. Ids copied out of older case notes are the classic failure: the service validates format strictly and resolves exactly the id you pass.\n\n## Response contract\n\nThe expected output is a list of dispute records for the specified user. Each dispute record carries three groups of fields.\n\n1. Dispute identifiers and metadata: dispute_id, dispute_date, status such as open, under_review, or closed, and last_updated_at.\n2. Transaction details related to the dispute: transaction_id, transaction_date, merchant_name, amount, currency, and card_last4.\n3. Additional dispute context if available: reason_code, outcome, and notes or internal comments.\n\nAn empty list is a successful response shape, not an error.\n\n## Scope\n\nThe service returns only credit card disputes associated with the specified user_id. Debit card disputes are serviced on the debit platform and never appear in this export. The deprecated v1 path mixed the two populations; that is exactly why it was retired.\n\n## Data handling\n\nRecords in these responses are customer data. User data from dispute-history responses must always be handled in accordance with internal data handling and privacy requirements: no exports beyond the case that needed them, no pasting records into channels, no retention outside the case record.\n\n## Error surface\n\nThe error-behavior table in this pack enumerates the transport and validation surface. Floor triage guidance - what an agent does when a lookup misbehaves mid-contact - is deliberately not restated here; it is pinned in the support-eng channel (2025-11-03) and will graduate to a KB runbook under SE-4417.\n\n## History\n\nv1 (retired 2025-03) returned combined credit and debit dispute rows; it is retained in the OpenAPI document as a deprecated path for audit replays only. v2.0 (2025-03) split the populations. v2.3 (2025-08-18, current) added last_updated_at and tightened the id format validation. Examples and fixture ids in the Postman collection are illustrations, not policy.\n"
+}

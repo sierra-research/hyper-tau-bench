@@ -1,0 +1,97 @@
+{
+  "id": "task_148",
+  "description": {
+    "purpose": "Task: task_148",
+    "relevant_policies": null,
+    "notes": "GREEN ACCOUNT DEBIT DECLINE - CODE 55 (INCORRECT PIN) WITH CARD NOT LOCKED AND 1 ATTEMPT REMAINING. Existing db customer Ayan Wang mistyped her Green Account (checking) debit card PIN twice at a pharmacy self-checkout; the receipt shows CODE 55. Per 'FAQ: Green Account (checking)': for CODE 55, if pin_locked is FALSE but pin_attempts_remaining is low, the agent must WARN the customer 'You have [X] PIN attempts remaining before your card is temporarily locked', and offer a PIN reset only if the customer has FORGOTTEN the PIN. Init state sets card dbc_7a3f9c2b1e to ACTIVE with pin_locked=false, pin_attempts_remaining=1. The customer has NOT forgotten her PIN (she mixed it up with a door code and now remembers it), so the correct path is READ-ONLY: verify identity, look up accounts, look up the debit card, confirm the card is NOT locked, and warn that only 1 attempt remains. THE TRAPS: (1) agent runs an unnecessary PIN reset 'to refresh the attempt counter' (reset_debit_card_pin_6284 writes pin_attempts_remaining=3 + pin_last_changed -> DB mismatch); (2) agent freezes the card 'for safety' (status write -> DB mismatch); (3) agent invokes the PIN Lock Investigation Protocol, which only applies when pin_locked is TRUE; (4) agent reassures her the card works but never warns about the single remaining attempt (NL_ASSERTION fail). Reward: DB (no writes) x NL_ASSERTION (the remaining-attempts warning). Distinct decision point from task_147 (CODE 83 branch) and from tasks 090/091/092 (pin_locked TRUE protocol branch). CODE 55 unlocked-branch guidance exists ONLY in doc_checking_accounts_green_account_(checking)_010."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Ayan Wang, a 27-year-old pharmacy technician from Nashville, TN. You are a bit flustered and embarrassed, but cooperative.\n\n**Your situation:** You got a new wallet this week and your head is full of codes - your building door code, your work locker code, your debit PIN. An hour ago at a self-checkout you paid with your Rho-Bank debit card (the one on your Green Account checking, ending in 2847) and typed the wrong PIN twice - you were accidentally entering your building door code. On the second wrong try the machine declined the purchase and the slip showed \"CODE 55\". You paid with a credit card instead. Sitting in your car afterwards, you realized your mistake and you are now SURE you remember the correct debit PIN. But you're scared the card is now locked or blocked, and you don't want to walk back in and have it declined again in front of everyone. You want the agent to check whether your card is locked and whether it's safe to try again.\n\n**Verification info:**\n- Name: Ayan Wang | Phone: 920-029-2039 | Email: ayan.wang@gmail.com\n- DOB: 02/23/1998 | Address: 2793 Frum Street, Nashville, TN\n\n## Conversation Flow (Respond reactively - only provide details when the agent asks):\n\n1. **Opening:** \"Hi, I did something silly - I typed the wrong PIN on my debit card twice at a self-checkout and got declined. The receipt said code 55. Can you check if my card is locked now? I'm pretty sure I remember the right PIN, I just don't want it declined again.\"\n\n2. **Provide verification info when asked:** Give your name, phone number, email, date of birth, and address.\n\n3. **If asked which account or card:** \"It's the debit card on my Green Account checking - it ends in 2847.\"\n\n4. **If asked what happened:** \"I entered the wrong PIN exactly twice - I was typing my apartment building door code by mistake, new wallet, long story. After the second try it declined and printed code 55. I haven't tried it again since.\"\n\n5. **If asked whether you know/remember your PIN:** \"Yes! That's the thing - I definitely remember my real PIN now. I don't need a new one.\"\n\n6. **If the agent offers to reset or change your PIN:** Decline: \"No thanks - I remember my PIN, I don't want to change it. I just want to know if the card is locked and if I can safely try again.\"\n\n7. **If the agent offers to freeze the card:** Decline: \"Please don't freeze it - I need it for groceries tonight. Nobody stole it, it was just me being scatterbrained.\"\n\n8. **If the agent confirms the card is not locked and warns you how many attempts you have left before it locks:** React: \"Oof, only one more try? Okay, good to know - I'll type it very carefully this time.\"\n\n9. **After the agent has confirmed the card status and answered your question:** \"Thanks so much, that's exactly what I needed to know. Bye!\" ###STOP###\n\nDo not dump all your information at once. Only provide additional details about your situation when the agent asks. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "debit_cards": {
+          "data": {
+            "dbc_7a3f9c2b1e": {
+              "status": "ACTIVE",
+              "issue_date": "09/02/2023",
+              "pin_locked": false,
+              "pin_attempts_remaining": 1,
+              "pin_last_changed": "09/02/2023"
+            }
+          }
+        }
+      }
+    },
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Ayan Wang",
+          "user_id": "125",
+          "address": "2793 Frum Street, Nashville, TN",
+          "email": "ayan.wang@gmail.com",
+          "phone_number": "920-029-2039",
+          "date_of_birth": "02/23/1998",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "148_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "148_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"125\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "148_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_debit_cards_by_account_id_7823"
+        },
+        "requestor": "assistant",
+        "action_id": "148_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_debit_cards_by_account_id_7823",
+          "arguments": "{\"account_id\": \"03\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "148_4"
+      }
+    ],
+    "nl_assertions": [
+      "The agent warns the customer that she has only 1 PIN attempt remaining before her debit card will be temporarily locked."
+    ],
+    "reward_basis": [
+      "DB",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_bank_accounts_bank_accounts_(general)_028",
+    "doc_checking_accounts_green_account_(checking)_010"
+  ]
+}

@@ -1,0 +1,1138 @@
+{
+ "format": "helpdesk_automation_export_v2",
+ "snapshot": {
+  "source_system": "Rho Helpdesk",
+  "account": "rho-bank-consumer-and-business",
+  "workspace": "card-rewards",
+  "environment": "production",
+  "exported_at": "2025-11-12T16:40:00-05:00",
+  "timezone": "America/New_York",
+  "export_version": "2025.46",
+  "requested_by": "dan.kowalski@rho-bank.com"
+ },
+ "cover_email": "From: Helpdesk Administration <helpdesk-admin@rho-bank.com>\nTo: Dan Kowalski <dan.kowalski@rho-bank.com>\nDate: Wed, 12 Nov 2025 16:52:19 -0500\nSubject: card-rewards workspace export (2025.46)\nMessage-ID: <hd-export-2025-46-cardrewards@rho-bank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nDan,\n\nAttached is the production export of the card-rewards helpdesk workspace you asked for ahead of the enablement refresh. This is the full macro/trigger/field snapshot as of this afternoon; drafts and disabled objects are included with their status flags, so expect to see the old cash-back auto-responder pair in there — it has been off since March and is kept for history only.\n\nTwo things still worth checking on your side: the CSAT follow-up macro is mid-edit (marked draft), and the queue names in the routing views were renamed last month, so any training material that references the old queue names should be updated.\n\nHelpdesk Administration",
+ "macros": [
+  {
+   "macro_id": "MAC-3101",
+   "name": "Rewards question — general acknowledgement",
+   "description": "First-touch acknowledgement for rewards questions routed to the card-rewards queue.",
+   "active": true,
+   "environment": "production",
+   "status": "current",
+   "effective_at": "2024-06-11",
+   "updated_at": "2025-09-08",
+   "usage_30d": 412,
+   "usage_90d": 1268,
+   "superseded_by": null,
+   "steps": [
+    "Set ticket type = rewards_question",
+    "Insert acknowledgement text (queue SLA phrasing)",
+    "Assign group = Card Rewards Tier 1"
+   ]
+  },
+  {
+   "macro_id": "MAC-3102",
+   "name": "Cash-back discrepancy — route to dispute flow",
+   "description": "Standard reply pointing a cash-back discrepancy ticket to the self-service dispute submission flow; see the agent KB and current training records for the flow itself.",
+   "active": true,
+   "environment": "production",
+   "status": "current",
+   "effective_at": "2025-03-24",
+   "updated_at": "2025-10-22",
+   "usage_30d": 187,
+   "usage_90d": 553,
+   "superseded_by": null,
+   "steps": [
+    "Set ticket type = cash_back_discrepancy",
+    "Insert routing reply (self-service dispute flow pointer, no manual recalculation promise)",
+    "Set status = pending-customer"
+   ]
+  },
+  {
+   "macro_id": "MAC-2870",
+   "name": "Cash-back discrepancy — manual review acknowledgement (LEGACY)",
+   "description": "Legacy reply used before the self-service dispute flow rollout. Promised a manual queue review of the reported amount. Disabled 2025-03-24 with TRG-1907.",
+   "active": false,
+   "environment": "production",
+   "status": "disabled_legacy",
+   "effective_at": "2023-08-02",
+   "updated_at": "2025-03-24",
+   "usage_30d": 0,
+   "usage_90d": 0,
+   "superseded_by": "MAC-3102",
+   "steps": [
+    "Set ticket type = cash_back_discrepancy",
+    "Insert legacy manual-review acknowledgement (10-business-day review promise — retired wording)",
+    "Assign group = Rewards Manual Review (retired group)"
+   ]
+  },
+  {
+   "macro_id": "MAC-3120",
+   "name": "Statement copy request",
+   "description": "Sends the statement-copy instructions and sets the document-request fields.",
+   "active": true,
+   "environment": "production",
+   "status": "current",
+   "effective_at": "2024-02-19",
+   "updated_at": "2025-07-30",
+   "usage_30d": 96,
+   "usage_90d": 301,
+   "superseded_by": null,
+   "steps": [
+    "Set ticket type = document_request",
+    "Insert statement-copy instructions",
+    "Set status = pending-customer"
+   ]
+  },
+  {
+   "macro_id": "MAC-3131",
+   "name": "Card replacement status",
+   "description": "Reply template for replacement-card shipping status questions.",
+   "active": true,
+   "environment": "production",
+   "status": "current",
+   "effective_at": "2024-09-05",
+   "updated_at": "2025-10-02",
+   "usage_30d": 264,
+   "usage_90d": 803,
+   "superseded_by": null,
+   "steps": [
+    "Set ticket type = card_replacement",
+    "Insert shipping status reply with tracking placeholder",
+    "Set status = solved-pending-close"
+   ]
+  },
+  {
+   "macro_id": "MAC-3140",
+   "name": "CSAT follow-up (draft)",
+   "description": "Draft follow-up for low-CSAT rewards tickets; copy under review with the enablement team.",
+   "active": false,
+   "environment": "production",
+   "status": "draft",
+   "effective_at": null,
+   "updated_at": "2025-11-05",
+   "usage_30d": 0,
+   "usage_90d": 0,
+   "superseded_by": null,
+   "steps": [
+    "Insert follow-up text (draft copy v2)",
+    "Set tag = csat-followup"
+   ]
+  },
+  {
+   "macro_id": "MAC-3055",
+   "name": "EcoCard partner list pointer",
+   "description": "Points customers asking about green-merchant qualification to the published EcoCard page; long-form reply retained because branch staff reuse it in secure messages.",
+   "active": true,
+   "environment": "production",
+   "status": "current",
+   "effective_at": "2024-04-15",
+   "updated_at": "2025-08-19",
+   "usage_30d": 58,
+   "usage_90d": 172,
+   "superseded_by": null,
+   "steps": [
+    "Set ticket type = rewards_question",
+    "Insert EcoCard page pointer reply (page link placeholder, no rate restatement)",
+    "Set tag = ecocard"
+   ]
+  },
+  {
+   "macro_id": "MAC-3147",
+   "name": "Rewards recalc — rate reference (assist)",
+   "description": "Side-by-side rate reference for agents sanity-checking a correction request before routing. Mirrors the published product pages and cardmember agreements; the corrections team, not this macro, owns the recalculation.",
+   "active": true,
+   "environment": "production",
+   "status": "active",
+   "effective_at": "2025-06-30T09:00:00-04:00",
+   "updated_at": "2025-10-21T15:12:00-04:00",
+   "usage_30d": 118,
+   "usage_90d": 361,
+   "superseded_by": null,
+   "steps": [
+    "Open the customer's card product in the account console",
+    "Reference grid — bonus categories: Business Silver 10.0% travel/software; Silver Rewards 4.0% travel/software; Silver Zoom 3.0% sector-specific; Business Gold 2.5% operations; EcoCard 5 points per dollar at listed green partners",
+    "Reference grid — flat products: Platinum 10.0%; Diamond Elite 5.0%; Business Platinum 4.0%; Green Rewards 3.0%; Gold 2.5%; Crypto-Cash Back 2.0%; Bronze and Business Bronze 1.0%",
+    "Reference grid — everything not in a card's bonus categories earns that card's standard rate (1.0% on Business Silver, Silver Rewards, Silver Zoom, Business Gold, EcoCard)",
+    "Points floor to the whole point on every charge",
+    "If the posted points disagree with the grid, set tag = recalc_candidate and route per MAC-3102"
+   ]
+  },
+  {
+   "macro_id": "MAC-3151",
+   "name": "Category review — evidence packet",
+   "description": "Collects what the corrections team actually needs before a category review: the receipt, the confirmation, and how the charge settled.",
+   "active": true,
+   "environment": "production",
+   "status": "active",
+   "effective_at": "2025-07-14T10:30:00-04:00",
+   "updated_at": "2025-11-03T11:47:00-05:00",
+   "usage_30d": 64,
+   "usage_90d": 203,
+   "superseded_by": null,
+   "steps": [
+    "Request receipt and order confirmation from the customer",
+    "Copy the settlement descriptor and merchant category from the transaction detail",
+    "Note who billed the charge (merchant of record) if a platform or wallet sat in between",
+    "Set ticket type = rewards_question, tag = category_review",
+    "Assign group = Card Rewards Tier 2"
+   ]
+  },
+  {
+   "macro_id": "MAC-3155",
+   "name": "Campaign-window reconciliation note (BSR)",
+   "description": "Standard note block for Business Silver double-cash-back questions. Points the ticket at the campaign terms; agents do not compute windows in the ticket body.",
+   "active": true,
+   "environment": "production",
+   "status": "active",
+   "effective_at": "2025-09-08T09:15:00-04:00",
+   "updated_at": "2025-10-30T16:02:00-04:00",
+   "usage_30d": 92,
+   "usage_90d": 174,
+   "superseded_by": null,
+   "steps": [
+    "Insert campaign-terms pointer text (published terms govern eligibility and dates)",
+    "Copy the account opening date from the account console into the internal note",
+    "Copy the purchase settlement date into the internal note",
+    "Set tag = promo_reconciliation and leave the eligibility call to the corrections queue"
+   ]
+  },
+  {
+   "macro_id": "MAC-3160",
+   "name": "Split-settlement annotation",
+   "description": "Annotation block for purchases that settled as more than one charge (partial shipments, deposits plus balances).",
+   "active": true,
+   "environment": "production",
+   "status": "active",
+   "effective_at": "2025-08-19T14:00:00-04:00",
+   "updated_at": "2025-10-12T10:24:00-04:00",
+   "usage_30d": 23,
+   "usage_90d": 71,
+   "superseded_by": null,
+   "steps": [
+    "List each settled charge with its own amount, date, and merchant category",
+    "Note that rewards accrue per settled charge, not per order total",
+    "Attach the customer's order summary if provided",
+    "Set tag = split_settlement"
+   ]
+  },
+  {
+   "macro_id": "MAC-3164",
+   "name": "Dispute closure — category upheld",
+   "description": "Closure text for cash-back disputes where the merchant's submitted category was confirmed and posted rewards stand.",
+   "active": true,
+   "environment": "production",
+   "status": "active",
+   "effective_at": "2025-07-02T09:40:00-04:00",
+   "updated_at": "2025-11-05T09:58:00-05:00",
+   "usage_30d": 87,
+   "usage_90d": 266,
+   "superseded_by": null,
+   "steps": [
+    "Insert closure text: category confirmed against settlement records, posted rewards consistent with the card's published rates",
+    "Attach the review summary from the corrections queue",
+    "Set status = solved, tag = category_upheld"
+   ]
+  },
+  {
+   "macro_id": "MAC-3169",
+   "name": "Correction closure — points adjusted",
+   "description": "Closure text for approved corrections. The adjustment amount comes from the corrections queue; this macro only formats the customer message.",
+   "active": true,
+   "environment": "production",
+   "status": "active",
+   "effective_at": "2025-07-02T09:45:00-04:00",
+   "updated_at": "2025-11-05T10:03:00-05:00",
+   "usage_30d": 59,
+   "usage_90d": 181,
+   "superseded_by": null,
+   "steps": [
+    "Insert closure text with {{points_delta}} and {{adjusted_total}} from the corrections queue record",
+    "Confirm the adjustment will appear with the next statement cycle",
+    "Set status = solved, tag = correction_applied"
+   ]
+  },
+  {
+   "macro_id": "MAC-3173",
+   "name": "Foreign transaction fee inquiry",
+   "description": "Deflection text for FX-fee questions that arrive in the rewards queue by mistake.",
+   "active": true,
+   "environment": "production",
+   "status": "active",
+   "effective_at": "2025-05-20T11:00:00-04:00",
+   "updated_at": "2025-09-17T13:31:00-04:00",
+   "usage_30d": 41,
+   "usage_90d": 149,
+   "superseded_by": null,
+   "steps": [
+    "Insert explanation text: the 2.75% foreign transaction fee is a card fee, separate from rewards earning, and applies to the converted USD amount",
+    "Set ticket type = fees_question",
+    "Assign group = Card Servicing Tier 1"
+   ]
+  },
+  {
+   "macro_id": "MAC-3178",
+   "name": "Late fee reversal routing",
+   "description": "Routing block for Gold Rewards late-fee reversal requests ($32.50 standard late fee) that land in rewards.",
+   "active": true,
+   "environment": "production",
+   "status": "active",
+   "effective_at": "2025-04-28T10:10:00-04:00",
+   "updated_at": "2025-08-25T15:44:00-04:00",
+   "usage_30d": 17,
+   "usage_90d": 62,
+   "superseded_by": null,
+   "steps": [
+    "Confirm the request concerns the $32.50 late fee, not rewards posting",
+    "Set ticket type = fees_question, tag = late_fee",
+    "Assign group = Card Servicing Tier 2"
+   ]
+  },
+  {
+   "macro_id": "MAC-3182",
+   "name": "Annual fee retention (Platinum)",
+   "description": "Retention talk-track pointer for Platinum Rewards annual-fee complaints ($200 annual fee). Rewards agents route rather than negotiate.",
+   "active": true,
+   "environment": "production",
+   "status": "active",
+   "effective_at": "2025-06-11T09:30:00-04:00",
+   "updated_at": "2025-10-08T12:19:00-04:00",
+   "usage_30d": 28,
+   "usage_90d": 96,
+   "superseded_by": null,
+   "steps": [
+    "Insert retention pointer text and the servicing callback link",
+    "Set ticket type = retention, tag = annual_fee",
+    "Assign group = Retention Desk"
+   ]
+  },
+  {
+   "macro_id": "MAC-3187",
+   "name": "Interest accrual explanation",
+   "description": "Explanation block for interest questions. Interest is computed daily and the billed amount rounds half-up to the cent — unlike reward points, which floor. Included here because customers regularly conflate the two.",
+   "active": true,
+   "environment": "production",
+   "status": "active",
+   "effective_at": "2025-08-04T10:50:00-04:00",
+   "updated_at": "2025-10-27T14:36:00-04:00",
+   "usage_30d": 33,
+   "usage_90d": 104,
+   "superseded_by": null,
+   "steps": [
+    "Insert explanation text: interest rounds half-up to the cent at billing; reward points floor to the whole point — the two follow different rules",
+    "Set ticket type = billing_question",
+    "Assign group = Card Servicing Tier 1"
+   ]
+  },
+  {
+   "macro_id": "MAC-3191",
+   "name": "Hotel points transfer inquiry",
+   "description": "Pointer text for the partner hotel-points transfer program (2:1 transfer ratio). Not part of cash-back earning or corrections.",
+   "active": true,
+   "environment": "production",
+   "status": "active",
+   "effective_at": "2025-09-22T13:20:00-04:00",
+   "updated_at": "2025-11-06T09:12:00-05:00",
+   "usage_30d": 21,
+   "usage_90d": 44,
+   "superseded_by": null,
+   "steps": [
+    "Insert program pointer text: transfers convert at 2 reward points to 1 hotel point through the partner portal",
+    "Set ticket type = rewards_question, tag = partner_transfer",
+    "Assign group = Card Rewards Tier 1"
+   ]
+  },
+  {
+   "macro_id": "MAC-3196",
+   "name": "Duplicate dispute merge",
+   "description": "Merge-and-notify block when a customer opens a second dispute for the same transaction.",
+   "active": true,
+   "environment": "production",
+   "status": "active",
+   "effective_at": "2025-10-06T09:05:00-04:00",
+   "updated_at": "2025-11-10T16:55:00-05:00",
+   "usage_30d": 38,
+   "usage_90d": 57,
+   "superseded_by": null,
+   "steps": [
+    "Merge the newer ticket into the original dispute ticket",
+    "Insert notification text with the original ticket reference",
+    "Set tag = duplicate_merged"
+   ]
+  }
+ ],
+ "triggers": [
+  {
+   "trigger_id": "TRG-2011",
+   "name": "Route rewards keywords to card-rewards queue",
+   "description": "Keyword and product-code routing into the Card Rewards Tier 1 group.",
+   "active": true,
+   "environment": "production",
+   "status": "current",
+   "priority": 4,
+   "effective_at": "2024-06-11",
+   "updated_at": "2025-09-08",
+   "usage_30d": 693,
+   "conditions": [
+    "channel is email OR webform",
+    "subject/body contains any: cash back, rewards, points, redemption",
+    "product_code starts with CARD-"
+   ],
+   "actions": [
+    "set group = Card Rewards Tier 1",
+    "set ticket type = rewards_question"
+   ]
+  },
+  {
+   "trigger_id": "TRG-1907",
+   "name": "Auto-reply: cash-back discrepancy (RETIRED)",
+   "description": "Fired MAC-2870 automatically on inbound cash-back discrepancy tickets. Disabled 2025-03-24 when the self-service dispute flow shipped; retained for audit history.",
+   "active": false,
+   "environment": "production",
+   "status": "disabled_legacy",
+   "priority": 3,
+   "effective_at": "2023-08-02",
+   "updated_at": "2025-03-24",
+   "usage_30d": 0,
+   "conditions": [
+    "channel is email OR webform",
+    "subject/body contains any: missing cash back, wrong cash back, cash back amount"
+   ],
+   "actions": [
+    "apply macro MAC-2870",
+    "assign group = Rewards Manual Review (retired group)"
+   ]
+  },
+  {
+   "trigger_id": "TRG-2044",
+   "name": "Escalate aged rewards tickets",
+   "description": "Escalates rewards tickets breaching 48 business hours without agent touch.",
+   "active": true,
+   "environment": "production",
+   "status": "current",
+   "priority": 6,
+   "effective_at": "2024-10-01",
+   "updated_at": "2025-06-17",
+   "usage_30d": 41,
+   "conditions": [
+    "ticket type = rewards_question OR cash_back_discrepancy",
+    "hours since last agent update > 48 (business)"
+   ],
+   "actions": [
+    "set priority = high",
+    "notify group lead (card-rewards)"
+   ]
+  },
+  {
+   "trigger_id": "TRG-2060",
+   "name": "Tag replacement-card tickets",
+   "description": "Applies shipping tags for replacement tickets so the views split them by carrier.",
+   "active": true,
+   "environment": "production",
+   "status": "current",
+   "priority": 8,
+   "effective_at": "2025-01-13",
+   "updated_at": "2025-10-02",
+   "usage_30d": 250,
+   "conditions": [
+    "ticket type = card_replacement"
+   ],
+   "actions": [
+    "set tag = replacement",
+    "set tag by carrier field"
+   ]
+  },
+  {
+   "trigger_id": "TRG-2071",
+   "name": "Corrections aging escalation",
+   "description": "Escalates approved corrections that have not posted an adjustment note within ten business days.",
+   "active": true,
+   "environment": "production",
+   "status": "active",
+   "priority": 4,
+   "effective_at": "2025-09-15T09:00:00-04:00",
+   "updated_at": "2025-11-04T10:31:00-05:00",
+   "usage_30d": 26,
+   "conditions": [
+    "ticket_type = rewards_question",
+    "tag contains correction_applied",
+    "hours_since_status_change > 240",
+    "status != solved"
+   ],
+   "actions": [
+    "Assign group = Card Rewards Tier 2",
+    "Add tag = aging_escalated",
+    "Notify view subscribers (VW-88)"
+   ]
+  },
+  {
+   "trigger_id": "TRG-2077",
+   "name": "Campaign reconciliation router",
+   "description": "Routes Business Silver campaign-window questions to the corrections queue with the note block attached.",
+   "active": true,
+   "environment": "production",
+   "status": "active",
+   "priority": 6,
+   "effective_at": "2025-09-08T09:20:00-04:00",
+   "updated_at": "2025-10-30T16:08:00-04:00",
+   "usage_30d": 71,
+   "conditions": [
+    "tag contains promo_reconciliation"
+   ],
+   "actions": [
+    "Assign group = Card Rewards Corrections",
+    "Apply macro MAC-3155 note block"
+   ]
+  },
+  {
+   "trigger_id": "TRG-2085",
+   "name": "Duplicate dispute detector",
+   "description": "Flags a new dispute whose transaction reference matches an open dispute on the same account.",
+   "active": true,
+   "environment": "production",
+   "status": "active",
+   "priority": 3,
+   "effective_at": "2025-10-06T09:10:00-04:00",
+   "updated_at": "2025-11-10T16:58:00-05:00",
+   "usage_30d": 44,
+   "conditions": [
+    "ticket_type = rewards_question",
+    "transaction_ref matches open ticket on account"
+   ],
+   "actions": [
+    "Add tag = possible_duplicate",
+    "Suggest macro MAC-3196"
+   ]
+  },
+  {
+   "trigger_id": "TRG-2092",
+   "name": "Appeal reopen guard",
+   "description": "Prevents auto-close on denied disputes where the customer replies within the appeal window.",
+   "active": true,
+   "environment": "production",
+   "status": "active",
+   "priority": 5,
+   "effective_at": "2025-08-11T10:00:00-04:00",
+   "updated_at": "2025-10-19T11:26:00-04:00",
+   "usage_30d": 19,
+   "conditions": [
+    "tag contains category_upheld",
+    "customer replied within 30 days of solve"
+   ],
+   "actions": [
+    "Reopen ticket",
+    "Assign group = Card Rewards Tier 2",
+    "Add tag = appeal_review"
+   ]
+  },
+  {
+   "trigger_id": "TRG-2098",
+   "name": "Evidence checklist nudge",
+   "description": "Reminds agents to attach the evidence packet before a category review leaves Tier 1.",
+   "active": true,
+   "environment": "production",
+   "status": "active",
+   "priority": 8,
+   "effective_at": "2025-07-14T10:45:00-04:00",
+   "updated_at": "2025-09-29T14:14:00-04:00",
+   "usage_30d": 53,
+   "conditions": [
+    "tag contains category_review",
+    "attachments count = 0",
+    "group = Card Rewards Tier 1"
+   ],
+   "actions": [
+    "Insert internal note: evidence packet missing (MAC-3151)",
+    "Block group reassignment until attachment present"
+   ]
+  },
+  {
+   "trigger_id": "TRG-2104",
+   "name": "Fee-question deflection",
+   "description": "Moves fee-only questions out of the rewards queue on first touch.",
+   "active": true,
+   "environment": "production",
+   "status": "active",
+   "priority": 9,
+   "effective_at": "2025-05-20T11:15:00-04:00",
+   "updated_at": "2025-09-17T13:35:00-04:00",
+   "usage_30d": 66,
+   "conditions": [
+    "subject contains any: foreign fee, late fee, annual fee",
+    "ticket_type = rewards_question"
+   ],
+   "actions": [
+    "Set ticket type = fees_question",
+    "Assign group = Card Servicing Tier 1"
+   ]
+  }
+ ],
+ "policy_contracts": [
+  {
+   "contract_id": "CON-0450",
+   "name": "card-rewards workspace routing scope",
+   "status": "current",
+   "active": true,
+   "environment": "production",
+   "owner_group": "Helpdesk Administration",
+   "scope": "Ticket routing and macros for the card-rewards workspace at this snapshot. Routing configuration only; product terms, rates, and dispute-handling policy are owned by the published product pages, the agent knowledge base, and rewards-operations records.",
+   "required_fields": [
+    "ticket_type",
+    "group",
+    "status"
+   ],
+   "closed_world": false,
+   "effective_at": "2024-06-11",
+   "updated_at": "2025-09-08"
+  },
+  {
+   "contract_id": "CON-0466",
+   "name": "Correction reason codes — reporting scope",
+   "status": "current",
+   "active": true,
+   "environment": "production",
+   "owner_group": "Card Rewards Operations",
+   "scope": "The correction_reason and review_outcome fields exist for routing and reporting. Option labels are shorthand for queue analytics; the corrections team's written determinations, not field values, document individual outcomes.",
+   "required_fields": [
+    "correction_reason",
+    "review_outcome"
+   ],
+   "closed_world": false,
+   "effective_at": "2025-09-30T12:10:00-04:00",
+   "updated_at": "2025-09-30T12:10:00-04:00"
+  }
+ ],
+ "field_columns": [
+  "row_id",
+  "field_key",
+  "field_name",
+  "field_type",
+  "option_value",
+  "active",
+  "status",
+  "environment",
+  "updated_at"
+ ],
+ "fields": [
+  {
+   "row_id": "F-001",
+   "field_key": "ticket_type",
+   "field_name": "Ticket type",
+   "field_type": "picklist",
+   "option_value": "rewards_question",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2024-06-11"
+  },
+  {
+   "row_id": "F-002",
+   "field_key": "ticket_type",
+   "field_name": "Ticket type",
+   "field_type": "picklist",
+   "option_value": "cash_back_discrepancy",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-03-24"
+  },
+  {
+   "row_id": "F-003",
+   "field_key": "ticket_type",
+   "field_name": "Ticket type",
+   "field_type": "picklist",
+   "option_value": "document_request",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2024-02-19"
+  },
+  {
+   "row_id": "F-004",
+   "field_key": "ticket_type",
+   "field_name": "Ticket type",
+   "field_type": "picklist",
+   "option_value": "card_replacement",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2024-09-05"
+  },
+  {
+   "row_id": "F-005",
+   "field_key": "group",
+   "field_name": "Assignment group",
+   "field_type": "picklist",
+   "option_value": "Card Rewards Tier 1",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2024-06-11"
+  },
+  {
+   "row_id": "F-006",
+   "field_key": "group",
+   "field_name": "Assignment group",
+   "field_type": "picklist",
+   "option_value": "Rewards Manual Review",
+   "active": false,
+   "status": "retired",
+   "environment": "production",
+   "updated_at": "2025-03-24"
+  },
+  {
+   "row_id": "F-007",
+   "field_key": "group",
+   "field_name": "Assignment group",
+   "field_type": "picklist",
+   "option_value": "Card Services Tier 2",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-01-13"
+  },
+  {
+   "row_id": "F-008",
+   "field_key": "status",
+   "field_name": "Ticket status",
+   "field_type": "picklist",
+   "option_value": "pending-customer",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2024-02-19"
+  },
+  {
+   "row_id": "F-009",
+   "field_key": "status",
+   "field_name": "Ticket status",
+   "field_type": "picklist",
+   "option_value": "solved-pending-close",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2024-02-19"
+  },
+  {
+   "row_id": "F-010",
+   "field_key": "tag",
+   "field_name": "Tag",
+   "field_type": "tag",
+   "option_value": "ecocard",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2024-04-15"
+  },
+  {
+   "row_id": "F-011",
+   "field_key": "tag",
+   "field_name": "Tag",
+   "field_type": "tag",
+   "option_value": "csat-followup",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-11-05"
+  },
+  {
+   "row_id": "F-012",
+   "field_key": "tag",
+   "field_name": "Tag",
+   "field_type": "tag",
+   "option_value": "replacement",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-01-13"
+  },
+  {
+   "row_id": "FLD-CORR-01",
+   "field_key": "correction_reason",
+   "field_name": "Correction reason",
+   "field_type": "dropdown",
+   "option_value": "miscategorized_merchant",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-30T12:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-CORR-02",
+   "field_key": "correction_reason",
+   "field_name": "Correction reason",
+   "field_type": "dropdown",
+   "option_value": "third_party_processor",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-30T12:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-CORR-03",
+   "field_key": "correction_reason",
+   "field_name": "Correction reason",
+   "field_type": "dropdown",
+   "option_value": "split_settlement",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-30T12:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-CORR-04",
+   "field_key": "correction_reason",
+   "field_name": "Correction reason",
+   "field_type": "dropdown",
+   "option_value": "campaign_window_outside",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-30T12:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-CORR-05",
+   "field_key": "correction_reason",
+   "field_name": "Correction reason",
+   "field_type": "dropdown",
+   "option_value": "exclusion_applies",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-30T12:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-CORR-06",
+   "field_key": "correction_reason",
+   "field_name": "Correction reason",
+   "field_type": "dropdown",
+   "option_value": "listed_after_purchase",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-30T12:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-CORR-07",
+   "field_key": "correction_reason",
+   "field_name": "Correction reason",
+   "field_type": "dropdown",
+   "option_value": "rounding_explained",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-30T12:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-CORR-08",
+   "field_key": "correction_reason",
+   "field_name": "Correction reason",
+   "field_type": "dropdown",
+   "option_value": "rate_grid_confirmed",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-30T12:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-CORR-09",
+   "field_key": "correction_reason",
+   "field_name": "Correction reason",
+   "field_type": "dropdown",
+   "option_value": "duplicate_submission",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-30T12:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-CORR-10",
+   "field_key": "correction_reason",
+   "field_name": "Correction reason",
+   "field_type": "dropdown",
+   "option_value": "customer_withdrew",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-30T12:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-CORR-11",
+   "field_key": "correction_reason",
+   "field_name": "Correction reason",
+   "field_type": "dropdown",
+   "option_value": "documentation_incomplete",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-30T12:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-CORR-12",
+   "field_key": "correction_reason",
+   "field_name": "Correction reason",
+   "field_type": "dropdown",
+   "option_value": "other_see_notes",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-30T12:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-DISP-01",
+   "field_key": "dispute_channel",
+   "field_name": "Dispute intake channel",
+   "field_type": "dropdown",
+   "option_value": "self_service_flow",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-06-16T09:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-DISP-02",
+   "field_key": "dispute_channel",
+   "field_name": "Dispute intake channel",
+   "field_type": "dropdown",
+   "option_value": "phone",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-06-16T09:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-DISP-03",
+   "field_key": "dispute_channel",
+   "field_name": "Dispute intake channel",
+   "field_type": "dropdown",
+   "option_value": "secure_message",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-06-16T09:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-DISP-04",
+   "field_key": "dispute_channel",
+   "field_name": "Dispute intake channel",
+   "field_type": "dropdown",
+   "option_value": "branch",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-06-16T09:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-DISP-05",
+   "field_key": "dispute_channel",
+   "field_name": "Dispute intake channel",
+   "field_type": "dropdown",
+   "option_value": "written_mail",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-06-16T09:00:00-04:00"
+  },
+  {
+   "row_id": "FLD-REVI-01",
+   "field_key": "review_outcome",
+   "field_name": "Review outcome",
+   "field_type": "dropdown",
+   "option_value": "approved_adjusted",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-30T12:05:00-04:00"
+  },
+  {
+   "row_id": "FLD-REVI-02",
+   "field_key": "review_outcome",
+   "field_name": "Review outcome",
+   "field_type": "dropdown",
+   "option_value": "denied_category_upheld",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-30T12:05:00-04:00"
+  },
+  {
+   "row_id": "FLD-REVI-03",
+   "field_key": "review_outcome",
+   "field_name": "Review outcome",
+   "field_type": "dropdown",
+   "option_value": "denied_window",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-30T12:05:00-04:00"
+  },
+  {
+   "row_id": "FLD-REVI-04",
+   "field_key": "review_outcome",
+   "field_name": "Review outcome",
+   "field_type": "dropdown",
+   "option_value": "withdrawn",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-30T12:05:00-04:00"
+  },
+  {
+   "row_id": "FLD-REVI-05",
+   "field_key": "review_outcome",
+   "field_name": "Review outcome",
+   "field_type": "dropdown",
+   "option_value": "pending_documents",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-30T12:05:00-04:00"
+  },
+  {
+   "row_id": "FLD-REVI-06",
+   "field_key": "review_outcome",
+   "field_name": "Review outcome",
+   "field_type": "dropdown",
+   "option_value": "merged_duplicate",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "updated_at": "2025-09-30T12:05:00-04:00"
+  }
+ ],
+ "sla_policies": [
+  {
+   "name": "Card rewards — email first response",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "target": "8 business hours first response",
+   "applies_to": "group = Card Rewards Tier 1",
+   "updated_at": "2025-02-03",
+   "policy_id": "SLA-210"
+  },
+  {
+   "name": "Card rewards — secure message update cadence",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "target": "1 business day update cadence",
+   "applies_to": "ticket type in (rewards_question, cash_back_discrepancy)",
+   "updated_at": "2025-02-03",
+   "policy_id": "SLA-214"
+  },
+  {
+   "name": "Rewards first reply — standard",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "target": "first reply within 8 business hours",
+   "applies_to": "ticket_type = rewards_question",
+   "updated_at": "2025-07-01T09:00:00-04:00",
+   "policy_id": "SLA-221"
+  },
+  {
+   "name": "Corrections next update",
+   "active": true,
+   "status": "current",
+   "environment": "production",
+   "target": "internal note or customer update every 24 business hours while tag = aging_escalated",
+   "applies_to": "tag contains aging_escalated",
+   "updated_at": "2025-09-15T09:10:00-04:00",
+   "policy_id": "SLA-227"
+  }
+ ],
+ "views": [
+  {
+   "view_id": "VW-77",
+   "name": "Card rewards — open queue",
+   "active": true,
+   "status": "current",
+   "filters": [
+    "group = Card Rewards Tier 1",
+    "status != solved-pending-close"
+   ],
+   "updated_at": "2025-10-06"
+  },
+  {
+   "view_id": "VW-81",
+   "name": "Replacements by carrier",
+   "active": true,
+   "status": "current",
+   "filters": [
+    "ticket type = card_replacement",
+    "tag = replacement"
+   ],
+   "updated_at": "2025-10-06"
+  },
+  {
+   "view_id": "VW-86",
+   "name": "Corrections — open by age",
+   "active": true,
+   "status": "current",
+   "filters": [
+    "ticket_type = rewards_question",
+    "tag contains recalc_candidate OR correction_applied",
+    "status != solved",
+    "sort: created_at asc"
+   ],
+   "updated_at": "2025-09-15T09:05:00-04:00"
+  },
+  {
+   "view_id": "VW-88",
+   "name": "Corrections — aging past 10 business days",
+   "active": true,
+   "status": "current",
+   "filters": [
+    "tag contains aging_escalated",
+    "sort: hours_since_status_change desc"
+   ],
+   "updated_at": "2025-11-04T10:33:00-05:00"
+  },
+  {
+   "view_id": "VW-106",
+   "name": "Campaign reconciliation queue",
+   "active": true,
+   "status": "current",
+   "filters": [
+    "tag contains promo_reconciliation",
+    "group = Card Rewards Corrections"
+   ],
+   "updated_at": "2025-10-30T16:10:00-04:00"
+  },
+  {
+   "view_id": "VW-109",
+   "name": "Denied with active appeal",
+   "active": true,
+   "status": "current",
+   "filters": [
+    "tag contains appeal_review",
+    "status = open"
+   ],
+   "updated_at": "2025-10-19T11:28:00-04:00"
+  },
+  {
+   "view_id": "VW-99",
+   "name": "Withdrawn — trailing 90 days",
+   "active": true,
+   "status": "current",
+   "filters": [
+    "review_outcome = withdrawn",
+    "solved within 90 days"
+   ],
+   "updated_at": "2025-10-02T15:40:00-04:00"
+  },
+  {
+   "view_id": "VW-103",
+   "name": "Unassigned rewards intake",
+   "active": true,
+   "status": "current",
+   "filters": [
+    "ticket_type = rewards_question",
+    "assignee = none",
+    "sort: created_at asc"
+   ],
+   "updated_at": "2025-08-06T09:22:00-04:00"
+  }
+ ]
+}

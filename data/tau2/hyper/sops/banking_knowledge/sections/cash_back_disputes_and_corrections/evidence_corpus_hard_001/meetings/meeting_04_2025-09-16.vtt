@@ -1,0 +1,206 @@
+WEBVTT
+
+00:00:01.900 --> 00:00:20.438
+<v Priya Raman>Okay, quorum. Dan's in Charlotte doing the trainer certification thing, so he's spared today. It's the four of us and one big agenda item, which is the correction process redesign. I want most of the hour on that.
+
+00:00:21.016 --> 00:00:25.702
+<v Alicia Fuentes>Most of the half hour. We're a half hour meeting.
+
+00:00:25.879 --> 00:00:28.736
+<v Priya Raman>Most of the half hour, thank you.
+
+00:00:29.800 --> 00:00:41.810
+<v Grace Liu>Did Dan really send a photo of the certification binder to the channel, or was that photoshopped? The binder looked four inches thick.
+
+00:00:42.804 --> 00:00:47.777
+<v Alicia Fuentes>Real. He annotated it with tabs. Colored tabs. On day one.
+
+00:00:47.936 --> 00:00:51.468
+<v Marcus Webb>That tracks completely. That man tabs restaurant menus.
+
+00:00:52.442 --> 00:01:08.249
+<v Priya Raman>And he'll come back certified to certify, which means the Q4 calibration runs under the new format, which is the actual reason I let him go in September. Two small items first. Marcus, thirty seconds, dashboard and the label thing.
+
+00:01:08.573 --> 00:01:40.198
+<v Marcus Webb>Thirty seconds is doable. Dashboard: fixed since the twenty-seventh, backfill verified against the source extract, no drift since. The rewards tile is current as of last night, and it has a little freshness stamp on it now, so if it ever freezes again it will at least confess. Label work: scoped, two weeks of effort, my team starts it after the ATM claims planning settles, so realistically October.
+
+00:01:41.031 --> 00:01:44.113
+<v Priya Raman>Good on both. Alicia, KB, ten seconds.
+
+00:01:44.415 --> 00:01:49.498
+<v Alicia Fuentes>Legal has it. One adjective died, nothing substantive. Still on for the thirtieth.
+
+00:01:50.305 --> 00:02:23.135
+<v Priya Raman>Great. Okay. Correction process. Context for the recording, because we'll want to point people back at this: today what happens after a dispute is resolved and approved lives in agent habit and a memo from two years ago. We're replacing that with an actual documented flow, the diagram is numbered RWD-OPS-114, and what I'm about to share is revision B, which is a draft. Dated today. It is not approved, it is not on the board, it is for this room to shoot at.
+
+00:02:28.573 --> 00:02:29.488
+<v Grace Liu>Locked and loaded.
+
+00:02:29.985 --> 00:02:31.716
+<v Priya Raman>I noticed. Sharing now.
+
+00:02:34.199 --> 00:02:36.719
+[Priya shares the RWD-OPS-114 rev B draft diagram.]
+
+00:04:13.326 --> 00:05:03.296
+<v Priya Raman>Walk with me left to right. Box one: the trigger is a resolved, approved dispute. You find those in the disputes database — resolved status, and the record carries the transaction id or ids that need fixing. Box two: unlock. The rewards update tool is one of the locked tools, so the flow goes through the unlock step first, same pattern as the fee-reversal tools. Box three — and this is the one I want debated — the draft takes the corrected value from the dispute record itself. There's a field on the record, expected rewards, filled in during the dispute process. Rev B reads that field, posts it through the update tool, done. Box four: verify the transaction history shows the new value and note the case.
+
+00:05:03.591 --> 00:05:05.223
+<v Marcus Webb>Mm.
+
+00:05:05.506 --> 00:05:15.896
+<v Priya Raman>That noise was Marcus pre-hedging. Before the debate — any mechanical questions on the boxes themselves? I want the flow understood before it's argued with.
+
+00:05:17.244 --> 00:05:32.218
+<v Grace Liu>One on box two. Who actually holds the unlock? Like, when the flow says unlock, is that the agent themselves, their lead, a request to your team — what's the draft assuming?
+
+00:05:32.689 --> 00:06:00.493
+<v Priya Raman>Draft assumes the working agent performs the unlock themselves, and the unlock is logged. Same as the fee tools today. The lock isn't a permission gate in the approval sense — it's a speed bump that makes posting a rewards change a deliberate act with a trace, instead of a fat-finger risk sitting live in every session.
+
+00:06:01.073 --> 00:06:28.131
+<v Marcus Webb>And mechanically that's the right pattern to copy. The fee tools have run that way for two years, the unlock log has settled more than one who-did-what conversation, and — this is the part I like — nothing about the lock cares which value gets posted. So whatever this room decides about box three, box two survives unchanged.
+
+00:06:28.508 --> 00:06:52.953
+<v Grace Liu>Fine. Then box three. I want to put a real case on the table before anyone falls in love with that arrow, because I brought the case that breaks it. CB-2509-0288. Give me a second to pull the record up — I want to read his exact words, not my memory of them.
+
+00:06:53.392 --> 00:06:56.097
+[Grace pulls up the case record on her second screen.]
+
+00:08:05.656 --> 00:08:12.885
+<v Grace Liu>Okay, I have it. Can I talk over your share? Just leave the diagram up.
+
+00:08:13.446 --> 00:08:14.797
+<v Priya Raman>Go.
+
+00:08:15.112 --> 00:09:02.656
+<v Grace Liu>Business Silver customer. The disputed charge is at Apple — three hundred forty dollars, some hardware accessory thing, doesn't matter. Customer files, and in the dispute intake, where it asks what you expected, he writes — I'm reading the intake verbatim: "This purchase was at Apple which is a software company, my card gives ten percent on software, so I expected 3400 points and received a fraction of that. Please correct to 3400." End quote. Because in his head, Apple is software, software is ten percent, ten percent of three forty is thirty-four dollars, three thousand four hundred points. His arithmetic is perfect. His premise is wrong.
+
+00:09:03.435 --> 00:09:09.060
+<v Alicia Fuentes>Because Apple's on the exclusions list, so it earns the standard rate.
+
+00:09:09.359 --> 00:09:47.641
+<v Grace Liu>Right — the published page has Apple under hardware and electronics, excluded from the bonus, earns the standard one percent. So the correct number for that charge, if it had needed correcting at all, is three hundred forty points. The field on his dispute record says three thousand four hundred. That field is his claim. It's what he expected, which is literally the name of the field. And box three reads it as if it were the answer.
+
+00:09:50.277 --> 00:10:28.902
+<v Marcus Webb>Can I stack on that before Alicia rebuts? Because I looked at where that field comes from, mechanically, after Grace flagged the case to me on Friday. I want to be careful — I've looked at one afternoon's worth of records, this is not a study. But in the records I pulled, that field is populated at intake, and what goes in is what the customer stated, sometimes cleaned up by the agent, sometimes not filled at all. There's no validation on it. It's a text-ish number that a hopeful person typed.
+
+00:10:29.643 --> 00:11:11.857
+<v Alicia Fuentes>Okay, so, rebuttal, or at least — not a rebuttal, a cost argument, and then you can all pile on. The reason rev B reads the field is speed, right? The correction queue is slow today because every correction is a bespoke recomputation. If the field is right — what, Marcus, most of the time? — then reading it clears most of the queue fast, and we catch the bad ones with a spot check. Sample one in five, whatever. We're not choosing between perfect and broken, we're choosing between slow-and-right and fast-with-a-net.
+
+00:11:15.504 --> 00:11:23.682
+<v Priya Raman>Grace, put an actual number on slow before we argue about fixing it. What's the correction queue running?
+
+00:11:24.426 --> 00:11:58.422
+<v Grace Liu>Median nine days from dispute approval to the account actually showing the fixed value. Worst case this quarter was twenty-two days, and that customer called twice in the gap, understandably. For contrast, the dispute decision itself averages six. So the correction tail is longer than the decision, which is backwards from how customers experience fairness — they forgive the deliberation, they don't forgive waiting on a number everyone already agreed to.
+
+00:11:59.192 --> 00:12:06.041
+<v Alicia Fuentes>Thank you, that's my argument with better numbers. Whatever wins box three, that tail is the actual enemy.
+
+00:12:06.565 --> 00:12:40.955
+<v Grace Liu>The net has a hole in it, though, and the hole is shaped exactly like the cases that matter. Think about who files a dispute with a wrong expectation. It's precisely the exclusions crowd — the Apple-is-software people, the twenty-percent-promo people. Their expected value isn't randomly wrong, it's systematically wrong, in their own favor, for the exact merchants where the rules have teeth. A spot check samples randomly. The errors aren't random.
+
+00:12:42.524 --> 00:13:05.941
+<v Marcus Webb>And I'll add the quieter failure: the blank ones. If the field's empty, rev B has no arrow. The flow just... has nothing to post. So you need the recompute path anyway, for the blanks, which means you're maintaining both paths, which eats a chunk of the speed argument on its own.
+
+00:13:06.393 --> 00:13:20.996
+<v Alicia Fuentes>Unless the blanks are rare — okay, no, you just said you don't know the rates. Fine. What would it take to know? Because I feel like we're arguing philosophy when someone could just count.
+
+00:13:23.556 --> 00:13:53.725
+<v Marcus Webb>That's the one thing I can offer cheaply. Give me two weeks and I'll pull a real sample — a few hundred resolved disputes, and for each one: was the field filled, did it match what a proper recomputation gives, and if not, which direction and how far off. Then the philosophy has numbers under it. I'd rather this decision read my tally than my hunch.
+
+00:13:54.282 --> 00:14:43.599
+<v Marcus Webb>And one design note while I have the floor, whichever arrow wins. The recompute path has a moving part nobody's named yet: promotions. A correction done in December for a purchase made in July has to use July's rates — whatever bonus or promo was live at purchase time, not at correction time. The doubling promo alone means the same merchant, same amount, same card gives different right answers depending on the purchase date and the account's opening date. Wherever the flow lands, the person doing the recompute needs the promo terms in front of them, dated. Otherwise we'll be correcting our corrections.
+
+00:14:43.757 --> 00:14:56.748
+<v Grace Liu>Strong agree, and the promo terms live in the final terms deck, so the flow should say so — point at the deck, not at anyone's memory of the deck.
+
+00:14:57.204 --> 00:15:02.314
+<v Priya Raman>Requirement noted, and it goes in rev-whatever-wins. Purchase-time rates, source named.
+
+00:15:04.379 --> 00:15:17.381
+<v Priya Raman>Hold on, before we all agree our way into it — Grace, if not the field, what's the alternative arrow? Say it out loud so the recording has both options in full.
+
+00:15:20.151 --> 00:15:53.375
+<v Grace Liu>The alternative is: the record tells you which transaction, and only that. The value gets recomputed fresh every time — card type, what category the charge actually processed under, whatever promotion was live at purchase. The customer's expected number is context. You look at it, sure, it tells you what to explain in the reply. It just never becomes the number you post.
+
+00:15:54.521 --> 00:16:06.143
+<v Alicia Fuentes>Which is what you'd do anyway for the blanks and the promo cases, I know, I heard me. I'm not conceding, I'm... acknowledging structural difficulties.
+
+00:16:07.243 --> 00:16:38.847
+<v Priya Raman>Then here's where we land today, and I want to be precise because I know how draft diagrams escape into the wild. No decision in this meeting. Rev B stays a draft — nobody builds against it, nobody trains against it, it does not go on the board. Marcus runs the sample. When the tally's in, I'll make the call, and I'll make it in writing, not in a hallway.
+
+00:16:39.371 --> 00:16:47.665
+<v Marcus Webb>Sample by the end of the month. It'll be ready for the October second sync.
+
+00:16:47.964 --> 00:17:04.899
+<v Grace Liu>And I'll pull the promo-window disputes from the last two months as a companion piece, because if the sample's error cases cluster where I think they will, that's the strongest version of my argument.
+
+00:17:05.879 --> 00:17:26.030
+<v Alicia Fuentes>And I reserve the right to have been right about the speed problem, which is real even if my fix dies. The queue is slow. Whatever wins, the flow needs to say who does the recompute and how long it's allowed to take, or the next redesign meeting is about the backlog.
+
+00:17:26.194 --> 00:17:39.815
+<v Priya Raman>Fair, and that goes in as a requirement regardless of the arrow. Let me get my notes in order — one second, I'm writing the requirement down before it evaporates.
+
+00:17:44.750 --> 00:17:47.865
+[Priya types the requirements into the shared notes document.]
+
+00:19:01.913 --> 00:19:25.618
+<v Priya Raman>Okay. Written. Also on the calendar note: Tunde's observation write-up comes to me this week, and whatever housekeeping it asks for, we'll fold into the October syncs rather than a special session. He was gentle, apparently. Alicia, you had an Apple-adjacent thing, and I can feel it coming, so let's do it on purpose.
+
+00:19:25.741 --> 00:19:47.979
+<v Alicia Fuentes>It's small. Prompted by Grace's case, hear me out: is there any appetite for asking product about splitting Apple in the exclusions — like, the App Store as software, physically-a-laptop as hardware? Because his premise, Apple is software, isn't crazy, it's just wrong under the current page, and it keeps generating—
+
+00:19:48.099 --> 00:20:01.533
+<v Grace Liu>It's wrong under the page, which is the thing agents can actually apply. The moment the answer depends on which Apple storefront, every call needs a receipt forensics unit.
+
+00:20:01.953 --> 00:20:25.046
+<v Priya Raman>We did this in August, and the answer hasn't moved: the published exclusions list is the rule we work by, merchant-level, as written. If product ever re-cuts the list, it comes with its own review and its own retraining, and it will not be launched from this sync. Closing it there.
+
+00:20:25.367 --> 00:20:26.337
+<v Alicia Fuentes>Withdrawn with dignity.
+
+00:20:27.221 --> 00:20:44.945
+<v Priya Raman>Always. Remaining items, quickly. Calibration: Dan's Q4 session is October sixteenth, it's on everyone's calendar as of yesterday, and it's the rewards-math one, so bring your worst cases. Grace, that's a formal ask — a shortlist from the queue for Dan by the tenth.
+
+00:20:45.220 --> 00:20:58.597
+<v Grace Liu>Already started. It's mostly the greatest hits — fractions, exclusions, one promo casualty. I'll have it to him by the eighth, honestly, because I know he builds slides the night before.
+
+00:20:58.821 --> 00:21:02.591
+<v Alicia Fuentes>He builds good slides the night before, to be fair.
+
+00:21:03.018 --> 00:21:26.919
+<v Alicia Fuentes>Oh — small ship notice while we're in list mode, thirty seconds. The redemption confirmation screen now shows the dollar equivalent next to the points number. Went out Thursday. Grace, that was your paper cut from the last sync — the pre-redemption hesitation calls should taper, and if they don't by mid-October, tell me and I'll stare at the screen some more.
+
+00:21:27.149 --> 00:21:34.089
+<v Grace Liu>Saw it, love it, already had one agent message me asking if the app was new. Progress.
+
+00:21:38.880 --> 00:22:04.585
+<v Priya Raman>The class: Bea, Hugo, Katya, Wes start shadowing Monday. First-week reviews go to Dan per his plan; Grace gets escalations only. If any of the four somehow draws a correction case in week one, it comes straight to Grace, do not let a shadow post a rewards update, locked tool or no.
+
+00:22:05.509 --> 00:22:10.446
+<v Grace Liu>Noted, and the lock alone should stop that, but noted with enthusiasm.
+
+00:22:10.968 --> 00:22:15.886
+<v Marcus Webb>The lock will stop it. That pattern I'm comfortable vouching for.
+
+00:22:16.181 --> 00:22:21.602
+<v Alicia Fuentes>Bold, unhedged Marcus. Everyone drink it in, we get this maybe twice a year.
+
+00:22:21.943 --> 00:22:28.884
+<v Marcus Webb>Locks and logs. The two things in this building I'll vouch for without a footnote.
+
+00:22:32.148 --> 00:22:33.971
+<v Priya Raman>Framing that. Moving on.
+
+00:22:34.347 --> 00:22:51.430
+<v Priya Raman>Famous last words, timestamped. Okay, recap. Marcus: the sample, few hundred records, tally by the second. Grace: promo-window companion pull, calibration shortlist to Dan. Alicia: nothing new — KB on the thirtieth, and thank you for dying on fewer hills than usual.
+
+00:22:51.920 --> 00:22:55.718
+<v Alicia Fuentes>One hill. I withdrew from the other hill.
+
+00:22:57.272 --> 00:23:12.667
+<v Priya Raman>And me: I owe you all a decision on the arrow once the numbers exist, in writing. That's it. Under the half hour, which for a diagram day is a personal best.
+
+00:23:18.009 --> 00:23:20.115
+<v Grace Liu>Don't jinx the next one.
+

@@ -1,0 +1,365 @@
+# Delta specification: canonical `airline` -> `airline_plus`.
+#
+# This file is the single reviewable map of every change between the canonical
+# airline domain and airline_plus (policy.md / db.json / tasks.json /
+# split_tasks.json). The committed outputs embody these values, and the test
+# suite checks them against this spec.
+#
+# Design goals:
+#   1. Parity for policy-readers: same workflows and task structures, values of
+#      the same difficulty class.
+#   2. Discrimination: an agent applying canonical airline values must fail at
+#      least one task per changed value (canonical-ghost gate).
+
+meta:
+  source_domain: airline
+  target_domain: airline_plus
+  seed: airline-plus-v1
+
+# ---------------------------------------------------------------------------
+# Group B: values wired into tools and gold actions
+# ---------------------------------------------------------------------------
+fees:
+  # Must match AirlinePlusTools in src/tau2/domains/airline_plus/tools.py.
+  extra_baggage_fee: {old: 50, new: 65}
+  insurance_fee_per_passenger: {old: 30, new: 45}
+
+# Free checked bags per passenger, [basic_economy, economy, business].
+# Deliberately NOT a uniform shift: two cells kept identical (regular/business,
+# gold/business), one cell raised (silver/business) so memorized-matrix agents
+# can fail by overcharging as well as undercharging.
+baggage_allowance:
+  regular: {old: [0, 1, 2], new: [0, 0, 2]}
+  silver:  {old: [1, 2, 3], new: [0, 1, 4]}
+  gold:    {old: [2, 3, 4], new: [1, 2, 4]}
+
+# ---------------------------------------------------------------------------
+# Group A: prose-only values
+# ---------------------------------------------------------------------------
+compensation:
+  cancelled_flight_per_passenger: {old: 100, new: 170}
+  delayed_flight_per_passenger: {old: 50, new: 85}
+limits:
+  max_passengers: {old: 5, new: 4}
+  max_gift_cards: {old: 3, new: 1}
+refund_window:
+  old: within 5 to 7 business days
+  new: within 12 business days
+
+# Exact-substring rewrites applied to policy.md in order. Each `old` must
+# occur exactly once at the moment it is applied (the generator asserts this),
+# which is why the matrix edits are ordered top cabin-value first.
+policy_edits:
+  - old: "at most five passengers."
+    new: "at most four passengers."
+  - old: "at most one travel certificate, at most one credit card, and at most three gift cards."
+    new: "at most one travel certificate, at most one credit card, and at most one gift card."
+  # Free-bag matrix, economy column (regular 1->0 must run before silver 2->1).
+  - old: "- 1 free checked bag for each economy passenger"
+    new: "- 0 free checked bag for each economy passenger"
+  - old: "- 2 free checked bag for each economy passenger"
+    new: "- 1 free checked bag for each economy passenger"
+  - old: "- 3 free checked bag for each economy passenger"
+    new: "- 2 free checked bag for each economy passenger"
+  # Basic economy column (silver 1->0 before gold 2->1).
+  - old: "- 1 free checked bag for each basic economy passenger"
+    new: "- 0 free checked bag for each basic economy passenger"
+  - old: "- 2 free checked bag for each basic economy passenger"
+    new: "- 1 free checked bag for each basic economy passenger"
+  # Business column: only silver changes (3->4); regular and gold keep 2 and 4.
+  - old: "- 3 free checked bags for each business passenger"
+    new: "- 4 free checked bags for each business passenger"
+  - old: "- Each extra baggage is 50 dollars."
+    new: "- Each extra baggage is 65 dollars."
+  - old: "- The travel insurance is 30 dollars per passenger and enables full refund if the user needs to cancel the flight given health or weather reasons."
+    new: "- The travel insurance is 45 dollars per passenger and enables full refund if the user needs to cancel the flight given health or weather reasons."
+  - old: "- The refund will go to original payment methods within 5 to 7 business days."
+    new: "- The refund will go to original payment methods within 12 business days."
+  - old: "- If the user complains about cancelled flights in a reservation, the agent can offer a certificate as a gesture after confirming the facts, with the amount being $100 times the number of passengers."
+    new: "- If the user complains about cancelled flights in a reservation, the agent can offer a certificate as a gesture after confirming the facts, with the amount being $170 times the number of passengers."
+  - old: "- If the user complains about delayed flights in a reservation and wants to change or cancel the reservation, the agent can offer a certificate as a gesture after confirming the facts and changing or cancelling the reservation, with the amount being $50 times the number of passengers."
+    new: "- If the user complains about delayed flights in a reservation and wants to change or cancel the reservation, the agent can offer a certificate as a gesture after confirming the facts and changing or cancelling the reservation, with the amount being $85 times the number of passengers."
+
+# ---------------------------------------------------------------------------
+# Group D: data values and entity identifiers
+# ---------------------------------------------------------------------------
+# All monetary data values (flight prices per date/cabin, stored reservation
+# flight prices, payment-history amounts, gift-card and certificate balances)
+# are scaled by `price_scale` with sign-aware floor. A pure multiplicative
+# scale preserves every cheapest-flight ordering the tasks rely on.
+price_scale: 1.2
+
+identifiers:
+  flight_prefix: {old: HAT, new: MER}
+  # Reservation ids created by the tools during an episode (must match
+  # AirlinePlusTools.NEW_RESERVATION_IDS / NEW_PAYMENT_IDS).
+  new_reservation_ids:
+    old: [HATHAT, HATHAU, HATHAV]
+    new: [MERMER, MERMES, MERMET]
+  new_payment_ids:
+    old: [3221322, 3221323, 3221324]
+    new: [8471205, 8471206, 8471207]
+  # user ids, reservation ids, payment-method ids, emails and dates of birth
+  # are remapped with deterministic seeded generators (see generator).
+  # SUPERSEDED 2026-08 (PR C): last_four digits, street addresses (address1 +
+  # address2 unit numbers) and user zips — originally kept as carrying no
+  # policy value — were redrawn post-cutover by scripts external to the
+  # generator (seed "plus-value-redraw-v1", per-distinct-string injective
+  # maps, new pools disjoint from the UNION of canonical retail+airline
+  # values; zips keep their leading digit). The standalone db is
+  # authoritative; disjointness is gated in
+  # tests/test_domains/test_airline_plus/test_standalone_invariants.py.
+  redrawn_value_families: [last_four, address1, address2, zip]
+
+# Bijective name maps. Every first/last name that appears anywhere in db.json
+# or tasks.json must have an entry; the generator fails on unmapped names.
+first_names:
+  Aarav: Vihaan
+  Alex: Casey
+  Amelia: Eleanor
+  Anya: Katya
+  Ari: Lior
+  Ava: Isla
+  Chen: Wei
+  Daiki: Haruto
+  Emma: Clara
+  Ethan: Caleb
+  Evelyn: Beatrice
+  Ezra: Silas
+  Fatima: Amina
+  Harper: Marlowe
+  Isabella: Valentina
+  Ivan: Dmitri
+  James: Henry
+  Jamie: Robin
+  Juan: Diego
+  Kevin: Marcus   # task-only passenger (task 8)
+  Kit: Lane
+  Lei: Ming
+  Liam: Declan
+  Lucas: Felix
+  Mason: Carter
+  Mei: Xiu
+  Mia: Zoe
+  Mohamed: Karim
+  Morgan: Avery
+  Noah: Elias
+  Olivia: Charlotte
+  Omar: Tariq
+  Raj: Arjun
+  River: Wren
+  Rune: Bjorn
+  Sage: Ember
+  Sofia: Lucia
+  Sophia: Helena
+  Tatum: Peyton
+  Yara: Layla
+  Yusuf: Hamza
+last_names:
+  Ahmed: Rashid
+  Anderson: Carlson
+  Brown: Whitfield
+  Cole: Barrett
+  Davis: Sutton
+  Drew: Ellery
+  Falk: Lindqvist
+  Garcia: Fuentes
+  Gonzalez: Delgado
+  Hernandez: Villanueva
+  Holm: Dahl
+  Ito: Takeda
+  Jackson: Everett
+  Johansson: Lindgren
+  Johnson: Harmon
+  Kato: Fujii
+  Khan: Malik
+  Kim: Choi
+  Kovacs: Horvath
+  Lee: Chung
+  Li: Zhao
+  Lopez: Herrera
+  Martin: Beaumont
+  Moore: Sinclair
+  Muller: Keller
+  Navarro: Ibarra
+  Nguyen: Pham
+  Nyx: Vale
+  Park: Seo
+  Patel: Mehta
+  Quinn: Rafferty
+  Rossi: Moretti
+  Sanchez: Arroyo
+  Santos: Ferreira
+  Silva: Oliveira
+  Smith: Winslow
+  Taylor: Merritt
+  Thomas: Callahan
+  Updated: Renner   # canonical data quirk kept as a name
+  West: Hale
+  Wilson: Prescott
+
+# Name tokens that appear in task text but are NOT person references; the
+# generator leaves these occurrences untouched and fails on any other
+# unexplained leftover name token.
+text_name_exceptions:
+  - {task: "24", token: West}   # "West Coast"
+
+# ---------------------------------------------------------------------------
+# communicate_info derivations. Canonical values are reproduced by these
+# formulas (verified by the generator's identity self-test) and recomputed
+# against the transformed world.
+# ---------------------------------------------------------------------------
+communicate_rules:
+  # Task 3's second anchor is a post-cutover addition (2026-08, Phase C): the
+  # user also asks the total cost of bringing four suitcases for the two
+  # passengers; silver/economy allowance 1/pax x 2 pax = 2 free, leaving 2
+  # paid bags at the plus fee. See task_overrides "3" for the text edit.
+  "3": ["bag_allowance:JMO1MG", "bag_fee_total:2"]
+  "7": ["upcoming_paid_total:daiki_muller_1116"]
+  "11": ["flights_update_refund:11"]
+  "14": ["gc_sum:mohamed_silva_9265", "cert_sum:mohamed_silva_9265", "cc_paid_total:14"]
+  "18": ["flights_update_refund:18"]
+  "23": ["gc_sum:mohamed_silva_9265", "cert_sum:mohamed_silva_9265", "cc_paid_total:23"]
+  # New coverage tasks (new_tasks_source.json): fee quotes derived from the
+  # spec fees so the transcripts can never drift from the schedule above.
+  "55": ["insurance_total:3"]
+  "56": ["insurance_total:2"]
+  "58": ["bag_fee_total:3"]
+  # Phase C coverage tasks "63"-"66" (post-cutover, 2026-08) are DB-scored
+  # only and carry no derived quotes, so they have no entries here; their
+  # canonical-coordinate source forms live in new_tasks_source.json.
+
+# ---------------------------------------------------------------------------
+# Per-task adjustments. Everything not listed here is transformed purely
+# mechanically (id/name remap + price scaling + gold recompute).
+# ---------------------------------------------------------------------------
+task_overrides:
+  "3":
+    # POST-CUTOVER (2026-08, Phase C): the original '2' anchor is a
+    # near-vacuous substring match (a canonical-matrix agent saying "2 free
+    # bags per passenger" passes). The user now also asks what bringing four
+    # suitcases for the two passengers would cost; the correct answer is
+    # 2 x $65 = $130 (communicate_rules bag_fee_total:2), which a
+    # canonical-matrix agent (4 free -> $0) never states. The committed
+    # tasks.json is authoritative; this entry documents the edit in the
+    # generator's coordinates.
+    text_edits:
+      - old: "insist on getting the total number in numeric form, as you can see numbers better than words."
+        new: "insist on getting the total number in numeric form, as you can see numbers better than words. Once you know how many free suitcases the reservation allows, also ask what it would cost in total if you brought four suitcases for the two of you, and get the exact dollar amount before you end the call."
+        count: 1
+      # REPAIR (2026-08-26, W25): the canonical supervisor clause fired the
+      # moment the agent named Silver membership -- i.e. inside the free-
+      # allowance answer, BEFORE the Phase C four-suitcase question was ever
+      # asked -- and the sim then ended the call on the transfer, making the
+      # '130' anchor structurally unreachable (0/8 task-reps across the
+      # 2026-08-24 booked medium/hard matrix runs, including one where the
+      # agent refused the transfer and the sim still hung up). The clause is
+      # now sequenced after the dollar amount; the dispute pressure itself is
+      # unchanged.
+      - old: "If the agent insists that you are a Silver member, ask to be transferred to a supervisor."
+        new: "If the agent insists that you are a Silver member, ask to be transferred to a supervisor, but only after you have gotten the exact dollar amount for the four suitcases; do not ask for a supervisor or end the call before then."
+        count: 1
+  # "13" (POST-CUTOVER 2026-08, Phase C): ACTION was added to the task's
+  # reward_basis in tasks.json so the gold transfer_to_human_agents
+  # (compare_args: [], name-only match) actually gates the reward; under
+  # DB+COMMUNICATE alone an agent that never transfers scored 1.0 because the
+  # transfer writes nothing to the db. Mirrors the telecom transfer-scoring
+  # convention. Not a value override, so there is no mechanical entry.
+  "14":
+    # Gift-card cap 3 -> 1: keep the certificate and the larger gift card.
+    payment_plans:
+      "14_1": [certificate_3765853, gift_card_8020792, credit_card_2198526]
+    text_edits:
+      # Budget scaled and re-rounded; generator asserts the mastercard charge
+      # stays under it (accept direction preserved).
+      - {old: "less than $2000", new: "less than $2600", count: 1}
+    assertions:
+      - {value: "cc_paid_total:14", op: "<", bound: 2600}
+  "21":
+    # The flipped bag charge (65) plus the flight-change fee (71) exceeds the
+    # scaled balance of the canonical "smallest" gift card by $1 (135 vs 136),
+    # and per-call balance checks would force an ambiguous split across cards.
+    # Make the scenario explicit and pin both charges to the smallest gift
+    # card that covers them. A memorized-matrix agent expects no bag fee and
+    # picks a smaller card, so this also discriminates on card choice.
+    payment_ids:
+      "21_0": gift_card_7091239
+      "21_1": gift_card_7091239
+    text_edits:
+      - old: "You want to be sure the agent uses your gift card with the smallest balance to pay."
+        new: "You want to be sure the agent uses your gift card with the smallest balance that is enough to cover all the charges."
+        count: 1
+  "23":
+    payment_plans:
+      # Booking 1 under the 1-gift-card cap: certificate + larger gift card.
+      "23_1": [certificate_3765853, gift_card_8020792, credit_card_2198526]
+    text_edits:
+      - old: "You will then use the 500 dollar certificate and all gift cards for you"
+        new: "You will then use the 600 dollar certificate and your larger gift card for you"
+        count: 1
+  "24":
+    # New silver/basic allowance is 0, so "use all your free baggage
+    # allowance" now means no bags at all.
+    baggage:
+      "24_0": {total_baggages: 0}
+    payment_plans:
+      # Gift-card cap 1: the larger gift card covers the scaled fare alone.
+      "24_0": [gift_card_7773485]
+    text_edits:
+      - old: "You want to first use up your smaller GC and then the larger one. "
+        new: "You want to pay with your gift cards, small one first. If only one gift card is allowed, use whichever gift card covers the price. "
+        count: 1
+  "18":
+    # Community-reported defect (tau-bench #41): the gold downgrades leave
+    # checked bags above the new economy allowance and deliberately do not
+    # re-charge them (the tools never recompute baggage on cabin change).
+    # airline_plus widens that gap (regular/economy allowance is 0), so pin
+    # the user sim against agreeing to new baggage charges an agent might
+    # propose; the gold stays baggage-untouched, matching canonical.
+    text_edits:
+      - old: "You are fine with refunding to original payment for each reservation."
+        new: "You are fine with refunding to original payment for each reservation. You want to keep your checked bags exactly as they are and will not pay any new baggage fees; if the agent says the downgrade changes your baggage allowance, tell them to leave the baggage as is."
+        count: 1
+  "25":
+    # 1.2x scaling moves the fare from 375 to 450, which would cross the
+    # canonical $400 branch point; move the threshold so the same branch
+    # (gift card + credit card) is taken with a similar margin.
+    text_edits:
+      - {old: "if the price is higher than $400", new: "if the price is higher than $500", count: 1}
+    assertions:
+      - {value: "book_total:25_0", op: "<", bound: 500}
+  "29":
+    # Community-reported user-sim drift (observed identically on canonical
+    # airline with gpt-4.1: the sim adds travel insurance to the rebooking and
+    # invents a gift-card-first payment split, neither of which is in the gold
+    # booking). Pin both; the gold action is unchanged.
+    text_edits:
+      - old: "Since you took insurance for this trip, you want change fees waived (mention your health problem at the start of the conversation)."
+        new: "Since you took insurance for this trip, you want change fees waived (mention your health problem at the start of the conversation). You do not want travel insurance on the new booking."
+        count: 1
+      # Quoted last_four re-synced to the post-redraw committed task text
+      # (see the SUPERSEDED redrawn_value_families note under identifiers;
+      # 6521 was the pre-redraw digit string).
+      - old: "You also want to add 1 checked bag."
+        new: "You also want to add 1 checked bag. Pay for the new booking and any fees with your credit card ending in 3203 only; do not use your gift card."
+        count: 1
+  "32":
+    # The upgrade step costs money but the nonstop change refunds more, so the
+    # net cost is negative in canonical airline and stays negative under pure
+    # scaling. The scenario budget is scaled with prices to keep the
+    # sticker-to-budget ratio (and so the user sim's willingness to proceed
+    # past the upgrade quote) identical to canonical.
+    text_edits:
+      - {old: "You are willing to pay up to $100 for the change.", new: "You are willing to pay up to $120 for the change.", count: 1}
+    assertions:
+      - {value: "flights_update_net:32", op: "<", bound: 120}
+  "35":
+    # Community-reported defect (tau2-bench #172 / PR #357): the instructions
+    # never state the passenger count, so the user sim invents a companion and
+    # every agent books 2 passengers against a 1-passenger gold. Anchor the
+    # count, mirroring the "only for yourself" wording used elsewhere in the
+    # domain; the gold action is unchanged.
+    text_edits:
+      - old: "You don't need any baggage or insurance."
+        new: "You don't need any baggage or insurance. The new flight is only for yourself, one passenger."
+        count: 1

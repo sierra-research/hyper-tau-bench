@@ -1,0 +1,115 @@
+{
+  "id": "task_132",
+  "description": {
+    "purpose": "Task: task_132",
+    "relevant_policies": null,
+    "notes": "ECOCARD MINIMUM-PAYMENT ARITHMETIC -> EXACT PAYMENT AMOUNT. Existing db customer Claire Dubois is cash-tight and wants to pay ONLY the minimum due on her EcoCard from her checking account before the due date; she does not know the minimum amount. Seeded state: EcoCard balance $840.00 with $0.00 past due, plus a checking account chk_a6a7d745b2 ($2,400). Per 'EcoCard: Making Payments and Managing Your Account' the minimum monthly payment is 1.0% of the outstanding balance (plus past-due amounts, here zero) -> exactly $8.40. Per 'Paying Off Credit Card Balance from Checking Account (Internal)' the agent must look up both accounts, confirm the amount with the customer (communicate_info '$8.40'), and pay via pay_credit_card_from_checking_9182. THE TRAP: agents that guess a typical minimum (e.g. $25 or 2%), round wrong, or pay the full balance write the wrong amount -> DB mismatch (checking holdings and card balance both diverge). The customer refuses to pay more than the minimum."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Claire Dubois, a 32-year-old freelance jazz musician from Charleston, WV. You are warm and chatty but genuinely broke this month.\n\n**Your situation:** Gigs dried up in November and rent is due. Your EcoCard payment due date is in a couple of days and you absolutely cannot afford a late fee on top of everything else. Your plan: pay ONLY the minimum payment - not a dollar more - from your Rho-Bank checking account, and catch up properly next month after a wedding gig pays out. You have no idea what the minimum actually is; you could never find it in the app. You think your card balance is 'eight hundred and something'.\n\n**Information you know and should provide when asked:**\n- Your full name: Claire Dubois\n- Your phone number: 504-555-0847\n- Your email: jazzy_cat_lady@yahoo.com\n- Your date of birth: 06/03/1993\n- Your address: 1723 Santana Ave, Charleston, WV 25301\n\n## Conversation Flow:\n\n1. **Opening:** \"Hi! I need to make a payment on my EcoCard before the due date so I don't get hit with a late fee, but money is really tight this month. I want to pay just the minimum - literally the smallest amount I'm allowed to pay. Can you tell me what that is and take it out of my checking?\"\n\n2. **Provide verification info when asked:** Give your name, phone number, email, date of birth as requested.\n\n3. **If asked which accounts:** \"My EcoCard, and please pay it from my Rho-Bank checking account - it's the only checking account I have with you.\"\n\n4. **If the agent suggests paying more than the minimum (or the full balance):** Refuse firmly but kindly. \"I hear you, and normally I would, but every other dollar is going to rent this month. Just the minimum, please.\"\n\n5. **When the agent tells you the minimum amount:** React and authorize. \"Okay, that I can do. Yes, please go ahead and pay exactly that from my checking.\"\n\n6. **If the agent asks you what the minimum is:** \"No idea - that's why I'm calling. Can you work it out from my balance?\"\n\n7. **After the payment is confirmed:** \"Thank you so much, that's a weight off. I'll pay more next month when my December gigs pay out. Bye!\" ###STOP###\n\nDo not dump all your information at once. Only provide additional details about your situation when the agent asks. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "credit_card_accounts": {
+          "data": {
+            "cc_a6a7d745b2_eco": {
+              "account_id": "cc_a6a7d745b2_eco",
+              "user_id": "a6a7d745b2",
+              "card_type": "EcoCard",
+              "date_of_account_open": "01/20/2024",
+              "current_balance": "$840.00",
+              "credit_limit": "$6,000.00",
+              "reward_points": "1567 points",
+              "account_status": "ACTIVE",
+              "past_due_amount": "$0.00"
+            }
+          }
+        },
+        "accounts": {
+          "data": {
+            "chk_a6a7d745b2": {
+              "account_id": "chk_a6a7d745b2",
+              "user_id": "a6a7d745b2",
+              "class": "checking",
+              "level": "Blue Account",
+              "date_opened": "06/15/2024",
+              "status": "OPEN",
+              "current_holdings": "2400.00"
+            }
+          }
+        }
+      },
+      "user_data": null
+    },
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Claire Dubois",
+          "user_id": "a6a7d745b2",
+          "address": "1723 Santana Ave, Charleston, WV 25301",
+          "email": "jazzy_cat_lady@yahoo.com",
+          "phone_number": "504-555-0847",
+          "date_of_birth": "06/03/1993",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "132_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "132_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"a6a7d745b2\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "132_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "pay_credit_card_from_checking_9182"
+        },
+        "requestor": "assistant",
+        "action_id": "132_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "pay_credit_card_from_checking_9182",
+          "arguments": "{\"user_id\": \"a6a7d745b2\", \"checking_account_id\": \"chk_a6a7d745b2\", \"credit_card_account_id\": \"cc_a6a7d745b2_eco\", \"amount\": 8.40}"
+        },
+        "requestor": "assistant",
+        "action_id": "132_4"
+      }
+    ],
+    "communicate_info": [
+      "$8.40"
+    ],
+    "reward_basis": [
+      "DB",
+      "COMMUNICATE"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_credit_cards_ecocard_008",
+    "doc_credit_cards_credit_card_account_logistics_009",
+    "doc_bank_accounts_bank_accounts_(general)_009"
+  ]
+}

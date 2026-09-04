@@ -1,0 +1,615 @@
+{
+  "format": "api_contract_pack_v1",
+  "release": {
+    "contract_id": "CONTRACT-CARDSVC-5765-V13",
+    "environment": "production",
+    "status": "published",
+    "current": true,
+    "effective_at": "2025-09-24T09:00:00-04:00",
+    "snapshot_at": "2025-09-24T15:30:00-04:00",
+    "superseded_by": null
+  },
+  "cover_email": "From: Yuki Tanaka <yuki.tanaka@rhobank.com>\nTo: Card Services Support <card-services-support@rhobank.com>\nCc: Support Engineering <support-eng@rhobank.com>\nDate: Wed, 24 Sep 2025 15:42:17 -0400\nSubject: pending-orders lookup contract pack v1.3 (production)\nMessage-ID: <c9e4b1f07a25d8@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nTeam,\n\nAttached is the v1.3 contract pack for get_pending_replacement_orders_5765, cut from the production gateway definition this afternoon. This is the reference we'll answer questions against, so please work from the pack rather than from memory of the v1.1 behavior — the response envelope changed in v1.2 and the old shape keeps coming up in tickets.\n\nContents: the OpenAPI document, a Postman collection wired for the internal gateway, the error-behavior table as CSV, the record-contract notes with worked response examples including the empty case, and — new in this cut — the version lifecycle and delta sheets plus the identifier quick reference the L2 desk asked for after the September migration questions.\n\nQuestions to #support-eng as usual. Triage steps for the error rows live with the support KB, not in this pack — we document what the service does, they document what you should do about it.\n\nYuki",
+  "openapi": {
+    "openapi": "3.1.0",
+    "info": {
+      "title": "Card Services — pending replacement orders lookup",
+      "version": "1.3.0",
+      "description": "Contract for get_pending_replacement_orders_5765. Purpose: to check whether a credit card account has pending replacement card orders, call this tool with the account's credit_card_account_id. Returns the account's outstanding replacement card orders, or an empty collection when none are pending.",
+      "x-contract-id": "CONTRACT-CARDSVC-5765-V13",
+      "x-contract-status": "published",
+      "x-environment": "production",
+      "x-effective-at": "2025-09-24T09:00:00-04:00",
+      "x-superseded-by": null,
+      "x-source-of-truth": "Rho Bank internal API gateway, card-services namespace"
+    },
+    "servers": [
+      {
+        "url": "https://gateway.internal.rhobank.com/card-services/v1",
+        "description": "Internal production gateway. Reachable only from the internal environment; callers must be able to authenticate to the internal environment where the tool is available."
+      }
+    ],
+    "paths": {
+      "/replacement-orders/pending": {
+        "get": {
+          "operationId": "get_pending_replacement_orders_5765",
+          "summary": "List pending replacement card orders for a credit card account",
+          "description": "Checks a credit card account for outstanding replacement card orders. Prerequisites: the correct credit_card_account_id for the account under review (an account-level identifier — see the record-contract notes), permission to use the tool (gateway role card-services.replacement-orders.read), and an authenticated internal-environment session.",
+          "parameters": [
+            {
+              "name": "credit_card_account_id",
+              "in": "query",
+              "required": true,
+              "description": "The credit card account identifier to check for outstanding replacement card orders. Account-level, not card-level.",
+              "schema": {
+                "type": "string",
+                "pattern": "^CCA-[0-9]{2}-[0-9]{4,8}$"
+              }
+            }
+          ],
+          "security": [
+            {
+              "internalSso": [
+                "card-services.replacement-orders.read"
+              ]
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success. The body carries orders as a collection of replacement order records; an empty collection means the account has no pending replacement orders and is itself the successful no-pending-orders response, not an error.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PendingOrdersResponse"
+                  },
+                  "examples": {
+                    "two_orders": {
+                      "summary": "Account with replacement activity",
+                      "value": {
+                        "credit_card_account_id": "CCA-31-5520",
+                        "orders": [
+                          {
+                            "order_id": "RPL-68415",
+                            "status": "shipped",
+                            "created_at": "2025-09-18T10:12:44Z",
+                            "latest_event_at": "2025-09-22T16:03:10Z",
+                            "notes": "expedited; customer travelling from 09-29"
+                          },
+                          {
+                            "order_id": "RPL-67102",
+                            "status": "delivered",
+                            "created_at": "2025-07-02T09:40:21Z",
+                            "latest_event_at": "2025-07-11T14:22:05Z"
+                          }
+                        ]
+                      }
+                    },
+                    "empty": {
+                      "summary": "No pending orders (successful empty collection)",
+                      "value": {
+                        "credit_card_account_id": "CCA-22-4105",
+                        "orders": []
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "INVALID_ACCOUNT_ID — the identifier did not resolve to a credit card account. See the error-behavior table."
+            },
+            "401": {
+              "description": "UNAUTHENTICATED — no valid internal-environment session. See the error-behavior table."
+            },
+            "403": {
+              "description": "PERMISSION_DENIED — the caller's role lacks card-services.replacement-orders.read. See the error-behavior table."
+            },
+            "504": {
+              "description": "UPSTREAM_TIMEOUT — the orders store did not answer in time. See the error-behavior table."
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "PendingOrdersResponse": {
+          "type": "object",
+          "required": [
+            "credit_card_account_id",
+            "orders"
+          ],
+          "properties": {
+            "credit_card_account_id": {
+              "type": "string"
+            },
+            "orders": {
+              "type": "array",
+              "description": "Collection of replacement order records for the account. Empty when no replacement orders are pending.",
+              "items": {
+                "$ref": "#/components/schemas/ReplacementOrderRecord"
+              }
+            }
+          }
+        },
+        "ReplacementOrderRecord": {
+          "type": "object",
+          "required": [
+            "order_id",
+            "status",
+            "created_at",
+            "latest_event_at"
+          ],
+          "properties": {
+            "order_id": {
+              "type": "string",
+              "description": "Replacement order identifier (RPL-prefixed)."
+            },
+            "status": {
+              "type": "string",
+              "description": "Order lifecycle status. Examples include pending, shipped, delivered, and cancelled.",
+              "examples": [
+                "pending",
+                "shipped",
+                "delivered",
+                "cancelled"
+              ]
+            },
+            "created_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "latest_event_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "notes": {
+              "type": "string",
+              "description": "Optional free-text context recorded with the order."
+            }
+          }
+        }
+      }
+    }
+  },
+  "postman_collection": {
+    "info": {
+      "_postman_id": "7f2c1a94-5d08-4b3e-9c61-8e0f4b72d5a1",
+      "name": "Card Services — pending replacement orders (5765) v1.3",
+      "description": "Requests against the internal production gateway. Set the {{gateway}} variable and sign on through the internal SSO helper before running anything; unauthenticated calls return 401 by design.",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+      {
+        "key": "gateway",
+        "value": "https://gateway.internal.rhobank.com/card-services/v1"
+      }
+    ],
+    "item": [
+      {
+        "name": "Pending orders — account with activity",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "url": {
+            "raw": "{{gateway}}/replacement-orders/pending?credit_card_account_id=CCA-31-5520",
+            "host": [
+              "{{gateway}}"
+            ],
+            "path": [
+              "replacement-orders",
+              "pending"
+            ],
+            "query": [
+              {
+                "key": "credit_card_account_id",
+                "value": "CCA-31-5520"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "Pending orders — empty collection case",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "url": {
+            "raw": "{{gateway}}/replacement-orders/pending?credit_card_account_id=CCA-22-4105",
+            "host": [
+              "{{gateway}}"
+            ],
+            "path": [
+              "replacement-orders",
+              "pending"
+            ],
+            "query": [
+              {
+                "key": "credit_card_account_id",
+                "value": "CCA-22-4105"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "Invalid identifier (card-level id) — expect 400",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "url": {
+            "raw": "{{gateway}}/replacement-orders/pending?credit_card_account_id=4417-XXXX-XXXX-8830",
+            "host": [
+              "{{gateway}}"
+            ],
+            "path": [
+              "replacement-orders",
+              "pending"
+            ],
+            "query": [
+              {
+                "key": "credit_card_account_id",
+                "value": "4417-XXXX-XXXX-8830"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "Lookup during in-flight write — expect 409",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "url": {
+            "raw": "{{gateway}}/replacement-orders/pending?credit_card_account_id=CCA-19-30327",
+            "host": [
+              "{{gateway}}"
+            ],
+            "path": [
+              "replacement-orders",
+              "pending"
+            ],
+            "query": [
+              {
+                "key": "credit_card_account_id",
+                "value": "CCA-19-30327"
+              }
+            ]
+          },
+          "description": "Reproduces ORDERS_WRITE_IN_FLIGHT (error table row ERR-5765-409) when run while an order submission for the same account is mid-write. A fresh call after the write lands is a new lookup."
+        }
+      },
+      {
+        "name": "Legacy-core account — expect 404 HISTORY_NOT_PROVISIONED",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "url": {
+            "raw": "{{gateway}}/replacement-orders/pending?credit_card_account_id=CCA-07-118204",
+            "host": [
+              "{{gateway}}"
+            ],
+            "path": [
+              "replacement-orders",
+              "pending"
+            ],
+            "query": [
+              {
+                "key": "credit_card_account_id",
+                "value": "CCA-07-118204"
+              }
+            ]
+          },
+          "description": "Known legacy-core test account. Distinguish this 404 from the v1.1-era no-orders 404 in old saved examples."
+        }
+      }
+    ]
+  },
+  "error_behavior_columns": [
+    "rule_id",
+    "status",
+    "environment",
+    "audience",
+    "http_status",
+    "condition",
+    "response_code",
+    "notes",
+    "retry_safe",
+    "updated_at",
+    "superseded_by"
+  ],
+  "error_behavior": [
+    {
+      "rule_id": "ERR-5765-400",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 400,
+      "condition": "credit_card_account_id does not resolve to a credit card account (wrong format, card-level identifier, or unknown account)",
+      "response_code": "INVALID_ACCOUNT_ID",
+      "notes": "The service validates the identifier before touching the orders store; nothing is queried on a 400.",
+      "updated_at": "2025-09-24T09:00:00-04:00",
+      "superseded_by": null,
+      "retry_safe": false
+    },
+    {
+      "rule_id": "ERR-5765-401",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 401,
+      "condition": "no valid internal-environment session accompanies the call",
+      "response_code": "UNAUTHENTICATED",
+      "notes": "Sessions expire on the gateway's schedule, not the tool's; a previously working session can 401 later in the same shift.",
+      "updated_at": "2025-09-24T09:00:00-04:00",
+      "superseded_by": null,
+      "retry_safe": false
+    },
+    {
+      "rule_id": "ERR-5765-403",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 403,
+      "condition": "the authenticated caller's role lacks card-services.replacement-orders.read",
+      "response_code": "PERMISSION_DENIED",
+      "notes": "Role grants are provisioned per support role; the service does not distinguish missing role from suspended role in the response.",
+      "updated_at": "2025-09-24T09:00:00-04:00",
+      "superseded_by": null,
+      "retry_safe": false
+    },
+    {
+      "rule_id": "ERR-5765-404",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 404,
+      "condition": "the identifier resolves to a credit card account, but the account's replacement-order history is not provisioned in the orders store (accounts still carried on a legacy core)",
+      "response_code": "HISTORY_NOT_PROVISIONED",
+      "notes": "Not the successful empty collection and not a timeout: the store cannot answer for this account at all. Retrying returns the same answer; route to support engineering for a legacy-core pull.",
+      "retry_safe": false,
+      "updated_at": "2025-09-24T09:00:00-04:00",
+      "superseded_by": null
+    },
+    {
+      "rule_id": "ERR-5765-409",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 409,
+      "condition": "a write touching the same account's replacement orders is in flight when the lookup runs",
+      "response_code": "ORDERS_WRITE_IN_FLIGHT",
+      "notes": "Momentary by nature; a fresh call after the conflicting write lands is a new lookup, not a retry of this one.",
+      "retry_safe": false,
+      "updated_at": "2025-09-24T09:00:00-04:00",
+      "superseded_by": null
+    },
+    {
+      "rule_id": "ERR-5765-503",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 503,
+      "condition": "the orders store is mid-failover between shards",
+      "response_code": "STORE_FAILOVER",
+      "notes": "Same handling as the gateway timeout: says nothing about whether orders exist. Failovers complete in seconds.",
+      "retry_safe": true,
+      "updated_at": "2025-09-24T09:00:00-04:00",
+      "superseded_by": null
+    },
+    {
+      "rule_id": "ERR-5765-504",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 504,
+      "condition": "the orders store does not answer within the gateway deadline",
+      "response_code": "UPSTREAM_TIMEOUT",
+      "notes": "A timeout says nothing about whether orders exist. Distinct from the successful empty collection, which is a 200.",
+      "updated_at": "2025-09-24T09:00:00-04:00",
+      "superseded_by": null,
+      "retry_safe": true
+    }
+  ],
+  "record_contract_notes": "# get_pending_replacement_orders_5765 — record contract notes\n\nContract: `CONTRACT-CARDSVC-5765-V13`\nEnvironment: production · Status: published · Effective 2025-09-24\nOwner: Support Engineering (Yuki Tanaka)\n\n## Purpose\n\nTo check whether a credit card account has pending replacement card orders, use the get_pending_replacement_orders_5765 tool. It must be called with `credit_card_account_id` to check for outstanding replacement card orders for that account. One account per call; there is no batch form.\n\n## Prerequisites\n\n1. **The correct `credit_card_account_id`.** This is the account-level identifier (`CCA-…`). Card-level identifiers — PANs, card ids from a card-detail screen — do not resolve here even when they belong to the right account.\n2. **Permission to use the tool.** The gateway checks the caller's role for `card-services.replacement-orders.read`.\n3. **Internal-environment authentication.** The tool lives on the internal gateway; the caller must be able to authenticate to the internal environment where the tool is available.\n\n## Response contract\n\nA successful response contains `orders` as a collection of replacement order records, or an empty collection if none are pending.\n\nTypical replacement order record fields:\n\n| Field | Notes |\n|---|---|\n| `order_id` | RPL-prefixed order identifier |\n| `status` | examples include `pending`, `shipped`, `delivered`, `cancelled` |\n| `created_at` | when the order was placed |\n| `latest_event_at` | most recent lifecycle event |\n| `notes` | optional free-text context |\n\n### The empty case\n\n```json\n{ \"credit_card_account_id\": \"CCA-22-4105\", \"orders\": [] }\n```\n\nA 200 with an empty `orders` collection is the successful no-pending-orders response. It is not an error, and callers should not retry it looking for a different answer.\n\n## Interpreting statuses\n\nThe contract documents what the service reports, not what any team should do about it — procedure lives with the owning teams. The status vocabulary is open-ended by design: values beyond the four examples above can appear as the fulfillment pipeline grows.\n\n## Changelog\n\n- **v1.3 (2025-09-24)** — documented the 504 gateway deadline behavior; added the card-level-identifier example to the Postman collection; clarified that the empty collection is a success.\n- **v1.2 (2025-05-07)** — response envelope now wraps records in `orders` with the echoing `credit_card_account_id`; v1.1 returned a bare array.\n- **v1.1 (2025-02-19)** — first gateway release; superseded.\n- **v1.0 (2024-08-30)** — pre-gateway pilot as a nightly card-services batch job; archived.\n\n## Identifier quick reference\n\n| Identifier | Level | Where it comes from | Works here? |\n|---|---|---|---|\n| `credit_card_account_id` (`CCA-…`) | account | account lookup / account header in the console | yes — the only accepted input |\n| `card_id` (`CRD-…`) | card | card-detail screen | no — resolves to a 400 |\n| PAN (16-digit card number) | card | the physical card | no — never used internally |\n\nThe ordering tool's console form is governed by its own argument contract and\nis more permissive about identifier level; do not carry that allowance over\nto this lookup. This endpoint validates for an account-level identifier and\nreturns `INVALID_ACCOUNT_ID` for anything else, card-level values included.\n\n## Reading old saved examples\n\nSaved calls and pasted responses from before 2025-05-07 show the v1.1 shape:\na bare array with no envelope, no `latest_event_at`, and a 404 where today's\ncontract returns the successful empty collection. Those examples keep\ncirculating in old tickets. When a response you are shown does not match the\nproduction shape, check which era it came from before drawing any conclusion\nabout the account — and note that today's 404 is `HISTORY_NOT_PROVISIONED`,\na different thing entirely from the v1.1 no-orders 404.\n\n## Retry discipline\n\nThe `retry_safe` column in the error-behavior table is the license: the two\ntimeout-class rows (503, 504) are safe to retry as-is. Nothing else is — a\n400 needs a different identifier, a 401 needs a fresh session, a 403 needs a\nrole fix, a 404 needs support engineering, and a 409 resolves itself once the\nin-flight write lands.\n\n## Roles and sessions\n\nThe gateway checks one role for this endpoint:\n`card-services.replacement-orders.read`. On the console side that role rides\nwith the standard agent grant (GRT-2201 in the workspace export) and with the\nsupport-engineering grant (GRT-2203); the retention-desk grant does not carry\nit. Sessions are the gateway's: they expire on the gateway schedule\nregardless of console activity, which is why a shift that started clean can\nstill meet a 401 mid-afternoon. A 401 is a session problem and a 403 is a\nrole problem; fixing one never fixes the other.\n\n## Scope\n\nThis pack documents the lookup service alone. The ordering tool\n(`order_replacement_credit_card_7291`) is a console tool with its own\nargument contract and its own error surface, documented on the console side;\nthe support KB keeps a quick reference for its error codes. Nothing in this\npack constrains it.\n",
+  "version_lifecycle_columns": [
+    "version",
+    "contract_id",
+    "status",
+    "environment",
+    "current",
+    "effective_at",
+    "superseded_by"
+  ],
+  "version_lifecycle": [
+    {
+      "version": "v1.0",
+      "contract_id": "CONTRACT-CARDSVC-5765-V10",
+      "status": "archived",
+      "environment": "batch (pre-gateway)",
+      "current": false,
+      "effective_at": "2024-08-30",
+      "superseded_by": "CONTRACT-CARDSVC-5765-V11"
+    },
+    {
+      "version": "v1.1",
+      "contract_id": "CONTRACT-CARDSVC-5765-V11",
+      "status": "superseded",
+      "environment": "production",
+      "current": false,
+      "effective_at": "2025-02-19",
+      "superseded_by": "CONTRACT-CARDSVC-5765-V12"
+    },
+    {
+      "version": "v1.2",
+      "contract_id": "CONTRACT-CARDSVC-5765-V12",
+      "status": "superseded",
+      "environment": "production",
+      "current": false,
+      "effective_at": "2025-05-07",
+      "superseded_by": "CONTRACT-CARDSVC-5765-V13"
+    },
+    {
+      "version": "v1.3",
+      "contract_id": "CONTRACT-CARDSVC-5765-V13",
+      "status": "published",
+      "environment": "production",
+      "current": true,
+      "effective_at": "2025-09-24",
+      "superseded_by": null
+    },
+    {
+      "version": "v1.4-rc",
+      "contract_id": "CONTRACT-CARDSVC-5765-V14RC",
+      "status": "review",
+      "environment": "staging",
+      "current": false,
+      "effective_at": null,
+      "superseded_by": null
+    }
+  ],
+  "version_delta_columns": [
+    "from_version",
+    "to_version",
+    "changes"
+  ],
+  "version_deltas": [
+    {
+      "from_version": "v1.0",
+      "to_version": "v1.1",
+      "changes": "nightly batch job became a gateway endpoint; RPL- order identifiers standardized"
+    },
+    {
+      "from_version": "v1.1",
+      "to_version": "v1.2",
+      "changes": "response envelope introduced (records wrapped in orders with the echoing credit_card_account_id; v1.1 returned a bare array); latest_event_at added to the record contract; the no-pending-orders answer became a 200 with an empty orders collection — v1.1 returned HTTP 404 when nothing was pending, which is why old saved examples still show a 404 for accounts that were simply quiet"
+    },
+    {
+      "from_version": "v1.2",
+      "to_version": "v1.3",
+      "changes": "504 gateway-deadline behavior documented; card-level-identifier example added to the Postman collection; empty-collection-as-success wording clarified"
+    },
+    {
+      "from_version": "v1.3",
+      "to_version": "v1.4-rc",
+      "changes": "adds cancellation_reason on cancelled records; review only — not production behavior"
+    }
+  ],
+  "status_lifecycle_columns": [
+    "status_value",
+    "lifecycle_stage",
+    "meaning"
+  ],
+  "status_lifecycle": [
+    {
+      "status_value": "pending",
+      "lifecycle_stage": "open",
+      "meaning": "order accepted, card not yet produced or handed to the carrier"
+    },
+    {
+      "status_value": "shipped",
+      "lifecycle_stage": "open",
+      "meaning": "with the carrier; physical delivery still outstanding"
+    },
+    {
+      "status_value": "delivered",
+      "lifecycle_stage": "closed",
+      "meaning": "carrier confirmed delivery"
+    },
+    {
+      "status_value": "cancelled",
+      "lifecycle_stage": "closed",
+      "meaning": "order withdrawn before delivery; no card arriving"
+    }
+  ],
+  "worked_responses_columns": [
+    "label",
+    "era",
+    "body",
+    "reading"
+  ],
+  "worked_responses": [
+    {
+      "label": "production — orders present",
+      "era": "v1.3",
+      "body": {
+        "credit_card_account_id": "CCA-31-5520",
+        "orders": [
+          {
+            "order_id": "RPL-68415",
+            "status": "shipped",
+            "created_at": "2025-09-18T10:12:44Z",
+            "latest_event_at": "2025-09-22T16:03:10Z",
+            "notes": "expedited; customer travelling from 09-29"
+          }
+        ]
+      },
+      "reading": "envelope echoes the account id; every record carries latest_event_at"
+    },
+    {
+      "label": "production — successful empty collection",
+      "era": "v1.3",
+      "body": {
+        "credit_card_account_id": "CCA-22-4105",
+        "orders": []
+      },
+      "reading": "the no-pending-orders answer; a 200, never retried"
+    },
+    {
+      "label": "legacy saved example — orders present",
+      "era": "v1.1",
+      "body": [
+        {
+          "order_id": "RPL-51209",
+          "status": "shipped",
+          "created_at": "2025-03-02T11:08:30Z"
+        }
+      ],
+      "reading": "bare array, no envelope, no latest_event_at; recognize the era before comparing shapes"
+    },
+    {
+      "label": "legacy saved example — nothing pending",
+      "era": "v1.1",
+      "body": {
+        "error": "NOT_FOUND",
+        "http_status": 404
+      },
+      "reading": "v1.1 answered a quiet account with a 404; under the production contract the same account returns the empty collection"
+    },
+    {
+      "label": "production — unprovisioned history",
+      "era": "v1.3",
+      "body": {
+        "error": "HISTORY_NOT_PROVISIONED",
+        "http_status": 404,
+        "credit_card_account_id": "CCA-07-118204"
+      },
+      "reading": "today's 404: the account is real but its order history lives on a legacy core; not empty, not retryable"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "representation": "helpdesk_automation_export",
+  "filename": "northline_customer_identity_admin_export_2026-08-08.zip",
+  "authoritative_fact_ids": [
+    "phone_side_checks_available_before_account",
+    "open_account_for_carrier_side_change",
+    "carrier_side_workflow_examples",
+    "account_change_requires_identity_line_and_confirmation"
+  ],
+  "authority_rule": {
+    "environment": "production",
+    "active": true,
+    "status": "published",
+    "effective_at_or_before": "2026-08-08T16:30:00-07:00",
+    "superseded_by": null,
+    "usage_role": "corroborating_only"
+  },
+  "fact_evidence": [
+    {
+      "fact_id": "phone_side_checks_available_before_account",
+      "file": "macros.json",
+      "object_ids": [
+        "MAC-5161"
+      ],
+      "locations": [
+        "macros[]"
+      ],
+      "claim_type": "positive_capability"
+    },
+    {
+      "fact_id": "open_account_for_carrier_side_change",
+      "file": "triggers.json",
+      "object_ids": [
+        "TRG-7504"
+      ],
+      "locations": [
+        "triggers[]"
+      ],
+      "claim_type": "deterministic_machine_rule"
+    },
+    {
+      "fact_id": "carrier_side_workflow_examples",
+      "file": "policy_contracts.json",
+      "object_ids": [
+        "CONTRACT-2313"
+      ],
+      "locations": [
+        "policy_contracts[]"
+      ],
+      "claim_type": "positive_capability"
+    },
+    {
+      "fact_id": "account_change_requires_identity_line_and_confirmation",
+      "file": "triggers.json",
+      "object_ids": [
+        "TRG-7507",
+        "CONTRACT-2314"
+      ],
+      "locations": [
+        "triggers[]",
+        "policy_contracts[]"
+      ],
+      "claim_type": "deterministic_machine_rule",
+      "files": [
+        "triggers.json",
+        "policy_contracts.json"
+      ]
+    }
+  ]
+}

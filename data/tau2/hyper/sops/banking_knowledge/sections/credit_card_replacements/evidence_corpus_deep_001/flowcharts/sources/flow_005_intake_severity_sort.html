@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CCR-OPS-214 — Card-event intake severity sort</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 740px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #23405f; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #c3d2e2; }
+  .lane { position: absolute; border: 1px dashed #b9c4cf; border-radius: 8px; }
+  .lanelabel { position: absolute; font-size: 12px; font-weight: 600; color: #6b7885; letter-spacing: .6px; text-transform: uppercase; }
+  .node { position: absolute; box-sizing: border-box; background: #fff; border: 2px solid #35506e; border-radius: 8px; padding: 10px 12px; font-size: 13.5px; color: #1d2833; line-height: 1.35; }
+  .start { border-color: #2e7d54; background: #f2faf5; }
+  .decision { border-color: #a2662a; background: #fdf7ee; }
+  .step { border-color: #35506e; }
+  .warn { border-color: #9d3535; background: #fdf1f1; }
+  .ok { border-color: #2e7d54; background: #f2faf5; }
+  .note { position: absolute; box-sizing: border-box; background: #fffbe8; border: 1px solid #d9c98a; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; color: #4c4630; line-height: 1.35; }
+  .edge { position: absolute; background: #55677a; }
+  .h { height: 2px; } .v { width: 2px; }
+  .lbl { position: absolute; font-size: 11.5px; color: #55677a; background: #fbfcfd; padding: 0 4px; }
+  .foot { position: absolute; left: 24px; bottom: 12px; font-size: 11.5px; color: #7b8794; }
+  .nid { display:inline-block; background:#23405f; color:#fff; border-radius:4px; font-size:10.5px; font-weight:700; letter-spacing:.6px; padding:1px 6px; margin-right:7px; vertical-align:1px; }
+  .cite { display:block; margin-top:7px; font-size:11px; color:#5a6b7d; border-top:1px dotted #c3cdd7; padding-top:5px; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>CCR-OPS-214 — Card-event intake severity sort</h1>
+    <div class="meta">Card operations &middot; owner: E. Porter &middot; published 2025-10-20 &middot; adjacent to the closures desk; decides queue routing only</div>
+  </div>
+
+  <div class="lane" style="left:24px; top:92px; width:1512px; height:560px;"></div>
+  <div class="lanelabel" style="left:40px; top:100px;">Intake — sort by event severity, route to the owning queue</div>
+
+  <div class="node start" style="left:56px; top:140px; width:300px;"><span class="nid">N01</span>Card event reaches the operations intake: compromise reports, bulk-reissue notices from the network, delivery exceptions, vendor advisories.</div>
+
+  <div class="node decision" style="left:430px; top:140px; width:300px;"><span class="nid">N02</span>Active compromise on a live card? Fast lane: the compromise queue takes it whole &mdash; replacement conversations included &mdash; and works it end to end.<span class="cite">fast-lane cases keep their own queue; nothing routes back through standard intake</span></div>
+
+  <div class="node step" style="left:810px; top:140px; width:300px;"><span class="nid">N03</span>Network- or vendor-initiated bulk reissue event: open a bulk tracker, notify the affected-portfolio owner, and route member accounts to the reissue sub-queue in batches.<span class="cite">bulk events never run through single-account tooling</span></div>
+
+  <div class="node step" style="left:1180px; top:140px; width:300px;"><span class="nid">N04</span>Delivery exception on an in-flight shipment: logistics queue. The exception note and reship path run on the logistics macros.<span class="cite">MAC-5218 &middot; TRG-3333 &middot; VIEW-1037</span></div>
+
+  <div class="node step" style="left:430px; top:420px; width:300px;"><span class="nid">N05</span>Everything else: standard card-services queue with a severity tag. Wrap-up: the intake sort is itself logged &mdash; which lane, when, and by whom &mdash; for the weekly operations review.<span class="cite">SLA-STD-CARD on the standard queue &middot; SLA-RPLC-STD once a case turns into a replacement &middot; weekly review reads VIEW-980 (aging) and VIEW-1031 (fee review)</span></div>
+
+  <div class="edge h" style="left:356px; top:172px; width:74px;"></div>
+  <div class="edge h" style="left:730px; top:172px; width:80px;"></div>
+  <div class="edge h" style="left:1110px; top:172px; width:70px;"></div>
+  <div class="edge v" style="left:580px; top:266px; height:154px;"></div>
+
+  <div class="note" style="left:56px; top:420px; width:300px;">Boundary: this board sorts and routes. Closure gating on pending replacement orders is CCR-OPS-208 &mdash; a different board with a different owner. If a closure question arrives here, it was mis-routed; send it to the closures queue unsorted &mdash; it enters that board at CCR-OPS-208/N01.</div>
+
+  <div class="note" style="left:810px; top:420px; width:690px;">Severity is about the event, not the customer's tone. A calm report of an active skimmer is severity-first; an upset call about a late envelope is logistics. The sort exists so the fast lane stays fast.</div>
+
+  <div class="foot">CCR-OPS-214 &middot; Card operations &middot; internal — not customer-facing &middot; cite nodes as CCR-OPS-214/N01&hellip;N05</div>
+</div>
+</body>
+</html>

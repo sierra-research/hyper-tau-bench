@@ -1,0 +1,193 @@
+{
+  "id": "airline_plus/all_defects_v1",
+  "version": 6,
+  "domain": "airline_plus",
+  "client": {
+    "published_api_version": "3.1.0",
+    "deployed_api_version": "3.1.0+airline-all-defects.6",
+    "defects": [
+      {
+        "defect_id": "reservation_booking_async_v1",
+        "actual_behavior": "POST /v1/reservations returns 202 Accepted with a workflow ID, Location, and Retry-After for the selected booking cohort even though the published OpenAPI documents synchronous 201 creation.",
+        "disclosure_conditions": [
+          "The Developer identifies createReservation or POST /v1/reservations and reports the observed 202 response together with its workflow ID or Location URL."
+        ],
+        "expected_remediation": "Follow the returned Location, respect Retry-After, and consume the terminal reservation without resubmitting the booking mutation.",
+        "client_can_deploy_fix": false
+      },
+      {
+        "defect_id": "reservation_insurance_boolean_v1",
+        "actual_behavior": "GET /v1/reservations/{reservation_id} returns insurance as a JSON boolean even though the published schema documents the strings yes and no.",
+        "disclosure_conditions": [
+          "The Developer identifies getReservation or GET /v1/reservations/{reservation_id} and reports observing a boolean insurance field instead of the documented string."
+        ],
+        "expected_remediation": "Make the agent tolerate the deployed boolean representation while remaining compatible with the published string representation.",
+        "client_can_deploy_fix": false
+      },
+      {
+        "defect_id": "flight_search_rate_limit_v1",
+        "actual_behavior": "GET /v1/flight-itineraries returns 429 on the sixth request and remains unavailable until the Retry-After window has elapsed.",
+        "disclosure_conditions": [
+          "The Developer identifies searchFlightItineraries or GET /v1/flight-itineraries and reports observing 429 with Retry-After."
+        ],
+        "expected_remediation": "Cache duplicate flight searches and retry only after the server-provided delay.",
+        "client_can_deploy_fix": false
+      },
+      {
+        "defect_id": "certificate_post_commit_timeout_v1",
+        "actual_behavior": "The first certificate creation in selected compensation workflows commits but returns 504; the endpoint honors Idempotency-Key for safe outcome recovery.",
+        "disclosure_conditions": [
+          "The Developer identifies createCustomerCertificate or POST /v1/customers/{customer_id}/certificates and reports a 504 response or asks whether the endpoint supports an idempotency key after observing the timeout."
+        ],
+        "expected_remediation": "Send a stable Idempotency-Key and reuse it after an ambiguous response, or reconcile through the customer resource before retrying.",
+        "client_can_deploy_fix": false
+      },
+      {
+        "defect_id": "reservation_reticketing_async_v1",
+        "actual_behavior": "PUT /v1/reservations/{reservation_id}/itinerary returns 202 Accepted and completes through an unadvertised reticketing workflow while the published OpenAPI documents a synchronous 200 response.",
+        "disclosure_conditions": [
+          "The Developer identifies replaceReservationItinerary or PUT /v1/reservations/{reservation_id}/itinerary and reports the observed 202 response together with its workflow ID or Location URL."
+        ],
+        "expected_remediation": "Poll the returned Location until terminal success before treating the replacement itinerary as authoritative; do not repeat the mutation while pending.",
+        "client_can_deploy_fix": false
+      },
+      {
+        "defect_id": "reservation_booking_post_commit_timeout_v1",
+        "actual_behavior": "The first reservation creation in selected booking workflows commits but returns 504; the endpoint honors Idempotency-Key and returns the original server-owned reservation on an identical retry.",
+        "disclosure_conditions": [
+          "The Developer identifies createReservation or POST /v1/reservations and reports a 504 response or asks about idempotency after observing the timeout."
+        ],
+        "expected_remediation": "Use a stable Idempotency-Key from the first attempt and reuse it after an ambiguous response so the original reservation ID is recovered without a duplicate booking.",
+        "client_can_deploy_fix": false
+      },
+      {
+        "defect_id": "customer_reservations_cursor_pagination_v1",
+        "actual_behavior": "GET /v1/customers/{customer_id} returns at most three reservation IDs and includes next_cursor when more exist, although the published OpenAPI says the customer resource is unpaginated.",
+        "disclosure_conditions": [
+          "The Developer identifies getCustomer or GET /v1/customers/{customer_id} and reports observing next_cursor or exactly three reservation IDs for a customer known to have more."
+        ],
+        "expected_remediation": "Follow next_cursor until exhaustion and combine all reservation IDs before making an enumeration-dependent decision.",
+        "client_can_deploy_fix": false
+      },
+      {
+        "defect_id": "flight_search_cursor_pagination_v1",
+        "actual_behavior": "GET /v1/flight-itineraries returns at most two itineraries in a stable deployed ordering and includes next_cursor when more results exist, although the published contract says pagination is absent.",
+        "disclosure_conditions": [
+          "The Developer identifies searchFlightItineraries or GET /v1/flight-itineraries and reports observing next_cursor or a result set limited to two itineraries."
+        ],
+        "expected_remediation": "Follow next_cursor until exhaustion before comparing candidate itineraries or selecting the best result.",
+        "client_can_deploy_fix": false
+      }
+    ]
+  },
+  "capabilities": [
+    {
+      "id": "airline_reservation_cancellation_v1",
+      "operation_id": "createReservationCancellation",
+      "missing_functionality": "Cancel an eligible reservation after the customer has explicitly confirmed the cancellation and its consequences."
+    }
+  ],
+  "defects": [
+    {
+      "id": "reservation_booking_async_v1",
+      "kind": "async_completion",
+      "operation_id": "createReservation",
+      "activation": {
+        "task_ids": ["8", "14", "20", "24", "25", "35", "53", "56", "58", "65"],
+        "developer_test": {
+          "exposure_rate": 0.5,
+          "seed": 20260829,
+          "mutually_exclusive_group": "reservation_booking_response"
+        }
+      },
+      "status_path": "/v1/booking-workflows/{workflow_id}",
+      "min_delay_seconds": 1.5,
+      "max_delay_seconds": 5.0,
+      "retry_after_seconds": 1,
+      "seed": 9101
+    },
+    {
+      "id": "reservation_insurance_boolean_v1",
+      "kind": "response_value_map",
+      "operation_id": "getReservation",
+      "path": ["insurance"],
+      "mapping": {
+        "yes": true,
+        "no": false
+      }
+    },
+    {
+      "id": "flight_search_rate_limit_v1",
+      "kind": "rate_limit",
+      "operation_id": "searchFlightItineraries",
+      "trigger_call_ordinal": 6,
+      "min_delay_seconds": 1.5,
+      "max_delay_seconds": 5.0,
+      "retry_after_seconds": 2,
+      "seed": 5401
+    },
+    {
+      "id": "certificate_post_commit_timeout_v1",
+      "kind": "post_commit_timeout",
+      "operation_id": "createCustomerCertificate",
+      "activation": {
+        "task_ids": ["50", "51", "62"],
+        "call_ordinals": [1],
+        "developer_test": {
+          "exposure_rate": 0.5,
+          "seed": 20260830
+        }
+      },
+      "idempotency_header": "Idempotency-Key",
+      "timeout_status": 504
+    },
+    {
+      "id": "reservation_reticketing_async_v1",
+      "kind": "async_completion",
+      "operation_id": "replaceReservationItinerary",
+      "status_path": "/v1/reticketing-workflows/{workflow_id}",
+      "min_delay_seconds": 1.5,
+      "max_delay_seconds": 5.0,
+      "retry_after_seconds": 1,
+      "seed": 9102
+    },
+    {
+      "id": "reservation_booking_post_commit_timeout_v1",
+      "kind": "post_commit_timeout",
+      "operation_id": "createReservation",
+      "activation": {
+        "task_ids": ["23", "29"],
+        "call_ordinals": [1],
+        "developer_test": {
+          "exposure_rate": 0.5,
+          "seed": 20260829,
+          "mutually_exclusive_group": "reservation_booking_response"
+        }
+      },
+      "idempotency_header": "Idempotency-Key",
+      "timeout_status": 504
+    },
+    {
+      "id": "customer_reservations_cursor_pagination_v1",
+      "kind": "pagination",
+      "operation_id": "getCustomer",
+      "collection_path": ["reservation_ids"],
+      "page_size": 3,
+      "mode": "cursor",
+      "ordering": "canonical",
+      "cursor_query_parameter": "cursor",
+      "cursor_response_field": "next_cursor"
+    },
+    {
+      "id": "flight_search_cursor_pagination_v1",
+      "kind": "pagination",
+      "operation_id": "searchFlightItineraries",
+      "collection_path": ["itineraries"],
+      "page_size": 2,
+      "mode": "cursor",
+      "ordering": "reverse_canonical",
+      "cursor_query_parameter": "cursor",
+      "cursor_response_field": "next_cursor"
+    }
+  ]
+}

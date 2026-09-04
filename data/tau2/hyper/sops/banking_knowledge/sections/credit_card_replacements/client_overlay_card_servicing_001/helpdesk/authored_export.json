@@ -1,0 +1,261 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "Rho Helpdesk",
+    "account": "rho-bank-consumer-and-business",
+    "workspace": "card-services-console",
+    "environment": "production",
+    "exported_at": "2025-11-10T14:20:00-05:00",
+    "timezone": "America/New_York",
+    "export_version": "2025.46",
+    "requested_by": "selma.ruiz@rhobank.com"
+  },
+  "cover_email": "From: Helpdesk Administration <helpdesk-admin@rhobank.com>\nTo: Selma Ruiz <selma.ruiz@rhobank.com>\nDate: Mon, 10 Nov 2025 14:26:52 -0500\nSubject: card-services-console workspace export (2025.46)\nMessage-ID: <hd-export-2025-46-cardservices@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nSelma,\n\nFull production export of the card-services-console workspace — macros, triggers, field definitions, contracts, SLAs, and views, current as of 14:20 today. The replacement-order tool contract you asked about is in policy_contracts (CON-RPLC-12), alongside the discoverable-tool wrapper contract. The retired expedite-everything macro is in there with its lifecycle metadata since you wanted the history for the training deck.\n\nOn your other question - whether anything in this workspace enforces an open-order block on new replacement orders: nothing does. No trigger, contract, or field constraint stops a second order while one is open; the banner is informational and the order tool does not read it. If the RPLC-2214 disposition comes back as a standing rule, that will be a new trigger build, so keep us on the ticket.\n\nHelpdesk Administration",
+  "macros": [
+    {
+      "macro_id": "MAC-5244",
+      "name": "Replacement order — case documentation scaffold",
+      "description": "Inserts the replacement-order documentation scaffold (reason, speed, address confirmation, fee handling, order id) into the case record after an order is submitted.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-06-18T09:00:00-04:00",
+      "updated_at": "2025-09-12T10:05:31-04:00",
+      "usage_30d": 947,
+      "usage_90d": 2731,
+      "superseded_by": null,
+      "steps": [
+        "Insert note template: reason / speed / address confirmed / fee handling / order id / next steps given",
+        "Apply tag replacement-order"
+      ]
+    },
+    {
+      "macro_id": "MAC-5240",
+      "name": "Ineligible replacement — next steps note",
+      "description": "Case-note scaffold for replacement requests that do not go forward. Content-free by design: what to tell the customer comes from the knowledge base, not from macros.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-06-18T09:00:00-04:00",
+      "updated_at": "2025-06-18T09:00:00-04:00",
+      "usage_30d": 118,
+      "usage_90d": 342,
+      "superseded_by": null,
+      "steps": [
+        "Insert note template: eligibility finding / what was explained / follow-up owner",
+        "Apply tag replacement-ineligible"
+      ]
+    },
+    {
+      "macro_id": "MAC-5108",
+      "name": "Expedite everything (retired)",
+      "description": "Legacy macro that pre-filled expedited shipping on every replacement order form. Retired 2025-05-22 after the spring billing review found fee acknowledgements being skipped on pre-filled orders.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "effective_at": "2024-09-10T09:00:00-04:00",
+      "updated_at": "2025-05-22T11:47:20-04:00",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": null,
+      "steps": [
+        "Pre-fill order form: shipping speed expedited",
+        "Apply tag replacement-order"
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "TRG-3301",
+      "name": "Replacement tag → replacement queue view",
+      "description": "Routes replacement-tagged cases to the replacement orders view for QA sampling.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 20,
+      "effective_at": "2025-06-18T09:00:00-04:00",
+      "updated_at": "2025-06-18T09:00:00-04:00",
+      "usage_30d": 1065,
+      "conditions": ["tag added replacement-order"],
+      "actions": ["move to view VIEW-1024"]
+    },
+    {
+      "trigger_id": "TRG-3318",
+      "name": "Missing fee acknowledgement — flag for review",
+      "description": "Flags submitted replacement cases where the fee-acknowledged field is unset while the recorded shipping speed is expedited.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 12,
+      "effective_at": "2025-07-02T09:00:00-04:00",
+      "updated_at": "2025-07-02T09:00:00-04:00",
+      "usage_30d": 9,
+      "conditions": [
+        { "field": "shipping_speed", "operator": "equals", "value": "expedited" },
+        { "field": "fee_acknowledged", "operator": "is_unset" }
+      ],
+      "actions": ["apply tag fee-review", "notify group card-services-qa"]
+    },
+    {
+      "trigger_id": "TRG-3140",
+      "name": "Auto-expedite on fraud keyword (retired)",
+      "description": "Fired MAC-5108 on new replacement cases containing 'fraud'. Deactivated 2025-05-22 alongside the macro retirement.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "priority": 40,
+      "effective_at": "2024-09-10T09:00:00-04:00",
+      "updated_at": "2025-05-22T11:47:20-04:00",
+      "usage_30d": 0,
+      "conditions": ["ticket.created", "body contains 'fraud'"],
+      "actions": ["apply macro MAC-5108"]
+    }
+  ],
+  "policy_contracts": [
+    {
+      "contract_id": "CON-DTOOL-9",
+      "name": "Discoverable agent tool access — replacement ordering",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "card-services-operations",
+      "scope": "The replacement ordering tool order_replacement_credit_card_7291 surfaced in the card-services console. Internal agent tool, never handed to customers to run.",
+      "required_fields": ["tool_name"],
+      "closed_world": true,
+      "wrapper_rule": "After eligibility is confirmed and before calling the order tool, the agent unlocks the discoverable replacement order tool using unlock_discoverable_agent_tool with tool_name order_replacement_credit_card_7291. After unlocking, the agent calls it using call_discoverable_agent_tool with tool_name order_replacement_credit_card_7291. The console rejects call attempts on tools that were not unlocked in the same interaction, and the unlock is not performed for customers who are not eligible for a replacement.",
+      "effective_at": "2025-06-18T09:00:00-04:00",
+      "updated_at": "2025-11-10T14:18:44-05:00"
+    },
+    {
+      "contract_id": "CON-RPLC-12",
+      "name": "Replacement order tool call — required arguments",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "card-services-operations",
+      "scope": "Argument contract for order_replacement_credit_card_7291. The console form maps one-to-one onto these arguments; a call missing any required argument is rejected by the tool, not queued.",
+      "required_fields": [
+        "credit_card_account_id",
+        "replacement_reason",
+        "shipping_address",
+        "shipping_speed",
+        "expedited_fee_acknowledgement",
+        "notes"
+      ],
+      "argument_contract": [
+        {
+          "argument": "credit_card_account_id",
+          "specification": "The customer credit card account identifier, such as account_id or card_id from the account lookup. Either identifier level resolves for this tool; take it from the lookup you just ran, never from a prior case."
+        },
+        {
+          "argument": "replacement_reason",
+          "specification": "Exactly one of: fraud_suspected, lost, stolen, damaged, expired, or other. The form offers no free-text reason; pick the value the customer's own description supports."
+        },
+        {
+          "argument": "shipping_address",
+          "specification": "The confirmed address — primary or alternate as confirmed with the customer in this interaction, including any unit or suite information."
+        },
+        {
+          "argument": "shipping_speed",
+          "specification": "standard or expedited."
+        },
+        {
+          "argument": "expedited_fee_acknowledgement",
+          "specification": "Customer consent captured if a fee applies based on card tier. Record the acknowledgement before submission; the fee posts with the order."
+        },
+        {
+          "argument": "notes",
+          "specification": "Any relevant context, such as travel dates, fraud report reference, or delivery instructions. Empty string permitted when there is genuinely nothing to carry."
+        }
+      ],
+      "closed_world": true,
+      "effective_at": "2025-06-18T09:00:00-04:00",
+      "updated_at": "2025-11-10T14:18:44-05:00"
+    },
+    {
+      "contract_id": "CON-CASE-5",
+      "name": "Replacement case record completeness",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "quality",
+      "scope": "Replacement-order cases must carry the documentation scaffold fields before closure; QA sampling reads these fields.",
+      "required_fields": ["replacement_reason", "shipping_speed", "next_step"],
+      "closed_world": false,
+      "effective_at": "2025-06-18T09:00:00-04:00",
+      "updated_at": "2025-06-18T09:00:00-04:00"
+    }
+  ],
+  "field_columns": [
+    "row_id",
+    "field_key",
+    "field_name",
+    "field_type",
+    "option_value",
+    "option_description",
+    "active",
+    "status",
+    "environment",
+    "updated_at"
+  ],
+  "fields": [
+    { "row_id": "FLD-831", "field_key": "replacement_reason", "field_name": "Replacement reason", "field_type": "dropdown", "option_value": "fraud_suspected", "option_description": "Customer suspects fraudulent use of the card", "active": true, "status": "current", "environment": "production", "updated_at": "2025-06-18T09:00:00-04:00" },
+    { "row_id": "FLD-832", "field_key": "replacement_reason", "field_name": "Replacement reason", "field_type": "dropdown", "option_value": "lost", "option_description": "Card misplaced, no theft suspected", "active": true, "status": "current", "environment": "production", "updated_at": "2025-06-18T09:00:00-04:00" },
+    { "row_id": "FLD-833", "field_key": "replacement_reason", "field_name": "Replacement reason", "field_type": "dropdown", "option_value": "stolen", "option_description": "Card taken; theft reported or suspected", "active": true, "status": "current", "environment": "production", "updated_at": "2025-06-18T09:00:00-04:00" },
+    { "row_id": "FLD-834", "field_key": "replacement_reason", "field_name": "Replacement reason", "field_type": "dropdown", "option_value": "damaged", "option_description": "Card physically unusable (chip, antenna, cracked)", "active": true, "status": "current", "environment": "production", "updated_at": "2025-06-18T09:00:00-04:00" },
+    { "row_id": "FLD-836", "field_key": "replacement_reason", "field_name": "Replacement reason", "field_type": "dropdown", "option_value": "expired", "option_description": "Replacement ahead of or after expiry where automatic reissue did not cover it", "active": true, "status": "current", "environment": "production", "updated_at": "2025-06-18T09:00:00-04:00" },
+    { "row_id": "FLD-837", "field_key": "replacement_reason", "field_name": "Replacement reason", "field_type": "dropdown", "option_value": "other", "option_description": "Reason not covered above; describe in notes", "active": true, "status": "current", "environment": "production", "updated_at": "2025-06-18T09:00:00-04:00" },
+    { "row_id": "FLD-838", "field_key": "shipping_speed", "field_name": "Shipping speed", "field_type": "dropdown", "option_value": "standard", "option_description": "Standard delivery", "active": true, "status": "current", "environment": "production", "updated_at": "2025-06-18T09:00:00-04:00" },
+    { "row_id": "FLD-839", "field_key": "shipping_speed", "field_name": "Shipping speed", "field_type": "dropdown", "option_value": "expedited", "option_description": "Expedited shipping", "active": true, "status": "current", "environment": "production", "updated_at": "2025-06-18T09:00:00-04:00" },
+    { "row_id": "FLD-830", "field_key": "fee_acknowledged", "field_name": "Expedited fee acknowledged", "field_type": "checkbox", "option_value": null, "option_description": "Set when the customer's consent to an applicable expedited fee is captured", "active": true, "status": "current", "environment": "production", "updated_at": "2025-07-02T09:00:00-04:00" },
+    { "row_id": "FLD-835", "field_key": "next_step", "field_name": "Next step", "field_type": "text", "option_value": null, "option_description": "What the customer was told happens next", "active": true, "status": "current", "environment": "production", "updated_at": "2025-06-18T09:00:00-04:00" }
+  ],
+  "sla_policies": [
+    {
+      "policy_id": "SLA-RPLC-STD",
+      "name": "Replacement request handling",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "first response 4 business hours; order decision within the first contact where verification succeeds",
+      "applies_to": "cases tagged replacement-order or replacement-ineligible",
+      "updated_at": "2025-06-18T09:00:00-04:00"
+    },
+    {
+      "policy_id": "SLA-STD-CARD",
+      "name": "Standard card-support response",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "first response 4 business hours",
+      "applies_to": "all card-support contacts",
+      "updated_at": "2025-06-11T09:00:00-04:00"
+    }
+  ],
+  "views": [
+    {
+      "view_id": "VIEW-1024",
+      "name": "Replacement orders",
+      "active": true,
+      "status": "current",
+      "filters": ["tag replacement-order", "status < solved"],
+      "updated_at": "2025-06-18T09:00:00-04:00"
+    },
+    {
+      "view_id": "VIEW-1031",
+      "name": "Fee review",
+      "active": true,
+      "status": "current",
+      "filters": ["tag fee-review", "status < solved"],
+      "updated_at": "2025-07-02T09:00:00-04:00"
+    },
+    {
+      "view_id": "VIEW-980",
+      "name": "Aging card cases",
+      "active": true,
+      "status": "current",
+      "filters": ["updated > 72h", "group card-services"],
+      "updated_at": "2025-06-11T09:00:00-04:00"
+    }
+  ]
+}

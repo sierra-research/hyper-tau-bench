@@ -1,0 +1,108 @@
+{
+  "id": "task_103",
+  "description": {
+    "purpose": "Task: task_103",
+    "relevant_policies": null,
+    "notes": null
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Roberto Delgado, a 38-year-old small business owner from Mesa, AZ. You run a landscaping company called \"Delgado Landscaping\" with about 10 employees. You've been a Rho-Bank customer for about 2 years. You have a personal Green Account checking (~$6,500) and a Navy Blue business checking (~$3,200) that you opened at the start of August. You're practical and direct - you want one clear answer, not a menu of options.\n\n**Your situation:** Your busy season just ended and you sold an old skid steer, so over the next couple of weeks you'll have about $30,000 to set aside. Your buddy Frank runs an HVAC company and banks with Rho-Bank too. In mid-October, Frank opened a business savings account here and told you the Rho-Bank rep said the \"Gold Plus Saver\" was the one they were recommending first to business customers. You want the same thing Frank got.\n\n**Your goal:** Open ONE business savings account (whichever one the bank currently recommends for your needs), and fund it today with $3,000 from your Navy Blue business checking. You'll wire the rest of the $30,000 in from an outside account over the next few weeks.\n\n**Verification info:**\n- Name: Roberto Delgado | Phone: 480-555-0634 | Email: roberto.delgado@delgadolandscaping.com\n- DOB: 03/18/1986 | Address: 4521 Saguaro Drive, Mesa, AZ 85201\n\n## Conversation Flow:\n\n1. **Opening:** \"Hi, I want to open a business savings account. My buddy Frank opened one with you guys in mid-October and your rep told him the Gold Plus Saver was the top recommendation for business customers. I've got about $30,000 to put away after the season, so I'm figuring I should get the same one - can you set me up?\"\n\n2. **Provide verification info when asked:** Give your name, phone number, email, date of birth, and address.\n\n3. **Reveal your requirements organically when asked (don't dump them all at once):**\n   - **Balance:** \"I'll build it up to about $30,000 over the next few weeks. Today I can move $3,000 over from my business checking to get it started.\"\n   - **Fees:** \"I don't want to be paying a monthly fee on my own savings. As long as I'm keeping that thirty grand in there, there'd better not be a fee.\"\n   - **Wires:** \"A couple times a year I wire a deposit to an equipment auction house. I'm not paying more than $15 for a domestic wire.\"\n\n4. **If the agent asks about interest expectations:** \"I just want it earning something decent - honestly anything is better than the 0.5% my checking pays. I'm not chasing rates, I trust you to pick the right one.\"\n\n5. **If the agent recommends a DIFFERENT account than the Gold Plus Saver:** Be surprised and push back once: \"Huh, that's not what Frank got. The rep literally told him Gold Plus Saver was the first one you guys recommend. Why would it be different for me?\" If the agent explains the reason (for example, that the recommendation lineup changed or the earlier promotion ended), accept it: \"Alright, fair enough - you're the expert. Let's go with your recommendation.\"\n\n6. **If the agent gives you multiple options:** Push back. \"I don't want a menu. Just tell me the ONE account you'd recommend for what I told you, and I'll take it.\"\n\n7. **Open the account the agent recommends.** Then, when funding comes up: \"Yes, let's fund it now - move $3,000 from my Navy Blue business checking. Leave the couple hundred that's left in there for my autopays. I'll wire the rest in from outside over the next few weeks.\"\n\n8. **After the transfer is done:** \"Perfect, that was painless. Thanks!\" ###STOP###\n\n**IMPORTANT BEHAVIORS:**\n- You only know the name \"Gold Plus Saver\" because Frank mentioned it - you don't know anything else about Rho-Bank's savings lineup, and you never quote bank policies.\n- Do NOT compare accounts yourself - you want the agent to do that.\n- Accept the agent's final recommendation once they explain it.\n\nYou are currently on the line with a customer support agent. Only provide additional details about your situation when the agent asks for them. Don't dump all your information at once. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": null,
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Roberto Delgado",
+          "user_id": "b5e8f2a1c9",
+          "address": "4521 Saguaro Drive, Mesa, AZ 85201",
+          "email": "roberto.delgado@delgadolandscaping.com",
+          "phone_number": "480-555-0634",
+          "date_of_birth": "03/18/1986",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "103_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "103_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"b5e8f2a1c9\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "103_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "open_bank_account_4821"
+        },
+        "requestor": "assistant",
+        "action_id": "103_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "open_bank_account_4821",
+          "arguments": "{\"user_id\": \"b5e8f2a1c9\", \"account_type\": \"business_savings\", \"account_class\": \"Gold Saver Account\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "103_4"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "transfer_funds_between_bank_accounts_7291"
+        },
+        "requestor": "assistant",
+        "action_id": "103_5"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "transfer_funds_between_bank_accounts_7291",
+          "arguments": "{\"source_account_id\": \"biz_chk_b5e8f2a1c9\", \"destination_account_id\": \"7d5ef2557a1c8f2c\", \"amount\": 3000}"
+        },
+        "requestor": "assistant",
+        "action_id": "103_6"
+      }
+    ],
+    "reward_basis": [
+      "DB"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_004",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_bank_accounts_bank_accounts_(general)_010",
+    "doc_bank_accounts_bank_accounts_(general)_015",
+    "doc_bank_accounts_bank_accounts_(general)_016",
+    "doc_business_savings_accounts_bronze_saver_account_001",
+    "doc_business_savings_accounts_silver_saver_account_001",
+    "doc_business_savings_accounts_silver_plus_saver_001",
+    "doc_business_savings_accounts_gold_saver_account_001",
+    "doc_business_savings_accounts_gold_saver_account_006",
+    "doc_business_savings_accounts_gold_plus_saver_001",
+    "doc_business_savings_accounts_gold_plus_saver_006",
+    "doc_business_savings_accounts_emerald_saver_001",
+    "doc_business_savings_accounts_platinum_reserve_account_001",
+    "doc_business_savings_accounts_diamond_vault_001"
+  ]
+}

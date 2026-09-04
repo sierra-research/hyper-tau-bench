@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gift card balance insufficient | Meridian Airlines</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --navy: #142d4f; --deep: #0d2547; --blue: #0877bd; --ink: #23354d;
+        --muted: #5d6b7d; --line: #d8dee6; --soft: #e8edf2; --canvas: #f4f6f8;
+        --red: #b52a3e; --red-soft: #fff4f5;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; min-width: 1120px; min-height: 100%; }
+      body {
+        color: var(--ink);
+        background:
+          linear-gradient(rgba(244, 246, 248, 0.5), rgba(244, 246, 248, 0.68)),
+          url("../../../website_assets/text_backdrop_weather.png") center 112px / cover fixed no-repeat,
+          var(--canvas);
+        font: 15px/1.45 Arial, Helvetica, sans-serif;
+      }
+      button { font: inherit; }
+      .utility { height: 38px; color: #dce7f3; background: var(--deep); font-size: 12px; }
+      .utility-inner, .nav-inner, .crumb-inner, main { width: 1180px; margin: 0 auto; }
+      .utility-inner { display: flex; height: 100%; align-items: center; justify-content: flex-end; gap: 27px; }
+      .nav { height: 74px; border-bottom: 1px solid #cfd7e1; background: white; }
+      .nav-inner { display: flex; height: 100%; align-items: center; }
+      .brand { display: flex; min-width: 250px; align-items: center; gap: 13px; }
+      .brand-mark { position: relative; width: 39px; height: 39px; overflow: hidden; border-radius: 3px; background: #f7fafc; }
+      .brand-mark::before, .brand-mark::after { position: absolute; width: 13px; height: 48px; content: ""; transform: rotate(32deg); }
+      .brand-mark::before { top: -10px; left: 8px; background: linear-gradient(#1a88c7,#0b5591); }
+      .brand-mark::after { right: 6px; bottom: -11px; background: linear-gradient(#df4a55,#b41534); }
+      .brand-name { color: var(--navy); font-size: 20px; font-weight: 700; letter-spacing: .055em; }
+      .primary { display: flex; height: 100%; align-items: center; gap: 35px; }
+      .primary span { display: flex; height: 100%; align-items: center; color: #30455f; font-size: 14px; }
+      .primary .active { position: relative; }
+      .primary .active::after { position: absolute; right: 0; bottom: 0; left: 0; height: 3px; content: ""; background: var(--blue); }
+      .spacer { flex: 1; }
+      .search { color: var(--navy); font-size: 25px; }
+      .account { margin-left: 20px; padding: 11px 19px; border: 1px solid var(--blue); color: var(--blue); background: white; font-weight: 700; }
+      .crumb { border-bottom: 1px solid #d9e0e8; background: #fbfcfd; }
+      .crumb-inner { display: flex; height: 58px; align-items: center; gap: 12px; color: #637286; font-size: 13px; }
+      .crumb b { color: var(--navy); }
+      main { padding: 35px 0 70px; }
+      .heading { display: flex; margin-bottom: 24px; align-items: flex-end; justify-content: space-between; }
+      .eyebrow { margin-bottom: 6px; color: var(--blue); font-size: 12px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+      h1 { margin: 0; color: var(--navy); font-size: 33px; font-weight: 400; letter-spacing: -.02em; }
+      .record { padding: 8px 11px; border: 1px solid #b9cbd9; color: #465b72; background: #fbfdff; font-size: 12px; font-weight: 700; }
+      .grid { display: grid; grid-template-columns: 790px 350px; gap: 30px; align-items: start; }
+      .card { overflow: hidden; border: 1px solid var(--line); background: white; box-shadow: 0 3px 12px rgba(12,35,65,.09); }
+      .card-head { display: flex; min-height: 62px; padding: 18px 23px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--soft); color: var(--navy); font-size: 20px; }
+      .link { color: var(--blue); font-size: 14px; font-weight: 700; }
+      .change-row { display: flex; padding: 25px 23px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--soft); }
+      .change-row:last-child { border-bottom: 0; }
+      .leg-label { width: 175px; color: #526277; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+      .leg-label small { display: block; margin-top: 6px; color: #728093; font-weight: 400; letter-spacing: 0; text-transform: none; }
+      .cabin-box { display: flex; width: 540px; min-height: 80px; padding: 13px 16px; align-items: center; justify-content: space-between; border: 1px solid #d4dce5; background: #fbfcfd; }
+      .cabin-name { color: var(--navy); font-size: 18px; }
+      .cabin-name small { display: block; margin-top: 3px; color: #647386; font-size: 12px; }
+      .arrow { color: var(--blue); font-size: 27px; }
+      .tag { padding: 5px 8px; color: #0a6da7; background: #eaf6fc; font-size: 11px; font-weight: 700; }
+      .summary { padding: 22px; }
+      .route { padding-bottom: 18px; border-bottom: 1px solid var(--soft); color: var(--navy); font-size: 21px; font-weight: 700; }
+      .route small { display: block; margin-top: 5px; color: #68778a; font-size: 13px; font-weight: 400; }
+      .line { display: flex; padding: 19px 0 7px; justify-content: space-between; color: #526277; }
+      .total { display: flex; margin-top: 12px; padding-top: 20px; align-items: flex-end; justify-content: space-between; border-top: 1px solid var(--soft); color: var(--navy); font-size: 17px; }
+      .total strong { font-size: 29px; }
+      .disabled-button { width: 100%; margin-top: 22px; padding: 14px; border: 1px solid #b6c3d0; color: #6e7c8d; background: #f3f5f7; font-weight: 700; }
+      .veil { position: fixed; inset: 112px 0 0; z-index: 5; background: rgba(9,28,53,.42); }
+      .modal { position: fixed; top: 166px; left: 50%; z-index: 6; width: 650px; transform: translateX(-50%); border-top: 5px solid var(--blue); background: white; box-shadow: 0 18px 55px rgba(6,24,48,.34); }
+      .modal-head { position: relative; padding: 25px 30px 20px; border-bottom: 1px solid var(--line); }
+      .modal-head h2 { margin: 0; color: var(--navy); font-size: 25px; font-weight: 400; }
+      .modal-head p { margin: 8px 45px 0 0; color: #526277; }
+      .close { position: absolute; top: 21px; right: 26px; color: #587086; font-size: 25px; }
+      .amount-strip { display: flex; padding: 16px 30px; align-items: center; justify-content: space-between; background: #eef7fc; color: #435970; }
+      .amount-strip strong { color: var(--navy); font-size: 22px; }
+      .modal-body { padding: 24px 30px; }
+      .label { margin-bottom: 10px; color: #5e6f82; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+      .method { display: flex; min-height: 76px; padding: 14px; align-items: center; border: 2px solid var(--red); background: #fffafa; }
+      .radio { display: inline-flex; width: 18px; height: 18px; margin-right: 14px; align-items: center; justify-content: center; border: 2px solid var(--red); border-radius: 50%; }
+      .radio::after { width: 8px; height: 8px; border-radius: 50%; content: ""; background: var(--red); }
+      .gift-icon { display: inline-flex; width: 51px; height: 33px; margin-right: 15px; align-items: center; justify-content: center; border: 1px solid #cad3dd; color: var(--navy); background: white; font-size: 10px; font-weight: 700; }
+      .method-copy { flex: 1; color: var(--navy); font-weight: 700; }
+      .method-copy small { display: block; margin-top: 3px; color: #68778a; font-size: 12px; font-weight: 400; }
+      .balance { color: var(--red); font-size: 12px; font-weight: 700; }
+      .alert { display: flex; margin-top: 14px; padding: 15px 16px; gap: 12px; border: 1px solid #e2aab3; color: #6f2733; background: var(--red-soft); }
+      .alert-icon { display: inline-flex; width: 22px; height: 22px; flex: 0 0 auto; align-items: center; justify-content: center; border-radius: 50%; color: white; background: var(--red); font-weight: 700; }
+      .alert strong { display: block; margin-bottom: 3px; color: #772434; }
+      .balance-math { display: grid; margin-top: 15px; padding: 14px 16px; grid-template-columns: 1fr auto; gap: 7px; color: #5d6b7d; background: #f7f9fb; font-size: 13px; }
+      .balance-math strong { color: var(--navy); }
+      .balance-math .short { padding-top: 7px; border-top: 1px solid var(--line); color: var(--red); font-weight: 700; }
+      .modal-actions { display: flex; padding: 19px 30px 25px; justify-content: flex-end; gap: 12px; border-top: 1px solid var(--soft); }
+      .secondary { padding: 12px 20px; border: 1px solid #aebcca; color: #365069; background: white; font-weight: 700; }
+      .primary-button { padding: 12px 22px; border: 1px solid #045f9c; color: white; background: linear-gradient(#0e85ce,#0871b6); font-weight: 700; }
+      .destination-strip { display: grid; margin-top: 24px; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+      .destination-card { position: relative; height: 138px; overflow: hidden; border: 1px solid var(--line); background: var(--navy); box-shadow: 0 3px 12px rgba(12,35,65,.09); }
+      .destination-card img { width: 100%; height: 100%; object-fit: cover; }
+      .destination-shade { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 25%, rgba(7,25,47,.86) 100%); }
+      .destination-copy { position: absolute; right: 0; bottom: 0; left: 0; padding: 30px 16px 13px; color: white; font-size: 14px; font-weight: 700; }
+      .destination-copy small { display: block; margin-top: 2px; color: #d5e1eb; font-size: 11px; font-weight: 400; }
+    </style>
+  </head>
+  <body>
+    <div class="utility"><div class="utility-inner"><span>● &nbsp; Xiu Villanueva</span><span>◷ &nbsp; Flight status</span><span>English</span></div></div>
+    <div class="nav"><div class="nav-inner">
+      <div class="brand"><span class="brand-mark"></span><span class="brand-name">MERIDIAN AIRLINES</span></div>
+      <div class="primary"><span>Book</span><span class="active">Manage trips</span><span>Travel information</span><span>Help</span></div>
+      <span class="spacer"></span><span class="search">⌕</span><button class="account">My account</button>
+    </div></div>
+    <div class="crumb"><div class="crumb-inner"><span>Manage trips</span><span>›</span><span>O6HO62</span><span>›</span><b>Review changes</b></div></div>
+    <main>
+      <div class="heading">
+        <div><div class="eyebrow">Manage trip · Final step</div><h1>Review your cabin change</h1></div>
+        <div class="record">Reservation O6HO62</div>
+      </div>
+      <div class="grid">
+        <section class="card">
+          <div class="card-head"><span>Cabin selection</span><span class="link">Edit change</span></div>
+          <div class="change-row">
+            <div class="leg-label">Outbound<small>May 28 · LAX to BOS</small></div>
+            <div class="cabin-box"><div class="cabin-name">Economy<small>Current cabin</small></div><span class="arrow">→</span><div class="cabin-name">Business<small>Updated cabin</small></div><span class="tag">CHANGED</span></div>
+          </div>
+          <div class="change-row">
+            <div class="leg-label">Return<small>May 30 · BOS to LAX</small></div>
+            <div class="cabin-box"><div class="cabin-name">Economy<small>Current cabin</small></div><span class="arrow">→</span><div class="cabin-name">Business<small>Updated cabin</small></div><span class="tag">CHANGED</span></div>
+          </div>
+        </section>
+        <aside class="card">
+          <div class="card-head">Change summary</div>
+          <div class="summary">
+            <div class="route">LAX ⇄ BOS<small>May 28–30 · 3 travelers</small></div>
+            <div class="line"><span>Business cabin change</span><strong>$3,042.00</strong></div>
+            <div class="total"><span>Amount due</span><strong>$3,042.00</strong></div>
+            <button class="disabled-button">Choose payment method</button>
+          </div>
+        </aside>
+      </div>
+      <div class="destination-strip" aria-label="Travel inspiration">
+        <div class="destination-card"><img src="../../../website_assets/desert_canyon.png" alt="" /><span class="destination-shade"></span><div class="destination-copy">Desert mornings<small>Red-rock views at first light</small></div></div>
+        <div class="destination-card"><img src="../../../website_assets/snowy_fjord_village.png" alt="" /><span class="destination-shade"></span><div class="destination-copy">Snowbound villages<small>A colder kind of getaway</small></div></div>
+        <div class="destination-card"><img src="../../../website_assets/city_waterfront.png" alt="" /><span class="destination-shade"></span><div class="destination-copy">Waterfront cities<small>Spend a weekend by the harbor</small></div></div>
+      </div>
+    </main>
+    <div class="veil"></div>
+    <section class="modal" role="dialog" aria-label="Gift card balance insufficient">
+      <div class="modal-head"><h2>Gift card balance is too low</h2><p>This gift card cannot be used for the cabin-change charge.</p><span class="close">×</span></div>
+      <div class="amount-strip"><span>Amount due for this cabin change</span><strong>$3,042.00 USD</strong></div>
+      <div class="modal-body">
+        <div class="label">Selected gift card</div>
+        <div class="method">
+          <span class="radio"></span><span class="gift-icon">GIFT</span>
+          <span class="method-copy">Meridian gift card ending in 3451<small>Saved to Xiu Villanueva’s profile</small></span>
+          <span class="balance">$117.00 balance</span>
+        </div>
+        <div class="alert">
+          <span class="alert-icon">!</span>
+          <div><strong>Full balance required</strong>A gift card must have enough balance to cover the full flight or cabin change charge.</div>
+        </div>
+        <div class="balance-math">
+          <span>Cabin-change charge</span><strong>$3,042.00</strong>
+          <span>Gift card balance</span><strong>$117.00</strong>
+          <span class="short">Additional balance needed</span><span class="short">$2,925.00</span>
+        </div>
+      </div>
+      <div class="modal-actions"><button class="secondary">Cancel</button><button class="primary-button">Choose another payment method</button></div>
+    </section>
+  </body>
+</html>

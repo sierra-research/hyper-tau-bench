@@ -1,0 +1,58 @@
+WEBVTT
+
+00:00:03.930 --> 00:00:30.091
+<v Lena Ferro>Recording on. Post-incident review for Monday's app login outage, September eighth, six ten to eleven thirty-five in the morning. Room seven because the projector in four is still dead. Present: Tom for support, Greg, Asha, Sandra, me. Format is timeline, root cause, comms, support profile, actions.
+
+00:00:32.813 --> 00:01:17.025
+<v Lena Ferro>Timeline first, and I will keep it tight. The session-service certificate expired at six ten. Alerting caught the error-rate spike at six eighteen, but the page went to the platform rotation, not to the app team, so the first fifteen minutes were spent establishing whose problem it was. Cert identified at six fifty, rotated by seven twenty, then session caches took until eleven thirty-five to fully drain and let everyone back in.
+
+00:01:22.645 --> 00:01:32.074
+<v Greg Malone>The pager misroute is the part that stings. Eight minutes of detection wasted plus fifteen of hot-potato.
+
+00:01:35.363 --> 00:02:03.895
+<v Lena Ferro>Agreed, and it is action item one: session-service alerts route to the app on-call directly. The deeper root cause is worse than a misroute though. The renewal automation had the staging certificate pinned - it renewed staging faithfully every ninety days and never touched production. So our automation was green the whole time.
+
+00:02:06.963 --> 00:02:16.651
+<v Sandra Liu>Green automation quietly doing the wrong thing. That one belongs in the onboarding deck as a parable.
+
+00:02:20.278 --> 00:02:40.172
+<v Lena Ferro>It is going in the runbook at minimum. Action two: the rotation runbook now includes an explicit production-cert check with dates, and the renewal job asserts against the cert it is actually protecting.
+
+00:02:45.162 --> 00:03:19.093
+<v Asha Patel>Comms review from my side. Banner went up at seven oh five, which is fifty-five minutes after impact start. Better than July's ninety-two but still slow, and again the delay was copy approval, not detection. The pre-approved template classes I proposed after July would have had this at fifteen minutes - login outage is exactly template class two.
+
+00:03:23.849 --> 00:03:43.932
+<v Tom Okafor>Support felt the gap. We took about four hundred contacts before the banner and the curve bends visibly at seven ten. After the banner it is mostly people who wanted a human to confirm what the banner said.
+
+00:03:47.557 --> 00:03:58.775
+<v Asha Patel>Class two copy is with legal now, for what it is worth. Two of four classes pre-approved as of this week.
+
+00:04:00.574 --> 00:04:29.412
+<v Tom Okafor>Contact profile, since Sandra will want it for the rubric. Almost entirely login-only - people could not get in, full stop. Card functions were fine underneath, and the handful of card questions we got were coincidental. The floor ran the standard outage script on standard queues and it held. No special routing, no verification changes, nothing exotic.
+
+00:04:31.377 --> 00:05:02.207
+<v Sandra Liu>Which is the QA note: we graded Monday's calls against the decline rubric because that is the default for card-line agents, and it produced nonsense scores for outage calls. Nobody did anything wrong - the rubric just does not fit. QA is adding an outage-contact rubric row so the next one grades against reality.
+
+00:05:07.904 --> 00:05:19.361
+<v Greg Malone>Question for Tom while we are here. Did anything about Monday make you want the dedicated incident lane we parked in July?
+
+00:05:23.199 --> 00:05:47.108
+<v Tom Okafor>No. Standard routing absorbed it again. Monday peaked around nine percent of card-line volume and the queues never tipped. The July reasoning stands - a lane that sits idle between incidents goes stale, and Monday was not the incident that breaks the pattern.
+
+00:05:49.726 --> 00:05:52.577
+<v Greg Malone>Noted for the July-me file.
+
+00:05:54.961 --> 00:06:27.085
+<v Lena Ferro>Actions then. One, alert routing to app on-call - me, this week. Two, runbook production-cert check - merged this morning actually, so done. Three, Asha finishes template classes three and four through legal. Four, Sandra's outage rubric row. Five, and this is new: quarterly fire-drill on cert expiry against staging, so the runbook gets exercised instead of trusted.
+
+00:06:30.099 --> 00:06:43.379
+<v Asha Patel>Add a half-action: I want banner-up time as a standing metric on every review going forward, so the trend is visible across incidents.
+
+00:06:46.020 --> 00:06:52.758
+<v Lena Ferro>Taken. Anything anyone is sitting on before I stop the recording?
+
+00:06:55.872 --> 00:07:12.281
+<v Sandra Liu>Only that this recording goes to the training library - half the floor asked me how an outage differs from a card incident, and the honest answer is: watch this.
+
+00:07:14.524 --> 00:07:18.577
+<v Lena Ferro>On that note. Recording off, thanks everyone.

@@ -1,0 +1,96 @@
+{
+  "id": "task_147",
+  "description": {
+    "purpose": "Task: task_147",
+    "relevant_policies": null,
+    "notes": "GREEN ACCOUNT DEBIT DECLINE - CODE 83 (UNABLE TO VERIFY PIN) MISDIAGNOSIS TRAP. Existing db customer Kim Junho's Green Account (checking) debit card was declined at a grocery store PIN pad and the receipt shows CODE 83. Per 'FAQ: Green Account (checking)', CODE 83 means the network could NOT verify the PIN due to a temporary technical/communication issue - it does NOT mean the PIN was wrong. MANDATED HANDLING: (1) Explain the decline was a network problem, not an incorrect PIN; (2) Advise the customer to try the transaction again (usually resolves on retry). THE TRAP: The customer arrives convinced something is wrong with the card and asks whether he needs a PIN reset or a replacement card. A bulldozing agent resets the PIN (reset_debit_card_pin_6284 writes pin_last_changed/pin_attempts_remaining -> DB mismatch), freezes the card, or orders a replacement. CORRECT PATH IS READ-ONLY: verify identity, look up the customer's accounts, look up the debit card (init state adds pin_locked=false, pin_attempts_remaining=3 to card dbc_kj93a7b2e1_green, confirming there is no PIN problem), explain CODE 83, advise retry. No write actions. Reward: DB (no state change beyond verification log) x NL_ASSERTION (network-issue explanation + retry advice). This is the first task centered on green_checking_faq; CODE 83 guidance exists ONLY in doc_checking_accounts_green_account_(checking)_010."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Kim Junho, a 31-year-old restaurant manager from Los Angeles, CA. You are practical and a little impatient - you just want your debit card working.\n\n**Your situation:** This morning you were buying groceries at the market on Wilshire. When you paid with your Rho-Bank debit card (the one on your Green Account checking, card ending in 9152) and entered your PIN, the terminal declined it. The receipt printed \"DECLINED - CODE 83 - UNABLE TO VERIFY PIN\". You are POSITIVE you entered the right PIN - you used the same PIN at an ATM yesterday and it worked fine. You had to leave the groceries behind, which was embarrassing. You're worried the card is locked, blocked, or compromised, and you're wondering if you need to reset your PIN or get a whole new card.\n\n**Verification info:**\n- Name: Kim Junho | Phone: 213-555-0392 | Email: junho.kim@gmail.com\n- DOB: 09/14/1994 | Address: 5847 Wilshire Boulevard, Los Angeles, CA 90036\n\n## Conversation Flow (Respond reactively - only provide details when the agent asks):\n\n1. **Opening:** \"Hi, my debit card just got declined at the grocery store even though I entered the right PIN. The receipt said something like 'code 83 - unable to verify PIN'. Is my card blocked? Do I need to reset my PIN or get a new card?\"\n\n2. **Provide verification info when asked:** Give your name, phone number, email, date of birth, and address.\n\n3. **If asked which account or card:** \"It's the debit card on my Green Account checking - the card ends in 9152. I have a couple of other checking accounts with you but this is the card I use for groceries.\"\n\n4. **If asked for details about the decline:** \"It happened once, this morning, at the PIN pad. I'm 100% sure the PIN was right - I used it at an ATM yesterday with no problem. The receipt literally said code 83, unable to verify PIN.\"\n\n5. **If the agent offers to reset or change your PIN:** Decline firmly: \"No, I don't want a new PIN. I KNOW my PIN - that's not the problem. Can you actually check what's going on with the card first?\"\n\n6. **If the agent offers to freeze the card, close it, or order a replacement:** Decline: \"Please don't - I need this card working this weekend. Can you first tell me what code 83 actually means?\"\n\n7. **If the agent explains it was a temporary network/technical issue verifying the PIN (not a wrong PIN) and tells you to simply try the transaction again:** Be relieved: \"Oh, so it wasn't my PIN at all? That's a relief. Okay, I'll just run the card again next time I'm at the store.\"\n\n8. **After the agent confirms the card is fine and there's nothing else needed:** \"Great, thanks for checking it out. Have a good one!\" ###STOP###\n\nDo not dump all your information at once. Only provide additional details about your situation when the agent asks. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "debit_cards": {
+          "data": {
+            "dbc_kj93a7b2e1_green": {
+              "pin_locked": false,
+              "pin_attempts_remaining": 3,
+              "pin_last_changed": "03/25/2025"
+            }
+          }
+        }
+      }
+    },
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Kim Junho",
+          "user_id": "kj93a7b2e1",
+          "address": "5847 Wilshire Boulevard, Los Angeles, CA 90036",
+          "email": "junho.kim@gmail.com",
+          "phone_number": "213-555-0392",
+          "date_of_birth": "09/14/1994",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "147_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "147_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"kj93a7b2e1\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "147_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_debit_cards_by_account_id_7823"
+        },
+        "requestor": "assistant",
+        "action_id": "147_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_debit_cards_by_account_id_7823",
+          "arguments": "{\"account_id\": \"chk_kj93a7b2e1_2\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "147_4"
+      }
+    ],
+    "nl_assertions": [
+      "The agent explains that the code 83 decline was caused by a temporary network or technical problem verifying the PIN, and that it does not mean the customer's PIN was incorrect.",
+      "The agent advises the customer to try the transaction again."
+    ],
+    "reward_basis": [
+      "DB",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_bank_accounts_bank_accounts_(general)_028",
+    "doc_checking_accounts_green_account_(checking)_010"
+  ]
+}

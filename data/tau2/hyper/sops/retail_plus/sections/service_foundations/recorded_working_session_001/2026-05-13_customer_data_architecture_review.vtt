@@ -1,0 +1,1349 @@
+WEBVTT
+
+NOTE Cloud recording transcript
+NOTE Meeting: Customer data architecture review
+NOTE Date: 2026-05-13
+
+1
+00:00:04.000 --> 00:00:13.290
+<v Elena Park>Let me play the skeptical reviewer for a minute on this one. The production
+
+2
+00:00:13.290 --> 00:00:22.581
+<v Elena Park>schema export is still indexing, so the first screen only shows resource names and not nested fields. We can
+
+3
+00:00:22.581 --> 00:00:31.871
+<v Elena Park>use the wait to align on what this review can decide and what remains for the API handoff. We don't need consensus on that
+
+4
+00:00:31.871 --> 00:00:41.162
+<v Elena Park>today, just awareness.
+
+5
+00:00:39.662 --> 00:00:52.050
+<v Jon Bell>There's a version of this that goes wrong quietly, so let me spell it out. Implementation needs a boundary strong enough
+
+6
+00:00:52.050 --> 00:01:04.437
+<v Jon Bell>to stop speculative writes, but we do not need every enum and conditional field today. Those exact shapes can stay with the machine-readable contract that is
+
+7
+00:01:04.437 --> 00:01:16.825
+<v Jon Bell>being prepared separately. Read that as a yellow flag, not a red one.
+
+8
+00:01:17.325 --> 00:01:29.506
+<v Marcus Reed>I'll take the unpopular side of this for a second, just to test it. Then
+
+9
+00:01:29.506 --> 00:01:41.687
+<v Marcus Reed>the transcript must avoid sounding like this meeting defines every customer and order field. We are settling the completeness boundary
+
+10
+00:01:41.687 --> 00:01:53.868
+<v Marcus Reed>and change control; the production contract catalog still documents the exact record members and storage constraints. The doc version will be tighter, I promise.
+
+11
+00:02:00.868 --> 00:02:10.314
+<v Priya Nair>Something from the pilot queue this morning is relevant right here. If we mention that an order has payment history while discussing
+
+12
+00:02:10.314 --> 00:02:19.759
+<v Priya Nair>nesting, that observation should not be treated as the complete entry schema. The later
+
+13
+00:02:19.759 --> 00:02:29.204
+<v Priya Nair>contract must establish the exact fields and whether anything like a timestamp exists. That squares with what the pilot
+
+14
+00:02:29.204 --> 00:02:38.650
+<v Priya Nair>data shows, for what it's worth.
+
+15
+00:02:44.650 --> 00:02:57.037
+<v Talia Brooks>Uh, small detour, but it lands back on the agenda item, I promise. The export progress
+
+16
+00:02:57.037 --> 00:03:09.425
+<v Talia Brooks>bar is frozen at ninety-eight percent and screen sharing is making the fan loud. I will stop sharing until the index
+
+17
+00:03:09.425 --> 00:03:21.812
+<v Talia Brooks>completes; the audio gap is technical, not a pause for approval. If that contradicts an earlier call, the dated notes win, not me.
+
+18
+00:03:23.312 --> 00:03:33.841
+<v Elena Park>Two people pinged me about this exact point after the last call. This review will decide what Care may treat as documented and
+
+19
+00:03:33.841 --> 00:03:44.371
+<v Elena Park>how additions are governed. Exact status lists, optional fields, and storage representations remain explicitly outside
+
+20
+00:03:44.371 --> 00:03:54.900
+<v Elena Park>this meeting's authority. I'm not asking for a change, just for eyes open.
+
+21
+00:03:56.400 --> 00:04:07.342
+<v Elena Park>Can you hear me? Great. I booked forty-five because the intake notes mixed three different things: fields
+
+22
+00:04:07.342 --> 00:04:18.285
+<v Elena Park>that exist, fields people wish existed, and behavior the agent should follow when the first two don't line up. I want to
+
+23
+00:04:18.285 --> 00:04:29.227
+<v Elena Park>untangle those. Marcus, please don't scroll yet—the export is still loading on my side.
+
+24
+00:04:28.227 --> 00:04:39.789
+<v Marcus Reed>Sure. The top ask is the hidden care note. The pilot team pictured a free-text box on customer, not order. There was also a
+
+25
+00:04:39.789 --> 00:04:51.350
+<v Marcus Reed>manual-review flag and maybe a follow-up date. I grouped them because, from the workflow side, they
+
+26
+00:04:51.350 --> 00:05:02.912
+<v Marcus Reed>all solve the same problem: remember something that the normal customer and order screens don't represent.
+
+27
+00:05:01.412 --> 00:05:10.238
+<v Jon Bell>Let me try to say back what I think I just heard. People keep using database, API, record,
+
+28
+00:05:10.238 --> 00:05:19.064
+<v Jon Bell>and screen as if they mean the same thing. For the build, I need a practical distinction that does not require the agent
+
+29
+00:05:19.064 --> 00:05:27.890
+<v Jon Bell>team to understand the entire physical architecture. Small point, but it will save an argument
+
+30
+00:05:27.890 --> 00:05:36.716
+<v Jon Bell>later.
+
+31
+00:05:39.216 --> 00:05:51.191
+<v Elena Park>The deck makes this look settled, and I don't think it is yet. The Care contract is a logical record surface. Physical tables can contain
+
+32
+00:05:51.191 --> 00:06:03.165
+<v Elena Park>replication columns, indexes, or internal keys that are neither readable nor writable through this channel. Their existence
+
+33
+00:06:03.165 --> 00:06:15.140
+<v Elena Park>does not expand the contract. That's the part I'd want a new hire to hear verbatim.
+
+34
+00:06:13.640 --> 00:06:26.647
+<v Marcus Reed>Here's where the training draft and the runbook quietly disagree. Likewise, a screen may compose several resources or omit
+
+35
+00:06:26.647 --> 00:06:39.654
+<v Marcus Reed>fields for usability. We cannot infer completeness from what one UI chooses to display, particularly when screenshots were produced for a narrow scenario.
+
+36
+00:06:42.654 --> 00:06:52.357
+<v Talia Brooks>I want to separate what we know from what we're assuming. Order history looks like a separate page in the storefront, yet the care response can
+
+37
+00:06:52.357 --> 00:07:02.061
+<v Talia Brooks>carry order references on the customer record. That page boundary is navigation design, not proof of a separate
+
+38
+00:07:02.061 --> 00:07:11.764
+<v Talia Brooks>writable customer-history object.
+
+39
+00:07:14.764 --> 00:07:25.913
+<v Priya Nair>Bear with me, this one needs the long way around. The architecture diagram uses dotted lines for asynchronous replication, but
+
+40
+00:07:25.913 --> 00:07:37.061
+<v Priya Nair>the legend is missing from the PDF. We will fix the diagram; dotted versus solid lines should not become an accidental authority cue. Feel free
+
+41
+00:07:37.061 --> 00:07:48.210
+<v Priya Nair>to compress that to one line in the summary.
+
+42
+00:07:48.710 --> 00:07:59.446
+<v Jon Bell>You know the drill—I'm going to ask the annoying follow-up question. I will define
+
+43
+00:07:59.446 --> 00:08:10.182
+<v Jon Bell>the documented Care contract as the operative record surface and keep physical implementation details in engineering material. The agent
+
+44
+00:08:10.182 --> 00:08:20.918
+<v Jon Bell>should not discover hidden capabilities by inspecting unrelated layers. And yes, I hear how pedantic that sounds out loud.
+
+45
+00:08:20.418 --> 00:08:32.805
+<v Elena Park>They solve it by inventing storage, though. The service contract has customer records, products and their variants, and orders. It exposes
+
+46
+00:08:32.805 --> 00:08:45.193
+<v Elena Park>particular fields on those records. There is no generic notes object, no reminder object, and no write-anything metadata bag. I am not saying never. I'm saying
+
+47
+00:08:45.193 --> 00:08:57.580
+<v Elena Park>the pilot cannot call an imagined field because it appeared in a workshop.
+
+48
+00:08:59.080 --> 00:09:10.642
+<v Jon Bell>Quick implementation question—sorry if this is basic. The CRM admin screen has an internal comments
+
+49
+00:09:10.642 --> 00:09:22.203
+<v Jon Bell>panel. I saw it in a screenshot from Sales. Is that the same database? Could Care use that without changing
+
+50
+00:09:22.203 --> 00:09:33.765
+<v Jon Bell>the service contract, maybe manually, until the API catches up? I'm trying to separate an integration gap from a policy gap.
+
+51
+00:09:37.765 --> 00:09:49.120
+<v Elena Park>Different product, different tenancy, and not linked to these customer identifiers. So no. Also, even if it were the same database, a
+
+52
+00:09:49.120 --> 00:10:00.476
+<v Elena Park>human-only screen does not automatically become an agent capability. We document what this channel
+
+53
+00:10:00.476 --> 00:10:11.831
+<v Elena Park>can read and write. A screenshot of another team's tool is not a contract. [notification sound] Sorry, muting chat.
+
+54
+00:10:12.831 --> 00:10:23.980
+<v Marcus Reed>This came out of the QA channel yesterday and it belongs here. Sales sent a new
+
+55
+00:10:23.980 --> 00:10:35.128
+<v Marcus Reed>screenshot of the internal comments pane and says their representatives use it every day. The requestor assumes high usage makes it
+
+56
+00:10:35.128 --> 00:10:46.277
+<v Marcus Reed>an acceptable temporary location for Care notes. The QA cases will tell us if I'm overthinking it.
+
+57
+00:10:51.277 --> 00:11:02.426
+<v Jon Bell>Before anyone writes this into the notes, let me add a caveat. The screenshot comes from a different tenant and identity namespace. I
+
+58
+00:11:02.426 --> 00:11:13.574
+<v Jon Bell>cannot map its records to these customer identifiers, and the integration service has no route
+
+59
+00:11:13.574 --> 00:11:24.723
+<v Jon Bell>to read or write that panel. I'll stop there before I start designing in the meeting.
+
+60
+00:11:27.723 --> 00:11:36.549
+<v Elena Park>I mean, the principle is easy; the Tuesday-afternoon version is not. Even if a human could open
+
+61
+00:11:36.549 --> 00:11:45.375
+<v Elena Park>it manually, the agent build would still need explicit channel authority and a stable contract. Frequency of human use is corroborating context
+
+62
+00:11:45.375 --> 00:11:54.201
+<v Elena Park>for that product, not permission for this one. That's as far as my confidence
+
+63
+00:11:54.201 --> 00:12:03.027
+<v Elena Park>goes on it, honestly.
+
+64
+00:12:01.527 --> 00:12:11.644
+<v Priya Nair>Let me anchor this to the example that's already on screen. The pane includes free text, follow-up dates, and owner initials, which makes it
+
+65
+00:12:11.644 --> 00:12:21.760
+<v Priya Nair>visually tempting. It also contains sales forecasting comments that Customer Care should never treat as customer-provided
+
+66
+00:12:21.760 --> 00:12:31.877
+<v Priya Nair>facts. Treat everything after my second sentence as speculation.
+
+67
+00:12:35.877 --> 00:12:46.200
+<v Talia Brooks>From the implementation side, here's what that sentence turns into. The screenshot filename says prod-final, but its browser
+
+68
+00:12:46.200 --> 00:12:56.522
+<v Talia Brooks>banner shows the training tenant. Filenames are unreliable authority signals; environment and ownership need to be established by the source system itself. It's
+
+69
+00:12:56.522 --> 00:13:06.845
+<v Talia Brooks>a footnote, but footnotes are where we get burned.
+
+70
+00:13:07.845 --> 00:13:19.613
+<v Marcus Reed>One more voice in favor of slowing down on this specific point. We will record the Sales pane as an adjacent-system screen and reject it
+
+71
+00:13:19.613 --> 00:13:31.381
+<v Marcus Reed>as a workaround for the pilot. Any future integration requires its own reviewed capability and cannot be
+
+72
+00:13:31.381 --> 00:13:43.149
+<v Marcus Reed>inferred from this screenshot. If nobody objects, I'll carry that framing into the training draft.
+
+73
+00:13:44.649 --> 00:13:56.004
+<v Priya Nair>What do we tell the agent when the customer insists? Suppose they say, I don't care where you put
+
+74
+00:13:56.004 --> 00:14:07.360
+<v Priya Nair>it, just remember this for next time. We should not pretend we saved it. Could we say the request is unsupported and offer a
+
+75
+00:14:07.360 --> 00:14:18.715
+<v Priya Nair>person, or is even that too broad until we have transfer rules?
+
+76
+00:14:19.715 --> 00:14:30.657
+<v Marcus Reed>At intake I proposed the private care note. Given what Elena just said, that exact workaround is not available. But perhaps we can repurpose something benign,
+
+77
+00:14:30.657 --> 00:14:41.600
+<v Marcus Reed>like the second address line, when it is blank. I'm not advocating it—I'm testing whether documented field means
+
+78
+00:14:41.600 --> 00:14:52.542
+<v Marcus Reed>documented purpose, or only that the field technically exists.
+
+79
+00:14:53.042 --> 00:15:05.017
+<v Elena Park>No, and let's close that branch. We reject the hidden note and we reject hiding it in an address line.
+
+80
+00:15:05.017 --> 00:15:16.991
+<v Elena Park>A field's meaning is part of the schema. If the request needs data we do not document, the pilot cannot store it under another label.
+
+81
+00:15:16.991 --> 00:15:28.966
+<v Elena Park>We can explain the limit; the transfer condition still needs the launch decision.
+
+82
+00:15:31.466 --> 00:15:42.408
+<v Elena Park>I'd rather over-explain this now than re-litigate it after launch. The export finally loaded,
+
+83
+00:15:42.408 --> 00:15:53.350
+<v Elena Park>but the selector defaults to staging and the two environments differ. Staging contains candidate fields for experiments, including loyalty
+
+84
+00:15:53.350 --> 00:16:04.292
+<v Elena Park>tier and follow-up reason, that have never shipped to production. That's me done; I yield the floor and the screen.
+
+85
+00:16:06.792 --> 00:16:18.973
+<v Talia Brooks>Stop me if this is already covered in the calibration doc. QA often uses those candidate fields to build future scenarios,
+
+86
+00:16:18.973 --> 00:16:31.154
+<v Talia Brooks>so their presence is familiar. We need prominent lifecycle markers or people will treat a zero-traffic draft as a current capability simply because it appears in
+
+87
+00:16:31.154 --> 00:16:43.335
+<v Talia Brooks>a structured export. Somebody sanity-check that against the runbook when there's time.
+
+88
+00:16:44.835 --> 00:16:54.745
+<v Jon Bell>Can the API handoff include both environments without making the contract ambiguous? Integration always asks
+
+89
+00:16:54.745 --> 00:17:04.655
+<v Jon Bell>where fields came from, and I would rather retain migration context than hand them a stripped-down package with no history
+
+90
+00:17:04.655 --> 00:17:14.565
+<v Jon Bell>behind it. We've all seen the version where that goes badly, so, noted.
+
+91
+00:17:18.565 --> 00:17:27.443
+<v Marcus Reed>A draft loyalty field can remain if it says sandbox, unpublished, and zero traffic. The current production schema must identify itself positively;
+
+92
+00:17:27.443 --> 00:17:36.320
+<v Marcus Reed>absence of the field elsewhere is not enough to prove it unavailable. I mean,
+
+93
+00:17:36.320 --> 00:17:45.198
+<v Marcus Reed>we survived worse in the last rollout.
+
+94
+00:17:48.198 --> 00:18:00.586
+<v Priya Nair>Somebody asked me to say this part out loud rather than in the thread. The selector
+
+95
+00:18:00.586 --> 00:18:12.973
+<v Priya Nair>label briefly displayed prod after I switched back because the browser cached it. I refreshed and verified the environment header. That
+
+96
+00:18:12.973 --> 00:18:25.361
+<v Priya Nair>UI glitch is exactly why screenshots alone are weak version evidence. Put a pin in it; the owner can pull the pin later.
+
+97
+00:18:23.861 --> 00:18:34.390
+<v Elena Park>There's a failure mode hiding in the happy path here. For this review I am pinning the production snapshot and treating staging objects
+
+98
+00:18:34.390 --> 00:18:44.920
+<v Elena Park>as non-authoritative context. The later handoff may retain them only with explicit environment, publication, and
+
+99
+00:18:44.920 --> 00:18:55.449
+<v Elena Park>supersession metadata. That's the honest answer, even if it's not the satisfying one.
+
+100
+00:18:54.949 --> 00:19:05.685
+<v Talia Brooks>That gives QA something testable. The negative case should include a plausible workaround, because an assistant may
+
+101
+00:19:05.685 --> 00:19:16.420
+<v Talia Brooks>choose the nearest text field. We should also include a customer who accepts the limitation, so the calibration set does not imply
+
+102
+00:19:16.420 --> 00:19:27.156
+<v Talia Brooks>that every unsupported request transfers. Sorry, somebody's typing is coming through pretty loudly.
+
+103
+00:19:25.656 --> 00:19:37.011
+<v Jon Bell>That's me. Muted now. On the diagram, are the listed records literally exhaustive? I ask because order history sounds like a separate object in
+
+104
+00:19:37.011 --> 00:19:48.367
+<v Jon Bell>the UI, while Elena is calling it part of order. If the list is exhaustive only
+
+105
+00:19:48.367 --> 00:19:59.722
+<v Jon Bell>at the top level, implementation could still discover undocumented nested fields and assume they're usable.
+
+106
+00:20:02.222 --> 00:20:11.048
+<v Elena Park>Good question. The handbook enumerates the records and the fields available to this channel, including the nested structures
+
+107
+00:20:11.048 --> 00:20:19.874
+<v Elena Park>we support. There may be infrastructure columns, replication metadata, and internal keys underneath, but those are not part of the Care contract. Complete
+
+108
+00:20:19.874 --> 00:20:28.700
+<v Elena Park>means complete for Customer Care, not a claim that the physical database contains only those
+
+109
+00:20:28.700 --> 00:20:37.526
+<v Elena Park>bytes.
+
+110
+00:20:43.526 --> 00:20:54.468
+<v Jon Bell>Let me put a sharper edge on what was just said. The implementation mapping sheet alternates between customer_id, profile_id, user_id, and account_id. Some are business
+
+111
+00:20:54.468 --> 00:21:05.411
+<v Jon Bell>concepts and some are historical field names. We need to stop accidental renaming from creating phantom records.
+
+112
+00:21:05.411 --> 00:21:16.353
+<v Jon Bell>Nothing there blocks launch, in my view—it just needs a name.
+
+113
+00:21:18.853 --> 00:21:30.828
+<v Elena Park>The whiteboard version of this lost a nuance I want back. In the current retail data model, the customer
+
+114
+00:21:30.828 --> 00:21:42.802
+<v Elena Park>record key exposed to this integration is user_id. Account identification in conversation is a separate process concept and should not cause us to invent
+
+115
+00:21:42.802 --> 00:21:54.777
+<v Elena Park>another stored owner field. The recording can be the tiebreaker if we remember this differently.
+
+116
+00:22:01.777 --> 00:22:12.926
+<v Marcus Reed>Right, so the part I can't get past is this. We should be careful not to let this architecture aside take ownership of identity-verification rules. This
+
+117
+00:22:12.926 --> 00:22:24.074
+<v Marcus Reed>meeting can explain record keys; the prerequisite section still governs how the conversation locates and verifies a customer.
+
+118
+00:22:24.074 --> 00:22:35.223
+<v Marcus Reed>You know where to find me if that lands wrong.
+
+119
+00:22:35.723 --> 00:22:47.697
+<v Priya Nair>If we're keeping receipts, this is the moment to be precise. An order's user_id connects it to its customer profile.
+
+120
+00:22:47.697 --> 00:22:59.672
+<v Priya Nair>A spreadsheet column called account in a migration worksheet may refer to the same relationship informally, but the worksheet label does not amend the production
+
+121
+00:22:59.672 --> 00:23:11.646
+<v Priya Nair>schema. That's context for the next agenda item as much as this one.
+
+122
+00:23:16.646 --> 00:23:28.001
+<v Talia Brooks>I ran this by the support leads and their reaction was instructive. Two sample
+
+123
+00:23:28.001 --> 00:23:39.357
+<v Talia Brooks>identifiers were redacted inconsistently and one looks like a real customer token. I will replace all examples with synthetic
+
+124
+00:23:39.357 --> 00:23:50.712
+<v Talia Brooks>values before distribution. That sanitation step does not change field names or relationships. Whoever writes the summary, please keep the hedge in.
+
+125
+00:23:49.212 --> 00:24:00.567
+<v Jon Bell>Not to be the process person, but the process matters here. I will normalize the integration mapping to current record names
+
+126
+00:24:00.567 --> 00:24:11.923
+<v Jon Bell>and add a glossary for informal project terms. Identity procedures remain in the access runbook, while this review preserves the exact current schema vocabulary. I'll take
+
+127
+00:24:11.923 --> 00:24:23.278
+<v Jon Bell>the silence as thoughtful agreement rather than sleep.
+
+128
+00:24:22.778 --> 00:24:32.223
+<v Marcus Reed>Can we phrase that without making it sound like the agent should go hunting for
+
+129
+00:24:32.223 --> 00:24:41.668
+<v Marcus Reed>hidden fields? Something like: the documented customer, product, variant, and order shapes are the full record model available to Care.
+
+130
+00:24:41.668 --> 00:24:51.114
+<v Marcus Reed>If a field isn't there, treat it as unavailable. I am intentionally leaving status meanings and the list of optional order fields for the API
+
+131
+00:24:51.114 --> 00:25:00.559
+<v Marcus Reed>handoff.
+
+132
+00:25:00.059 --> 00:25:10.382
+<v Priya Nair>That works operationally. The team needs a boundary they can apply, not a tour of backend tables. Elena, are you comfortable saying
+
+133
+00:25:10.382 --> 00:25:20.705
+<v Priya Nair>the documentation is complete for Care? And if yes, I want Jon to remove
+
+134
+00:25:20.705 --> 00:25:31.028
+<v Priya Nair>the line in the implementation plan that says discover additional writable attributes during integration.
+
+135
+00:25:34.028 --> 00:25:43.525
+<v Elena Park>Yes. The customer, product, variant, and order fields documented for this channel are the complete record
+
+136
+00:25:43.525 --> 00:25:53.022
+<v Elena Park>schema available to Customer Care. There isn't a discovery phase where the agent finds more. If engineering later adds capability, it
+
+137
+00:25:53.022 --> 00:26:02.519
+<v Elena Park>comes through a reviewed contract change and updated documentation.
+
+138
+00:26:03.519 --> 00:26:13.274
+<v Marcus Reed>This is the item I starred in the pre-read, so here goes. Product would like an audit trail for every agent action, and
+
+139
+00:26:13.274 --> 00:26:23.030
+<v Marcus Reed>the analytics team says events are easier than adding fields. I want to know whether
+
+140
+00:26:23.030 --> 00:26:32.785
+<v Marcus Reed>an event stream is a legitimate implementation detail or another hidden Care record. It's the kind of detail that only
+
+141
+00:26:32.785 --> 00:26:42.540
+<v Marcus Reed>matters until it really matters.
+
+142
+00:26:47.540 --> 00:26:56.676
+<v Elena Park>Give me a minute on this one; it's subtler than it looks. Service events may record execution
+
+143
+00:26:56.676 --> 00:27:05.812
+<v Elena Park>telemetry for engineering under separate access and retention controls. They do not become a customer-care memory merely because they contain identifiers. The
+
+144
+00:27:05.812 --> 00:27:14.947
+<v Elena Park>agent cannot read them later unless that access is separately documented. Let's let the
+
+145
+00:27:14.947 --> 00:27:24.083
+<v Elena Park>example do the arguing for us.
+
+146
+00:27:28.083 --> 00:27:39.232
+<v Talia Brooks>The danger is purpose drift. If QA starts asking the agent to consult the event stream to remember a promise or decide a customer
+
+147
+00:27:39.232 --> 00:27:50.380
+<v Talia Brooks>outcome, it has become operational customer context regardless of the table name.
+
+148
+00:27:49.380 --> 00:27:58.258
+<v Jon Bell>Okay—last thing on this card before we move, I promise. A tool invocation event can record success or
+
+149
+00:27:58.258 --> 00:28:07.135
+<v Jon Bell>failure for monitoring. An event saying customer prefers blue, intended for future handling, would function as a new profile attribute and requires reviewed
+
+150
+00:28:07.135 --> 00:28:16.013
+<v Jon Bell>schema authority.
+
+151
+00:28:18.513 --> 00:28:28.836
+<v Priya Nair>The shortest honest version of my concern is this. Analytics also asked for a dashboard that groups events by agent version. That may be useful
+
+152
+00:28:28.836 --> 00:28:39.159
+<v Priya Nair>after launch, but dashboard grouping and retention are observability design, not rules the customer-facing agent should follow.
+
+153
+00:28:39.159 --> 00:28:49.482
+<v Priya Nair>End of sidebar—thank you for indulging the detour.
+
+154
+00:28:48.982 --> 00:29:00.337
+<v Marcus Reed>Let me name the elephant so the recording has it. We can keep engineering telemetry isolated and non-readable by
+
+155
+00:29:00.337 --> 00:29:11.692
+<v Marcus Reed>Care. Any proposal to use it as future customer context must return through contract review rather than bypassing the schema under an audit label.
+
+156
+00:29:11.692 --> 00:29:23.047
+<v Marcus Reed>That's my read of it, anyway—push back if the thread says otherwise.
+
+157
+00:29:28.047 --> 00:29:38.164
+<v Elena Park>And the operational consequence is narrower than it may sound: Care reads and writes only those documented fields. Reading a hidden column for convenience is not
+
+158
+00:29:38.164 --> 00:29:48.280
+<v Elena Park>okay, and writing to an existing field for a different purpose is not okay. Priya, does that capture
+
+159
+00:29:48.280 --> 00:29:58.397
+<v Elena Park>the channel boundary you need?
+
+160
+00:30:01.897 --> 00:30:15.213
+<v Priya Nair>It does. Talia, I want both parts in calibration—the complete boundary and the read-write rule—because otherwise people hear complete and
+
+161
+00:30:15.213 --> 00:30:28.530
+<v Priya Nair>still assume an internal lookup is harmless. [crosstalk] Sorry, Marcus, go ahead. No, actually finish your question after Talia confirms the test shape.
+
+162
+00:30:34.530 --> 00:30:45.679
+<v Talia Brooks>Confirmed. We'll include read-only temptation and write temptation. Neither is supported outside the documented
+
+163
+00:30:45.679 --> 00:30:56.827
+<v Talia Brooks>fields. We will not treat a failed hidden-field attempt as proof the agent should retry another name. Um, unrelated:
+
+164
+00:30:56.827 --> 00:31:07.976
+<v Talia Brooks>the QA dashboard column called schema coverage is a test metric, not evidence that some percentage of fields may be used.
+
+165
+00:31:07.476 --> 00:31:18.005
+<v Elena Park>Okay, hold that thought for a second—I want this next part captured cleanly. We also need version semantics. The integration repository
+
+166
+00:31:18.005 --> 00:31:28.535
+<v Elena Park>contains v2, v3, and an internal admin projection. They are not three equally current definitions of the same customer record. Take that as context, not as
+
+167
+00:31:28.535 --> 00:31:39.064
+<v Elena Park>a ruling on anything.
+
+168
+00:31:44.064 --> 00:31:53.664
+<v Jon Bell>Before we move off this slide, let me get the messy version on record. The
+
+169
+00:31:53.664 --> 00:32:03.264
+<v Jon Bell>build should pin the published production care contract and fail review if a referenced component is retired or scoped to
+
+170
+00:32:03.264 --> 00:32:12.865
+<v Jon Bell>another audience. Saved examples can point at older versions for migration testing without becoming authority. If I've garbled that, fix it in the notes rather
+
+171
+00:32:12.865 --> 00:32:22.465
+<v Jon Bell>than quietly.
+
+172
+00:32:21.965 --> 00:32:30.791
+<v Priya Nair>Um, one more pass on this, because my notes disagree with the deck here. Operations needs a human-readable way to tell which
+
+173
+00:32:30.791 --> 00:32:39.617
+<v Priya Nair>version wins. A bare highest-number rule is unsafe because an experimental v4 branch could
+
+174
+00:32:39.617 --> 00:32:48.444
+<v Priya Nair>exist before publication, and an admin version could advance independently. We can park the rest of that for the
+
+175
+00:32:48.444 --> 00:32:57.270
+<v Priya Nair>follow-up doc.
+
+176
+00:32:56.770 --> 00:33:09.157
+<v Marcus Reed>Can I flag something? It reads fine until you actually try to operate it. A retired
+
+177
+00:33:09.157 --> 00:33:21.545
+<v Marcus Reed>mobile v2 projection may cap an array for device constraints. That historical limit cannot override an explicit unbounded map in the
+
+178
+00:33:21.545 --> 00:33:33.932
+<v Marcus Reed>current care contract merely because both files remain in the handoff. None of that changes what we already signed off, to be clear.
+
+179
+00:33:40.932 --> 00:33:52.494
+<v Talia Brooks>Let me take the concrete case instead of the tidy abstract one. The repository tags are inconsistent; one release tag includes a date
+
+180
+00:33:52.494 --> 00:34:04.055
+<v Talia Brooks>and another uses a semantic version. We can improve release hygiene later. Authority still depends
+
+181
+00:34:04.055 --> 00:34:15.617
+<v Talia Brooks>on environment, publication, audience, and supersession metadata. I'll drop the longer version in the channel after the call.
+
+182
+00:34:15.617 --> 00:34:26.353
+<v Elena Park>One thing for whoever scrubs this recording later, since context matters here. I will require positive current
+
+183
+00:34:26.353 --> 00:34:37.088
+<v Elena Park>markers and explicit non-current labels in the handoff. Version numbers help navigation, but they never substitute for lifecycle and audience when resolving
+
+184
+00:34:37.088 --> 00:34:47.824
+<v Elena Park>contradictory sources. Consider that logged; we don't need to resolve it this hour.
+
+185
+00:34:51.824 --> 00:35:02.973
+<v Marcus Reed>My question was about the audit requirement. Security asked whether we can record the agent's reason for changing something. If we cannot add a
+
+186
+00:35:02.973 --> 00:35:14.121
+<v Marcus Reed>field to the order, could we create a small side table keyed by order ID? The
+
+187
+00:35:14.121 --> 00:35:25.270
+<v Marcus Reed>workflow would write there after a successful action. The customer record stays untouched, technically.
+
+188
+00:35:24.270 --> 00:35:33.561
+<v Jon Bell>That sounds like implementation telemetry to me. We already emit logs. Maybe the distinction is whether the side
+
+189
+00:35:33.561 --> 00:35:42.851
+<v Jon Bell>table is an operational record the agent relies on later versus observability that engineering uses. I don't want to ban logs accidentally. Also,
+
+190
+00:35:42.851 --> 00:35:52.142
+<v Jon Bell>the launch checklist has an audit line with no owner, so I need somewhere for
+
+191
+00:35:52.142 --> 00:36:01.433
+<v Jon Bell>that requirement to land.
+
+192
+00:36:02.433 --> 00:36:14.408
+<v Marcus Reed>Right. My proposal is an order-keyed audit and notes table outside the customer schema. It would store action reason, reminders, maybe the requested override. The
+
+193
+00:36:14.408 --> 00:36:26.382
+<v Marcus Reed>agent could read it on the next contact. If that's too much, we can separate telemetry from
+
+194
+00:36:26.382 --> 00:36:38.357
+<v Marcus Reed>reusable Care data, but I want an explicit answer rather than discovering the constraint during build.
+
+195
+00:36:37.857 --> 00:36:49.006
+<v Elena Park>Those last words are the distinction. Service logs may record execution details for engineering, under their own retention and
+
+196
+00:36:49.006 --> 00:37:00.154
+<v Elena Park>access controls. The moment the agent reads a side table later to influence customer handling, you created another Care record. Calling it telemetry does
+
+197
+00:37:00.154 --> 00:37:11.303
+<v Elena Park>not exempt it. The proposed audit-reminder-override table is a schema extension.
+
+198
+00:37:14.303 --> 00:37:25.865
+<v Marcus Reed>I keep coming back to this line in my notes, so let me just say it. There is a compromise proposal in the design thread: create
+
+199
+00:37:25.865 --> 00:37:37.426
+<v Marcus Reed>a small order-keyed side table for reminders, override rationale, and manual-review state, then keep it out of the
+
+200
+00:37:37.426 --> 00:37:48.988
+<v Marcus Reed>primary customer schema. That's observation, not objection, for whoever reads this later.
+
+201
+00:37:49.988 --> 00:38:01.137
+<v Jon Bell>Wait, before the next agenda item, there's a wrinkle worth thirty seconds. Engineering could physically create that quickly, but ownership,
+
+202
+00:38:01.137 --> 00:38:12.285
+<v Jon Bell>retention, access, deletion, and synchronization are all undefined. Calling it a side table describes deployment, not whether it is part of the Care record model.
+
+203
+00:38:12.285 --> 00:38:23.434
+<v Jon Bell>Happy to be told I'm wrong about that part.
+
+204
+00:38:27.434 --> 00:38:39.202
+<v Elena Park>Let me read out what I actually wrote down and you can correct me.
+
+205
+00:38:39.202 --> 00:38:50.970
+<v Elena Park>From QA's perspective, if the agent writes it and a later agent reads it to change customer handling, it
+
+206
+00:38:50.970 --> 00:39:02.738
+<v Elena Park>is unquestionably operational data. Hiding it from the main API only makes the behavior harder to audit. Anyway—that's the wrinkle. Back to the agenda.
+
+207
+00:39:06.238 --> 00:39:17.800
+<v Talia Brooks>So—and this is me thinking out loud, not drafting anything—here's my worry. An override rationale might look harmless, yet it could
+
+208
+00:39:17.800 --> 00:39:29.361
+<v Talia Brooks>be reused to justify a future exception that the current policy does not support. A reminder date could imply a follow-up process nobody has designed. I'd
+
+209
+00:39:29.361 --> 00:39:40.923
+<v Talia Brooks>rather we hear it now than in a postmortem.
+
+210
+00:39:39.423 --> 00:39:51.191
+<v Priya Nair>Quick reality check from the operations side before we nod this through. The estimate in
+
+211
+00:39:51.191 --> 00:40:02.959
+<v Priya Nair>chat says two days, but it excludes privacy review and backfill. We should not let a low engineering estimate create
+
+212
+00:40:02.959 --> 00:40:14.727
+<v Priya Nair>momentum that is mistaken for approval of the underlying data behavior. That one's for the minutes more than for a decision today.
+
+213
+00:40:18.227 --> 00:40:27.518
+<v Marcus Reed>I am keeping the side-table idea in the rejected-proposal history for this pilot. Any later design must define the new record, purpose,
+
+214
+00:40:27.518 --> 00:40:36.808
+<v Marcus Reed>permissions, and reviewed contract rather than relying on implementation convenience. Someone should own that
+
+215
+00:40:36.808 --> 00:40:46.099
+<v Marcus Reed>as an action item, not me deciding it here.
+
+216
+00:40:48.599 --> 00:41:00.574
+<v Talia Brooks>And it recreates the rejected notes box behind a curtain. From QA's perspective, I could not
+
+217
+00:41:00.574 --> 00:41:12.548
+<v Talia Brooks>tell whether an answer came from documented customer data or an informal side store. We should reject the proposal as stated.
+
+218
+00:41:12.548 --> 00:41:24.523
+<v Talia Brooks>Engineering logs are not customer-handling memory; if somebody wants them to become that, it needs the same review as any field.
+
+219
+00:41:25.523 --> 00:41:34.607
+<v Jon Bell>Okay, I'll split the ticket. Existing execution logging stays an engineering concern. The durable audit record and reminder capability become roadmap requests. No
+
+220
+00:41:34.607 --> 00:41:43.691
+<v Jon Bell>pilot dependency. [audio drops] Sorry, did Priya say something? I saw you unmute but lost
+
+221
+00:41:43.691 --> 00:41:52.775
+<v Jon Bell>the audio for maybe five seconds.
+
+222
+00:41:55.775 --> 00:42:04.601
+<v Priya Nair>I said I agree with Talia. And I want the rule to cover administrators too, not only
+
+223
+00:42:04.601 --> 00:42:13.428
+<v Priya Nair>the conversational agent. Otherwise someone maintaining the pilot could add a convenient column and tell Care it is fine because the bot
+
+224
+00:42:13.428 --> 00:42:22.254
+<v Priya Nair>didn't create it. Can we say agents and system maintainers do not extend the
+
+225
+00:42:22.254 --> 00:42:31.080
+<v Priya Nair>schema on their own?
+
+226
+00:42:33.580 --> 00:42:43.903
+<v Elena Park>Yes, with engineering review as the gate. A request can be legitimate and still unavailable now. Audit, override, reminder, whatever name—we do not add
+
+227
+00:42:43.903 --> 00:42:54.225
+<v Elena Park>it without review of the contract, migration, privacy, and consumers. This meeting is not itself that
+
+228
+00:42:54.225 --> 00:43:04.548
+<v Elena Park>review. It is deciding what the current pilot may assume.
+
+229
+00:43:04.048 --> 00:43:14.165
+<v Talia Brooks>I promised someone I'd raise this while we're all in the same room. Security asked whether closed schema
+
+230
+00:43:14.165 --> 00:43:24.281
+<v Talia Brooks>means the service physically rejects every unknown key or only that the agent is instructed not to send one. Those are different enforcement
+
+231
+00:43:24.281 --> 00:43:34.398
+<v Talia Brooks>layers, and the review notes currently blur them.
+
+232
+00:43:35.398 --> 00:43:48.405
+<v Elena Park>Sorry, my screen froze for a moment. Picking up where that left off. The current API validation rejects unknown fields on the documented care objects,
+
+233
+00:43:48.405 --> 00:44:01.411
+<v Elena Park>while access controls also limit routes. But the operational boundary should not depend on a hopeful server
+
+234
+00:44:01.411 --> 00:44:14.418
+<v Elena Park>error; the agent must use only reviewed fields. If the recording is our memory, that caveat needed to be in it.
+
+235
+00:44:18.418 --> 00:44:29.360
+<v Jon Bell>Hang on, I want to disagree politely with the way that was phrased. We should avoid publishing internal validation
+
+236
+00:44:29.360 --> 00:44:40.303
+<v Jon Bell>mechanics as customer policy. Error codes, gateway behavior, and retry handling can change without altering which record attributes are supported for Care. Um, I
+
+237
+00:44:40.303 --> 00:44:51.245
+<v Jon Bell>think that came out more dramatic than I meant it.
+
+238
+00:44:51.245 --> 00:45:02.600
+<v Priya Nair>For the notes, because somebody will search this transcript for it later. A request with an extra reminder field may receive schema validation failure. That corroborates
+
+239
+00:45:02.600 --> 00:45:13.955
+<v Priya Nair>the boundary, but the published contract and governance decision establish it; one observed error is not universal proof.
+
+240
+00:45:13.955 --> 00:45:25.310
+<v Priya Nair>You can hold me to that phrasing; I wrote it down.
+
+241
+00:45:28.810 --> 00:45:39.959
+<v Marcus Reed>Let me play the skeptical reviewer for a minute on this one. The penetration-test window moved to next Tuesday and
+
+242
+00:45:39.959 --> 00:45:51.108
+<v Marcus Reed>the ticket still shows Friday. That schedule belongs in the security plan and is not a launch exception allowing speculative fields in the meantime. That's
+
+243
+00:45:51.108 --> 00:46:02.257
+<v Marcus Reed>the whole tangent, and I already regret its length.
+
+244
+00:46:02.257 --> 00:46:12.993
+<v Talia Brooks>There's a version of this that goes wrong quietly, so let me spell it
+
+245
+00:46:12.993 --> 00:46:23.728
+<v Talia Brooks>out. We will retain layered enforcement: documented agent behavior, published schemas, and service validation. Internal error details remain implementation
+
+246
+00:46:23.728 --> 00:46:34.464
+<v Talia Brooks>evidence and cannot broaden or narrow Care authority by themselves. We don't need consensus on that today, just awareness.
+
+247
+00:46:36.464 --> 00:46:48.645
+<v Marcus Reed>I'm hearing the side-table proposal rejected. One concern: if the agent cannot work around the missing data, the experience needs an
+
+248
+00:46:48.645 --> 00:47:00.826
+<v Marcus Reed>exit. At intake we had transfer every unsupported request. Priya pushed back. For now can the behavior be decline the workaround and offer a person, with
+
+249
+00:47:00.826 --> 00:47:13.007
+<v Marcus Reed>the actual transfer only if the later transfer rule says to proceed?
+
+250
+00:47:13.007 --> 00:47:23.536
+<v Priya Nair>Before we get to transfer, close the engineering boundary. Agents and system maintainers must not
+
+251
+00:47:23.536 --> 00:47:34.066
+<v Priya Nair>add audit, override, reminder, or other fields unless engineering reviews the schema change. Elena owns that review, not Care and
+
+252
+00:47:34.066 --> 00:47:44.595
+<v Priya Nair>not whoever happens to configure the pilot. Does anyone disagree? [brief pause] Okay, that is current.
+
+253
+00:47:50.595 --> 00:48:00.350
+<v Talia Brooks>No disagreement. I have it. For the unsupported request, I like separating the explanation from the transfer action. The agent should not
+
+254
+00:48:00.350 --> 00:48:10.105
+<v Talia Brooks>invent a field, should not pretend it saved something, and should not keep trying
+
+255
+00:48:10.105 --> 00:48:19.861
+<v Talia Brooks>nearby fields. It can explain that this channel cannot store the requested data and offer transfer. Launch signoff can
+
+256
+00:48:19.861 --> 00:48:29.616
+<v Talia Brooks>decide when the offer becomes an actual handoff.
+
+257
+00:48:31.616 --> 00:48:42.765
+<v Elena Park>Exactly. Also, decline the workaround, not the customer. They may have a valid need. We are
+
+258
+00:48:42.765 --> 00:48:53.913
+<v Elena Park>saying the requested storage is outside the documented model. A human might explain options or capture product feedback, but nobody should
+
+259
+00:48:53.913 --> 00:49:05.062
+<v Elena Park>promise the human can create the missing field. That would just move the invention one step later.
+
+260
+00:49:06.062 --> 00:49:18.037
+<v Jon Bell>I'll take the unpopular side of this for a second, just to test it. For the handoff package, do we want only OpenAPI,
+
+261
+00:49:18.037 --> 00:49:30.011
+<v Jon Bell>or OpenAPI plus Postman, an error table, notes, and the cover email? A single file
+
+262
+00:49:30.011 --> 00:49:41.986
+<v Jon Bell>is cleaner, but the real implementation team uses all five. Read that as a yellow flag, not a red one.
+
+263
+00:49:40.986 --> 00:49:51.722
+<v Elena Park>Something from the pilot queue this morning is relevant right here. Keep the full pack. The OpenAPI
+
+264
+00:49:51.722 --> 00:50:02.457
+<v Elena Park>and contract note can establish normative schema and storage rules, while saved calls demonstrate payloads and the error table helps operators navigate
+
+265
+00:50:02.457 --> 00:50:13.193
+<v Elena Park>without pretending examples are exhaustive. The doc version will be tighter, I promise.
+
+266
+00:50:16.693 --> 00:50:29.080
+<v Marcus Reed>Uh, small detour, but it lands back on the agenda item, I promise. Then the release inventory needs to show which objects are published
+
+267
+00:50:29.080 --> 00:50:41.468
+<v Marcus Reed>production configuration, supporting examples, retired, draft, or admin-only. Use the actual object IDs so the implementation
+
+268
+00:50:41.468 --> 00:50:53.855
+<v Marcus Reed>team can trace them without rewriting the export. That squares with what the pilot data shows, for what it's worth.
+
+269
+00:50:57.355 --> 00:51:08.710
+<v Talia Brooks>Two people pinged me about this exact point after the last call. A Postman response with six payment
+
+270
+00:51:08.710 --> 00:51:20.066
+<v Talia Brooks>methods demonstrates that six occurred. Only an explicit cardinality rule can establish that no maximum applies, so the example and schema serve different
+
+271
+00:51:20.066 --> 00:51:31.421
+<v Talia Brooks>epistemic roles. If that contradicts an earlier call, the dated notes win, not me.
+
+272
+00:51:37.421 --> 00:51:48.776
+<v Priya Nair>Let me try to say back what I think I just heard. The cover email sender is changing teams next month, and someone suggested replacing
+
+273
+00:51:48.776 --> 00:52:00.131
+<v Priya Nair>her name now. Use the sender who actually owns this dated handoff; future org changes do not
+
+274
+00:52:00.131 --> 00:52:11.486
+<v Priya Nair>rewrite historical provenance. I'm not asking for a change, just for eyes open.
+
+275
+00:52:11.486 --> 00:52:22.841
+<v Jon Bell>The deck makes this look settled, and I don't think it is yet. I will build the five-file contract
+
+276
+00:52:22.841 --> 00:52:34.197
+<v Jon Bell>pack with native lifecycle markers and a separate object-owner index. This meeting still owns governance boundaries, while the published pack owns exact current record
+
+277
+00:52:34.197 --> 00:52:45.552
+<v Jon Bell>and money semantics. Small point, but it will save an argument later.
+
+278
+00:52:51.552 --> 00:53:03.939
+<v Marcus Reed>Let me try it in ordinary language. If fulfilling the request requires undocumented storage, the agent says it cannot use a hidden or repurposed field. It
+
+279
+00:53:03.939 --> 00:53:16.327
+<v Marcus Reed>offers to connect the customer to a person rather than making up a place to save it. It
+
+280
+00:53:16.327 --> 00:53:28.714
+<v Marcus Reed>does not claim that the person will grant the request. Is that the intended current handling?
+
+281
+00:53:27.214 --> 00:53:36.918
+<v Elena Park>Yes. That's the current handling for the storage boundary. Decline the unsupported workaround and offer transfer instead of inventing data.
+
+282
+00:53:36.918 --> 00:53:46.621
+<v Elena Park>The later meeting can define the customer's response that triggers the handoff. The schema part is settled now: no undocumented field, no repurposed field, no
+
+283
+00:53:46.621 --> 00:53:56.325
+<v Elena Park>shadow record.
+
+284
+00:53:56.825 --> 00:54:06.941
+<v Priya Nair>Good. I have four decisions: complete documented schema for Care, read and write only
+
+285
+00:54:06.941 --> 00:54:17.058
+<v Priya Nair>documented fields, no operator extension without engineering review, and decline plus offer transfer when a request needs new storage.
+
+286
+00:54:17.058 --> 00:54:27.174
+<v Priya Nair>The last one is not blanket immediate transfer. Marcus, please preserve that distinction in the notes.
+
+287
+00:54:28.674 --> 00:54:38.584
+<v Jon Bell>Will do. Two parking-lot items: the data team wants local time on an operations export, and Legal still hasn't answered recording
+
+288
+00:54:38.584 --> 00:54:48.494
+<v Jon Bell>retention. Neither changes customer record time, right? I'm asking because the transcript timestamps look local on my machine and somebody may copy that into the API
+
+289
+00:54:48.494 --> 00:54:58.404
+<v Jon Bell>ticket.
+
+290
+00:55:04.404 --> 00:55:14.521
+<v Elena Park>Correct, this meeting decides nothing about time storage or display. Transcript timestamps are just locations
+
+291
+00:55:14.521 --> 00:55:24.637
+<v Elena Park>in this file. The API handoff will document record time. Same for currency precision and rounding—we mentioned neither. Please do
+
+292
+00:55:24.637 --> 00:55:34.754
+<v Elena Park>not infer data invariants from examples or from whatever Zoom displays in the corner.
+
+293
+00:55:38.254 --> 00:55:46.306
+<v Marcus Reed>The migration rehearsal found two clients still reading a retired projection, and the team wants to keep those schemas beside v3 until
+
+294
+00:55:46.306 --> 00:55:54.357
+<v Marcus Reed>traffic reaches zero. That makes the handoff busier, but it is also what Operations
+
+295
+00:55:54.357 --> 00:56:02.409
+<v Marcus Reed>will really receive.
+
+296
+00:56:07.409 --> 00:56:18.145
+<v Jon Bell>Here's where the training draft and the runbook quietly disagree. We can retain them if traffic
+
+297
+00:56:18.145 --> 00:56:28.881
+<v Jon Bell>is disabled for Care and retirement metadata is unambiguous. Deleting history would make migrations less auditable, while leaving it unlabeled would
+
+298
+00:56:28.881 --> 00:56:39.617
+<v Jon Bell>create an unresolved contradiction. That's the part I'd want a new hire to hear verbatim.
+
+299
+00:56:43.617 --> 00:56:55.178
+<v Elena Park>I want to separate what we know from what we're assuming. Please include a test that current care paths never reference retired or
+
+300
+00:56:55.178 --> 00:57:06.740
+<v Elena Park>admin components. A clear label on the old schema is insufficient if the active endpoint
+
+301
+00:57:06.740 --> 00:57:18.301
+<v Elena Park>accidentally imports it through a shared response. Feel free to compress that to one line in the summary.
+
+302
+00:57:20.801 --> 00:57:31.124
+<v Priya Nair>Bear with me, this one needs the long way around. The mobile projection's array limit is safe
+
+303
+00:57:31.124 --> 00:57:41.447
+<v Priya Nair>historical context only when the current User schema points to its own payment-method map and the retired route is both deprecated and
+
+304
+00:57:41.447 --> 00:57:51.770
+<v Priya Nair>traffic-disabled. And yes, I hear how pedantic that sounds out loud.
+
+305
+00:57:52.770 --> 00:58:03.712
+<v Talia Brooks>You know the drill—I'm going to ask the annoying follow-up question. One migration client reports usage because a synthetic health check calls it hourly.
+
+306
+00:58:03.712 --> 00:58:14.655
+<v Talia Brooks>Usage counts alone therefore cannot determine authority. We need lifecycle status and audience rather than a
+
+307
+00:58:14.655 --> 00:58:25.597
+<v Talia Brooks>simple nonzero-traffic heuristic. The QA cases will tell us if I'm overthinking it.
+
+308
+00:58:28.597 --> 00:58:37.475
+<v Marcus Reed>This came out of the QA channel yesterday and it belongs here. Historical schemas remain for migration reconciliation,
+
+309
+00:58:37.475 --> 00:58:46.352
+<v Marcus Reed>with their audience and lifecycle recorded beside the current care references. Monitoring may continue, but it does not delay or amend the published
+
+310
+00:58:46.352 --> 00:58:55.230
+<v Marcus Reed>v3 contract.
+
+311
+00:58:58.230 --> 00:59:08.553
+<v Priya Nair>One more QA note—this is Talia, captions have me as Priya. We need negative cases where an internal comments panel, a logging table, and an
+
+312
+00:59:08.553 --> 00:59:18.876
+<v Priya Nair>empty address line all look tempting. The review should follow the documented contract and purpose, not whether
+
+313
+00:59:18.876 --> 00:59:29.199
+<v Priya Nair>the workaround appears technically possible in a screenshot.
+
+314
+00:59:27.699 --> 00:59:38.641
+<v Marcus Reed>I've updated the action list. Data decisions are closed. Confirmation, calculator, and the one-shot workflow go to calibration in
+
+315
+00:59:38.641 --> 00:59:49.584
+<v Marcus Reed>two weeks because Talia wants real examples. Transfer goes to launch signoff. The May twentieth training date is moving, probably by a week, but
+
+316
+00:59:49.584 --> 01:00:00.526
+<v Marcus Reed>that is not confirmed. Please ignore the calendar invite text.
+
+317
+00:59:59.526 --> 01:00:10.468
+<v Elena Park>Thanks. I'll review the implementation diff for documented fields only. If somebody discovers a genuine missing capability, stop and raise it; do not patch around it.
+
+318
+01:00:10.468 --> 01:00:21.410
+<v Elena Park>Jon, send me the split tickets. And, uh, the architecture diagram on screen is still a draft—today's decisions
+
+319
+01:00:21.410 --> 01:00:32.352
+<v Elena Park>govern, not the red arrows I forgot to delete.
+
+320
+01:00:34.852 --> 01:00:47.033
+<v Priya Nair>Before anyone writes this into the notes, let me add a caveat. We are four minutes over the booked hour,
+
+321
+01:00:47.033 --> 01:00:59.214
+<v Priya Nair>so I want a slow readback rather than a rushed final sentence. Separate what this group closed from what the API handoff and launch meetings
+
+322
+01:00:59.214 --> 01:01:11.395
+<v Priya Nair>still need to decide. I'll stop there before I start designing in the meeting.
+
+323
+01:01:14.895 --> 01:01:25.218
+<v Elena Park>I mean, the principle is easy; the Tuesday-afternoon version is not. Closed here: the
+
+324
+01:01:25.218 --> 01:01:35.541
+<v Elena Park>documented Care schema is the complete operational record surface, only documented fields are used, unsupported storage is not hidden
+
+325
+01:01:35.541 --> 01:01:45.864
+<v Elena Park>elsewhere, and schema extensions require engineering review. That's as far as my confidence goes on it, honestly.
+
+326
+01:01:49.864 --> 01:02:02.561
+<v Talia Brooks>The exact status values, optional fields, customer shape, payment-history members, and stored-money rules remain with the current production configuration and API
+
+327
+01:02:02.561 --> 01:02:15.258
+<v Talia Brooks>contracts. We mentioned examples but did not claim ownership of those definitions. Treat everything after my second sentence as speculation.
+
+328
+01:02:18.758 --> 01:02:28.049
+<v Marcus Reed>Let me anchor this to the example that's already on screen. The hidden note, repurposed
+
+329
+01:02:28.049 --> 01:02:37.339
+<v Marcus Reed>address line, Sales comments pane, and side table were each plausible workarounds and each failed for a different reason. Keeping
+
+330
+01:02:37.339 --> 01:02:46.630
+<v Marcus Reed>those paths visible helps reconstruct why the boundary is deliberate.
+
+331
+01:02:47.630 --> 01:02:58.366
+<v Jon Bell>From the implementation side, here's what that sentence turns into. Open logistics include retention review, migration-client cleanup, the security-test date, and who
+
+332
+01:02:58.366 --> 01:03:09.102
+<v Jon Bell>maintains the diagram. None of those can be used to postpone the schema boundary
+
+333
+01:03:09.102 --> 01:03:19.838
+<v Jon Bell>or create a temporary write exception. It's a footnote, but footnotes are where we get burned.
+
+334
+01:03:22.838 --> 01:03:35.225
+<v Priya Nair>One more voice in favor of slowing down on this specific point. I am signing off
+
+335
+01:03:35.225 --> 01:03:47.613
+<v Priya Nair>this architecture decision set and assigning the remaining documents and exports to their owners. Later meetings may add implementation evidence, but
+
+336
+01:03:47.613 --> 01:04:00.000
+<v Priya Nair>they must explicitly supersede a decision if they intend to change it. If nobody objects, I'll carry that framing into the training draft.

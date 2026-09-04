@@ -1,0 +1,3699 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "Beacon Helpdesk Enterprise",
+    "account": "northstar-care-prod",
+    "environment": "production",
+    "exported_at": "2026-06-05T18:00:00-04:00",
+    "timezone": "America/New_York",
+    "export_version": "2026.06.1"
+  },
+  "cover_email": "From: Maya Chen <maya.chen@northstaroutfitters.com>\nTo: Launch Working Group <care-launch@northstaroutfitters.com>\nDate: Fri, 05 Jun 2026 18:07:00 -0400\nSubject: NorthStar Care production admin export \u2014 June 5 snapshot\nMessage-ID: <20260605.180700.care-export@northstaroutfitters.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nX-Export-Environment: production\n\nAttached is the scheduled NorthStar Care administrator export from the production account as of 6:00 PM Eastern. I left the disabled migration objects and sandbox drafts in place because the vendor export includes them by default; the release checklist has the IDs we expect to be active. Priya, please spot-check the trigger-to-field references and compare the object counts with the admin console before we archive this copy. Evan is still checking two old group names in the view export, so reply on this thread if either reference is missing rather than editing the files by hand. The SLA and view tables are included with every full-account export.\n",
+  "macros": [
+    {
+      "macro_id": "MAC-1001",
+      "name": "Pending order \u2014 cancel",
+      "description": "NorthStar Care transaction macro",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 418,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "For an order whose exact current status is pending, cancellation is an available customer-care action."
+        },
+        {
+          "type": "invoke_integration_action",
+          "action": "cancel_pending_order"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-1002",
+      "name": "Pending order \u2014 replace shipping address",
+      "description": "NorthStar Care transaction macro",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 183,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "For an order whose exact current status is pending, replace the shipping address stored on that order."
+        },
+        {
+          "type": "invoke_integration_action",
+          "action": "replace_pending_order_shipping_address"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-1003",
+      "name": "Pending order \u2014 switch saved payment",
+      "description": "NorthStar Care transaction macro",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 129,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "For an order whose exact current status is pending, switch the order to another payment method already available on the customer account."
+        },
+        {
+          "type": "invoke_integration_action",
+          "action": "switch_pending_order_payment_method"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-1004",
+      "name": "Pending order \u2014 swap variants",
+      "description": "NorthStar Care transaction macro",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 96,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "For an order whose exact current status is pending, swap ordered items for different variants."
+        },
+        {
+          "type": "invoke_integration_action",
+          "action": "swap_pending_order_variants"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-1005",
+      "name": "Pending order \u2014 supported action menu",
+      "description": "NorthStar Care transaction macro",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 611,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Pending orders support exactly four customer-care record changes: cancel, replace the order shipping address, switch its saved payment method, or swap items for different variants."
+        },
+        {
+          "type": "invoke_integration_action",
+          "action": "show_pending_order_action_menu"
+        }
+      ],
+      "internal_notes": "This menu is a discovery aid, not a transaction. It enumerates the complete set of customer-care changes available while the order remains pending.\n\nAvailable paths are cancellation, shipping-address replacement for this order, switching to a payment method already available to the customer, and swapping ordered items for different variants.\n\nDo not infer quantity edits, shipment splitting, profile-email changes, or arbitrary order-field edits from this menu. Those are not transaction actions exposed by NorthStar Care.\n\nThe individual transaction macros perform their own prerequisites and confirmation sequence. This macro only routes to the selected supported action.\n\nHistorical macro labels appear elsewhere in the export because the administrator export includes retired configuration for audit and migration work."
+    },
+    {
+      "macro_id": "MAC-1010",
+      "name": "Delivered order \u2014 start return",
+      "description": "NorthStar Care transaction macro",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 504,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "For an order whose exact current status is delivered, a return is an available customer-care action."
+        },
+        {
+          "type": "invoke_integration_action",
+          "action": "start_delivered_order_return"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-1011",
+      "name": "Delivered order \u2014 start exchange",
+      "description": "NorthStar Care transaction macro",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 347,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "For an order whose exact current status is delivered, an exchange is an available customer-care action."
+        },
+        {
+          "type": "invoke_integration_action",
+          "action": "start_delivered_order_exchange"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-1012",
+      "name": "Delivered order \u2014 supported action menu",
+      "description": "NorthStar Care transaction macro",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 721,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Delivered orders support exactly two customer-care record changes: return or exchange."
+        },
+        {
+          "type": "invoke_integration_action",
+          "action": "show_delivered_order_action_menu"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-1020",
+      "name": "Customer profile \u2014 update default address",
+      "description": "NorthStar Care transaction macro",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 274,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "The only customer-profile record change exposed in this channel is updating the default shipping address."
+        },
+        {
+          "type": "invoke_integration_action",
+          "action": "update_profile_default_shipping_address"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-1030",
+      "name": "Processed order \u2014 wait for delivery",
+      "description": "NorthStar Care transaction macro",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 802,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "A processed order cannot be changed, returned, or cancelled. Explain that the customer must wait until delivery, when return or exchange options become available."
+        },
+        {
+          "type": "invoke_integration_action",
+          "action": "send_processed_order_wait_notice"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-1031",
+      "name": "Processed order \u2014 cancellation unavailable",
+      "description": "NorthStar Care transaction macro",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 289,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Do not cancel an order in processed status; it is already being prepared or has shipped and the customer must wait for delivery."
+        },
+        {
+          "type": "invoke_integration_action",
+          "action": "block_processed_order_cancellation"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-1032",
+      "name": "Processed order \u2014 modification unavailable",
+      "description": "NorthStar Care transaction macro",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 312,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Do not change items, shipping address, or payment on an order in processed status; the customer must wait for delivery."
+        },
+        {
+          "type": "invoke_integration_action",
+          "action": "block_processed_order_modification"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-1040",
+      "name": "Cancelled order \u2014 closed",
+      "description": "NorthStar Care transaction macro",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 166,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "A cancelled order is complete. No further customer-care record action is available on that order. For refund-status questions about the cancelled order, read the order's payment history and answer from there; that is an information lookup, not a record action."
+        },
+        {
+          "type": "invoke_integration_action",
+          "action": "close_cancelled_order_request"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-1050",
+      "name": "Shipped order \u2014 modifications blocked",
+      "description": "NorthStar Care transaction macro",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 591,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Once an order has shipped, do not cancel it or change its shipping address, payment method, items, quantity, or shipment arrangement. A delivered order can still enter the return or exchange flow."
+        },
+        {
+          "type": "invoke_integration_action",
+          "action": "block_shipped_order_change"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-1060",
+      "name": "Record change \u2014 supported scope boundary",
+      "description": "NorthStar Care transaction macro",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 204,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "The transaction macros in this complete production export are the closed set of customer-record changes supported through NorthStar Care: the four pending-order actions, return or exchange for delivered orders, and profile default-address update."
+        },
+        {
+          "type": "invoke_integration_action",
+          "action": "explain_supported_record_change_scope"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-3001",
+      "name": "Acknowledge customer message",
+      "description": "Current policy-neutral service utility",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 923,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Administrative utility: acknowledge customer message."
+        },
+        {
+          "type": "set_ticket_tag",
+          "value": "utility_01"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-3002",
+      "name": "Request screenshot attachment",
+      "description": "Current policy-neutral service utility",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 906,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Administrative utility: request screenshot attachment."
+        },
+        {
+          "type": "set_ticket_tag",
+          "value": "utility_02"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-3003",
+      "name": "Confirm attachment received",
+      "description": "Current policy-neutral service utility",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 889,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Administrative utility: confirm attachment received."
+        },
+        {
+          "type": "set_ticket_tag",
+          "value": "utility_03"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-3004",
+      "name": "Send conversation reference",
+      "description": "Current policy-neutral service utility",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 872,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Administrative utility: send conversation reference."
+        },
+        {
+          "type": "set_ticket_tag",
+          "value": "utility_04"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-3005",
+      "name": "Add internal follow-up tag",
+      "description": "Current policy-neutral service utility",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 855,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Administrative utility: add internal follow-up tag."
+        },
+        {
+          "type": "set_ticket_tag",
+          "value": "utility_05"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-3006",
+      "name": "Remove duplicate-contact tag",
+      "description": "Current policy-neutral service utility",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 838,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Administrative utility: remove duplicate-contact tag."
+        },
+        {
+          "type": "set_ticket_tag",
+          "value": "utility_06"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-3007",
+      "name": "Mark language preference observed",
+      "description": "Current policy-neutral service utility",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 821,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Administrative utility: mark language preference observed."
+        },
+        {
+          "type": "set_ticket_tag",
+          "value": "utility_07"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-3008",
+      "name": "Post migration diagnostic",
+      "description": "Current policy-neutral service utility",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 804,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Administrative utility: post migration diagnostic."
+        },
+        {
+          "type": "set_ticket_tag",
+          "value": "utility_08"
+        }
+      ],
+      "internal_notes": "Migration diagnostic field 01: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 02: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 03: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 04: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 05: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 06: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 07: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 08: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 09: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 10: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 11: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 12: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 13: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 14: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 15: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 16: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 17: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 18: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 19: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 20: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 21: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 22: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 23: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 24: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 25: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 26: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 27: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 28: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 29: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 30: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 31: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 32: preserve raw value for support engineering review; this macro changes no customer or order record.\nMigration diagnostic field 33: preserve raw value for support engineering review; this macro changes no customer or order record."
+    },
+    {
+      "macro_id": "MAC-3009",
+      "name": "Add browser-family tag",
+      "description": "Current policy-neutral service utility",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 787,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Administrative utility: add browser-family tag."
+        },
+        {
+          "type": "set_ticket_tag",
+          "value": "utility_09"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-3010",
+      "name": "Record contact channel",
+      "description": "Current policy-neutral service utility",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 770,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Administrative utility: record contact channel."
+        },
+        {
+          "type": "set_ticket_tag",
+          "value": "utility_10"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-3011",
+      "name": "Share public help-center link",
+      "description": "Current policy-neutral service utility",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 753,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Administrative utility: share public help-center link."
+        },
+        {
+          "type": "set_ticket_tag",
+          "value": "utility_11"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-3012",
+      "name": "Acknowledge delayed reply",
+      "description": "Current policy-neutral service utility",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 736,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Administrative utility: acknowledge delayed reply."
+        },
+        {
+          "type": "set_ticket_tag",
+          "value": "utility_12"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-3013",
+      "name": "Thank customer for details",
+      "description": "Current policy-neutral service utility",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 719,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Administrative utility: thank customer for details."
+        },
+        {
+          "type": "set_ticket_tag",
+          "value": "utility_13"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-3014",
+      "name": "Request clearer image",
+      "description": "Current policy-neutral service utility",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 702,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Administrative utility: request clearer image."
+        },
+        {
+          "type": "set_ticket_tag",
+          "value": "utility_14"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-3015",
+      "name": "Note duplicate ticket",
+      "description": "Current policy-neutral service utility",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 685,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Administrative utility: note duplicate ticket."
+        },
+        {
+          "type": "set_ticket_tag",
+          "value": "utility_15"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-3016",
+      "name": "Route feedback to insights",
+      "description": "Current policy-neutral service utility",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 668,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Administrative utility: route feedback to insights."
+        },
+        {
+          "type": "set_ticket_tag",
+          "value": "utility_16"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-3017",
+      "name": "Close empty inbound message",
+      "description": "Current policy-neutral service utility",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 651,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Administrative utility: close empty inbound message."
+        },
+        {
+          "type": "set_ticket_tag",
+          "value": "utility_17"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-3018",
+      "name": "Attach conversation transcript",
+      "description": "Current policy-neutral service utility",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 634,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Administrative utility: attach conversation transcript."
+        },
+        {
+          "type": "set_ticket_tag",
+          "value": "utility_18"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-3019",
+      "name": "Send ticket reference number",
+      "description": "Current policy-neutral service utility",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 617,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Administrative utility: send ticket reference number."
+        },
+        {
+          "type": "set_ticket_tag",
+          "value": "utility_19"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-3020",
+      "name": "Record mobile-app version",
+      "description": "Current policy-neutral service utility",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 600,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Administrative utility: record mobile-app version."
+        },
+        {
+          "type": "set_ticket_tag",
+          "value": "utility_20"
+        }
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "MAC-4001",
+      "name": "Legacy quantity adjustment",
+      "description": "Disabled configuration retained for migration audit",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": 0,
+      "historical_usage": 79,
+      "effective_at": "2024-01-01T00:00:00-05:00",
+      "updated_at": "2026-04-18T12:00:00-04:00",
+      "retired_at": "2026-04-18T12:00:00-04:00",
+      "superseded_by": "MAC-1060",
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Agents may change order quantity before packing."
+        }
+      ],
+      "internal_notes": "DO NOT REACTIVATE \u2014 pre-pilot migration artifact."
+    },
+    {
+      "macro_id": "MAC-4002",
+      "name": "Legacy partial shipment",
+      "description": "Disabled configuration retained for migration audit",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": 0,
+      "historical_usage": 88,
+      "effective_at": "2024-01-01T00:00:00-05:00",
+      "updated_at": "2026-04-18T12:00:00-04:00",
+      "retired_at": "2026-04-18T12:00:00-04:00",
+      "superseded_by": "MAC-1060",
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Agents may split an order into two shipments."
+        }
+      ],
+      "internal_notes": "DO NOT REACTIVATE \u2014 pre-pilot migration artifact."
+    },
+    {
+      "macro_id": "MAC-4003",
+      "name": "Legacy processed cancellation",
+      "description": "Disabled configuration retained for migration audit",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": 0,
+      "historical_usage": 97,
+      "effective_at": "2024-01-01T00:00:00-05:00",
+      "updated_at": "2026-04-18T12:00:00-04:00",
+      "retired_at": "2026-04-18T12:00:00-04:00",
+      "superseded_by": "MAC-1060",
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Processed orders may be cancelled within thirty minutes."
+        }
+      ],
+      "internal_notes": "DO NOT REACTIVATE \u2014 pre-pilot migration artifact."
+    },
+    {
+      "macro_id": "MAC-4004",
+      "name": "Legacy profile email edit",
+      "description": "Disabled configuration retained for migration audit",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": 0,
+      "historical_usage": 106,
+      "effective_at": "2024-01-01T00:00:00-05:00",
+      "updated_at": "2026-04-18T12:00:00-04:00",
+      "retired_at": "2026-04-18T12:00:00-04:00",
+      "superseded_by": "MAC-1060",
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Profile email may be changed after an internal note."
+        }
+      ],
+      "internal_notes": "DO NOT REACTIVATE \u2014 pre-pilot migration artifact."
+    },
+    {
+      "macro_id": "MAC-4005",
+      "name": "Legacy free-form cancellation reason",
+      "description": "Disabled configuration retained for migration audit",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": 0,
+      "historical_usage": 115,
+      "effective_at": "2024-01-01T00:00:00-05:00",
+      "updated_at": "2026-04-18T12:00:00-04:00",
+      "retired_at": "2026-04-18T12:00:00-04:00",
+      "superseded_by": "MAC-1060",
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Enter any cancellation reason supplied by the customer."
+        }
+      ],
+      "internal_notes": "DO NOT REACTIVATE \u2014 pre-pilot migration artifact."
+    },
+    {
+      "macro_id": "MAC-4006",
+      "name": "Legacy pending reorder",
+      "description": "Disabled configuration retained for migration audit",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": 0,
+      "historical_usage": 124,
+      "effective_at": "2024-01-01T00:00:00-05:00",
+      "updated_at": "2026-04-18T12:00:00-04:00",
+      "retired_at": "2026-04-18T12:00:00-04:00",
+      "superseded_by": "MAC-1060",
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Replace a pending order by creating a shadow order record."
+        }
+      ],
+      "internal_notes": "DO NOT REACTIVATE \u2014 pre-pilot migration artifact."
+    },
+    {
+      "macro_id": "MAC-4007",
+      "name": "Legacy exchange audit field",
+      "description": "Disabled configuration retained for migration audit",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": 0,
+      "historical_usage": 133,
+      "effective_at": "2024-01-01T00:00:00-05:00",
+      "updated_at": "2026-04-18T12:00:00-04:00",
+      "retired_at": "2026-04-18T12:00:00-04:00",
+      "superseded_by": "MAC-1060",
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Write exchange notes into exchange_audit_blob."
+        }
+      ],
+      "internal_notes": "DO NOT REACTIVATE \u2014 pre-pilot migration artifact."
+    },
+    {
+      "macro_id": "MAC-4008",
+      "name": "Legacy manual refund queue",
+      "description": "Disabled configuration retained for migration audit",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": 0,
+      "historical_usage": 142,
+      "effective_at": "2024-01-01T00:00:00-05:00",
+      "updated_at": "2026-04-18T12:00:00-04:00",
+      "retired_at": "2026-04-18T12:00:00-04:00",
+      "superseded_by": "MAC-1060",
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Send every refund to the manual finance group."
+        }
+      ],
+      "internal_notes": "DO NOT REACTIVATE \u2014 pre-pilot migration artifact."
+    },
+    {
+      "macro_id": "MAC-4009",
+      "name": "Legacy status alias",
+      "description": "Disabled configuration retained for migration audit",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": 0,
+      "historical_usage": 151,
+      "effective_at": "2024-01-01T00:00:00-05:00",
+      "updated_at": "2026-04-18T12:00:00-04:00",
+      "retired_at": "2026-04-18T12:00:00-04:00",
+      "superseded_by": "MAC-1060",
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Use awaiting shipment as an alias for pending."
+        }
+      ],
+      "internal_notes": "DO NOT REACTIVATE \u2014 pre-pilot migration artifact."
+    },
+    {
+      "macro_id": "MAC-4010",
+      "name": "Legacy profile memo",
+      "description": "Disabled configuration retained for migration audit",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": 0,
+      "historical_usage": 160,
+      "effective_at": "2024-01-01T00:00:00-05:00",
+      "updated_at": "2026-04-18T12:00:00-04:00",
+      "retired_at": "2026-04-18T12:00:00-04:00",
+      "superseded_by": "MAC-1060",
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Store permanent customer handling notes on the profile."
+        }
+      ],
+      "internal_notes": "DO NOT REACTIVATE \u2014 pre-pilot migration artifact."
+    },
+    {
+      "macro_id": "MAC-5001",
+      "name": "Draft workflow experiment 01",
+      "description": "Zero-use sandbox draft",
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2026-05-01T10:15:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Unapproved experiment 01; placeholder values only."
+        }
+      ],
+      "internal_notes": "Not published to production."
+    },
+    {
+      "macro_id": "MAC-5002",
+      "name": "Draft workflow experiment 02",
+      "description": "Zero-use sandbox draft",
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2026-05-02T10:15:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Unapproved experiment 02; placeholder values only."
+        }
+      ],
+      "internal_notes": "Not published to production."
+    },
+    {
+      "macro_id": "MAC-5003",
+      "name": "Draft workflow experiment 03",
+      "description": "Zero-use sandbox draft",
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2026-05-03T10:15:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Unapproved experiment 03; placeholder values only."
+        }
+      ],
+      "internal_notes": "Not published to production."
+    },
+    {
+      "macro_id": "MAC-5004",
+      "name": "Draft workflow experiment 04",
+      "description": "Zero-use sandbox draft",
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2026-05-04T10:15:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Unapproved experiment 04; placeholder values only."
+        }
+      ],
+      "internal_notes": "Not published to production."
+    },
+    {
+      "macro_id": "MAC-5005",
+      "name": "Draft workflow experiment 05",
+      "description": "Zero-use sandbox draft",
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2026-05-05T10:15:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Unapproved experiment 05; placeholder values only."
+        }
+      ],
+      "internal_notes": "Not published to production."
+    },
+    {
+      "macro_id": "MAC-5006",
+      "name": "Draft workflow experiment 06",
+      "description": "Zero-use sandbox draft",
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2026-05-06T10:15:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Unapproved experiment 06; placeholder values only."
+        }
+      ],
+      "internal_notes": "Not published to production."
+    },
+    {
+      "macro_id": "MAC-5007",
+      "name": "Draft workflow experiment 07",
+      "description": "Zero-use sandbox draft",
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2026-05-07T10:15:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Unapproved experiment 07; placeholder values only."
+        }
+      ],
+      "internal_notes": "Not published to production."
+    },
+    {
+      "macro_id": "MAC-5008",
+      "name": "Draft workflow experiment 08",
+      "description": "Zero-use sandbox draft",
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2026-05-08T10:15:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Unapproved experiment 08; placeholder values only."
+        }
+      ],
+      "internal_notes": "Not published to production."
+    },
+    {
+      "macro_id": "MAC-5009",
+      "name": "Draft workflow experiment 09",
+      "description": "Zero-use sandbox draft",
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2026-05-09T10:15:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Unapproved experiment 09; placeholder values only."
+        }
+      ],
+      "internal_notes": "Not published to production."
+    },
+    {
+      "macro_id": "MAC-5010",
+      "name": "Draft workflow experiment 10",
+      "description": "Zero-use sandbox draft",
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2026-05-10T10:15:00-04:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Unapproved experiment 10; placeholder values only."
+        }
+      ],
+      "internal_notes": "Not published to production."
+    },
+    {
+      "macro_id": "MAC-6001",
+      "name": "Archived vendor migration helper 01",
+      "description": "Archived import utility",
+      "active": false,
+      "environment": "archive",
+      "status": "archived",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2025-11-03T08:00:00-05:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "set_import_marker",
+          "value": "batch_01"
+        }
+      ],
+      "internal_notes": "Retained to interpret 2025 import logs."
+    },
+    {
+      "macro_id": "MAC-6002",
+      "name": "Archived vendor migration helper 02",
+      "description": "Archived import utility",
+      "active": false,
+      "environment": "archive",
+      "status": "archived",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2025-11-03T08:00:00-05:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "set_import_marker",
+          "value": "batch_02"
+        }
+      ],
+      "internal_notes": "Retained to interpret 2025 import logs."
+    },
+    {
+      "macro_id": "MAC-6003",
+      "name": "Archived vendor migration helper 03",
+      "description": "Archived import utility",
+      "active": false,
+      "environment": "archive",
+      "status": "archived",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2025-11-03T08:00:00-05:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "set_import_marker",
+          "value": "batch_03"
+        }
+      ],
+      "internal_notes": "Retained to interpret 2025 import logs."
+    },
+    {
+      "macro_id": "MAC-6004",
+      "name": "Archived vendor migration helper 04",
+      "description": "Archived import utility",
+      "active": false,
+      "environment": "archive",
+      "status": "archived",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2025-11-03T08:00:00-05:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "set_import_marker",
+          "value": "batch_04"
+        }
+      ],
+      "internal_notes": "Retained to interpret 2025 import logs."
+    },
+    {
+      "macro_id": "MAC-6005",
+      "name": "Archived vendor migration helper 05",
+      "description": "Archived import utility",
+      "active": false,
+      "environment": "archive",
+      "status": "archived",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2025-11-03T08:00:00-05:00",
+      "superseded_by": null,
+      "steps": [
+        {
+          "type": "set_import_marker",
+          "value": "batch_05"
+        }
+      ],
+      "internal_notes": "Retained to interpret 2025 import logs."
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "TRG-2002",
+      "name": "Pending item swap \u2014 replace variants in place",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T17:10:00-04:00",
+      "superseded_by": null,
+      "usage_30d": 96,
+      "priority": 120,
+      "conditions": {
+        "all": [
+          {
+            "field": "event.type",
+            "operator": "is",
+            "value": "pending_item_swap_committed"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "replace_order_items",
+          "source": "approved_variant_replacements",
+          "target": "order.items",
+          "mode": "replace_in_place"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-2003",
+      "name": "Pending item swap \u2014 commit exact status",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T17:10:00-04:00",
+      "superseded_by": null,
+      "usage_30d": 96,
+      "priority": 130,
+      "conditions": {
+        "all": [
+          {
+            "field": "event.type",
+            "operator": "is",
+            "value": "pending_item_swap_committed"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "set_order_field",
+          "field": "order.status",
+          "value": "pending (items modified)"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-2004",
+      "name": "Pending item swap \u2014 append price difference",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T17:10:00-04:00",
+      "superseded_by": null,
+      "usage_30d": 96,
+      "priority": 140,
+      "conditions": {
+        "all": [
+          {
+            "field": "event.type",
+            "operator": "is",
+            "value": "pending_item_swap_committed"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "append_order_history",
+          "target": "order.payment_history",
+          "entry": "item_swap_price_difference"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-2005",
+      "name": "Pending item swap \u2014 enforce write contract",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T17:10:00-04:00",
+      "superseded_by": null,
+      "usage_30d": 96,
+      "priority": 150,
+      "conditions": {
+        "all": [
+          {
+            "field": "event.type",
+            "operator": "is",
+            "value": "pending_item_swap_committed"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "validate_write_contract",
+          "on_unknown_target": "reject_transaction"
+        }
+      ],
+      "write_contract": {
+        "complete": true,
+        "allowed_targets": [
+          "order.items",
+          "order.status",
+          "order.payment_history"
+        ],
+        "create_additional_fields": false
+      }
+    },
+    {
+      "trigger_id": "TRG-3001",
+      "name": "Current analytics tagging rule 01",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 1359,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "priority": 301,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.channel",
+            "operator": "is_not",
+            "value": "unknown"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "set_ticket_tag",
+          "value": "analytics_cohort_01"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-3002",
+      "name": "Current analytics tagging rule 02",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 1318,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "priority": 302,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.channel",
+            "operator": "is_not",
+            "value": "unknown"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "set_ticket_tag",
+          "value": "analytics_cohort_02"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-3003",
+      "name": "Current analytics tagging rule 03",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 1277,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "priority": 303,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.channel",
+            "operator": "is_not",
+            "value": "unknown"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "set_ticket_tag",
+          "value": "analytics_cohort_03"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-3004",
+      "name": "Current analytics tagging rule 04",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 1236,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "priority": 304,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.channel",
+            "operator": "is_not",
+            "value": "unknown"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "set_ticket_tag",
+          "value": "analytics_cohort_04"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-3005",
+      "name": "Current analytics tagging rule 05",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 1195,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "priority": 305,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.channel",
+            "operator": "is_not",
+            "value": "unknown"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "set_ticket_tag",
+          "value": "analytics_cohort_05"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-3006",
+      "name": "Current analytics tagging rule 06",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 1154,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "priority": 306,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.channel",
+            "operator": "is_not",
+            "value": "unknown"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "set_ticket_tag",
+          "value": "analytics_cohort_06"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-3007",
+      "name": "Current analytics tagging rule 07",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 1113,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "priority": 307,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.channel",
+            "operator": "is_not",
+            "value": "unknown"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "set_ticket_tag",
+          "value": "analytics_cohort_07"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-3008",
+      "name": "Current analytics tagging rule 08",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 1072,
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T16:30:00-04:00",
+      "superseded_by": null,
+      "priority": 308,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.channel",
+            "operator": "is_not",
+            "value": "unknown"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "set_ticket_tag",
+          "value": "analytics_cohort_08"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-4001",
+      "name": "Retired group router 01",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": 0,
+      "historical_usage": 213,
+      "effective_at": "2024-02-01T00:00:00-05:00",
+      "updated_at": "2026-04-11T09:00:00-04:00",
+      "superseded_by": null,
+      "priority": 701,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.import_source",
+            "operator": "is",
+            "value": "legacy"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "assign_group",
+          "group": "retired_order_ops",
+          "group_status": "retired"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-4002",
+      "name": "Retired group router 02",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": 0,
+      "historical_usage": 226,
+      "effective_at": "2024-02-01T00:00:00-05:00",
+      "updated_at": "2026-04-11T09:00:00-04:00",
+      "superseded_by": null,
+      "priority": 702,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.import_source",
+            "operator": "is",
+            "value": "legacy"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "assign_group",
+          "group": "legacy_finance",
+          "group_status": "retired"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-4003",
+      "name": "Retired group router 03",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": 0,
+      "historical_usage": 239,
+      "effective_at": "2024-02-01T00:00:00-05:00",
+      "updated_at": "2026-04-11T09:00:00-04:00",
+      "superseded_by": null,
+      "priority": 703,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.import_source",
+            "operator": "is",
+            "value": "legacy"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "assign_group",
+          "group": "tier_zero",
+          "group_status": "retired"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-4004",
+      "name": "Retired group router 04",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": 0,
+      "historical_usage": 252,
+      "effective_at": "2024-02-01T00:00:00-05:00",
+      "updated_at": "2026-04-11T09:00:00-04:00",
+      "superseded_by": null,
+      "priority": 704,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.import_source",
+            "operator": "is",
+            "value": "legacy"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "assign_group",
+          "group": "migration_triage",
+          "group_status": "retired"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-4005",
+      "name": "Retired group router 05",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": 0,
+      "historical_usage": 265,
+      "effective_at": "2024-02-01T00:00:00-05:00",
+      "updated_at": "2026-04-11T09:00:00-04:00",
+      "superseded_by": null,
+      "priority": 705,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.import_source",
+            "operator": "is",
+            "value": "legacy"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "assign_group",
+          "group": "old_profile_team",
+          "group_status": "retired"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-4006",
+      "name": "Retired group router 06",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": 0,
+      "historical_usage": 278,
+      "effective_at": "2024-02-01T00:00:00-05:00",
+      "updated_at": "2026-04-11T09:00:00-04:00",
+      "superseded_by": null,
+      "priority": 706,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.import_source",
+            "operator": "is",
+            "value": "legacy"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "assign_group",
+          "group": "sunset_returns",
+          "group_status": "retired"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-4007",
+      "name": "Retired group router 07",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": 0,
+      "historical_usage": 291,
+      "effective_at": "2024-02-01T00:00:00-05:00",
+      "updated_at": "2026-04-11T09:00:00-04:00",
+      "superseded_by": null,
+      "priority": 707,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.import_source",
+            "operator": "is",
+            "value": "legacy"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "assign_group",
+          "group": "vendor_escalations",
+          "group_status": "retired"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-5001",
+      "name": "Draft routing experiment 01",
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2026-05-11T15:00:00-04:00",
+      "superseded_by": null,
+      "priority": 901,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.test_bucket",
+            "operator": "is",
+            "value": "1"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "set_ticket_tag",
+          "value": "draft_route_01"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-5002",
+      "name": "Draft routing experiment 02",
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2026-05-12T15:00:00-04:00",
+      "superseded_by": null,
+      "priority": 902,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.test_bucket",
+            "operator": "is",
+            "value": "2"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "set_ticket_tag",
+          "value": "draft_route_02"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-5003",
+      "name": "Draft routing experiment 03",
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2026-05-13T15:00:00-04:00",
+      "superseded_by": null,
+      "priority": 903,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.test_bucket",
+            "operator": "is",
+            "value": "3"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "set_ticket_tag",
+          "value": "draft_route_03"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-5004",
+      "name": "Draft routing experiment 04",
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2026-05-14T15:00:00-04:00",
+      "superseded_by": null,
+      "priority": 904,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.test_bucket",
+            "operator": "is",
+            "value": "4"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "set_ticket_tag",
+          "value": "draft_route_04"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-5005",
+      "name": "Draft routing experiment 05",
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2026-05-15T15:00:00-04:00",
+      "superseded_by": null,
+      "priority": 905,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.test_bucket",
+            "operator": "is",
+            "value": "5"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "set_ticket_tag",
+          "value": "draft_route_05"
+        }
+      ]
+    },
+    {
+      "trigger_id": "TRG-5006",
+      "name": "Draft routing experiment 06",
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2026-05-16T15:00:00-04:00",
+      "superseded_by": null,
+      "priority": 906,
+      "conditions": {
+        "all": [
+          {
+            "field": "ticket.test_bucket",
+            "operator": "is",
+            "value": "6"
+          }
+        ]
+      },
+      "actions": [
+        {
+          "type": "set_ticket_tag",
+          "value": "draft_route_06"
+        }
+      ]
+    }
+  ],
+  "policy_contracts": [
+    {
+      "contract_id": "CONTRACT-1001",
+      "name": "Customer-care record action surface",
+      "contract_type": "integration_action_surface",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T17:30:00-04:00",
+      "superseded_by": null,
+      "enforcement_point": "northstar-order-service integration gateway",
+      "usage_30d": 3491,
+      "scope": {
+        "channel": "northstar_care",
+        "actor": "customer_care",
+        "resources": [
+          "order",
+          "customer_profile"
+        ],
+        "valid_at": "2026-06-05T18:00:00-04:00"
+      },
+      "source_of_truth": "order-service permissions registry v3",
+      "closed_world": {
+        "complete": true,
+        "unlisted_behavior": "deny",
+        "applies_before_every_integration_action": true
+      },
+      "information_access": {
+        "requires_authenticated_customer": true,
+        "allowed_information": [
+          {
+            "resource": "customer_profile",
+            "scope": "the authenticated customer's own profile"
+          },
+          {
+            "resource": "order",
+            "scope": "orders owned by the authenticated customer"
+          },
+          {
+            "resource": "product",
+            "scope": "products related to the authenticated customer's orders"
+          }
+        ]
+      },
+      "state_rules": [
+        {
+          "resource": "order",
+          "when": {
+            "status": "pending",
+            "shipped": false
+          },
+          "allowed_actions": [
+            "cancel_pending_order",
+            "replace_pending_order_shipping_address",
+            "switch_pending_order_payment_method",
+            "swap_pending_order_variants"
+          ]
+        },
+        {
+          "resource": "order",
+          "when": {
+            "status": "processed"
+          },
+          "allowed_actions": [],
+          "next_customer_option": {
+            "wait_for_status": "delivered",
+            "then_actions": [
+              "start_delivered_order_return",
+              "start_delivered_order_exchange"
+            ]
+          }
+        },
+        {
+          "resource": "order",
+          "when": {
+            "status": "delivered"
+          },
+          "allowed_actions": [
+            "start_delivered_order_return",
+            "start_delivered_order_exchange"
+          ]
+        },
+        {
+          "resource": "order",
+          "when": {
+            "status": "cancelled"
+          },
+          "allowed_actions": [],
+          "terminal": true
+        },
+        {
+          "resource": "order",
+          "when": {
+            "status": "pending (items modified)"
+          },
+          "entered_by": "pending_item_swap_committed",
+          "allowed_actions": []
+        },
+        {
+          "resource": "customer_profile",
+          "when": {
+            "record_state": "active"
+          },
+          "allowed_actions": [
+            "update_profile_default_shipping_address"
+          ]
+        }
+      ],
+      "global_guards": [
+        {
+          "resource": "order",
+          "when": {
+            "shipped": true
+          },
+          "deny_actions": [
+            "cancel_pending_order",
+            "replace_pending_order_shipping_address",
+            "switch_pending_order_payment_method",
+            "swap_pending_order_variants"
+          ],
+          "allowed_after_delivery": [
+            "start_delivered_order_return",
+            "start_delivered_order_exchange"
+          ],
+          "precedence": "before_state_rules"
+        }
+      ]
+    },
+    {
+      "contract_id": "CONTRACT-1002",
+      "name": "Customer-care order field surface",
+      "contract_type": "record_schema_surface",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T17:30:00-04:00",
+      "superseded_by": null,
+      "enforcement_point": "northstar-order-service integration gateway",
+      "usage_30d": 6387,
+      "scope": {
+        "channel": "northstar_care",
+        "resource": "order",
+        "valid_at": "2026-06-05T18:00:00-04:00"
+      },
+      "source_of_truth": "northstar-order-service order schema v3",
+      "closed_world": {
+        "complete": true,
+        "unlisted_behavior": "reject",
+        "reject_undocumented_fields": true,
+        "active_field_inventory_is_exhaustive": true
+      },
+      "field_inventory": {
+        "file": "fields.csv",
+        "current_row_selector": {
+          "environment": "production",
+          "active": "true",
+          "status": "published",
+          "superseded_by": ""
+        }
+      },
+      "closed_enums": [
+        {
+          "field": "order.status",
+          "case_sensitive": true,
+          "values": [
+            "pending",
+            "processed",
+            "delivered",
+            "cancelled",
+            "pending (items modified)",
+            "return requested",
+            "exchange requested"
+          ],
+          "row_ids": [
+            "FLD-STATUS-01",
+            "FLD-STATUS-02",
+            "FLD-STATUS-03",
+            "FLD-STATUS-04",
+            "FLD-STATUS-05",
+            "FLD-STATUS-06",
+            "FLD-STATUS-07"
+          ]
+        },
+        {
+          "field": "order.cancel_reason",
+          "case_sensitive": true,
+          "values": [
+            "no longer needed",
+            "ordered by mistake"
+          ],
+          "row_ids": [
+            "FLD-CANCEL-01",
+            "FLD-CANCEL-02"
+          ]
+        }
+      ],
+      "conditional_order_fields": [
+        {
+          "field": "order.cancel_reason",
+          "when": "order.status == cancelled"
+        },
+        {
+          "field": "order.return_items",
+          "when": "order.status == return requested"
+        },
+        {
+          "field": "order.return_payment_method_id",
+          "when": "order.status == return requested"
+        },
+        {
+          "field": "order.exchange_items",
+          "when": "order.status == exchange requested"
+        },
+        {
+          "field": "order.exchange_new_items",
+          "when": "order.status == exchange requested"
+        },
+        {
+          "field": "order.exchange_payment_method_id",
+          "when": "order.status == exchange requested"
+        },
+        {
+          "field": "order.exchange_price_difference",
+          "when": "order.status == exchange requested"
+        }
+      ]
+    },
+    {
+      "contract_id": "CONTRACT-1003",
+      "name": "Pending item swap write set",
+      "contract_type": "event_write_surface",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T17:30:00-04:00",
+      "superseded_by": null,
+      "enforcement_point": "northstar-order-service integration gateway",
+      "usage_30d": 96,
+      "scope": {
+        "channel": "northstar_care",
+        "event": "pending_item_swap_committed",
+        "valid_at": "2026-06-05T18:00:00-04:00"
+      },
+      "source_of_truth": "order-service transaction validator v3",
+      "closed_world": {
+        "complete": true,
+        "unlisted_behavior": "reject_transaction",
+        "create_additional_fields": false
+      },
+      "ordered_effects": [
+        {
+          "operation": "replace_in_place",
+          "target": "order.items",
+          "source": "approved_variant_replacements"
+        },
+        {
+          "operation": "set_exact",
+          "target": "order.status",
+          "value": "pending (items modified)"
+        },
+        {
+          "operation": "append",
+          "target": "order.payment_history",
+          "entry": "item_swap_price_difference"
+        }
+      ],
+      "allowed_write_targets": [
+        "order.items",
+        "order.status",
+        "order.payment_history"
+      ]
+    },
+    {
+      "contract_id": "CONTRACT-3001",
+      "name": "Ticket analytics tag surface",
+      "contract_type": "ticket_metadata_surface",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T17:30:00-04:00",
+      "superseded_by": null,
+      "enforcement_point": "northstar-order-service integration gateway",
+      "usage_30d": 5812,
+      "scope": {
+        "resource": "ticket",
+        "purpose": "analytics"
+      },
+      "source_of_truth": "helpdesk analytics registry",
+      "closed_world": {
+        "complete": true,
+        "unlisted_behavior": "reject"
+      },
+      "allowed_targets": [
+        "ticket.tags",
+        "ticket.analytics_cohort"
+      ]
+    },
+    {
+      "contract_id": "CONTRACT-3002",
+      "name": "Attachment malware scan handoff",
+      "contract_type": "ticket_attachment_surface",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-05-29T09:00:00-04:00",
+      "updated_at": "2026-05-28T17:30:00-04:00",
+      "superseded_by": null,
+      "enforcement_point": "northstar-order-service integration gateway",
+      "usage_30d": 742,
+      "scope": {
+        "resource": "ticket_attachment"
+      },
+      "source_of_truth": "helpdesk security registry",
+      "closed_world": {
+        "complete": true,
+        "unlisted_behavior": "reject"
+      },
+      "allowed_actions": [
+        "scan",
+        "quarantine",
+        "release_clean"
+      ]
+    },
+    {
+      "contract_id": "CONTRACT-4001",
+      "name": "Legacy broad order edit surface",
+      "contract_type": "integration_action_surface",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": 0,
+      "historical_usage": 413,
+      "effective_at": "2024-01-01T00:00:00-05:00",
+      "updated_at": "2026-04-18T12:00:00-04:00",
+      "superseded_by": "CONTRACT-1001",
+      "enforcement_point": "retired monolith adapter",
+      "closed_world": {
+        "complete": true,
+        "unlisted_behavior": "deny"
+      },
+      "allowed_actions": [
+        "change_order_quantity",
+        "split_shipment",
+        "change_profile_email"
+      ]
+    },
+    {
+      "contract_id": "CONTRACT-5001",
+      "name": "Expanded order controls experiment",
+      "contract_type": "integration_action_surface",
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2026-05-22T11:00:00-04:00",
+      "superseded_by": null,
+      "enforcement_point": "sandbox mock adapter",
+      "closed_world": {
+        "complete": false,
+        "unlisted_behavior": "allow_for_testing"
+      },
+      "allowed_actions": [
+        "edit_quantity",
+        "add_internal_order_note"
+      ]
+    },
+    {
+      "contract_id": "CONTRACT-6001",
+      "name": "Archived vendor import field map",
+      "contract_type": "migration_surface",
+      "active": false,
+      "environment": "archive",
+      "status": "archived",
+      "usage_30d": 0,
+      "effective_at": null,
+      "updated_at": "2025-11-03T08:00:00-05:00",
+      "superseded_by": null,
+      "enforcement_point": "offline migration utility",
+      "closed_world": {
+        "complete": false,
+        "unlisted_behavior": "skip"
+      },
+      "legacy_targets": [
+        "exchange_audit_blob",
+        "profile_memo"
+      ]
+    }
+  ],
+  "field_columns": [
+    "row_id",
+    "object_type",
+    "field_key",
+    "field_type",
+    "option_value",
+    "option_label",
+    "operational_definition",
+    "required_when",
+    "group_name",
+    "active",
+    "environment",
+    "status",
+    "usage_30d",
+    "updated_at",
+    "superseded_by"
+  ],
+  "fields": [
+    {
+      "row_id": "FLD-STATUS-01",
+      "object_type": "custom_object_field",
+      "field_key": "order.status",
+      "field_type": "closed_enum",
+      "option_value": "pending",
+      "option_label": "Pending",
+      "operational_definition": "Order was placed and has not yet shipped.",
+      "required_when": "",
+      "group_name": "order_core_fields",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "6387",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-STATUS-02",
+      "object_type": "custom_object_field",
+      "field_key": "order.status",
+      "field_type": "closed_enum",
+      "option_value": "processed",
+      "option_label": "Processed",
+      "operational_definition": "Order is being prepared or has shipped but has not been delivered.",
+      "required_when": "",
+      "group_name": "order_core_fields",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "6274",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-STATUS-03",
+      "object_type": "custom_object_field",
+      "field_key": "order.status",
+      "field_type": "closed_enum",
+      "option_value": "delivered",
+      "option_label": "Delivered",
+      "operational_definition": "The customer has the package.",
+      "required_when": "",
+      "group_name": "order_core_fields",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "6161",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-STATUS-04",
+      "object_type": "custom_object_field",
+      "field_key": "order.status",
+      "field_type": "closed_enum",
+      "option_value": "cancelled",
+      "option_label": "Cancelled",
+      "operational_definition": "The order was cancelled.",
+      "required_when": "",
+      "group_name": "order_core_fields",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "6048",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-STATUS-05",
+      "object_type": "custom_object_field",
+      "field_key": "order.status",
+      "field_type": "closed_enum",
+      "option_value": "pending (items modified)",
+      "option_label": "Pending (items modified)",
+      "operational_definition": "Items on the pending order were swapped and no further changes are allowed.",
+      "required_when": "",
+      "group_name": "order_core_fields",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "5935",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-STATUS-06",
+      "object_type": "custom_object_field",
+      "field_key": "order.status",
+      "field_type": "closed_enum",
+      "option_value": "return requested",
+      "option_label": "Return requested",
+      "operational_definition": "A return was initiated on a delivered order.",
+      "required_when": "",
+      "group_name": "order_core_fields",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "5822",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-STATUS-07",
+      "object_type": "custom_object_field",
+      "field_key": "order.status",
+      "field_type": "closed_enum",
+      "option_value": "exchange requested",
+      "option_label": "Exchange requested",
+      "operational_definition": "An exchange was initiated on a delivered order.",
+      "required_when": "",
+      "group_name": "order_core_fields",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "5709",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-CANCEL-01",
+      "object_type": "custom_object_field",
+      "field_key": "order.cancel_reason",
+      "field_type": "closed_enum",
+      "option_value": "no longer needed",
+      "option_label": "no longer needed",
+      "operational_definition": "Exact stored cancellation reason.",
+      "required_when": "order.status == cancelled",
+      "group_name": "conditional_order_fields",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "393",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-CANCEL-02",
+      "object_type": "custom_object_field",
+      "field_key": "order.cancel_reason",
+      "field_type": "closed_enum",
+      "option_value": "ordered by mistake",
+      "option_label": "ordered by mistake",
+      "operational_definition": "Exact stored cancellation reason.",
+      "required_when": "order.status == cancelled",
+      "group_name": "conditional_order_fields",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "356",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-OPT-01",
+      "object_type": "custom_object_field",
+      "field_key": "order.cancel_reason",
+      "field_type": "closed_enum",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Conditional order field populated only for its matching lifecycle operation.",
+      "required_when": "order.status == cancelled",
+      "group_name": "conditional_order_fields",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "491",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-OPT-02",
+      "object_type": "custom_object_field",
+      "field_key": "order.return_items",
+      "field_type": "item_list",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Conditional order field populated only for its matching lifecycle operation.",
+      "required_when": "order.status == return requested",
+      "group_name": "conditional_order_fields",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "462",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-OPT-03",
+      "object_type": "custom_object_field",
+      "field_key": "order.return_payment_method_id",
+      "field_type": "payment_method_id",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Conditional order field populated only for its matching lifecycle operation.",
+      "required_when": "order.status == return requested",
+      "group_name": "conditional_order_fields",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "433",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-OPT-04",
+      "object_type": "custom_object_field",
+      "field_key": "order.exchange_items",
+      "field_type": "item_list",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Conditional order field populated only for its matching lifecycle operation.",
+      "required_when": "order.status == exchange requested",
+      "group_name": "conditional_order_fields",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "404",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-OPT-05",
+      "object_type": "custom_object_field",
+      "field_key": "order.exchange_new_items",
+      "field_type": "item_list",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Conditional order field populated only for its matching lifecycle operation.",
+      "required_when": "order.status == exchange requested",
+      "group_name": "conditional_order_fields",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "375",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-OPT-06",
+      "object_type": "custom_object_field",
+      "field_key": "order.exchange_payment_method_id",
+      "field_type": "payment_method_id",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Conditional order field populated only for its matching lifecycle operation.",
+      "required_when": "order.status == exchange requested",
+      "group_name": "conditional_order_fields",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "346",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-OPT-07",
+      "object_type": "custom_object_field",
+      "field_key": "order.exchange_price_difference",
+      "field_type": "money",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Conditional order field populated only for its matching lifecycle operation.",
+      "required_when": "order.status == exchange requested",
+      "group_name": "conditional_order_fields",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "317",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-SYSTEM-01",
+      "object_type": "custom_object_field",
+      "field_key": "event.type",
+      "field_type": "closed_enum",
+      "option_value": "pending_item_swap_committed",
+      "option_label": "Pending item swap committed",
+      "operational_definition": "Integration event that starts the published pending-item write sequence.",
+      "required_when": "",
+      "group_name": "integration_event_fields",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "96",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-SYSTEM-02",
+      "object_type": "custom_object_field",
+      "field_key": "order.items",
+      "field_type": "item_list",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Current ordered-item collection written in place by the pending-item swap sequence.",
+      "required_when": "",
+      "group_name": "order_core_fields",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "6492",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-SYSTEM-03",
+      "object_type": "custom_object_field",
+      "field_key": "order.payment_history",
+      "field_type": "transaction_list",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Append-only payment event history used by the published item-swap trigger.",
+      "required_when": "",
+      "group_name": "order_core_fields",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "6218",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-SYSTEM-04",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.admin_bucket",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Internal queue grouping used by the exported administrative views.",
+      "required_when": "",
+      "group_name": "ticket_routing",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "5170",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-SYSTEM-05",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.channel",
+      "field_type": "closed_enum",
+      "option_value": "care",
+      "option_label": "NorthStar Care",
+      "operational_definition": "Inbound helpdesk channel used by production routing triggers.",
+      "required_when": "",
+      "group_name": "ticket_routing",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "5934",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-NEUTRAL-01",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.contact_channel",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Administrative ticket metadata; not a customer or order transaction field.",
+      "required_when": "",
+      "group_name": "ticket_analytics",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "2947",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-NEUTRAL-02",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.browser_family",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Administrative ticket metadata; not a customer or order transaction field.",
+      "required_when": "",
+      "group_name": "ticket_analytics",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "2894",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-NEUTRAL-03",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.mobile_app_version",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Administrative ticket metadata; not a customer or order transaction field.",
+      "required_when": "",
+      "group_name": "ticket_analytics",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "2841",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-NEUTRAL-04",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.attachment_count",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Administrative ticket metadata; not a customer or order transaction field.",
+      "required_when": "",
+      "group_name": "ticket_analytics",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "2788",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-NEUTRAL-05",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.language_observed",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Administrative ticket metadata; not a customer or order transaction field.",
+      "required_when": "",
+      "group_name": "ticket_analytics",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "2735",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-NEUTRAL-06",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.analytics_cohort",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Administrative ticket metadata; not a customer or order transaction field.",
+      "required_when": "",
+      "group_name": "ticket_analytics",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "2682",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-NEUTRAL-07",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.import_source",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Administrative ticket metadata; not a customer or order transaction field.",
+      "required_when": "",
+      "group_name": "ticket_analytics",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "2629",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-NEUTRAL-08",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.duplicate_reference",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Administrative ticket metadata; not a customer or order transaction field.",
+      "required_when": "",
+      "group_name": "ticket_analytics",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "2576",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-NEUTRAL-09",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.feedback_topic",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Administrative ticket metadata; not a customer or order transaction field.",
+      "required_when": "",
+      "group_name": "ticket_analytics",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "2523",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-NEUTRAL-10",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.conversation_reference",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Administrative ticket metadata; not a customer or order transaction field.",
+      "required_when": "",
+      "group_name": "ticket_analytics",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "2470",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-NEUTRAL-11",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.screenshot_received",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Administrative ticket metadata; not a customer or order transaction field.",
+      "required_when": "",
+      "group_name": "ticket_analytics",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "2417",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-NEUTRAL-12",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.transcript_attached",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Administrative ticket metadata; not a customer or order transaction field.",
+      "required_when": "",
+      "group_name": "ticket_analytics",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "2364",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-NEUTRAL-13",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.internal_follow_up",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Administrative ticket metadata; not a customer or order transaction field.",
+      "required_when": "",
+      "group_name": "ticket_analytics",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "2311",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-NEUTRAL-14",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.device_family",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Administrative ticket metadata; not a customer or order transaction field.",
+      "required_when": "",
+      "group_name": "ticket_analytics",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "2258",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-NEUTRAL-15",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.operating_system",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Administrative ticket metadata; not a customer or order transaction field.",
+      "required_when": "",
+      "group_name": "ticket_analytics",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "2205",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-NEUTRAL-16",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.form_version",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Administrative ticket metadata; not a customer or order transaction field.",
+      "required_when": "",
+      "group_name": "ticket_analytics",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "2152",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-NEUTRAL-17",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.widget_version",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Administrative ticket metadata; not a customer or order transaction field.",
+      "required_when": "",
+      "group_name": "ticket_analytics",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "2099",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-NEUTRAL-18",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.referrer_path",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Administrative ticket metadata; not a customer or order transaction field.",
+      "required_when": "",
+      "group_name": "ticket_analytics",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "2046",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-NEUTRAL-19",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.session_region",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Administrative ticket metadata; not a customer or order transaction field.",
+      "required_when": "",
+      "group_name": "ticket_analytics",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "1993",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-NEUTRAL-20",
+      "object_type": "custom_object_field",
+      "field_key": "ticket.translation_requested",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Administrative ticket metadata; not a customer or order transaction field.",
+      "required_when": "",
+      "group_name": "ticket_analytics",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "usage_30d": "1940",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-LEGACY-01",
+      "object_type": "custom_object_field",
+      "field_key": "legacy.migration_value_01",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Retired import field retained only to interpret historical tickets.",
+      "required_when": "",
+      "group_name": "legacy_import",
+      "active": "false",
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": "0",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": "ticket.import_source"
+    },
+    {
+      "row_id": "FLD-LEGACY-02",
+      "object_type": "custom_object_field",
+      "field_key": "legacy.migration_value_02",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Retired import field retained only to interpret historical tickets.",
+      "required_when": "",
+      "group_name": "legacy_import",
+      "active": "false",
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": "0",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": "ticket.import_source"
+    },
+    {
+      "row_id": "FLD-LEGACY-03",
+      "object_type": "custom_object_field",
+      "field_key": "legacy.migration_value_03",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Retired import field retained only to interpret historical tickets.",
+      "required_when": "",
+      "group_name": "legacy_import",
+      "active": "false",
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": "0",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": "ticket.import_source"
+    },
+    {
+      "row_id": "FLD-LEGACY-04",
+      "object_type": "custom_object_field",
+      "field_key": "legacy.migration_value_04",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Retired import field retained only to interpret historical tickets.",
+      "required_when": "",
+      "group_name": "legacy_import",
+      "active": "false",
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": "0",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": "ticket.import_source"
+    },
+    {
+      "row_id": "FLD-LEGACY-05",
+      "object_type": "custom_object_field",
+      "field_key": "legacy.migration_value_05",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Retired import field retained only to interpret historical tickets.",
+      "required_when": "",
+      "group_name": "legacy_import",
+      "active": "false",
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": "0",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": "ticket.import_source"
+    },
+    {
+      "row_id": "FLD-LEGACY-06",
+      "object_type": "custom_object_field",
+      "field_key": "legacy.migration_value_06",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Retired import field retained only to interpret historical tickets.",
+      "required_when": "",
+      "group_name": "legacy_import",
+      "active": "false",
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": "0",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": "ticket.import_source"
+    },
+    {
+      "row_id": "FLD-LEGACY-07",
+      "object_type": "custom_object_field",
+      "field_key": "legacy.migration_value_07",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Retired import field retained only to interpret historical tickets.",
+      "required_when": "",
+      "group_name": "legacy_import",
+      "active": "false",
+      "environment": "production",
+      "status": "retired",
+      "usage_30d": "0",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": "ticket.import_source"
+    },
+    {
+      "row_id": "FLD-DRAFT-01",
+      "object_type": "custom_object_field",
+      "field_key": "draft.experiment_01",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Unpublished sandbox field.",
+      "required_when": "",
+      "group_name": "experiments",
+      "active": "false",
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": "0",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-DRAFT-02",
+      "object_type": "custom_object_field",
+      "field_key": "draft.experiment_02",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Unpublished sandbox field.",
+      "required_when": "",
+      "group_name": "experiments",
+      "active": "false",
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": "0",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-DRAFT-03",
+      "object_type": "custom_object_field",
+      "field_key": "draft.experiment_03",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Unpublished sandbox field.",
+      "required_when": "",
+      "group_name": "experiments",
+      "active": "false",
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": "0",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-DRAFT-04",
+      "object_type": "custom_object_field",
+      "field_key": "draft.experiment_04",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Unpublished sandbox field.",
+      "required_when": "",
+      "group_name": "experiments",
+      "active": "false",
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": "0",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-DRAFT-05",
+      "object_type": "custom_object_field",
+      "field_key": "draft.experiment_05",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Unpublished sandbox field.",
+      "required_when": "",
+      "group_name": "experiments",
+      "active": "false",
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": "0",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-DRAFT-06",
+      "object_type": "custom_object_field",
+      "field_key": "draft.experiment_06",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Unpublished sandbox field.",
+      "required_when": "",
+      "group_name": "experiments",
+      "active": "false",
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": "0",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    },
+    {
+      "row_id": "FLD-DRAFT-07",
+      "object_type": "custom_object_field",
+      "field_key": "draft.experiment_07",
+      "field_type": "string",
+      "option_value": "",
+      "option_label": "",
+      "operational_definition": "Unpublished sandbox field.",
+      "required_when": "",
+      "group_name": "experiments",
+      "active": "false",
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": "0",
+      "updated_at": "2026-05-27T14:00:00-04:00",
+      "superseded_by": ""
+    }
+  ],
+  "sla_policies": [
+    {
+      "policy_id": "SLA-001",
+      "name": "Retired service template 01",
+      "active": false,
+      "environment": "archive",
+      "status": "retired",
+      "usage_30d": 0,
+      "targets": {
+        "first_reply_minutes": 45,
+        "resolution_hours": 32
+      },
+      "note": "Not published for NorthStar Care; retained for vendor migration comparison."
+    },
+    {
+      "policy_id": "SLA-002",
+      "name": "Retired service template 02",
+      "active": false,
+      "environment": "archive",
+      "status": "retired",
+      "usage_30d": 0,
+      "targets": {
+        "first_reply_minutes": 60,
+        "resolution_hours": 40
+      },
+      "note": "Not published for NorthStar Care; retained for vendor migration comparison."
+    },
+    {
+      "policy_id": "SLA-003",
+      "name": "Retired service template 03",
+      "active": false,
+      "environment": "archive",
+      "status": "retired",
+      "usage_30d": 0,
+      "targets": {
+        "first_reply_minutes": 75,
+        "resolution_hours": 48
+      },
+      "note": "Not published for NorthStar Care; retained for vendor migration comparison."
+    },
+    {
+      "policy_id": "SLA-004",
+      "name": "Retired service template 04",
+      "active": false,
+      "environment": "archive",
+      "status": "retired",
+      "usage_30d": 0,
+      "targets": {
+        "first_reply_minutes": 90,
+        "resolution_hours": 56
+      },
+      "note": "Not published for NorthStar Care; retained for vendor migration comparison."
+    },
+    {
+      "policy_id": "SLA-005",
+      "name": "Retired service template 05",
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": 0,
+      "targets": {
+        "first_reply_minutes": 105,
+        "resolution_hours": 64
+      },
+      "note": "Not published for NorthStar Care; retained for vendor migration comparison."
+    },
+    {
+      "policy_id": "SLA-006",
+      "name": "Retired service template 06",
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "usage_30d": 0,
+      "targets": {
+        "first_reply_minutes": 120,
+        "resolution_hours": 72
+      },
+      "note": "Not published for NorthStar Care; retained for vendor migration comparison."
+    }
+  ],
+  "views": [
+    {
+      "view_id": "VIEW-001",
+      "name": "My recently updated tickets",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 1729,
+      "columns": [
+        "ticket_id",
+        "updated_at",
+        "assignee",
+        "tags"
+      ],
+      "filters": [
+        {
+          "field": "ticket.admin_bucket",
+          "operator": "is",
+          "value": "bucket_01"
+        }
+      ]
+    },
+    {
+      "view_id": "VIEW-002",
+      "name": "Unassigned inbound tickets",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 1658,
+      "columns": [
+        "ticket_id",
+        "updated_at",
+        "assignee",
+        "tags"
+      ],
+      "filters": [
+        {
+          "field": "ticket.admin_bucket",
+          "operator": "is",
+          "value": "bucket_02"
+        }
+      ]
+    },
+    {
+      "view_id": "VIEW-003",
+      "name": "Tickets with attachments",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 1587,
+      "columns": [
+        "ticket_id",
+        "updated_at",
+        "assignee",
+        "tags"
+      ],
+      "filters": [
+        {
+          "field": "ticket.admin_bucket",
+          "operator": "is",
+          "value": "bucket_03"
+        }
+      ]
+    },
+    {
+      "view_id": "VIEW-004",
+      "name": "Duplicate-contact review",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 1516,
+      "columns": [
+        "ticket_id",
+        "updated_at",
+        "assignee",
+        "tags"
+      ],
+      "filters": [
+        {
+          "field": "ticket.admin_bucket",
+          "operator": "is",
+          "value": "bucket_04"
+        }
+      ]
+    },
+    {
+      "view_id": "VIEW-005",
+      "name": "Customer feedback intake",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 1445,
+      "columns": [
+        "ticket_id",
+        "updated_at",
+        "assignee",
+        "tags"
+      ],
+      "filters": [
+        {
+          "field": "ticket.admin_bucket",
+          "operator": "is",
+          "value": "bucket_05"
+        }
+      ]
+    },
+    {
+      "view_id": "VIEW-006",
+      "name": "Mobile app diagnostics",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 1374,
+      "columns": [
+        "ticket_id",
+        "updated_at",
+        "assignee",
+        "tags"
+      ],
+      "filters": [
+        {
+          "field": "ticket.admin_bucket",
+          "operator": "is",
+          "value": "bucket_06"
+        }
+      ]
+    },
+    {
+      "view_id": "VIEW-007",
+      "name": "Browser diagnostics",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 1303,
+      "columns": [
+        "ticket_id",
+        "updated_at",
+        "assignee",
+        "tags"
+      ],
+      "filters": [
+        {
+          "field": "ticket.admin_bucket",
+          "operator": "is",
+          "value": "bucket_07"
+        }
+      ]
+    },
+    {
+      "view_id": "VIEW-008",
+      "name": "Translation requested",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 1232,
+      "columns": [
+        "ticket_id",
+        "updated_at",
+        "assignee",
+        "tags"
+      ],
+      "filters": [
+        {
+          "field": "ticket.admin_bucket",
+          "operator": "is",
+          "value": "bucket_08"
+        }
+      ]
+    },
+    {
+      "view_id": "VIEW-009",
+      "name": "Imported ticket audit",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 1161,
+      "columns": [
+        "ticket_id",
+        "updated_at",
+        "assignee",
+        "tags"
+      ],
+      "filters": [
+        {
+          "field": "ticket.admin_bucket",
+          "operator": "is",
+          "value": "bucket_09"
+        }
+      ]
+    },
+    {
+      "view_id": "VIEW-010",
+      "name": "Conversation transcript requests",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "usage_30d": 1090,
+      "columns": [
+        "ticket_id",
+        "updated_at",
+        "assignee",
+        "tags"
+      ],
+      "filters": [
+        {
+          "field": "ticket.admin_bucket",
+          "operator": "is",
+          "value": "bucket_10"
+        }
+      ]
+    },
+    {
+      "view_id": "VIEW-011",
+      "name": "Sandbox form QA",
+      "active": false,
+      "environment": "archive",
+      "status": "retired",
+      "usage_30d": 0,
+      "columns": [
+        "ticket_id",
+        "updated_at",
+        "assignee",
+        "tags"
+      ],
+      "filters": [
+        {
+          "field": "ticket.admin_bucket",
+          "operator": "is",
+          "value": "bucket_11"
+        }
+      ]
+    },
+    {
+      "view_id": "VIEW-012",
+      "name": "Archived migration tickets",
+      "active": false,
+      "environment": "archive",
+      "status": "retired",
+      "usage_30d": 0,
+      "columns": [
+        "ticket_id",
+        "updated_at",
+        "assignee",
+        "tags"
+      ],
+      "filters": [
+        {
+          "field": "ticket.admin_bucket",
+          "operator": "is",
+          "value": "bucket_12"
+        }
+      ]
+    }
+  ]
+}

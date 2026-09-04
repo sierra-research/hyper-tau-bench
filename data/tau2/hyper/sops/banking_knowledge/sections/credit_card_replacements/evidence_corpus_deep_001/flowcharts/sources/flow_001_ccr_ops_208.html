@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CCR-OPS-208 — Pending replacement order check before account closure</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 1600px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #23405f; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #c3d2e2; }
+  .lane { position: absolute; border: 1px dashed #b9c4cf; border-radius: 8px; }
+  .lanelabel { position: absolute; font-size: 12px; font-weight: 600; color: #6b7885; letter-spacing: .6px; text-transform: uppercase; }
+  .node { position: absolute; box-sizing: border-box; background: #fff; border: 2px solid #35506e; border-radius: 8px; padding: 10px 12px; font-size: 13.5px; color: #1d2833; line-height: 1.35; }
+  .start { border-color: #2e7d54; background: #f2faf5; }
+  .decision { border-color: #a2662a; background: #fdf7ee; }
+  .step { border-color: #35506e; }
+  .warn { border-color: #9d3535; background: #fdf1f1; }
+  .ok { border-color: #2e7d54; background: #f2faf5; }
+  .note { position: absolute; box-sizing: border-box; background: #fffbe8; border: 1px solid #d9c98a; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; color: #4c4630; line-height: 1.35; }
+  .edge { position: absolute; background: #55677a; }
+  .h { height: 2px; } .v { width: 2px; }
+  .lbl { position: absolute; font-size: 11.5px; color: #55677a; background: #fbfcfd; padding: 0 4px; }
+  .foot { position: absolute; left: 24px; bottom: 12px; font-size: 11.5px; color: #7b8794; }
+  .nid { display:inline-block; background:#23405f; color:#fff; border-radius:4px; font-size:10.5px; font-weight:700; letter-spacing:.6px; padding:1px 6px; margin-right:7px; vertical-align:1px; }
+  .cite { display:block; margin-top:7px; font-size:11px; color:#5a6b7d; border-top:1px dotted #c3cdd7; padding-top:5px; }
+  .legend { position:absolute; box-sizing:border-box; background:#f4f7fa; border:1px solid #c3cdd7; border-radius:8px; padding:12px 16px; font-size:12px; color:#3a4956; line-height:1.5; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>CCR-OPS-208 — Pending replacement order check before account closure</h1>
+    <div class="meta">Closures team &middot; owner: R. Sloane &middot; published 2025-10-06 &middot; implements the card-operations directive of 2025-10-03 &middot; node ids added for case-note citation 2025-10-27</div>
+  </div>
+
+  <div class="lane" style="left:24px; top:92px; width:700px; height:700px;"></div>
+  <div class="lanelabel" style="left:40px; top:100px;">Procedure — run the check</div>
+
+  <div class="node start" style="left:56px; top:136px; width:300px;">Account closure request reaches the closures queue for an account with credit card products</div>
+
+  <div class="node step" style="left:56px; top:246px; width:300px;"><span class="nid">N01</span>Step 1 — Locate the credit_card_account_id for the account being reviewed. Take it from the account header, not from a card row.<span class="cite">id source: contract pack identifier quick reference — account-level CCA-, never a card id</span></div>
+
+  <div class="node step" style="left:56px; top:402px; width:300px;"><span class="nid">N02</span>Step 2 — Invoke get_pending_replacement_orders_5765 with the credit_card_account_id parameter.<span class="cite">production contract per the pack's version lifecycle sheet</span></div>
+
+  <div class="node step" style="left:56px; top:540px; width:300px;"><span class="nid">N03</span>Step 3 — Review the response for any outstanding replacement card orders.<span class="cite">response contract: the empty collection is the no-pending-orders answer</span></div>
+
+  <div class="node step" style="left:56px; top:660px; width:300px;"><span class="nid">N04</span>Step 4 — Document the result in the customer's case notes before proceeding with any account closure steps.<span class="cite">MAC-5251 &middot; precheck_outcome + precheck_timestamp</span></div>
+
+  <div class="note" style="left:400px; top:246px; width:290px;">Tool behavior — parameters, response shape, error codes — is Support Engineering's contract pack (v1.3, 2025-09-24). Call errors are triaged per KB-3412. This board assumes a readable response.</div>
+
+  <div class="note" style="left:400px; top:452px; width:290px;">The response's orders collection drives the outcome lane. An empty collection is a real answer, not a failed call.</div>
+
+  <div class="edge v" style="left:200px; top:200px; height:46px;"></div>
+  <div class="edge v" style="left:200px; top:388px; height:14px;"></div>
+  <div class="edge v" style="left:200px; top:526px; height:14px;"></div>
+  <div class="edge v" style="left:200px; top:646px; height:14px;"></div>
+  <div class="edge h" style="left:356px; top:440px; width:404px;"></div>
+
+  <div class="lane" style="left:760px; top:92px; width:776px; height:1100px;"></div>
+  <div class="lanelabel" style="left:776px; top:100px;">Outcome — what the orders collection means for the closure</div>
+
+  <div class="node decision" style="left:800px; top:140px; width:320px;">Orders collection empty?</div>
+
+  <div class="node ok" style="left:1180px; top:130px; width:320px;">No pending replacement orders: note the check outcome in the case record and continue with the closure process. Closure may proceed per standard procedures.</div>
+
+  <div class="node step" style="left:800px; top:270px; width:320px;"><span class="nid">N05</span>One or more replacement orders returned: treat the account as having pending replacement activity unless every order is clearly delivered or cancelled.</div>
+
+  <div class="node decision" style="left:800px; top:400px; width:320px;">Every returned order clearly delivered or cancelled?</div>
+
+  <div class="node warn" style="left:800px; top:530px; width:320px;"><span class="nid">N06</span>Any order in a non-final state — such as pending or shipped — means the account is blocked from closure. Do not proceed with the closure until every returned replacement order is clearly delivered or cancelled.<span class="cite">open statuses per the contract pack: pending, shipped</span></div>
+
+  <div class="node ok" style="left:1180px; top:412px; width:320px;">All orders final (delivered or cancelled status): proceed with standard closure checks.</div>
+
+  <div class="node step" style="left:1180px; top:560px; width:320px;">Multiple orders on one account: review each order's status individually. Proceed only when all orders are delivered or cancelled — one final order does not clear the others.<span class="cite">per-order walk: read each status against the contract pack's status lifecycle table</span></div>
+
+  <div class="edge h" style="left:1120px; top:172px; width:60px;"></div>
+  <div class="lbl" style="left:1126px; top:154px;">yes</div>
+  <div class="edge v" style="left:960px; top:196px; height:74px;"></div>
+  <div class="lbl" style="left:968px; top:222px;">no</div>
+  <div class="edge v" style="left:960px; top:352px; height:48px;"></div>
+  <div class="edge v" style="left:960px; top:466px; height:64px;"></div>
+  <div class="lbl" style="left:968px; top:492px;">no</div>
+  <div class="edge h" style="left:1120px; top:438px; width:60px;"></div>
+  <div class="lbl" style="left:1126px; top:420px;">yes</div>
+  <div class="edge v" style="left:1340px; top:472px; height:88px;"></div>
+
+  <div class="note" style="left:800px; top:700px; width:700px;">Blocked path in practice: the closure case stays open, the closures specialist notes the blocking order ids, and the case is re-checked as delivery events land. Ownership of the customer conversation stays with whoever holds the closure case.</div>
+
+  <div class="note" style="left:800px; top:800px; width:700px;">Worked example (October QA sample): a closure request on an account showing one order with status shipped was held; the order reached delivered six days later and the closure completed on re-check. A same-week case with two orders — one delivered, one cancelled — proceeded on first review.</div>
+
+  <div class="note" style="left:800px; top:912px; width:700px;">Scope: this board covers the replacement-order precheck only. The rest of the closure workflow — payoff, rewards disposition, statement handling — runs on the closures team's standard procedures and is not drawn here.</div>
+
+  <div class="node warn" style="left:800px; top:1030px; width:320px;"><span class="nid">N07</span>Call errors or responses that stay ambiguous after the KB-3412 triage: record precheck_outcome check_failed, escalate to the SUPENG-triage queue, and hold the closure &mdash; an unreadable check is not a clean check. Re-run from N02 once support engineering answers.<span class="cite">KB-3412 &middot; KB-3424 intake package</span></div>
+
+  <div class="note" style="left:1180px; top:1030px; width:320px;">Citation practice: case notes cite the node acted from &mdash; "held at N05, RPL-71126 still shipped" reads unambiguously a week later. Node ids are stable; box wording may be touched, ids are not renumbered.</div>
+
+  <div class="edge v" style="left:960px; top:596px; height:434px;"></div>
+  <div class="lbl" style="left:968px; top:790px;">error / unreadable</div>
+
+  <div class="legend" style="left:24px; top:780px; width:700px;">
+  <b>Reading this board.</b> Left lane is the four-step procedure (N01&ndash;N04); right lane is what the returned orders collection means for the closure (N05&ndash;N07).
+  Grey citation lines under a box say where the box's terms are defined &mdash; identifier levels and the status lifecycle live in Support Engineering's contract pack,
+  the documentation package lives in the workspace export (MAC-5251 and the two precheck fields), and call-error triage lives in KB-3412.
+  The board decides closure gating and nothing else; it does not define tool behavior, and it does not restate fee or limit rows.
+  <br><br><b>Blocked cases.</b> A blocked closure keeps its case open with the blocking order ids noted (N06), and re-checks from N02 as delivery events land.
+  A check that cannot be read cleanly is its own outcome (N07): check_failed, escalate, hold. The three precheck_outcome values in the workspace export map
+  one-to-one onto the three ways a check ends: no_pending_orders (proceed), orders_open (hold), check_failed (escalate and hold).
+  </div>
+
+  <div class="node step" style="left:800px; top:1240px; width:700px;">After the outcome is recorded: continue the closure workflow (proceed cases) or set the re-check follow-up (blocked cases). Either way the precheck result stays in the case notes.</div>
+
+  <div class="foot">CCR-OPS-208 &middot; Closures team &middot; internal — not customer-facing &middot; cite nodes as CCR-OPS-208/N01&hellip;N07</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1614 @@
+{
+ "export_format": "jira_cloud_issue_export_v1",
+ "exported_at": "2025-11-07T18:00:00-08:00",
+ "projects": [
+  {
+   "key": "CARD",
+   "name": "Card Servicing"
+  }
+ ],
+ "users": [
+  {
+   "accountId": "acct-marisol",
+   "displayName": "Marisol Vega"
+  },
+  {
+   "accountId": "acct-yuki",
+   "displayName": "Yuki Tanaka"
+  },
+  {
+   "accountId": "acct-owen",
+   "displayName": "Owen Brooks"
+  },
+  {
+   "accountId": "acct-leah",
+   "displayName": "Leah Morgan"
+  },
+  {
+   "accountId": "acct-kira",
+   "displayName": "Kira Patel"
+  },
+  {
+   "accountId": "acct-marcus",
+   "displayName": "Marcus Chen"
+  },
+  {
+   "accountId": "acct-priya",
+   "displayName": "Priya Shah"
+  },
+  {
+   "accountId": "acct-eli",
+   "displayName": "Eli Navarro"
+  },
+  {
+   "accountId": "acct-mateo",
+   "displayName": "Mateo Ruiz"
+  },
+  {
+   "accountId": "acct-grace",
+   "displayName": "Grace Lindqvist"
+  }
+ ],
+ "issues": [
+  {
+   "key": "CARD-1401",
+   "fields": {
+    "summary": "Walkthrough punch list \u2014 October 15 closure/downgrade session",
+    "description": "Collector for the punch items out of the October 15 closure/downgrade walkthrough. Child items are filed separately and linked; this ticket tracks the list itself and the follow-up owners. Nine items came out of the session, two of them re-opens of shipped work.",
+    "issuetype": {
+     "name": "Task"
+    },
+    "status": {
+     "name": "Done"
+    },
+    "priority": {
+     "name": "Medium"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "created": "2025-10-15T13:26:54-07:00",
+    "updated": "2025-10-24T11:42:18-07:00",
+    "reporter": {
+     "accountId": "acct-marisol"
+    },
+    "assignee": {
+     "accountId": "acct-kira"
+    },
+    "comment": {
+     "comments": [
+      {
+       "id": "comment-card-1401-1",
+       "author": {
+        "accountId": "acct-kira"
+       },
+       "created": "2025-10-17T10:14:37-07:00",
+       "body": "All nine punch items filed and linked from the session notes."
+      },
+      {
+       "id": "comment-card-1401-2",
+       "author": {
+        "accountId": "acct-marisol"
+       },
+       "created": "2025-10-23T09:38:25-07:00",
+       "body": "List reviewed with the floor leads on the 15th. Owners confirmed. MV"
+      }
+     ]
+    },
+    "issuelinks": [
+     {
+      "type": "relates to",
+      "issueKey": "CARD-1447"
+     },
+     {
+      "type": "relates to",
+      "issueKey": "CARD-1452"
+     }
+    ],
+    "labels": [
+     "walkthrough",
+     "care-desk"
+    ],
+    "components": [
+     {
+      "name": "Operations"
+     }
+    ],
+    "fixVersions": []
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "history-card-1401-1",
+      "author": {
+       "accountId": "acct-kira"
+      },
+      "created": "2025-10-24T11:42:18-07:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "In Progress",
+        "toString": "Done"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "CARD-1408",
+   "fields": {
+    "summary": "Closure action: hold the submit behind the ID and eligibility gates",
+    "description": "Context\nAgents could reach the closure submit from a bookmarked deep link even when the checks panel hadn't run. Two near-misses in UAT (see Owen's notes on the walkthrough doc).\n\nWhat ships\nSequencing is enforced in the workspace instead of in coaching: identity verification runs first with the standard checks, the eligibility panel has to come back all green second, and only then does the workspace let close_credit_card_account_7834 fire. Deep links now land on whichever step is unfinished.\n\nAcceptance\n- Verify-first: no eligibility panel until the standard identity checks pass.\n- Submit stays dead until every eligibility requirement is confirmed.\n- The close itself goes through close_credit_card_account_7834 and nothing else.",
+    "issuetype": {
+     "name": "Story"
+    },
+    "status": {
+     "name": "Done"
+    },
+    "priority": {
+     "name": "High"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "created": "2025-07-14T09:22:41-07:00",
+    "updated": "2025-08-01T15:37:12-07:00",
+    "reporter": {
+     "accountId": "acct-marisol"
+    },
+    "assignee": {
+     "accountId": "acct-yuki"
+    },
+    "comment": {
+     "comments": [
+      {
+       "id": "comment-card-1408-1",
+       "author": {
+        "accountId": "acct-owen"
+       },
+       "created": "2025-07-22T11:08:33-07:00",
+       "body": "Replayed the UAT deep-link repro on build 2026.14.3 \u2014 lands on the identity step now, both bookmark variants. Runs are timestamped in the test log."
+      },
+      {
+       "id": "comment-card-1408-2",
+       "author": {
+        "accountId": "acct-marcus"
+       },
+       "created": "2025-07-25T08:51:20-07:00",
+       "body": "floor keeps asking if bookmarks still work. they do, just land earlier. pls stop filing dupes"
+      },
+      {
+       "id": "comment-card-1408-3",
+       "author": {
+        "accountId": "acct-marisol"
+       },
+       "created": "2025-08-01T15:12:46-07:00",
+       "body": "Matches what we agreed at the servicing review. Marking it done on the board. MV"
+      }
+     ]
+    },
+    "issuelinks": [],
+    "labels": [
+     "closure-flow",
+     "care-desk"
+    ],
+    "components": [
+     {
+      "name": "Closure orchestration"
+     }
+    ],
+    "fixVersions": [
+     {
+      "name": "CareDesk 2026.6"
+     }
+    ]
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "history-card-1408-1",
+      "author": {
+       "accountId": "acct-yuki"
+      },
+      "created": "2025-07-23T10:19:27-07:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "In Progress",
+        "toString": "In Review"
+       }
+      ]
+     },
+     {
+      "id": "history-card-1408-2",
+      "author": {
+       "accountId": "acct-yuki"
+      },
+      "created": "2025-08-01T15:37:12-07:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "In Review",
+        "toString": "Done"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "CARD-1412",
+   "fields": {
+    "summary": "Queue dashboard shows PT and ET on the same axis",
+    "description": "The intraday chart mixed time zones after the July deploy \u2014 PT ticks on the x-axis, ET timestamps in the tooltips, 39 confused pings in one morning. Everything is normalized to PT now with the zone stated in the axis label.",
+    "issuetype": {
+     "name": "Task"
+    },
+    "status": {
+     "name": "Done"
+    },
+    "priority": {
+     "name": "Low"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "created": "2025-07-16T08:47:33-07:00",
+    "updated": "2025-07-23T12:19:26-07:00",
+    "reporter": {
+     "accountId": "acct-eli"
+    },
+    "assignee": {
+     "accountId": "acct-eli"
+    },
+    "comment": {
+     "comments": [
+      {
+       "id": "comment-card-1412-1",
+       "author": {
+        "accountId": "acct-marcus"
+       },
+       "created": "2025-07-23T09:03:41-07:00",
+       "body": "tooltips match the axis now, thx"
+      }
+     ]
+    },
+    "issuelinks": [],
+    "labels": [
+     "reporting"
+    ],
+    "components": [
+     {
+      "name": "Reporting"
+     }
+    ],
+    "fixVersions": [
+     {
+      "name": "CareDesk 2026.6"
+     }
+    ]
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "history-card-1412-1",
+      "author": {
+       "accountId": "acct-eli"
+      },
+      "created": "2025-07-23T12:19:26-07:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "In Progress",
+        "toString": "Done"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "CARD-1415",
+   "fields": {
+    "summary": "Pre-closure checklist renders in a fixed order",
+    "description": "Context\nThe checklist tiles rendered in whatever order the API returned them, so two agents reading the same account saw different first steps.\n\nChange\nOrder is pinned in the component and agents can't drag tiles: disputes come first, pending replacement cards second, the minimum account-age gate third, and outstanding balance last.\n\nAcceptance\n- Tile order is fixed at disputes \u2192 replacement cards \u2192 account age \u2192 balance, per the servicing review sign-off.\n- Keyboard navigation walks the tiles in that same order.",
+    "issuetype": {
+     "name": "Story"
+    },
+    "status": {
+     "name": "Done"
+    },
+    "priority": {
+     "name": "Medium"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "created": "2025-07-17T10:47:18-07:00",
+    "updated": "2025-08-08T14:22:55-07:00",
+    "reporter": {
+     "accountId": "acct-kira"
+    },
+    "assignee": {
+     "accountId": "acct-yuki"
+    },
+    "comment": {
+     "comments": [
+      {
+       "id": "comment-card-1415-1",
+       "author": {
+        "accountId": "acct-leah"
+       },
+       "created": "2025-07-29T13:34:09-07:00",
+       "body": "Does the reference page need a matching change? The screenshots on the closure page still show the old tile layout."
+      },
+      {
+       "id": "comment-card-1415-2",
+       "author": {
+        "accountId": "acct-kira"
+       },
+       "created": "2025-07-30T09:16:44-07:00",
+       "body": "Yes \u2014 re-shots are queued with the October refresh batch. Checklist for that is on the enablement page."
+      }
+     ]
+    },
+    "issuelinks": [],
+    "labels": [
+     "closure-flow",
+     "workspace-ui"
+    ],
+    "components": [
+     {
+      "name": "Workspace UI"
+     }
+    ],
+    "fixVersions": [
+     {
+      "name": "CareDesk 2026.6"
+     }
+    ]
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "history-card-1415-1",
+      "author": {
+       "accountId": "acct-yuki"
+      },
+      "created": "2025-08-08T14:22:55-07:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "In Review",
+        "toString": "Done"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "CARD-1422",
+   "fields": {
+    "summary": "Run the prior-attempt lookup before the reason logger or offers unlock",
+    "description": "Context\nOffer panels were reachable before anyone had checked whether the account already went through a closure conversation recently.\n\nChange\nThe workspace now calls get_closure_reason_history_8293 for the account up front; until that lookup answers whether any closure reason records exist from the past year, both the reason logger and the offer panel stay locked.\n\nAcceptance\n- The lookup fires before reason logging and before any offer surfaces, every time.\n- The past-year window is computed account-side, not in the client.",
+    "issuetype": {
+     "name": "Story"
+    },
+    "status": {
+     "name": "Done"
+    },
+    "priority": {
+     "name": "High"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "created": "2025-07-22T09:03:52-07:00",
+    "updated": "2025-08-15T16:41:33-07:00",
+    "reporter": {
+     "accountId": "acct-marisol"
+    },
+    "assignee": {
+     "accountId": "acct-yuki"
+    },
+    "comment": {
+     "comments": [
+      {
+       "id": "comment-card-1422-1",
+       "author": {
+        "accountId": "acct-owen"
+       },
+       "created": "2025-08-04T10:52:18-07:00",
+       "body": "Repro from the old build attached (offer panel open, lookup never fired). New build blocks it in all three entry paths I tried."
+      },
+      {
+       "id": "comment-card-1422-2",
+       "author": {
+        "accountId": "acct-yuki"
+       },
+       "created": "2025-08-05T14:09:37-07:00",
+       "body": "Edge case handled: a lookup timeout leaves both panels locked and shows a retry. Safer to block than to guess."
+      },
+      {
+       "id": "comment-card-1422-3",
+       "author": {
+        "accountId": "acct-priya"
+       },
+       "created": "2025-08-07T11:26:02-07:00",
+       "body": "Risk reviewed the fail-closed behavior and we are comfortable with it. Please keep the retry telemetry on our dashboard."
+      },
+      {
+       "id": "comment-card-1422-4",
+       "author": {
+        "accountId": "acct-marcus"
+       },
+       "created": "2025-08-15T08:44:51-07:00",
+       "body": "shipped to floor. week one clean, no complaints"
+      },
+      {
+       "id": "comment-card-1422-5",
+       "author": {
+        "accountId": "acct-kira"
+       },
+       "created": "2025-08-15T09:31:16-07:00",
+       "body": "Enablement note went out with Friday's huddle pack so nobody is surprised by the locked panels."
+      },
+      {
+       "id": "comment-card-1422-6",
+       "author": {
+        "accountId": "acct-leah"
+       },
+       "created": "2025-08-15T10:02:40-07:00",
+       "body": "Reference page for the closure flow updated to describe the locked-until-lookup behavior."
+      }
+     ]
+    },
+    "issuelinks": [],
+    "labels": [
+     "retention",
+     "closure-flow"
+    ],
+    "components": [
+     {
+      "name": "Retention records"
+     }
+    ],
+    "fixVersions": [
+     {
+      "name": "CareDesk 2026.6"
+     }
+    ]
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "history-card-1422-1",
+      "author": {
+       "accountId": "acct-yuki"
+      },
+      "created": "2025-08-06T09:57:44-07:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "In Progress",
+        "toString": "In Review"
+       }
+      ]
+     },
+     {
+      "id": "history-card-1422-2",
+      "author": {
+       "accountId": "acct-yuki"
+      },
+      "created": "2025-08-15T16:41:33-07:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "In Review",
+        "toString": "Done"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "CARD-1431",
+   "fields": {
+    "summary": "Reason logger 500s when the client sends extra fields",
+    "description": "Repro\n1. POST the reason form with a stray `channel` field (the retired macro used to add one).\n2. Service throws a 500 instead of a clean rejection.\n\nExpected\nlog_credit_card_closure_reason_4521 takes exactly three things \u2014 credit_card_account_id, user_id, closure_reason \u2014 and anything beyond those gets a 400, not a server error.\n\nFix\nStrict schema on the endpoint. The payload contract stays those three fields, nothing added.",
+    "issuetype": {
+     "name": "Bug"
+    },
+    "status": {
+     "name": "Done"
+    },
+    "priority": {
+     "name": "High"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "created": "2025-08-12T11:38:26-07:00",
+    "updated": "2025-08-26T13:54:08-07:00",
+    "reporter": {
+     "accountId": "acct-owen"
+    },
+    "assignee": {
+     "accountId": "acct-yuki"
+    },
+    "comment": {
+     "comments": [
+      {
+       "id": "comment-card-1431-1",
+       "author": {
+        "accountId": "acct-yuki"
+       },
+       "created": "2025-08-20T15:21:49-07:00",
+       "body": "Strict mode on. Unknown fields get a 400 with the offending names listed in the error body."
+      },
+      {
+       "id": "comment-card-1431-2",
+       "author": {
+        "accountId": "acct-owen"
+       },
+       "created": "2025-08-26T09:47:31-07:00",
+       "body": "Re-ran the macro payload plus four fuzzed variants \u2014 clean 400s across the board. Good to close."
+      }
+     ]
+    },
+    "issuelinks": [],
+    "labels": [
+     "retention",
+     "api"
+    ],
+    "components": [
+     {
+      "name": "Retention records"
+     }
+    ],
+    "fixVersions": [
+     {
+      "name": "CareDesk 2026.6"
+     }
+    ]
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "history-card-1431-1",
+      "author": {
+       "accountId": "acct-yuki"
+      },
+      "created": "2025-08-26T13:54:08-07:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "In Review",
+        "toString": "Done"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "CARD-1433",
+   "fields": {
+    "summary": "Reason dropdown: align the labels with the accepted value set",
+    "description": "Context\nThe dropdown showed friendly labels that didn't round-trip to the values the logger accepts, so agents kept typing free text into notes.\n\nChange\nThe dropdown now maps one-to-one onto the accepted set: annual_fee, not_using_card, found_better_card, unhappy_with_rewards, simplifying_finances, negative_experience, other. Same seven, humanized labels, nothing invented on top.\n\nAcceptance\n- Seven options, exactly the values above, and no free-text entry path.",
+    "issuetype": {
+     "name": "Task"
+    },
+    "status": {
+     "name": "Done"
+    },
+    "priority": {
+     "name": "Medium"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "created": "2025-08-14T14:12:37-07:00",
+    "updated": "2025-08-29T10:28:44-07:00",
+    "reporter": {
+     "accountId": "acct-kira"
+    },
+    "assignee": {
+     "accountId": "acct-leah"
+    },
+    "comment": {
+     "comments": [
+      {
+       "id": "comment-card-1433-1",
+       "author": {
+        "accountId": "acct-marcus"
+       },
+       "created": "2025-08-29T08:19:52-07:00",
+       "body": "good. the free text ones were unreadable in the weekly report"
+      }
+     ]
+    },
+    "issuelinks": [],
+    "labels": [
+     "retention",
+     "workspace-ui"
+    ],
+    "components": [
+     {
+      "name": "Workspace UI"
+     }
+    ],
+    "fixVersions": [
+     {
+      "name": "CareDesk 2026.6"
+     }
+    ]
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "history-card-1433-1",
+      "author": {
+       "accountId": "acct-leah"
+      },
+      "created": "2025-08-29T10:28:44-07:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "In Progress",
+        "toString": "Done"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "CARD-1437",
+   "fields": {
+    "summary": "Dispute timeline jumps to the top on background refresh",
+    "description": "Repro\n1. Open a dispute timeline with 30+ entries.\n2. Wait for the 60-second background refresh.\n3. Scroll position resets to the newest entry.\n\nAgents lose their place mid-read on long histories. Fix keeps the viewport anchored to the entry under the cursor through the refresh.",
+    "issuetype": {
+     "name": "Bug"
+    },
+    "status": {
+     "name": "Done"
+    },
+    "priority": {
+     "name": "Medium"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "created": "2025-08-18T10:28:19-07:00",
+    "updated": "2025-09-03T14:36:52-07:00",
+    "reporter": {
+     "accountId": "acct-mateo"
+    },
+    "assignee": {
+     "accountId": "acct-yuki"
+    },
+    "comment": {
+     "comments": [
+      {
+       "id": "comment-card-1437-1",
+       "author": {
+        "accountId": "acct-mateo"
+       },
+       "created": "2025-09-02T11:14:48-07:00",
+       "body": "Confirmed fixed on the floor build \u2014 stayed put through three refreshes on a 60-entry timeline."
+      },
+      {
+       "id": "comment-card-1437-2",
+       "author": {
+        "accountId": "acct-yuki"
+       },
+       "created": "2025-09-02T13:52:37-07:00",
+       "body": "Anchor logic reused from the payments ledger view, so it ages with that one."
+      }
+     ]
+    },
+    "issuelinks": [],
+    "labels": [
+     "disputes",
+     "workspace-ui"
+    ],
+    "components": [
+     {
+      "name": "Workspace UI"
+     }
+    ],
+    "fixVersions": [
+     {
+      "name": "CareDesk 2026.6"
+     }
+    ]
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "history-card-1437-1",
+      "author": {
+       "accountId": "acct-yuki"
+      },
+      "created": "2025-09-03T14:36:52-07:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "In Review",
+        "toString": "Done"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "CARD-1447",
+   "fields": {
+    "summary": "Offer panel: one tier-keyed offer, gated on the logged reason",
+    "description": "Context\nAgents could re-roll offers by reopening the panel, which turned retention into a haggle.\n\nChange\nOnce eligibility is confirmed, the past-year lookup comes back empty, the reason is logged, and the concern has been worked, the panel exposes a single offer keyed to the card's tier for a customer who still wants to close \u2014 and that is the only one the session gets. Reopening the panel shows the same offer, spent or not.\n\nAcceptance\n- One offer per closure conversation, selected by card tier.\n- The panel refuses to render before the reason is logged.",
+    "issuetype": {
+     "name": "Story"
+    },
+    "status": {
+     "name": "Done"
+    },
+    "priority": {
+     "name": "High"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "created": "2025-08-25T09:41:29-07:00",
+    "updated": "2025-09-19T15:19:57-07:00",
+    "reporter": {
+     "accountId": "acct-marisol"
+    },
+    "assignee": {
+     "accountId": "acct-yuki"
+    },
+    "comment": {
+     "comments": [
+      {
+       "id": "comment-card-1447-1",
+       "author": {
+        "accountId": "acct-marcus"
+       },
+       "created": "2025-09-12T08:36:14-07:00",
+       "body": "haggle is dead. floor leads confirm"
+      },
+      {
+       "id": "comment-card-1447-2",
+       "author": {
+        "accountId": "acct-owen"
+       },
+       "created": "2025-09-16T13:42:58-07:00",
+       "body": "Session-replay test covers the reopen path: same offer id both times, panel state survives a tab refresh."
+      },
+      {
+       "id": "comment-card-1447-3",
+       "author": {
+        "accountId": "acct-priya"
+       },
+       "created": "2025-09-18T10:17:35-07:00",
+       "body": "Reviewed the gating order against the risk checklist; no gaps from our side. Item 4 on our list closes with this."
+      }
+     ]
+    },
+    "issuelinks": [],
+    "labels": [
+     "retention",
+     "care-desk"
+    ],
+    "components": [
+     {
+      "name": "Retention records"
+     }
+    ],
+    "fixVersions": [
+     {
+      "name": "CareDesk 2026.7"
+     }
+    ]
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "history-card-1447-1",
+      "author": {
+       "accountId": "acct-yuki"
+      },
+      "created": "2025-09-09T11:24:41-07:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "In Progress",
+        "toString": "In Review"
+       }
+      ]
+     },
+     {
+      "id": "history-card-1447-2",
+      "author": {
+       "accountId": "acct-yuki"
+      },
+      "created": "2025-09-19T15:19:57-07:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "In Review",
+        "toString": "Done"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "CARD-1452",
+   "fields": {
+    "summary": "Downgrade target list filters to the card's own category",
+    "description": "Context\nThe target picker listed the whole catalog, and a business card nearly got moved onto a personal product during UAT.\n\nChange\nThe picker filters hard by category: a personal card only ever sees personal targets, a business card only business ones. No cross-category rows, not even disabled ones.\n\nAcceptance\n- Personal\u2192personal and business\u2192business are the only pairings the picker can produce.",
+    "issuetype": {
+     "name": "Story"
+    },
+    "status": {
+     "name": "Done"
+    },
+    "priority": {
+     "name": "Medium"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "created": "2025-09-02T10:33:15-07:00",
+    "updated": "2025-09-25T14:47:29-07:00",
+    "reporter": {
+     "accountId": "acct-leah"
+    },
+    "assignee": {
+     "accountId": "acct-yuki"
+    },
+    "comment": {
+     "comments": [
+      {
+       "id": "comment-card-1452-1",
+       "author": {
+        "accountId": "acct-owen"
+       },
+       "created": "2025-09-17T09:58:22-07:00",
+       "body": "Tried to force a cross-category target id through the API directly \u2014 422. Good."
+      },
+      {
+       "id": "comment-card-1452-2",
+       "author": {
+        "accountId": "acct-yuki"
+       },
+       "created": "2025-09-17T11:41:07-07:00",
+       "body": "Server rejects it too, so the filter isn't only cosmetic. Belt and suspenders."
+      }
+     ]
+    },
+    "issuelinks": [],
+    "labels": [
+     "downgrade",
+     "workspace-ui"
+    ],
+    "components": [
+     {
+      "name": "Product changes"
+     }
+    ],
+    "fixVersions": [
+     {
+      "name": "CareDesk 2026.7"
+     }
+    ]
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "history-card-1452-1",
+      "author": {
+       "accountId": "acct-yuki"
+      },
+      "created": "2025-09-25T14:47:29-07:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "In Review",
+        "toString": "Done"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "CARD-1455",
+   "fields": {
+    "summary": "Voice transcripts mislabel speakers after a mid-call transfer",
+    "description": "Repro\nTransfer a live call between agents; diarization keeps the first agent's label on the second agent's audio for the rest of the recording. QA reviewers are hand-correcting labels before scoring transfers.\n\nWorking theory: the speaker map isn't rebuilt on the transfer event. Vendor ticket open in parallel.",
+    "issuetype": {
+     "name": "Bug"
+    },
+    "status": {
+     "name": "In Progress"
+    },
+    "priority": {
+     "name": "Medium"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "created": "2025-10-01T09:36:41-07:00",
+    "updated": "2025-11-04T15:44:19-08:00",
+    "reporter": {
+     "accountId": "acct-owen"
+    },
+    "assignee": {
+     "accountId": "acct-yuki"
+    },
+    "comment": {
+     "comments": [
+      {
+       "id": "comment-card-1455-1",
+       "author": {
+        "accountId": "acct-owen"
+       },
+       "created": "2025-10-13T10:22:53-07:00",
+       "body": "Sample set of eight mislabeled calls attached to the test run."
+      },
+      {
+       "id": "comment-card-1455-2",
+       "author": {
+        "accountId": "acct-kira"
+       },
+       "created": "2025-10-28T14:08:36-07:00",
+       "body": "QA leads flagged eleven more in the October sample \u2014 batching them onto this ticket rather than filing separately."
+      },
+      {
+       "id": "comment-card-1455-3",
+       "author": {
+        "accountId": "acct-yuki"
+       },
+       "created": "2025-11-04T15:31:02-08:00",
+       "body": "Speaker-map rebuild prototyped on staging. Needs a soak week before I trust it."
+      }
+     ]
+    },
+    "issuelinks": [],
+    "labels": [
+     "qa",
+     "voice"
+    ],
+    "components": [
+     {
+      "name": "Reporting"
+     }
+    ],
+    "fixVersions": []
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "history-card-1455-1",
+      "author": {
+       "accountId": "acct-yuki"
+      },
+      "created": "2025-10-09T09:48:15-07:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "To Do",
+        "toString": "In Progress"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "CARD-1460",
+   "fields": {
+    "summary": "Payoff action requires a session unlock before it can be called",
+    "description": "Context\nThe payoff action was callable cold, which made accidental double-runs possible from stale tabs.\n\nChange\npay_credit_card_from_checking_9182 is now discoverable-but-locked: the session has to run unlock_discoverable_agent_tool for it first, and only after that is the payoff callable. Stale tabs lose the unlock along with the session.\n\nAcceptance\n- A cold call without the unlock returns a locked error, never a transfer.\n- The unlock is per-session, not per-agent.",
+    "issuetype": {
+     "name": "Story"
+    },
+    "status": {
+     "name": "Done"
+    },
+    "priority": {
+     "name": "High"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "created": "2025-09-09T09:17:46-07:00",
+    "updated": "2025-10-03T16:08:12-07:00",
+    "reporter": {
+     "accountId": "acct-marcus"
+    },
+    "assignee": {
+     "accountId": "acct-yuki"
+    },
+    "comment": {
+     "comments": [
+      {
+       "id": "comment-card-1460-1",
+       "author": {
+        "accountId": "acct-owen"
+       },
+       "created": "2025-09-26T10:26:53-07:00",
+       "body": "Locked-error path verified on stale tabs from three-day-old sessions. No transfer fired in any run."
+      },
+      {
+       "id": "comment-card-1460-2",
+       "author": {
+        "accountId": "acct-marcus"
+       },
+       "created": "2025-10-01T08:12:38-07:00",
+       "body": "floor briefed at wed huddle. nobody blocked so far"
+      }
+     ]
+    },
+    "issuelinks": [],
+    "labels": [
+     "payments-rail",
+     "care-desk"
+    ],
+    "components": [
+     {
+      "name": "Discoverable actions"
+     }
+    ],
+    "fixVersions": [
+     {
+      "name": "CareDesk 2026.7"
+     }
+    ]
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "history-card-1460-1",
+      "author": {
+       "accountId": "acct-yuki"
+      },
+      "created": "2025-09-23T13:29:04-07:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "In Progress",
+        "toString": "In Review"
+       }
+      ]
+     },
+     {
+      "id": "history-card-1460-2",
+      "author": {
+       "accountId": "acct-yuki"
+      },
+      "created": "2025-10-03T16:08:12-07:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "In Review",
+        "toString": "Done"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "CARD-1462",
+   "fields": {
+    "summary": "Statement credit: unlock, then invoke with a JSON args string",
+    "description": "Context\nThe credit action moved onto the discoverable-tools rail with the payoff work, and the call shape changed with it.\n\nChange\nThe flow for a credit is: unlock apply_statement_credit_8472 with unlock_discoverable_agent_tool, then invoke it through call_discoverable_agent_tool passing the tool name plus one JSON string that carries every required argument. Partial argument sets fail validation before anything posts.\n\nAcceptance\n- Unlock precedes invocation within the same session.\n- The invoke call takes the tool name and the complete JSON argument string in one shot.",
+    "issuetype": {
+     "name": "Story"
+    },
+    "status": {
+     "name": "Done"
+    },
+    "priority": {
+     "name": "High"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "created": "2025-09-10T11:52:31-07:00",
+    "updated": "2025-10-06T15:36:47-07:00",
+    "reporter": {
+     "accountId": "acct-yuki"
+    },
+    "assignee": {
+     "accountId": "acct-yuki"
+    },
+    "comment": {
+     "comments": [
+      {
+       "id": "comment-card-1462-1",
+       "author": {
+        "accountId": "acct-owen"
+       },
+       "created": "2025-09-29T14:33:26-07:00",
+       "body": "Validation-first confirmed: a missing amount bounces before anything posts, error names the field."
+      },
+      {
+       "id": "comment-card-1462-2",
+       "author": {
+        "accountId": "acct-kira"
+       },
+       "created": "2025-10-02T09:48:11-07:00",
+       "body": "Enablement one-pager updated to the two-step shape; old screenshots pulled from the huddle deck."
+      },
+      {
+       "id": "comment-card-1462-3",
+       "author": {
+        "accountId": "acct-yuki"
+       },
+       "created": "2025-10-06T15:21:03-07:00",
+       "body": "Rolled to all pods Friday. Telemetry looks boring, which is the goal."
+      }
+     ]
+    },
+    "issuelinks": [],
+    "labels": [
+     "payments-rail",
+     "care-desk"
+    ],
+    "components": [
+     {
+      "name": "Discoverable actions"
+     }
+    ],
+    "fixVersions": [
+     {
+      "name": "CareDesk 2026.7"
+     }
+    ]
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "history-card-1462-1",
+      "author": {
+       "accountId": "acct-yuki"
+      },
+      "created": "2025-10-06T15:36:47-07:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "In Review",
+        "toString": "Done"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "CARD-1466",
+   "fields": {
+    "summary": "Macro archive: inventory what the floor still opens",
+    "description": "Before anyone deletes the legacy macro folder we need thirty days of open-rates. Instrumentation is on; readout due mid-November. Early signal: the closure wrap-up macro still gets opened even though it can't run against live cases anymore.",
+    "issuetype": {
+     "name": "Task"
+    },
+    "status": {
+     "name": "In Progress"
+    },
+    "priority": {
+     "name": "Low"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "created": "2025-10-22T11:09:28-07:00",
+    "updated": "2025-10-31T10:53:36-07:00",
+    "reporter": {
+     "accountId": "acct-marcus"
+    },
+    "assignee": {
+     "accountId": "acct-leah"
+    },
+    "comment": {
+     "comments": [
+      {
+       "id": "comment-card-1466-1",
+       "author": {
+        "accountId": "acct-eli"
+       },
+       "created": "2025-10-29T09:27:14-07:00",
+       "body": "Open-rate export lands in the WFM warehouse nightly. Query is in the shared folder, numbers first."
+      }
+     ]
+    },
+    "issuelinks": [],
+    "labels": [
+     "care-desk",
+     "cleanup"
+    ],
+    "components": [
+     {
+      "name": "Operations"
+     }
+    ],
+    "fixVersions": []
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "history-card-1466-1",
+      "author": {
+       "accountId": "acct-leah"
+      },
+      "created": "2025-10-23T10:31:47-07:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "To Do",
+        "toString": "In Progress"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "CARD-1469",
+   "fields": {
+    "summary": "October product-reference refresh: publish the re-shot pages",
+    "description": "The refreshed reference pages (card terms, rewards tables, travel lineup) go live in CareDesk this week. Every refreshed page carries the 'Reference updated October 25, 2025' stamp in the footer so the floor can tell the new pages from stale screenshots.",
+    "issuetype": {
+     "name": "Task"
+    },
+    "status": {
+     "name": "Done"
+    },
+    "priority": {
+     "name": "Medium"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "created": "2025-10-17T09:14:22-07:00",
+    "updated": "2025-10-25T16:26:39-07:00",
+    "reporter": {
+     "accountId": "acct-leah"
+    },
+    "assignee": {
+     "accountId": "acct-leah"
+    },
+    "comment": {
+     "comments": [
+      {
+       "id": "comment-card-1469-1",
+       "author": {
+        "accountId": "acct-kira"
+       },
+       "created": "2025-10-25T14:37:51-07:00",
+       "body": "Stamp shows on all nine pages I spot-checked, footer placement consistent."
+      },
+      {
+       "id": "comment-card-1469-2",
+       "author": {
+        "accountId": "acct-marcus"
+       },
+       "created": "2025-10-25T15:09:12-07:00",
+       "body": "floor sees it. done pls"
+      }
+     ]
+    },
+    "issuelinks": [],
+    "labels": [
+     "reference",
+     "care-desk"
+    ],
+    "components": [
+     {
+      "name": "Product reference"
+     }
+    ],
+    "fixVersions": [
+     {
+      "name": "CareDesk 2026.7"
+     }
+    ]
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "history-card-1469-1",
+      "author": {
+       "accountId": "acct-leah"
+      },
+      "created": "2025-10-25T16:26:39-07:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "In Progress",
+        "toString": "Done"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "CARD-1471",
+   "fields": {
+    "summary": "Batch statement-credit pilot: bulk goodwill runs from a case list",
+    "description": "Pilot scope\nRun a vetted case list through credits in one batch instead of one at a time. The pilot dashboard exists; the execution path does not.\n\nStatus\nPostponed before the first run \u2014 Risk wants the concentration review finished first, and Ops agreed the one-at-a-time path holds until then.",
+    "issuetype": {
+     "name": "Story"
+    },
+    "status": {
+     "name": "Blocked"
+    },
+    "priority": {
+     "name": "High"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "created": "2025-10-28T10:42:17-07:00",
+    "updated": "2025-11-06T16:53:28-08:00",
+    "reporter": {
+     "accountId": "acct-marisol"
+    },
+    "assignee": {
+     "accountId": "acct-yuki"
+    },
+    "comment": {
+     "comments": [
+      {
+       "id": "comment-card-1471-1",
+       "author": {
+        "accountId": "acct-priya"
+       },
+       "created": "2025-11-05T11:18:46-08:00",
+       "body": "The concentration review lands mid-Q4 at the earliest; please plan the pilot calendar around that."
+      },
+      {
+       "id": "comment-card-1471-2",
+       "author": {
+        "accountId": "acct-marisol"
+       },
+       "created": "2025-11-06T09:26:31-08:00",
+       "body": "Context first: the case list is ready and the dashboard stays up. Postponing execution was the right call until Priya's review is in. Ask: park the branch, keep the tile dark. MV"
+      },
+      {
+       "id": "comment-card-1471-3",
+       "author": {
+        "accountId": "acct-marcus"
+       },
+       "created": "2025-11-06T10:04:58-08:00",
+       "body": "dashboards still poll the pilot views btw, someone silence that"
+      },
+      {
+       "id": "comment-card-1471-4",
+       "author": {
+        "accountId": "acct-eli"
+       },
+       "created": "2025-11-06T11:47:23-08:00",
+       "body": "Silenced in the WFM rotation until it unparks. Refresh job downgraded to weekly."
+      },
+      {
+       "id": "comment-card-1471-5",
+       "author": {
+        "accountId": "acct-yuki"
+       },
+       "created": "2025-11-06T16:38:09-08:00",
+       "body": "Blocked flag set, execution branch parked behind a feature gate."
+      }
+     ]
+    },
+    "issuelinks": [
+     {
+      "type": "relates to",
+      "issueKey": "CARD-1473"
+     }
+    ],
+    "labels": [
+     "pilot",
+     "payments-rail"
+    ],
+    "components": [
+     {
+      "name": "Discoverable actions"
+     }
+    ],
+    "fixVersions": []
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "history-card-1471-1",
+      "author": {
+       "accountId": "acct-yuki"
+      },
+      "created": "2025-11-03T09:22:35-08:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "To Do",
+        "toString": "In Progress"
+       }
+      ]
+     },
+     {
+      "id": "history-card-1471-2",
+      "author": {
+       "accountId": "acct-yuki"
+      },
+      "created": "2025-11-06T16:53:28-08:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "In Progress",
+        "toString": "Blocked"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "CARD-1473",
+   "fields": {
+    "summary": "Add the batch-credit pilot tile to the team dashboards",
+    "description": "Requested a pilot tile next to queue health so leads could watch batch runs as they happen. With the pilot postponed there is nothing to watch \u2014 parking the tile work along with it rather than shipping an empty widget.",
+    "issuetype": {
+     "name": "Task"
+    },
+    "status": {
+     "name": "Won't Do"
+    },
+    "priority": {
+     "name": "Low"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "created": "2025-10-30T13:57:42-07:00",
+    "updated": "2025-11-07T11:04:16-08:00",
+    "reporter": {
+     "accountId": "acct-eli"
+    },
+    "assignee": {
+     "accountId": "acct-leah"
+    },
+    "comment": {
+     "comments": [
+      {
+       "id": "comment-card-1473-1",
+       "author": {
+        "accountId": "acct-marcus"
+       },
+       "created": "2025-11-07T09:12:44-08:00",
+       "body": "agreed, no tile for a paused pilot"
+      }
+     ]
+    },
+    "issuelinks": [
+     {
+      "type": "relates to",
+      "issueKey": "CARD-1471"
+     }
+    ],
+    "labels": [
+     "pilot",
+     "reporting"
+    ],
+    "components": [
+     {
+      "name": "Reporting"
+     }
+    ],
+    "fixVersions": []
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "history-card-1473-1",
+      "author": {
+       "accountId": "acct-leah"
+      },
+      "created": "2025-11-07T11:04:16-08:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "To Do",
+        "toString": "Won't Do"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "CARD-1478",
+   "fields": {
+    "summary": "Meline webhook retries create duplicate fulfillment events",
+    "description": "When our acknowledgement lands slow (over 4 seconds), Meline's retry posts a second fulfillment event with a fresh id, so replacement timelines show double 'shipped' rows. A dedupe on their order reference is possible on our side, but the durable fix is idempotency keys on theirs. Waiting on Meline's November patch window.",
+    "issuetype": {
+     "name": "Bug"
+    },
+    "status": {
+     "name": "Blocked"
+    },
+    "priority": {
+     "name": "Medium"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "created": "2025-11-03T09:31:08-08:00",
+    "updated": "2025-11-06T14:17:53-08:00",
+    "reporter": {
+     "accountId": "acct-grace"
+    },
+    "assignee": {
+     "accountId": "acct-yuki"
+    },
+    "comment": {
+     "comments": [
+      {
+       "id": "comment-card-1478-1",
+       "author": {
+        "accountId": "acct-grace"
+       },
+       "created": "2025-11-05T10:44:27-08:00",
+       "body": "Our platform team has the idempotency change scheduled for the November window; I will confirm the exact date by Friday."
+      },
+      {
+       "id": "comment-card-1478-2",
+       "author": {
+        "accountId": "acct-yuki"
+       },
+       "created": "2025-11-06T13:58:36-08:00",
+       "body": "Holding the our-side dedupe until we see their patch \u2014 one fix, not two half-fixes."
+      }
+     ]
+    },
+    "issuelinks": [],
+    "labels": [
+     "vendor",
+     "fulfillment"
+    ],
+    "components": [
+     {
+      "name": "Fulfillment integrations"
+     }
+    ],
+    "fixVersions": []
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "history-card-1478-1",
+      "author": {
+       "accountId": "acct-yuki"
+      },
+      "created": "2025-11-06T14:17:53-08:00",
+      "items": [
+       {
+        "field": "status",
+        "fromString": "In Progress",
+        "toString": "Blocked"
+       }
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

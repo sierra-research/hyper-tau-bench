@@ -1,0 +1,154 @@
+{
+ "id": "banking_ddde_client_overlay_deposit_services_pack_001",
+ "section_id": "direct_deposit_delay_and_escalation",
+ "transformations": [
+  {
+   "id": "ddde_client_ds_reference_docs_001",
+   "representation": "reference_document",
+   "stub_path": "tau2/hyper/sops/banking_knowledge/sections/direct_deposit_delay_and_escalation/transcript_induction_001.md",
+   "artifacts": [
+    {
+     "path": "tau2/hyper/sops/banking_knowledge/sections/direct_deposit_delay_and_escalation/client_overlay_deposit_services_001/reference_documents/dd_sched_matrix_rev_c.md",
+     "kit_filename": "dd_sched_matrix_rev_c_2025-10-20.md",
+     "included_fact_ids": [
+      "F003",
+      "F005"
+     ],
+     "depends_on_fact_ids": [
+      "F004"
+     ]
+    },
+    {
+     "path": "tau2/hyper/sops/banking_knowledge/sections/direct_deposit_delay_and_escalation/client_overlay_deposit_services_001/reference_documents/dd_sched_matrix_rev_b.md",
+     "kit_filename": "dd_sched_matrix_rev_b_2025-06-02.md",
+     "context_only": true,
+     "depends_on_fact_ids": [
+      "F003",
+      "F004",
+      "F005"
+     ]
+    },
+    {
+     "path": "tau2/hyper/sops/banking_knowledge/sections/direct_deposit_delay_and_escalation/evidence_corpus_hard_001/reference_documents/dd_pattern_key.md",
+     "kit_filename": "dd_pattern_key_2025-09.md",
+     "context_only": true,
+     "depends_on_fact_ids": [
+      "F003",
+      "F005"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ddde_client_ds_qa_export_001",
+   "representation": "contact_center_qa_export",
+   "stub_path": "tau2/hyper/sops/banking_knowledge/sections/direct_deposit_delay_and_escalation/transcript_induction_001.md",
+   "artifacts": [
+    {
+     "path": "tau2/hyper/sops/banking_knowledge/sections/mobile_check_deposit/client_overlay_deposit_services_001/qa/contact_center_quality_export.json",
+     "kit_filename": "rho_evaluate_november_wave_export.json",
+     "eval_manifest_path": "tau2/hyper/sops/banking_knowledge/sections/direct_deposit_delay_and_escalation/evidence_corpus_hard_001/qa/eval_manifest.json",
+     "included_fact_ids": [
+      "F008"
+     ],
+     "shared_spine": true
+    }
+   ]
+  },
+  {
+   "id": "ddde_client_ds_knowledge_001",
+   "representation": "client_knowledge",
+   "stub_path": "tau2/hyper/sops/banking_knowledge/sections/direct_deposit_delay_and_escalation/transcript_induction_001.md",
+   "fact_ids": [
+    "F004"
+   ],
+   "confirmable_fact_ids": [
+    "F003",
+    "F005",
+    "F006",
+    "F007"
+   ],
+   "discovery_tiers": {
+    "F004": "pointer"
+   }
+  }
+ ],
+ "transformation_bundles": [
+  {
+   "id": "ddde_evidence_bundle_hard_client_ds_001",
+   "client_overlay_of": "ddde_evidence_bundle_hard_001",
+   "stub_path": "tau2/hyper/sops/banking_knowledge/sections/direct_deposit_delay_and_escalation/transcript_induction_001.md",
+   "description": "Deposit-services client overlay on the payroll-desk evidence room: the same November wave, but the posting-schedule matrices carry the morning window without its clock span — the span is read from the customer working group (the Client). The pattern key keeps its file-vs-money jurisdiction, the console flow still cites the matrix rev, and the trio-shared QA wave names the timing-first behavior without re-quoting the window.",
+   "fact_ids": [
+    "F002",
+    "F003",
+    "F004",
+    "F005",
+    "F006",
+    "F007",
+    "F008",
+    "F009",
+    "F010",
+    "F011",
+    "F012"
+   ],
+   "members": [
+    {
+     "transformation_id": "ddde_client_ds_reference_docs_001",
+     "authoritative_fact_ids": [
+      "F003",
+      "F005"
+     ]
+    },
+    {
+     "transformation_id": "ddde_hard_helpdesk_export_001",
+     "authoritative_fact_ids": [
+      "F006",
+      "F007",
+      "F010"
+     ],
+     "primary": true
+    },
+    {
+     "transformation_id": "ddde_hard_email_archive_001",
+     "authoritative_fact_ids": [
+      "F002",
+      "F011"
+     ]
+    },
+    {
+     "transformation_id": "ddde_hard_support_cases_carrier_001",
+     "authoritative_fact_ids": [
+      "F009",
+      "F012"
+     ]
+    },
+    {
+     "transformation_id": "ddde_hard_support_cases_context_001"
+    },
+    {
+     "transformation_id": "ddde_client_ds_qa_export_001",
+     "authoritative_fact_ids": [
+      "F008"
+     ]
+    },
+    {
+     "transformation_id": "ddde_hard_slack_capture_001"
+    },
+    {
+     "transformation_id": "ddde_hard_ledger_export_001"
+    },
+    {
+     "transformation_id": "ddde_client_ds_knowledge_001",
+     "authoritative_fact_ids": [
+      "F004"
+     ]
+    }
+   ],
+   "member_substitutions": {
+    "ddde_hard_reference_docs_001": "ddde_client_ds_reference_docs_001",
+    "ddde_hard_qa_export_001": "ddde_client_ds_qa_export_001"
+   }
+  }
+ ]
+}

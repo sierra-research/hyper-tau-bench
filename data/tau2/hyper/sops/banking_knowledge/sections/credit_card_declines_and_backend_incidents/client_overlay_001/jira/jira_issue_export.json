@@ -1,0 +1,1184 @@
+{
+ "export_format": "jira_cloud_issue_export_v1",
+ "exported_at": "2025-11-14T08:25:41-05:00",
+ "site": {
+  "displayName": "Rho Bank",
+  "baseUrl": "https://rhobank.atlassian.net"
+ },
+ "jql": "project in (CARD, CCOPS) AND updated >= -120d ORDER BY updated DESC",
+ "projects": [
+  {
+   "key": "CARD",
+   "name": "Card Platform"
+  },
+  {
+   "key": "CCOPS",
+   "name": "Card Support Operations"
+  }
+ ],
+ "users": [
+  {
+   "accountId": "lferro",
+   "displayName": "Lena Ferro",
+   "active": true
+  },
+  {
+   "accountId": "mwebb",
+   "displayName": "Marcus Webb",
+   "active": true
+  },
+  {
+   "accountId": "rjimenez",
+   "displayName": "Rosa Jimenez",
+   "active": true
+  },
+  {
+   "accountId": "tokafor",
+   "displayName": "Tom Okafor",
+   "active": true
+  },
+  {
+   "accountId": "gmalone",
+   "displayName": "Greg Malone",
+   "active": true
+  },
+  {
+   "accountId": "dmarsh",
+   "displayName": "Devon Marsh",
+   "active": true
+  },
+  {
+   "accountId": "apatel",
+   "displayName": "Asha Patel",
+   "active": true
+  },
+  {
+   "accountId": "fidris",
+   "displayName": "Farah Idris",
+   "active": true
+  },
+  {
+   "accountId": "ndelgado",
+   "displayName": "Nick Delgado",
+   "active": true
+  },
+  {
+   "accountId": "sliu",
+   "displayName": "Sandra Liu",
+   "active": true
+  }
+ ],
+ "issues": [
+  {
+   "id": "70291",
+   "key": "CARD-2291",
+   "self": "https://rhobank.atlassian.net/rest/api/3/issue/70291",
+   "fields": {
+    "summary": "Backend Incident 11/13 — credit card payments posted from checking not reflected on statement balance",
+    "description": "Ledger sync failure between checking posting and the credit card statement service, first customer reports 11/13 ~07:50 ET.\n\nCustomer-matching criteria\nUse the Backend Incident 11/13 flow only when a customer reports all three: statement paid, checking account debited, and the payment not reflected in the credit card statement balance. Reports missing any of the three go through standard decline/payment triage, not this flow.\n\nSupport window\nIncident-specific support protocol in effect until 11/15/2025, 11:59 PM EST. Window sized to the reconciliation backfill estimate below; if the backfill lands early we still hold the window — see Marcus's comment.\n\nHandling directive for the support floor is distributed separately by Incident Command (CCOPS-577); this ticket is the engineering record.",
+    "issuetype": {
+     "name": "Incident"
+    },
+    "status": {
+     "name": "In Progress"
+    },
+    "priority": {
+     "name": "P1"
+    },
+    "resolution": null,
+    "project": {
+     "key": "CARD"
+    },
+    "labels": [
+     "incident",
+     "ledger-sync",
+     "credit-card-payments"
+    ],
+    "components": [
+     {
+      "name": "statement-service"
+     }
+    ],
+    "fixVersions": [],
+    "created": "2025-11-13T08:40:22-05:00",
+    "updated": "2025-11-13T15:44:03-05:00",
+    "reporter": {
+     "accountId": "lferro",
+     "displayName": "Lena Ferro"
+    },
+    "comment": {
+     "total": 4,
+     "comments": [
+      {
+       "id": "c-2291-01",
+       "author": {
+        "accountId": "lferro"
+       },
+       "created": "2025-11-13T09:18:40-05:00",
+       "body": "Root cause isolated to the overnight ledger sync job (run id 2025-11-13.0310). Checking-side postings committed; statement-side consumer dropped the batch after a schema mismatch on the new memo field. Payments are safe — this is a reflection problem, not a money-movement problem."
+      },
+      {
+       "id": "c-2291-02",
+       "author": {
+        "accountId": "gmalone"
+       },
+       "created": "2025-11-13T10:05:12-05:00",
+       "body": "Reconciliation backfill estimate: replays complete by late 11/15. Recommend sizing the support window to end of day 11/15 with buffer; propagation to customer-visible statement balances lags the replay by up to a few hours."
+      },
+      {
+       "id": "c-2291-03",
+       "author": {
+        "accountId": "mwebb"
+       },
+       "created": "2025-11-13T10:11:55-05:00",
+       "body": "Window set per Greg's estimate — support protocol runs until 11/15/2025, 11:59 PM EST and we hold it even if the backfill lands early. One clean boundary beats a moving one. Floor handling directive goes out via CCOPS-577, not in this ticket."
+      },
+      {
+       "id": "c-2291-04",
+       "author": {
+        "accountId": "tokafor"
+       },
+       "created": "2025-11-13T15:44:03-05:00",
+       "body": "Floor volume: 61 matching contacts by 15:30. Matching criteria above are holding up — two near-matches (statement paid, checking debited, balance updated after refresh) correctly went standard-path."
+      }
+     ]
+    },
+    "issuelinks": [
+     {
+      "id": "l-2291-01",
+      "type": {
+       "name": "Relates"
+      },
+      "issueKey": "CARD-2301"
+     },
+     {
+      "id": "l-2291-02",
+      "type": {
+       "name": "Relates"
+      },
+      "issueKey": "CCOPS-577"
+     },
+     {
+      "id": "l-2291-03",
+      "type": {
+       "name": "Duplicate"
+      },
+      "issueKey": "CARD-2296"
+     },
+     {
+      "id": "l-2291-04",
+      "type": {
+       "name": "Relates"
+      },
+      "issueKey": "CARD-2233"
+     }
+    ]
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "h-2291-01",
+      "author": {
+       "accountId": "lferro"
+      },
+      "created": "2025-11-13T08:40:22-05:00",
+      "items": [
+       {
+        "field": "status",
+        "fieldtype": "jira",
+        "fromString": null,
+        "toString": "Open"
+       }
+      ]
+     },
+     {
+      "id": "h-2291-02",
+      "author": {
+       "accountId": "mwebb"
+      },
+      "created": "2025-11-13T08:58:07-05:00",
+      "items": [
+       {
+        "field": "priority",
+        "fieldtype": "jira",
+        "fromString": "P2",
+        "toString": "P1"
+       },
+       {
+        "field": "status",
+        "fieldtype": "jira",
+        "fromString": "Open",
+        "toString": "In Progress"
+       }
+      ]
+     },
+     {
+      "id": "h-2291-03",
+      "author": {
+       "accountId": "mwebb"
+      },
+      "created": "2025-11-13T10:11:55-05:00",
+      "items": [
+       {
+        "field": "description",
+        "fieldtype": "jira",
+        "fromString": "Ledger sync failure between checking posting and the credit card statement service, first customer reports 11/13 ~07:50 ET. Support window: TBD pending reconciliation estimate.",
+        "toString": "Support window section finalized — protocol until 11/15/2025, 11:59 PM EST."
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "70304",
+   "key": "CARD-2304",
+   "self": "https://rhobank.atlassian.net/rest/api/3/issue/70304",
+   "fields": {
+    "summary": "Backend Incident 11/14 — erroneous delinquency reporting transmitted to credit bureaus",
+    "description": "On 11/14/2025, a batch processing error transmitted erroneous delinquency reports to credit bureaus for credit card accounts in good standing. The 03:20 furnishment batch picked up a mis-flagged status column from the same statement-service schema change tracked under CARD-2291; accounts current on payment were furnished as 30-day delinquent.\n\n\nCustomer impact\nAffected customers may report any of the following: alerts from credit monitoring services about sudden score drops; being notified of a delinquency they did not incur; a credit score decreasing significantly, often 80-150 points.\n\nThis ticket is the engineering and bureau-remediation record.",
+    "issuetype": {
+     "name": "Incident"
+    },
+    "status": {
+     "name": "Open"
+    },
+    "priority": {
+     "name": "P1"
+    },
+    "resolution": null,
+    "project": {
+     "key": "CARD"
+    },
+    "labels": [
+     "incident",
+     "credit-bureau",
+     "furnishment"
+    ],
+    "components": [
+     {
+      "name": "bureau-reporting"
+     }
+    ],
+    "fixVersions": [],
+    "created": "2025-11-14T07:55:36-05:00",
+    "updated": "2025-11-14T08:22:11-05:00",
+    "reporter": {
+     "accountId": "rjimenez",
+     "displayName": "Rosa Jimenez"
+    },
+    "comment": {
+     "total": 1,
+     "comments": [
+      {
+       "id": "c-2304-01",
+       "author": {
+        "accountId": "rjimenez"
+       },
+       "created": "2025-11-14T08:22:11-05:00",
+       "body": "Bad batch identified: furnishment run 2025-11-14.0320, job id frn-88231. Halted the 11/14 evening run until the status-column mapping is fixed and verified against ten known-good accounts."
+      }
+     ]
+    },
+    "issuelinks": [
+     {
+      "id": "l-2304-03",
+      "type": {
+       "name": "Relates"
+      },
+      "issueKey": "CARD-2291"
+     }
+    ]
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "h-2304-01",
+      "author": {
+       "accountId": "rjimenez"
+      },
+      "created": "2025-11-14T07:55:36-05:00",
+      "items": [
+       {
+        "field": "status",
+        "fieldtype": "jira",
+        "fromString": null,
+        "toString": "Open"
+       },
+       {
+        "field": "priority",
+        "fieldtype": "jira",
+        "fromString": null,
+        "toString": "P1"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "68107",
+   "key": "CARD-2107",
+   "self": "https://rhobank.atlassian.net/rest/api/3/issue/68107",
+   "fields": {
+    "summary": "Duplicate authorization holds on card purchases at fuel and hotel merchants",
+    "description": "July incident: acquirer retry storm created duplicate authorization holds on a subset of card purchases 7/18-7/22. Holds released on the normal expiry cycle; no settled duplicates.\n\nComms: status-page banner plus a help-center note. Support handled contacts through standard queues with standard verification — no incident-specific routing was needed; the banner plus hold-expiry explanation resolved most contacts in one touch.",
+    "issuetype": {
+     "name": "Incident"
+    },
+    "status": {
+     "name": "Done"
+    },
+    "priority": {
+     "name": "P2"
+    },
+    "resolution": {
+     "name": "Done"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "labels": [
+     "incident",
+     "authorizations"
+    ],
+    "components": [
+     {
+      "name": "auth-gateway"
+     }
+    ],
+    "fixVersions": [],
+    "created": "2025-07-18T11:05:44-04:00",
+    "updated": "2025-08-01T16:12:30-04:00",
+    "reporter": {
+     "accountId": "gmalone",
+     "displayName": "Greg Malone"
+    },
+    "comment": {
+     "total": 2,
+     "comments": [
+      {
+       "id": "c-2107-01",
+       "author": {
+        "accountId": "apatel"
+       },
+       "created": "2025-07-18T13:22:18-04:00",
+       "body": "Banner live. Copy: temporary duplicate holds may appear on recent card purchases and will drop off automatically. Help-center note links the hold-expiry explainer."
+      },
+      {
+       "id": "c-2107-02",
+       "author": {
+        "accountId": "gmalone"
+       },
+       "created": "2025-08-01T16:12:30-04:00",
+       "body": "Closing. Retry-storm guard shipped on the acquirer connection; last duplicate hold expired 7/29. Post-incident review notes filed on the ops wiki."
+      }
+     ]
+    },
+    "issuelinks": []
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "h-2107-01",
+      "author": {
+       "accountId": "gmalone"
+      },
+      "created": "2025-08-01T16:12:30-04:00",
+      "items": [
+       {
+        "field": "status",
+        "fieldtype": "jira",
+        "fromString": "In Progress",
+        "toString": "Done"
+       },
+       {
+        "field": "resolution",
+        "fieldtype": "jira",
+        "fromString": null,
+        "toString": "Done"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "68168",
+   "key": "CARD-2168",
+   "self": "https://rhobank.atlassian.net/rest/api/3/issue/68168",
+   "fields": {
+    "summary": "Mobile app login outage 9/8 — session service certificate expiry",
+    "description": "App logins failed 9/8 06:10-11:35 ET after a session-service certificate expired. Web banking unaffected. Comms via status page; support floor used the standard outage script and normal queues. Card purchases and payments were unaffected — contacts were overwhelmingly login-only.",
+    "issuetype": {
+     "name": "Incident"
+    },
+    "status": {
+     "name": "Done"
+    },
+    "priority": {
+     "name": "P1"
+    },
+    "resolution": {
+     "name": "Done"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "labels": [
+     "incident",
+     "mobile-app"
+    ],
+    "components": [
+     {
+      "name": "session-service"
+     }
+    ],
+    "fixVersions": [],
+    "created": "2025-09-08T06:31:09-04:00",
+    "updated": "2025-09-12T10:02:47-04:00",
+    "reporter": {
+     "accountId": "lferro",
+     "displayName": "Lena Ferro"
+    },
+    "comment": {
+     "total": 2,
+     "comments": [
+      {
+       "id": "c-2168-01",
+       "author": {
+        "accountId": "lferro"
+       },
+       "created": "2025-09-08T11:41:20-04:00",
+       "body": "Cert rotated, logins recovering. Root cause: renewal automation had the staging cert pinned. Fix in the rotation runbook."
+      },
+      {
+       "id": "c-2168-02",
+       "author": {
+        "accountId": "tokafor"
+       },
+       "created": "2025-09-12T10:02:47-04:00",
+       "body": "Post-incident review held 9/10 (recording in the training library). Closing after the runbook update merged."
+      }
+     ]
+    },
+    "issuelinks": []
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "h-2168-01",
+      "author": {
+       "accountId": "lferro"
+      },
+      "created": "2025-09-12T10:02:47-04:00",
+      "items": [
+       {
+        "field": "status",
+        "fieldtype": "jira",
+        "fromString": "In Progress",
+        "toString": "Done"
+       },
+       {
+        "field": "resolution",
+        "fieldtype": "jira",
+        "fromString": null,
+        "toString": "Done"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "70296",
+   "key": "CARD-2296",
+   "self": "https://rhobank.atlassian.net/rest/api/3/issue/70296",
+   "fields": {
+    "summary": "Payments made 11/12 evening not showing on card balances",
+    "description": "Several branch escalations: customers paid card statements from checking on the evening of 11/12, checking debited, card balance unchanged next morning.",
+    "issuetype": {
+     "name": "Incident"
+    },
+    "status": {
+     "name": "Closed"
+    },
+    "priority": {
+     "name": "P2"
+    },
+    "resolution": {
+     "name": "Duplicate"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "labels": [
+     "incident",
+     "credit-card-payments"
+    ],
+    "components": [
+     {
+      "name": "statement-service"
+     }
+    ],
+    "fixVersions": [],
+    "created": "2025-11-13T09:12:58-05:00",
+    "updated": "2025-11-13T09:58:31-05:00",
+    "reporter": {
+     "accountId": "tokafor",
+     "displayName": "Tom Okafor"
+    },
+    "comment": {
+     "total": 1,
+     "comments": [
+      {
+       "id": "c-2296-01",
+       "author": {
+        "accountId": "lferro"
+       },
+       "created": "2025-11-13T09:55:47-05:00",
+       "body": "Same ledger sync failure — folding these escalations into CARD-2291 so scope and window live in one place."
+      }
+     ]
+    },
+    "issuelinks": [
+     {
+      "id": "l-2296-01",
+      "type": {
+       "name": "Duplicate"
+      },
+      "issueKey": "CARD-2291"
+     }
+    ]
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "h-2296-01",
+      "author": {
+       "accountId": "lferro"
+      },
+      "created": "2025-11-13T09:58:31-05:00",
+      "items": [
+       {
+        "field": "status",
+        "fieldtype": "jira",
+        "fromString": "Open",
+        "toString": "Closed"
+       },
+       {
+        "field": "resolution",
+        "fieldtype": "jira",
+        "fromString": null,
+        "toString": "Duplicate"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "70301",
+   "key": "CARD-2301",
+   "self": "https://rhobank.atlassian.net/rest/api/3/issue/70301",
+   "fields": {
+    "summary": "Status-page banner: card payment posting delays",
+    "description": "Customer-facing banner for the payment-reflection incident. Keep the copy generic (posting delays, payments safe, no action needed) — matching criteria and support handling stay internal.",
+    "issuetype": {
+     "name": "Task"
+    },
+    "status": {
+     "name": "Done"
+    },
+    "priority": {
+     "name": "P2"
+    },
+    "resolution": {
+     "name": "Done"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "labels": [
+     "status-page"
+    ],
+    "components": [
+     {
+      "name": "status-page"
+     }
+    ],
+    "fixVersions": [],
+    "created": "2025-11-13T09:05:19-05:00",
+    "updated": "2025-11-13T11:32:40-05:00",
+    "reporter": {
+     "accountId": "mwebb",
+     "displayName": "Marcus Webb"
+    },
+    "comment": {
+     "total": 1,
+     "comments": [
+      {
+       "id": "c-2301-01",
+       "author": {
+        "accountId": "apatel"
+       },
+       "created": "2025-11-13T11:32:40-05:00",
+       "body": "Banner live at 11:28. Copy passed legal's incident-comms template review; no bureau or verification language anywhere near it."
+      }
+     ]
+    },
+    "issuelinks": [
+     {
+      "id": "l-2301-01",
+      "type": {
+       "name": "Relates"
+      },
+      "issueKey": "CARD-2291"
+     }
+    ]
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "h-2301-01",
+      "author": {
+       "accountId": "apatel"
+      },
+      "created": "2025-11-13T11:32:40-05:00",
+      "items": [
+       {
+        "field": "status",
+        "fieldtype": "jira",
+        "fromString": "In Progress",
+        "toString": "Done"
+       },
+       {
+        "field": "resolution",
+        "fieldtype": "jira",
+        "fromString": null,
+        "toString": "Done"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "69233",
+   "key": "CARD-2233",
+   "self": "https://rhobank.atlassian.net/rest/api/3/issue/69233",
+   "fields": {
+    "summary": "Nightly ledger reconciliation refactor — schema-tolerant consumers",
+    "description": "Make the statement-service batch consumers tolerant of additive schema changes and add a same-night reconciliation check between checking postings and statement balances. Scoped in Q3 planning; the 11/13 incident is exactly the failure mode this closes.",
+    "issuetype": {
+     "name": "Story"
+    },
+    "status": {
+     "name": "In Progress"
+    },
+    "priority": {
+     "name": "P2"
+    },
+    "resolution": null,
+    "project": {
+     "key": "CARD"
+    },
+    "labels": [
+     "reliability",
+     "ledger-sync"
+    ],
+    "components": [
+     {
+      "name": "statement-service"
+     }
+    ],
+    "fixVersions": [
+     {
+      "name": "2025.12"
+     }
+    ],
+    "created": "2025-09-24T14:20:33-04:00",
+    "updated": "2025-11-13T17:05:52-05:00",
+    "reporter": {
+     "accountId": "gmalone",
+     "displayName": "Greg Malone"
+    },
+    "comment": {
+     "total": 2,
+     "comments": [
+      {
+       "id": "c-2233-01",
+       "author": {
+        "accountId": "lferro"
+       },
+       "created": "2025-10-15T10:12:29-04:00",
+       "body": "Consumer-side tolerance merged behind a flag. Reconciliation check still in design — the open question is where the alert lands overnight."
+      },
+      {
+       "id": "c-2233-02",
+       "author": {
+        "accountId": "gmalone"
+       },
+       "created": "2025-11-13T17:05:52-05:00",
+       "body": "Pulling this forward after today. If the reconciliation check had been live, the 03:10 drop would have paged before the first customer contact."
+      }
+     ]
+    },
+    "issuelinks": [
+     {
+      "id": "l-2233-01",
+      "type": {
+       "name": "Relates"
+      },
+      "issueKey": "CARD-2291"
+     }
+    ]
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "h-2233-01",
+      "author": {
+       "accountId": "gmalone"
+      },
+      "created": "2025-09-24T14:20:33-04:00",
+      "items": [
+       {
+        "field": "status",
+        "fieldtype": "jira",
+        "fromString": null,
+        "toString": "Open"
+       }
+      ]
+     },
+     {
+      "id": "h-2233-02",
+      "author": {
+       "accountId": "lferro"
+      },
+      "created": "2025-10-06T09:30:41-04:00",
+      "items": [
+       {
+        "field": "status",
+        "fieldtype": "jira",
+        "fromString": "Open",
+        "toString": "In Progress"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "51518",
+   "key": "CCOPS-518",
+   "self": "https://rhobank.atlassian.net/rest/api/3/issue/51518",
+   "fields": {
+    "summary": "Proposal: auto-block cards after repeated purchase declines in 24 hours",
+    "description": "Floor proposal from the September queue review: automatically place a temporary block on cards that hit repeated purchase declines within 24 hours, to cut repeat-contact volume.",
+    "issuetype": {
+     "name": "Story"
+    },
+    "status": {
+     "name": "Closed"
+    },
+    "priority": {
+     "name": "P3"
+    },
+    "resolution": {
+     "name": "Won't Do"
+    },
+    "project": {
+     "key": "CCOPS"
+    },
+    "labels": [
+     "queue-review",
+     "proposal"
+    ],
+    "components": [
+     {
+      "name": "support-policy"
+     }
+    ],
+    "fixVersions": [],
+    "created": "2025-09-19T13:44:56-04:00",
+    "updated": "2025-10-17T15:26:12-04:00",
+    "reporter": {
+     "accountId": "ndelgado",
+     "displayName": "Nick Delgado"
+    },
+    "comment": {
+     "total": 2,
+     "comments": [
+      {
+       "id": "c-518-01",
+       "author": {
+        "accountId": "sliu"
+       },
+       "created": "2025-10-02T11:15:38-04:00",
+       "body": "QA sampled 40 repeated-decline contacts: 31 were legitimate spend (travel, large purchases, merchant retries). An auto-block converts a decline inconvenience into a lockout for the majority case."
+      },
+      {
+       "id": "c-518-02",
+       "author": {
+        "accountId": "tokafor"
+       },
+       "created": "2025-10-17T15:26:12-04:00",
+       "body": "Declined at the October ops review on Sandra's sample. Risk team may revisit with a fraud-score gate next year; nothing changes on the floor."
+      }
+     ]
+    },
+    "issuelinks": []
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "h-518-01",
+      "author": {
+       "accountId": "tokafor"
+      },
+      "created": "2025-10-17T15:26:12-04:00",
+      "items": [
+       {
+        "field": "status",
+        "fieldtype": "jira",
+        "fromString": "Open",
+        "toString": "Closed"
+       },
+       {
+        "field": "resolution",
+        "fieldtype": "jira",
+        "fromString": null,
+        "toString": "Won't Do"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "51540",
+   "key": "CCOPS-540",
+   "self": "https://rhobank.atlassian.net/rest/api/3/issue/51540",
+   "fields": {
+    "summary": "Publish CCD-OPS-114 rev C to the ops board library",
+    "description": "Publish the decline-diagnostic routing board rev C and index it in the ops board library. Rev decision recorded in Tom's 8/6 note to the routing group.",
+    "issuetype": {
+     "name": "Task"
+    },
+    "status": {
+     "name": "Done"
+    },
+    "priority": {
+     "name": "P3"
+    },
+    "resolution": {
+     "name": "Done"
+    },
+    "project": {
+     "key": "CCOPS"
+    },
+    "labels": [
+     "ops-boards"
+    ],
+    "components": [
+     {
+      "name": "support-policy"
+     }
+    ],
+    "fixVersions": [],
+    "created": "2025-08-07T09:22:14-04:00",
+    "updated": "2025-08-12T10:45:29-04:00",
+    "reporter": {
+     "accountId": "tokafor",
+     "displayName": "Tom Okafor"
+    },
+    "comment": {
+     "total": 1,
+     "comments": [
+      {
+       "id": "c-540-01",
+       "author": {
+        "accountId": "tokafor"
+       },
+       "created": "2025-08-12T10:45:29-04:00",
+       "body": "Published and indexed. Rev B draft stays in the design-review folder for history; the library entry points only at rev C."
+      }
+     ]
+    },
+    "issuelinks": []
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "h-540-01",
+      "author": {
+       "accountId": "tokafor"
+      },
+      "created": "2025-08-12T10:45:29-04:00",
+      "items": [
+       {
+        "field": "status",
+        "fieldtype": "jira",
+        "fromString": "In Progress",
+        "toString": "Done"
+       },
+       {
+        "field": "resolution",
+        "fieldtype": "jira",
+        "fromString": null,
+        "toString": "Done"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "51561",
+   "key": "CCOPS-561",
+   "self": "https://rhobank.atlassian.net/rest/api/3/issue/51561",
+   "fields": {
+    "summary": "Kept-call library — quarterly refresh automation",
+    "description": "Automate the quarterly refresh of the QA kept-call library: pull approved records, refresh the index, and notify team leads. Curation criteria unchanged — QA approval remains manual.",
+    "issuetype": {
+     "name": "Task"
+    },
+    "status": {
+     "name": "Done"
+    },
+    "priority": {
+     "name": "P3"
+    },
+    "resolution": {
+     "name": "Done"
+    },
+    "project": {
+     "key": "CCOPS"
+    },
+    "labels": [
+     "qa-library"
+    ],
+    "components": [
+     {
+      "name": "quality"
+     }
+    ],
+    "fixVersions": [],
+    "created": "2025-09-30T10:08:47-04:00",
+    "updated": "2025-10-09T14:19:55-04:00",
+    "reporter": {
+     "accountId": "sliu",
+     "displayName": "Sandra Liu"
+    },
+    "comment": {
+     "total": 1,
+     "comments": [
+      {
+       "id": "c-561-01",
+       "author": {
+        "accountId": "fidris"
+       },
+       "created": "2025-10-09T14:19:55-04:00",
+       "body": "Refresh job scheduled first Monday of the quarter. Index rebuild verified against the October library snapshot."
+      }
+     ]
+    },
+    "issuelinks": []
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "h-561-01",
+      "author": {
+       "accountId": "fidris"
+      },
+      "created": "2025-10-09T14:19:55-04:00",
+      "items": [
+       {
+        "field": "status",
+        "fieldtype": "jira",
+        "fromString": "In Progress",
+        "toString": "Done"
+       },
+       {
+        "field": "resolution",
+        "fieldtype": "jira",
+        "fromString": null,
+        "toString": "Done"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "51577",
+   "key": "CCOPS-577",
+   "self": "https://rhobank.atlassian.net/rest/api/3/issue/51577",
+   "fields": {
+    "summary": "Distribute IC bulletin for Backend Incident 11/13 to the support floor",
+    "description": "Draft, review, and distribute the Incident Command support bulletin for the 11/13 payment-reflection incident. Content owned by IC; this task tracks distribution and acknowledgment only.",
+    "issuetype": {
+     "name": "Task"
+    },
+    "status": {
+     "name": "Done"
+    },
+    "priority": {
+     "name": "P1"
+    },
+    "resolution": {
+     "name": "Done"
+    },
+    "project": {
+     "key": "CCOPS"
+    },
+    "labels": [
+     "incident-comms"
+    ],
+    "components": [
+     {
+      "name": "enablement"
+     }
+    ],
+    "fixVersions": [],
+    "created": "2025-11-13T09:31:44-05:00",
+    "updated": "2025-11-13T13:10:26-05:00",
+    "reporter": {
+     "accountId": "mwebb",
+     "displayName": "Marcus Webb"
+    },
+    "comment": {
+     "total": 1,
+     "comments": [
+      {
+       "id": "c-577-01",
+       "author": {
+        "accountId": "ndelgado"
+       },
+       "created": "2025-11-13T13:10:26-05:00",
+       "body": "Sent 12:47 to the card-support floor list; acknowledgment tracking on. One draft round — the verification stance in my first cut was wrong and Marcus corrected it in the thread before send."
+      }
+     ]
+    },
+    "issuelinks": [
+     {
+      "id": "l-577-01",
+      "type": {
+       "name": "Relates"
+      },
+      "issueKey": "CARD-2291"
+     }
+    ]
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "h-577-01",
+      "author": {
+       "accountId": "ndelgado"
+      },
+      "created": "2025-11-13T13:10:26-05:00",
+      "items": [
+       {
+        "field": "status",
+        "fieldtype": "jira",
+        "fromString": "In Progress",
+        "toString": "Done"
+       },
+       {
+        "field": "resolution",
+        "fieldtype": "jira",
+        "fromString": null,
+        "toString": "Done"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "69214",
+   "key": "CARD-2214",
+   "self": "https://rhobank.atlassian.net/rest/api/3/issue/69214",
+   "fields": {
+    "summary": "Decline reason codes truncated in console export CSV",
+    "description": "The card-support console's CSV export truncates decline reason codes to 12 characters, which folds several distinct codes into the same prefix. Analytics only — the console UI shows full codes.",
+    "issuetype": {
+     "name": "Bug"
+    },
+    "status": {
+     "name": "Done"
+    },
+    "priority": {
+     "name": "P3"
+    },
+    "resolution": {
+     "name": "Done"
+    },
+    "project": {
+     "key": "CARD"
+    },
+    "labels": [
+     "console"
+    ],
+    "components": [
+     {
+      "name": "support-console"
+     }
+    ],
+    "fixVersions": [
+     {
+      "name": "2025.11"
+     }
+    ],
+    "created": "2025-10-13T15:37:02-04:00",
+    "updated": "2025-10-24T09:12:44-04:00",
+    "reporter": {
+     "accountId": "fidris",
+     "displayName": "Farah Idris"
+    },
+    "comment": {
+     "total": 1,
+     "comments": [
+      {
+       "id": "c-2214-01",
+       "author": {
+        "accountId": "fidris"
+       },
+       "created": "2025-10-24T09:12:44-04:00",
+       "body": "Fixed in the 2025.11 console release; export column widened and backfilled for October."
+      }
+     ]
+    },
+    "issuelinks": []
+   },
+   "changelog": {
+    "histories": [
+     {
+      "id": "h-2214-01",
+      "author": {
+       "accountId": "fidris"
+      },
+      "created": "2025-10-24T09:12:44-04:00",
+      "items": [
+       {
+        "field": "status",
+        "fieldtype": "jira",
+        "fromString": "In Progress",
+        "toString": "Done"
+       },
+       {
+        "field": "resolution",
+        "fieldtype": "jira",
+        "fromString": null,
+        "toString": "Done"
+       }
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Rho app — share a referral</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"Segoe UI",Arial,sans-serif;background:#0d1420;width:420px}
+.statusbar{display:flex;justify-content:space-between;color:#e8eef6;font-size:13px;padding:10px 22px 4px;font-weight:600}
+.appbar{display:flex;align-items:center;gap:12px;color:#e8eef6;padding:12px 18px}
+.appbar .back{font-size:22px} .appbar .title{font-size:16px;font-weight:600}
+.sheet{background:#f4f6f9;border-radius:22px 22px 0 0;min-height:700px;padding:22px 18px 30px;position:relative}
+h2{font-size:13px;letter-spacing:.6px;text-transform:uppercase;color:#5a6b7d;margin:18px 4px 10px}
+.refrow{background:#fff;border-radius:14px;padding:13px 16px;margin-bottom:10px;display:flex;gap:12px;align-items:center;box-shadow:0 1px 2px rgba(13,20,32,.06)}
+.refrow .avatar{width:36px;height:36px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff}
+.refrow .body{flex:1;min-width:0}
+.refrow .who{font-size:14.5px;font-weight:600;color:#1d2a38}
+.refrow .what{font-size:12px;color:#5a6b7d;margin-top:2px}
+.chip{font-size:10px;font-weight:700;letter-spacing:.5px;border-radius:10px;padding:4px 9px;flex:none}
+.c-complete{background:#dcefe2;color:#1e7a44}
+.c-progress{background:#e3ecfb;color:#2456a6}
+.c-applied{background:#fdf3d7;color:#8a6d1c}
+.c-noprog{background:#e8edf3;color:#5a6b7d}
+.c-rejected{background:#fbe3e3;color:#a62424}
+.c-error{background:#f3e3fb;color:#7a24a6}
+.c-waiting{background:#fdf3d7;color:#8a6d1c}
+.legend{background:#fff;border-radius:16px;padding:16px;margin-top:6px;box-shadow:0 1px 2px rgba(13,20,32,.06)}
+.legend .lhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.legend .lhead .t{font-size:15px;font-weight:700;color:#1d2a38}
+.legend .lhead .x{color:#8296ab;font-size:17px}
+.lentry{display:flex;gap:12px;padding:11px 2px;border-top:1px solid #eef1f5;align-items:flex-start}
+.lentry:first-of-type{border-top:none}
+.lentry .chip{margin-top:2px}
+.lentry .d{font-size:12.5px;color:#3d4c5c;line-height:1.55;flex:1}
+.explain{background:#fff;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 1px 2px rgba(13,20,32,.06)}
+.explain .ehead{font-size:14.5px;font-weight:700;color:#1d2a38;margin-bottom:6px}
+.explain p{font-size:12.5px;color:#3d4c5c;line-height:1.55;margin-bottom:6px}
+.explain p:last-child{margin-bottom:0}
+.btn{display:block;text-align:center;background:#0b2a52;color:#fff;border-radius:12px;padding:12px;font-size:14px;font-weight:600;margin-top:10px}
+.btn.ghost{background:#e8edf3;color:#33465a}
+.note{font-size:11.5px;color:#7c8b9b;margin:16px 6px 0;line-height:1.5}
+.tabbar{background:#fff;border-top:1px solid #e2e7ed;display:flex;justify-content:space-around;padding:10px 0 16px;font-size:10.5px;color:#8296ab;position:static}
+.tabbar .on{color:#0b2a52;font-weight:600}
+.tabbar div{text-align:center} .tabbar .ic{font-size:17px;display:block;margin-bottom:2px}
+.scrim{background:rgba(13,20,32,.45);border-radius:22px 22px 0 0;position:absolute;inset:0;padding:60px 14px 0}
+.sharesheet{background:#f7f8fa;border-radius:18px 18px 0 0;position:absolute;left:0;right:0;bottom:0;padding:16px 18px 26px}
+.sharesheet .grab{width:38px;height:4px;border-radius:2px;background:#c8d0da;margin:0 auto 14px}
+.sharesheet .shead{font-size:13px;font-weight:600;color:#1d2a38;margin-bottom:4px}
+.sharesheet .slink{font-size:11.5px;color:#5a6b7d;background:#edf0f4;border-radius:8px;padding:8px 10px;margin-bottom:14px;word-break:break-all}
+.sharesheet .apps{display:flex;gap:14px;margin-bottom:14px}
+.sharesheet .app{text-align:center;font-size:10px;color:#5a6b7d;flex:1}
+.sharesheet .app .ic{width:46px;height:46px;border-radius:12px;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;font-size:19px;color:#fff}
+.sharesheet .row{background:#fff;border-radius:10px;padding:12px 14px;font-size:13px;color:#1d2a38;margin-bottom:8px;display:flex;justify-content:space-between}
+</style></head><body>
+<div class="statusbar"><span>11:26</span><span>Rho Bank &middot; 3.9.1</span><span>&#9679;&#9679;&#9679;</span></div>
+<div class="appbar"><span class="back">&#8249;</span><span class="title">Referrals</span></div>
+<div class="sheet">
+<h2>Your referrals</h2>
+<div class="refrow"><div class="avatar" style="background:#2456a6">DM</div><div class="body"><div class="who">Dana M.</div><div class="what">Platinum Rewards Card &middot; invited Oct 14</div></div><span class="chip c-complete">COMPLETE</span></div>
+<div class="refrow"><div class="avatar" style="background:#1e7a44">RK</div><div class="body"><div class="who">Ravi K.</div><div class="what">EcoCard &middot; invited Oct 29</div></div><span class="chip c-progress">IN_PROGRESS</span></div>
+<div class="scrim">
+<div class="sharesheet">
+<div class="grab"></div>
+<div class="shead">Share your EcoCard referral</div>
+<div class="slink">rhobank.com/r/eco/7XKQ2M&hellip;</div>
+<div class="apps">
+<div class="app"><div class="ic" style="background:#1e7a44">&#9993;</div>Mail</div>
+<div class="app"><div class="ic" style="background:#2456a6">&#128172;</div>Messages</div>
+<div class="app"><div class="ic" style="background:#8a6d1c">&#128279;</div>Copy link</div>
+<div class="app"><div class="ic" style="background:#5a6b7d">&#8943;</div>More</div>
+</div>
+<div class="row">AirDrop<span>&#8250;</span></div>
+<div class="row">Add to Notes<span>&#8250;</span></div>
+</div>
+</div>
+</div>
+<div class="tabbar">
+<div><span class="ic">&#8962;</span>Home</div>
+<div class="on"><span class="ic">&#9642;</span>Cards</div>
+<div><span class="ic">&#8644;</span>Transfers</div>
+<div><span class="ic">&#9737;</span>More</div>
+</div>
+</body></html>

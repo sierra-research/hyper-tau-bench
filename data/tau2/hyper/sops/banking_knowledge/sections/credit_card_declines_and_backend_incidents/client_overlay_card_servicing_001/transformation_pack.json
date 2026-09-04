@@ -1,0 +1,220 @@
+{
+ "id": "banking_ccdi_client_overlay_pack_cs_001",
+ "section_id": "credit_card_declines_and_backend_incidents",
+ "transformations": [
+  {
+   "id": "ccdi_cs_client_slack_captures_001",
+   "representation": "slack_mcp_dump",
+   "stub_path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_declines_and_backend_incidents/transcript_induction_001.md",
+   "artifacts": [
+    {
+     "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_declines_and_backend_incidents/client_overlay_card_servicing_001/slack/capture_01.json",
+     "kit_filename": "slack_capture_01.json",
+     "included_fact_ids": [
+      "F055",
+      "F056",
+      "F057",
+      "F059"
+     ],
+     "depends_on_fact_ids": [
+      "F020",
+      "F022",
+      "F050",
+      "F051",
+      "F052",
+      "F053",
+      "F054"
+     ]
+    },
+    {
+     "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_declines_and_backend_incidents/evidence_corpus_hard_001/slack/capture_02.json",
+     "kit_filename": "slack_capture_02.json",
+     "context_only": true,
+     "depends_on_fact_ids": [
+      "F020",
+      "F022"
+     ]
+    },
+    {
+     "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_declines_and_backend_incidents/evidence_corpus_hard_001/slack/capture_03.json",
+     "kit_filename": "slack_capture_03.json",
+     "context_only": true
+    },
+    {
+     "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_declines_and_backend_incidents/evidence_corpus_hard_001/slack/capture_04.json",
+     "kit_filename": "slack_capture_04.json",
+     "context_only": true,
+     "depends_on_fact_ids": [
+      "F010",
+      "F015",
+      "F016"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ccdi_cs_client_knowledge_001",
+   "representation": "client_knowledge",
+   "fact_ids": [
+    "F058"
+   ],
+   "confirmable_fact_ids": [
+    "F050",
+    "F051",
+    "F052",
+    "F053",
+    "F054",
+    "F057"
+   ],
+   "discovery_tiers": {
+    "F058": "caveat"
+   },
+   "stub_path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_declines_and_backend_incidents/transcript_induction_001.md"
+  }
+ ],
+ "transformation_bundles": [
+  {
+   "id": "ccdi_evidence_corpus_hard_client_cs_001",
+   "description": "Card-servicing client fork of the CC-declines/backend-incidents hard corpus. The 11/14 incident pin still rules the floor on fault, immediacy, verification waiver, and register, but the affected-account handling criteria - what qualifies a contact as a match and the exact console action - moved to #incident-cmd-private with the IC log while the qualification wording was still shifting. The kit keeps the incident population (CARD-2304 good-standing accounts), the symptom shapes, and three matched-call tapes whose console lines enact positive instances; the gate sentence itself, including when the protocol does NOT apply, lives with the Client.",
+   "stub_path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_declines_and_backend_incidents/transcript_induction_001.md",
+   "fact_ids": [
+    "F010",
+    "F011",
+    "F012",
+    "F013",
+    "F014",
+    "F015",
+    "F016",
+    "F017",
+    "F018",
+    "F020",
+    "F021",
+    "F022",
+    "F023",
+    "F024",
+    "F025",
+    "F026",
+    "F027",
+    "F028",
+    "F029",
+    "F030",
+    "F031",
+    "F032",
+    "F033",
+    "F034",
+    "F035",
+    "F036",
+    "F037",
+    "F038",
+    "F039",
+    "F050",
+    "F051",
+    "F052",
+    "F053",
+    "F054",
+    "F055",
+    "F056",
+    "F057",
+    "F058",
+    "F059",
+    "F060"
+   ],
+   "members": [
+    {
+     "transformation_id": "ccdi_hard_website_screenshots_001",
+     "authoritative_fact_ids": []
+    },
+    {
+     "transformation_id": "ccdi_hard_flowcharts_001",
+     "authoritative_fact_ids": [
+      "F010",
+      "F011",
+      "F012",
+      "F013",
+      "F014",
+      "F015",
+      "F016",
+      "F017",
+      "F018"
+     ],
+     "primary": true
+    },
+    {
+     "transformation_id": "ccdi_hard_jira_export_001",
+     "authoritative_fact_ids": [
+      "F020",
+      "F021",
+      "F022",
+      "F050",
+      "F051",
+      "F052",
+      "F053",
+      "F054"
+     ]
+    },
+    {
+     "transformation_id": "ccdi_hard_support_cases_carrier_001",
+     "authoritative_fact_ids": [
+      "F060"
+     ]
+    },
+    {
+     "transformation_id": "ccdi_hard_support_cases_context_001",
+     "authoritative_fact_ids": []
+    },
+    {
+     "transformation_id": "ccdi_hard_working_sessions_001",
+     "authoritative_fact_ids": [
+      "F028",
+      "F031",
+      "F032",
+      "F033",
+      "F034",
+      "F035",
+      "F036",
+      "F037",
+      "F038"
+     ]
+    },
+    {
+     "transformation_id": "ccdi_hard_email_archive_001",
+     "authoritative_fact_ids": [
+      "F023",
+      "F024",
+      "F025",
+      "F026",
+      "F027",
+      "F039"
+     ]
+    },
+    {
+     "transformation_id": "ccdi_cs_client_slack_captures_001",
+     "authoritative_fact_ids": [
+      "F055",
+      "F056",
+      "F057",
+      "F059"
+     ]
+    },
+    {
+     "transformation_id": "ccdi_hard_helpdesk_export_001",
+     "authoritative_fact_ids": [
+      "F029",
+      "F030"
+     ]
+    },
+    {
+     "transformation_id": "ccdi_cs_client_knowledge_001",
+     "authoritative_fact_ids": [
+      "F058"
+     ]
+    }
+   ],
+   "client_overlay_of": "cc_declines_evidence_corpus_hard_001",
+   "member_substitutions": {
+    "ccdi_hard_slack_captures_001": "ccdi_cs_client_slack_captures_001"
+   },
+   "contested_fact_ids": {}
+  }
+ ]
+}

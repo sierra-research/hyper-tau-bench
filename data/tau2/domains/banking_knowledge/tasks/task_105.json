@@ -1,0 +1,132 @@
+{
+  "id": "task_105",
+  "description": {
+    "purpose": "Task: task_105",
+    "relevant_policies": null,
+    "notes": null
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Oluwaseun Adeyemi, a 37-year-old barber from Atlanta, GA. You own a two-chair shop called \"Crown & Clippers\". You bank with Rho-Bank: a personal Blue Account checking and a Navy Blue business checking with about $5,600 in it. Money is steady but tight - you run lean on purpose. You're friendly but you make people earn your trust with straight answers.\n\n**Your goal:** Open ONE business savings account for a small emergency cushion, then move $1,800 into it from your Navy Blue business checking today.\n\n**Verification info:**\n- Name: Oluwaseun Adeyemi | Phone: 404-555-0672 | Email: oadeyemi@gmail.com\n- DOB: 02/14/1988 | Address: 2201 Peachtree Road NE, Atlanta, GA 30309\n\n## Conversation Flow:\n\n1. **Opening:** \"Hey, I want to set up a business savings account for my barbershop - just a rainy-day cushion, nothing big. Can you tell me which one of your accounts makes sense for a small shop like mine? One recommendation please, I don't want to compare ten brochures.\"\n\n2. **Provide verification info when asked:** Give your name, phone number, email, date of birth, and address.\n\n3. **Reveal your requirements organically when asked:**\n   - **Balance (your hard limit):** \"Realistically I can keep about $1,500 to $2,000 in there. If an account needs a $5,000 minimum, that's not me - not even close.\"\n   - **Interest (your other hard requirement):** \"I want it earning at least 3.5%. My cousin keeps bragging about the rate on his savings account and I'm not settling for less than 3.5%.\"\n   - **Fees:** \"I don't mind a minimum as long as it's low, but I'm not paying fees just for parking my own money above whatever the minimum is.\"\n\n4. **If the agent offers multiple options:** \"Just pick the ONE that fits: about $1,800 in it, earning at least 3.5%. Which is it?\"\n\n5. **If the agent recommends an account that needs more money than you have, or pays less than 3.5%:** Push back: \"That doesn't fit what I said - I've got under two grand and I want at least 3.5%. Is there one that actually fits, or not?\"\n\n6. **When the agent recommends an account that fits both requirements:** \"That's the one. Let's open it.\"\n\n7. **Funding:** When asked about funding, say: \"Yes - move $1,800 over from my Navy Blue business checking right now.\"\n\n8. **After the transfer:** \"Appreciate you. That's all I needed today.\" ###STOP###\n\n**IMPORTANT BEHAVIORS:**\n- Do NOT suggest account names yourself - you don't know Rho-Bank's lineup.\n- You never quote bank policies or promotions; you only know your own numbers and what you want.\n- Accept the agent's single recommendation as long as it meets your two requirements.\n\nYou are currently on the line with a customer support agent. Only provide additional details about your situation when the agent asks for them. Don't dump all your information at once. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "accounts": {
+          "data": {
+            "chk_86e92f639e": {
+              "account_id": "chk_86e92f639e",
+              "user_id": "86e92f639e",
+              "class": "checking",
+              "level": "Blue Account",
+              "date_opened": "04/18/2024",
+              "status": "OPEN",
+              "current_holdings": "3900.00"
+            },
+            "biz_chk_86e92f639e": {
+              "account_id": "biz_chk_86e92f639e",
+              "user_id": "86e92f639e",
+              "class": "business_checking",
+              "level": "Navy Blue",
+              "date_opened": "05/05/2025",
+              "status": "OPEN",
+              "current_holdings": "5600.00"
+            }
+          }
+        }
+      },
+      "user_data": null
+    },
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Oluwaseun Adeyemi",
+          "user_id": "86e92f639e",
+          "address": "2201 Peachtree Road NE, Atlanta, GA 30309",
+          "email": "oadeyemi@gmail.com",
+          "phone_number": "404-555-0672",
+          "date_of_birth": "02/14/1988",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "105_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "105_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"86e92f639e\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "105_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "open_bank_account_4821"
+        },
+        "requestor": "assistant",
+        "action_id": "105_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "open_bank_account_4821",
+          "arguments": "{\"user_id\": \"86e92f639e\", \"account_type\": \"business_savings\", \"account_class\": \"Emerald Saver Account\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "105_4"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "transfer_funds_between_bank_accounts_7291"
+        },
+        "requestor": "assistant",
+        "action_id": "105_5"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "transfer_funds_between_bank_accounts_7291",
+          "arguments": "{\"source_account_id\": \"biz_chk_86e92f639e\", \"destination_account_id\": \"242e8e52e6f1dd3f\", \"amount\": 1800}"
+        },
+        "requestor": "assistant",
+        "action_id": "105_6"
+      }
+    ],
+    "reward_basis": [
+      "DB"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_004",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_bank_accounts_bank_accounts_(general)_010",
+    "doc_bank_accounts_bank_accounts_(general)_015",
+    "doc_bank_accounts_bank_accounts_(general)_016",
+    "doc_business_savings_accounts_bronze_saver_account_001",
+    "doc_business_savings_accounts_silver_saver_account_001",
+    "doc_business_savings_accounts_silver_plus_saver_001",
+    "doc_business_savings_accounts_gold_saver_account_001",
+    "doc_business_savings_accounts_gold_plus_saver_001",
+    "doc_business_savings_accounts_emerald_saver_001",
+    "doc_business_savings_accounts_platinum_reserve_account_001",
+    "doc_business_savings_accounts_diamond_vault_001"
+  ]
+}

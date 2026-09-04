@@ -1,0 +1,42 @@
+{
+ "section": "personal_credit_card_account_services",
+ "pack_id": "banking_pcs_client_overlay_pack_cs_001",
+ "bundle_id": "pcs_evidence_corpus_hard_client_cs_001",
+ "bundle_description": "Card-servicing client fork of the personal-CC account-services hard corpus. The concierge first-response window is re-cited instead of stated: the Gold benefits page holds response times to the Concierge Service Standard (CSS-9, absent from the kit) and meeting_01's overnight beat sends agents to CSS-9 rather than reciting the window. The finalize gate is contested: the Halcyon tape now poses standing-cap-versus-fresh-authorization and proceeds only after a fresh authorization lands, while a context capture shows the desk moving on a standing cap mid-flight. The Client holds the 2-hour window (both statements) and the explicit-approval/payment-authorization gate.",
+ "held_fact_ids": ["F019", "F029", "F031"],
+ "member_map": {
+  "pcs_hard_website_captures_001": "pcs_cs_client_website_captures_001",
+  "pcs_hard_working_sessions_001": "pcs_cs_client_working_sessions_001",
+  "pcs_hard_support_cases_001": "pcs_cs_client_support_cases_001",
+  "pcs_hard_slack_captures_001": "pcs_cs_client_slack_captures_001"
+ },
+ "artifact_overrides": {
+  "screen_003_gold_benefits.png": {"member": "pcs_hard_website_captures_001"},
+  "meeting_01.vtt": {"member": "pcs_hard_working_sessions_001"},
+  "case_005.md": {"member": "pcs_hard_support_cases_001"},
+  "capture_01.json": {"member": "pcs_hard_slack_captures_001"}
+ },
+ "client_knowledge": {
+  "id": "pcs_cs_client_knowledge_001",
+  "representation": "client_knowledge",
+  "fact_ids": ["F019", "F029", "F031"],
+  "confirmable_fact_ids": ["F018", "F026", "F027", "F028"],
+  "discovery_tiers": {
+   "F019": "pointer",
+   "F029": "pointer",
+   "F031": "caveat"
+  }
+ },
+ "contested_fact_ids": {
+  "F029": [
+   {
+    "member_id": "pcs_cs_client_support_cases_001",
+    "reading": "the concierge never finalizes a purchase without the customer's explicit approval and a payment authorization - the Halcyon tape refuses 'whatever it takes' until the read-back approval and a fresh authorization land, and the kit workflow (F027) has the desk proceeding only after the customer approves an option"
+   },
+   {
+    "member_id": "pcs_cs_client_slack_captures_001",
+    "reading": "the desk may front a purchase under a standing pre-approved cap and square the paperwork after - the arena-ticket win moves on the standing cap while the customer is over the Atlantic, and the Halcyon console records a standing-cap check as a live gate"
+   }
+  ]
+ }
+}

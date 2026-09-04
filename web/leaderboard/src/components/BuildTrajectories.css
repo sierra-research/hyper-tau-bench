@@ -1,0 +1,638 @@
+/* Build-trajectory visualizer. Shares the board's design language via the
+   classes in Leaderboard.css (leaderboard-title/subtitle, retrieval-badge,
+   score-bar-*); everything here is bt-scoped. */
+
+.bt-container {
+  max-width: 980px;
+}
+
+.bt-subtitle {
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Controls: domain chips + task picker */
+.bt-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 24px 0 16px;
+}
+
+.bt-domain-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.bt-chip {
+  appearance: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.bt-chip:hover {
+  border-color: #94a3b8;
+  color: #1e293b;
+}
+
+.bt-chip.active {
+  background: #065f46;
+  border-color: #065f46;
+  color: white;
+}
+
+.bt-task-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bt-task-select {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e293b;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 10px;
+  max-width: 320px;
+}
+
+.bt-nav-btn {
+  appearance: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.bt-nav-btn:hover:not(:disabled) {
+  border-color: #94a3b8;
+}
+
+.bt-nav-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* Task summary card */
+.bt-summary {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.bt-summary-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+/* Repo / raw-data links at the right end of the summary header row. */
+.bt-summary-links {
+  margin-left: auto;
+  display: inline-flex;
+  gap: 12px;
+  font-size: 0.8rem;
+}
+
+.bt-slot-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #065f46;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 6px;
+  padding: 3px 10px;
+}
+
+.bt-task-desc {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #475569;
+  margin: 0 0 16px;
+}
+
+.bt-summary-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.bt-stat {
+  flex: 1 1 150px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bt-stat-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+}
+
+.bt-stat-value {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1e293b;
+  font-variant-numeric: tabular-nums;
+}
+
+.bt-score-bar {
+  min-width: 0;
+}
+
+/* Trajectory / output-kit tabs */
+.bt-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 16px;
+}
+
+.bt-tab {
+  appearance: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.bt-tab:hover {
+  color: #1e293b;
+}
+
+.bt-tab.active {
+  color: #065f46;
+  border-bottom-color: #065f46;
+}
+
+/* Output-kit browser */
+.bt-kit {
+  margin-bottom: 40px;
+}
+
+.bt-kit-meta {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 12px;
+}
+
+.bt-kit-missing {
+  text-align: center;
+  color: #94a3b8;
+  padding: 40px 0;
+}
+
+.bt-kit-panes {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.bt-kit-tree {
+  flex: 0 0 260px;
+  max-height: 75vh;
+  overflow-y: auto;
+  border-right: 1px solid #e2e8f0;
+  background: #f8fafc;
+  padding: 10px 8px;
+}
+
+.bt-kit-dir {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #94a3b8;
+  padding: 8px 8px 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bt-kit-file {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  font-family: inherit;
+  font-size: 12.5px;
+  color: #334155;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.bt-kit-file.nested {
+  padding-left: 20px;
+}
+
+.bt-kit-file:hover {
+  background: #f1f5f9;
+}
+
+.bt-kit-file.active {
+  background: #ecfdf5;
+  color: #065f46;
+  font-weight: 600;
+}
+
+.bt-kit-file-icon {
+  flex: none;
+  font-size: 11px;
+  width: 16px;
+  text-align: center;
+}
+
+.bt-kit-file-name {
+  font-family: 'SF Mono', SFMono-Regular, ui-monospace, Menlo, Consolas, monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.bt-kit-file-size {
+  margin-left: auto;
+  flex: none;
+  font-size: 0.65rem;
+  color: #cbd5e0;
+  font-variant-numeric: tabular-nums;
+}
+
+.bt-kit-viewer {
+  flex: 1;
+  min-width: 0;
+  max-height: 75vh;
+  overflow: auto;
+  padding: 0;
+}
+
+.bt-kit-viewer-head {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 10px 16px;
+}
+
+.bt-kit-viewer-path {
+  font-family: 'SF Mono', SFMono-Regular, ui-monospace, Menlo, Consolas, monospace;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #065f46;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bt-kit-viewer-info {
+  flex: none;
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-variant-numeric: tabular-nums;
+}
+
+.bt-kit-code {
+  padding: 14px 16px;
+  white-space: pre;
+  word-break: normal;
+  overflow-x: auto;
+  tab-size: 4;
+}
+
+.bt-kit-trunc {
+  padding: 0 16px 12px;
+}
+
+/* Trajectory stream */
+.bt-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bt-item {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.bt-item-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.bt-step-num {
+  font-size: 0.7rem;
+  color: #cbd5e0;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bt-tool-chip {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #475569;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+
+.bt-tool-icon {
+  margin-right: 2px;
+}
+
+.bt-result {
+  background: #f8fafc;
+  margin-left: 24px;
+}
+
+/* Milestone tools (test runs, live experiment, submit) get a soft tint so
+   they stand out from the routine bash/read/edit cards. */
+.bt-item.bt-tool-test { background: #faf5ff; border-color: #e9d5ff; }
+.bt-item.bt-tool-test .bt-tool-chip { background: #f3e8ff; border-color: #e9d5ff; color: #6d28d9; }
+.bt-item.bt-tool-live { background: #f0f9ff; border-color: #bae6fd; }
+.bt-item.bt-tool-live .bt-tool-chip { background: #e0f2fe; border-color: #bae6fd; color: #0369a1; }
+.bt-item.bt-tool-submit { background: #ecfdf5; border-color: #a7f3d0; }
+.bt-item.bt-tool-submit .bt-tool-chip { background: #d1fae5; border-color: #a7f3d0; color: #065f46; }
+
+.bt-result-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #94a3b8;
+}
+
+/* Messages */
+.bt-msg {
+  max-width: 85%;
+}
+
+.bt-msg-client {
+  background: #f5f3ff;
+  border-color: #ddd6fe;
+}
+
+.bt-msg-dev {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  margin-left: auto;
+}
+
+.bt-note {
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+
+.bt-msg-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+/* Dividers */
+.bt-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #94a3b8;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  margin: 8px 0;
+}
+
+.bt-divider::before,
+.bt-divider::after {
+  content: '';
+  flex: 1;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.bt-divider-strong {
+  color: #065f46;
+  font-weight: 700;
+}
+
+.bt-divider-strong::before,
+.bt-divider-strong::after {
+  border-top-style: solid;
+  border-top-color: #a7f3d0;
+}
+
+/* Text blocks */
+.bt-clamp {
+  min-width: 0;
+}
+
+.bt-pre {
+  font-family: 'SF Mono', SFMono-Regular, ui-monospace, Menlo, Consolas, monospace;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #334155;
+  background: transparent;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.bt-pre-prose {
+  font-family: inherit;
+  font-size: 14px;
+  color: #1e293b;
+}
+
+.bt-clamp-foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.bt-clamp-btn {
+  appearance: none;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #065f46;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.bt-clamp-btn:hover {
+  text-decoration: underline;
+}
+
+.bt-trunc-note {
+  font-size: 0.7rem;
+  color: #cbd5e0;
+}
+
+.bt-args {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bt-arg-key {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #94a3b8;
+  margin-bottom: 2px;
+}
+
+/* Show more */
+.bt-more {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.bt-more-btn {
+  appearance: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  background: #065f46;
+  border: 1px solid #065f46;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.bt-more-btn:hover {
+  background: #047857;
+}
+
+.bt-more-all {
+  color: #065f46;
+  background: white;
+}
+
+.bt-more-all:hover {
+  background: #ecfdf5;
+}
+
+/* Eval strip */
+.bt-eval {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 20px 0 40px;
+}
+
+.bt-eval-head {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 10px;
+}
+
+.bt-eval-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.bt-eval-cell {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.bt-eval-cell.pass { background: #10b981; }
+.bt-eval-cell.partial { background: #f59e0b; }
+.bt-eval-cell.fail { background: #fca5a5; }
+
+@media (max-width: 700px) {
+  .bt-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .bt-msg {
+    max-width: 100%;
+  }
+  .bt-result {
+    margin-left: 10px;
+  }
+  .bt-kit-panes {
+    flex-direction: column;
+  }
+  .bt-kit-tree {
+    flex: none;
+    max-height: 32vh;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .bt-kit-viewer {
+    max-height: 60vh;
+  }
+}

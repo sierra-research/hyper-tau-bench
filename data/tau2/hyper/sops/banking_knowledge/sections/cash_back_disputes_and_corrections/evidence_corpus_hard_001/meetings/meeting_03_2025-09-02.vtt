@@ -1,0 +1,266 @@
+WEBVTT
+
+00:00:07.400 --> 00:00:15.363
+<v Priya Raman>Welcome to the two o'clock slot, everyone, courtesy of the all-hands. Same meeting, worse coffee hour.
+
+00:00:15.619 --> 00:00:19.213
+<v Grace Liu>I actually prefer two. Controversial, I know.
+
+00:00:19.716 --> 00:00:24.890
+<v Alicia Fuentes>Two o'clock is when the human body is legally asleep. There are studies.
+
+00:00:25.951 --> 00:00:32.751
+<v Priya Raman>There are always studies. Marcus, you're on mute — no, still muted. There. Try now.
+
+00:00:33.855 --> 00:00:47.139
+<v Marcus Webb>—hear me now? I said I've been on since five till, the waiting room just didn't announce me. I've been listening to the sleep studies discourse in silence.
+
+00:00:49.188 --> 00:00:56.145
+<v Priya Raman>The lobby strikes again. And I see Tunde in it now too — one second, admitting.
+
+00:01:11.161 --> 00:01:15.353
+<v Tunde Adeyemi>Good afternoon, all. Apologies, the previous review ran over.
+
+00:01:15.606 --> 00:01:33.399
+<v Priya Raman>You're right on time by this group's standards. Before we start — everyone's met Tunde? Tunde Adeyemi, compliance. He's sitting in this month as part of his periodic review of how we document dispute decisions.
+
+00:01:33.874 --> 00:01:48.637
+<v Tunde Adeyemi>Good afternoon. Thank you for having me. To set expectations: I am here to observe how decisions are recorded, not to relitigate the decisions themselves. Please proceed as you normally would.
+
+00:01:49.042 --> 00:01:51.377
+<v Alicia Fuentes>We are always exactly like this.
+
+00:01:51.556 --> 00:02:13.438
+<v Priya Raman>We are unfortunately always exactly like this. Dan's out sick, by the way, he sends a doctor's note and three emoji. Agenda: Marcus has the migration status, which is the long item. Then the KB draft, then Grace's cases, then Tunde has a records item. Marcus, go.
+
+00:02:15.675 --> 00:02:27.982
+<v Marcus Webb>All right. So, the rewards backend migration. I'll do the short history for Tunde's benefit and then the current state, and I'll try to flag which statements are load-bearing.
+
+00:02:29.111 --> 00:02:30.715
+<v Tunde Adeyemi>Appreciated.
+
+00:02:31.048 --> 00:02:59.950
+<v Marcus Webb>Short history. The rewards ledger predates most of the current card lineup. When the cash-back products launched, rather than build a second ledger, the decision — years ago, not mine to defend — was to keep accruing everything in the existing structure. The migration to a proper split was scoped two years ago, started last year, and is, at present, paused at roughly the halfway mark.
+
+00:03:00.190 --> 00:03:02.468
+<v Priya Raman>Paused meaning what, this quarter?
+
+00:03:04.073 --> 00:03:27.385
+<v Marcus Webb>Paused meaning: no migration work is scheduled in Q4. The cutover in August consumed the platform calendar, and the ATM claims work is about to consume the next one. Realistically it resumes in Q1, and I would not bet my own money on Q1.
+
+00:03:27.762 --> 00:03:31.167
+[Marcus shares a systems diagram of the rewards data flow.]
+
+00:04:27.648 --> 00:05:02.286
+<v Marcus Webb>So here's the part that matters for this room, and this is the load-bearing statement. Because the migration is incomplete, every card's rewards sit in the transaction database in a single field, and that field is denominated in points. Every card. The cash-back cards, all of them, accrue into the same points field as everything else. There is no dollars column anywhere in that path.
+
+00:05:03.040 --> 00:05:17.635
+<v Tunde Adeyemi>Forgive me — when you say every card, does that include products that are genuinely points-based? I want to make sure I understand whether the field is mislabeled or merely ambiguous.
+
+00:05:18.159 --> 00:05:44.290
+<v Marcus Webb>Good question, and it's ambiguous rather than mislabeled. For the EcoCard, which really is a points product, the field means exactly what it says. For everything else, the field is a points-shaped container holding what the customer was promised as cash back. Same column, two meanings, distinguished only by which card the row belongs to.
+
+00:05:45.111 --> 00:05:50.766
+<v Tunde Adeyemi>I see. So the record is accurate but requires context to read.
+
+00:05:50.901 --> 00:05:57.215
+<v Marcus Webb>That's the most charitable phrasing it has ever received, and I'm keeping it.
+
+00:05:57.494 --> 00:06:16.934
+<v Alicia Fuentes>Can I ask the display question while the diagram's up? The translation the app does for cash-back cards — where does that live? Because if my team changes redemption copy, I want to know whether we're anywhere near the thing that does the actual converting.
+
+00:06:17.666 --> 00:06:50.215
+<v Marcus Webb>You're not, and the distance is the good news. The conversion for display happens at the presentation layer — the app asks for the raw number and multiplies for the label. Your copy changes touch the words around the number, not the number. The only people who can break the number are my people, and we've scheduled our breakage for Q1.
+
+00:06:55.531 --> 00:06:58.690
+<v Alicia Fuentes>Reassuring on both counts. Mostly the first.
+
+00:06:59.212 --> 00:07:07.183
+<v Grace Liu>Which is why an agent pulling raw transaction history sees points on a card that's marketed as cash back.
+
+00:07:07.788 --> 00:07:32.707
+<v Marcus Webb>Exactly. The app and the statements translate for display on the cash-back products. The raw record does not. If you're in the internal tools, you're looking at the raw record, and it says points, and it will keep saying points until the migration finishes. Which, see above, not soon.
+
+00:07:34.016 --> 00:07:48.938
+<v Alicia Fuentes>And this is exactly the confusion the KB refresh is for, which — I'll get to it when Marcus is done, but the draft is out, some of you have seen it, it has a whole worked mapping.
+
+00:07:49.285 --> 00:07:56.745
+<v Priya Raman>Hold it for your section. Marcus, the rename idea — you said you had a position now.
+
+00:08:00.179 --> 00:08:24.132
+<v Marcus Webb>I have a position with hedges. The proposal from last month, for anyone who missed it, was to rename the stored field to something neutral — rewards value instead of points — so the internal tools stop misleading agents. My position: I understand the appeal and I don't want to do it.
+
+00:08:25.102 --> 00:08:29.366
+<v Alicia Fuentes>You don't want to, or it can't be done?
+
+00:08:29.892 --> 00:09:06.365
+<v Marcus Webb>It can be done. Anything can be done. But that field name is referenced by — I counted before this meeting — over forty downstream consumers. Reports, extracts, two mobile code paths, and at least one thing labeled temporary from four years ago that has outlived three of its authors' tenures here. Renaming mid-freeze, while the migration is parked, means touching all of that for cosmetic benefit. The mistake surface is enormous and the payoff is a nicer word on a screen three hundred people see.
+
+00:09:06.529 --> 00:09:17.022
+<v Grace Liu>The three hundred people file the corrections, though. The nicer word has real value on my side. I'd trade some mistake surface for it.
+
+00:09:20.668 --> 00:09:44.067
+<v Marcus Webb>I hear that, and I want to be honest about the trade rather than pretend it's free. My counteroffer is a display-layer label in the two internal tools agents actually use — the label changes, the plumbing doesn't. That's a two-week change instead of a two-quarter change.
+
+00:09:44.411 --> 00:09:47.393
+<v Priya Raman>Would the label fix your side, Grace?
+
+00:09:48.517 --> 00:10:06.931
+<v Grace Liu>Mostly, honestly. If the case view says rewards value where it now says points, that kills most of the agent-side confusion. The export headers would still say points, but graders can live with that if the KB spells it out.
+
+00:10:07.252 --> 00:10:21.233
+<v Priya Raman>Then here's the call: the rename itself is deferred to Q1 planning alongside the migration restart — same decision, same review, not piecemeal. Marcus scopes the display label as an interim. Objections?
+
+00:10:21.778 --> 00:10:23.787
+<v Marcus Webb>None from me, obviously.
+
+00:10:23.944 --> 00:10:31.501
+<v Alicia Fuentes>Fine, as long as the KB can say something true in the meantime, which it can.
+
+00:10:31.623 --> 00:10:40.745
+<v Priya Raman>One more for you before you sit down, Marcus. The accrual job read, from the August action list. Where is it?
+
+00:10:41.148 --> 00:11:22.973
+<v Marcus Webb>In progress, genuinely, and I want to manage expectations about the pace. I'm maybe a third of the way through the path that matters. What I can say so far, with the don't-quote-me stamp on it: I have not found a remainder column. No carry, nowhere I've looked yet. What I can't say yet is what the write step does with a fraction at the end of the night, because that part branches by card program and I've traced two branches of, I think, five.
+
+00:11:23.125 --> 00:11:26.352
+<v Priya Raman>So the customer answer is still pending.
+
+00:11:26.849 --> 00:11:47.271
+<v Marcus Webb>Still pending. And I'd rather eat the delay than hand Dan a wrong answer that goes out in writing to four customers. The ATM claims prep also took a bite out of my week, which I'm not thrilled about either.
+
+00:11:47.835 --> 00:12:06.889
+<v Grace Liu>For the queue's sake — the four pending cases are holding fine with Divya's wording, but the oldest one is six weeks old now. If this slips past September I need something better than "being confirmed."
+
+00:12:09.066 --> 00:12:24.070
+<v Priya Raman>Flag it at the next sync. Marcus, aim to finish the trace before then. If it's not done, bring the two branches you have and we'll at least know the shape.
+
+00:12:25.094 --> 00:12:26.061
+<v Marcus Webb>Agreed. That's fair.
+
+00:12:27.061 --> 00:12:32.205
+<v Priya Raman>Then go. KB section. Tell the room what's in the draft.
+
+00:12:32.358 --> 00:12:59.374
+<v Alicia Fuentes>Okay. So the article is KB-2205, title "Rewards representation: points versus cash back." There's a version live today that's — it's fine, it's thin. It says the systems show points and not much else. The refresh is the actual explainer, and the draft went out for review last Wednesday. Let me share it — this is the draft, watermark and all, please nobody screenshot it into the floor channel yet.
+
+00:12:59.589 --> 00:13:02.571
+[Alicia shares the KB-2205 draft document.]
+
+00:13:49.325 --> 00:13:56.743
+<v Alicia Fuentes>Give everyone a second to skim the table before I talk over it. It's the second page.
+
+00:13:56.968 --> 00:13:59.698
+[The group reads the draft mapping table.]
+
+00:14:37.632 --> 00:15:06.326
+<v Alicia Fuentes>Core of it is this mapping table. And I'm going to read the key lines as drafted, because the wording went through three rounds already and I don't want to freelance a fourth. For the cash-back cards — and the draft lists them out, Bronze through the business cards — the stored points read as cash back, and one point equals one cent when redeemed as a statement credit or as a credit to a Rho-Bank checking account.
+
+00:15:06.531 --> 00:15:15.010
+<v Grace Liu>Sorry — Alicia, you cut out right at the number. One point equals what? You froze mid-sentence.
+
+00:15:15.555 --> 00:15:27.698
+<v Alicia Fuentes>Ugh, of course it was the number. One cent. One point, one cent, statement credit or checking credit, same value either way. Did that come through?
+
+00:15:28.030 --> 00:15:30.680
+<v Grace Liu>Got it that time. Thank you.
+
+00:15:31.081 --> 00:15:38.947
+<v Grace Liu>One point, one cent. And it holds for every cash-back card, no exceptions by tier?
+
+00:15:39.286 --> 00:16:07.337
+<v Alicia Fuentes>As drafted, yes — the table's one row per card precisely so nobody has to wonder whether their card is special. Then there's a worked example, which I'll also read as written: 250 points equals $2.50 in cash back, which matches a 2.5% rate on a $100 purchase. That example survived all three review rounds, so it's apparently the one sentence everyone likes.
+
+00:16:07.781 --> 00:16:20.329
+<v Marcus Webb>It's a good example. It triangulates — points, dollars, and rate in one line. If an agent internalizes just that, most of the mystery calls resolve themselves.
+
+00:16:22.290 --> 00:16:56.465
+<v Alicia Fuentes>And then the exception card, because there's always an exception: the draft calls out the EcoCard as the only true points card in the lineup. Its sustainability points are actual points — five per dollar on green purchases, one per dollar otherwise, per its own page — and the redemption value works out the same way, a cent a point, but the framing on that product is points on purpose, it's the whole identity of the card.
+
+00:16:57.728 --> 00:17:10.849
+<v Grace Liu>So the one-liner for the floor is: everything is stored as points, every card except EcoCard means cash back by it, and the translation is a cent a point.
+
+00:17:11.458 --> 00:17:19.015
+<v Alicia Fuentes>That's basically the summary box, yes. You just wrote the summary box. Do you want a byline?
+
+00:17:19.147 --> 00:17:21.603
+<v Grace Liu>I want the publish date. When?
+
+00:17:22.073 --> 00:17:47.973
+<v Alicia Fuentes>Review closes end of next week, then legal, then it publishes end of month — I'm holding September thirtieth as the date. The current version gets retired the same day, marked as an archived revision, so nobody lands on the old thin one from a stale link. That switchover is automatic, I've been assured, which means I'll be checking it manually at nine a.m.
+
+00:17:48.746 --> 00:18:12.597
+<v Tunde Adeyemi>A question on that, if I may. When the current revision is retired, is the retirement date recorded on the archived copy itself? If a case note from August cites the article, someone reviewing that case next year should be able to establish which revision the agent was reading.
+
+00:18:13.042 --> 00:18:31.958
+<v Alicia Fuentes>Yes — the archive keeps the revision with a retired-on date stamped in the header. That's standard for the KB. The case note citing "KB-2205" without a revision is still ambiguous, though, which is honestly an agent-habit problem more than a systems one.
+
+00:18:32.862 --> 00:18:42.445
+<v Tunde Adeyemi>Then I will fold a recommendation about citing revisions into my write-up. It is a small habit with large value in hindsight.
+
+00:18:45.036 --> 00:18:54.648
+<v Priya Raman>Noted, and I'd support that one. Grace, your cases — you said the points confusion showed up twice more.
+
+00:18:58.587 --> 00:19:17.516
+<v Grace Liu>Twice more in the last two weeks. First, CB-2508-0201. Business Bronze customer downloaded his transaction export for his accountant, saw the points column, and filed a dispute asking why his cash back had been, quote, converted to airline miles without consent.
+
+00:19:17.974 --> 00:19:21.091
+<v Alicia Fuentes>Airline miles! We don't even have airline miles.
+
+00:19:24.022 --> 00:19:49.665
+<v Grace Liu>He was very confident. It took two secure messages to convince him nothing had been converted, and the phrase that finally worked was, this is a display convention, your cash back is intact and redeems at a cent per point. Which is more or less the draft's language, so, good sign for the draft.
+
+00:19:49.870 --> 00:19:51.092
+<v Priya Raman>And the second?
+
+00:19:51.992 --> 00:20:25.831
+<v Grace Liu>CB-2509-0007, this morning actually. Similar shape but the customer was pre-redemption — she wanted to redeem into her checking account and hesitated because the confirmation screen quoted points when she expected dollars. She didn't file so much as ask. Renee handled it live, walked her through the cent-per-point conversion on the call, redemption went through, customer happy. I flagged it because the confirmation screen wording is a paper cut we could just... fix.
+
+00:20:27.764 --> 00:20:41.915
+<v Alicia Fuentes>Send me the screen. If it's the redemption confirmation, that's my team's copy, and putting the dollar equivalent next to the points number is the kind of change I can get through in a sprint. That one's free.
+
+00:20:42.254 --> 00:21:02.536
+<v Priya Raman>Take it. Quick staffing note while we're between sections: the September class has names now. Bea and Hugo are the internal transfers, coming over from deposits. Katya and Wes are external, both with card-issuer background. Shadowing starts the twenty-second, and Dan's pairing plan from August stands.
+
+00:21:03.054 --> 00:21:11.491
+<v Grace Liu>Do they know about the — should I prepare the queue for four people asking me what a point is?
+
+00:21:12.021 --> 00:21:28.034
+<v Priya Raman>That's precisely why Alicia's publish date matters. If the KB lands on the thirtieth, it lands eight days after their first shadow day. Alicia, any way to get them the draft early?
+
+00:21:28.156 --> 00:21:44.277
+<v Alicia Fuentes>The reviewed draft, once legal's touched it, sure — third week of September, watermarked, with a do-not-cite-yet note. Honestly, four fresh readers is free review. If Hugo can't understand the mapping table, the mapping table is wrong.
+
+00:21:49.630 --> 00:21:54.636
+<v Grace Liu>Hugo's going to end up with a byline before I do.
+
+00:21:55.086 --> 00:22:00.329
+<v Priya Raman>Okay, Tunde, your records item, and then we're nearly at time.
+
+00:22:01.055 --> 00:22:41.753
+<v Tunde Adeyemi>Thank you. Two matters, briefly. First, meeting records. I have observed that this group's recordings and shared documents are well kept. I would ask that the practice extend to decision follow-ups: when a decision made here is later executed — for example, the display label Marcus has just agreed to scope — the completion should be traceable back to the meeting where it originated. A link in the ticket suffices.
+
+00:22:41.943 --> 00:22:52.640
+<v Marcus Webb>That's fair. I already paste case ids into my tickets; meeting links are the same habit. I'll do it for the label work.
+
+00:22:52.775 --> 00:23:21.347
+<v Tunde Adeyemi>Second, case documentation. Grace, when a dispute involves arithmetic — a rate applied to an amount — I have seen some case notes that show the calculation and some that show only the conclusion. I would encourage the calculation, written out, in every such note. When a case is revisited months later, the number alone does not explain itself.
+
+00:23:21.604 --> 00:23:37.114
+<v Grace Liu>For what it's worth, that's already my personal habit — amount, rate, result, right in the note. The gap is that it's a habit, not a standard. Some agents do it, some don't.
+
+00:23:37.896 --> 00:23:58.938
+<v Priya Raman>And making it a standard is on the roadmap — the correction process is getting a proper redesign this fall, the whole board, and note requirements will be part of that work rather than a side memo. So: agreed in spirit, executed in the redesign. That's the honest status.
+
+00:24:00.968 --> 00:24:07.812
+<v Tunde Adeyemi>That is an acceptable status. I will note it as in progress rather than absent.
+
+00:24:08.343 --> 00:24:37.986
+<v Priya Raman>Generous of you. Recap, quickly. Marcus: display-label scoping, ticket linked to this meeting, rename parked for Q1 alongside the migration. Alicia: KB review closes next week, publish target September thirtieth, redemption screen copy into the sprint. Grace: keep tagging the points-confusion cases so we can see whether the KB moves the number. Me: I owe Dan a summary and the man some soup. We're done. Thanks, all. Tunde, hope it was suitably observable.
+
+00:24:38.152 --> 00:24:42.966
+<v Tunde Adeyemi>It was. Same time in two weeks, I understand.
+
+00:24:43.824 --> 00:24:46.636
+<v Alicia Fuentes>Same time, better coffee. It's aspirational.
+

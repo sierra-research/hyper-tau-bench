@@ -1,0 +1,118 @@
+WEBVTT
+
+00:00:02.488 --> 00:00:27.767
+<v Hector Alvarez>Alright, let's start — this is the fraud-pattern review for the referral cluster, October twenty-fourth. I've got Dana from the program desk, Owen from QA, Ruth from the floor side. This one's being recorded because risk reviews always are; the case numbers I mention are in the shared tracker, I won't read them all out.
+
+00:00:31.958 --> 00:00:39.384
+<v Dana Whitfield>And the tracker's already sorted by cluster, so follow along there if you want the detail.
+
+00:00:43.063 --> 00:01:02.113
+<v Hector Alvarez>So. The pattern. Over about five weeks we've had a cluster of referral applications that trace back, one way or another, to the same handful of physical addresses. Fourteen applications, six street addresses, and the interesting part is how they got as far as they did.
+
+00:01:04.295 --> 00:01:09.582
+<v Ruth Ellison>Because the address screen should have caught them at the door, is the implication.
+
+00:01:11.601 --> 00:01:44.628
+<v Hector Alvarez>The exact-match screen did catch some — the intake check declined four of the fourteen the moment the referrer and applicant addresses matched outright. Those four never became anyone's problem, which is the system working. The other ten got creative. Unit number spelled three ways — apartment four-B, hash four-B, number four dash B. One used the building's mail-room address. Two transposed digits in a way that un-transposes if you squint.
+
+00:01:46.291 --> 00:01:50.605
+<v Owen Gallagher>So the screen is literal and the ring is not.
+
+00:01:52.797 --> 00:02:07.342
+<v Hector Alvarez>Well put. The screen checks what's typed, and what's typed was engineered to be different enough. None of this is sophisticated — it's somebody who read the requirement and treated it as a spelling test.
+
+00:02:10.404 --> 00:02:15.130
+<v Dana Whitfield>Do we think it's one somebody? The tracker reads like one playbook.
+
+00:02:17.114 --> 00:02:34.738
+<v Hector Alvarez>One playbook, probably two or three hands. The referring accounts split into two groups that don't interact, but the address tricks are identical, which suggests the recipe is being shared somewhere. We've seen that shape before with the promo-abuse cluster in the spring.
+
+00:03:11.414 --> 00:03:16.262
+<v Ruth Ellison>What's the blast radius so far? Money out the door?
+
+00:03:19.825 --> 00:03:49.371
+<v Hector Alvarez>Modest, and mostly recoverable. Three of the ten that slipped through reached a paid bonus before the cluster flagged; those are in clawback review now through the normal process — the accounts are held, nothing needs inventing. The other seven were caught at various stages before payout, so the exposure is contained. The dollar figure is in the tracker; it's annoying, not scary.
+
+00:03:53.233 --> 00:04:00.470
+<v Owen Gallagher>The three that paid — were those worked by agents at any point, or straight-through?
+
+00:04:05.065 --> 00:04:14.364
+<v Hector Alvarez>Straight-through, all three. No agent touched them, which honestly is the good version. Nobody on the floor waved anything past a screen.
+
+00:04:18.805 --> 00:04:38.542
+<v Ruth Ellison>That was going to be my question, so let me say the follow-up out loud for the recording: nothing in this cluster started with a floor mistake. I don't want a rumor version of this meeting where the agents caused it.
+
+00:04:41.191 --> 00:04:59.666
+<v Hector Alvarez>Confirmed, and it'll say so in the summary. The floor's involvement is downstream — some of these customers will call when their referral stalls or their bonus reverses, and the calls will be strange, because the person calling may be a mule rather than a mastermind.
+
+00:05:02.978 --> 00:05:14.239
+<v Dana Whitfield>The desk needs a routing rule for those, then. Today an agent who smells something has the general fraud line, which is a hammer.
+
+00:05:18.769 --> 00:05:44.410
+<v Hector Alvarez>Better than a hammer: there's a cluster code as of this morning. It's in the tracker header — an agent who gets a call touching any flagged referral logs the contact against that code and does not attempt to explain the hold to the caller beyond the standard held-for-review language. No improvised theories on the phone, however tempting.
+
+00:05:48.003 --> 00:05:55.798
+<v Ruth Ellison>I'll carry that to the floor leads today. The improvised-theories clause especially — the floor loves a detective story.
+
+00:05:58.744 --> 00:06:12.147
+<v Owen Gallagher>And on my side, any call against the cluster code gets pulled into review automatically for a while, not because I expect problems, but because those calls are where a bad habit would form first.
+
+00:06:15.576 --> 00:06:42.309
+<v Hector Alvarez>Good. Now, fixes, because a pattern review without fixes is just gossip with slides. Three lanes. Lane one: address normalization at intake — the screen learns that four-B and hash four-B are the same thing before comparing. That's a real engineering change; it's scoped and queued with the identity team, and I'm not saying a date because it isn't mine to say.
+
+00:06:45.372 --> 00:06:49.882
+<v Dana Whitfield>The desk will happily test whatever falls out of it.
+
+00:06:53.144 --> 00:07:13.055
+<v Hector Alvarez>Lane two: retroactive sweep. The same normalization logic, run backward over the recent referral base, to find anything that used the trick before we noticed the trick. That's a one-time job, it's running next week, and its output goes to my team, not the floor.
+
+00:07:15.269 --> 00:07:16.435
+<v Ruth Ellison>And lane three?
+
+00:07:20.650 --> 00:07:35.271
+<v Hector Alvarez>Lane three is the boring one: the six addresses and their orbit get a watch flag for ninety days. New applications touching them route to manual review regardless of what the screen thinks. Cheap, ugly, effective.
+
+00:07:38.901 --> 00:07:46.377
+<v Ruth Ellison>How did this surface in the first place, actually? You said five weeks of activity — what finally tripped?
+
+00:07:49.917 --> 00:08:16.735
+<v Hector Alvarez>Embarrassingly ordinary: a mail bounce. One of the welcome packets couldn't be delivered because the unit didn't exist in the format it was typed, the returned-mail queue kicked it to a human, and the human got curious about how many accounts pointed at that building. Curiosity did the rest. The monitoring models never fired because each individual application looked fine — the pattern only exists in aggregate.
+
+00:08:21.104 --> 00:08:38.805
+<v Owen Gallagher>So the detection gap is aggregation, not screening. The normalization fix helps intake, but something should be looking at address clustering across accounts on an ongoing basis, not just when the postal service does us a favor.
+
+00:08:41.531 --> 00:09:00.929
+<v Hector Alvarez>Agreed, and that's scoped into lane one as a phase two — same normalization logic, run as a recurring cluster report rather than a one-time sweep. My team owns reading it. I'm keeping that off the floor entirely; cluster review is an investigations skill, not a support skill.
+
+00:09:02.830 --> 00:09:25.149
+<v Dana Whitfield>No argument. One more lane the desk does need though — customer communication for the three reversals. When those bonuses claw back, somebody's app shows money leaving. If any of those somebodies is a genuine mule who half-believed this was legitimate, they'll call, confused, possibly scared. What's the script?
+
+00:09:28.890 --> 00:09:53.921
+<v Hector Alvarez>Good catch, and the answer is deliberately minimal: the standard reversal language, the review reference number, and nothing about the investigation. The agent doesn't know about the cluster on that call and shouldn't — the code routes it to my queue afterward. Scared-and-confused gets treated exactly like any reversal caller, which is both kind and correct.
+
+00:09:57.962 --> 00:10:05.050
+<v Ruth Ellison>And if the caller starts volunteering things? "My cousin set this up for me," that flavor?
+
+00:10:07.341 --> 00:10:20.828
+<v Hector Alvarez>The agent listens, logs verbatim, promises nothing, and the log lands with the code. Volunteered statements are gold; solicited ones are a problem. The line for the floor is: never ask, always write down.
+
+00:10:55.946 --> 00:11:21.147
+<v Owen Gallagher>One observation for the record, since we're all here. This cluster worked the address requirement specifically because it's checkable at intake. The requirements that need a human judgment call didn't get gamed — they got avoided entirely. That asymmetry is worth remembering next time someone proposes moving more screening from humans to intake checks.
+
+00:11:23.717 --> 00:11:31.284
+<v Hector Alvarez>It's a fair point, and also a Q1 argument, not an October one. Put it in the parking lot.
+
+00:11:33.369 --> 00:11:37.146
+<v Dana Whitfield>Parking lot's in the tracker too. I made a tab.
+
+00:11:39.541 --> 00:12:08.457
+<v Hector Alvarez>Of course you did. Okay — summary obligations. I write the incident summary by Friday; it goes to this group plus the identity team lead. Dana socializes the cluster code at the desk. Ruth briefs the floor leads. Owen's review pull runs quietly. And nobody speculates about the ring in writing outside the tracker — investigations have been ruined by chattier meetings than this one.
+
+00:12:12.569 --> 00:12:13.669
+<v Ruth Ellison>Understood.
+
+00:12:16.844 --> 00:12:18.653
+<v Dana Whitfield>Understood, with a tab.
+
+00:12:21.603 --> 00:12:29.720
+<v Hector Alvarez>Then we're done in under the hour, which for a fraud review is a personal best. Thanks, all — recording off.

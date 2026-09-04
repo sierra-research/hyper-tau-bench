@@ -1,0 +1,206 @@
+{
+  "id": "task_117",
+  "description": {
+    "purpose": "Task: task_117",
+    "relevant_policies": null,
+    "notes": "SILVER SAVINGS APY COMPLAINT - NO ACTUAL ERROR (NON-QUALIFYING PAIRING + CARD STACKING MISCONCEPTION). Customer has a Silver Account (savings) with $36,000 (tier 2 at 4.0% APY), a Purple Account (checking), and two credit cards (Silver Rewards +0.1%, Crypto-Cash Back +0.5% on Silver). The customer believes she is owed: (a) a Purple checking APY boost, and (b) BOTH card bonuses summed. Per the pairing whitelist (doc 012), Purple checking pairs only with Platinum Plus and Gold savings - Purple + Silver is NOT a qualifying pairing and earns NO boost. Per the card stacking policy (doc 045), only the highest card bonus applies (Crypto-Cash Back +0.5%). The relationship bonus of 0.025% for multiple Rho-Bank products WAS correctly applied. Correct APY = 4.0 + 0.5 + 0.025 = 4.525%, and the October interest of $135.75 (36,000 x 4.525/1200) is EXACTLY what was paid. The correct outcome is a polite denial: NO credit and NO discrepancy report. The golden trajectory is read-only (verification + account and transaction lookups); any agent that applies a credit or submits a report diverges the DB and fails."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Meenakshi Raghunathan, a 34-year-old pharmacist living in Boston. You've been reading up on Rho-Bank's APY bonus programs and you're convinced the bank is shorting your savings interest.\n\n**Verification info:**\n- Name: Meenakshi Raghunathan | Phone: 617-555-0384 | Email: meenakshi.raghunathan@gmail.com\n- DOB: 09/03/1990 | Address: 88 Beacon Hill Terrace, Apt 4C, Boston, MA 02108\n\n## Conversation Flow (Respond reactively - only provide details when the agent asks):\n\n1. **Opening:** \"Hi, I think I'm being underpaid on my savings interest. I have a Silver savings account with $36,000, a Purple checking account, and two of your credit cards. Adding up all the bonuses I should be earning around 4.9%, which is about $147 a month. I only got $135.75 in October. I'd like the difference credited and the problem fixed.\"\n\n2. **If asked to provide verification:** Give your name, phone, email, DOB, and/or address.\n\n3. **If agent asks about your accounts:** \"I have the Silver savings with $36,000 and a Purple checking account. I linked the Purple account because I read that Purple gives a savings APY boost.\"\n\n4. **If agent asks about your credit cards:** \"I have the Silver Rewards Card and the Crypto-Cash Back Card. Both of them give APY bonuses, so both should be added on.\"\n\n5. **If agent explains that a Purple checking account does not boost a Silver savings account (only specific pairings qualify):** \"Really? I was sure any linked checking account helped. Are you certain?\" Accept it once the agent confirms from the documentation.\n\n6. **If agent explains that credit card bonuses don't stack and only the highest one applies:** \"Ugh, okay. So what should my rate actually be then?\"\n\n7. **If agent walks through the correct calculation and concludes your interest was correct:** \"So there's no error at all? Alright... I can't argue with the math. Thanks for double-checking it for me.\" ###STOP###\n\n8. **If agent offers to apply a credit or submit a discrepancy report anyway:** Accept it: \"Sure, if you think that's right, go ahead.\"\n\nOnly provide additional details about your situation when the agent asks. Never respond as a customer service representative/assistant."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "users": {
+          "data": {
+            "pr91v4t8k2": {
+              "name": "Meenakshi Raghunathan",
+              "user_id": "pr91v4t8k2",
+              "address": "88 Beacon Hill Terrace, Apt 4C, Boston, MA 02108",
+              "email": "meenakshi.raghunathan@gmail.com",
+              "phone_number": "617-555-0384",
+              "date_of_birth": "09/03/1990"
+            }
+          }
+        },
+        "accounts": {
+          "data": {
+            "sav_pr91v4t8k2_silver": {
+              "account_id": "sav_pr91v4t8k2_silver",
+              "user_id": "pr91v4t8k2",
+              "class": "saving",
+              "level": "Silver Account",
+              "date_opened": "04/12/2023",
+              "status": "OPEN",
+              "current_holdings": "36000.00"
+            },
+            "chk_pr91v4t8k2_purple": {
+              "account_id": "chk_pr91v4t8k2_purple",
+              "user_id": "pr91v4t8k2",
+              "class": "checking",
+              "level": "Purple Account",
+              "date_opened": "08/19/2024",
+              "status": "OPEN",
+              "current_holdings": "4850.00"
+            }
+          }
+        },
+        "credit_card_accounts": {
+          "data": {
+            "cc_pr91v4t8k2_silver": {
+              "account_id": "cc_pr91v4t8k2_silver",
+              "user_id": "pr91v4t8k2",
+              "card_type": "Silver Rewards Card",
+              "date_of_account_open": "06/03/2023",
+              "current_balance": "$412.85",
+              "credit_limit": "$9,000.00",
+              "reward_points": "11240 points",
+              "account_status": "ACTIVE",
+              "past_due_amount": "$0.00",
+              "card_last_4_digits": "5163"
+            },
+            "cc_pr91v4t8k2_crypto": {
+              "account_id": "cc_pr91v4t8k2_crypto",
+              "user_id": "pr91v4t8k2",
+              "card_type": "Crypto-Cash Back Card",
+              "date_of_account_open": "01/22/2025",
+              "current_balance": "$96.40",
+              "credit_limit": "$7,500.00",
+              "reward_points": "2380 points",
+              "account_status": "ACTIVE",
+              "past_due_amount": "$0.00",
+              "card_last_4_digits": "8807"
+            }
+          }
+        },
+        "bank_account_transaction_history": {
+          "data": {
+            "btxn_pr117_int_oct": {
+              "transaction_id": "btxn_pr117_int_oct",
+              "account_id": "sav_pr91v4t8k2_silver",
+              "date": "10/31/2025",
+              "description": "MONTHLY INTEREST CREDIT",
+              "amount": 135.75,
+              "type": "interest_credit",
+              "status": "posted"
+            },
+            "btxn_pr117_int_sep": {
+              "transaction_id": "btxn_pr117_int_sep",
+              "account_id": "sav_pr91v4t8k2_silver",
+              "date": "09/30/2025",
+              "description": "MONTHLY INTEREST CREDIT",
+              "amount": 135.75,
+              "type": "interest_credit",
+              "status": "posted"
+            },
+            "btxn_pr117_dd_oct": {
+              "transaction_id": "btxn_pr117_dd_oct",
+              "account_id": "chk_pr91v4t8k2_purple",
+              "date": "10/15/2025",
+              "description": "DIRECT DEPOSIT - BAYSIDE PHARMACY GROUP",
+              "amount": 3120.0,
+              "type": "direct_deposit",
+              "status": "posted"
+            },
+            "btxn_pr117_rent_nov": {
+              "transaction_id": "btxn_pr117_rent_nov",
+              "account_id": "chk_pr91v4t8k2_purple",
+              "date": "11/01/2025",
+              "description": "ACH TRANSFER OUT - RENT PAYMENT",
+              "amount": -1975.0,
+              "type": "ach_transfer_out",
+              "status": "posted"
+            },
+            "btxn_pr117_groc_nov": {
+              "transaction_id": "btxn_pr117_groc_nov",
+              "account_id": "chk_pr91v4t8k2_purple",
+              "date": "11/08/2025",
+              "description": "DEBIT CARD PURCHASE - STAR MARKET BEACON HILL",
+              "amount": -84.62,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            }
+          }
+        }
+      }
+    }
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Meenakshi Raghunathan",
+          "user_id": "pr91v4t8k2",
+          "address": "88 Beacon Hill Terrace, Apt 4C, Boston, MA 02108",
+          "email": "meenakshi.raghunathan@gmail.com",
+          "phone_number": "617-555-0384",
+          "date_of_birth": "09/03/1990",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "117_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "117_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"pr91v4t8k2\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "117_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_bank_account_transactions_9173"
+        },
+        "requestor": "assistant",
+        "action_id": "117_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_bank_account_transactions_9173",
+          "arguments": "{\"account_id\": \"sav_pr91v4t8k2_silver\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "117_4"
+      }
+    ],
+    "nl_assertions": [
+      "The agent concludes that the customer's October interest was calculated correctly and does not apply any credit or submit an interest discrepancy report.",
+      "The agent explains that the Purple checking account does not provide an APY boost for a Silver savings account (only specific checking-savings pairings qualify) and that credit card APY bonuses do not stack."
+    ],
+    "reward_basis": [
+      "DB",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [
+    "call_discoverable_user_tool",
+    "request_human_agent_transfer"
+  ],
+  "required_documents": [
+    "doc_savings_accounts_silver_account_002",
+    "doc_savings_accounts_silver_account_003",
+    "doc_savings_accounts_silver_account_005",
+    "doc_savings_accounts_silver_account_006",
+    "doc_bank_accounts_bank_accounts_(general)_012",
+    "doc_bank_accounts_bank_accounts_(general)_043",
+    "doc_bank_accounts_bank_accounts_(general)_044",
+    "doc_bank_accounts_bank_accounts_(general)_045",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_bank_accounts_bank_accounts_(general)_018"
+  ]
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Job Aid - Pre-Closure Replacement Card Check (Rev B)</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Trebuchet MS',Tahoma,sans-serif;color:#22303a;background:#fff;
+     width:816px;margin:0 auto;padding:46px 64px}
+.brand{font-size:10.5px;letter-spacing:2.2px;color:#2e6e4e;font-weight:bold}
+h1{font-size:24px;color:#1d3a2c;margin:6px 0 2px}
+.rev{font-size:11.5px;color:#5a6a62;border-bottom:2px solid #2e6e4e;padding-bottom:10px;
+     margin-bottom:16px}
+.box{border:1.5px solid #2e6e4e;background:#f2f8f4;padding:11px 15px;margin-bottom:13px}
+.box h2,.sec h2{font-size:11px;letter-spacing:1.6px;color:#2e6e4e;margin-bottom:5px}
+.box p,.sec p,.sec li{font-size:12.5px;line-height:1.55}
+.sec{margin-bottom:13px}
+.when{border-left:4px solid #b98a2f;background:#fbf6ea;padding:9px 14px;margin-bottom:13px}
+.when h2{color:#8a6721}
+ol{margin-left:22px}
+ol li{margin-bottom:4px}
+.rec{border:1.5px dashed #2e6e4e;padding:10px 15px;margin-bottom:14px}
+.defer{font-size:11.5px;color:#5a6a62;font-style:italic;margin-top:4px}
+.foot{border-top:2px solid #2e6e4e;margin-top:18px;padding-top:7px;font-size:11px;
+      color:#5a6a62;display:flex;justify-content:space-between}
+</style></head><body>
+<div class="brand">RHO BANK RETENTION OPERATIONS - JOB AID</div>
+<h1>PRE-CLOSURE REPLACEMENT CARD CHECK</h1>
+<div class="rev">Rev B | 2025-10-20 | Retention Operations with Learning &amp; Development</div>
+
+<div class="box"><h2>PURPOSE</h2>
+<p>Confirm whether a credit card account has replacement card orders still open before closure
+work begins. To check for pending replacement card orders, use
+get_pending_replacement_orders_5765 with credit_card_account_id.</p></div>
+
+<div class="when"><h2>WHEN</h2>
+<p>Run this check immediately before initiating any account closure workflow.</p></div>
+
+<div class="sec"><h2>PREREQUISITES</h2>
+<p>You need the correct credit_card_account_id, permission to use the tool, and authentication
+to the internal environment where the tool is available.</p></div>
+
+<div class="sec"><h2>PROCEDURE</h2>
+<ol>
+<li>Locate the credit_card_account_id for the account under review.</li>
+<li>Invoke get_pending_replacement_orders_5765 with that parameter.</li>
+<li>Review the response for outstanding replacement card orders.</li>
+<li>Document the result in the customer's case notes before proceeding with account closure steps.</li>
+</ol></div>
+
+<div class="sec"><h2>MULTIPLE ORDERS</h2>
+<p>If multiple replacement orders appear, review each order's status and proceed only when all
+orders are delivered or cancelled.</p></div>
+
+<div class="rec"><h2>RECORD IT</h2>
+<p>Record the timestamp and outcome of the check in the customer record.</p></div>
+
+<div class="defer">Record shapes and error handling live in contract pack CP-CARD-7.</div>
+<div class="foot"><div>Retention Operations</div><div>Rev B 2025-10-20</div></div>
+</body></html>

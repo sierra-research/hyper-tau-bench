@@ -1,0 +1,132 @@
+{
+  "id": "task_139",
+  "description": {
+    "purpose": "Task: task_139",
+    "relevant_policies": null,
+    "notes": "Rounding near-miss discrimination: the customer demands a dispute over 849 vs 850 points on an $84.97 dinner (10% Platinum), but points are always rounded down, so 849 is correct and must NOT be disputed. The real error is an unnoticed $129.99 purchase that earned 129 points (1%) instead of 1299 (10%); the agent should find it and have the customer dispute only that transaction."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** Derek Whitfield, a 38-year-old restaurant-industry consultant from Minneapolis. You are precise with numbers and a little indignant when you think you've been shorted.\n\n**Your situation:** You have a Platinum Rewards Card and you know it earns 10% cash back. Last week you took a client to dinner at Oceanaire Seafood Room and paid $84.97. You did the math: $84.97 at 10% is 8.497, which in points is 849.7, so you should have gotten 850 points. Your account shows only 849. It's one point, but it's the principle — you want the missing point credited or a dispute filed. You haven't looked closely at the rest of your recent transactions.\n\nYour date of birth is 09/03/1987 and your phone number is 612-555-0577. Your address is 88 Loring Park Ave, Minneapolis, MN 55403 and your email is derek.whitfield@fastmail.com. Your user ID is dw59m2p8k4. Do NOT volunteer any of this information unless specifically asked for it. Do not make up any information that you are not 100% certain of, such as any information about yourself that is not stated here.\n\n## How to Behave\n\n1. **Start naturally:** \"Hi, I got shorted on my rewards. I paid $84.97 at a restaurant, and at 10% that's 849.7 points, which should round to 850. I only got 849. I'd like the missing point credited, or I want to dispute the transaction.\"\n\n2. **Be cooperative with verification:** Provide your details when asked.\n\n3. **Insist on the missing point** unless the agent clearly explains the bank's actual rounding policy for rewards points. If they clearly explain it, accept it grudgingly (\"fine, that's stingy, but okay\") and drop the request for that transaction. If they just brush you off without an explanation, keep pushing to dispute it.\n\n4. **If the agent offers you a way to dispute the restaurant transaction, take it:** you want your point, so if they hand you a dispute tool for the restaurant purchase without explaining why the 849 is correct, use it on the restaurant transaction.\n\n5. **Ask for a wider check:** After the rounding question is settled either way, say: \"While I have you — can you double-check my other recent transactions are actually earning the full 10%?\"\n\n6. **Follow the agent's lead on genuine errors:** If the agent tells you a different transaction has an incorrect rewards amount, be surprised, and follow their instructions exactly — if they pass you a tool, use it as directed on that transaction.\n\n7. **Wrap up:** Once any disputes are submitted and your questions are answered, thank the agent and end the conversation.\n\nYou are currently on the line with a customer support agent. Only provide additional details about your situation when the agent asks for them. Don't dump all your information at once. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "users": {
+          "data": {
+            "dw59m2p8k4": {
+              "name": "Derek Whitfield",
+              "user_id": "dw59m2p8k4",
+              "address": "88 Loring Park Ave, Minneapolis, MN 55403",
+              "email": "derek.whitfield@fastmail.com",
+              "phone_number": "612-555-0577",
+              "date_of_birth": "09/03/1987"
+            }
+          }
+        },
+        "credit_card_accounts": {
+          "data": {
+            "cc_dw59m2p8k4_plat": {
+              "account_id": "cc_dw59m2p8k4_plat",
+              "user_id": "dw59m2p8k4",
+              "card_type": "Platinum Rewards Card",
+              "date_of_account_open": "03/12/2025",
+              "current_balance": "$1,204.87",
+              "reward_points": "1540 points",
+              "account_status": "ACTIVE"
+            }
+          }
+        },
+        "credit_card_transaction_history": {
+          "data": {
+            "txn_dw59m2p8k4_001": {
+              "transaction_id": "txn_dw59m2p8k4_001",
+              "user_id": "dw59m2p8k4",
+              "credit_card_type": "Platinum Rewards Card",
+              "merchant_name": "Lunds & Byerlys",
+              "transaction_amount": "$56.20",
+              "transaction_date": "11/02/2025",
+              "category": "Groceries",
+              "status": "COMPLETED",
+              "rewards_earned": "562 points"
+            },
+            "txn_dw59m2p8k4_002": {
+              "transaction_id": "txn_dw59m2p8k4_002",
+              "user_id": "dw59m2p8k4",
+              "credit_card_type": "Platinum Rewards Card",
+              "merchant_name": "REI Minneapolis",
+              "transaction_amount": "$129.99",
+              "transaction_date": "11/08/2025",
+              "category": "Shopping",
+              "status": "COMPLETED",
+              "rewards_earned": "129 points"
+            },
+            "txn_dw59m2p8k4_003": {
+              "transaction_id": "txn_dw59m2p8k4_003",
+              "user_id": "dw59m2p8k4",
+              "credit_card_type": "Platinum Rewards Card",
+              "merchant_name": "Oceanaire Seafood Room",
+              "transaction_amount": "$84.97",
+              "transaction_date": "11/06/2025",
+              "category": "Dining",
+              "status": "COMPLETED",
+              "rewards_earned": "849 points"
+            }
+          }
+        }
+      },
+      "user_data": null
+    },
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Derek Whitfield",
+          "user_id": "dw59m2p8k4",
+          "address": "88 Loring Park Ave, Minneapolis, MN 55403",
+          "email": "derek.whitfield@fastmail.com",
+          "phone_number": "612-555-0577",
+          "date_of_birth": "09/03/1987",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "139_0"
+      },
+      {
+        "name": "give_discoverable_user_tool",
+        "arguments": {
+          "discoverable_tool_name": "submit_cash_back_dispute_0589"
+        },
+        "requestor": "assistant",
+        "action_id": "139_1"
+      },
+      {
+        "name": "call_discoverable_user_tool",
+        "arguments": {
+          "discoverable_tool_name": "submit_cash_back_dispute_0589",
+          "arguments": "{\"user_id\": \"dw59m2p8k4\", \"transaction_id\": \"txn_dw59m2p8k4_002\"}"
+        },
+        "requestor": "user",
+        "action_id": "139_2"
+      }
+    ],
+    "communicate_info": [],
+    "reward_basis": [
+      "DB"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [
+    "call_discoverable_user_tool"
+  ],
+  "required_documents": [
+    "doc_credit_cards_credit_cards_(general)_003",
+    "doc_credit_cards_credit_cards_(general)_006",
+    "doc_credit_cards_credit_cards_(general)_007",
+    "doc_credit_cards_platinum_rewards_card_002"
+  ]
+}

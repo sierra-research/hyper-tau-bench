@@ -1,0 +1,798 @@
+{
+  "id": "banking_personal_credit_card_application_recommendation_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "personal_credit_card_application_recommendation",
+  "display_name": "Personal credit-card recommendation and application eligibility",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/personal_credit_card_application_recommendation/source.md",
+    "heading": "## Personal credit-card recommendation and application eligibility"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/personal_credit_card_application_recommendation/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/personal_credit_card_application_recommendation/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook requirements from shared context: verify identity before account-specific information, get explicit confirmation before account-modifying actions, and use the exact transfer message when a transfer is performed.",
+      "Support console turns may mention document ids, internal tool results, and eligibility checks; Agent turns should give the customer the customer-visible next step or outcome.",
+      "Do not transform concrete KB tables, thresholds, statuses, fees, amounts, or condition-specific outcomes into vague dependency statements."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "identity verification before account-specific details",
+      "explicit customer confirmation before account-modifying actions",
+      "plain-language customer-facing outcomes",
+      "support-console notes for internal KB/tool evidence"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_bronze_rewards_card_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_silver_rewards_card_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_gold_rewards_card_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_platinum_rewards_card_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_ecocard_001.json"
+    ],
+    "summary": "Matching customer income, fee sensitivity, subscriptions, environmental or travel preferences, and card eligibility to the right card.",
+    "rules": [
+      "Preserve all values, tables, thresholds, statuses, fees, amounts, eligibility gates, tool/action names, and condition-to-outcome mappings from the source bundle.",
+      "Use the shared banking handbook for identity verification, explicit confirmation before account-modifying actions, discoverable-tool wrapper behavior, schema limits, and transfer wording.",
+      "Do not invent unsupported account fields, undocumented override mechanisms, undocumented tool names, or customer entitlements not present in the source bundle.",
+      "When a source document is internal, represent its internal checks in Support console turns or agent behavior rather than as exposed policy narration."
+    ],
+    "candidate": {
+      "id": "personal_credit_card_application_recommendation",
+      "title": "Personal credit-card recommendation and application eligibility",
+      "priority": 1,
+      "related_task_ids": [
+        "task_001",
+        "task_002",
+        "task_003",
+        "task_006",
+        "task_007",
+        "task_008"
+      ],
+      "recommended_case_count": 5,
+      "losslessness_risks": [
+        "Preserve each card's eligibility requirements and annual-fee facts.",
+        "Preserve card-specific reward/benefit distinctions needed to choose between cards.",
+        "Do not merge all personal card recommendations into a single vague best-card rule."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "personal_credit_card_application_recommendation_journey",
+        "label": "Personal credit-card recommendation and application eligibility",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "personal_credit_card_application_recommendation_path_a",
+        "label": "Bronze Rewards Card recommendation and application support case",
+        "kind": "scenario_branch",
+        "parent_id": "personal_credit_card_application_recommendation_journey",
+        "order": 1,
+        "description": "Policy path represented by case A.",
+        "fact_ids": [
+          "F003",
+          "F004",
+          "F005",
+          "F006",
+          "F007",
+          "F008",
+          "F009",
+          "F010",
+          "F011",
+          "F012",
+          "F013",
+          "F014",
+          "F015",
+          "F016",
+          "F017",
+          "F018",
+          "F019",
+          "F020",
+          "F021",
+          "F022",
+          "F023",
+          "F024",
+          "F025",
+          "F026",
+          "F027"
+        ]
+      },
+      {
+        "id": "personal_credit_card_application_recommendation_path_b",
+        "label": "Silver Rewards Card recommendation and application support case",
+        "kind": "scenario_branch",
+        "parent_id": "personal_credit_card_application_recommendation_journey",
+        "order": 2,
+        "description": "Policy path represented by case B.",
+        "fact_ids": [
+          "F028",
+          "F029",
+          "F030",
+          "F031",
+          "F032",
+          "F033",
+          "F034",
+          "F035",
+          "F036",
+          "F037",
+          "F038",
+          "F039",
+          "F040",
+          "F041",
+          "F042",
+          "F043",
+          "F044"
+        ]
+      },
+      {
+        "id": "personal_credit_card_application_recommendation_path_c",
+        "label": "Gold Rewards Card recommendation and application support case",
+        "kind": "scenario_branch",
+        "parent_id": "personal_credit_card_application_recommendation_journey",
+        "order": 3,
+        "description": "Policy path represented by case C.",
+        "fact_ids": [
+          "F045",
+          "F046",
+          "F047",
+          "F048",
+          "F049",
+          "F050",
+          "F051",
+          "F052",
+          "F053",
+          "F054",
+          "F055",
+          "F056",
+          "F057",
+          "F058",
+          "F059",
+          "F060",
+          "F061",
+          "F062",
+          "F063",
+          "F064",
+          "F065"
+        ]
+      },
+      {
+        "id": "personal_credit_card_application_recommendation_path_d",
+        "label": "Platinum Rewards Card recommendation and setup support case",
+        "kind": "scenario_branch",
+        "parent_id": "personal_credit_card_application_recommendation_journey",
+        "order": 4,
+        "description": "Policy path represented by case D.",
+        "fact_ids": [
+          "F066",
+          "F067",
+          "F068",
+          "F069",
+          "F070",
+          "F071",
+          "F072",
+          "F073",
+          "F074",
+          "F075",
+          "F076",
+          "F077",
+          "F078",
+          "F079",
+          "F080",
+          "F081",
+          "F082",
+          "F083",
+          "F084",
+          "F085",
+          "F086"
+        ]
+      },
+      {
+        "id": "personal_credit_card_application_recommendation_path_e",
+        "label": "EcoCard recommendation and application support case",
+        "kind": "scenario_branch",
+        "parent_id": "personal_credit_card_application_recommendation_journey",
+        "order": 5,
+        "description": "Policy path represented by case E.",
+        "fact_ids": [
+          "F087",
+          "F088",
+          "F089",
+          "F090",
+          "F091",
+          "F092",
+          "F093",
+          "F094",
+          "F095",
+          "F096",
+          "F097",
+          "F098",
+          "F099",
+          "F100",
+          "F101",
+          "F102",
+          "F103"
+        ]
+      }
+    ],
+    "relations": []
+  },
+  "facts": [
+    {
+      "id": "F003",
+      "statement": "The Bronze Rewards Card has a minimum credit score requirement of $640."
+    },
+    {
+      "id": "F004",
+      "statement": "The Bronze Rewards Card has an annual fee of $0.00."
+    },
+    {
+      "id": "F005",
+      "statement": "The Bronze Rewards Card has a standard APR of 20.49% on carried balances after any intro period."
+    },
+    {
+      "id": "F006",
+      "statement": "The Bronze Rewards Card has a new customer introductory APR of 0% on carried balances for the first year."
+    },
+    {
+      "id": "F007",
+      "statement": "The Bronze Rewards Card has a foreign transaction fee of 2.75% on international purchases."
+    },
+    {
+      "id": "F008",
+      "statement": "The Bronze Rewards Card has a minimum starting credit limit of $3,000 upon approval."
+    },
+    {
+      "id": "F009",
+      "statement": "Virtual card management is not available for the Bronze Rewards Card."
+    },
+    {
+      "id": "F010",
+      "statement": "Bronze Rewards Card application step 1 requires gathering a government-issued ID, SSN/TIN, and income details."
+    },
+    {
+      "id": "F011",
+      "statement": "Bronze Rewards Card application step 1 also requires gathering current housing status and a monthly payment estimate."
+    },
+    {
+      "id": "F012",
+      "statement": "Bronze Rewards Card application step 2 is to submit the application online and complete the form accurately to avoid delays."
+    },
+    {
+      "id": "F013",
+      "statement": "Bronze Rewards Card application step 2 requires consenting to a credit pull, and the minimum score requirement is $640."
+    },
+    {
+      "id": "F014",
+      "statement": "Bronze Rewards Card application step 3 includes reviewing the offer; if approved, the starting limit will be at least $3,000."
+    },
+    {
+      "id": "F015",
+      "statement": "Bronze Rewards Card application step 3 includes reviewing APR terms: standard APR is 20.49% and first-year promo APR is 0%."
+    },
+    {
+      "id": "F016",
+      "statement": "Bronze Rewards Card application step 4 is to accept and finalize by confirming disclosures and e-signing to open the account."
+    },
+    {
+      "id": "F017",
+      "statement": "After Bronze Rewards Card approval, the get-started process is described as taking 10 minutes."
+    },
+    {
+      "id": "F018",
+      "statement": "After Bronze Rewards Card approval, the customer should activate the card using the instructions in the approval email or online dashboard."
+    },
+    {
+      "id": "F019",
+      "statement": "After Bronze Rewards Card approval, the customer should create or sign in to an online account to manage statements and controls."
+    },
+    {
+      "id": "F020",
+      "statement": "After Bronze Rewards Card approval, the customer should set up payment preferences by choosing a payment account and schedule."
+    },
+    {
+      "id": "F021",
+      "statement": "After Bronze Rewards Card approval, the customer should enable alerts for due dates and transactions."
+    },
+    {
+      "id": "F022",
+      "statement": "After Bronze Rewards Card approval, the customer should add the card to preferred online merchants for faster checkout."
+    },
+    {
+      "id": "F023",
+      "statement": "The Bronze Rewards Card is ready for use immediately after activation."
+    },
+    {
+      "id": "F024",
+      "statement": "For Bronze Rewards Card international travel, purchases processed outside the U.S. have a foreign transaction fee of 2.75%."
+    },
+    {
+      "id": "F025",
+      "statement": "A Bronze Rewards Card smooth-start tip is to schedule the first payment as soon as the account is active to avoid missing the due date."
+    },
+    {
+      "id": "F026",
+      "statement": "A Bronze Rewards Card smooth-start tip is to review statement settings so the customer receives notifications and can track spending from month one."
+    },
+    {
+      "id": "F027",
+      "statement": "For larger initial Bronze Rewards Card purchases, the customer should confirm the approved limit, which is at least $3,000, before checkout."
+    },
+    {
+      "id": "F028",
+      "statement": "The Silver Rewards Card has a minimum credit score requirement of $680."
+    },
+    {
+      "id": "F029",
+      "statement": "The Silver Rewards Card has an annual fee of $0.00."
+    },
+    {
+      "id": "F030",
+      "statement": "The Silver Rewards Card has a standard APR of 18.99% for carried balances after any promotional period."
+    },
+    {
+      "id": "F031",
+      "statement": "The Silver Rewards Card has an introductory APR of 0% for new customers during the first year."
+    },
+    {
+      "id": "F032",
+      "statement": "The Silver Rewards Card foreign transaction fee is 2.75% without a premium subscription."
+    },
+    {
+      "id": "F033",
+      "statement": "The Silver Rewards Card foreign transaction fee is 0% with a premium subscription."
+    },
+    {
+      "id": "F034",
+      "statement": "Silver Rewards Card initial credit limits typically range from $10,000 to $100,000, subject to approval."
+    },
+    {
+      "id": "F035",
+      "statement": "Silver Rewards Card purchase protection covers eligible items for 90 days after purchase, up to $3,000 per claim."
+    },
+    {
+      "id": "F036",
+      "statement": "Silver Rewards Card purchases outside top categories earn 1.0% back."
+    },
+    {
+      "id": "F037",
+      "statement": "Virtual card management features are not available for the Silver Rewards Card."
+    },
+    {
+      "id": "F038",
+      "statement": "Silver Rewards Card application step 1 is to complete the online application with personal information and income details."
+    },
+    {
+      "id": "F039",
+      "statement": "Silver Rewards Card application step 2 is to consent to a credit check and submit any requested documentation."
+    },
+    {
+      "id": "F040",
+      "statement": "Silver Rewards Card application step 3 is to review the preliminary credit limit offer and terms."
+    },
+    {
+      "id": "F041",
+      "statement": "Silver Rewards Card application step 4 is to accept the terms to finalize account setup."
+    },
+    {
+      "id": "F042",
+      "statement": "After Silver Rewards Card approval, the customer should activate the physical card upon arrival and add it to preferred digital wallets."
+    },
+    {
+      "id": "F043",
+      "statement": "After Silver Rewards Card approval, the customer should set up account alerts and autopay to avoid missed payments."
+    },
+    {
+      "id": "F044",
+      "statement": "After Silver Rewards Card approval, the customer should review the benefits summary, including purchase protection and the international fee terms."
+    },
+    {
+      "id": "F045",
+      "statement": "The Gold Rewards Card has a minimum credit score requirement of $720."
+    },
+    {
+      "id": "F046",
+      "statement": "The Gold Rewards Card requires a Rho-Bank+ premium subscription."
+    },
+    {
+      "id": "F047",
+      "statement": "The Gold Rewards Card has an annual fee of $0.00."
+    },
+    {
+      "id": "F048",
+      "statement": "The Gold Rewards Card earns 2.5% cash back on all purchases."
+    },
+    {
+      "id": "F049",
+      "statement": "The Gold Rewards Card has an APR of 17.99% on carried balances."
+    },
+    {
+      "id": "F050",
+      "statement": "The Gold Rewards Card has a foreign transaction fee of 0%."
+    },
+    {
+      "id": "F051",
+      "statement": "The Gold Rewards Card has a late payment fee of $32.50."
+    },
+    {
+      "id": "F052",
+      "statement": "The Gold Rewards Card requires a minimum of $15 in rewards to redeem."
+    },
+    {
+      "id": "F053",
+      "statement": "Gold Rewards Card purchase protection lasts 105 days from purchase and covers up to $7,500 per covered claim."
+    },
+    {
+      "id": "F054",
+      "statement": "Virtual card management is available for the Gold Rewards Card."
+    },
+    {
+      "id": "F055",
+      "statement": "Gold Rewards Card approved credit limits typically range from $17,500 to $112,500."
+    },
+    {
+      "id": "F056",
+      "statement": "The Gold Rewards Card initial limit is determined during underwriting based on the customer credit profile and supplied financial information."
+    },
+    {
+      "id": "F057",
+      "statement": "Gold Rewards Card application step 1 is to confirm the customer has an active Rho-Bank+ subscription, which is required."
+    },
+    {
+      "id": "F058",
+      "statement": "Gold Rewards Card application step 2 is to prepare documentation typically requested during credit evaluation, such as government ID, income details, and address verification."
+    },
+    {
+      "id": "F059",
+      "statement": "Gold Rewards Card application step 3 is to complete the application in the Rho-Bank dashboard and consent to a credit pull, with a minimum score of $720."
+    },
+    {
+      "id": "F060",
+      "statement": "Gold Rewards Card application step 4 is to review key terms before submission, including APR range on carried balances, annual fee, late payment fee, rewards redemption minimum, purchase protection period and cap, and foreign transaction fee."
+    },
+    {
+      "id": "F061",
+      "statement": "Gold Rewards Card application step 5 is to submit and monitor application status; if additional information is needed, the customer will receive a prompt to upload or confirm details."
+    },
+    {
+      "id": "F062",
+      "statement": "Gold Rewards Card application step 6 is that upon approval, the initial limit will be set within $17,500-$112,500."
+    },
+    {
+      "id": "F063",
+      "statement": "After Gold Rewards Card approval, if virtual cards are enabled on the account, the customer can create and manage virtual cards immediately."
+    },
+    {
+      "id": "F064",
+      "statement": "Gold Rewards Card purchases made after activation begin earning cash back at 2.5%."
+    },
+    {
+      "id": "F065",
+      "statement": "Gold Rewards Card purchases made after activation are covered by purchase protection for 105 days up to $7,500 per claim."
+    },
+    {
+      "id": "F066",
+      "statement": "For the Platinum Rewards Card, the customer should activate the card as soon as it arrives and then add it to a digital wallet for immediate use."
+    },
+    {
+      "id": "F067",
+      "statement": "For the Platinum Rewards Card, the customer should set up account alerts for transactions, payments, and unusual activity."
+    },
+    {
+      "id": "F068",
+      "statement": "The Platinum Rewards Card purchase APR is 16.99% variable."
+    },
+    {
+      "id": "F069",
+      "statement": "The Platinum Rewards Card purchase APR should be reviewed in account details before the first transaction."
+    },
+    {
+      "id": "F070",
+      "statement": "Platinum Rewards Card typical approved credit limits range from $25,000 to $150,000."
+    },
+    {
+      "id": "F071",
+      "statement": "The exact Platinum Rewards Card credit limit appears in the approval details."
+    },
+    {
+      "id": "F072",
+      "statement": "For the Platinum Rewards Card, the customer can choose an autopay option of minimum due, statement balance, or custom amount to avoid interest and fees."
+    },
+    {
+      "id": "F073",
+      "statement": "The Platinum Rewards Card minimum monthly payment is 2.5% of the outstanding balance."
+    },
+    {
+      "id": "F074",
+      "statement": "A late Platinum Rewards Card payment triggers a fee of $32.50."
+    },
+    {
+      "id": "F075",
+      "statement": "For the Platinum Rewards Card, the customer should set due-date reminders to stay on track."
+    },
+    {
+      "id": "F076",
+      "statement": "The Platinum Rewards Card has an annual fee of $200.00."
+    },
+    {
+      "id": "F077",
+      "statement": "The Platinum Rewards Card has a 0% foreign transaction fee on international purchases."
+    },
+    {
+      "id": "F078",
+      "statement": "Free virtual cards are included with the Platinum Rewards Card."
+    },
+    {
+      "id": "F079",
+      "statement": "Platinum Rewards Card virtual cards can be used to protect the primary card number for online purchases."
+    },
+    {
+      "id": "F080",
+      "statement": "Virtual card management is available in the Platinum Rewards Card account."
+    },
+    {
+      "id": "F081",
+      "statement": "Platinum Rewards Card virtual card management can create, pause, or delete virtual card numbers as needed."
+    },
+    {
+      "id": "F082",
+      "statement": "The Platinum Rewards Card first purchases checklist includes confirming that billing address and contact details are current."
+    },
+    {
+      "id": "F083",
+      "statement": "The Platinum Rewards Card first purchases checklist includes enrolling in alerts and autopay."
+    },
+    {
+      "id": "F084",
+      "statement": "The Platinum Rewards Card first purchases checklist includes adding the card to frequently used merchants and services."
+    },
+    {
+      "id": "F085",
+      "statement": "The Platinum Rewards Card first purchases checklist includes using virtual cards for new online merchants to reduce exposure."
+    },
+    {
+      "id": "F086",
+      "statement": "If the customer is still applying for the Platinum Rewards Card, the minimum credit score required is $750."
+    },
+    {
+      "id": "F087",
+      "statement": "EcoCard has a minimum credit score required to apply of 0."
+    },
+    {
+      "id": "F088",
+      "statement": "For EcoCard, 0 indicates no credit score requirement."
+    },
+    {
+      "id": "F089",
+      "statement": "EcoCard applicants must provide standard identity and income information during the application."
+    },
+    {
+      "id": "F090",
+      "statement": "EcoCard application step 1 is to complete the online application with personal and financial details."
+    },
+    {
+      "id": "F091",
+      "statement": "EcoCard application step 2 is to review pricing and terms, including listed fees and interest rates."
+    },
+    {
+      "id": "F092",
+      "statement": "EcoCard application step 3 is to submit the application and, if approved, activate the card upon receipt to begin using it."
+    },
+    {
+      "id": "F093",
+      "statement": "EcoCard initial credit lines are determined at approval and typically range from $5,000 to $50,000."
+    },
+    {
+      "id": "F094",
+      "statement": "EcoCard credit line increases may be reviewed over time based on account history and usage."
+    },
+    {
+      "id": "F095",
+      "statement": "EcoCard has a purchase APR of 19.99% on carried balances."
+    },
+    {
+      "id": "F096",
+      "statement": "EcoCard has an annual fee of $50.00."
+    },
+    {
+      "id": "F097",
+      "statement": "EcoCard has a foreign transaction fee of 1.0% on international purchases."
+    },
+    {
+      "id": "F098",
+      "statement": "EcoCard has a late payment fee of $32.50 if the customer misses the due date."
+    },
+    {
+      "id": "F099",
+      "statement": "EcoCard new-customer bonus requires spending $5,000 in eligible purchases within the first month to earn $2,000 sustainability points."
+    },
+    {
+      "id": "F100",
+      "statement": "EcoCard bonus points are awarded once the spending threshold is met and the qualifying period closes."
+    },
+    {
+      "id": "F101",
+      "statement": "After applying for EcoCard, the customer will receive a decision or a request for additional documentation."
+    },
+    {
+      "id": "F102",
+      "statement": "If approved for EcoCard, the customer should set up an online account."
+    },
+    {
+      "id": "F103",
+      "statement": "If approved for EcoCard, the customer should add the card to a digital wallet to start using it immediately after activation."
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Bronze Rewards Card recommendation and application support case",
+      "spec": "Future case record should demonstrate use of shared banking context while matching a customer's eligibility, fee sensitivity, travel considerations, application steps, approval terms, and post-approval setup needs to Bronze Rewards Card facts.",
+      "included_fact_ids": [
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F017",
+        "F018",
+        "F019",
+        "F020",
+        "F021",
+        "F022",
+        "F023",
+        "F024",
+        "F025",
+        "F026",
+        "F027"
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Silver Rewards Card recommendation and application support case",
+      "spec": "Future case record should demonstrate use of shared banking context while matching a customer's eligibility, no-annual-fee preference, premium-subscription international-fee conditions, rewards/protection needs, application steps, and post-approval setup needs to Silver Rewards Card facts.",
+      "included_fact_ids": [
+        "F028",
+        "F029",
+        "F030",
+        "F031",
+        "F032",
+        "F033",
+        "F034",
+        "F035",
+        "F036",
+        "F037",
+        "F038",
+        "F039",
+        "F040",
+        "F041",
+        "F042",
+        "F043",
+        "F044"
+      ]
+    },
+    {
+      "id": "C",
+      "title": "Gold Rewards Card recommendation and application support case",
+      "spec": "Future case record should demonstrate use of shared banking context while matching a customer's Rho-Bank+ subscription status, eligibility, no-annual-fee preference, travel/foreign-fee needs, rewards expectations, application steps, underwriting limit range, virtual-card availability, and post-activation benefits to Gold Rewards Card facts.",
+      "included_fact_ids": [
+        "F045",
+        "F046",
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F057",
+        "F058",
+        "F059",
+        "F060",
+        "F061",
+        "F062",
+        "F063",
+        "F064",
+        "F065"
+      ]
+    },
+    {
+      "id": "D",
+      "title": "Platinum Rewards Card recommendation and setup support case",
+      "spec": "Future case record should demonstrate use of shared banking context while matching a customer's eligibility, annual-fee tolerance, travel/foreign-fee needs, high-limit expectations, virtual-card needs, payment/autopay requirements, late-fee awareness, and first-purchase setup needs to Platinum Rewards Card facts.",
+      "included_fact_ids": [
+        "F066",
+        "F067",
+        "F068",
+        "F069",
+        "F070",
+        "F071",
+        "F072",
+        "F073",
+        "F074",
+        "F075",
+        "F076",
+        "F077",
+        "F078",
+        "F079",
+        "F080",
+        "F081",
+        "F082",
+        "F083",
+        "F084",
+        "F085",
+        "F086"
+      ]
+    },
+    {
+      "id": "E",
+      "title": "EcoCard recommendation and application support case",
+      "spec": "Future case record should demonstrate use of shared banking context while matching a customer's no-credit-score-requirement need, sustainability preference, annual-fee tolerance, travel-fee expectations, application steps, approval/credit-line outcomes, bonus threshold, and post-approval setup needs to EcoCard facts.",
+      "included_fact_ids": [
+        "F087",
+        "F088",
+        "F089",
+        "F090",
+        "F091",
+        "F092",
+        "F093",
+        "F094",
+        "F095",
+        "F096",
+        "F097",
+        "F098",
+        "F099",
+        "F100",
+        "F101",
+        "F102",
+        "F103"
+      ]
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/personal_credit_card_application_recommendation/evidence_corpus_hard_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/personal_credit_card_application_recommendation/evidence_corpus_deep_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/personal_credit_card_application_recommendation/client_overlay_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/personal_credit_card_application_recommendation/client_overlay_card_selection_001/transformation_pack.json"
+    }
+  ]
+}

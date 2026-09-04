@@ -1,0 +1,344 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "Rho Helpdesk",
+    "account": "rho-bank-consumer-and-business",
+    "workspace": "new-accounts-console",
+    "environment": "production",
+    "exported_at": "2025-11-13T17:31:00-05:00",
+    "timezone": "America/New_York",
+    "export_version": "2025.46",
+    "requested_by": "devon.park@rhobank.com"
+  },
+  "cover_email": "From: Helpdesk Administration <helpdesk-admin@rhobank.com>\nTo: Devon Park <devon.park@rhobank.com>\nDate: Thu, 13 Nov 2025 17:42:09 -0500\nSubject: new-accounts-console workspace export (2025.46)\nMessage-ID: <hd-export-2025-46-newaccountsconsole@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nDevon,\n\nHere is the full production export of the new-accounts-console workspace, the file you added to this afternoon's request — macros, triggers, field definitions, SLAs, and views as of this export. Objects ship with their status flags as stored; nothing is filtered from the file.\n\nHelpdesk Administration",
+  "macros": [
+    {
+      "macro_id": "MAC-7021",
+      "name": "New-account checklist — personal checking",
+      "description": "Gates board and guided opening sequence for personal checking accounts. To open a personal checking account, all listed eligibility requirements must be true; the gate records in this macro's config are the listed set.",
+      "enabled": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2024-11-11",
+      "updated_at": "2025-10-07",
+      "usage_30d": 291,
+      "usage_90d": 668,
+      "superseded_by": null,
+      "config": {
+        "gate_logic": "all_of",
+        "gates": [
+          {
+            "gate_id": "CHK-G1",
+            "requirement": "The customer must be verified."
+          },
+          {
+            "gate_id": "CHK-G2",
+            "requirement": "The customer must be at least 18 years old."
+          },
+          {
+            "gate_id": "CHK-G3",
+            "requirement": "The customer must not exceed 4 personal checking accounts."
+          },
+          {
+            "gate_id": "CHK-G4",
+            "requirement": "The customer must have no checking accounts closed for cause in the past 6 months."
+          }
+        ],
+        "steps": [
+          {
+            "step": 1,
+            "action": "Verify customer identity."
+          },
+          {
+            "step": 2,
+            "action": "Check the eligibility requirements after identity verification."
+          },
+          {
+            "step": 3,
+            "action": "Confirm the customer's desired account_class selection after eligibility is checked. account_class options must use the full official name ending with 'Account' — for example 'Blue Account' or 'Green Account (checking)'."
+          },
+          {
+            "step": 4,
+            "action": "Use open_bank_account_4821 to open the account after the customer's desired account_class selection is confirmed."
+          }
+        ],
+        "wrap_up": [
+          "Insert opening-confirmation reply (account details and funding placeholders)",
+          "Set ticket type = account_opening",
+          "Set status = solved-pending-close"
+        ]
+      }
+    },
+    {
+      "macro_id": "MAC-7008",
+      "name": "Instant-open — personal checking",
+      "description": "Single-touch opening path for walk-in personal checking requests; runs the opening tool as soon as the profile checks on file clear and a selection is on the request form.",
+      "enabled": false,
+      "environment": "production",
+      "status": "disabled",
+      "effective_at": "2025-03-17",
+      "disabled_at": "2025-10-06T09:41:00-04:00",
+      "updated_at": "2025-10-06",
+      "usage_30d": 0,
+      "usage_90d": 87,
+      "superseded_by": "MAC-7021",
+      "config": {
+        "gate_logic": "all_of",
+        "gates": [
+          {
+            "gate_id": "IO-G1",
+            "requirement": "Identity check on the profile is complete."
+          },
+          {
+            "gate_id": "IO-G2",
+            "requirement": "Profile date of birth shows 18 or older."
+          },
+          {
+            "gate_id": "IO-G3",
+            "requirement": "Personal checking accounts on the profile number 4 or fewer."
+          }
+        ],
+        "steps": [
+          {
+            "step": 1,
+            "action": "Read the account selection from the request form as captured."
+          },
+          {
+            "step": 2,
+            "action": "Run the opening tool with the captured selection."
+          }
+        ],
+        "wrap_up": [
+          "Insert opening-confirmation reply (account details placeholders)",
+          "Set ticket type = account_opening",
+          "Set status = solved-pending-close"
+        ]
+      }
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "TRG-6203",
+      "name": "Route new-account requests to New Accounts Tier 1",
+      "description": "Keyword routing for inbound checking-opening requests.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 4,
+      "effective_at": "2024-11-11",
+      "updated_at": "2025-10-07",
+      "usage_30d": 447,
+      "conditions": [
+        "channel is email OR webform OR chat",
+        "subject/body contains any: open checking, new checking, add checking, switch my checking"
+      ],
+      "actions": [
+        "set group = New Accounts Tier 1",
+        "set ticket type = account_opening"
+      ]
+    },
+    {
+      "trigger_id": "TRG-6118",
+      "name": "Instant-open at intake",
+      "description": "Fires the instant-open macro when a completed walk-in request form arrives with a checking selection.",
+      "active": false,
+      "environment": "production",
+      "status": "disabled",
+      "priority": 5,
+      "effective_at": "2025-03-17",
+      "disabled_at": "2025-10-06",
+      "updated_at": "2025-10-06",
+      "usage_30d": 0,
+      "conditions": [
+        "ticket type = account_opening",
+        "request form complete = true",
+        "new account_type = checking"
+      ],
+      "actions": [
+        "apply macro MAC-7008"
+      ]
+    },
+    {
+      "trigger_id": "TRG-6231",
+      "name": "Escalate aged opening tickets",
+      "description": "Escalates account-opening tickets breaching 24 business hours without agent touch.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 6,
+      "effective_at": "2025-03-24",
+      "updated_at": "2025-10-27",
+      "usage_30d": 36,
+      "conditions": [
+        "ticket type = account_opening",
+        "hours since last agent update > 24 (business)"
+      ],
+      "actions": [
+        "set priority = high",
+        "notify group lead (new accounts)"
+      ]
+    }
+  ],
+  "policy_contracts": [
+    {
+      "contract_id": "CON-0910",
+      "name": "new-accounts-console workspace scope",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Helpdesk Administration",
+      "scope": "Ticket routing, macros, and console field handling for the new-accounts-console workspace at this snapshot. Console configuration only; personal checking product terms are owned by the Personal Checking Guide set (the lineup card and the per-product guide sheets), referral program terms by Growth Marketing's dated program-terms messages, and tool parameter contracts by the production tool registry — the registry pages ship with the opening-console workspace export and the developer portal's account-services pack.",
+      "required_fields": [
+        "ticket_type",
+        "group",
+        "status"
+      ],
+      "closed_world": false,
+      "effective_at": "2024-11-11",
+      "updated_at": "2025-10-07"
+    }
+  ],
+  "field_columns": [
+    "row_id",
+    "field_key",
+    "field_name",
+    "field_type",
+    "option_value",
+    "option_description",
+    "active",
+    "status",
+    "environment",
+    "updated_at"
+  ],
+  "fields": [
+    {
+      "row_id": "F-420",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "account_opening",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-11"
+    },
+    {
+      "row_id": "F-421",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "eligibility_question",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-11"
+    },
+    {
+      "row_id": "F-422",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "product_question",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-11"
+    },
+    {
+      "row_id": "F-430",
+      "field_key": "group",
+      "field_name": "Assignment group",
+      "field_type": "picklist",
+      "option_value": "New Accounts Tier 1",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-11"
+    },
+    {
+      "row_id": "F-431",
+      "field_key": "group",
+      "field_name": "Assignment group",
+      "field_type": "picklist",
+      "option_value": "Deposit Desk Tier 1",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-11"
+    },
+    {
+      "row_id": "F-440",
+      "field_key": "tag",
+      "field_name": "Tag",
+      "field_type": "tag",
+      "option_value": "guide-sheet-sent",
+      "option_description": "Applied when a product guide sheet is emailed from the call so follow-ups land with context.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-27"
+    },
+    {
+      "row_id": "F-441",
+      "field_key": "tag",
+      "field_name": "Tag",
+      "field_type": "tag",
+      "option_value": "deferred-selection",
+      "option_description": "Applied when the customer leaves the call still deciding between products.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-11-12"
+    }
+  ],
+  "sla_policies": [
+    {
+      "name": "New accounts — opening requests first response",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "8 business hours first response",
+      "applies_to": "group = New Accounts Tier 1",
+      "updated_at": "2025-10-07",
+      "policy_id": "SLA-621"
+    },
+    {
+      "name": "Opening follow-up cadence",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "24 business hours between agent touches on open account_opening tickets",
+      "applies_to": "ticket type = account_opening",
+      "updated_at": "2025-11-03",
+      "policy_id": "SLA-624"
+    }
+  ],
+  "views": [
+    {
+      "view_id": "VW-97",
+      "name": "New accounts — open opening requests",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "ticket type = account_opening",
+        "status != solved-pending-close"
+      ],
+      "updated_at": "2025-10-07"
+    },
+    {
+      "view_id": "VW-98",
+      "name": "Still deciding — follow-ups",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "tag = deferred-selection"
+      ],
+      "updated_at": "2025-11-12"
+    }
+  ]
+}

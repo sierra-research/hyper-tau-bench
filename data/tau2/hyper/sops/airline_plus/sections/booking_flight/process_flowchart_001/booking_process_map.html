@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1760">
+  <title>New Booking - High-level Flow</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 1760px;
+      height: 1180px;
+      overflow: hidden;
+      background: #fff;
+      color: #161616;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .page {
+      position: relative;
+      width: 1760px;
+      height: 1180px;
+      background: #fff;
+    }
+    .frame {
+      position: absolute;
+      left: 38px;
+      top: 28px;
+      width: 1684px;
+      height: 945px;
+      border: 1.5px solid #1f1f1f;
+    }
+    .frame-label {
+      position: absolute;
+      left: -1px;
+      top: -22px;
+      height: 22px;
+      padding: 4px 14px;
+      background: #111;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .phase {
+      position: absolute;
+      border: 1px solid #777;
+      background: transparent;
+      z-index: 1;
+    }
+    .phase > span {
+      position: absolute;
+      left: -1px;
+      top: -18px;
+      height: 18px;
+      padding: 3px 8px;
+      background: #777;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+    }
+    .node, .system-note, .terminal {
+      position: absolute;
+      z-index: 3;
+      background: #fff;
+      border: 1.4px solid #1a1a1a;
+      padding: 9px 10px;
+      font-size: 11px;
+      line-height: 1.24;
+      text-align: center;
+    }
+    .node {
+      width: 188px;
+      min-height: 74px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .node .system {
+      margin-top: 8px;
+      color: #54777c;
+      font-size: 9px;
+      font-weight: 700;
+      text-decoration: underline;
+      letter-spacing: .15px;
+    }
+    .terminal {
+      width: 180px;
+      min-height: 54px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .decision {
+      position: absolute;
+      z-index: 3;
+      width: 102px;
+      height: 102px;
+      border: 1.4px solid #1a1a1a;
+      background: #fff;
+      transform: rotate(45deg);
+    }
+    .decision span {
+      position: absolute;
+      inset: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transform: rotate(-45deg);
+      font-size: 10px;
+      line-height: 1.15;
+    }
+    .system-note {
+      width: 186px;
+      min-height: 74px;
+      border-color: #8f9daf;
+      background: #f2f7fd;
+      text-align: left;
+      font-family: "Courier New", monospace;
+      font-size: 8px;
+      line-height: 1.22;
+    }
+    .api {
+      position: absolute;
+      z-index: 4;
+      color: #527de1;
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+    .micro {
+      position: absolute;
+      z-index: 4;
+      font-size: 8px;
+      line-height: 1.25;
+      color: #333;
+    }
+    .paper-note {
+      position: absolute;
+      z-index: 3;
+      width: 190px;
+      padding: 7px 9px;
+      border: 1px solid #aaa77b;
+      background: #fffde1;
+      font-size: 9px;
+      line-height: 1.25;
+      transform: rotate(-.5deg);
+    }
+    svg {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      width: 1684px;
+      height: 945px;
+      overflow: visible;
+    }
+    .flow {
+      fill: none;
+      stroke: #1d6c84;
+      stroke-width: 2;
+      marker-end: url(#arrow);
+    }
+    .thin {
+      fill: none;
+      stroke: #222;
+      stroke-width: 1;
+      marker-end: url(#arrow-black);
+    }
+    .return {
+      fill: none;
+      stroke: #777;
+      stroke-width: 1;
+      stroke-dasharray: 5 4;
+      marker-end: url(#arrow-gray);
+    }
+    .edge-label {
+      font-size: 9px;
+      fill: #333;
+      paint-order: stroke;
+      stroke: white;
+      stroke-width: 4px;
+      stroke-linejoin: round;
+    }
+    footer {
+      position: absolute;
+      left: 40px;
+      right: 40px;
+      bottom: 18px;
+      display: flex;
+      justify-content: space-between;
+      color: #737373;
+      font-size: 9px;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="frame">
+      <div class="frame-label">NEW BOOKING FLOW</div>
+
+      <div class="phase" style="left:22px; top:68px; width:514px; height:286px;">
+        <span>CUSTOMER AND TRIP REQUEST</span>
+      </div>
+      <div class="phase" style="left:555px; top:68px; width:1082px; height:286px;">
+        <span>SEARCH AND SELECTION</span>
+      </div>
+      <div class="phase" style="left:22px; top:486px; width:1615px; height:394px;">
+        <span>PRICE, PAYMENT AND RESERVATION CREATE</span>
+      </div>
+
+      <svg viewBox="0 0 1684 945" aria-hidden="true">
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0 0 L8 4 L0 8 Z" fill="#1d6c84"/>
+          </marker>
+          <marker id="arrow-black" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0 0 L8 4 L0 8 Z" fill="#222"/>
+          </marker>
+          <marker id="arrow-gray" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0 0 L8 4 L0 8 Z" fill="#777"/>
+          </marker>
+        </defs>
+
+        <path class="flow" d="M210 210 H248"/>
+        <path class="flow" d="M436 210 H482"/>
+        <path class="flow" d="M584 210 H626"/>
+        <text class="edge-label" x="596" y="198">Yes</text>
+        <path class="return" d="M533 261 V334 H342 V247"/>
+        <text class="edge-label" x="541" y="318">No - continue profile lookup</text>
+        <path class="flow" d="M814 210 H858"/>
+        <path class="flow" d="M960 210 H1004"/>
+        <path class="flow" d="M1192 210 H1238"/>
+        <path class="flow" d="M1426 210 H1480"/>
+        <text class="edge-label" x="1438" y="198">Yes</text>
+        <path class="return" d="M1531 261 V338 H1332 V247"/>
+        <text class="edge-label" x="1539" y="320">No - review options</text>
+
+        <path class="return" d="M909 261 V324 H716 V254"/>
+        <text class="edge-label" x="918" y="300">No - revise search request</text>
+        <text class="edge-label" x="970" y="198">Yes</text>
+
+        <path class="flow" d="M1570 247 V430 H165 V550"/>
+        <path class="flow" d="M259 588 H304"/>
+        <path class="flow" d="M492 588 H538"/>
+        <path class="flow" d="M726 588 H770"/>
+        <path class="flow" d="M872 588 H916"/>
+        <path class="flow" d="M1104 588 H1150"/>
+        <path class="flow" d="M1252 588 H1296"/>
+        <path class="flow" d="M1484 588 H1530"/>
+        <text class="edge-label" x="880" y="576">Yes</text>
+        <text class="edge-label" x="1260" y="576">Yes</text>
+
+        <path class="return" d="M821 639 V690 H632 V626"/>
+        <text class="edge-label" x="829" y="674">No - return to payment</text>
+        <path class="return" d="M1201 639 V742 H1010 V626"/>
+        <text class="edge-label" x="1210" y="726">No - review details</text>
+
+        <path class="thin" d="M342 247 V394 H350"/>
+        <path class="thin" d="M720 247 V394 H682"/>
+        <path class="thin" d="M1100 247 V394 H1090"/>
+        <path class="thin" d="M398 626 V760 H375"/>
+        <path class="thin" d="M1010 626 V760 H1035"/>
+        <path class="thin" d="M1390 626 V760 H1390"/>
+      </svg>
+
+      <div class="terminal" style="left:30px; top:183px;">
+        Customer requests a new booking
+      </div>
+
+      <div class="node" style="left:248px; top:173px;">
+        Retrieve customer profile
+        <span class="system">CUSTOMER PROFILE</span>
+      </div>
+
+      <div class="decision" style="left:482px; top:159px;">
+        <span>Profile available?</span>
+      </div>
+
+      <div class="node" style="left:626px; top:173px;">
+        Capture trip request<br>
+        <span style="font-size:9px;">trip type, origin, destination, preferred dates, cabin</span>
+      </div>
+
+      <div class="decision" style="left:858px; top:159px;">
+        <span>Search request complete?</span>
+      </div>
+
+      <div class="node" style="left:1004px; top:173px;">
+        Request available flights
+        <span class="system">AVAILABILITY SERVICE</span>
+      </div>
+
+      <div class="node" style="left:1238px; top:173px;">
+        Present matching flight options<br>
+        <span style="font-size:9px;">flight number, time and price</span>
+      </div>
+
+      <div class="decision" style="left:1480px; top:159px;">
+        <span>Customer selects an option?</span>
+      </div>
+
+      <div class="micro" style="left:1245px; top:270px; width:225px;">
+        Available itinerary shapes:<br>
+        direct / nonstop &nbsp;&nbsp; or &nbsp;&nbsp; connecting / one-stop
+      </div>
+
+      <div class="api" style="left:292px; top:355px;">PROFILE</div>
+      <div class="system-note" style="left:258px; top:394px;">
+        GET CUSTOMER PROFILE<br>
+        Input: customer reference<br>
+        Output: profile, saved methods,<br>
+        membership status
+      </div>
+
+      <div class="api" style="left:640px; top:355px;">API</div>
+      <div class="system-note" style="left:589px; top:394px;">
+        SEARCH FLIGHTS<br>
+        Input: route, dates, trip type,<br>
+        cabin and passenger request<br>
+        Output: matching itineraries
+      </div>
+
+      <div class="paper-note" style="left:996px; top:380px;">
+        Inventory, pricing and schedule details are supplied by existing booking services. Interface naming remains under review.
+      </div>
+
+      <div class="node" style="left:71px; top:550px;">
+        Capture passenger(s)
+        <span class="system">BOOKING WORKSPACE</span>
+      </div>
+
+      <div class="node" style="left:304px; top:550px;">
+        Calculate booking total
+        <span class="system">PRICING SERVICE</span>
+      </div>
+
+      <div class="node" style="left:538px; top:550px;">
+        Validate payment allocation
+        <span class="system">PAYMENT SERVICE</span>
+      </div>
+
+      <div class="decision" style="left:770px; top:537px;">
+        <span>Allocation valid?</span>
+      </div>
+
+      <div class="node" style="left:916px; top:550px;">
+        Read back complete booking details
+      </div>
+
+      <div class="decision" style="left:1150px; top:537px;">
+        <span>Customer explicitly confirms?</span>
+      </div>
+
+      <div class="node" style="left:1296px; top:550px;">
+        Create reservation
+        <span class="system">RESERVATION SERVICE</span>
+      </div>
+
+      <div class="terminal" style="left:1530px; top:560px;">
+        END<br>
+        Booking created
+      </div>
+
+      <div class="api" style="left:340px; top:720px;">API</div>
+      <div class="system-note" style="left:282px; top:760px;">
+        PRICE BOOKING<br>
+        Input: itinerary, passengers,<br>
+        requested ancillary selections<br>
+        Output: booking total
+      </div>
+
+      <div class="api" style="left:995px; top:720px;">API</div>
+      <div class="system-note" style="left:942px; top:760px;">
+        VALIDATE PAYMENT<br>
+        Input: booking total and saved<br>
+        payment allocation<br>
+        Output: validation status; no charge
+      </div>
+
+      <div class="api" style="left:1345px; top:720px;">API</div>
+      <div class="system-note" style="left:1297px; top:760px;">
+        CREATE RESERVATION<br>
+        Input: confirmed booking request<br>
+        Output: charged reservation reference
+      </div>
+
+      <div class="micro" style="left:520px; top:810px; width:310px;">
+        Document cross-reference: pricing, baggage, protection and payment-validation details are maintained outside this high-level flow.
+      </div>
+    </section>
+
+    <footer>
+      <span>Internal working material</span>
+      <span>Process reference: NB-HL-07 &nbsp; | &nbsp; Version 0.8</span>
+    </footer>
+  </main>
+</body>
+</html>

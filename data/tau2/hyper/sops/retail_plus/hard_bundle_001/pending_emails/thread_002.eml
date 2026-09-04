@@ -1,0 +1,100 @@
+From: Grace Okafor <grace.okafor@northstaroutfitters.com>
+To: Marcy Doyle <marcy.doyle@northstaroutfitters.com>
+Cc: Iris Kovac <iris.kovac@northstaroutfitters.com>,
+ Evan Kessler <evan.kessler@northstaroutfitters.com>
+Date: Thu, 26 Feb 2026 08:55:45 -0500
+Subject: RE: Write access review for the ledger sandbox
+Message-ID: <ae0052d429d8.b1eb7ac1@mail.northstaroutfitters.com>
+In-Reply-To: <99e3ed08a1f3.09d7d0b7@mail.northstaroutfitters.com>
+References: <637f664c38fc.68f82cf3@mail.northstaroutfitters.com>
+ <9ed7eaecd961.361d475e@mail.northstaroutfitters.com>
+ <0783da18db64.a6ace74b@mail.northstaroutfitters.com>
+ <99e3ed08a1f3.09d7d0b7@mail.northstaroutfitters.com>
+Thread-Topic: Write access review for the ledger sandbox
+Thread-Index: AbF5oQ+kX8nBh2F6EolIO7gSEr4gIQ==
+Accept-Language: en-US
+X-Auto-Response-Suppress: All
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Template is up under tracker templates. Zero requests so far, which is exactl=
+y the right number. The template asks four questions and fits on one screen: =
+purpose, tables, duration, and the two approvers. Iris's guardrail note is li=
+nked at the bottom so the scratch-schema rule is visible at request time rath=
+er than at rejection time.
+
+-----Original Message-----
+From: Evan Kessler <evan.kessler@northstaroutfitters.com>
+Sent: Wednesday, February 25, 2026 2:20 PM UTC-05:00
+To: Grace Okafor <grace.okafor@northstaroutfitters.com>
+Cc: Marcy Doyle <marcy.doyle@northstaroutfitters.com>; Iris Kovac <iris.kovac=
+@northstaroutfitters.com>
+Subject: RE: Write access review for the ledger sandbox
+Message-ID: <99e3ed08a1f3.09d7d0b7@mail.northstaroutfitters.com>
+In-Reply-To: <0783da18db64.a6ace74b@mail.northstaroutfitters.com>
+References: <637f664c38fc.68f82cf3@mail.northstaroutfitters.com> <9ed7eaecd96=
+1.361d475e@mail.northstaroutfitters.com> <0783da18db64.a6ace74b@mail.northsta=
+routfitters.com>
+
+No objection from accounting. Put the request form in the tracker templates s=
+o the process is findable when it is finally needed. One more accounting note=
+: if a write ever needs to touch a mirrored table to reproduce a defect, that=
+ stops being a sandbox request and becomes a change ticket with its own revie=
+w. Better to say so in the template than to discover the boundary mid-argumen=
+t.
+
+-----Original Message-----
+From: Iris Kovac <iris.kovac@northstaroutfitters.com>
+Sent: Wednesday, February 25, 2026 9:30 AM UTC-05:00
+To: Grace Okafor <grace.okafor@northstaroutfitters.com>
+Cc: Marcy Doyle <marcy.doyle@northstaroutfitters.com>; Evan Kessler <evan.kes=
+sler@northstaroutfitters.com>
+Subject: RE: Write access review for the ledger sandbox
+Message-ID: <0783da18db64.a6ace74b@mail.northstaroutfitters.com>
+In-Reply-To: <9ed7eaecd961.361d475e@mail.northstaroutfitters.com>
+References: <637f664c38fc.68f82cf3@mail.northstaroutfitters.com> <9ed7eaecd96=
+1.361d475e@mail.northstaroutfitters.com>
+
+One rails addition =E2=80=94 writes go to the scratch schema only, never the =
+mirrored tables. Refreshes stay reproducible that way, and on-call never has =
+to wonder whether a strange row is real. The scratch schema already exists an=
+d already resets on every refresh, so there is nothing to build. I will add a=
+ guardrail that rejects writes outside it from any account carrying the sandb=
+ox-writer role, which turns the policy from a promise into a property.
+
+-----Original Message-----
+From: Marcy Doyle <marcy.doyle@northstaroutfitters.com>
+Sent: Tuesday, February 24, 2026 11:05 AM UTC-05:00
+To: Grace Okafor <grace.okafor@northstaroutfitters.com>
+Cc: Iris Kovac <iris.kovac@northstaroutfitters.com>; Evan Kessler <evan.kessl=
+er@northstaroutfitters.com>
+Subject: RE: Write access review for the ledger sandbox
+Message-ID: <9ed7eaecd961.361d475e@mail.northstaroutfitters.com>
+In-Reply-To: <637f664c38fc.68f82cf3@mail.northstaroutfitters.com>
+References: <637f664c38fc.68f82cf3@mail.northstaroutfitters.com>
+
+Treasury proposal: written justification, a duration capped at thirty days, s=
+ign-off from me and from Noah, and automatic expiry rather than a removal tic=
+ket nobody files. Justification means a sentence about what the write is for =
+and which rows it touches, not an essay. The thirty-day cap is deliberately s=
+horter than a quarter so nothing survives from one access review to the next =
+without a fresh ask. And expiry has to be mechanical; the January cleanup fou=
+nd two grants that outlived the people who approved them.
+
+-----Original Message-----
+From: Grace Okafor <grace.okafor@northstaroutfitters.com>
+Sent: Tuesday, February 24, 2026 9:40 AM UTC-05:00
+To: Marcy Doyle <marcy.doyle@northstaroutfitters.com>
+Cc: Iris Kovac <iris.kovac@northstaroutfitters.com>; Evan Kessler <evan.kessl=
+er@northstaroutfitters.com>
+Subject: Write access review for the ledger sandbox
+Message-ID: <637f664c38fc.68f82cf3@mail.northstaroutfitters.com>
+
+At kickoff we agreed sandbox write access needed a separate review, and then =
+never wrote down what the review is. Defining it now, calmly, beats defining =
+it later during someone's urgent request. For scope, I mean the ledger sandbo=
+x only =E2=80=94 the catalog and messaging sandboxes have their own owners an=
+d their own rules, and I do not propose to annex them. What I want out of thi=
+s thread is a definition we can paste into the access wiki: who can ask, who =
+approves, how long it lasts, and how it ends. Three paragraphs, no ceremony.

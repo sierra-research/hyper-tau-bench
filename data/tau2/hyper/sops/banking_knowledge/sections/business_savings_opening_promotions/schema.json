@@ -1,0 +1,2038 @@
+{
+  "id": "banking_business_savings_opening_promotions_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "business_savings_opening_promotions",
+  "display_name": "Business savings opening, product selection, and promotions",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/business_savings_opening_promotions/source.md",
+    "heading": "## Business savings opening, product selection, and promotions"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/business_savings_opening_promotions/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/business_savings_opening_promotions/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook requirements from shared context: verify identity before account-specific information, get explicit confirmation before account-modifying actions, and use the exact transfer message when a transfer is performed.",
+      "Support console turns may mention document ids, internal tool results, and eligibility checks; Agent turns should give the customer the customer-visible next step or outcome.",
+      "Do not transform concrete KB tables, thresholds, statuses, fees, amounts, or condition-specific outcomes into vague dependency statements."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "identity verification before account-specific details",
+      "explicit customer confirmation before account-modifying actions",
+      "plain-language customer-facing outcomes",
+      "support-console notes for internal KB/tool evidence"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_004.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_009.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_015.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_016.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_savings_accounts_bronze_saver_account_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_savings_accounts_silver_saver_account_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_savings_accounts_silver_plus_saver_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_savings_accounts_silver_plus_saver_006.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_savings_accounts_gold_saver_account_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_savings_accounts_gold_saver_account_006.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_savings_accounts_gold_plus_saver_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_savings_accounts_gold_plus_saver_006.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_savings_accounts_platinum_reserve_account_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_savings_accounts_emerald_saver_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_savings_accounts_diamond_vault_001.json"
+    ],
+    "summary": "Opening and recommending business savings accounts, promotion eligibility, ACH/wire transfer features, and APY-oriented product selection.",
+    "rules": [
+      "Preserve all values, tables, thresholds, statuses, fees, amounts, eligibility gates, tool/action names, and condition-to-outcome mappings from the source bundle.",
+      "Use the shared banking handbook for identity verification, explicit confirmation before account-modifying actions, discoverable-tool wrapper behavior, schema limits, and transfer wording.",
+      "Do not invent unsupported account fields, undocumented override mechanisms, undocumented tool names, or customer entitlements not present in the source bundle.",
+      "When a source document is internal, represent its internal checks in Support console turns or agent behavior rather than as exposed policy narration."
+    ],
+    "candidate": {
+      "id": "business_savings_opening_promotions",
+      "title": "Business savings opening, product selection, and promotions",
+      "priority": 1,
+      "related_task_ids": [
+        "task_056",
+        "task_071"
+      ],
+      "recommended_case_count": 5,
+      "losslessness_risks": [
+        "Preserve product-specific APY/transfer features.",
+        "Preserve business savings promotion month and eligibility conditions.",
+        "Do not blur business checking and business savings procedures."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "business_savings_opening_promotions_journey",
+        "label": "Business savings opening, product selection, and promotions",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "business_savings_opening_promotions_shared_rules",
+        "label": "Shared workflow rules",
+        "kind": "shared_reference",
+        "parent_id": "business_savings_opening_promotions_journey",
+        "order": 1,
+        "description": "Rules, prerequisites, and reference values used by more than one customer pathway in this journey.",
+        "fact_ids": [
+          "F004",
+          "F005",
+          "F006",
+          "F007",
+          "F008",
+          "F009",
+          "F010",
+          "F011",
+          "F012",
+          "F013",
+          "F014",
+          "F015",
+          "F016",
+          "F017",
+          "F018",
+          "F019",
+          "F020",
+          "F021",
+          "F022",
+          "F023",
+          "F024",
+          "F025",
+          "F026",
+          "F027",
+          "F028",
+          "F032",
+          "F033",
+          "F037",
+          "F038",
+          "F042"
+        ]
+      },
+      {
+        "id": "business_savings_opening_promotions_path_a",
+        "label": "Open and fund an eligible business savings account",
+        "kind": "scenario_branch",
+        "parent_id": "business_savings_opening_promotions_journey",
+        "order": 2,
+        "description": "Policy path represented by case A.",
+        "fact_ids": [
+          "F029"
+        ]
+      },
+      {
+        "id": "business_savings_opening_promotions_path_b",
+        "label": "Open an eligible business savings account without funding",
+        "kind": "scenario_branch",
+        "parent_id": "business_savings_opening_promotions_journey",
+        "order": 3,
+        "description": "Policy path represented by case B.",
+        "fact_ids": [
+          "F030"
+        ]
+      },
+      {
+        "id": "business_savings_opening_promotions_path_c",
+        "label": "Open and fund a Gold Saver Account",
+        "kind": "scenario_branch",
+        "parent_id": "business_savings_opening_promotions_journey",
+        "order": 4,
+        "description": "Policy path represented by case C.",
+        "fact_ids": [
+          "F031"
+        ]
+      },
+      {
+        "id": "business_savings_opening_promotions_path_d",
+        "label": "October high-balance product recommendation",
+        "kind": "scenario_branch",
+        "parent_id": "business_savings_opening_promotions_journey",
+        "order": 5,
+        "description": "Policy path represented by case D.",
+        "fact_ids": [
+          "F039",
+          "F224"
+        ]
+      },
+      {
+        "id": "business_savings_opening_promotions_path_e",
+        "label": "October same-day ACH and transfer recommendation",
+        "kind": "scenario_branch",
+        "parent_id": "business_savings_opening_promotions_journey",
+        "order": 6,
+        "description": "Policy path represented by case E.",
+        "fact_ids": [
+          "F040"
+        ]
+      },
+      {
+        "id": "business_savings_opening_promotions_path_f",
+        "label": "November no-minimum no-fee recommendation",
+        "kind": "scenario_branch",
+        "parent_id": "business_savings_opening_promotions_journey",
+        "order": 7,
+        "description": "Policy path represented by case F.",
+        "fact_ids": [
+          "F041"
+        ]
+      },
+      {
+        "id": "business_savings_opening_promotions_path_g",
+        "label": "November same-day ACH promotion recommendation",
+        "kind": "scenario_branch",
+        "parent_id": "business_savings_opening_promotions_journey",
+        "order": 8,
+        "description": "Policy path represented by case G.",
+        "fact_ids": [
+          "F034",
+          "F223"
+        ]
+      },
+      {
+        "id": "business_savings_opening_promotions_path_h",
+        "label": "November relationship-bonus recommendation",
+        "kind": "scenario_branch",
+        "parent_id": "business_savings_opening_promotions_journey",
+        "order": 9,
+        "description": "Policy path represented by case H.",
+        "fact_ids": [
+          "F035"
+        ]
+      },
+      {
+        "id": "business_savings_opening_promotions_path_i",
+        "label": "November frequent-access recommendation",
+        "kind": "scenario_branch",
+        "parent_id": "business_savings_opening_promotions_journey",
+        "order": 10,
+        "description": "Policy path represented by case I.",
+        "fact_ids": [
+          "F036"
+        ]
+      },
+      {
+        "id": "business_savings_opening_promotions_path_j",
+        "label": "Bronze Saver product guidance",
+        "kind": "scenario_branch",
+        "parent_id": "business_savings_opening_promotions_journey",
+        "order": 11,
+        "description": "Policy path represented by case J.",
+        "fact_ids": [
+          "F043",
+          "F044",
+          "F045",
+          "F046",
+          "F047",
+          "F048",
+          "F049",
+          "F050",
+          "F051",
+          "F052",
+          "F053",
+          "F054",
+          "F055",
+          "F056",
+          "F057",
+          "F058",
+          "F059",
+          "F060",
+          "F061",
+          "F062",
+          "F063",
+          "F064",
+          "F065",
+          "F066",
+          "F067",
+          "F068",
+          "F069",
+          "F070",
+          "F071",
+          "F072",
+          "F073",
+          "F074",
+          "F075"
+        ]
+      },
+      {
+        "id": "business_savings_opening_promotions_path_k",
+        "label": "Silver Saver product guidance",
+        "kind": "scenario_branch",
+        "parent_id": "business_savings_opening_promotions_journey",
+        "order": 12,
+        "description": "Policy path represented by case K.",
+        "fact_ids": [
+          "F076",
+          "F077",
+          "F078",
+          "F079",
+          "F080",
+          "F081",
+          "F082",
+          "F083",
+          "F084",
+          "F085",
+          "F086",
+          "F087",
+          "F088",
+          "F089",
+          "F090",
+          "F091",
+          "F092",
+          "F093",
+          "F094"
+        ]
+      },
+      {
+        "id": "business_savings_opening_promotions_path_l",
+        "label": "Silver Plus Saver product guidance",
+        "kind": "scenario_branch",
+        "parent_id": "business_savings_opening_promotions_journey",
+        "order": 13,
+        "description": "Policy path represented by case L.",
+        "fact_ids": [
+          "F095",
+          "F096",
+          "F097",
+          "F098",
+          "F099",
+          "F100",
+          "F101",
+          "F102",
+          "F103",
+          "F104",
+          "F105",
+          "F106",
+          "F107",
+          "F108",
+          "F109",
+          "F110",
+          "F111",
+          "F112",
+          "F113",
+          "F114",
+          "F115",
+          "F116",
+          "F117",
+          "F118",
+          "F119",
+          "F120",
+          "F121",
+          "F122",
+          "F123",
+          "F124"
+        ]
+      },
+      {
+        "id": "business_savings_opening_promotions_path_m",
+        "label": "Gold Saver product guidance",
+        "kind": "scenario_branch",
+        "parent_id": "business_savings_opening_promotions_journey",
+        "order": 14,
+        "description": "Policy path represented by case M.",
+        "fact_ids": [
+          "F125",
+          "F126",
+          "F127",
+          "F128",
+          "F129",
+          "F130",
+          "F131",
+          "F132",
+          "F133",
+          "F134",
+          "F135",
+          "F136"
+        ]
+      },
+      {
+        "id": "business_savings_opening_promotions_path_n",
+        "label": "Gold Plus Saver product guidance",
+        "kind": "scenario_branch",
+        "parent_id": "business_savings_opening_promotions_journey",
+        "order": 15,
+        "description": "Policy path represented by case N.",
+        "fact_ids": [
+          "F137",
+          "F138",
+          "F139",
+          "F140",
+          "F141",
+          "F142",
+          "F143",
+          "F144",
+          "F145",
+          "F146",
+          "F147",
+          "F148",
+          "F149",
+          "F150",
+          "F151",
+          "F152",
+          "F153",
+          "F154",
+          "F155",
+          "F156",
+          "F157",
+          "F158",
+          "F159",
+          "F160",
+          "F161",
+          "F162",
+          "F163",
+          "F164",
+          "F165",
+          "F166",
+          "F167",
+          "F168",
+          "F169",
+          "F170",
+          "F171",
+          "F172",
+          "F173",
+          "F174",
+          "F175",
+          "F176",
+          "F177",
+          "F178",
+          "F179",
+          "F180",
+          "F181",
+          "F182",
+          "F183",
+          "F184",
+          "F185",
+          "F186",
+          "F187",
+          "F188",
+          "F189"
+        ]
+      },
+      {
+        "id": "business_savings_opening_promotions_path_o",
+        "label": "Platinum Reserve, Emerald Saver, and Diamond Vault comparison",
+        "kind": "scenario_branch",
+        "parent_id": "business_savings_opening_promotions_journey",
+        "order": 16,
+        "description": "Policy path represented by case O.",
+        "fact_ids": [
+          "F190",
+          "F191",
+          "F192",
+          "F193",
+          "F194",
+          "F195",
+          "F196",
+          "F197",
+          "F198",
+          "F199",
+          "F200",
+          "F201",
+          "F202",
+          "F203",
+          "F204",
+          "F205",
+          "F206",
+          "F207",
+          "F208",
+          "F209",
+          "F210",
+          "F211",
+          "F212",
+          "F213",
+          "F214",
+          "F215",
+          "F216",
+          "F217",
+          "F218",
+          "F219",
+          "F220",
+          "F221",
+          "F222"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "business_savings_opening_promotions_path_a",
+        "type": "uses_shared_rules",
+        "target_id": "business_savings_opening_promotions_shared_rules"
+      },
+      {
+        "source_id": "business_savings_opening_promotions_path_b",
+        "type": "uses_shared_rules",
+        "target_id": "business_savings_opening_promotions_shared_rules"
+      },
+      {
+        "source_id": "business_savings_opening_promotions_path_c",
+        "type": "uses_shared_rules",
+        "target_id": "business_savings_opening_promotions_shared_rules"
+      },
+      {
+        "source_id": "business_savings_opening_promotions_path_d",
+        "type": "uses_shared_rules",
+        "target_id": "business_savings_opening_promotions_shared_rules"
+      },
+      {
+        "source_id": "business_savings_opening_promotions_path_e",
+        "type": "uses_shared_rules",
+        "target_id": "business_savings_opening_promotions_shared_rules"
+      },
+      {
+        "source_id": "business_savings_opening_promotions_path_f",
+        "type": "uses_shared_rules",
+        "target_id": "business_savings_opening_promotions_shared_rules"
+      },
+      {
+        "source_id": "business_savings_opening_promotions_path_g",
+        "type": "uses_shared_rules",
+        "target_id": "business_savings_opening_promotions_shared_rules"
+      },
+      {
+        "source_id": "business_savings_opening_promotions_path_h",
+        "type": "uses_shared_rules",
+        "target_id": "business_savings_opening_promotions_shared_rules"
+      },
+      {
+        "source_id": "business_savings_opening_promotions_path_i",
+        "type": "uses_shared_rules",
+        "target_id": "business_savings_opening_promotions_shared_rules"
+      },
+      {
+        "source_id": "business_savings_opening_promotions_path_j",
+        "type": "uses_shared_rules",
+        "target_id": "business_savings_opening_promotions_shared_rules"
+      },
+      {
+        "source_id": "business_savings_opening_promotions_path_k",
+        "type": "uses_shared_rules",
+        "target_id": "business_savings_opening_promotions_shared_rules"
+      },
+      {
+        "source_id": "business_savings_opening_promotions_path_l",
+        "type": "uses_shared_rules",
+        "target_id": "business_savings_opening_promotions_shared_rules"
+      },
+      {
+        "source_id": "business_savings_opening_promotions_path_m",
+        "type": "uses_shared_rules",
+        "target_id": "business_savings_opening_promotions_shared_rules"
+      },
+      {
+        "source_id": "business_savings_opening_promotions_path_n",
+        "type": "uses_shared_rules",
+        "target_id": "business_savings_opening_promotions_shared_rules"
+      },
+      {
+        "source_id": "business_savings_opening_promotions_path_o",
+        "type": "uses_shared_rules",
+        "target_id": "business_savings_opening_promotions_shared_rules"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "F004",
+      "statement": "Use get_all_user_accounts_by_user_id_3847 to retrieve a customer's checking and savings bank accounts.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_009"
+    },
+    {
+      "id": "F005",
+      "statement": "get_all_user_accounts_by_user_id_3847 is essential for checking opening-eligibility requirements, pre-closure requirements when closing accounts, and account details for customer service inquiries, including existing account status, balances, account tenure, and number of accounts.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_009"
+    },
+    {
+      "id": "F006",
+      "statement": "get_all_user_accounts_by_user_id_3847 requires the customer's user_id and returns account_id, account_type, account_class, status, balance, and date_opened.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_009"
+    },
+    {
+      "id": "F007",
+      "statement": "Before proceeding to open a business savings account, the customer identity must be verified.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F008",
+      "statement": "Before proceeding to open a business savings account, the customer must have at least one qualifying business checking account that has status OPEN, has been open for at least 30 days, and has a current balance of at least $2,500.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F009",
+      "statement": "Before proceeding to open a business savings account, the customer must have fewer than 4 existing business savings accounts. The source states this limit in two phrasings: the eligibility requirement says the customer \"cannot have more than 4 business savings accounts\" while the eligibility checklist and decision points require \"fewer than 4\" existing business savings accounts; the checklist phrasing is the operative pre-opening check.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F010",
+      "statement": "Before proceeding to open a business savings account, the customer must have no accounts with negative balances.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F011",
+      "statement": "Before proceeding to open a business savings account, at least one existing business checking account must have been open for at least 30 days.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F012",
+      "statement": "Before proceeding to open a business savings account, the existing business checking account that satisfies the tenure requirement must have a current balance of at least $2,500.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F013",
+      "statement": "The qualifying OPEN business checking account that meets both the 30-day tenure threshold and the $2,500 balance threshold is the source account for the optional opening deposit transfer.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F014",
+      "statement": "The business savings opening procedure orders identity verification before checking eligibility requirements.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F015",
+      "statement": "After eligibility is confirmed, the agent must confirm the business savings account selection with the customer before opening the account.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F016",
+      "statement": "When confirming account selection, the agent asks for the desired business savings account_class, such as Bronze Saver Account or Silver Saver Account.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F017",
+      "statement": "When confirming account selection, the agent must capture the exact official account_class name ending with \"Account.\"",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F018",
+      "statement": "The agent calls open_bank_account_4821 only after eligibility is confirmed and the customer has selected the desired business savings account_class.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F019",
+      "statement": "The open_bank_account_4821 signature is open_bank_account_4821(user_id, account_type, account_class).",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F020",
+      "statement": "When calling open_bank_account_4821 for this procedure, the agent sets account_type to 'business_savings'.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F021",
+      "statement": "When calling open_bank_account_4821 for this procedure, the agent sets account_class to the exact official name provided by the customer, such as 'Bronze Saver Account'.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F022",
+      "statement": "open_bank_account_4821 returns a new savings account record, and the new account_id must be captured for subsequent actions.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F023",
+      "statement": "After opening the new business savings account, the agent asks whether the customer wants to transfer the opening deposit now from the eligible business checking account.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F024",
+      "statement": "The transfer_funds_between_bank_accounts_7291 signature is transfer_funds_between_bank_accounts_7291(source_account_id, destination_account_id, amount).",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F025",
+      "statement": "The agent calls transfer_funds_between_bank_accounts_7291 only if the customer authorizes transferring the opening deposit now.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F026",
+      "statement": "For an authorized opening-deposit transfer, source_account_id is the qualifying OPEN business checking account that meets the 30-day tenure and $2,500 balance requirements.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F027",
+      "statement": "For an authorized opening-deposit transfer, destination_account_id is the newly opened business savings account_id.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F028",
+      "statement": "For an authorized opening-deposit transfer, amount is the required opening deposit amount confirmed with the customer.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F029",
+      "statement": "If the customer funds the new business savings account now and the opening-deposit transfer succeeds, the agent completes the transfer and confirms success.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F030",
+      "statement": "If the customer does not fund the new business savings account now, the agent informs the customer that they have 30 days to fund the account via internal transfer or external deposit, otherwise the account will be closed.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F031",
+      "statement": "If an opening-deposit transfer fails, including for insufficient funds, the agent informs the customer and reminds them they have 30 days to fund the account via internal transfer or external deposit, or the account will be closed.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F032",
+      "statement": "The agent calls business-savings-opening tools directly to perform actions on behalf of the customer and does not expose tool details to the customer.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_004"
+    },
+    {
+      "id": "F033",
+      "statement": "The November 2025 business savings account promotion is active from 11/01/2025 to 11/30/2025.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_015"
+    },
+    {
+      "id": "F034",
+      "statement": "During the November 2025 promotion, when recommending business savings accounts and multiple accounts meet all of the customer's stated requirements, Gold Saver Account is the first-priority recommendation when Gold Saver Account itself meets all of the customer's stated requirements.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_015"
+    },
+    {
+      "id": "F035",
+      "statement": "During the November 2025 promotion, Silver Plus Saver is the second-priority recommendation: it ranks after a qualifying Gold Saver Account when both qualify, and it is preferred over other qualifying business savings accounts when Gold Saver Account does not meet the customer's stated requirements and Silver Plus Saver does.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_015"
+    },
+    {
+      "id": "F036",
+      "statement": "During the November 2025 promotion, all other qualifying business savings accounts may be recommended only if neither Gold Saver Account nor Silver Plus Saver meets the customer's requirements.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_015"
+    },
+    {
+      "id": "F037",
+      "statement": "During the November 2025 promotion, the recommended account must still meet all of the customer's stated requirements, and the agent must not recommend a promotional account if it does not satisfy the customer's needs.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_015"
+    },
+    {
+      "id": "F038",
+      "statement": "The October 2025 business savings account promotion is active from 10/12/2025 to 11/12/2025.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_016"
+    },
+    {
+      "id": "F039",
+      "statement": "During the October 2025 promotion, when recommending business savings accounts and multiple accounts meet all of the customer's stated requirements, Gold Plus Saver is the first-priority recommendation when Gold Plus Saver itself meets all of the customer's stated requirements.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_016"
+    },
+    {
+      "id": "F040",
+      "statement": "During the October 2025 promotion, Silver Plus Saver is the second-priority recommendation: it ranks after a qualifying Gold Plus Saver when both qualify, and it is preferred over other qualifying business savings accounts when Gold Plus Saver does not meet the customer's stated requirements and Silver Plus Saver does.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_016"
+    },
+    {
+      "id": "F041",
+      "statement": "During the October 2025 promotion, all other qualifying business savings accounts may be recommended only if neither Gold Plus Saver nor Silver Plus Saver meets the customer's requirements.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_016"
+    },
+    {
+      "id": "F042",
+      "statement": "During the October 2025 promotion, the recommended account must still meet all of the customer's stated requirements, and the agent must not recommend a promotional account if it does not satisfy the customer's needs.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_016"
+    },
+    {
+      "id": "F043",
+      "statement": "Business Bronze Saver has an APY of 2.0%.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F044",
+      "statement": "Business Bronze Saver has a monthly maintenance fee of $0.00.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F045",
+      "statement": "Business Bronze Saver has a minimum opening deposit of $0.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F046",
+      "statement": "Business Bronze Saver does not require an ongoing minimum balance.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F047",
+      "statement": "Business Bronze Saver withdrawals have generous monthly limits designed for frequent access.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F048",
+      "statement": "The Business Bronze Saver customer opening guide says to start the application online and select Business Bronze Saver.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F049",
+      "statement": "The Business Bronze Saver customer opening guide says to review and accept the account terms and disclosures.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F050",
+      "statement": "The Business Bronze Saver customer opening guide says to fund the account with at least $0, meaning the customer can open with $0 and add funds anytime.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F051",
+      "statement": "The Business Bronze Saver customer opening guide says to set the preferred funding source for future deposits and transfers, and if funding later, set a reminder so the balance begins earning 2.0% as soon as funds arrive.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F052",
+      "statement": "Business Bronze Saver earns 2.0% on the available balance.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F053",
+      "statement": "Business Bronze Saver deposits can be made via transfer from the customer's business banking source of choice.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F054",
+      "statement": "For Business Bronze Saver, larger, less frequent deposits generally help maintain a higher average balance, increasing total interest earned at the same APY.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F055",
+      "statement": "For Business Bronze Saver, periodic transfers may be scheduled weekly, biweekly, or monthly to match the customer's cash-flow cycle.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F056",
+      "statement": "For Business Bronze Saver, keeping funds in the account for as long as possible during the month helps maximize interest at 2.0%.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F057",
+      "statement": "For Business Bronze Saver, an eligible Business Rewards Card APY bonus is added to the 2.0% APY.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F058",
+      "statement": "For Business Bronze Saver, the Business Silver Rewards Card bonus is 0.15%, for an approximate total APY of 2.15%.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F059",
+      "statement": "For Business Bronze Saver, the Business Gold Rewards Card bonus is 0.35%, for an approximate total APY of 2.35%.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F060",
+      "statement": "For Business Bronze Saver, the Business Platinum Rewards Card bonus is 0.65%, for an approximate total APY of 2.65%.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F061",
+      "statement": "For Business Bronze Saver, the Business Rewards Card must be active and in the same business profile as the savings account for the APY bonus process.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F062",
+      "statement": "For Business Bronze Saver, the APY bonus reflects automatically once eligibility is recognized.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F063",
+      "statement": "Business Bronze Saver withdrawals are initiated through online banking transfers, and authorized users who help manage deposits and withdrawals can be added.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F064",
+      "statement": "For Business Bronze Saver, multiple smaller withdrawals can be planned within the generous monthly limit when periodic cash needs are expected.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F065",
+      "statement": "For Business Bronze Saver, larger sums can be consolidated into fewer transfers to stay comfortably within the monthly allowance.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F066",
+      "statement": "For Business Bronze Saver, withdrawals can be scheduled toward the end of the billing cycle when possible to keep funds earning 2.0% longer.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F067",
+      "statement": "For Business Bronze Saver, a $10,000 average balance at the 2.0% base APY has approximate annual interest of about $200.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F068",
+      "statement": "For Business Bronze Saver, a $10,000 average balance with a Business Silver Rewards Card bonus has approximate annual interest of about $215.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F069",
+      "statement": "For Business Bronze Saver, a $10,000 average balance with a Business Gold Rewards Card bonus has approximate annual interest of about $235.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F070",
+      "statement": "For Business Bronze Saver, a $10,000 average balance with a Business Platinum Rewards Card bonus has approximate annual interest of about $265.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F071",
+      "statement": "For Business Bronze Saver, a $25,000 average balance at the 2.0% base APY has approximate annual interest of about $500.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F072",
+      "statement": "For Business Bronze Saver, a $25,000 average balance with a Business Silver Rewards Card bonus has approximate annual interest of about $537.50.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F073",
+      "statement": "For Business Bronze Saver, a $25,000 average balance with a Business Gold Rewards Card bonus has approximate annual interest of about $587.50.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F074",
+      "statement": "For Business Bronze Saver, a $25,000 average balance with a Business Platinum Rewards Card bonus has approximate annual interest of about $662.50.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F075",
+      "statement": "Business Bronze Saver example earnings assume the APY remains the same and the balance does not change during the period.",
+      "source_doc": "doc_business_savings_accounts_bronze_saver_account_001"
+    },
+    {
+      "id": "F076",
+      "statement": "Silver Saver Account balances under $25,000 earn 2.5% APY.",
+      "source_doc": "doc_business_savings_accounts_silver_saver_account_001"
+    },
+    {
+      "id": "F077",
+      "statement": "Silver Saver Account balances at or above $25,000 earn 4.0% APY.",
+      "source_doc": "doc_business_savings_accounts_silver_saver_account_001"
+    },
+    {
+      "id": "F078",
+      "statement": "For Silver Saver Account, when the balance is at or above $25,000 the higher APY applies, and if the balance falls below $25,000 the lower APY applies.",
+      "source_doc": "doc_business_savings_accounts_silver_saver_account_001"
+    },
+    {
+      "id": "F079",
+      "statement": "For Silver Saver Account, an eligible Business Rewards Card bonus is added to the base tier rate.",
+      "source_doc": "doc_business_savings_accounts_silver_saver_account_001"
+    },
+    {
+      "id": "F080",
+      "statement": "For Silver Saver Account, the Business Silver Rewards Card bonus is +0.1% APY.",
+      "source_doc": "doc_business_savings_accounts_silver_saver_account_001"
+    },
+    {
+      "id": "F081",
+      "statement": "For Silver Saver Account, the Business Gold Rewards Card bonus is +0.3% APY.",
+      "source_doc": "doc_business_savings_accounts_silver_saver_account_001"
+    },
+    {
+      "id": "F082",
+      "statement": "For Silver Saver Account, the Business Platinum Rewards Card bonus is +0.55% APY.",
+      "source_doc": "doc_business_savings_accounts_silver_saver_account_001"
+    },
+    {
+      "id": "F083",
+      "statement": "For Silver Saver Account, the combined APY for balances under $25,000 with a Business Silver Rewards Card is 2.6%.",
+      "source_doc": "doc_business_savings_accounts_silver_saver_account_001"
+    },
+    {
+      "id": "F084",
+      "statement": "For Silver Saver Account, the combined APY for balances under $25,000 with a Business Gold Rewards Card is 2.8%.",
+      "source_doc": "doc_business_savings_accounts_silver_saver_account_001"
+    },
+    {
+      "id": "F085",
+      "statement": "For Silver Saver Account, the combined APY for balances under $25,000 with a Business Platinum Rewards Card is 3.05%.",
+      "source_doc": "doc_business_savings_accounts_silver_saver_account_001"
+    },
+    {
+      "id": "F086",
+      "statement": "For Silver Saver Account, the combined APY for balances of $25,000 or more with a Business Silver Rewards Card is 4.1%.",
+      "source_doc": "doc_business_savings_accounts_silver_saver_account_001"
+    },
+    {
+      "id": "F087",
+      "statement": "For Silver Saver Account, the combined APY for balances of $25,000 or more with a Business Gold Rewards Card is 4.3%.",
+      "source_doc": "doc_business_savings_accounts_silver_saver_account_001"
+    },
+    {
+      "id": "F088",
+      "statement": "For Silver Saver Account, the combined APY for balances of $25,000 or more with a Business Platinum Rewards Card is 4.55%.",
+      "source_doc": "doc_business_savings_accounts_silver_saver_account_001"
+    },
+    {
+      "id": "F089",
+      "statement": "For Silver Saver Account, a $24,000 balance with no card earns 2.5% APY and about $600 in interest over a full year.",
+      "source_doc": "doc_business_savings_accounts_silver_saver_account_001"
+    },
+    {
+      "id": "F090",
+      "statement": "For Silver Saver Account, a $26,000 balance with no card earns 4.0% APY and about $1,040 in interest over a full year.",
+      "source_doc": "doc_business_savings_accounts_silver_saver_account_001"
+    },
+    {
+      "id": "F091",
+      "statement": "For Silver Saver Account, a $40,000 balance with a Business Gold Rewards Card earns 4.3% APY and about $1,720 in interest over a full year.",
+      "source_doc": "doc_business_savings_accounts_silver_saver_account_001"
+    },
+    {
+      "id": "F092",
+      "statement": "For Silver Saver Account, a $100,000 balance with a Business Platinum Rewards Card earns 4.55% APY and about $4,550 in interest over a full year.",
+      "source_doc": "doc_business_savings_accounts_silver_saver_account_001"
+    },
+    {
+      "id": "F093",
+      "statement": "For Silver Saver Account, keeping a buffer above $25,000 helps avoid brief dips that could move the account into the lower APY tier.",
+      "source_doc": "doc_business_savings_accounts_silver_saver_account_001"
+    },
+    {
+      "id": "F094",
+      "statement": "For Silver Saver Account, if large withdrawals are planned, timing deposits can help the balance remain at or above $25,000.",
+      "source_doc": "doc_business_savings_accounts_silver_saver_account_001"
+    },
+    {
+      "id": "F095",
+      "statement": "Silver Plus Saver requires maintaining a minimum balance of $5,000 to keep the account in good standing.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F096",
+      "statement": "For Silver Plus Saver, if the balance is anticipated to dip below $5,000, timing deposits and withdrawals can help avoid falling under the requirement.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F097",
+      "statement": "Silver Plus Saver balances below the tier 2 threshold earn 2.5% APY.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F098",
+      "statement": "Silver Plus Saver balances above the tier 2 threshold earn 4.0% APY.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F099",
+      "statement": "For Silver Plus Saver, an eligible Business Rewards Card relationship APY bonus is added to the base APY for the balance tier the customer qualifies for.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F100",
+      "statement": "For Silver Plus Saver, the Business Silver Rewards Card relationship APY bonus is +0.18% APY.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F101",
+      "statement": "For Silver Plus Saver, the Business Gold Rewards Card relationship APY bonus is +0.38% APY.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F102",
+      "statement": "For Silver Plus Saver, the Business Platinum Rewards Card relationship APY bonus is +0.62% APY.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F103",
+      "statement": "For Silver Plus Saver, the example total APY below the tier 2 threshold with a Business Silver Rewards Card is 2.68%.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F104",
+      "statement": "For Silver Plus Saver, the example total APY below the tier 2 threshold with a Business Gold Rewards Card is 2.88%.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F105",
+      "statement": "For Silver Plus Saver, the example total APY below the tier 2 threshold with a Business Platinum Rewards Card is 3.12%.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F106",
+      "statement": "For Silver Plus Saver, the example total APY above the tier 2 threshold with a Business Silver Rewards Card is 4.18%.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F107",
+      "statement": "For Silver Plus Saver, the example total APY above the tier 2 threshold with a Business Gold Rewards Card is 4.38%.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F108",
+      "statement": "For Silver Plus Saver, the example total APY above the tier 2 threshold with a Business Platinum Rewards Card is 4.62%.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F109",
+      "statement": "Silver Plus Saver offers higher withdrawal limits and improved transfer capabilities compared to Silver Saver.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F110",
+      "statement": "For Silver Plus Saver, large withdrawals should be planned in advance to ensure smooth processing.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F111",
+      "statement": "For Silver Plus Saver, scheduled transfers can be used for recurring payments to maintain the target balance above $5,000.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F112",
+      "statement": "For Silver Plus Saver, unusually large or time-sensitive transfers should be initiated earlier in the business day to reduce delay risk.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F113",
+      "statement": "When upgrading from Silver Saver to Silver Plus Saver, the customer should confirm they can maintain at least $5,000 in Silver Plus Saver.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F114",
+      "statement": "An upgrade from Silver Saver to Silver Plus Saver can be requested through online banking or by contacting support.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F115",
+      "statement": "After an upgrade from Silver Saver to Silver Plus Saver is completed, balances begin earning at the Silver Plus Saver rates.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F116",
+      "statement": "In online banking, Silver Plus Saver account details show the current balance tier, the base APY for that tier, and any relationship APY bonus applied.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F117",
+      "statement": "For Silver Plus Saver, the current APY and bonus should be reviewed after any balance change or card status update.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_001"
+    },
+    {
+      "id": "F118",
+      "statement": "Same-day ACH is available for Silver Plus Saver.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_006"
+    },
+    {
+      "id": "F119",
+      "statement": "For Silver Plus Saver, when scheduling an ACH transfer, the customer selects the same-day delivery option if available for the transfer type and destination.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_006"
+    },
+    {
+      "id": "F120",
+      "statement": "For Silver Plus Saver same-day ACH, sufficient available funds should be ensured before submission to avoid reversals.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_006"
+    },
+    {
+      "id": "F121",
+      "statement": "For Silver Plus Saver same-day ACH, transfer activity should be monitored for confirmation that the same-day request was accepted.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_006"
+    },
+    {
+      "id": "F122",
+      "statement": "Interest on Silver Plus Saver is compounded daily.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_006"
+    },
+    {
+      "id": "F123",
+      "statement": "For Silver Plus Saver, notifications can be enabled when frequent time-sensitive payments are anticipated so same-day can be selected when it suits cash flow.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_006"
+    },
+    {
+      "id": "F124",
+      "statement": "For Silver Plus Saver, keeping the balance steady helps maximize the benefits of interest compounded daily.",
+      "source_doc": "doc_business_savings_accounts_silver_plus_saver_006"
+    },
+    {
+      "id": "F125",
+      "statement": "For Gold Saver Account, each portion of the balance earns according to the tier it falls into, and funds do not all earn the same rate if the balance spans multiple tiers.",
+      "source_doc": "doc_business_savings_accounts_gold_saver_account_001"
+    },
+    {
+      "id": "F126",
+      "statement": "The Gold Saver Account first tier APY is 2.5%.",
+      "source_doc": "doc_business_savings_accounts_gold_saver_account_001"
+    },
+    {
+      "id": "F127",
+      "statement": "The Gold Saver Account second tier APY is 3.0%.",
+      "source_doc": "doc_business_savings_accounts_gold_saver_account_001"
+    },
+    {
+      "id": "F128",
+      "statement": "The Gold Saver Account third tier APY is 3.25%.",
+      "source_doc": "doc_business_savings_accounts_gold_saver_account_001"
+    },
+    {
+      "id": "F129",
+      "statement": "For Gold Saver Account, tiered APY applies progressively, so amounts in lower tiers continue to earn their respective APYs even if the balance qualifies for a higher tier.",
+      "source_doc": "doc_business_savings_accounts_gold_saver_account_001"
+    },
+    {
+      "id": "F130",
+      "statement": "For Gold Saver Account, if the balance fluctuates, only the portion residing in a given tier earns that tier's APY.",
+      "source_doc": "doc_business_savings_accounts_gold_saver_account_001"
+    },
+    {
+      "id": "F131",
+      "statement": "Same-day ACH transfers are available for Gold Saver Account.",
+      "source_doc": "doc_business_savings_accounts_gold_saver_account_006"
+    },
+    {
+      "id": "F132",
+      "statement": "For Gold Saver Account same-day ACH usage, transfers should be initiated as early as possible to maximize the likelihood of same-day processing.",
+      "source_doc": "doc_business_savings_accounts_gold_saver_account_006"
+    },
+    {
+      "id": "F133",
+      "statement": "For Gold Saver Account same-day ACH, recipient details should be accurate to avoid delays.",
+      "source_doc": "doc_business_savings_accounts_gold_saver_account_006"
+    },
+    {
+      "id": "F134",
+      "statement": "The outgoing domestic wire fee for Gold Saver Account is 15.",
+      "source_doc": "doc_business_savings_accounts_gold_saver_account_006"
+    },
+    {
+      "id": "F135",
+      "statement": "For Gold Saver Account, same-day ACH is recommended when speed and cost are primary considerations and eligibility is met.",
+      "source_doc": "doc_business_savings_accounts_gold_saver_account_006"
+    },
+    {
+      "id": "F136",
+      "statement": "For Gold Saver Account, wires are recommended when guaranteed bank-to-bank delivery with detailed beneficiary instructions is needed.",
+      "source_doc": "doc_business_savings_accounts_gold_saver_account_006"
+    },
+    {
+      "id": "F137",
+      "statement": "Gold Plus Saver has a base APY of 5.0%.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F138",
+      "statement": "For Gold Plus Saver, eligible Business Silver Rewards Card holders receive an APY boost of +0.22%.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F139",
+      "statement": "For Gold Plus Saver, eligible Business Gold Rewards Card holders receive an APY boost of +0.45%.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F140",
+      "statement": "For Gold Plus Saver, eligible Business Platinum Rewards Card holders receive an APY boost of +0.7%.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F141",
+      "statement": "For Gold Plus Saver, the example APY with no eligible card is 5.00%.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F142",
+      "statement": "For Gold Plus Saver, the example APY with a Business Silver Rewards Card is 5.22%.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F143",
+      "statement": "For Gold Plus Saver, the example APY with a Business Gold Rewards Card is 5.45%.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F144",
+      "statement": "For Gold Plus Saver, the example APY with a Business Platinum Rewards Card is 5.70%.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F145",
+      "statement": "For Gold Plus Saver, if the customer holds more than one eligible card, they should contact support to confirm how the APY bonus is applied.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F146",
+      "statement": "Gold Plus Saver has a minimum balance to maintain the account of $25,000.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F147",
+      "statement": "Gold Plus Saver has a monthly maintenance fee of $15.00 if the $25,000 minimum balance is not met.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F148",
+      "statement": "For Gold Plus Saver, keeping the ledger balance at or above $25,000 avoids the $15.00 fee in a given statement cycle.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F149",
+      "statement": "For Gold Plus Saver, if a temporary dip below $25,000 is anticipated, pausing investment sweeps or scheduling inbound transfers in advance can help remain fee-exempt.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F150",
+      "statement": "Gold Plus Saver investment sweep integration automates excess cash deployment and replenishment without manual intervention.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F151",
+      "statement": "For Gold Plus Saver outbound sweeps, when the balance exceeds a threshold set by the customer, excess funds are automatically swept to the linked investment destination.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F152",
+      "statement": "For Gold Plus Saver inbound sweeps, if the balance falls below the floor, funds are automatically returned to Gold Plus Saver to restore liquidity.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F153",
+      "statement": "For Gold Plus Saver sweep thresholds, the customer chooses a target balance and a floor.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F154",
+      "statement": "For Gold Plus Saver sweep directionality, the customer can enable both outbound and inbound sweeps or inbound only, depending on liquidity needs.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F155",
+      "statement": "For Gold Plus Saver sweep frequency, sweeps can run automatically on a schedule or only when manually initiated.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F156",
+      "statement": "For Gold Plus Saver sweep configuration, the customer can set a minimum dollar amount per sweep to avoid micro-movements.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F157",
+      "statement": "For Gold Plus Saver, setting the sweep floor at or above $25,000 minimizes the chance of incurring the $15.00 fee.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F158",
+      "statement": "For Gold Plus Saver, before large outgoing payments, the customer can temporarily disable outbound sweeps or increase the target balance to ensure cash availability.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F159",
+      "statement": "For Gold Plus Saver, sweep activity should be reviewed regularly and thresholds adjusted as the average daily balance changes.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F160",
+      "statement": "Gold Plus Saver sweeps may be affected by banking holidays or processing windows.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F161",
+      "statement": "For Gold Plus Saver sweep operations, if funds are needed on a specific date, the customer should plan ahead and use priority support to coordinate timing.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F162",
+      "statement": "For Gold Plus Saver, sweeps can be paused or resumed at any time, and paused periods do not affect APY.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F163",
+      "statement": "Gold Plus Saver offers elevated transfer capacity for established businesses.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F164",
+      "statement": "For Gold Plus Saver, larger one-time transfers can be initiated by coordinating in advance through priority support to ensure smooth processing.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F165",
+      "statement": "For Gold Plus Saver, temporary limit increases can be requested for time-sensitive payments by providing transaction details and timing to expedite review.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F166",
+      "statement": "For Gold Plus Saver, recurring large transfers can be supported by setting up a predictable schedule so limits can be tailored to the expected flow.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F167",
+      "statement": "For Gold Plus Saver, large transfer requests should be submitted earlier in the business day to reduce cutoff-delay risk.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F168",
+      "statement": "For Gold Plus Saver, if a large outgoing transfer could reduce the balance below $25,000, the customer should adjust sweep settings or stage inbound funds in advance to avoid the $15.00 fee.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F169",
+      "statement": "Gold Plus Saver includes expedited priority support.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F170",
+      "statement": "Gold Plus Saver priority support can be used to confirm the current APY and any applicable Business Rewards Card bonus.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F171",
+      "statement": "Gold Plus Saver priority support can be used to configure, pause, or adjust investment sweep thresholds before major cash movements.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F172",
+      "statement": "Gold Plus Saver priority support can be used to coordinate large transfers, including temporary limit increases and timing considerations.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F173",
+      "statement": "Gold Plus Saver priority support can be used to investigate an assessment of the $15.00 fee if the customer believes the $25,000 requirement was met.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F174",
+      "statement": "A Gold Plus Saver priority support request should include the account name and last four digits of the account number.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F175",
+      "statement": "A Gold Plus Saver priority support request should include the desired action.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F176",
+      "statement": "A Gold Plus Saver priority support request should include the amount, date, and any timing constraints.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F177",
+      "statement": "A Gold Plus Saver priority support request should include contact details for real-time follow-up.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F178",
+      "statement": "For Gold Plus Saver, holding a Business Platinum Rewards Card increases APY from 5.0% to 5.70%, a +0.7% increase.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F179",
+      "statement": "For Gold Plus Saver, if a planned payment may drop the balance below $25,000, pausing outbound sweeps and scheduling an inbound transfer to replenish before the cycle ends helps avoid the monthly maintenance fee.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F180",
+      "statement": "For Gold Plus Saver, one week before a large vendor payment, the customer can raise the sweep target balance and contact priority support to confirm transfer capacity and timing.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F181",
+      "statement": "For Gold Plus Saver, after a large vendor payment clears, the customer can restore previous sweep settings.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_001"
+    },
+    {
+      "id": "F182",
+      "statement": "Gold Plus Saver standard external bank transfers typically complete within 1 business days after initiation, subject to cutoffs and verification.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_006"
+    },
+    {
+      "id": "F183",
+      "statement": "Gold Plus Saver external bank transfers may post sooner or later depending on receiving-bank schedules and reviews.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_006"
+    },
+    {
+      "id": "F184",
+      "statement": "Outgoing domestic wires from Gold Plus Saver incur a fee of $10 per transfer.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_006"
+    },
+    {
+      "id": "F185",
+      "statement": "For Gold Plus Saver, wires are used when speed and finality are required and the customer accepts the $10 cost.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_006"
+    },
+    {
+      "id": "F186",
+      "statement": "For Gold Plus Saver routine payments where timing flexibility exists, standard external transfers are appropriate and usually settle within 1 business days.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_006"
+    },
+    {
+      "id": "F187",
+      "statement": "For Gold Plus Saver time-sensitive obligations, the customer should choose an outgoing wire and account for the $10 fee.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_006"
+    },
+    {
+      "id": "F188",
+      "statement": "For Gold Plus Saver external bank transfers, the customer should monitor transfer status in the activity view and retain confirmation details for reconciliation.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_006"
+    },
+    {
+      "id": "F189",
+      "statement": "For Gold Plus Saver external bank transfers, if a transfer remains pending beyond expected timing, the customer should contact support with the transfer reference for assistance.",
+      "source_doc": "doc_business_savings_accounts_gold_plus_saver_006"
+    },
+    {
+      "id": "F190",
+      "statement": "Platinum Reserve Account has an APY of 5.0% with daily compounding.",
+      "source_doc": "doc_business_savings_accounts_platinum_reserve_account_001"
+    },
+    {
+      "id": "F191",
+      "statement": "Platinum Reserve Account has a minimum to open and maintain the account of $100,000.",
+      "source_doc": "doc_business_savings_accounts_platinum_reserve_account_001"
+    },
+    {
+      "id": "F192",
+      "statement": "Platinum Reserve Account is designed for enterprises that prioritize capital preservation, liquidity visibility, and operational efficiency while keeping surplus cash productive.",
+      "source_doc": "doc_business_savings_accounts_platinum_reserve_account_001"
+    },
+    {
+      "id": "F193",
+      "statement": "Platinum Reserve Account provides daily interest compounding aligned to the actual ledger balance.",
+      "source_doc": "doc_business_savings_accounts_platinum_reserve_account_001"
+    },
+    {
+      "id": "F194",
+      "statement": "Platinum Reserve Account provides a comprehensive liquidity dashboard for real-time visibility across funds.",
+      "source_doc": "doc_business_savings_accounts_platinum_reserve_account_001"
+    },
+    {
+      "id": "F195",
+      "statement": "Platinum Reserve Account provides same-day transfer capabilities for rapid movement of funds.",
+      "source_doc": "doc_business_savings_accounts_platinum_reserve_account_001"
+    },
+    {
+      "id": "F196",
+      "statement": "Platinum Reserve Account provides dedicated account management for onboarding, optimization, and ongoing support.",
+      "source_doc": "doc_business_savings_accounts_platinum_reserve_account_001"
+    },
+    {
+      "id": "F197",
+      "statement": "To get started with Platinum Reserve Account, the customer should confirm they can meet the ongoing balance threshold of $100,000.",
+      "source_doc": "doc_business_savings_accounts_platinum_reserve_account_001"
+    },
+    {
+      "id": "F198",
+      "statement": "To get started with Platinum Reserve Account, the customer should prepare the treasury team's access needs and governance model ahead of onboarding.",
+      "source_doc": "doc_business_savings_accounts_platinum_reserve_account_001"
+    },
+    {
+      "id": "F199",
+      "statement": "To get started with Platinum Reserve Account, the customer should align internal cash management policies with a daily-compounding savings framework.",
+      "source_doc": "doc_business_savings_accounts_platinum_reserve_account_001"
+    },
+    {
+      "id": "F200",
+      "statement": "Emerald Saver Account has an APY on balances of 3.5%.",
+      "source_doc": "doc_business_savings_accounts_emerald_saver_001"
+    },
+    {
+      "id": "F201",
+      "statement": "Emerald Saver Account has a minimum balance to maintain the account of $1,000.",
+      "source_doc": "doc_business_savings_accounts_emerald_saver_001"
+    },
+    {
+      "id": "F202",
+      "statement": "Emerald Saver Account has a monthly maintenance fee of $5.00 if the minimum is not met.",
+      "source_doc": "doc_business_savings_accounts_emerald_saver_001"
+    },
+    {
+      "id": "F203",
+      "statement": "Emerald Saver Account earns interest at 3.5% on eligible balances while the account is open and in good standing.",
+      "source_doc": "doc_business_savings_accounts_emerald_saver_001"
+    },
+    {
+      "id": "F204",
+      "statement": "For Emerald Saver Account, interest begins accruing once funds are available and continues as long as the account remains active.",
+      "source_doc": "doc_business_savings_accounts_emerald_saver_001"
+    },
+    {
+      "id": "F205",
+      "statement": "For Emerald Saver Account, keeping at least $1,000 in the account maintains status and avoids the monthly maintenance fee.",
+      "source_doc": "doc_business_savings_accounts_emerald_saver_001"
+    },
+    {
+      "id": "F206",
+      "statement": "For Emerald Saver Account, balance alerts can help ensure the end-of-day balance does not fall below $1,000.",
+      "source_doc": "doc_business_savings_accounts_emerald_saver_001"
+    },
+    {
+      "id": "F207",
+      "statement": "For Emerald Saver Account, if the required minimum is not met during the statement period, a fee of $5.00 is charged.",
+      "source_doc": "doc_business_savings_accounts_emerald_saver_001"
+    },
+    {
+      "id": "F208",
+      "statement": "For Emerald Saver Account, the $5.00 fee applies only for periods in which the minimum balance requirement is not satisfied.",
+      "source_doc": "doc_business_savings_accounts_emerald_saver_001"
+    },
+    {
+      "id": "F209",
+      "statement": "For Emerald Saver Account, internal transfers can be scheduled to arrive before the statement period ends if the balance is trending near $1,000.",
+      "source_doc": "doc_business_savings_accounts_emerald_saver_001"
+    },
+    {
+      "id": "F210",
+      "statement": "For Emerald Saver Account, pending transactions and holds should be reviewed regularly so the available balance remains above $1,000.",
+      "source_doc": "doc_business_savings_accounts_emerald_saver_001"
+    },
+    {
+      "id": "F211",
+      "statement": "For Emerald Saver Account, if a temporary dip is anticipated, deposits or sweep funds can be planned to restore the balance promptly and avoid the $5.00 fee.",
+      "source_doc": "doc_business_savings_accounts_emerald_saver_001"
+    },
+    {
+      "id": "F212",
+      "statement": "Diamond Vault Account has an APY of 6.5%.",
+      "source_doc": "doc_business_savings_accounts_diamond_vault_001"
+    },
+    {
+      "id": "F213",
+      "statement": "Diamond Vault Account has a minimum balance requirement of $500,000.",
+      "source_doc": "doc_business_savings_accounts_diamond_vault_001"
+    },
+    {
+      "id": "F214",
+      "statement": "Diamond Vault Account has a monthly maintenance fee of $0.00.",
+      "source_doc": "doc_business_savings_accounts_diamond_vault_001"
+    },
+    {
+      "id": "F215",
+      "statement": "Diamond Vault Account balances earn an APY of 6.5%.",
+      "source_doc": "doc_business_savings_accounts_diamond_vault_001"
+    },
+    {
+      "id": "F216",
+      "statement": "For Diamond Vault Account, interest is credited based on the maintained balance and applicable account terms.",
+      "source_doc": "doc_business_savings_accounts_diamond_vault_001"
+    },
+    {
+      "id": "F217",
+      "statement": "For Diamond Vault Account, maintaining at least $500,000 aligns with the tier's requirements.",
+      "source_doc": "doc_business_savings_accounts_diamond_vault_001"
+    },
+    {
+      "id": "F218",
+      "statement": "For Diamond Vault Account, if operating needs require temporary dips, incoming transfers can be scheduled to restore the balance promptly.",
+      "source_doc": "doc_business_savings_accounts_diamond_vault_001"
+    },
+    {
+      "id": "F219",
+      "statement": "For Diamond Vault Account, current fee status can be confirmed in the account's fee summary at any time.",
+      "source_doc": "doc_business_savings_accounts_diamond_vault_001"
+    },
+    {
+      "id": "F220",
+      "statement": "For Diamond Vault Account, internal alerts can be set to monitor when the available balance approaches the requirement.",
+      "source_doc": "doc_business_savings_accounts_diamond_vault_001"
+    },
+    {
+      "id": "F221",
+      "statement": "For Diamond Vault Account, cash movements from the operating account can be coordinated to maintain continuity of earnings at the stated APY.",
+      "source_doc": "doc_business_savings_accounts_diamond_vault_001"
+    },
+    {
+      "id": "F222",
+      "statement": "For Diamond Vault Account, balance and interest activity should be reviewed regularly to ensure performance aligns with the treasury plan.",
+      "source_doc": "doc_business_savings_accounts_diamond_vault_001"
+    },
+    {
+      "id": "F223",
+      "statement": "The November 2025 business savings promotion is designed to increase adoption of the bank's premium and enhanced-tier business savings offerings.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_015"
+    },
+    {
+      "id": "F224",
+      "statement": "The October 2025 business savings promotion is designed to increase adoption of the bank's investment-focused and enhanced-tier business savings offerings.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_016"
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "description": "Eligible business customer opens a new business savings account, authorizes the opening-deposit transfer from the qualifying OPEN business checking account, and the transfer succeeds.",
+      "included_fact_ids": [
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F017",
+        "F018",
+        "F019",
+        "F020",
+        "F021",
+        "F022",
+        "F023",
+        "F024",
+        "F025",
+        "F026",
+        "F027",
+        "F028",
+        "F029",
+        "F032"
+      ]
+    },
+    {
+      "id": "B",
+      "description": "Eligible business customer opens a new business savings account but declines to fund it immediately, requiring the 30-day funding deadline and closure warning.",
+      "included_fact_ids": [
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F017",
+        "F018",
+        "F019",
+        "F020",
+        "F021",
+        "F022",
+        "F023",
+        "F030",
+        "F032"
+      ]
+    },
+    {
+      "id": "C",
+      "description": "Eligible business customer opens a new business savings account and authorizes the opening-deposit transfer, but the transfer fails and the customer receives the failure outcome and 30-day funding reminder.",
+      "included_fact_ids": [
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F017",
+        "F018",
+        "F019",
+        "F020",
+        "F021",
+        "F022",
+        "F023",
+        "F024",
+        "F025",
+        "F026",
+        "F027",
+        "F028",
+        "F031",
+        "F032"
+      ]
+    },
+    {
+      "id": "D",
+      "description": "October-promotion recommendation case dated within 10/12/2025 to 11/12/2025 where Gold Plus Saver and Silver Plus Saver both meet all stated requirements, demonstrating Gold Plus Saver priority.",
+      "included_fact_ids": [
+        "F038",
+        "F039",
+        "F042",
+        "F224"
+      ]
+    },
+    {
+      "id": "E",
+      "description": "October-promotion recommendation case dated within 10/12/2025 to 11/12/2025 where Gold Plus Saver does not satisfy stated needs but Silver Plus Saver does, demonstrating Silver Plus Saver as second promotional priority.",
+      "included_fact_ids": [
+        "F038",
+        "F040",
+        "F042"
+      ]
+    },
+    {
+      "id": "F",
+      "description": "October-promotion recommendation case dated within 10/12/2025 to 11/12/2025 where neither Gold Plus Saver nor Silver Plus Saver meets the customer's requirements, demonstrating when another qualifying account may be recommended.",
+      "included_fact_ids": [
+        "F038",
+        "F041",
+        "F042"
+      ]
+    },
+    {
+      "id": "G",
+      "description": "November-promotion recommendation case dated within 11/01/2025 to 11/30/2025 where Gold Saver Account and Silver Plus Saver both meet all stated requirements, demonstrating Gold Saver Account priority.",
+      "included_fact_ids": [
+        "F033",
+        "F034",
+        "F037",
+        "F223"
+      ]
+    },
+    {
+      "id": "H",
+      "description": "November-promotion recommendation case dated within 11/01/2025 to 11/30/2025 where Gold Saver Account does not satisfy stated needs but Silver Plus Saver does, demonstrating Silver Plus Saver as second promotional priority.",
+      "included_fact_ids": [
+        "F033",
+        "F035",
+        "F037"
+      ]
+    },
+    {
+      "id": "I",
+      "description": "November-promotion recommendation case dated within 11/01/2025 to 11/30/2025 where neither Gold Saver Account nor Silver Plus Saver meets the customer's requirements, demonstrating when another qualifying account may be recommended.",
+      "included_fact_ids": [
+        "F033",
+        "F036",
+        "F037"
+      ]
+    },
+    {
+      "id": "J",
+      "description": "Business Bronze Saver product inquiry covering APY, fees, opening deposit, funding, rewards-card APY bonuses, withdrawals, and example earnings.",
+      "included_fact_ids": [
+        "F043",
+        "F044",
+        "F045",
+        "F046",
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F057",
+        "F058",
+        "F059",
+        "F060",
+        "F061",
+        "F062",
+        "F063",
+        "F064",
+        "F065",
+        "F066",
+        "F067",
+        "F068",
+        "F069",
+        "F070",
+        "F071",
+        "F072",
+        "F073",
+        "F074",
+        "F075"
+      ]
+    },
+    {
+      "id": "K",
+      "description": "Silver Saver Account APY inquiry covering balance tiers, cardholder APY bonuses, combined APY matrix entries, annual-interest examples, and higher-rate maintenance tips.",
+      "included_fact_ids": [
+        "F076",
+        "F077",
+        "F078",
+        "F079",
+        "F080",
+        "F081",
+        "F082",
+        "F083",
+        "F084",
+        "F085",
+        "F086",
+        "F087",
+        "F088",
+        "F089",
+        "F090",
+        "F091",
+        "F092",
+        "F093",
+        "F094"
+      ]
+    },
+    {
+      "id": "L",
+      "description": "Silver Plus Saver inquiry covering minimum balance, APY tiers and relationship bonuses, upgrade from Silver Saver, same-day ACH, transfer guidance, and daily compounding.",
+      "included_fact_ids": [
+        "F095",
+        "F096",
+        "F097",
+        "F098",
+        "F099",
+        "F100",
+        "F101",
+        "F102",
+        "F103",
+        "F104",
+        "F105",
+        "F106",
+        "F107",
+        "F108",
+        "F109",
+        "F110",
+        "F111",
+        "F112",
+        "F113",
+        "F114",
+        "F115",
+        "F116",
+        "F117",
+        "F118",
+        "F119",
+        "F120",
+        "F121",
+        "F122",
+        "F123",
+        "F124"
+      ]
+    },
+    {
+      "id": "M",
+      "description": "Gold Saver Account inquiry covering progressive tiered APY, same-day ACH, outgoing domestic wire fee, and ACH-versus-wire recommendations.",
+      "included_fact_ids": [
+        "F125",
+        "F126",
+        "F127",
+        "F128",
+        "F129",
+        "F130",
+        "F131",
+        "F132",
+        "F133",
+        "F134",
+        "F135",
+        "F136"
+      ]
+    },
+    {
+      "id": "N",
+      "description": "Gold Plus Saver inquiry covering APY and card boosts, minimum balance and fee, investment sweeps, enhanced transfer limits, priority support, external-transfer timing, and wire fees.",
+      "included_fact_ids": [
+        "F137",
+        "F138",
+        "F139",
+        "F140",
+        "F141",
+        "F142",
+        "F143",
+        "F144",
+        "F145",
+        "F146",
+        "F147",
+        "F148",
+        "F149",
+        "F150",
+        "F151",
+        "F152",
+        "F153",
+        "F154",
+        "F155",
+        "F156",
+        "F157",
+        "F158",
+        "F159",
+        "F160",
+        "F161",
+        "F162",
+        "F163",
+        "F164",
+        "F165",
+        "F166",
+        "F167",
+        "F168",
+        "F169",
+        "F170",
+        "F171",
+        "F172",
+        "F173",
+        "F174",
+        "F175",
+        "F176",
+        "F177",
+        "F178",
+        "F179",
+        "F180",
+        "F181",
+        "F182",
+        "F183",
+        "F184",
+        "F185",
+        "F186",
+        "F187",
+        "F188",
+        "F189"
+      ]
+    },
+    {
+      "id": "O",
+      "description": "High-balance business savings comparison covering Platinum Reserve Account, Emerald Saver Account, and Diamond Vault Account rates, balance requirements, fees, transfer or dashboard features, and maintenance guidance.",
+      "included_fact_ids": [
+        "F190",
+        "F191",
+        "F192",
+        "F193",
+        "F194",
+        "F195",
+        "F196",
+        "F197",
+        "F198",
+        "F199",
+        "F200",
+        "F201",
+        "F202",
+        "F203",
+        "F204",
+        "F205",
+        "F206",
+        "F207",
+        "F208",
+        "F209",
+        "F210",
+        "F211",
+        "F212",
+        "F213",
+        "F214",
+        "F215",
+        "F216",
+        "F217",
+        "F218",
+        "F219",
+        "F220",
+        "F221",
+        "F222"
+      ]
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/business_savings_opening_promotions/evidence_corpus_hard_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/business_savings_opening_promotions/client_overlay_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/business_savings_opening_promotions/client_overlay_business_001/transformation_pack.json"
+    }
+  ]
+}

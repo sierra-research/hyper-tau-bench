@@ -1,0 +1,140 @@
+From: Evan Sokolov <evan.sokolov@rho-bank.com>
+To: Priyanka Rao <priyanka.rao@rho-bank.com>,
+ Marcus Adeyemi <marcus.adeyemi@rho-bank.com>
+Cc: Tomas Rivera <tomas.rivera@rho-bank.com>
+Date: Mon, 03 Nov 2025 10:41:27 -0500
+Subject: RE: Platinum sandbox fixture still seeds a $50k floor
+Message-ID: <64912a0b4deecea5381d@rho-bank.com>
+In-Reply-To: <3e6443defd67db46b4df@rho-bank.com>
+References: <70a61ac23012195595d7@rho-bank.com>
+ <528d77ee0a53fba1f200@rho-bank.com> <26387acecacd1031121d@rho-bank.com>
+ <c6562e6b230e979d2acd@rho-bank.com> <6a27d6137a6ff8fa6b30@rho-bank.com>
+ <29ffcff0cdfcaf6c00e1@rho-bank.com> <efb428d4bcb1dbc8ebeb@rho-bank.com>
+ <47931e0f1a512c894744@rho-bank.com> <3d017e1598b6fc4835b9@rho-bank.com>
+ <3e6443defd67db46b4df@rho-bank.com>
+Thread-Topic: Platinum sandbox fixture still seeds a $50k floor
+Thread-Index: 4ba375123a07e1945e8768899186f224
+Accept-Language: en-US
+X-Auto-Response-Suppress: All
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Last loose end: the load-test profile had its own hardcoded fifty-thousand co=
+nstant. Grepped the whole config repo this time, three hits, all fixed. Sandb=
+ox, load rig, and the board finally agree with each other.
+
+-----Original Message-----
+From: Jordan Mills <jordan.mills@rho-bank.com>
+Sent: Thu, 30 Oct 2025 15:12:44 -0400
+To: Marcus Adeyemi <marcus.adeyemi@rho-bank.com>
+Cc: Priyanka Rao <priyanka.rao@rho-bank.com>, Evan Sokolov <evan.sokolov@rho-=
+bank.com>
+Subject: RE: Platinum sandbox fixture still seeds a $50k floor
+
+The public Platinum page states the line range, and it has said seventy-five =
+at the bottom end for as long as the capture history goes back. Nothing outsi=
+de to fix.
+
+-----Original Message-----
+From: Marcus Adeyemi <marcus.adeyemi@rho-bank.com>
+Sent: Thu, 30 Oct 2025 13:55:21 -0400
+To: Priyanka Rao <priyanka.rao@rho-bank.com>, Jordan Mills <jordan.mills@rho-=
+bank.com>
+Cc: Evan Sokolov <evan.sokolov@rho-bank.com>
+Subject: RE: Platinum sandbox fixture still seeds a $50k floor
+
+Does anything customer-facing quote a minimum line? Checking whether the
+old fifty ever leaked past internal docs.
+
+-----Original Message-----
+From: Tomas Rivera <tomas.rivera@rho-bank.com>
+Sent: Wed, 29 Oct 2025 10:37:49 -0400
+To: Evan Sokolov <evan.sokolov@rho-bank.com>, Priyanka Rao <priyanka.rao@rho-=
+bank.com>
+Subject: RE: Platinum sandbox fixture still seeds a $50k floor
+
+Re-linked the fee tables to the new fixtures. Proration cases pass, including=
+ the waiver-year edge cases for November openings.
+
+-----Original Message-----
+From: Evan Sokolov <evan.sokolov@rho-bank.com>
+Sent: Wed, 29 Oct 2025 09:13:34 -0400
+To: Priyanka Rao <priyanka.rao@rho-bank.com>
+Cc: Tomas Rivera <tomas.rivera@rho-bank.com>
+Subject: RE: Platinum sandbox fixture still seeds a $50k floor
+
+Rebuilt this morning. Fixtures now generate requested lines across the board'=
+s actual floor-to-cap range, and the old seed is archived next to the draft i=
+t came from.
+
+-----Original Message-----
+From: Priyanka Rao <priyanka.rao@rho-bank.com>
+Sent: Tue, 28 Oct 2025 16:49:58 -0400
+To: Evan Sokolov <evan.sokolov@rho-bank.com>, Grace Lindqvist <grace.lindqvis=
+t@rho-bank.com>, Tomas Rivera <tomas.rivera@rho-bank.com>
+Cc: Marcus Adeyemi <marcus.adeyemi@rho-bank.com>
+Subject: RE: Platinum sandbox fixture still seeds a $50k floor
+
+Review is done. CC-UND-01, the drawing filed as
+flow_005_platinum_two_pass_review.png, came out of the
+review replaced: I marked it SUPERSEDED on 2025-10-28 in the library
+index, and flow_003_platinum_underwriting.png is the approved
+board going forward. The fifty went out with it. Seventy-five thousand
+is the floor the current board carries, which is also the number
+pricing and the fee tables already assume, so nobody downstream should
+feel this. Evan, seed the sandbox from the current board. The workshop
+board keeps its index entry for the history.
+
+-----Original Message-----
+From: Tomas Rivera <tomas.rivera@rho-bank.com>
+Sent: Mon, 27 Oct 2025 15:44:12 -0400
+To: Priyanka Rao <priyanka.rao@rho-bank.com>
+Cc: Grace Lindqvist <grace.lindqvist@rho-bank.com>, Evan Sokolov <evan.sokolo=
+v@rho-bank.com>
+Subject: RE: Platinum sandbox fixture still seeds a $50k floor
+
+Same on my side. The annual-fee proration cases in the test env assume the cu=
+rrent floor, so if the review lands anywhere unexpected, my fixtures break lo=
+udly on Wednesday.
+
+-----Original Message-----
+From: Grace Lindqvist <grace.lindqvist@rho-bank.com>
+Sent: Mon, 27 Oct 2025 14:21:37 -0400
+To: Priyanka Rao <priyanka.rao@rho-bank.com>
+Cc: Evan Sokolov <evan.sokolov@rho-bank.com>
+Subject: RE: Platinum sandbox fixture still seeds a $50k floor
+
+For tomorrow's review: pricing models the Platinum book from seventy-five up.=
+ If any surviving board keeps a fifty floor I need to know the same day, beca=
+use the fee economics do not work down there.
+
+-----Original Message-----
+From: Evan Sokolov <evan.sokolov@rho-bank.com>
+Sent: Wed, 22 Oct 2025 11:58:03 -0400
+To: Priyanka Rao <priyanka.rao@rho-bank.com>
+Subject: RE: Platinum sandbox fixture still seeds a $50k floor
+
+holding. sandbox stays on the old seed till then.
+
+-----Original Message-----
+From: Priyanka Rao <priyanka.rao@rho-bank.com>
+Sent: Wed, 22 Oct 2025 11:35:26 -0400
+To: Evan Sokolov <evan.sokolov@rho-bank.com>
+Cc: Marcus Adeyemi <marcus.adeyemi@rho-bank.com>
+Subject: RE: Platinum sandbox fixture still seeds a $50k floor
+
+CC-UND-01 dates from the spring, when the floor question was still open,
+and it is one of the drafts going to Tuesday's risk review. Hold the
+rebuild until then so you only do it once.
+
+-----Original Message-----
+From: Evan Sokolov <evan.sokolov@rho-bank.com>
+Sent: Wed, 22 Oct 2025 10:12:41 -0400
+To: Priyanka Rao <priyanka.rao@rho-bank.com>
+Subject: Platinum sandbox fixture still seeds a $50k floor
+
+Rebuilding the Platinum underwriting sandbox ahead of the waiver launch, and =
+the seed fixture sets the smallest approvable line at fifty thousand. The com=
+ment traces it to CC-UND-01. Is that draft still the reference for anything, =
+or should I seed from the current board?

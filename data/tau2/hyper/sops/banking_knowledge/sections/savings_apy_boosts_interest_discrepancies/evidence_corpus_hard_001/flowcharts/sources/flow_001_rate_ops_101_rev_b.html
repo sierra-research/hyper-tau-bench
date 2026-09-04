@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>RATE-OPS-101 rev B — Savings account credits — desk procedure</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 1240px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #4a5568; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #cdd6e0; }
+  .node { position: absolute; width: 300px; box-sizing: border-box; border: 2px solid #4a5b6d; border-radius: 6px; background: #fff; padding: 10px 12px; font-size: 13px; line-height: 1.35; color: #1d2733; }
+  .node .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding: 1px 6px; border-radius: 3px; margin-bottom: 6px; }
+  .entry { border-color: #1d6a44; } .entry .tag { background: #d9efe3; color: #17573a; }
+  .read { border-color: #2b5f8f; } .read .tag { background: #dcebf7; color: #234d73; }
+  .work { border-color: #4a5b6d; } .work .tag { background: #e6ebf0; color: #3a4a5a; }
+  .queue { border-color: #8a2f3c; } .queue .tag { background: #f6dde1; color: #6e2530; }
+  .terminal { border-color: #1d6a44; background: #f2faf5; } .terminal .tag { background: #d9efe3; color: #17573a; }
+  .decision { position: absolute; width: 300px; box-sizing: border-box; }
+  .decision .diamond { width: 280px; height: 132px; margin: 0 auto; background: #fff8e8; border: 2px solid #b08a1f; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 8px 16px; box-sizing: border-box; font-size: 12.5px; text-align: center; color: #4b3d10; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+  svg.edges { position: absolute; left: 0; top: 0; width: 1560px; height: 1240px; pointer-events: none; }
+  svg.edges path { stroke: #51606f; stroke-width: 2; fill: none; marker-end: url(#arrowa); }
+  .edge-label { position: absolute; font-size: 11px; font-weight: 600; color: #38424d; background: #fbfcfdcc; padding: 0 4px; border-radius: 2px; }
+  .sticky { position: absolute; width: 280px; box-sizing: border-box; padding: 10px 12px; font-size: 12px; line-height: 1.35; box-shadow: 2px 3px 6px rgba(0,0,0,0.12); }
+  .sticky.yellow { background: #fdf3c0; } .sticky.pink { background: #fbdce4; }
+  .control-definitions { position: absolute; left: 24px; top: 1074px; width: 1512px; box-sizing: border-box; border: 2px solid #4a5568; background: #f4f8fc; border-radius: 6px; padding: 14px 18px; }
+  .control-definitions h2 { margin: 0 0 8px; font-size: 14px; letter-spacing: 0.4px; color: #4a5568; }
+  .control-definitions dl { margin: 0; font-size: 12.5px; line-height: 1.45; color: #1d2733; }
+  .control-definitions dt { font-weight: 700; font-family: "Consolas", monospace; margin-top: 7px; }
+  .control-definitions dd { margin: 1px 0 0 14px; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>Savings account credits — desk procedure</h1>
+    <div class="meta">RATE-OPS-101 rev B &nbsp;·&nbsp; Approved 2025-10-08 (M. Osei, Rate Operations) &nbsp;·&nbsp; Supersedes rev A &nbsp;·&nbsp; Review with the October interest-run retro</div>
+  </div>
+
+  <svg class="edges" viewBox="0 0 1560 1240">
+    <defs><marker id="arrowa" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#51606f"></path></marker></defs>
+    <!-- entry -> verify -->
+    <path d="M 190 208 L 190 262"></path>
+    <!-- verify -> confirm savings -->
+    <path d="M 190 396 L 190 452"></path>
+    <!-- confirm savings -> circumstance diamond -->
+    <path d="M 190 566 L 190 626"></path>
+    <!-- diamond no -> no credit terminal -->
+    <path d="M 40 694 L 20 694 L 20 900 L 40 900"></path>
+    <!-- diamond yes -> calculate -->
+    <path d="M 340 694 L 448 694 L 448 640"></path>
+    <!-- calculate -> goodwill diamond -->
+    <path d="M 598 512 L 598 452 L 690 452 L 748 452"></path>
+    <!-- goodwill diamond yes -> supervisor -->
+    <path d="M 898 520 L 898 452 L 958 452"></path>
+    <!-- goodwill diamond no -> apply -->
+    <path d="M 828 656 L 828 726 L 958 726"></path>
+    <!-- supervisor -> apply -->
+    <path d="M 1108 574 L 1108 640"></path>
+    <!-- apply -> inform terminal -->
+    <path d="M 1108 810 L 1108 878"></path>
+  </svg>
+
+  <span class="edge-label" style="left:30px;top:760px">no — none of the three apply</span>
+  <span class="edge-label" style="left:352px;top:668px">yes — eligible circumstance</span>
+  <span class="edge-label" style="left:836px;top:430px">yes — goodwill over $25</span>
+  <span class="edge-label" style="left:838px;top:688px">no — within authorization</span>
+
+  <article class="node entry" style="left:40px;top:100px"><span class="tag">ENTRY</span>
+    Customer contact or internal referral indicates a savings account may need a
+    credit. Agent opens the credit checklist before touching the account.
+  </article>
+
+  <article class="node read" style="left:40px;top:266px"><span class="tag">STEP 1 — VERIFY</span>
+    Verify the customer's identity and account ownership.
+  </article>
+
+  <article class="node read" style="left:40px;top:456px"><span class="tag">STEP 2 — ACCOUNT TYPE</span>
+    Confirm that the account is a savings account. Checking-side credits follow a
+    different board.
+  </article>
+
+  <div class="decision" style="left:40px;top:626px"><div class="diamond">Does the customer meet one of the eligible credit circumstances?</div></div>
+
+  <article class="node work" style="left:448px;top:512px"><span class="tag">STEP 3 — CALCULATE</span>
+    Calculate the correct credit amount based on the discrepancy or fee. Show the
+    arithmetic in the case notes.
+  </article>
+
+  <div class="decision" style="left:748px;top:520px"><div class="diamond">Goodwill credit for an amount over $25?</div></div>
+
+  <article class="node queue" style="left:958px;top:414px"><span class="tag">SUPERVISOR APPROVAL</span>
+    Goodwill credits should be rare. Amounts over $25 typically require supervisor
+    approval — record the approver on the case before applying.
+  </article>
+
+  <article class="node work" style="left:958px;top:644px"><span class="tag">STEP 4 — APPLY</span>
+    After completing the required checks, use apply_savings_account_credit_6831 to
+    apply the credit to the savings account.
+  </article>
+
+  <article class="node terminal" style="left:958px;top:882px"><span class="tag">TERMINAL — INFORM</span>
+    Inform the customer of the applied credit and the new account balance. Close
+    the checklist on the case.
+  </article>
+
+  <article class="node work" style="left:40px;top:854px"><span class="tag">TERMINAL — NO CREDIT</span>
+    No eligible circumstance: explain why, and route rate questions to the product
+    documentation. Nothing is applied.
+  </article>
+
+  <aside class="sticky yellow" style="left:390px;top:100px">
+    <strong>Eligible circumstances (the only three):</strong> agents are authorized
+    to apply credits to savings accounts only for interest corrections, fee
+    refunds, or goodwill credits.
+  </aside>
+
+  <aside class="sticky yellow" style="left:700px;top:100px">
+    <strong>Fee refund:</strong> authorized if a fee was incorrectly charged to the
+    savings account — for example an excess withdrawal fee charged when the
+    customer was within limits, or a monthly maintenance fee charged when the
+    balance requirement was met.
+  </aside>
+
+  <aside class="sticky yellow" style="left:1010px;top:100px">
+    <strong>Goodwill credit:</strong> exceptional circumstances only, where the
+    customer experienced significant inconvenience due to bank error.
+  </aside>
+
+  <aside class="sticky pink" style="left:1310px;top:100px">
+    <strong>Interest corrections:</strong> eligibility and the tool-driven
+    pre-checks run through the interest-discrepancy flow — RATE-OPS-102, current
+    revision. Do not shortcut the component review.
+  </aside>
+
+  <div class="control-definitions">
+    <h2>TOOL REFERENCE</h2>
+    <dl>
+      <dt>apply_savings_account_credit_6831</dt>
+      <dd>Adds a credit transaction to a savings account. Parameter contract and
+      field definitions live in the deposit-console workspace export (Devon Park's
+      team owns the console); this board does not restate signatures.</dd>
+    </dl>
+  </div>
+</div>
+</body>
+</html>

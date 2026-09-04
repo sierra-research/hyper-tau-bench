@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CLI-DB-302 — Intake triage sketch (working state)</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 900px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #5a6b7d; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #d5dde5; }
+  .node { position: absolute; box-sizing: border-box; background: #fff; border: 2px solid #35506e; border-radius: 8px; padding: 10px 12px; font-size: 13.5px; color: #1d2833; line-height: 1.35; }
+  .start { border-color: #2e7d54; background: #f2faf5; }
+  .decision { border-color: #a2662a; background: #fdf7ee; }
+  .step { border-color: #35506e; }
+  .ghost { border-style: dashed; color: #7b8794; border-color: #9aa6b2; background: #f7f9fb; }
+  .note { position: absolute; box-sizing: border-box; background: #fffbe8; border: 1px solid #d9c98a; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; color: #4c4630; line-height: 1.35; }
+  .edge { position: absolute; background: #55677a; }
+  .h { height: 2px; } .v { width: 2px; }
+  .lbl { position: absolute; font-size: 11.5px; color: #55677a; background: #fbfcfd; padding: 0 4px; }
+  .foot { position: absolute; left: 24px; bottom: 12px; font-size: 11.5px; color: #7b8794; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>CLI-DB-302 &mdash; Intake triage sketch (working state)</h1>
+    <div class="meta">CLI Desk &middot; whiteboard capture 2025-11-05 &middot; not circulated &mdash; parking-lot sketch from the Wednesday sync</div>
+  </div>
+
+  <div class="node start" style="left:56px; top:120px; width:300px;">Card contact lands in the general queue</div>
+
+  <div class="node decision" style="left:56px; top:220px; width:300px;">What is the customer actually asking?</div>
+
+  <div class="edge v" style="left:206px; top:176px; height:44px;"></div>
+
+  <div class="node step" style="left:480px; top:130px; width:300px;">"More room on my card" &rarr; cli-decisioning queue, request form attached</div>
+  <div class="node step" style="left:480px; top:250px; width:300px;">"Pay my card from checking" &rarr; stays in card-support; payment macro handles it</div>
+  <div class="node step" style="left:480px; top:370px; width:300px;">"Charge I don't recognize" &rarr; disputes desk queue &mdash; different desk, different rules</div>
+  <div class="node ghost" style="left:480px; top:490px; width:300px;">"Raise my limit AND fight this charge" &rarr; ?? sequencing question &mdash; parked</div>
+
+  <div class="edge h" style="left:356px; top:262px; width:124px;"></div>
+  <div class="lbl" style="left:380px; top:246px;">route</div>
+
+  <div class="note" style="left:56px; top:420px; width:340px;">Parked at sync: does an active dispute block the increase conversation at intake, or does the request go in and the screen catches it? Current answer per the directive ordering: the request goes in; intake does not pre-screen. Sketch kept for the routing question only.</div>
+
+  <div class="note" style="left:880px; top:130px; width:380px;">Sync scribbles: the mixed-ask case (limit + dispute in one call) needs a warm-handoff convention between desks. Nobody owns this yet. Volunteer wanted, bribes accepted.</div>
+
+  <div class="node ghost" style="left:880px; top:300px; width:340px;">Possible v1: triage question script for the general queue &mdash; three questions max, no policy content, route fast</div>
+
+  <div class="foot">CLI-DB-302 working sketch &middot; whiteboard capture, unpolished by design &middot; internal &mdash; not customer-facing</div>
+</div>
+</body>
+</html>

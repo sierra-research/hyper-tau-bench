@@ -1,0 +1,130 @@
+From: Thandi Mbeki <thandi.mbeki@rhobank.com>
+To: deposit-desk <deposit-desk@rhobank.com>
+Date: Fri, 14 Nov 2025 08:34:25 -0500
+Subject: RE: Extract row disagrees with the item record
+Message-ID: <extc-f1f2a5@rhobank.com>
+In-Reply-To: <extc-0eb6b0@rhobank.com>
+References: <extc-a16246@rhobank.com>
+ <extc-d4326d@rhobank.com>
+ <extc-7cb293@rhobank.com>
+ <extc-0a2345@rhobank.com>
+ <extc-272711@rhobank.com>
+ <extc-579935@rhobank.com>
+ <extc-d316df@rhobank.com>
+ <extc-017293@rhobank.com>
+ <extc-66a157@rhobank.com>
+ <extc-0eb6b0@rhobank.com>
+Thread-Topic: Extract row disagrees with the item record
+Thread-Index: f40951f6130ad931d2d5f19e46e1b28e
+Accept-Language: en-US
+X-Auto-Response-Suppress: All
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+The desk noticed nothing, which is the correct amount of
+noticing.
+
+-----Original Message-----
+From: T. Nkemelu <tobias.nkemelu@rhobank.com>
+Sent: Fri, 14 Nov 2025 08:19:09 -0500
+To: Elliot Park <elliot.park@rhobank.com>; Aya Kimura <aya.kimura@rhobank.com>
+Cc: deposit-desk <deposit-desk@rhobank.com>
+Subject: RE: Extract row disagrees with the item record
+
+Row ties in this morning's cycle. Thanks, all.
+
+-----Original Message-----
+From: Sana Qureshi <sana.qureshi@rhobank.com>
+Sent: Thu, 13 Nov 2025 16:55:37 -0500
+To: Elliot Park <elliot.park@rhobank.com>; T. Nkemelu <tobias.nkemelu@rhobank.com>
+Cc: deposit-desk <deposit-desk@rhobank.com>
+Subject: RE: Extract row disagrees with the item record
+
+Then my note writes itself: the extract is a read replica, the app
+is the account of record. Moses is adding a line to the
+status-lookup macro so the desk never has to relearn this from a
+customer. Closing the risk item.
+
+-----Original Message-----
+From: T. Nkemelu <tobias.nkemelu@rhobank.com>
+Sent: Thu, 13 Nov 2025 16:22:41 -0500
+To: R. Salcedo <r.salcedo@rhobank.com>
+Cc: deposit-desk <deposit-desk@rhobank.com>
+Subject: RE: Extract row disagrees with the item record
+
+Checked. No letter quotes account digits - the pending-deposit
+template does not print them, which today is a feature.
+
+-----Original Message-----
+From: R. Salcedo <r.salcedo@rhobank.com>
+Sent: Thu, 13 Nov 2025 15:47:18 -0500
+To: deposit-desk <deposit-desk@rhobank.com>
+Subject: RE: Extract row disagrees with the item record
+
+Before this closes - did anything the review desk sent out this
+week quote the wrong digits?
+
+-----Original Message-----
+From: Aya Kimura <aya.kimura@rhobank.com>
+Sent: Thu, 13 Nov 2025 15:06:52 -0500
+To: Elliot Park <elliot.park@rhobank.com>
+Cc: T. Nkemelu <tobias.nkemelu@rhobank.com>; deposit-desk <deposit-desk@rhobank.com>
+Subject: RE: Extract row disagrees with the item record
+
+Staged. The remap lands in tomorrow's cycle; prior cycles stay as
+written - they are captures of what the job produced, not ledgers
+we edit after the fact.
+
+-----Original Message-----
+From: Elliot Park <elliot.park@rhobank.com>
+Sent: Thu, 13 Nov 2025 14:31:46 -0500
+To: Sana Qureshi <sana.qureshi@rhobank.com>; T. Nkemelu <tobias.nkemelu@rhobank.com>
+Cc: deposit-desk <deposit-desk@rhobank.com>
+Subject: RE: Extract row disagrees with the item record
+
+Root cause is a stale assumption, not an access problem: when a
+profile holds two accounts of the same type, the extract took the
+deposit-to account by list position instead of by the item's own
+account id. One row affected in the current window. A class in
+principle, rare in practice - it needs the second same-type
+account to be the deposit target. Fix rides tonight's job.
+
+-----Original Message-----
+From: Sana Qureshi <sana.qureshi@rhobank.com>
+Sent: Thu, 13 Nov 2025 11:58:23 -0500
+To: Elliot Park <elliot.park@rhobank.com>; T. Nkemelu <tobias.nkemelu@rhobank.com>
+Cc: deposit-desk <deposit-desk@rhobank.com>
+Subject: RE: Extract row disagrees with the item record
+
+Risk hat on: is this one row or a class? I need to know which
+sentence goes in the access-review note.
+
+-----Original Message-----
+From: T. Nkemelu <tobias.nkemelu@rhobank.com>
+Sent: Thu, 13 Nov 2025 10:41:07 -0500
+To: Elliot Park <elliot.park@rhobank.com>
+Cc: deposit-desk <deposit-desk@rhobank.com>
+Subject: RE: Extract row disagrees with the item record
+
+I was absolutely going to. Noted.
+
+-----Original Message-----
+From: Elliot Park <elliot.park@rhobank.com>
+Sent: Thu, 13 Nov 2025 10:26:14 -0500
+To: T. Nkemelu <tobias.nkemelu@rhobank.com>
+Cc: deposit-desk <deposit-desk@rhobank.com>
+Subject: RE: Extract row disagrees with the item record
+
+Looking. Do not patch the sheet by hand.
+
+-----Original Message-----
+From: T. Nkemelu <tobias.nkemelu@rhobank.com>
+Sent: Thu, 13 Nov 2025 10:12:31 -0500
+To: Elliot Park <elliot.park@rhobank.com>
+Cc: deposit-desk <deposit-desk@rhobank.com>
+Subject: Extract row disagrees with the item record
+
+One row in Wednesday's cycle shows a deposit-to account that does
+not match the item record. Everything else on the row ties.
+Ticket DEP-4194 has the row and the digits.

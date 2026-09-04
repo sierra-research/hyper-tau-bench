@@ -1,0 +1,75 @@
+Frame 4 - Item change on a pending order: highest-stakes lane, read this
+frame twice. Header note: Milestone 5 scope.
+
+Item-change flow:
+1. Pending confirmed - customer wants different variants of items in the
+   order.
+2. Walk the order line by line: which items change, and to which new
+   variant?
+3. Per line: new variant is the SAME product, different option?
+   - No: a different product type entirely (shirt to shoes) is not an item
+     change; that's outside this lane. Decline the swap for that line.
+4. New variant currently available?
+   - No: variant out of stock - offer a different option or leave that line
+     as-is. Unavailable variants never go on the change list.
+5. Add the line to the change list and ask: any other items to change? Loop
+   until the list is complete.
+6. Compute the price difference across the whole list - it can land higher
+   or lower than the original.
+7. Customer names one payment method to settle the whole difference - it
+   takes the charge if the new total is higher, or receives the refund if
+   it's lower.
+8. Difference is a CHARGE and the method is a gift card?
+   - Yes: gift-card balance covers the FULL difference? If the balance can't
+     cover the increase, that gift card can't settle this change; pick a
+     different method (or a different variant mix) before anything is
+     submitted.
+9. Final recap - confirm the list is COMPLETE: every line swap, the price
+   difference, and the settling method, read back in one pass.
+10. End the recap with the last-call question: "anything else you'd like to
+    change before I submit?" - then wait for the customer's answer. Never
+    submit while that question is still open.
+    - Customer adds another item: reopen the list.
+    - Customer wavers at the go/no-go: nothing submitted yet; return to the
+      recap when they're ready.
+11. Customer says go: SUBMIT the item change - single call, entire list at
+    once. The difference settles at submit: charge or refund runs against
+    the named method as part of the same operation.
+12. Post-submit state: status becomes pending (items modified) at submit.
+    What the order record supports from that point is the Order Ops
+    write-path matrix's call - the matrix lives in the servicing appendix,
+    off-board since M5 scope closed.
+13. End - items swapped, status updated.
+
+Status-string callout: post-submit status is the literal string pending
+(items modified) - lowercase, parenthesised; downstream systems compare on it
+literally; if a tool shows anything else, stop and flag in
+#beacon-order-servicing before touching the order again.
+
+Stickies (commentary): number-one escalation source three months running -
+three items swapped, customer rings back about a fourth, and where that
+lands post-submit is a write-path-matrix lookup nobody enjoys mid-call; the
+last-call question exists for exactly this (Priya Shah). Phrasing tip:
+"before I hit submit - anything else on this order, even a maybe?" (Iris
+Kovac). If the customer wavers, do not park a half-submitted change; nothing
+exists until submit (Sanjay Rao).
+
+Milestone 5 strip - item changes, launch history (shipped 6.1.26, live):
+- Superseded 5.22.26 (design review): the draft flow allowed submitting
+  line-by-line; cut before launch - recap quality and reconciliation both
+  wanted the whole list in one call, as drawn above.
+- Parked, no decision: grace window allowing a second item-change call
+  within 15 minutes, raised 6.9.26; engineering sized it at a full quarter;
+  parked with Order Ops.
+- Parked, no decision: top-spender exception on quantity asks (again); out
+  of this lane's scope either way - item changes swap variants; unit counts
+  are the fulfillment desks' question.
+- Sticky: UAT seeded three orders already in pending (items modified) to
+  make sure the router denies them cleanly - they fail the Frame 1 status
+  gate like any other non-pending status (Noor Danesh).
+- Sticky: exchanges on delivered orders rhyme with this lane but live in the
+  Delivered Orders journey with their own rules; open that board instead of
+  cross-referencing from memory (Dana Whitfield).
+- Rollout note: the last-call question is mandatory by design, and the
+  write-path matrix for post-submit servicing stayed with Order Ops in the
+  appendix. Coach the question; cite the matrix.

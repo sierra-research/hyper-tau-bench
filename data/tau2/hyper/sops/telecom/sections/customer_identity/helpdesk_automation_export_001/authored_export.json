@@ -1,0 +1,490 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "Northline Care Admin",
+    "account": "northline-care-prod",
+    "environment": "production",
+    "exported_at": "2026-08-08T16:30:00-07:00",
+    "timezone": "America/Los_Angeles",
+    "export_version": "2026.08.2"
+  },
+  "cover_email": "From: Maya Chen <maya.chen@northline.example>\nTo: Care Launch Review <care-launch@northline.example>\nDate: Sat, 08 Aug 2026 16:37:00 -0700\nSubject: Northline Care production admin export — customer identity\nMessage-ID: <89dcd2b2043f5282c294@mail.northline.example>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nX-Export-Environment: production\n\nAttached is Northline Care Admin export version 2026.08.2 requested for Monday calibration. The job includes current production configuration plus disabled sandbox items retained by the standard admin export. Please verify the seven members against the launch checklist, confirm the fields.csv timestamp, and flag any trigger field missing from the field inventory. I spot-checked macros, triggers, and policy contracts after the 16:30 snapshot. The 17:00 SLA reporting refresh may change dashboard counts but not the exported object definitions.\n",
+  "macros": [
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Pre-account phone-side check menu",
+      "usage_30d": 1924,
+      "steps": [
+        {
+          "type": "show_guided_checklist",
+          "body": "After identity succeeds and before an account record is opened, phone-side troubleshooting may inspect the status bar, SIM, network settings, data settings, VPN, app permissions, APN settings, and MMS behavior."
+        }
+      ],
+      "internal_notes": "This menu operates from customer-reported and phone-observed state. It does not read carrier records.",
+      "macro_id": "MAC-5161"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Escalation handoff note",
+      "usage_30d": 1307,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Record the current queue, last observed customer symptom, and the most recent completed diagnostic step."
+        },
+        {
+          "type": "copy_field",
+          "source": "case.callback_window",
+          "target": "handoff.callback_preference"
+        },
+        {
+          "type": "add_tag",
+          "value": "handoff_context_recorded"
+        }
+      ],
+      "internal_notes": "Operational case hygiene only; this macro does not authorize account access or a transaction.",
+      "macro_id": "MAC-5165"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Callback preference summary",
+      "usage_30d": 438,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Summarize the customer's stated callback window and contact channel without promising a completion time."
+        },
+        {
+          "type": "copy_field",
+          "source": "case.channel",
+          "target": "callback.contact_channel"
+        }
+      ],
+      "internal_notes": "Used by scheduling teams after the customer has already requested follow-up.",
+      "macro_id": "MAC-5168"
+    },
+    {
+      "active": false,
+      "environment": "sandbox",
+      "status": "archived",
+      "effective_at": "2026-05-12T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": "removed",
+      "name": "Retired pilot shortcut",
+      "usage_30d": 0,
+      "steps": [
+        {
+          "type": "internal_note",
+          "body": "Historical pilot object retained for migration audit."
+        }
+      ],
+      "internal_notes": "Never enabled in production.",
+      "macro_id": "MAC-5147"
+    }
+  ],
+  "triggers": [
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Open record for carrier-side mutation",
+      "usage_30d": 617,
+      "conditions": [
+        {
+          "field": "workflow.scope",
+          "operator": "is",
+          "value": "carrier_side_change"
+        }
+      ],
+      "actions": [
+        {
+          "type": "require",
+          "value": "account_record_open"
+        }
+      ],
+      "trigger_id": "TRG-7504"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Account mutation authorization gate",
+      "usage_30d": 604,
+      "conditions": [
+        {
+          "field": "action.kind",
+          "operator": "is",
+          "value": "account_change"
+        }
+      ],
+      "actions": [
+        {
+          "type": "require",
+          "value": "identified_customer"
+        },
+        {
+          "type": "require",
+          "value": "selected_affected_line"
+        },
+        {
+          "type": "require",
+          "value": "explicit_customer_confirmation"
+        },
+        {
+          "type": "reject_unless_all_requirements_pass",
+          "value": true
+        }
+      ],
+      "trigger_id": "TRG-7507"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Tag reopened Care contacts",
+      "usage_30d": 782,
+      "conditions": [
+        {
+          "field": "case.status",
+          "operator": "is",
+          "value": "reopened"
+        }
+      ],
+      "actions": [
+        {
+          "type": "add_tag",
+          "value": "reopened_contact"
+        }
+      ],
+      "trigger_id": "TRG-7513"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Route scheduled callbacks",
+      "usage_30d": 491,
+      "conditions": [
+        {
+          "field": "case.callback_window",
+          "operator": "is_not_empty",
+          "value": true
+        },
+        {
+          "field": "case.channel",
+          "operator": "is",
+          "value": "voice"
+        }
+      ],
+      "actions": [
+        {
+          "type": "add_tag",
+          "value": "scheduled_callback"
+        },
+        {
+          "type": "route_to_group",
+          "value": "care_callback_queue"
+        }
+      ],
+      "trigger_id": "TRG-7516"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Mark calibration exports",
+      "usage_30d": 238,
+      "conditions": [
+        {
+          "field": "case.qa_sample",
+          "operator": "is",
+          "value": true
+        },
+        {
+          "field": "case.archive_batch",
+          "operator": "is_not_empty",
+          "value": true
+        }
+      ],
+      "actions": [
+        {
+          "type": "add_tag",
+          "value": "calibration_export"
+        },
+        {
+          "type": "suppress_customer_notification",
+          "value": true
+        }
+      ],
+      "trigger_id": "TRG-7519"
+    },
+    {
+      "active": false,
+      "environment": "sandbox",
+      "status": "draft",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Sandbox callback timer",
+      "usage_30d": 0,
+      "conditions": [
+        {
+          "field": "case.channel",
+          "operator": "is",
+          "value": "voice"
+        }
+      ],
+      "actions": [
+        {
+          "type": "set_field",
+          "field": "callback_experiment",
+          "value": "eligible"
+        }
+      ],
+      "trigger_id": "TRG-7529"
+    }
+  ],
+  "policy_contracts": [
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Carrier-side record-access workflows",
+      "usage_30d": 0,
+      "contract_scope": "account_record_access",
+      "rules": [
+        "Open the account record for line status, bills, data usage, account roaming, payment requests, line resumption, and data refueling workflows.",
+        "Phone-side observation alone does not open the account record."
+      ],
+      "catalog_coverage": {
+        "complete_listing": false,
+        "unlisted_request_handling": "review"
+      },
+      "contract_id": "CONTRACT-2313"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Customer account write prerequisites",
+      "usage_30d": 0,
+      "contract_scope": "account_change",
+      "rules": [
+        "Require the identified customer, selected affected line, and explicit customer confirmation before an account-side write."
+      ],
+      "catalog_coverage": {
+        "complete_listing": true,
+        "unlisted_request_handling": "reject_transaction"
+      },
+      "contract_id": "CONTRACT-2314"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Case export metadata",
+      "usage_30d": 0,
+      "contract_scope": "case_export",
+      "rules": [
+        "Preserve the ticket identifier, archive timestamp, originating channel, and owning queue in offline exports.",
+        "Keep internal-note authorship and event ordering when an export is rebuilt for calibration.",
+        "Exclude attachments marked customer-sensitive from the offline calibration package.",
+        "Record the archive batch on every case included in the same export job."
+      ],
+      "catalog_coverage": {
+        "complete_listing": false,
+        "unlisted_request_handling": "allow"
+      },
+      "contract_id": "CONTRACT-2319"
+    },
+    {
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2026-08-04T09:00:00-07:00",
+      "updated_at": "2026-08-07T15:20:00-07:00",
+      "superseded_by": null,
+      "name": "Case workspace lifecycle",
+      "usage_30d": 0,
+      "contract_scope": "case_workspace",
+      "rules": [
+        "A reopened contact retains its original ticket identifier and receives a new event timestamp.",
+        "A scheduled callback records the customer's requested window without promising a resolution deadline.",
+        "Calibration selection does not change customer-visible status or send a notification.",
+        "Archive and reporting fields remain administrative metadata and do not authorize customer-account changes."
+      ],
+      "catalog_coverage": {
+        "complete_listing": false,
+        "unlisted_request_handling": "review"
+      },
+      "contract_id": "CONTRACT-2324"
+    }
+  ],
+  "field_columns": [
+    "row_id",
+    "field_key",
+    "label",
+    "type",
+    "active",
+    "environment",
+    "status",
+    "description"
+  ],
+  "fields": [
+    {
+      "row_id": "FLD-24",
+      "field_key": "case.status",
+      "label": "Case status",
+      "type": "enum",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Current assisted-care case lifecycle state."
+    },
+    {
+      "row_id": "FLD-25",
+      "field_key": "case.channel",
+      "label": "Contact channel",
+      "type": "enum",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Voice or messaging source for reporting."
+    },
+    {
+      "row_id": "FLD-26",
+      "field_key": "case.callback_window",
+      "label": "Callback window",
+      "type": "text",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Optional customer scheduling preference."
+    },
+    {
+      "row_id": "FLD-27",
+      "field_key": "case.qa_sample",
+      "label": "QA sample",
+      "type": "boolean",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Marks a case selected for calibration."
+    },
+    {
+      "row_id": "FLD-28",
+      "field_key": "case.archive_batch",
+      "label": "Archive batch",
+      "type": "text",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Offline export batch identifier."
+    },
+    {
+      "row_id": "FLD-29",
+      "field_key": "workflow.scope",
+      "label": "Workflow scope",
+      "type": "enum",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Classifies phone-side review and carrier-side changes."
+    },
+    {
+      "row_id": "FLD-30",
+      "field_key": "action.kind",
+      "label": "Action kind",
+      "type": "enum",
+      "active": "true",
+      "environment": "production",
+      "status": "published",
+      "description": "Transaction family presented to the authorization gate."
+    }
+  ],
+  "sla_policies": [
+    {
+      "policy_id": "SLA-11",
+      "name": "Care standard response",
+      "active": true,
+      "environment": "production",
+      "first_response_minutes": 20,
+      "resolution_hours": 24
+    },
+    {
+      "policy_id": "SLA-12",
+      "name": "Disabled launch-week priority",
+      "active": false,
+      "environment": "sandbox",
+      "first_response_minutes": 5,
+      "resolution_hours": 8
+    }
+  ],
+  "views": [
+    {
+      "view_id": "VIEW-31",
+      "name": "Open assisted-care cases",
+      "active": true,
+      "environment": "production",
+      "filters": [
+        {
+          "field": "case.status",
+          "operator": "is_not",
+          "value": "closed"
+        }
+      ]
+    },
+    {
+      "view_id": "VIEW-32",
+      "name": "August calibration samples",
+      "active": true,
+      "environment": "production",
+      "filters": [
+        {
+          "field": "case.qa_sample",
+          "operator": "is",
+          "value": true
+        }
+      ]
+    }
+  ]
+}

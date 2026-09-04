@@ -1,0 +1,644 @@
+{
+  "format": "api_contract_pack_v1",
+  "release": {
+    "contract_id": "RWP-INT-24",
+    "environment": "production",
+    "status": "published",
+    "current": true,
+    "effective_at": "2025-11-03",
+    "snapshot_at": "2025-11-14T08:00:00-05:00",
+    "superseded_by": null
+  },
+  "cover_email": "From: Sola Okafor <sola.okafor@rho-bank.com>\nTo: Card Servicing Systems <card-servicing-systems@rho-bank.com>\nCc: Rewards Enablement <rewards-enablement@rho-bank.com>\nDate: Mon, 03 Nov 2025 09:12:44 -0500\nSubject: Rewards Platform integration pack v2.4 (RWP-INT-24)\n\nTeam,\n\nAttached is the v2.4 integration pack for the Rewards Platform card rewards\nservice. It replaces v2.3 (2025-06-12). Changes in this release: the card\nproduct map adds the Silver Zoom Card and Business Platinum Rewards Card\nrows that v2.3 predated, the rounding note now carries both worked examples\nwe keep getting asked about, and the error catalog documents the intake\nexpected_value field explicitly.\n\nThe pack is the source of truth for record semantics only. Earn rates,\ncategory rules, and promotional terms stay with the published program\nguides and the campaign terms decks; please keep pointing product questions\nthere.\n\nSola Okafor\nPlatform Engineering — Rewards\n",
+  "openapi": {
+    "openapi": "3.1.0",
+    "info": {
+      "title": "Rho Bank Rewards Platform — card rewards service",
+      "version": "2.4.0",
+      "x-contract-id": "RWP-INT-24",
+      "x-contract-status": "published",
+      "x-environment": "production",
+      "x-effective-at": "2025-11-03",
+      "x-superseded-by": null,
+      "x-source-of-truth": "Platform Engineering — Rewards",
+      "description": "Record semantics for stored card rewards. Interpretation of the points field is governed by record_contract_notes.md in this pack; earn rates and promotional terms are governed by the published program guides and dated campaign terms."
+    },
+    "servers": [
+      {
+        "url": "https://rewards.internal.rho-bank.com/v2",
+        "description": "production"
+      }
+    ],
+    "paths": {
+      "/accounts/{account_id}/rewards/balance": {
+        "get": {
+          "operationId": "getRewardBalance",
+          "summary": "Current stored reward balance for a card account",
+          "parameters": [
+            {
+              "name": "account_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Stored balance in points units",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/RewardBalance"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/accounts/{account_id}/rewards/transactions": {
+        "get": {
+          "operationId": "listRewardTransactions",
+          "summary": "Reward accrual records for posted card transactions",
+          "parameters": [
+            {
+              "name": "account_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "posted_after",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "string",
+                "format": "date"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Page of reward transactions",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/RewardTransactionPage"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/accounts/{account_id}/rewards/redemptions": {
+        "post": {
+          "operationId": "createRedemption",
+          "summary": "Redeem stored points through a supported channel",
+          "parameters": [
+            {
+              "name": "account_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RedemptionRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Redemption accepted",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/RedemptionReceipt"
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Redemption rejected (see error_behavior.csv)"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "RewardBalance": {
+          "type": "object",
+          "x-integration-ref": "RWP-SCHEMA-BALANCE",
+          "required": [
+            "account_id",
+            "card_product",
+            "points",
+            "as_of"
+          ],
+          "properties": {
+            "account_id": {
+              "type": "string"
+            },
+            "card_product": {
+              "$ref": "#/components/schemas/CardProduct"
+            },
+            "points": {
+              "type": "integer",
+              "description": "Stored points. Interpret per the card product map in record_contract_notes.md; the unit is points for every product regardless of reward type."
+            },
+            "as_of": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "RewardTransactionPage": {
+          "type": "object",
+          "required": [
+            "items"
+          ],
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RewardTransaction"
+              }
+            },
+            "next_cursor": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "RewardTransaction": {
+          "type": "object",
+          "x-integration-ref": "RWP-SCHEMA-TXN",
+          "required": [
+            "transaction_id",
+            "card_product",
+            "amount_usd",
+            "points",
+            "status"
+          ],
+          "properties": {
+            "transaction_id": {
+              "type": "string"
+            },
+            "card_product": {
+              "$ref": "#/components/schemas/CardProduct"
+            },
+            "amount_usd": {
+              "type": "string",
+              "description": "Posted amount, decimal string"
+            },
+            "points": {
+              "type": "integer",
+              "description": "Whole stored points awarded for this transaction. Fractional points never persist: the calculation engine floors before writing (record_contract_notes.md, 'Points calculation and rounding')."
+            },
+            "rate_applied": {
+              "type": "string",
+              "description": "Decimal earn rate the engine applied, e.g. \"0.04\". Informational."
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "posted",
+                "reversed"
+              ]
+            },
+            "posted_at": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time"
+            }
+          }
+        },
+        "CardProduct": {
+          "type": "string",
+          "x-integration-ref": "RWP-SCHEMA-PRODUCT",
+          "description": "Card products with reward records on this service. Reward-type interpretation per record_contract_notes.md.",
+          "enum": [
+            "Bronze Rewards Card",
+            "Silver Rewards Card",
+            "Gold Rewards Card",
+            "Platinum Rewards Card",
+            "Diamond Elite Card",
+            "Crypto-Cash Back",
+            "Business Bronze Rewards Card",
+            "Business Silver Rewards Card",
+            "Green Rewards Card",
+            "Silver Zoom Card",
+            "Business Gold Rewards Card",
+            "Business Platinum Rewards Card",
+            "EcoCard"
+          ]
+        },
+        "RedemptionRequest": {
+          "type": "object",
+          "required": [
+            "channel",
+            "points_redeemed"
+          ],
+          "properties": {
+            "channel": {
+              "type": "string",
+              "enum": [
+                "statement_credit",
+                "checking_credit",
+                "crypto"
+              ],
+              "description": "Supported redemption channels vary by product; product servicing surfaces govern availability."
+            },
+            "points_redeemed": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "destination": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "description": "Channel-specific destination (checking account reference or crypto wallet handle)."
+            }
+          }
+        },
+        "RedemptionReceipt": {
+          "type": "object",
+          "required": [
+            "redemption_id",
+            "channel",
+            "points_redeemed",
+            "created_at"
+          ],
+          "properties": {
+            "redemption_id": {
+              "type": "string"
+            },
+            "channel": {
+              "type": "string"
+            },
+            "points_redeemed": {
+              "type": "integer"
+            },
+            "created_at": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "RewardValueV1": {
+          "type": "object",
+          "deprecated": true,
+          "x-retired": "2024-05-20",
+          "description": "v1 per-product value units (dollars on cash-back products, points on EcoCard). Retired; gateway traffic disabled. Export compatibility only — not a current record shape.",
+          "properties": {
+            "reward_value": {
+              "type": "string"
+            },
+            "unit": {
+              "type": "string",
+              "enum": [
+                "usd",
+                "points"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "postman_collection": {
+    "info": {
+      "_postman_id": "90f92458-566d-4333-9f31-4b9297e628d3",
+      "name": "Rho Bank Rewards Platform v2.4 — saved calls",
+      "description": "Saved production calls captured for the v2.4 pack. Examples are corroborating evidence only; the schemas and record_contract_notes.md govern record semantics.",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+      {
+        "key": "base_url",
+        "value": "https://rewards.internal.rho-bank.com/v2"
+      }
+    ],
+    "item": [
+      {
+        "name": "Get reward balance — EcoCard example",
+        "id": "POSTMAN-RWP-01",
+        "request": {
+          "method": "GET",
+          "url": "{{base_url}}/accounts/ACCT-2201-EC/rewards/balance"
+        },
+        "response": {
+          "code": 200,
+          "body": {
+            "account_id": "ACCT-2201-EC",
+            "card_product": "EcoCard",
+            "points": 1840,
+            "as_of": "2025-10-31T23:59:59Z"
+          },
+          "description": "Saved example. Examples prove a payload occurred, not a universal shape; the schemas and notes govern."
+        }
+      },
+      {
+        "name": "Get reward balance — Platinum example",
+        "id": "POSTMAN-RWP-02",
+        "request": {
+          "method": "GET",
+          "url": "{{base_url}}/accounts/ACCT-8114-PL/rewards/balance"
+        },
+        "response": {
+          "code": 200,
+          "body": {
+            "account_id": "ACCT-8114-PL",
+            "card_product": "Platinum Rewards Card",
+            "points": 20647,
+            "as_of": "2025-10-31T23:59:59Z"
+          },
+          "description": "Saved example, non-normative."
+        }
+      },
+      {
+        "name": "List reward transactions — posted and pending",
+        "id": "POSTMAN-RWP-03",
+        "request": {
+          "method": "GET",
+          "url": "{{base_url}}/accounts/ACCT-8114-PL/rewards/transactions?posted_after=2025-10-01"
+        },
+        "response": {
+          "code": 200,
+          "body": {
+            "items": [
+              {
+                "transaction_id": "TXN-9KX2478L",
+                "card_product": "Platinum Rewards Card",
+                "amount_usd": "184.30",
+                "points": 1843,
+                "rate_applied": "0.10",
+                "status": "posted",
+                "posted_at": "2025-10-03T14:11:02Z"
+              },
+              {
+                "transaction_id": "TXN-2MRR910F",
+                "card_product": "Platinum Rewards Card",
+                "amount_usd": "62.15",
+                "points": 621,
+                "rate_applied": "0.10",
+                "status": "pending",
+                "posted_at": null
+              }
+            ],
+            "next_cursor": null
+          },
+          "description": "Saved example, non-normative."
+        }
+      },
+      {
+        "name": "List reward transactions — reversal record",
+        "id": "POSTMAN-RWP-04",
+        "request": {
+          "method": "GET",
+          "url": "{{base_url}}/accounts/ACCT-3390-SR/rewards/transactions?posted_after=2025-09-01"
+        },
+        "response": {
+          "code": 200,
+          "body": {
+            "items": [
+              {
+                "transaction_id": "TXN-7QD1183P",
+                "card_product": "Silver Rewards Card",
+                "amount_usd": "-88.00",
+                "points": -352,
+                "rate_applied": "0.04",
+                "status": "reversed",
+                "posted_at": "2025-09-12T10:40:19Z"
+              }
+            ],
+            "next_cursor": null
+          },
+          "description": "Saved example, non-normative."
+        }
+      },
+      {
+        "name": "Create redemption — statement credit",
+        "id": "POSTMAN-RWP-05",
+        "request": {
+          "method": "POST",
+          "url": "{{base_url}}/accounts/ACCT-3390-SR/rewards/redemptions",
+          "body": {
+            "channel": "statement_credit",
+            "points_redeemed": 2500
+          }
+        },
+        "response": {
+          "code": 201,
+          "body": {
+            "redemption_id": "RED-114592",
+            "channel": "statement_credit",
+            "points_redeemed": 2500,
+            "created_at": "2025-10-14T16:02:51Z"
+          },
+          "description": "Saved example, non-normative."
+        }
+      },
+      {
+        "name": "Create redemption — checking credit",
+        "id": "POSTMAN-RWP-06",
+        "request": {
+          "method": "POST",
+          "url": "{{base_url}}/accounts/ACCT-5522-GD/rewards/redemptions",
+          "body": {
+            "channel": "checking_credit",
+            "points_redeemed": 1200,
+            "destination": {
+              "checking_account_ref": "CHK-REF-0244"
+            }
+          }
+        },
+        "response": {
+          "code": 201,
+          "body": {
+            "redemption_id": "RED-114807",
+            "channel": "checking_credit",
+            "points_redeemed": 1200,
+            "created_at": "2025-10-20T11:47:33Z"
+          },
+          "description": "Saved example, non-normative."
+        }
+      },
+      {
+        "name": "Create redemption — crypto channel",
+        "id": "POSTMAN-RWP-07",
+        "request": {
+          "method": "POST",
+          "url": "{{base_url}}/accounts/ACCT-6710-CC/rewards/redemptions",
+          "body": {
+            "channel": "crypto",
+            "points_redeemed": 4100,
+            "destination": {
+              "wallet_handle": "WLT-EX-2231"
+            }
+          }
+        },
+        "response": {
+          "code": 201,
+          "body": {
+            "redemption_id": "RED-115126",
+            "channel": "crypto",
+            "points_redeemed": 4100,
+            "created_at": "2025-10-27T09:23:08Z"
+          },
+          "description": "Saved example, non-normative. Product-level crypto redemption rules are governed by servicing surfaces, not this pack."
+        }
+      },
+      {
+        "name": "Create redemption — below product minimum (rejected)",
+        "id": "POSTMAN-RWP-08",
+        "request": {
+          "method": "POST",
+          "url": "{{base_url}}/accounts/ACCT-6710-CC/rewards/redemptions",
+          "body": {
+            "channel": "crypto",
+            "points_redeemed": 900
+          }
+        },
+        "response": {
+          "code": 422,
+          "body": {
+            "response_code": "RWD-422-REDEEM-MIN",
+            "message": "points_redeemed is below the product redemption minimum"
+          },
+          "description": "Saved example, non-normative. Product minimums are configured per product; see the published program guides and servicing references."
+        }
+      }
+    ]
+  },
+  "error_behavior_columns": [
+    "rule_id",
+    "status",
+    "environment",
+    "audience",
+    "http_status",
+    "condition",
+    "response_code",
+    "notes",
+    "updated_at",
+    "superseded_by"
+  ],
+  "error_behavior": [
+    {
+      "rule_id": "RWD-401",
+      "status": "active",
+      "environment": "production",
+      "audience": "all consumers",
+      "http_status": "401",
+      "condition": "missing or expired service credential",
+      "response_code": "RWD-401-AUTH",
+      "notes": "Rotate via the platform credential service.",
+      "updated_at": "2025-06-12",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "RWD-404",
+      "status": "active",
+      "environment": "production",
+      "audience": "all consumers",
+      "http_status": "404",
+      "condition": "account_id has no reward records",
+      "response_code": "RWD-404-ACCOUNT",
+      "notes": "Closed and never-carded accounts return 404, not an empty page.",
+      "updated_at": "2025-06-12",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "RWD-409",
+      "status": "active",
+      "environment": "production",
+      "audience": "servicing tools",
+      "http_status": "409",
+      "condition": "write attempts to reconcile stored points against an intake expected_value",
+      "response_code": "RWD-409-EXPECTED-VALUE",
+      "notes": "expected_value is customer-asserted intake data and is never authoritative; recalculate from the record.",
+      "updated_at": "2025-11-03",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "RWD-422-REDEEM-MIN",
+      "status": "active",
+      "environment": "production",
+      "audience": "all consumers",
+      "http_status": "422",
+      "condition": "points_redeemed below the product redemption minimum",
+      "response_code": "RWD-422-REDEEM-MIN",
+      "notes": "Minimums are product-configured; governed by the published program guides and servicing references, not this pack.",
+      "updated_at": "2025-06-12",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "RWD-422-CHANNEL",
+      "status": "active",
+      "environment": "production",
+      "audience": "all consumers",
+      "http_status": "422",
+      "condition": "redemption channel not enabled for the product",
+      "response_code": "RWD-422-CHANNEL",
+      "notes": "Channel availability is product-configured.",
+      "updated_at": "2025-06-12",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "RWD-410",
+      "status": "retired",
+      "environment": "production",
+      "audience": "v1 consumers",
+      "http_status": "410",
+      "condition": "any call to a retired v1 reward_value endpoint",
+      "response_code": "RWD-410-V1-RETIRED",
+      "notes": "v1 per-product value units retired 2024-05-20; traffic disabled at the gateway.",
+      "updated_at": "2024-05-20",
+      "superseded_by": "RWP-INT-22"
+    },
+    {
+      "rule_id": "RWD-429",
+      "status": "active",
+      "environment": "production",
+      "audience": "all consumers",
+      "http_status": "429",
+      "condition": "burst above the per-consumer quota",
+      "response_code": "RWD-429-QUOTA",
+      "notes": "Quotas managed by the gateway team; not a record-semantics rule.",
+      "updated_at": "2025-06-12",
+      "superseded_by": ""
+    },
+    {
+      "rule_id": "RWD-500",
+      "status": "active",
+      "environment": "production",
+      "audience": "all consumers",
+      "http_status": "500",
+      "condition": "calculation engine unavailable",
+      "response_code": "RWD-500-ENGINE",
+      "notes": "Retry with backoff; records are never partially written.",
+      "updated_at": "2025-06-12",
+      "superseded_by": ""
+    }
+  ],
+  "record_contract_notes": "# Rewards Platform — record contract notes and data dictionary\n\nPack: Rho Bank Rewards Platform integration pack v2.4 (RWP-INT-24)\nOwner: Platform Engineering — Rewards (Sola Okafor)\nPublished: 2025-11-03 · Status: CURRENT · Supersedes: v2.3 (2025-06-12)\nAudience: card servicing systems, contact-center tooling, statement rendering\n\n## The `points` field (`RewardTransaction.points`, `RewardBalance.points`)\n\nInteger. Reward accrual for a transaction, or an account's available reward\nbalance, **in stored points**. Stored rewards remain in points units for\nevery card product while the rewards storage migration is outstanding\n(Platform Engineering status notice, 2025-09-26). Consumers must interpret\nstored points using the card product map below; the field name does not\nindicate the customer-facing reward type.\n\n## Card product → reward type map (normative)\n\nInterpretation rule for cash-back products: stored \"points\" should be\ninterpreted as cash back with a conversion rate of 1 point = $0.01 when\nredeemed as a statement credit or as a credit to the user's Rho-Bank\nchecking account. This rule applies to each cash-back product row below.\n\n| `card_product` | Reward type | Stored-points interpretation |\n|---|---|---|\n| Bronze Rewards Card | cash back | 1 point = $0.01 (statement credit or Rho-Bank checking credit) |\n| Silver Rewards Card | cash back | 1 point = $0.01 (statement credit or Rho-Bank checking credit) |\n| Gold Rewards Card | cash back | 1 point = $0.01 (statement credit or Rho-Bank checking credit) |\n| Platinum Rewards Card | cash back | 1 point = $0.01 (statement credit or Rho-Bank checking credit) |\n| Diamond Elite Card | cash back | 1 point = $0.01 (statement credit or Rho-Bank checking credit) |\n| Crypto-Cash Back | cash back | 1 point = $0.01 (statement credit or Rho-Bank checking credit) |\n| Business Bronze Rewards Card | cash back | 1 point = $0.01 (statement credit or Rho-Bank checking credit) |\n| Business Silver Rewards Card | cash back | 1 point = $0.01 (statement credit or Rho-Bank checking credit) |\n| Green Rewards Card | cash back | 1 point = $0.01 (statement credit or Rho-Bank checking credit) |\n| Silver Zoom Card | cash back | 1 point = $0.01 (statement credit or Rho-Bank checking credit) |\n| Business Gold Rewards Card | cash back | 1 point = $0.01 (statement credit or Rho-Bank checking credit) |\n| Business Platinum Rewards Card | cash back | 1 point = $0.01 (statement credit or Rho-Bank checking credit) |\n| EcoCard | sustainability points | earns 5 points per dollar on green purchases and 1 point per dollar on other purchases; points redeem at $0.01 per point when redeemed as a statement credit or checking account credit |\n\nThe only true points-based card is the EcoCard. Every other product in the\nmap is a cash back card whose stored points are a storage and display unit,\nnot a customer-facing points program.\n\n### Worked identity (normative)\n\n250 points equals $2.50 in cash back, which matches a 2.5% cash back rate\non a $100 purchase. Statement rendering and servicing tools must reproduce\nthis identity exactly; do not derive a different conversion from historical\nexports.\n\n## Points calculation and rounding (normative)\n\nAll credit card rewards points are rounded down to the nearest whole\nnumber. When calculating points earned on a purchase, the calculation\nengine always truncates (floors) fractional points rather than rounding to\nthe nearest integer. This rounding rule applies consistently across all\ncredit card types and reward categories.\n\nWorked examples (normative):\n\n- A $126.77 purchase on a 1% cash back card earns 126 points (not 127),\n  because 126.77 × 0.01 = 1.2677 points, which rounds down to 1 point per\n  dollar, giving 126 points.\n- A $99.99 purchase at 2.5% cash back would calculate to 249.975 points but\n  would award 249 points.\n\n`rate_applied` is informational: it records the decimal rate the engine\napplied (for example \"0.04\"). The governing earn rates, category rules, and\npromotional terms for each product live in the published program guides and\ndated campaign terms, not in this pack.\n\n## `expected_value` (intake surfaces only)\n\nCustomer-asserted estimate captured at intake on servicing tickets and some\nqueue exports. Never authoritative; do not reconcile stored points against\nit. See error catalog entry RWD-409.\n\n## History and non-production projections\n\n- **v1 value units (retired 2024-05-20).** The v1 surface exposed\n  per-product `reward_value` units (dollars on cash-back products, points\n  on EcoCard). Retired; traffic disabled at the gateway. Kept in\n  `openapi.yaml` under `components.schemas.RewardValueV1` for export\n  compatibility only, marked deprecated.\n- **v3 draft (unpublished).** The post-migration design stores native\n  cash-back units per product. Design review only; not deployed to any\n  environment, and nothing in production emits it. Do not build against v3\n  until Platform Engineering publishes it with its own pack.\n"
+}

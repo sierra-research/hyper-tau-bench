@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FRD-OPS-210 — Fraud operations intake severity</title>
+<style>
+  body { margin: 0; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 1200px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #7a2430; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+  .banner { position: absolute; left: 40px; top: 84px; width: 1480px; box-sizing: border-box; border: 3px solid #7a2430; border-radius: 6px; background: #fdf0f1; padding: 12px 16px; font-size: 14px; line-height: 1.45; color: #4d1f27; font-weight: 600; }
+  .node { position: absolute; width: 300px; box-sizing: border-box; border: 2px solid #4a5b6d; border-radius: 6px; background: #fff; padding: 10px 12px; font-size: 13px; line-height: 1.35; color: #1d2733; }
+  .node .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding: 1px 6px; border-radius: 3px; margin-bottom: 6px; background: #e4e9ee; color: #33414f; }
+  .node.entry { border-color: #2f7d4f; } .node.entry .tag { background: #d9efe2; color: #1d5636; }
+  .node.terminal { border-color: #2f7d4f; background: #f2faf5; } .node.terminal .tag { background: #d9efe2; color: #1d5636; }
+  .lane { position: absolute; box-sizing: border-box; border: 2px solid #8a6d9e; border-radius: 6px; background: #f7f3fa; padding: 10px 14px; font-size: 13px; line-height: 1.4; color: #3d2a4a; }
+  .lane .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding: 1px 6px; border-radius: 3px; margin-bottom: 6px; background: #e8def0; color: #4b2a52; }
+  svg.edges { position: absolute; left: 0; top: 0; width: 1560px; height: 1200px; pointer-events: none; }
+  svg.edges path { stroke: #51606f; stroke-width: 2; fill: none; marker-end: url(#arrowfrd210); }
+  .edge-label { position: absolute; font-size: 11px; color: #51606f; background: #fbfcfd; padding: 0 4px; }
+  .sticky { position: absolute; width: 260px; box-sizing: border-box; padding: 10px 12px; font-size: 12px; line-height: 1.35; box-shadow: 2px 3px 6px rgba(0,0,0,0.12); }
+  .sticky.yellow { background: #fdf3c0; } .sticky.blue { background: #d8e9f9; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>Fraud operations — intake severity assignment</h1>
+    <div class="meta">FRD-OPS-210 rev C &nbsp;·&nbsp; Owner: G. Aslanyan, Fraud Operations &nbsp;·&nbsp; Effective 2025-08-18 &nbsp;·&nbsp; Next review 2026-02 &nbsp;·&nbsp; Applies to: fraud-ops intake triage of received referrals, transfers, and alert-queue items</div>
+  </div>
+
+  <div class="banner">
+    SCOPE — FRAUD OPERATIONS INTAKE ONLY. This board describes how fraud-ops triages work it has <u>already received</u>. It is not support-floor guidance: it plays no part in transfer reason-code selection, and nothing maps floor transfer codes to these severity levels. The support-floor board is XFER-OPS-101. <span style="font-weight:400">(Banner added 2025-11-04 after a cross-post; if this board is on a wall outside fraud ops, tell the owner.)</span>
+  </div>
+
+  <svg class="edges" viewBox="0 0 1560 1200">
+    <defs><marker id="arrowfrd210" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#51606f"></path></marker></defs>
+    <!-- entry -> derive -->
+    <path d="M 190 356 L 190 404"></path>
+    <!-- derive -> lanes -->
+    <path d="M 340 470 L 480 300 L 520 300"></path>
+    <path d="M 340 470 L 480 470 L 520 470"></path>
+    <path d="M 340 470 L 480 640 L 520 640"></path>
+    <!-- lanes -> handling -->
+    <path d="M 1000 300 L 1120 300"></path>
+    <path d="M 1000 470 L 1120 470"></path>
+    <path d="M 1000 640 L 1120 640"></path>
+  </svg>
+
+  <span class="edge-label" style="left:400px;top:280px">loss in motion</span>
+  <span class="edge-label" style="left:400px;top:450px">confirmed, static</span>
+  <span class="edge-label" style="left:400px;top:620px">suspicion only</span>
+
+  <article class="node entry" style="left:40px;top:210px"><span class="tag">ENTRY — WORK ARRIVES</span>
+    A fraud item lands at intake: a transfer from the support floor, a branch referral, or an alert-queue hit. Whatever the source called it, it arrives here untriaged.
+  </article>
+
+  <article class="node work" style="left:40px;top:410px"><span class="tag">DERIVE THE SEVERITY</span>
+    Intake derives the severity from the transfer summary, the account telemetry, and the alert detail. No severity tagging is requested from — or accepted from — the sending desk; a pre-tagged handoff gets re-derived on arrival.
+  </article>
+
+  <section class="lane" style="left:520px;top:240px;width:480px"><span class="tag">P1 — CONFIRMED LOSS IN MOTION</span>
+    Money is confirmed moving or moved, and the recovery window is live. Unauthorized wires in flight, active card cash-out patterns, credential takeover with pending transfers out.
+  </section>
+
+  <section class="lane" style="left:520px;top:410px;width:480px"><span class="tag">P2 — CONFIRMED, NO MOTION</span>
+    Compromise is confirmed but nothing is currently moving: a blocked attempt, a closed vector, a reissued credential with the damage contained. Real, documented, not on fire.
+  </section>
+
+  <section class="lane" style="left:520px;top:580px;width:480px"><span class="tag">P3 — SUSPICION ONLY</span>
+    Unconfirmed suspicion: pattern flags without corroboration, customer worry without evidence, third-party rumors. Everything here is provisional until worked.
+  </section>
+
+  <article class="node terminal" style="left:1120px;top:240px"><span class="tag">P1 HANDLING</span>
+    Pages the fraud on-call immediately, any hour. The pager fires from the intake system on sev assignment — no human decides whether a P1 is worth a page.
+  </article>
+
+  <article class="node terminal" style="left:1120px;top:410px"><span class="tag">P2 HANDLING</span>
+    Morning triage queue. The on-call is not paged; the item is worked at the next triage session with full telemetry attached.
+  </article>
+
+  <article class="node terminal" style="left:1120px;top:580px"><span class="tag">P3 HANDLING</span>
+    Standard queue, worked in order of arrival. A P3 that develops corroboration is re-derived, not nudged — severity changes happen at intake logic, not by queue drag.
+  </article>
+
+  <aside class="sticky blue" style="left:40px;top:800px">
+    Sev tags feed the intake dashboards. If a handoff arrives pre-tagged, the tag is ignored and re-derived — the dashboards line up with intake, not with the sender.
+  </aside>
+
+  <aside class="sticky yellow" style="left:340px;top:800px">
+    The level names are long on purpose — they survived a naming workshop. Say the whole thing in writing; abbreviations drift.
+  </aside>
+
+  <aside class="sticky yellow" style="left:640px;top:800px">
+    Photos of this board age badly. The revision letter changes when the lanes change, and the lanes have changed twice this year.
+  </aside>
+
+  <aside class="sticky blue" style="left:940px;top:800px">
+    P-levels are derived, never negotiated. A referral that arrives insisting it is a P1 gets triaged exactly like one that arrives quietly.
+  </aside>
+</div>
+</body>
+</html>

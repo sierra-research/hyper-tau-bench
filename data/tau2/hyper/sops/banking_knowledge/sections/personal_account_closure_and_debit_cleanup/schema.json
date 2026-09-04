@@ -1,0 +1,1255 @@
+{
+  "id": "banking_personal_account_closure_and_debit_cleanup_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "personal_account_closure_and_debit_cleanup",
+  "display_name": "Personal account closure with transaction/debit-card cleanup",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/personal_account_closure_and_debit_cleanup/source.md",
+    "heading": "## Personal account closure with transaction/debit-card cleanup"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/personal_account_closure_and_debit_cleanup/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/personal_account_closure_and_debit_cleanup/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/personal_account_closure_and_debit_cleanup/client_overlay_debit_security_001/transformation_pack.json"
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook requirements from shared context: verify identity before account-specific information, get explicit confirmation before account-modifying actions, and use the exact transfer message when a transfer is performed.",
+      "Support console turns may mention document ids, internal tool results, and eligibility checks; Agent turns should give the customer the customer-visible next step or outcome.",
+      "Do not transform concrete KB tables, thresholds, statuses, fees, amounts, or condition-specific outcomes into vague dependency statements."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "identity verification before account-specific details",
+      "explicit customer confirmation before account-modifying actions",
+      "plain-language customer-facing outcomes",
+      "support-console notes for internal KB/tool evidence"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_005.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_006.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_018.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_020.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_023.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_025.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_028.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_029.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_030.json"
+    ],
+    "summary": "Closing checking or savings accounts only after required transaction and debit-card checks, including lost/stolen cross-product handling.",
+    "rules": [
+      "Preserve all values, tables, thresholds, statuses, fees, amounts, eligibility gates, tool/action names, and condition-to-outcome mappings from the source bundle.",
+      "Use the shared banking handbook for identity verification, explicit confirmation before account-modifying actions, discoverable-tool wrapper behavior, schema limits, and transfer wording.",
+      "Do not invent unsupported account fields, undocumented override mechanisms, undocumented tool names, or customer entitlements not present in the source bundle.",
+      "When a source document is internal, represent its internal checks in Support console turns or agent behavior rather than as exposed policy narration."
+    ],
+    "candidate": {
+      "id": "personal_account_closure_and_debit_cleanup",
+      "title": "Personal account closure with transaction/debit-card cleanup",
+      "priority": 1,
+      "related_task_ids": [
+        "task_060",
+        "task_061",
+        "task_065",
+        "task_066",
+        "task_067",
+        "task_068",
+        "task_069",
+        "task_077",
+        "task_078",
+        "task_079",
+        "task_080",
+        "task_081",
+        "task_086",
+        "task_088",
+        "task_090",
+        "task_091",
+        "task_092"
+      ],
+      "recommended_case_count": 6,
+      "losslessness_risks": [
+        "Preserve closure blockers and required pre-closure checks.",
+        "Preserve debit-card cancellation/replacement consequences.",
+        "Do not let account closure skip explicit confirmation from shared context."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "personal_account_closure_and_debit_cleanup_journey",
+        "label": "Personal account closure with transaction/debit-card cleanup",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "personal_account_closure_and_debit_cleanup_shared_rules",
+        "label": "Shared workflow rules",
+        "kind": "shared_reference",
+        "parent_id": "personal_account_closure_and_debit_cleanup_journey",
+        "order": 1,
+        "description": "Rules, prerequisites, and reference values used by more than one customer pathway in this journey.",
+        "fact_ids": [
+          "F006",
+          "F014",
+          "F020",
+          "F021",
+          "F022",
+          "F024",
+          "F047",
+          "F053",
+          "F054",
+          "F055",
+          "F056",
+          "F057",
+          "F058",
+          "F059",
+          "F060",
+          "F061",
+          "F064",
+          "F069",
+          "F070",
+          "F071",
+          "F072",
+          "F075",
+          "F076",
+          "F077",
+          "F078",
+          "F079",
+          "F080",
+          "F081",
+          "F082",
+          "F083",
+          "F084",
+          "F085",
+          "F086",
+          "F087",
+          "F088",
+          "F089",
+          "F090",
+          "F091",
+          "F092",
+          "F093",
+          "F115",
+          "F116",
+          "F117",
+          "F118",
+          "F129"
+        ]
+      },
+      {
+        "id": "personal_account_closure_and_debit_cleanup_path_a",
+        "label": "Personal checking account closure after debit-card cleanup and pre-closure checks",
+        "kind": "scenario_branch",
+        "parent_id": "personal_account_closure_and_debit_cleanup_journey",
+        "order": 2,
+        "description": "Policy path represented by case A.",
+        "fact_ids": [
+          "F004",
+          "F005",
+          "F007",
+          "F008",
+          "F009",
+          "F010",
+          "F011"
+        ]
+      },
+      {
+        "id": "personal_account_closure_and_debit_cleanup_path_b",
+        "label": "Personal savings account closure including tier-specific notice, fee, and elite manager-approval handling",
+        "kind": "scenario_branch",
+        "parent_id": "personal_account_closure_and_debit_cleanup_journey",
+        "order": 3,
+        "description": "Policy path represented by case B.",
+        "fact_ids": [
+          "F012",
+          "F013",
+          "F015",
+          "F016",
+          "F017",
+          "F018",
+          "F019",
+          "F023",
+          "F130"
+        ]
+      },
+      {
+        "id": "personal_account_closure_and_debit_cleanup_path_c",
+        "label": "Transaction-history retrieval to detect pending account activity before closure",
+        "kind": "scenario_branch",
+        "parent_id": "personal_account_closure_and_debit_cleanup_journey",
+        "order": 4,
+        "description": "Policy path represented by case C.",
+        "fact_ids": [
+          "F025",
+          "F026",
+          "F027",
+          "F028",
+          "F029",
+          "F030"
+        ]
+      },
+      {
+        "id": "personal_account_closure_and_debit_cleanup_path_d",
+        "label": "Standard debit card order for an eligible checking account",
+        "kind": "scenario_branch",
+        "parent_id": "personal_account_closure_and_debit_cleanup_journey",
+        "order": 5,
+        "description": "Policy path represented by case D.",
+        "fact_ids": [
+          "F031",
+          "F032",
+          "F033",
+          "F034",
+          "F035",
+          "F036",
+          "F037",
+          "F038",
+          "F039",
+          "F040",
+          "F041",
+          "F042",
+          "F043",
+          "F044",
+          "F045",
+          "F046",
+          "F048",
+          "F049",
+          "F050",
+          "F051",
+          "F052"
+        ]
+      },
+      {
+        "id": "personal_account_closure_and_debit_cleanup_path_e",
+        "label": "Non-security debit card closure with pending-refund, pending-transaction, age, and permanence consequences",
+        "kind": "scenario_branch",
+        "parent_id": "personal_account_closure_and_debit_cleanup_journey",
+        "order": 6,
+        "description": "Policy path represented by case E.",
+        "fact_ids": [
+          "F062",
+          "F063"
+        ]
+      },
+      {
+        "id": "personal_account_closure_and_debit_cleanup_path_f",
+        "label": "Lost, stolen, or fraud_suspected debit card closure with replacement offer and credit-card cross-product protocol",
+        "kind": "scenario_branch",
+        "parent_id": "personal_account_closure_and_debit_cleanup_journey",
+        "order": 7,
+        "description": "Policy path represented by case F.",
+        "fact_ids": [
+          "F065",
+          "F066",
+          "F067",
+          "F068",
+          "F073",
+          "F074",
+          "F119",
+          "F120",
+          "F121",
+          "F122",
+          "F123",
+          "F124",
+          "F125",
+          "F126",
+          "F127",
+          "F128"
+        ]
+      },
+      {
+        "id": "personal_account_closure_and_debit_cleanup_path_g",
+        "label": "Replacement debit card order for ENTRY or MID tier checking account",
+        "kind": "scenario_branch",
+        "parent_id": "personal_account_closure_and_debit_cleanup_journey",
+        "order": 8,
+        "description": "Policy path represented by case G.",
+        "fact_ids": [
+          "F094",
+          "F095",
+          "F096",
+          "F097",
+          "F098",
+          "F099",
+          "F100",
+          "F101",
+          "F111",
+          "F112"
+        ]
+      },
+      {
+        "id": "personal_account_closure_and_debit_cleanup_path_h",
+        "label": "Replacement debit card order for PREMIUM or ELITE tier checking account",
+        "kind": "scenario_branch",
+        "parent_id": "personal_account_closure_and_debit_cleanup_journey",
+        "order": 9,
+        "description": "Policy path represented by case H.",
+        "fact_ids": [
+          "F102",
+          "F103",
+          "F104",
+          "F105",
+          "F106",
+          "F107",
+          "F108",
+          "F109",
+          "F110",
+          "F113",
+          "F114"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "personal_account_closure_and_debit_cleanup_path_a",
+        "type": "uses_shared_rules",
+        "target_id": "personal_account_closure_and_debit_cleanup_shared_rules"
+      },
+      {
+        "source_id": "personal_account_closure_and_debit_cleanup_path_b",
+        "type": "uses_shared_rules",
+        "target_id": "personal_account_closure_and_debit_cleanup_shared_rules"
+      },
+      {
+        "source_id": "personal_account_closure_and_debit_cleanup_path_c",
+        "type": "uses_shared_rules",
+        "target_id": "personal_account_closure_and_debit_cleanup_shared_rules"
+      },
+      {
+        "source_id": "personal_account_closure_and_debit_cleanup_path_d",
+        "type": "uses_shared_rules",
+        "target_id": "personal_account_closure_and_debit_cleanup_shared_rules"
+      },
+      {
+        "source_id": "personal_account_closure_and_debit_cleanup_path_e",
+        "type": "uses_shared_rules",
+        "target_id": "personal_account_closure_and_debit_cleanup_shared_rules"
+      },
+      {
+        "source_id": "personal_account_closure_and_debit_cleanup_path_f",
+        "type": "uses_shared_rules",
+        "target_id": "personal_account_closure_and_debit_cleanup_shared_rules"
+      },
+      {
+        "source_id": "personal_account_closure_and_debit_cleanup_path_g",
+        "type": "uses_shared_rules",
+        "target_id": "personal_account_closure_and_debit_cleanup_shared_rules"
+      },
+      {
+        "source_id": "personal_account_closure_and_debit_cleanup_path_h",
+        "type": "uses_shared_rules",
+        "target_id": "personal_account_closure_and_debit_cleanup_shared_rules"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "F004",
+      "statement": "Before closing a personal checking account, if an early closure fee applies, current_holdings must be at least the fee amount; otherwise current_holdings must be $0, and any early closure fee is deducted directly from the account balance with no alternative payment method.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_005"
+    },
+    {
+      "id": "F005",
+      "statement": "Before closing a personal checking account, the account status must be OPEN.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_005"
+    },
+    {
+      "id": "F006",
+      "statement": "Before closing a personal checking account, there must be no pending transactions for that account.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_005"
+    },
+    {
+      "id": "F007",
+      "statement": "For personal checking ENTRY TIER accounts, the account names are Light Blue Account, Light Green Account, and Green Fee-Free Account; the early closure fee is $15 if closed within 30 days; the notice period is 0 days.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_005"
+    },
+    {
+      "id": "F008",
+      "statement": "For personal checking MID TIER accounts, the account names are Blue Account and Green Account (checking); the early closure fee is $25 if closed within 60 days; the notice period is 3 days.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_005"
+    },
+    {
+      "id": "F009",
+      "statement": "For personal checking PREMIUM TIER accounts, the account name is Evergreen Account; the early closure fee is $50 if closed within 90 days; the notice period is 7 days.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_005"
+    },
+    {
+      "id": "F010",
+      "statement": "For personal checking ELITE TIER accounts, the account name is Bluest Account; the early closure fee is $100 if closed within 180 days; the notice period is 14 days.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_005"
+    },
+    {
+      "id": "F011",
+      "statement": "The personal checking closure procedure is to verify pre-closure requirements, determine the account tier and applicable fees/notice period, and then use close_bank_account_7392 to close the account.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_005"
+    },
+    {
+      "id": "F012",
+      "statement": "Before closing a personal savings account, if an early closure fee applies, current_holdings must be at least the fee amount; otherwise current_holdings must be $0, and any early closure fee is deducted directly from the account balance with no alternative payment method.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_006"
+    },
+    {
+      "id": "F013",
+      "statement": "Before closing a personal savings account, the account status must be OPEN.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_006"
+    },
+    {
+      "id": "F014",
+      "statement": "Before closing a personal savings account, there must be no pending transactions for that account.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_006"
+    },
+    {
+      "id": "F015",
+      "statement": "For personal savings ENTRY TIER accounts, the account name is Bronze Account; the early closure fee is $20 if closed within 60 days; the notice period is 1 days.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_006"
+    },
+    {
+      "id": "F016",
+      "statement": "For personal savings MID TIER accounts, the account names are Silver Account and Silver Plus Account; the early closure fee is $35 if closed within 90 days; the notice period is 5 days.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_006"
+    },
+    {
+      "id": "F017",
+      "statement": "For personal savings PREMIUM TIER accounts, the account names are Gold Account, Gold Plus Account, and Gold Years Account; the early closure fee is $75 if closed within 180 days; the notice period is 10 days.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_006"
+    },
+    {
+      "id": "F018",
+      "statement": "For personal savings ELITE TIER accounts, the account names are Platinum Account, Platinum Plus Account, and Diamond Elite Account; the early closure fee is $150 if closed within 270 days; the notice period is 21 days; manager approval is required.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_006"
+    },
+    {
+      "id": "F019",
+      "statement": "The personal savings closure procedure is to verify pre-closure requirements, determine the account tier and applicable fees/notice period, obtain manager approval before proceeding for ELITE tier, and then use close_bank_account_7392 to close the account.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_006"
+    },
+    {
+      "id": "F020",
+      "statement": "If a customer is unsure whether an early closure fee applies, customer service can look up the customer's specific account details and tell the customer what to expect.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_020"
+    },
+    {
+      "id": "F021",
+      "statement": "Some account types require advance notice before closure can be processed; the notice period is intended to allow pending transactions to clear and the account to be in good standing, and required notice varies by account tier from same-day processing for basic accounts to several weeks for premium business accounts.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_020"
+    },
+    {
+      "id": "F022",
+      "statement": "Before account closure can proceed, the balance must be zero or, if an early closure fee applies, at least equal to the fee amount because the fee is deducted directly from the balance, and there cannot be pending transactions because pending transactions must clear first.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_020"
+    },
+    {
+      "id": "F023",
+      "statement": "The public closure article states that for business savings accounts, linked accounts must also be properly addressed.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_020"
+    },
+    {
+      "id": "F024",
+      "statement": "The public closure article lists 1-800-RHO-BANK as the customer service phone number for account-closure questions or options discussions.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_020"
+    },
+    {
+      "id": "F025",
+      "statement": "Agents can retrieve transaction history for a checking or savings bank account using get_bank_account_transactions_9173(account_id).",
+      "source": "doc_bank_accounts_bank_accounts_(general)_018"
+    },
+    {
+      "id": "F026",
+      "statement": "get_bank_account_transactions_9173 returns a list of all transactions for the account in reverse chronological order, with the most recent transactions first.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_018"
+    },
+    {
+      "id": "F027",
+      "statement": "Each transaction record contains transaction_id as the unique identifier for the transaction, account_id as the bank account ID the transaction belongs to, date in MM/DD/YYYY format, description, amount in USD, type, and status; positive amount values are credits and negative amount values are debits.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_018"
+    },
+    {
+      "id": "F028",
+      "statement": "Transaction type must be one of: direct_deposit, debit_card_purchase, atm_withdrawal, atm_balance_inquiry, atm_fee, ach_transfer_in, ach_transfer_out, wire_transfer_in, wire_transfer_out, check_deposit, mobile_deposit, bill_pay, everyonepay, monthly_fee, overdraft_fee, fee_rebate, interest_credit, rebate_credit, or fee_refund.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_018"
+    },
+    {
+      "id": "F029",
+      "statement": "Transaction status must be either posted or pending.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_018"
+    },
+    {
+      "id": "F030",
+      "statement": "Transaction history retrieval is useful when reviewing account activity, verifying fees, checking for applied rebates, or investigating customer inquiries.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_018"
+    },
+    {
+      "id": "F031",
+      "statement": "Debit cards can only be ordered for checking accounts, whether personal or business; savings accounts are not eligible for debit cards.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023"
+    },
+    {
+      "id": "F032",
+      "statement": "To order a debit card, the customer must be verified.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023"
+    },
+    {
+      "id": "F033",
+      "statement": "To order a debit card, the account must be a checking account with account_type equal to checking.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023"
+    },
+    {
+      "id": "F034",
+      "statement": "To order a debit card, the account status must be OPEN.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023"
+    },
+    {
+      "id": "F035",
+      "statement": "To order a debit card, the account must have been open for at least 3 business days, excluding weekends.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023"
+    },
+    {
+      "id": "F036",
+      "statement": "To order a debit card, the customer cannot have more than 1 active debit card per checking account.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023"
+    },
+    {
+      "id": "F037",
+      "statement": "To order a debit card, the account must have a minimum balance of $25 to cover potential fees.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023"
+    },
+    {
+      "id": "F038",
+      "statement": "To order a debit card, the customer must be at least 18 years old, verified using date_of_birth.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023"
+    },
+    {
+      "id": "F039",
+      "statement": "To order a debit card, the customer cannot have a pending debit card order for the same account; this is checked in the debit_cards table for PENDING status.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023"
+    },
+    {
+      "id": "F040",
+      "statement": "To order a debit card, the customer's address on file must be a valid US domestic address because international shipping is not available.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023"
+    },
+    {
+      "id": "F041",
+      "statement": "For debit card orders, STANDARD delivery has free shipping and arrives in 7-10 business days.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023"
+    },
+    {
+      "id": "F042",
+      "statement": "For the EXPEDITED debit card delivery option, the arrival timeframe is 3-5 business days; the fee is $15 for debit card orders not governed by replacement tier rules, while replacement debit card EXPEDITED availability and delivery_fee amounts are governed by the applicable tier-specific replacement rules.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023; doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F043",
+      "statement": "For the RUSH debit card delivery option, the arrival timeframe is 1-2 business days; the general listed fee is $35 and fees may vary based on account tier, while replacement debit card RUSH availability and delivery_fee amounts are governed by the applicable tier-specific replacement rules.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023; doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F044",
+      "statement": "For debit card orders, CLASSIC card design is the standard Rho-Bank blue design, is the default option, and has no fee.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023"
+    },
+    {
+      "id": "F045",
+      "statement": "For the PREMIUM card design option, the design is a metallic silver finish; the fee is a $10 one-time fee for debit card orders not governed by replacement tier rules, while replacement debit card PREMIUM design_fee amounts are governed by the applicable tier-specific replacement rules.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023; doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F046",
+      "statement": "For debit card orders, CUSTOM card design uses a customer-uploaded image, has a $25 one-time fee, is subject to approval, and fees may vary based on account tier.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023"
+    },
+    {
+      "id": "F047",
+      "statement": "The debit card ordering steps are: verify customer identity, confirm which checking account the debit card should be linked to, check eligibility requirements for the specified account, ask for the customer's preferred delivery option and explain fees (STANDARD, EXPEDITED, or RUSH for general orders, but only tier-available delivery options for replacement orders), ask for the customer's preferred card design and explain fees (CLASSIC, PREMIUM, or CUSTOM with tier-specific replacement design_fee values when applicable), confirm the mailing address, use order_debit_card_5739 to order the card, and inform the customer of expected delivery timeframe and applicable fees.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023; doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F048",
+      "statement": "Expedited and rush delivery fees for debit card orders are automatically deducted from the linked checking account.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023"
+    },
+    {
+      "id": "F049",
+      "statement": "If the linked checking account has insufficient funds for delivery or design fees, the debit card order will fail.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023"
+    },
+    {
+      "id": "F050",
+      "statement": "Customers can track debit card shipment status using the Rho-Bank mobile app.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023"
+    },
+    {
+      "id": "F051",
+      "statement": "New debit cards are automatically activated upon first use with PIN entry.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023"
+    },
+    {
+      "id": "F052",
+      "statement": "For a debit card order in which the existing debit card is not being closed as part of a replacement or linked-account-closing process, the customer's existing debit card, if any, remains active until the new card is activated; when the existing card is closed for replacement or account-closing reasons, the closed card cannot remain active or be reopened.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_023; doc_bank_accounts_bank_accounts_(general)_025; doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F053",
+      "statement": "The debit card closing/cancelling procedure applies when a customer wants to close, cancel, or deactivate a debit card.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F054",
+      "statement": "Valid debit card closure reason enum values are lost, stolen, fraud_suspected, damaged, no_longer_needed, and account_closing; these correspond respectively to lost card, stolen card, suspected fraud or unauthorized transactions, damaged card when the customer wants a replacement, customer no longer needs the card, and closing the linked checking account.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F055",
+      "statement": "To close a debit card, the customer must be verified.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F056",
+      "statement": "To close a debit card, the customer must be the owner of the debit card, verified by matching user_id.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F057",
+      "statement": "To close a debit card, the debit card must currently be in ACTIVE or PENDING status.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F058",
+      "statement": "To close a debit card, the card must not have any pending or processing transactions.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F059",
+      "statement": "If pending or processing debit card transactions exist, the customer must be told to wait for all transactions to settle before the card can be closed.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F060",
+      "statement": "To close a debit card, the card must have no pending refunds unless the customer acknowledges in writing that the refunds will be credited to the linked checking account instead.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F061",
+      "statement": "If pending debit card refunds exist, the customer must wait for the refunds to process, typically 3-5 business days, or acknowledge in writing that the refunds will be credited to the linked checking account instead.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F062",
+      "statement": "For debit card closure reasons other than lost, stolen, or fraud_suspected, the card must have been active for at least 14 days, calculated from date_issued.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F063",
+      "statement": "If a debit card closure reason is not lost, stolen, or fraud_suspected and the card is newer than the 14-day minimum card age requirement, the customer must be told that the card cannot be closed yet and must be given the earliest eligible closure date.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F064",
+      "statement": "The debit card closure eligibility-gating portion of the procedure is: verify customer identity, ask the reason from the allowed reason list, check eligibility requirements, apply source exceptions or resolution paths where available (minimum-card-age bypass for lost, stolen, or fraud_suspected and written acknowledgement for pending refunds), and if any applicable requirement remains unmet or unresolved, inform the customer what must be resolved and do not proceed with closure.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F065",
+      "statement": "If the debit card closure reason is lost, stolen, or fraud_suspected, the minimum card age requirement is bypassed for security purposes.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F066",
+      "statement": "If the debit card closure reason is lost, stolen, or fraud_suspected, the customer must be informed that any pending transactions will still be processed.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F067",
+      "statement": "If the debit card closure reason is lost, stolen, or fraud_suspected, the agent must ask whether the customer wants to order a replacement card immediately.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F068",
+      "statement": "If the debit card closure reason is fraud_suspected, the customer must be advised to review recent transactions and file disputes for any unauthorized charges.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F069",
+      "statement": "To close a debit card, use close_debit_card_4721 with parameters card_id and reason.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F070",
+      "statement": "After debit card closure, the customer must be told that the card is permanently deactivated and cannot be reactivated.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F071",
+      "statement": "After debit card closure, the customer must be told that recurring payments linked to the card need to be updated with new payment information.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F072",
+      "statement": "After debit card closure, if the customer needs a new card, the customer can order one through the standard ordering process.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F073",
+      "statement": "Cards reported as lost or stolen are closed immediately with no cooling-off period.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F074",
+      "statement": "For fraud_suspected debit card closures, the agent should recommend that the customer also change the online banking password.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F075",
+      "statement": "If the linked checking account is being closed, all associated debit cards must be closed first.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F076",
+      "statement": "Closed debit cards cannot be reopened; the customer must order a new card if needed.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F077",
+      "statement": "Refunds to a closed debit card will be credited to the linked checking account.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F078",
+      "statement": "Use get_debit_cards_by_account_id_7823(account_id) to retrieve all debit cards associated with a specific checking account.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_028"
+    },
+    {
+      "id": "F079",
+      "statement": "get_debit_cards_by_account_id_7823 only returns debit cards for checking accounts because savings accounts do not have debit cards.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_028"
+    },
+    {
+      "id": "F080",
+      "statement": "Debit card records returned by get_debit_cards_by_account_id_7823 include card_id as the unique identifier for the debit card, account_id as the checking account ID the card is linked to, user_id as the user ID of the cardholder, card_number_last_4 as the last 4 digits of the card number, status as the current status of the card, issue_reason as why the card was issued, expiration_date in MM/YY format, date_issued as the date the card was issued, card_design as the design type, daily_purchase_limit as the maximum daily purchase amount, and daily_atm_limit as the maximum daily ATM withdrawal amount.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_028"
+    },
+    {
+      "id": "F081",
+      "statement": "Debit card status values returned by get_debit_cards_by_account_id_7823 are ACTIVE, PENDING, FROZEN, and CLOSED.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_028"
+    },
+    {
+      "id": "F082",
+      "statement": "Debit card issue_reason values returned by get_debit_cards_by_account_id_7823 are new_account, first_card, lost, stolen, fraud, expired, damaged, upgrade, and bank_reissue.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_028"
+    },
+    {
+      "id": "F083",
+      "statement": "Before ordering a new debit card, use debit card lookup to check whether the customer already has an active or pending card for the account.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_028"
+    },
+    {
+      "id": "F084",
+      "statement": "Before activating a debit card, use debit card lookup to check issue_reason and determine which activation tool to use.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_028"
+    },
+    {
+      "id": "F085",
+      "statement": "Before freezing or unfreezing a debit card, use debit card lookup to verify that the card exists and check its current status.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_028"
+    },
+    {
+      "id": "F086",
+      "statement": "Before closing a debit card, use debit card lookup to confirm card_id and current status.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_028"
+    },
+    {
+      "id": "F087",
+      "statement": "For customer inquiries about a debit card, use debit card lookup to look up card details.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_028"
+    },
+    {
+      "id": "F088",
+      "statement": "Debit card lookup may return multiple cards when the account has card history, and returns an empty list if no cards exist for the account.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_028"
+    },
+    {
+      "id": "F089",
+      "statement": "For privacy, debit card lookup never returns full card numbers and returns only the last 4 digits.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_028"
+    },
+    {
+      "id": "F090",
+      "statement": "When a customer requests a replacement debit card due to lost, stolen, damaged, or other reasons, replacement policies vary based on the customer's checking account tier.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F091",
+      "statement": "All applicable replacement debit card fees, including shipping, design, and excess replacement fees, are automatically charged to the linked checking account when the card is ordered.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F092",
+      "statement": "Before placing a replacement debit card order, the agent must inform the customer that the fee will be deducted from the checking account balance.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F093",
+      "statement": "When using order_debit_card_5739 for a replacement debit card, the agent must provide the exact delivery_fee and design_fee amounts based on the tier rules.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F094",
+      "statement": "ENTRY TIER checking accounts have a replacement debit card threshold of 2 replacement cards per rolling 12-month period; after that threshold is exceeded, the customer must wait until the oldest replacement ages out of the 12-month window or pay a $25 excess replacement fee.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F095",
+      "statement": "ENTRY TIER checking accounts have a 48-hour waiting period after card closure before a replacement debit card can be ordered.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F096",
+      "statement": "ENTRY TIER replacement debit cards have standard shipping only with no expedited option available, and the delivery_fee is $0.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F097",
+      "statement": "If an ENTRY TIER customer has exceeded the 2-card replacement threshold, the customer must wait until the oldest replacement ages out of the 12-month window or pay a $25 excess replacement fee.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F098",
+      "statement": "MID TIER checking accounts have a replacement debit card threshold of 3 replacement cards per rolling 12-month period; after that threshold is exceeded, the customer must wait until the oldest replacement ages out or pay a $15 excess replacement fee.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F099",
+      "statement": "MID TIER checking accounts have no waiting period for replacement debit cards and can order immediately after closure.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F100",
+      "statement": "MID TIER replacement debit cards may use standard shipping with delivery_fee $0 or expedited shipping with delivery_fee $15.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F101",
+      "statement": "If a MID TIER customer has exceeded the 3-card replacement threshold, the customer must wait until the oldest replacement ages out or pay a $15 excess replacement fee.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F102",
+      "statement": "PREMIUM TIER checking accounts have a maximum of 5 replacement debit cards per rolling 12-month period.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F103",
+      "statement": "PREMIUM TIER checking accounts have no waiting period for replacement debit cards and can order immediately after closure.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F104",
+      "statement": "PREMIUM TIER replacement debit cards have free expedited shipping on all replacements, with delivery_fee $0 for both STANDARD and EXPEDITED.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F105",
+      "statement": "PREMIUM TIER replacement debit cards may use rush shipping with delivery_fee $35.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F106",
+      "statement": "If a PREMIUM TIER customer has exceeded the 5-card replacement limit, the customer must wait until the oldest replacement ages out, with no fee option available.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F107",
+      "statement": "ELITE TIER checking accounts have unlimited replacement debit cards.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F108",
+      "statement": "ELITE TIER checking accounts have no waiting period for replacement debit cards and can order immediately after closure.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F109",
+      "statement": "ELITE TIER replacement debit cards have complimentary shipping on all replacements, with delivery_fee $0 for STANDARD, EXPEDITED, and RUSH.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F110",
+      "statement": "ELITE TIER replacement debit cards receive priority processing and ship the same business day if ordered before 2pm EST.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F111",
+      "statement": "ENTRY TIER replacement debit card design fees are CLASSIC $0, PREMIUM $10, and CUSTOM $25.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F112",
+      "statement": "MID TIER replacement debit card design fees are CLASSIC $0, PREMIUM $10, and CUSTOM $25.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F113",
+      "statement": "PREMIUM TIER replacement debit card design fees are CLASSIC $0, PREMIUM $0, and CUSTOM $15.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F114",
+      "statement": "ELITE TIER replacement debit card design fees are CLASSIC $0, PREMIUM $0, and CUSTOM $0.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F115",
+      "statement": "To check replacement debit card history, retrieve all cards for the account.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F116",
+      "statement": "When checking replacement debit card history, count cards with issue_reason lost, stolen, fraud, or damaged.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F117",
+      "statement": "When checking replacement debit card history, use date_issued to count cards issued within the last 12 months.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F118",
+      "statement": "Cards with issue_reason new_account, first_card, expired, upgrade, or bank_reissue do not count toward the replacement debit card limit.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_029"
+    },
+    {
+      "id": "F119",
+      "statement": "When a customer reports a lost or stolen debit card, agents must follow the lost/stolen card cross-product security protocol because other cards in the wallet may also have been compromised.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_030"
+    },
+    {
+      "id": "F120",
+      "statement": "For a lost or stolen debit card report, the required security check begins by completing the standard debit card freeze/close procedure.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_030"
+    },
+    {
+      "id": "F121",
+      "statement": "For a lost or stolen debit card report, after the standard debit card freeze/close procedure, the agent must check whether the customer has any Rho-Bank credit cards on file.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_030"
+    },
+    {
+      "id": "F122",
+      "statement": "If a lost or stolen debit card customer has any Rho-Bank credit cards on file, the agent must proactively offer to order a replacement credit card as a security precaution.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_030"
+    },
+    {
+      "id": "F123",
+      "statement": "When offering credit card protection after a lost or stolen debit card report, the agent must explain that wallet theft often involves multiple cards and that replacement protects against potential fraud.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_030"
+    },
+    {
+      "id": "F124",
+      "statement": "Use get_credit_card_accounts_by_user to retrieve any credit card accounts for the customer; the tool returns all active and closed credit card accounts.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_030"
+    },
+    {
+      "id": "F125",
+      "statement": "If the customer has one or more Rho-Bank credit cards after a lost or stolen debit card report, the agent must inform the customer that the bank noticed the customer also has a credit card with Rho-Bank.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_030"
+    },
+    {
+      "id": "F126",
+      "statement": "If the customer has one or more Rho-Bank credit cards after a lost or stolen debit card report, the agent must ask whether the credit card was also in the lost or stolen wallet.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_030"
+    },
+    {
+      "id": "F127",
+      "statement": "If the customer has one or more Rho-Bank credit cards after a lost or stolen debit card report, the agent must offer to order a replacement credit card with a new card number to prevent unauthorized charges.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_030"
+    },
+    {
+      "id": "F128",
+      "statement": "If the customer declines the credit card replacement offer after a lost or stolen debit card report, the agent must note in the account that the offer was made.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_030"
+    },
+    {
+      "id": "F129",
+      "statement": "After using close_debit_card_4721 to close a debit card, the agent must confirm that the card has been closed.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_025"
+    },
+    {
+      "id": "F130",
+      "statement": "An early closure fee may apply when an account is closed within a certain timeframe after opening, depending on the account type and when it was opened; these fees vary by account tier and are designed to offset the administrative costs of account setup, with entry-level accounts typically having lower fees and shorter early closure windows while premium and elite accounts may have higher fees and longer windows.",
+      "source": "doc_bank_accounts_bank_accounts_(general)_020"
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Personal checking account closure after debit-card cleanup and pre-closure checks",
+      "scope": "Future support case record should show identity verification, checking-account status/balance/pending-transaction checks, explicit confirmation before closure, associated debit card lookup/cleanup requirement, and close_bank_account_7392 only after requirements are met.",
+      "included_fact_ids": [
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F020",
+        "F021",
+        "F022",
+        "F024",
+        "F075",
+        "F078",
+        "F079",
+        "F083",
+        "F086",
+        "F088"
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Personal savings account closure including tier-specific notice, fee, and elite manager-approval handling",
+      "scope": "Future support case record should show identity verification, savings-account status/balance/pending-transaction checks, fee/notice lookup by tier, explicit confirmation before closure, manager approval when the savings account is ELITE tier, and close_bank_account_7392 only after all applicable requirements are met.",
+      "included_fact_ids": [
+        "F012",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F017",
+        "F018",
+        "F019",
+        "F020",
+        "F021",
+        "F022",
+        "F023",
+        "F024",
+        "F130"
+      ]
+    },
+    {
+      "id": "C",
+      "title": "Transaction-history retrieval to detect pending account activity before closure",
+      "scope": "Future support case record should show use of get_bank_account_transactions_9173 for a checking or savings account, interpretation of transaction fields, pending versus posted statuses, and pending-transaction blockers before account or card closure.",
+      "included_fact_ids": [
+        "F006",
+        "F014",
+        "F025",
+        "F026",
+        "F027",
+        "F028",
+        "F029",
+        "F030",
+        "F058",
+        "F059"
+      ]
+    },
+    {
+      "id": "D",
+      "title": "Standard debit card order for an eligible checking account",
+      "scope": "Future support case record should show verification, checking-account-only eligibility, all debit-card order eligibility gates, delivery/design option selection with fees and timeframes, address confirmation, order_debit_card_5739, customer-visible delivery/fee outcome, and debit-card lookup privacy/status fields.",
+      "included_fact_ids": [
+        "F031",
+        "F032",
+        "F033",
+        "F034",
+        "F035",
+        "F036",
+        "F037",
+        "F038",
+        "F039",
+        "F040",
+        "F041",
+        "F042",
+        "F043",
+        "F044",
+        "F045",
+        "F046",
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051",
+        "F052",
+        "F078",
+        "F079",
+        "F080",
+        "F081",
+        "F082",
+        "F083",
+        "F084",
+        "F085",
+        "F086",
+        "F087",
+        "F088",
+        "F089"
+      ]
+    },
+    {
+      "id": "E",
+      "title": "Non-security debit card closure with pending-refund, pending-transaction, age, and permanence consequences",
+      "scope": "Future support case record should cover a close/cancel/deactivate request for a reason such as damaged, no_longer_needed, or account_closing, including owner/status checks, transaction/refund blockers and alternatives, 14-day minimum-age gate, no-proceed outcome when unmet, close_debit_card_4721 when eligible, and post-closure consequences.",
+      "included_fact_ids": [
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F057",
+        "F058",
+        "F059",
+        "F060",
+        "F061",
+        "F062",
+        "F063",
+        "F064",
+        "F069",
+        "F070",
+        "F071",
+        "F072",
+        "F075",
+        "F076",
+        "F077",
+        "F078",
+        "F079",
+        "F080",
+        "F081",
+        "F082",
+        "F083",
+        "F084",
+        "F085",
+        "F086",
+        "F087",
+        "F088",
+        "F089",
+        "F129"
+      ]
+    },
+    {
+      "id": "F",
+      "title": "Lost, stolen, or fraud_suspected debit card closure with replacement offer and credit-card cross-product protocol",
+      "scope": "Future support case record should demonstrate a security closure reason independently of non-security reasons: minimum-card-age bypass, pending-transaction warning, immediate replacement-card offer, fraud-specific transaction/password guidance when fraud_suspected, standard debit card close/freeze procedure, credit-card account lookup, proactive replacement-credit-card offer, and decline notation if applicable.",
+      "included_fact_ids": [
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F057",
+        "F058",
+        "F059",
+        "F060",
+        "F061",
+        "F064",
+        "F065",
+        "F066",
+        "F067",
+        "F068",
+        "F069",
+        "F070",
+        "F071",
+        "F072",
+        "F073",
+        "F074",
+        "F075",
+        "F076",
+        "F077",
+        "F078",
+        "F079",
+        "F080",
+        "F081",
+        "F082",
+        "F083",
+        "F084",
+        "F085",
+        "F086",
+        "F087",
+        "F088",
+        "F089",
+        "F119",
+        "F120",
+        "F121",
+        "F122",
+        "F123",
+        "F124",
+        "F125",
+        "F126",
+        "F127",
+        "F128",
+        "F129"
+      ]
+    },
+    {
+      "id": "G",
+      "title": "Replacement debit card order for ENTRY or MID tier checking account",
+      "scope": "Future support case record should show replacement history retrieval/counting, ENTRY and MID replacement limits as separate condition-specific outcomes, waiting-period differences, available shipping choices and delivery_fee values, excess replacement fee alternatives, exact design_fee values, fee disclosure before order, and exact fee parameters for order_debit_card_5739.",
+      "included_fact_ids": [
+        "F047",
+        "F090",
+        "F091",
+        "F092",
+        "F093",
+        "F094",
+        "F095",
+        "F096",
+        "F097",
+        "F098",
+        "F099",
+        "F100",
+        "F101",
+        "F111",
+        "F112",
+        "F115",
+        "F116",
+        "F117",
+        "F118"
+      ]
+    },
+    {
+      "id": "H",
+      "title": "Replacement debit card order for PREMIUM or ELITE tier checking account",
+      "scope": "Future support case record should show replacement history retrieval/counting, PREMIUM and ELITE replacement limits as separate condition-specific outcomes, no-wait handling, shipping delivery_fee values including free expedited/rush distinctions, no excess-fee option for PREMIUM, unlimited ELITE replacements, ELITE priority processing cutoff, tier-specific design_fee values, fee disclosure before order, and exact fee parameters for order_debit_card_5739.",
+      "included_fact_ids": [
+        "F047",
+        "F090",
+        "F091",
+        "F092",
+        "F093",
+        "F102",
+        "F103",
+        "F104",
+        "F105",
+        "F106",
+        "F107",
+        "F108",
+        "F109",
+        "F110",
+        "F113",
+        "F114",
+        "F115",
+        "F116",
+        "F117",
+        "F118"
+      ]
+    }
+  ]
+}

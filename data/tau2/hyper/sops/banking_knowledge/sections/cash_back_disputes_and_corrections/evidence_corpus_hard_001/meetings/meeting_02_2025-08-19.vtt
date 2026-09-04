@@ -1,0 +1,263 @@
+WEBVTT
+
+00:00:00.900 --> 00:00:08.720
+<v Alicia Fuentes>—so then the contractor says the part is discontinued, and that's how I've had no kitchen sink since Thursday.
+
+00:00:10.632 --> 00:00:17.514
+<v Marcus Webb>That's genuinely worse than my weekend, and I spent mine on the cutover retro.
+
+00:00:19.193 --> 00:00:34.711
+<v Priya Raman>Okay, we're recorded, so the sink saga is now part of the official record. It's four past, let's start. Grace is out — lake house — so it's the four of us.
+
+00:00:37.505 --> 00:00:39.945
+<v Dan Kowalski>She earned the lake house.
+
+00:00:40.115 --> 00:01:00.245
+<v Priya Raman>Agenda: the dashboard, because I know Alicia is going to raise it anyway, then Dan has a rewards-math case that I want everyone's eyes on, then Alicia on the promo page refresh, then scheduling. Marcus, dashboard first. What's going on with it?
+
+00:01:00.471 --> 00:01:25.225
+<v Marcus Webb>Right. So. The ops dashboard, the rewards tile specifically, has been showing Friday's numbers since, well, Friday. I want to be careful about what I claim here because I haven't finished tracing it, but the shape of it is that the refresh job depends on an extract that moved hosts during the cutover.
+
+00:01:25.619 --> 00:01:30.069
+<v Alicia Fuentes>So the tile isn't wrong, it's just... frozen in the past.
+
+00:01:30.201 --> 00:01:48.752
+<v Marcus Webb>Frozen is right. The numbers were correct as of Friday evening. Nothing since has landed. I'd rather have it stale and labeled than silently wrong, for what it's worth, and it is at least stale in an honest way.
+
+00:01:50.343 --> 00:01:52.392
+<v Priya Raman>When does it come back?
+
+00:01:56.179 --> 00:02:17.764
+<v Marcus Webb>My guess — and it is a guess — is Wednesday. The fix itself is a connection string, but the backfill has to replay three days, and I don't want to promise the replay behaves until I've watched it once.
+
+00:02:17.914 --> 00:02:24.488
+<v Priya Raman>Fine. Send a line to the ops channel so people stop screenshotting Friday's tile into decks.
+
+00:02:26.080 --> 00:02:32.949
+<v Marcus Webb>Already drafted. I'll add the Wednesday guess with the word guess in it.
+
+00:02:33.129 --> 00:02:43.988
+<v Priya Raman>While I have you — anything else out of the cutover retro this group should know about, or is the dashboard the whole blast radius?
+
+00:02:44.502 --> 00:03:21.812
+<v Marcus Webb>Two other follow-ups, neither urgent for this room. The paging setup got noisy — we got woken up twice for things that self-healed, so the thresholds are getting retuned. And there's a list of jobs that inherited the old host name in their config, which we're walking through one by one. The rewards accrual job is on that list, incidentally, which is part of why I'm going to be in that code anyway.
+
+00:03:21.985 --> 00:03:30.413
+<v Priya Raman>Convenient. Hold that thought, because Dan's case is going to land you in there with a second reason.
+
+00:03:30.622 --> 00:03:37.449
+<v Marcus Webb>I heard the agenda. I have a bad feeling about the phrase "rewards-math case."
+
+00:03:38.478 --> 00:03:39.550
+<v Dan Kowalski>Justified.
+
+00:03:39.963 --> 00:03:41.892
+<v Priya Raman>Good. Dan, your case.
+
+00:03:42.424 --> 00:04:03.412
+<v Dan Kowalski>Yes. So this one came up through the app-review channel, of all places, and then the same customer called, so we have it as a real case too. CB-2508-0177. Let me share the statement view — one second, my other monitor has the, uh, the sensitive stuff on it.
+
+00:04:04.517 --> 00:04:06.979
+[Dan shares a redacted statement view.]
+
+00:04:52.933 --> 00:05:13.457
+<v Dan Kowalski>Okay. Crypto-Cash Back customer. Single charge, eighty-four dollars and seventy-five cents, at a hardware store. And the card's earn line — I'm reading it off the product page here so I get it exactly right — is 2.0% on eligible purchases.
+
+00:05:15.379 --> 00:05:16.389
+<v Marcus Webb>Mm-hm.
+
+00:05:17.372 --> 00:05:41.450
+<v Dan Kowalski>Customer does the math at home. Two percent of eighty-four seventy-five. He gets one sixty-nine and a half — as in, one hundred sixty-nine and a half points' worth. His statement shows one sixty-nine. He wants his half point, and honestly he wants to know where it went more than he wants the half cent.
+
+00:05:41.682 --> 00:05:51.261
+<v Alicia Fuentes>Wait, so the app told him one sixty-nine and he computed one sixty-nine point five. That's the whole dispute? Half a point?
+
+00:05:51.512 --> 00:06:06.475
+<v Dan Kowalski>That's the whole dispute. And before anyone laughs — he's the fourth one like this since July. People have calculators now. Well. People have always had calculators. People have opinions now.
+
+00:06:07.087 --> 00:06:17.398
+<v Alicia Fuentes>What did the app review say? You said it started as an app review, I want to hear how it was phrased in the wild.
+
+00:06:19.566 --> 00:06:39.428
+<v Dan Kowalski>I have it. Quote: "Great card, but the points math is wrong. I can do arithmetic. One star until someone explains where my half point went." He then edited it a week later to add, "Still waiting. The half point knows what it did."
+
+00:06:39.612 --> 00:06:46.698
+<v Alicia Fuentes>Okay, that's funny. That's a funny customer. We should not be losing the funny ones.
+
+00:06:47.164 --> 00:06:59.188
+<v Dan Kowalski>And let me show you the sibling case, because it's not just this card. Two seconds, let me pull it — this one's a Silver Rewards customer.
+
+00:07:01.309 --> 00:07:04.817
+[Dan switches to a second redacted statement.]
+
+00:08:04.148 --> 00:08:24.070
+<v Dan Kowalski>Here. Silver Rewards, so the travel and software card, and this is a software subscription she pays annually. Fifty-two sixty. The page rate for that category — again reading it as written — is 4.0%. Her math: two hundred ten point four. The app shows two hundred ten.
+
+00:08:25.656 --> 00:08:34.057
+<v Marcus Webb>Point four this time. So it's not a round-to-nearest gripe, strictly — nearest would also give her two ten.
+
+00:08:37.864 --> 00:08:59.670
+<v Dan Kowalski>Correct, and that's why I brought this one. She's not even claiming she's owed the fraction, necessarily. Her actual question, verbatim from the chat: "does the point four exist somewhere, or did you delete it?" Which is a systems question. Which is why I'm looking at Marcus.
+
+00:09:00.843 --> 00:09:07.780
+<v Marcus Webb>And I notice you're all looking at me like I personally deleted it.
+
+00:09:10.141 --> 00:09:11.600
+<v Alicia Fuentes>Did you?
+
+00:09:17.016 --> 00:09:18.590
+<v Marcus Webb>I'd remember.
+
+00:09:19.231 --> 00:09:42.069
+<v Alicia Fuentes>No, I'm not laughing, I'm — my thing is the display. If the app showed him something that says we know about the fraction, he never files. So, proposal: the app rounds to the nearest whole point for display. One sixty-nine and a half shows as one seventy. He feels great. Nobody files.
+
+00:09:43.160 --> 00:09:44.343
+<v Marcus Webb>Hold on.
+
+00:09:45.048 --> 00:09:57.938
+<v Alicia Fuentes>Or even — sorry, let me finish the thought — or even show one decimal. One sixty-nine point five. Also fine! Either way the mystery goes away, and the mystery is what generates the call.
+
+00:10:01.246 --> 00:10:33.373
+<v Marcus Webb>Okay, two problems, and I want to be careful because one of them I can only half confirm. Problem one: if the display says one seventy and the ledger holds one sixty-nine, we have not removed the mystery, we've moved it to redemption time, and made it worse, because now the app contradicts his statement at the exact moment he's cashing out.
+
+00:10:33.700 --> 00:10:37.036
+<v Alicia Fuentes>Only if the ledger actually holds one sixty-nine—
+
+00:10:37.177 --> 00:11:23.719
+<v Marcus Webb>Which is problem two. What does the ledger actually hold. And there I have to hedge. My strong impression, from the August accrual run I watched for other reasons, is that the nightly job writes whole numbers, and that what it does to fractions is not rounding to nearest. It looked like it simply drops them. But I have not read that code path on purpose, line by line, and I don't want this meeting to leave believing a thing because I half remember it.
+
+00:11:24.179 --> 00:11:31.516
+<v Dan Kowalski>So the half point might just... not exist anywhere? Or it might sit in some fractional column?
+
+00:11:31.902 --> 00:11:50.009
+<v Marcus Webb>That's exactly what I can't tell you yet. There could be a carry — some accrual systems bank the remainder and it shows up on a later transaction. Ours might. I genuinely don't know.
+
+00:11:50.323 --> 00:12:00.622
+<v Dan Kowalski>Because that changes the customer answer a lot, right? There's a difference between "you'll see it next month" and "it's gone."
+
+00:12:01.175 --> 00:12:06.785
+<v Priya Raman>Dan, what did we actually tell this customer? Please tell me we didn't guess.
+
+00:12:06.921 --> 00:12:36.624
+<v Dan Kowalski>We didn't guess. The agent — it was Divya, and she played this well — said the earn math on fractional amounts is being confirmed and that she'd follow up in writing. So the case is open, pending, and the customer knows it's pending. But I can't keep it pending forever, and I've got three more shaped like it.
+
+00:12:37.096 --> 00:12:43.727
+<v Alicia Fuentes>Okay but see, this is what I mean. Whatever the backend does, we could at least display—
+
+00:12:43.921 --> 00:13:00.509
+<v Marcus Webb>I'd really rather we not design the display before we know what we're displaying. That's how the tile ended up frozen on Friday, someone built the label before the pipe.
+
+00:13:00.989 --> 00:13:04.352
+<v Alicia Fuentes>That is a completely different — okay, partially fair.
+
+00:13:05.983 --> 00:13:25.116
+<v Priya Raman>Here's what we're doing. Marcus, your action is to actually read the job. Not watch it, read it. I want to know what happens to a fractional point at accrual, whether anything carries anywhere, and whether it's the same for every card. In writing.
+
+00:13:25.495 --> 00:13:39.977
+<v Marcus Webb>I can do that. I'll caveat it now: the rewards code has three generations of authors and the answer may be "it depends," and if it's "it depends" I'll bring the dependency, not a summary.
+
+00:13:41.209 --> 00:13:55.802
+<v Priya Raman>Fine. And until that lands, nobody states a rounding rule to a customer. Not up, not down, not nearest. The pending answer stays pending. Dan, can Divya's wording hold for the other three?
+
+00:13:56.042 --> 00:14:21.233
+<v Dan Kowalski>It can hold. I'll standardize her line for the queue — earn math being confirmed, follow-up in writing, no number promised. What I don't love is it's August and this has been floating since, honestly, the spring. At some point the floor needs the actual arithmetic on a page they can pull up.
+
+00:14:21.662 --> 00:14:32.384
+<v Priya Raman>Agreed, and that's on me to force once Marcus reports back. Park the display question until then too. Alicia, I'm not killing it, I'm sequencing it.
+
+00:14:32.867 --> 00:14:36.818
+<v Alicia Fuentes>Sequenced. I heard "not killing it," everyone note the timestamp.
+
+00:14:37.530 --> 00:15:00.326
+<v Dan Kowalski>One more wrinkle before we move on, because it'll come up: does anyone know if the fractions accumulate? Like across a month. If a guy has thirty charges with change on each, is there a pile of half points somewhere with his name on it? Because customer number four is going to ask exactly that.
+
+00:15:00.850 --> 00:15:17.905
+<v Marcus Webb>Same answer as before — that's the carry question, and it's the first thing I'll look for in the job. If there's a remainder column, I'll find it. If there isn't, the fractions aren't accumulating anywhere, whatever else is true.
+
+00:15:18.333 --> 00:15:32.702
+<v Alicia Fuentes>How big is this, though? Like, in dollars. Because if every transaction with change on it sheds a fraction, times every card, that's — someone's going to write that headline eventually. "Bank keeps the crumbs."
+
+00:15:33.210 --> 00:16:05.635
+<v Marcus Webb>In dollars it's small and I can be reasonably confident about that part, because the worst case per transaction is under a cent. The headline risk isn't the amount, it's the word "keeps," and whether it's even true — if there's no remainder column then nothing is being kept, the fraction was never minted. Which sounds philosophical, but the difference matters if anyone ever audits it.
+
+00:16:06.148 --> 00:16:16.803
+<v Dan Kowalski>"The half point was never minted" is somehow worse than "we keep it." Do not put Marcus in front of the funny customer.
+
+00:16:19.791 --> 00:16:29.629
+<v Priya Raman>Nobody is going in front of any customer with any of these sentences. That's the point of the pending wording.
+
+00:16:30.365 --> 00:16:43.027
+<v Priya Raman>Which is why the reading assignment exists. Anything else on this? No? Okay. It stays open, Marcus reports back, we revisit. Alicia, promo page refresh.
+
+00:16:46.886 --> 00:16:59.080
+<v Marcus Webb>Can I have thirty seconds to note the case numbers before we move? I want them in my ticket so the write-up traces back to something real.
+
+00:16:59.868 --> 00:17:00.787
+<v Priya Raman>Take it.
+
+00:17:01.251 --> 00:17:04.601
+[Marcus copies the case ids into his tracking ticket; Dan drops the links in the meeting chat.]
+
+00:18:18.856 --> 00:18:20.091
+<v Marcus Webb>Got them. Thanks.
+
+00:18:20.472 --> 00:18:45.914
+<v Alicia Fuentes>Yes, okay, so. The Business Silver page gets its late-summer content pass in two weeks. Three things going in: the exclusions section moves above the testimonial band, which, thank you Grace in absentia for the push; the earn table gets the merchant examples we discussed; and the promo call-out box gets a countdown-ish treatment since we're inside the last stretch of the window.
+
+00:18:46.157 --> 00:18:47.634
+<v Priya Raman>Countdown-ish?
+
+00:18:53.106 --> 00:19:13.016
+<v Alicia Fuentes>Not an actual ticking clock. A "promotional period ends this fall, terms apply" band that links the terms. Legal has seen the words "this fall" and prefers we name the actual date from the terms deck when we get closer, which, fine, we'll swap it in the November-adjacent pass.
+
+00:19:13.188 --> 00:19:26.967
+<v Alicia Fuentes>I just dropped the band mock in the chat. Thirty seconds, tell me if it reads as a warning or as marketing, because it's supposed to be exactly between the two.
+
+00:19:28.322 --> 00:19:31.684
+[The group reviews the mock-up posted in the meeting chat.]
+
+00:20:26.125 --> 00:20:33.066
+<v Dan Kowalski>It reads as marketing that's about to be a warning. Which I think is the assignment?
+
+00:20:33.390 --> 00:20:38.300
+<v Marcus Webb>The little clock icon might be too literal. Otherwise fine.
+
+00:20:40.485 --> 00:20:43.422
+<v Alicia Fuentes>The clock icon is load-bearing, but noted.
+
+00:20:43.623 --> 00:21:02.344
+<v Dan Kowalski>When the band goes up, can I get a heads-up a day before? Every page change generates a small wave of "did my card change" calls and I'd rather brief the floor before the wave, not during.
+
+00:21:02.951 --> 00:21:19.526
+<v Alicia Fuentes>Yes — actually, better, I'll give you the staging link Thursday. Wait, no, Thursday is the copy review. Friday. Staging link Friday, page live the following Wednesday, assuming legal doesn't find a new adjective to hate.
+
+00:21:19.909 --> 00:21:38.019
+<v Priya Raman>Put both dates in the channel. Scheduling, last thing. Two items. First, the September second sync collides with the ops all-hands after all, so we're moving to the same Tuesday at two. Calendar update goes out today; accept it, please, I'm looking at nobody in particular.
+
+00:21:38.205 --> 00:21:40.889
+<v Alicia Fuentes>One time. It was — fine, twice.
+
+00:21:43.164 --> 00:22:01.962
+<v Priya Raman>Second, Tunde from compliance is going to sit in on a September session. He's doing his periodic pass over how we document dispute decisions, and he specifically asked to see a working meeting rather than a cleaned-up summary, so: be yourselves, but, you know. Label your guesses.
+
+00:22:02.197 --> 00:22:08.340
+<v Marcus Webb>I always label my guesses. It's the only thing I'm certain about.
+
+00:22:08.653 --> 00:22:10.678
+<v Dan Kowalski>Put that on a mug.
+
+00:22:10.883 --> 00:22:49.731
+<v Priya Raman>Okay, recap. Marcus: dashboard note today, Wednesday-ish backfill, and the accrual job read with the fraction answer in writing. Dan: standardize the pending wording, keep the four cases open, brief the floor Friday off the staging link. Alicia: staging link to Dan Friday, dates in the channel, and the display idea stays parked until the backend answer exists. Me: I chase legal on nothing this week, which is a personal record. We're done — eight minutes back, spend them wisely.
+
+00:22:49.996 --> 00:22:51.400
+<v Alicia Fuentes>Sink shopping.
+
+00:22:52.043 --> 00:22:53.006
+<v Dan Kowalski>Godspeed.
+
+00:22:53.703 --> 00:23:01.149
+<v Priya Raman>Oh — and someone tell Grace the lake house is over and the queue missed her. Gently.
+
+00:23:01.447 --> 00:23:06.609
+<v Dan Kowalski>I'll send her the app review. She'll be back by lunch.
+

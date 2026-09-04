@@ -1,0 +1,184 @@
+{
+  "id": "retail_manage_pending_order_process_flowchart_001",
+  "representation": "process_flowchart",
+  "context": "beacon_program_board_pending_order_servicing_milestones Ownership note: the board owns the eligibility gates and branch structure; conduct rules moved to the QA calibration deck and refund mechanics to the finance email archive, and the board restates them only as labeled echoes.",
+  "author_source_artifact": "pending_order_servicing_board.html",
+  "generation": {
+    "generation_mode": "deterministic_html_board",
+    "rendering_mode": "browser_element_screenshot_per_frame",
+    "renderer": "render_board.py (Playwright, Chrome channel, device scale factor 1, light color scheme)",
+    "viewport": {
+      "width": 1760,
+      "height": 1200
+    },
+    "purpose": "Reproduce the density of a real program whiteboard export: a current-state default scenario, per-lane frames, milestone history strips, stickies, parked proposals, a scoped wholesale fence, and an open-questions frame - while keeping every policy-bearing string deterministic in the HTML source."
+  },
+  "world_consistency": {
+    "brand": "NorthStar Outfitters / Project Beacon",
+    "aligned_with": [
+      "slack_mcp_dump_001 decision arcs CR1-CR8, RD5, QS4, EM3 (dates and outcomes)",
+      "retail handbook sections 'Cancelling a pending order' and 'Changing a pending order'"
+    ],
+    "board_dates": "board updated 7.28.26; every cited ruling predates it"
+  },
+  "artifacts": [
+    {
+      "frame": "01_default_scenario",
+      "agent_facing_artifact": "pending_order_servicing_board_01_default_scenario.png",
+      "text_source_artifact": "pending_order_servicing_board_01_default_scenario.txt",
+      "target_facts": [
+        {
+          "id": "cancel_requires_order_identifier_and_status_check",
+          "statement": "For cancellation, the agent must confirm the order identifier and check the order status before proceeding."
+        },
+        {
+          "id": "only_pending_orders_can_be_cancelled",
+          "statement": "Only orders with status pending can be cancelled through this flow."
+        },
+        {
+          "id": "non_pending_cancel_denials_by_status",
+          "statement": "Processed, delivered, and already-cancelled orders cannot be cancelled through this flow, and the agent must explain that to the customer; delivered orders must be redirected to returns, and processed orders must be transferred if the customer is stuck on the processed order and really wants it stopped."
+        },
+        {
+          "id": "pending_status_required_for_any_order_change",
+          "statement": "Before any pending-order change, the agent must confirm the order status is pending."
+        },
+        {
+          "id": "pending_order_other_changes_unsupported",
+          "statement": "Pending-order quantity changes, split shipments, order email changes, and any other changes outside shipping address, payment method, or specific items are unsupported and should be declined with transfer offered if needed."
+        }
+      ],
+      "permitted_supporting_echoes": {
+        "pending_order_three_change_types_only": "Router lanes name shipping address, payment method, and specific items as the three change lanes (authoritative in the full-site storefront screenshots)."
+      },
+      "grounded_distractors": [
+        "FigJam-style cover block, legend, avatars, collaborator cursors, and link chips",
+        "Stickies restating QS4 / EM3 rulings owned by other sections and boards",
+        "Red-circled reminder that identity verification precedes this board",
+        "Parked self-serve-cancel proposal card that changes nothing if it ships"
+      ]
+    },
+    {
+      "frame": "02_cancellation",
+      "agent_facing_artifact": "pending_order_servicing_board_02_cancellation.png",
+      "text_source_artifact": "pending_order_servicing_board_02_cancellation.txt",
+      "target_facts": [],
+      "permitted_supporting_echoes": {
+        "accepted_cancel_reason_no_longer_needed": "The CR8 margin note lists 'no longer needed' with customer wording counting (authoritative in the Slack MCP capture).",
+        "accepted_cancel_reason_ordered_by_mistake": "The CR8 margin note lists 'ordered by mistake' as the second entry (authoritative in the Slack MCP capture).",
+        "unaccepted_cancel_reasons_decline_and_offer_transfer": "The reason-gate deny box declines other reasons politely and offers a transfer (authoritative in the Slack MCP capture).",
+        "ask_cancel_reason_before_processing": "The reason-gate diamond asks the cancellation reason before any processing node (authoritative as QA rule card C-2 in the QA calibration deck).",
+        "cancel_requires_recap_and_explicit_confirmation": "The recap and confirm nodes require the recap and a yes before the processing step (authoritative as QA rule card C-5 in the QA calibration deck).",
+        "cancel_sets_status_cancelled_and_refunds_full_amount": "The processing node flips the order to cancelled and refunds in full (authoritative as a dated ruling in the finance email archive).",
+        "gift_card_cancel_refund_immediate": "The gift-card refund box shows the immediate credit back to the card (authoritative as a dated ruling in the finance email archive).",
+        "card_or_paypal_cancel_refund_timeline": "The card/PayPal refund box shows the 3-6 business-day window and the tell-the-customer step (authoritative as a dated ruling in the finance email archive).",
+        "multiple_charges_refunded_separately": "The ringed multi-charge callout shows separate per-charge refunds (authoritative as a dated ruling in the finance email archive)."
+      },
+      "grounded_distractors": [
+        "Milestone history strip of superseded/killed cancellation-reason eras (CR2, CR4, CR5, CR7)",
+        "Parked sub-$25 auto-approve and new-gift-card goodwill proposals",
+        "M4 refund-execution wiring box with internal system labels",
+        "RD5 cross-reference explicitly scoped to returns on a different board"
+      ]
+    },
+    {
+      "frame": "03_address_payment",
+      "agent_facing_artifact": "pending_order_servicing_board_03_address_payment.png",
+      "text_source_artifact": "pending_order_servicing_board_03_address_payment.txt",
+      "target_facts": [
+        {
+          "id": "address_change_status_pending_no_money_moves",
+          "statement": "A pending-order shipping address change leaves the order status pending and does not move money."
+        },
+        {
+          "id": "payment_change_saved_different_single_method",
+          "statement": "A pending-order payment method change must use one different payment method already saved on the customer's profile; splitting across methods is not allowed."
+        },
+        {
+          "id": "payment_change_gift_card_covers_entire_total",
+          "statement": "If the new payment method is a gift card, it must have enough balance to cover the entire order total."
+        }
+      ],
+      "permitted_supporting_echoes": {
+        "address_change_read_back_confirm_update": "Lane A's read-back loop shows the field-by-field echo and confirmation before the update (authoritative as QA rule card A-3 in the QA calibration deck).",
+        "payment_change_refund_original_full_amount": "Lane B's execute node refunds the original method for the full amount (authoritative as a dated ruling in the finance email archive).",
+        "payment_change_refund_timelines": "Lane B's timeline fork shows immediate gift-card and 3-6 day card/PayPal swap refunds (authoritative as a dated ruling in the finance email archive).",
+        "payment_change_status_stays_pending": "Lane B's end node keeps the order pending after the swap (authoritative as a dated ruling in the finance email archive)."
+      },
+      "grounded_distractors": [
+        "Wholesale-pilot fence with credit-memo and net-30 cards scoped to wholesale accounts only",
+        "Parked address-validation autocomplete and split-tender proposals",
+        "WHY-saved-only rationale callout and sequencing-gotcha sticky",
+        "Profile-default-address separation sticky pointing at a different journey"
+      ]
+    },
+    {
+      "frame": "04_item_change",
+      "agent_facing_artifact": "pending_order_servicing_board_04_item_change.png",
+      "text_source_artifact": "pending_order_servicing_board_04_item_change.txt",
+      "target_facts": [
+        {
+          "id": "item_change_single_difference_payment_method",
+          "statement": "For an item change, the customer provides one payment method to handle the price difference, whether that difference is a charge or a refund."
+        },
+        {
+          "id": "item_change_gift_card_covers_price_increase",
+          "statement": "If the item-change price goes up and the customer chooses a gift card, that gift card must have enough balance to cover the full difference."
+        },
+        {
+          "id": "item_change_one_shot_locks_order",
+          "statement": "An item change is one-shot for the order; after submission the status becomes pending (items modified), and the order cannot be modified or cancelled again."
+        }
+      ],
+      "permitted_supporting_echoes": {
+        "item_change_same_product_different_variant": "The per-line gate requires the same product with a different option (authoritative in the full-site storefront screenshots).",
+        "item_change_new_variant_available": "The availability gate keeps out-of-stock variants off the change list (authoritative in the full-site storefront screenshots).",
+        "item_change_complete_list_before_submit": "The last-call nodes show the complete-list check and the final anything-else question (authoritative as QA rule card I-6 in the QA calibration deck)."
+      },
+      "grounded_distractors": [
+        "Milestone 5 launch-history strip with a superseded line-by-line draft and parked grace-window / top-spender proposals",
+        "Status-string exactness callout and escalation-pattern stickies",
+        "UAT seeding note and delivered-order-exchange cross-reference sticky"
+      ]
+    },
+    {
+      "frame": "05_open_questions",
+      "agent_facing_artifact": "pending_order_servicing_board_05_open_questions.png",
+      "text_source_artifact": "pending_order_servicing_board_05_open_questions.txt",
+      "target_facts": [],
+      "permitted_supporting_echoes": {},
+      "grounded_distractors": [
+        "Open-questions stickies, parking-lot cards, decision changelog, and board-hygiene chatter; the frame header states nothing on it is policy"
+      ]
+    }
+  ],
+  "excluded_claims": [
+    "Superseded, killed, or parked cards define current policy (each is labeled and the board states they never change agent behavior)",
+    "Wholesale-fence content applies to consumer orders (every card inside is scoped 'wholesale accounts only')",
+    "Internal system labels (SERVICING CONSOLE, ORDER LOOKUP, ORDER SERVICE, PAYMENTS, PRICING, COMMS) are required tool identifiers",
+    "Milestone ship dates, ruling IDs, personas, channels, or board metadata are policy facts",
+    "The board defines identity verification, returns, exchanges, or profile-journey policy (it hands off to those journeys)",
+    "Any unstated threshold, fee, or timeline can be inferred from the diagram"
+  ],
+  "distribution": {
+    "expose_to_developer_agent": [
+      "pending_order_servicing_board_01_default_scenario.png",
+      "pending_order_servicing_board_02_cancellation.png",
+      "pending_order_servicing_board_03_address_payment.png",
+      "pending_order_servicing_board_04_item_change.png",
+      "pending_order_servicing_board_05_open_questions.png"
+    ],
+    "keep_author_side": [
+      "pending_order_servicing_board.html",
+      "render_board.py",
+      "check_artifact.py",
+      "eval_manifest.json",
+      "README.md",
+      "pending_order_servicing_board_01_default_scenario.txt",
+      "pending_order_servicing_board_02_cancellation.txt",
+      "pending_order_servicing_board_03_address_payment.txt",
+      "pending_order_servicing_board_04_item_change.txt",
+      "pending_order_servicing_board_05_open_questions.txt"
+    ]
+  }
+}

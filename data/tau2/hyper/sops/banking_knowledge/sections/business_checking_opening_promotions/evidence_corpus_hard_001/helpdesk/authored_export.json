@@ -1,0 +1,2275 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "Rho Support Admin",
+    "account": "rho-business-banking",
+    "workspace": "Business Banking Support",
+    "environment": "production",
+    "exported_at": "2025-11-14T20:00:00Z",
+    "timezone": "America/Los_Angeles",
+    "export_version": "2025.11.14-rc3",
+    "requested_by": "maya.singh@rho-bank.com"
+  },
+  "cover_email": "From: Owen Park <owen.park@rho-bank.com>\nTo: Maya Singh <maya.singh@rho-bank.com>, Jamal Price <jamal.price@rho-bank.com>\nCc: Nina Patel <nina.patel@rho-bank.com>, Aisha Bell <aisha.bell@rho-bank.com>\nDate: Fri, 14 Nov 2025 12:07:36 -0800\nSubject: Production export for this afternoon's BC support check\nMessage-ID: <20251114120736.8821.helpdesk-admin@rho-bank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\n\nMaya — attached is the production export I pulled just after noon. It includes the\nbusiness-checking macros, triggers, ticket fields, policy contracts, SLAs, and the\nsaved views visible to the admin account. The export version in each file should\nread 2025.11.14-rc3.\n\nTwo things to call out before the smoke test. The after-hours source-conflict\nreply is still draft, so agents should not see it. I left it in the export because\nJamal is waiting on the wording and we need to check the eventual trigger against\nthe same object ID. The three entries prefixed LEGACY are intentionally disabled;\ntheir prior usage and replacement links are retained for the migration review.\n\nThe launch-floor routing rule is live. Its count is low because we enabled it on\nMonday, which is expected. Please use a test case with the Launch watch field set\nto Review and confirm that it lands in BC Launch Floor with the internal note. For\nthe promotion conflict check, use the source-check field rather than adding a\nfree-form tag—the tag-based rule is the retired one near the bottom of the export.\n\nI compared the object totals with last night's change ticket and did not see a\nmissing production object. I have not tested Branch Enablement permissions from a\nbranch profile; Lena still owns that check. If you change anything during the\nsmoke test, send me the object ID and I will pull a clean post-change export so we\ndo not pass around two files with the same name.\n\nOwen\nSupport Platform Administration\n",
+  "macros": [
+    {
+      "macro_id": "m_bc_current_source",
+      "name": "BC · locate current product source",
+      "description": "Adds the owner-checked links used for a current product question.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-10-20T15:00:00Z",
+      "updated_at": "2025-11-12T22:08:14Z",
+      "usage_30d": 684,
+      "usage_90d": 2059,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "add_internal_comment",
+          "value": "Check the product named on the case against the current product inventory before replying. Attach any customer-supplied capture."
+        },
+        {
+          "type": "set_field",
+          "field_key": "bc_issue_family",
+          "value": "product_source"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bc_source_check",
+          "value": "required"
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_compare_products",
+      "name": "BC · product comparison follow-up",
+      "description": "Sets a neutral follow-up for customers still comparing checking products.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 411,
+      "usage_90d": 1240,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_issue_family",
+          "value": "product_comparison"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "I can help you compare the current business-checking options. Before you start an application, let’s make sure the account features match how your business expects to bank."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_page_pricing_conflict",
+      "name": "BC · page and pricing conflict",
+      "description": "Captures the observed page and routes a same-day source disagreement.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T18:03:51Z",
+      "usage_30d": 37,
+      "usage_90d": 118,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_issue_family",
+          "value": "source_conflict"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bc_source_check",
+          "value": "conflict"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bc_ops_route",
+          "value": "deposit_ops"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Include product name, URL, observed date/time, and the conflicting source. Do not resolve from a filename or cached search result."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_promo_window_check",
+      "name": "BC · promotion window check",
+      "description": "Requests campaign-date verification without promising qualification.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-11T17:29:03Z",
+      "usage_30d": 129,
+      "usage_90d": 394,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_issue_family",
+          "value": "promotion"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bc_campaign_check",
+          "value": "needed"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Record the page or offer name and the customer-relevant date. Product fit and account-specific qualification stay separate."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_expired_offer",
+      "name": "BC · expired offer acknowledgment",
+      "description": "Customer reply used after the campaign owner confirms the offer ended.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 48,
+      "usage_90d": 151,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_campaign_check",
+          "value": "expired_confirmed"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "The offer you found is no longer within its published availability window. I can still help you review the business-checking options that are currently available."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_promo_not_fit",
+      "name": "BC · promotion does not determine product fit",
+      "description": "Keeps campaign placement separate from the product-fit discussion.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 93,
+      "usage_90d": 286,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_issue_family",
+          "value": "promotion"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "A promotion does not by itself determine which account is the best fit. We can first review the current product features and then check any offer that may apply."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_opening_status",
+      "name": "BC · opening status intake",
+      "description": "Collects the application reference before an opening-status handoff.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 522,
+      "usage_90d": 1573,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_issue_family",
+          "value": "opening_status"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bc_ops_route",
+          "value": "onboarding_support"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Use the application reference. Do not ask the customer to place identity documents or sensitive review signals in the ticket."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_opening_reentry",
+      "name": "BC · application re-entry question",
+      "description": "Routes questions about returning to an unfinished application.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 174,
+      "usage_90d": 529,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_issue_family",
+          "value": "opening_reentry"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bc_ops_route",
+          "value": "onboarding_support"
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_manual_review_neutral",
+      "name": "BC · review in progress (neutral)",
+      "description": "Acknowledges an unresolved opening review without inventing a reason.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-14T17:12:45Z",
+      "usage_30d": 286,
+      "usage_90d": 865,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_issue_family",
+          "value": "opening_review"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "The application still needs review. I don’t have a confirmed outcome to share yet, but I can make sure it is with the correct team and note the best way to reach you."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_atm_charge_intake",
+      "name": "BC · ATM charge intake",
+      "description": "Separates the observed transaction lines before discussing pricing.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 203,
+      "usage_90d": 616,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_issue_family",
+          "value": "atm_charge"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bc_atm_charge_type",
+          "value": "unclassified"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Capture posting date and terminal/network detail when visible. Identify who assessed each amount before describing it as a bank fee."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_atm_terminal_surcharge",
+      "name": "BC · terminal-owner surcharge explanation",
+      "description": "Reply used when the non-bank surcharge has been identified.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 97,
+      "usage_90d": 298,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_atm_charge_type",
+          "value": "terminal_surcharge"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "This line is a surcharge assessed by the ATM or terminal owner. It is separate from any fee the bank may assess for the transaction."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_atm_reimbursement_review",
+      "name": "BC · ATM reimbursement timing review",
+      "description": "Routes a missing-reimbursement question to servicing with transaction context.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 64,
+      "usage_90d": 199,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_atm_charge_type",
+          "value": "reimbursement_question"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bc_ops_route",
+          "value": "deposit_servicing"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Include the posting date and the separately identified charge lines."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_atm_sky_blue_followup",
+      "name": "BC · Sky Blue ATM fee or rebate follow-up",
+      "description": "Sky Blue reply for a fee or rebate that has not appeared as expected.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 34,
+      "usage_90d": 102,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_atm_charge_type",
+          "value": "reimbursement_question"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "For a Sky Blue account, if an ATM fee or rebate does not appear as expected, keep the ATM receipt, check the statement, and contact support with the date, location, and amount of the withdrawal for review. As a routine practice, Sky Blue customers should keep ATM receipts and review statements for posted rebates."
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Confirm the charge lines are separately identified before sending; route to deposit_servicing if the posting still cannot be located."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_lime_green_rebate_lines",
+      "name": "BC · Lime Green rebate line items",
+      "description": "Explains how Lime Green ATM rebates post; no customer action is required.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 27,
+      "usage_90d": 84,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_atm_charge_type",
+          "value": "reimbursement_question"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "For Lime Green eligible ATM rebates, no additional customer action is needed. Fees and corresponding credits appear as separate line items on account activity once processed."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_hunter_green_rebate_tracking",
+      "name": "BC · Hunter Green rebate tracking",
+      "description": "Shows a Hunter Green customer where fees, rebates, and the remaining monthly amount appear.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 21,
+      "usage_90d": 66,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_atm_charge_type",
+          "value": "reimbursement_question"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "On a Hunter Green account, fees and any related rebates appear as separate line items on account activity and statements. You can track how much of the $20 monthly rebate has been used by reviewing the statement or recent transactions."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_referral_general",
+      "name": "BC · referral program general information",
+      "description": "Points a general program question to the currently approved terms.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 118,
+      "usage_90d": 361,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_issue_family",
+          "value": "referral"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bc_referral_scope",
+          "value": "general"
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_referral_account_specific",
+      "name": "BC · referral account-specific handoff",
+      "description": "Routes authenticated qualification or status questions to Referral Operations.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 72,
+      "usage_90d": 223,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_referral_scope",
+          "value": "account_specific"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bc_ops_route",
+          "value": "referral_operations"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Add the referral reference when available; do not infer status from the FAQ."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_historical_capture",
+      "name": "BC · customer supplied historical capture",
+      "description": "Preserves an old screenshot while marking that a dated source check is required.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 31,
+      "usage_90d": 100,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_source_check",
+          "value": "historical_capture"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Keep the supplied image with the ticket. Identify what applied on the relevant date before answering; the capture is context, not automatic proof."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_branch_handoff",
+      "name": "BC · branch-assisted opening handoff",
+      "description": "Tags a branch-assisted opening question for the enablement route.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 54,
+      "usage_90d": 169,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_channel",
+          "value": "branch"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bc_ops_route",
+          "value": "branch_enablement"
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_after_hours_note",
+      "name": "BC · after-hours source check received",
+      "description": "Acknowledges receipt when the product owner is outside operating hours.",
+      "active": false,
+      "environment": "production",
+      "status": "draft",
+      "effective_at": "",
+      "updated_at": "2025-11-14T18:48:19Z",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_source_check",
+          "value": "after_hours_pending"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "I’ve recorded the source you found and the date you saw it. The product team is outside its current review hours, so we’ll follow up after the source can be checked rather than guess."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": "Awaiting Support Enablement approval; not available to agents."
+    },
+    {
+      "macro_id": "m_bc_launch_floor_escalation",
+      "name": "BC · launch-week floor escalation",
+      "description": "Adds the launch-week review tag and routes the case to the floor lead.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-10T14:00:00Z",
+      "updated_at": "2025-11-14T19:03:02Z",
+      "usage_30d": 19,
+      "usage_90d": 64,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_launch_watch",
+          "value": "review"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bc_ops_route",
+          "value": "launch_floor"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Add the source URL, observed time, and the exact customer question."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_mobile_deposit_route",
+      "name": "BC · mobile deposit support route",
+      "description": "Routes a product-specific mobile-deposit question to servicing.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 144,
+      "usage_90d": 439,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_issue_family",
+          "value": "mobile_deposit"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bc_ops_route",
+          "value": "deposit_servicing"
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_cobalt_console_orientation",
+      "name": "BC · Cobalt Blue console orientation",
+      "description": "Points a Cobalt Blue customer to the console surfaces for balance, usage, and interest.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 58,
+      "usage_90d": 176,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_public_reply",
+          "value": "In online banking for a Cobalt Blue account: the account summary shows your current balance against the $2,500 waiver requirement, the activity tracker displays monthly usage versus the $175 limit, and the interest section displays the current APY of 0.5% and accrued interest to date."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_sky_blue_alerts",
+      "name": "BC · Sky Blue alerts setup",
+      "description": "Reply for a Sky Blue customer asking how to follow funds availability and interest.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 39,
+      "usage_90d": 117,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_public_reply",
+          "value": "On a Sky Blue account you can set balance and deposit alerts to track funds availability and interest accrual. Alerts are managed from the notification settings in online banking."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_fee_exception_request",
+      "name": "BC · maintenance fee exception request",
+      "description": "Collects the product and authenticated account context for an exception review.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 86,
+      "usage_90d": 265,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_issue_family",
+          "value": "fee_exception"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bc_ops_route",
+          "value": "deposit_ops"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Do not imply approval; include the current product and request context. Confirm waiver eligibility per the waiver table in RB-PRC-01 (Business Pricing & Terms Exhibit); do not restate its dollar values in the ticket."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_lime_green_fee_posting",
+      "name": "BC · Lime Green maintenance-fee posting",
+      "description": "Explains when the Lime Green maintenance charge posts if the balance is short at assessment.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 44,
+      "usage_90d": 131,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_public_reply",
+          "value": "The Lime Green monthly maintenance fee is drawn directly from the account. If the available balance is insufficient at assessment time, the charge posts when funds are available."
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Posting mechanics only. For waiver or exception requests, use the maintenance fee exception intake."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_source_conflict_close",
+      "name": "BC · source conflict resolved",
+      "description": "Records the controlling source supplied by the responsible owner.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 22,
+      "usage_90d": 73,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_source_check",
+          "value": "resolved"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bc_launch_watch",
+          "value": "resolved"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Paste the owner-confirmed source and effective date before closing."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_archive_followup",
+      "name": "BC · archive discoverability follow-up",
+      "description": "Creates an internal follow-up when inactive material remains easy to mistake for current.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 11,
+      "usage_90d": 40,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_issue_family",
+          "value": "archive_discoverability"
+        },
+        {
+          "type": "set_field",
+          "field_key": "bc_ops_route",
+          "value": "knowledge_admin"
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_callback_confirm",
+      "name": "BC · callback details confirmed",
+      "description": "Records an agreed callback channel for an operations-owned follow-up.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 331,
+      "usage_90d": 1000,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "bc_callback_confirmed",
+          "value": "yes"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Do not copy authentication details into this note."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_bc_old_launch_apy",
+      "name": "LEGACY · launch APY reply",
+      "description": "Former launch-period reply retained in the admin export only.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "effective_at": "2025-07-14T14:00:00Z",
+      "updated_at": "2025-09-30T23:59:00Z",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "m_bc_current_source",
+      "steps": [
+        {
+          "type": "set_public_reply",
+          "value": "The launch rate shown in the former campaign applies."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": "Disabled after the September pricing refresh; historical usage retained."
+    },
+    {
+      "macro_id": "m_bc_old_manual_path",
+      "name": "LEGACY · send manual-opening worksheet",
+      "description": "Old attachment workflow retained for audit after digital-opening cutover.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "effective_at": "2025-06-02T15:00:00Z",
+      "updated_at": "2025-10-01T14:02:00Z",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "m_bc_opening_status",
+      "steps": [
+        {
+          "type": "add_internal_comment",
+          "value": "Send the manual worksheet from the shared drive."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": "Disabled at account-opening cutover."
+    },
+    {
+      "macro_id": "m_bc_old_atm_bundle",
+      "name": "LEGACY · ATM fee and reimbursement bundle",
+      "description": "Former response that combined multiple charge types.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "effective_at": "2025-05-01T15:00:00Z",
+      "updated_at": "2025-10-18T20:16:09Z",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "m_bc_atm_charge_intake",
+      "steps": [
+        {
+          "type": "set_public_reply",
+          "value": "ATM charges and reimbursements are handled together under your account terms."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": "Disabled because it collapsed bank and terminal-owner charges."
+    },
+    {
+      "macro_id": "m_bc_training_sandbox_note",
+      "name": "Training · source comparison exercise",
+      "description": "Non-production draft left in the export for admin visibility.",
+      "active": false,
+      "environment": "production",
+      "status": "draft",
+      "effective_at": "",
+      "updated_at": "2025-11-07T16:44:00Z",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "add_internal_comment",
+          "value": "Training exercise only — compare both sources and identify the owner."
+        }
+      ],
+      "tags": [
+        "business-checking",
+        "deposit-support"
+      ],
+      "internal_notes": "Hidden from agent workspaces."
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "t_bc_source_conflict",
+      "name": "Business checking source conflict",
+      "description": "Production routing rule for business checking source conflict.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 20,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 37,
+      "conditions": [
+        {
+          "field_key": "bc_source_check",
+          "operator": "is",
+          "value": "conflict"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bc_page_pricing_conflict"
+        },
+        {
+          "type": "assign_group",
+          "group": "Deposit Operations"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bc_promo_check",
+      "name": "Promotion window review",
+      "description": "Production routing rule for promotion window review.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 30,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 129,
+      "conditions": [
+        {
+          "field_key": "bc_campaign_check",
+          "operator": "is",
+          "value": "needed"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bc_promo_window_check"
+        },
+        {
+          "type": "assign_group",
+          "group": "Promotions Desk"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bc_opening_status",
+      "name": "Opening status handoff",
+      "description": "Production routing rule for opening status handoff.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 40,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 522,
+      "conditions": [
+        {
+          "field_key": "bc_issue_family",
+          "operator": "is",
+          "value": "opening_status"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bc_opening_status"
+        },
+        {
+          "type": "assign_group",
+          "group": "Onboarding Support"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bc_opening_review",
+      "name": "Opening review neutral response",
+      "description": "Production routing rule for opening review neutral response.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 35,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 286,
+      "conditions": [
+        {
+          "field_key": "bc_issue_family",
+          "operator": "is",
+          "value": "opening_review"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bc_manual_review_neutral"
+        },
+        {
+          "type": "assign_group",
+          "group": "Onboarding Support"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bc_atm_unclassified",
+      "name": "Unclassified ATM charge",
+      "description": "Production routing rule for unclassified atm charge.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 45,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 203,
+      "conditions": [
+        {
+          "field_key": "bc_atm_charge_type",
+          "operator": "is",
+          "value": "unclassified"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bc_atm_charge_intake"
+        },
+        {
+          "type": "assign_group",
+          "group": "Deposit Servicing"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bc_referral_specific",
+      "name": "Account-specific referral question",
+      "description": "Production routing rule for account-specific referral question.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 50,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 72,
+      "conditions": [
+        {
+          "field_key": "bc_referral_scope",
+          "operator": "is",
+          "value": "account_specific"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bc_referral_account_specific"
+        },
+        {
+          "type": "assign_group",
+          "group": "Referral Operations"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bc_branch_opening",
+      "name": "Branch-assisted opening",
+      "description": "Production routing rule for branch-assisted opening.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 55,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 41,
+      "conditions": [
+        {
+          "field_key": "bc_channel",
+          "operator": "is",
+          "value": "branch"
+        },
+        {
+          "field_key": "bc_issue_family",
+          "operator": "is",
+          "value": "opening_status"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bc_branch_handoff"
+        },
+        {
+          "type": "assign_group",
+          "group": "Branch Enablement"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bc_launch_watch",
+      "name": "Launch watch review",
+      "description": "Production routing rule for launch watch review.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 10,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 19,
+      "conditions": [
+        {
+          "field_key": "bc_launch_watch",
+          "operator": "is",
+          "value": "review"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bc_launch_floor_escalation"
+        },
+        {
+          "type": "assign_group",
+          "group": "BC Launch Floor"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bc_archive_followup",
+      "name": "Historical material discoverability",
+      "description": "Production routing rule for historical material discoverability.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 70,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 31,
+      "conditions": [
+        {
+          "field_key": "bc_source_check",
+          "operator": "is",
+          "value": "historical_capture"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bc_historical_capture"
+        },
+        {
+          "type": "assign_group",
+          "group": "Knowledge Administration"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bc_fee_exception",
+      "name": "Maintenance fee exception intake",
+      "description": "Production routing rule for maintenance fee exception intake.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 60,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 86,
+      "conditions": [
+        {
+          "field_key": "bc_issue_family",
+          "operator": "is",
+          "value": "fee_exception"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bc_fee_exception_request"
+        },
+        {
+          "type": "assign_group",
+          "group": "Deposit Operations"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bc_mobile_deposit",
+      "name": "Mobile deposit question",
+      "description": "Production routing rule for mobile deposit question.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 80,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 144,
+      "conditions": [
+        {
+          "field_key": "bc_issue_family",
+          "operator": "is",
+          "value": "mobile_deposit"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bc_mobile_deposit_route"
+        },
+        {
+          "type": "assign_group",
+          "group": "Deposit Servicing"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bc_after_hours_draft",
+      "name": "After-hours source conflict",
+      "description": "Production routing rule for after-hours source conflict.",
+      "active": false,
+      "environment": "production",
+      "status": "draft",
+      "priority": 25,
+      "effective_at": "",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 0,
+      "conditions": [
+        {
+          "field_key": "bc_source_check",
+          "operator": "is",
+          "value": "after_hours_pending"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bc_after_hours_note"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_bc_legacy_apy",
+      "name": "LEGACY launch-rate tag",
+      "description": "Production routing rule for legacy launch-rate tag.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "priority": 200,
+      "effective_at": "",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 0,
+      "conditions": [
+        {
+          "system_field": "tags",
+          "operator": "includes",
+          "value": "launch-rate-question"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bc_old_launch_apy"
+        }
+      ],
+      "superseded_by": "t_bc_source_conflict"
+    },
+    {
+      "trigger_id": "t_bc_legacy_manual",
+      "name": "LEGACY manual worksheet route",
+      "description": "Production routing rule for legacy manual worksheet route.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "priority": 210,
+      "effective_at": "",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 0,
+      "conditions": [
+        {
+          "system_field": "tags",
+          "operator": "includes",
+          "value": "manual-opening"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_bc_old_manual_path"
+        }
+      ],
+      "superseded_by": "t_bc_opening_status"
+    }
+  ],
+  "policy_contracts": [
+    {
+      "contract_id": "pc_bc_source_conflict",
+      "name": "Business checking source-conflict routing",
+      "status": "published",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Deposit Operations",
+      "scope": [
+        "product_source",
+        "source_conflict"
+      ],
+      "required_fields": [
+        "bc_issue_family",
+        "bc_source_check"
+      ],
+      "closed_world": true,
+      "effective_at": "2025-10-20T15:00:00Z",
+      "updated_at": "2025-11-13T18:03:51Z"
+    },
+    {
+      "contract_id": "pc_bc_promotion",
+      "name": "Promotion review boundary",
+      "status": "published",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Promotions Desk",
+      "scope": [
+        "promotion"
+      ],
+      "required_fields": [
+        "bc_campaign_check"
+      ],
+      "closed_world": true,
+      "effective_at": "2025-10-27T15:00:00Z",
+      "updated_at": "2025-11-11T17:29:03Z"
+    },
+    {
+      "contract_id": "pc_bc_opening",
+      "name": "Opening operations handoff",
+      "status": "published",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Onboarding Support",
+      "scope": [
+        "opening_status",
+        "opening_reentry",
+        "opening_review"
+      ],
+      "required_fields": [
+        "bc_issue_family",
+        "bc_ops_route"
+      ],
+      "closed_world": true,
+      "effective_at": "2025-10-01T14:00:00Z",
+      "updated_at": "2025-11-14T17:12:45Z"
+    },
+    {
+      "contract_id": "pc_bc_atm",
+      "name": "ATM charge classification",
+      "status": "published",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Deposit Servicing",
+      "scope": [
+        "atm_charge"
+      ],
+      "required_fields": [
+        "bc_atm_charge_type"
+      ],
+      "closed_world": true,
+      "effective_at": "2025-10-20T15:00:00Z",
+      "updated_at": "2025-11-09T20:14:28Z"
+    },
+    {
+      "contract_id": "pc_bc_referral",
+      "name": "Referral question routing",
+      "status": "published",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Referral Operations",
+      "scope": [
+        "referral"
+      ],
+      "required_fields": [
+        "bc_referral_scope"
+      ],
+      "closed_world": true,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-08T17:03:11Z"
+    },
+    {
+      "contract_id": "pc_bc_launch_watch",
+      "name": "Launch-week watch",
+      "status": "published",
+      "active": true,
+      "environment": "production",
+      "owner_group": "BC Launch Floor",
+      "scope": [
+        "launch_watch"
+      ],
+      "required_fields": [
+        "bc_launch_watch"
+      ],
+      "closed_world": true,
+      "effective_at": "2025-11-10T14:00:00Z",
+      "updated_at": "2025-11-14T19:03:02Z"
+    }
+  ],
+  "field_columns": [
+    "row_id",
+    "field_key",
+    "field_name",
+    "field_type",
+    "option_value",
+    "active",
+    "status",
+    "environment",
+    "updated_at"
+  ],
+  "fields": [
+    {
+      "row_id": "fd_001",
+      "field_key": "bc_issue_family",
+      "field_name": "Business checking issue",
+      "field_type": "dropdown",
+      "option_value": "product_source",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_002",
+      "field_key": "bc_issue_family",
+      "field_name": "Business checking issue",
+      "field_type": "dropdown",
+      "option_value": "product_comparison",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_003",
+      "field_key": "bc_issue_family",
+      "field_name": "Business checking issue",
+      "field_type": "dropdown",
+      "option_value": "source_conflict",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_004",
+      "field_key": "bc_issue_family",
+      "field_name": "Business checking issue",
+      "field_type": "dropdown",
+      "option_value": "promotion",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_005",
+      "field_key": "bc_issue_family",
+      "field_name": "Business checking issue",
+      "field_type": "dropdown",
+      "option_value": "opening_status",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_006",
+      "field_key": "bc_issue_family",
+      "field_name": "Business checking issue",
+      "field_type": "dropdown",
+      "option_value": "opening_reentry",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_007",
+      "field_key": "bc_issue_family",
+      "field_name": "Business checking issue",
+      "field_type": "dropdown",
+      "option_value": "opening_review",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_008",
+      "field_key": "bc_issue_family",
+      "field_name": "Business checking issue",
+      "field_type": "dropdown",
+      "option_value": "atm_charge",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_009",
+      "field_key": "bc_issue_family",
+      "field_name": "Business checking issue",
+      "field_type": "dropdown",
+      "option_value": "referral",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_010",
+      "field_key": "bc_issue_family",
+      "field_name": "Business checking issue",
+      "field_type": "dropdown",
+      "option_value": "mobile_deposit",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_011",
+      "field_key": "bc_issue_family",
+      "field_name": "Business checking issue",
+      "field_type": "dropdown",
+      "option_value": "fee_exception",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_012",
+      "field_key": "bc_issue_family",
+      "field_name": "Business checking issue",
+      "field_type": "dropdown",
+      "option_value": "archive_discoverability",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_013",
+      "field_key": "bc_source_check",
+      "field_name": "Source check state",
+      "field_type": "dropdown",
+      "option_value": "required",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_014",
+      "field_key": "bc_source_check",
+      "field_name": "Source check state",
+      "field_type": "dropdown",
+      "option_value": "conflict",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_015",
+      "field_key": "bc_source_check",
+      "field_name": "Source check state",
+      "field_type": "dropdown",
+      "option_value": "historical_capture",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_016",
+      "field_key": "bc_source_check",
+      "field_name": "Source check state",
+      "field_type": "dropdown",
+      "option_value": "after_hours_pending",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_017",
+      "field_key": "bc_source_check",
+      "field_name": "Source check state",
+      "field_type": "dropdown",
+      "option_value": "resolved",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_018",
+      "field_key": "bc_campaign_check",
+      "field_name": "Campaign check",
+      "field_type": "dropdown",
+      "option_value": "needed",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_019",
+      "field_key": "bc_campaign_check",
+      "field_name": "Campaign check",
+      "field_type": "dropdown",
+      "option_value": "expired_confirmed",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_020",
+      "field_key": "bc_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "deposit_ops",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_021",
+      "field_key": "bc_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "onboarding_support",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_022",
+      "field_key": "bc_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "deposit_servicing",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_023",
+      "field_key": "bc_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "referral_operations",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_024",
+      "field_key": "bc_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "branch_enablement",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_025",
+      "field_key": "bc_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "launch_floor",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_026",
+      "field_key": "bc_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "knowledge_admin",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_027",
+      "field_key": "bc_atm_charge_type",
+      "field_name": "ATM charge type",
+      "field_type": "dropdown",
+      "option_value": "unclassified",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_028",
+      "field_key": "bc_atm_charge_type",
+      "field_name": "ATM charge type",
+      "field_type": "dropdown",
+      "option_value": "terminal_surcharge",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_029",
+      "field_key": "bc_atm_charge_type",
+      "field_name": "ATM charge type",
+      "field_type": "dropdown",
+      "option_value": "reimbursement_question",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_030",
+      "field_key": "bc_referral_scope",
+      "field_name": "Referral question scope",
+      "field_type": "dropdown",
+      "option_value": "general",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_031",
+      "field_key": "bc_referral_scope",
+      "field_name": "Referral question scope",
+      "field_type": "dropdown",
+      "option_value": "account_specific",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_032",
+      "field_key": "bc_channel",
+      "field_name": "Customer channel",
+      "field_type": "dropdown",
+      "option_value": "digital",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_033",
+      "field_key": "bc_channel",
+      "field_name": "Customer channel",
+      "field_type": "dropdown",
+      "option_value": "branch",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_034",
+      "field_key": "bc_channel",
+      "field_name": "Customer channel",
+      "field_type": "dropdown",
+      "option_value": "phone",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_035",
+      "field_key": "bc_launch_watch",
+      "field_name": "Launch watch state",
+      "field_type": "dropdown",
+      "option_value": "review",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_036",
+      "field_key": "bc_launch_watch",
+      "field_name": "Launch watch state",
+      "field_type": "dropdown",
+      "option_value": "resolved",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_037",
+      "field_key": "bc_callback_confirmed",
+      "field_name": "Callback confirmed",
+      "field_type": "checkbox",
+      "option_value": "yes",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    }
+  ],
+  "sla_policies": [
+    {
+      "policy_id": "sla_bc_source_conflict",
+      "name": "Current-source conflict",
+      "status": "active",
+      "environment": "production",
+      "priority": "high",
+      "calendar": "Business Banking Ops",
+      "first_reply_minutes": 30,
+      "resolution_minutes": 240,
+      "conditions": [
+        {
+          "field_key": "bc_source_check",
+          "operator": "is",
+          "value": "conflict"
+        }
+      ]
+    },
+    {
+      "policy_id": "sla_bc_opening_review",
+      "name": "Opening review handoff",
+      "status": "active",
+      "environment": "production",
+      "priority": "normal",
+      "calendar": "Onboarding Support",
+      "first_reply_minutes": 60,
+      "resolution_minutes": 480,
+      "conditions": [
+        {
+          "field_key": "bc_issue_family",
+          "operator": "is",
+          "value": "opening_review"
+        }
+      ]
+    },
+    {
+      "policy_id": "sla_bc_promotion",
+      "name": "Promotion date check",
+      "status": "active",
+      "environment": "production",
+      "priority": "normal",
+      "calendar": "Promotions Desk",
+      "first_reply_minutes": 120,
+      "resolution_minutes": 480,
+      "conditions": [
+        {
+          "field_key": "bc_campaign_check",
+          "operator": "is",
+          "value": "needed"
+        }
+      ]
+    },
+    {
+      "policy_id": "sla_bc_launch_floor",
+      "name": "Launch-week floor review",
+      "status": "active",
+      "environment": "production",
+      "priority": "urgent",
+      "calendar": "BC Launch Coverage",
+      "first_reply_minutes": 15,
+      "resolution_minutes": 120,
+      "conditions": [
+        {
+          "field_key": "bc_launch_watch",
+          "operator": "is",
+          "value": "review"
+        }
+      ]
+    },
+    {
+      "policy_id": "sla_bc_atm",
+      "name": "ATM servicing handoff",
+      "status": "active",
+      "environment": "production",
+      "priority": "normal",
+      "calendar": "Deposit Servicing",
+      "first_reply_minutes": 120,
+      "resolution_minutes": 960,
+      "conditions": [
+        {
+          "field_key": "bc_issue_family",
+          "operator": "is",
+          "value": "atm_charge"
+        }
+      ]
+    },
+    {
+      "policy_id": "sla_bc_referral",
+      "name": "Referral operations handoff",
+      "status": "active",
+      "environment": "production",
+      "priority": "normal",
+      "calendar": "Referral Operations",
+      "first_reply_minutes": 240,
+      "resolution_minutes": 1440,
+      "conditions": [
+        {
+          "field_key": "bc_referral_scope",
+          "operator": "is",
+          "value": "account_specific"
+        }
+      ]
+    },
+    {
+      "policy_id": "sla_bc_legacy_launch",
+      "name": "LEGACY campaign escalation",
+      "status": "retired",
+      "environment": "production",
+      "priority": "normal",
+      "calendar": "Campaign Launch",
+      "first_reply_minutes": 60,
+      "resolution_minutes": 240,
+      "conditions": [
+        {
+          "system_field": "tags",
+          "operator": "includes",
+          "value": "launch-rate-question"
+        }
+      ],
+      "superseded_by": "sla_bc_source_conflict"
+    }
+  ],
+  "views": [
+    {
+      "view_id": "v_bc_launch_watch",
+      "name": "BC launch watch — open",
+      "status": "active",
+      "environment": "production",
+      "group": "BC Launch Floor",
+      "order": 10,
+      "conditions": [
+        {
+          "field_key": "bc_launch_watch",
+          "operator": "is",
+          "value": "review"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "bc_issue_family",
+        "bc_source_check",
+        "updated_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_bc_source_conflicts",
+      "name": "Business checking source conflicts",
+      "status": "active",
+      "environment": "production",
+      "group": "Deposit Operations",
+      "order": 20,
+      "conditions": [
+        {
+          "field_key": "bc_source_check",
+          "operator": "is",
+          "value": "conflict"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "organization",
+        "bc_issue_family",
+        "updated_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_bc_promo_checks",
+      "name": "Promotion checks awaiting owner",
+      "status": "active",
+      "environment": "production",
+      "group": "Promotions Desk",
+      "order": 30,
+      "conditions": [
+        {
+          "field_key": "bc_campaign_check",
+          "operator": "is",
+          "value": "needed"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "bc_campaign_check",
+        "created_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_bc_opening_reviews",
+      "name": "Opening reviews",
+      "status": "active",
+      "environment": "production",
+      "group": "Onboarding Support",
+      "order": 40,
+      "conditions": [
+        {
+          "field_key": "bc_issue_family",
+          "operator": "is",
+          "value": "opening_review"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "organization",
+        "created_at",
+        "updated_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_bc_atm_unclassified",
+      "name": "ATM charges needing classification",
+      "status": "active",
+      "environment": "production",
+      "group": "Deposit Servicing",
+      "order": 50,
+      "conditions": [
+        {
+          "field_key": "bc_atm_charge_type",
+          "operator": "is",
+          "value": "unclassified"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "bc_atm_charge_type",
+        "created_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_bc_referrals",
+      "name": "Account-specific referral questions",
+      "status": "active",
+      "environment": "production",
+      "group": "Referral Operations",
+      "order": 60,
+      "conditions": [
+        {
+          "field_key": "bc_referral_scope",
+          "operator": "is",
+          "value": "account_specific"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "organization",
+        "updated_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_bc_branch",
+      "name": "Branch-assisted checking cases",
+      "status": "active",
+      "environment": "production",
+      "group": "Branch Enablement",
+      "order": 70,
+      "conditions": [
+        {
+          "field_key": "bc_channel",
+          "operator": "is",
+          "value": "branch"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "bc_issue_family",
+        "created_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_bc_archive_followup",
+      "name": "Historical material follow-up",
+      "status": "active",
+      "environment": "production",
+      "group": "Knowledge Administration",
+      "order": 80,
+      "conditions": [
+        {
+          "field_key": "bc_source_check",
+          "operator": "is",
+          "value": "historical_capture"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "bc_source_check",
+        "updated_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_bc_legacy_campaign",
+      "name": "LEGACY launch campaign queue",
+      "status": "retired",
+      "environment": "production",
+      "group": "Campaign Launch",
+      "order": 900,
+      "conditions": [
+        {
+          "system_field": "tags",
+          "operator": "includes",
+          "value": "launch-rate-question"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "created_at",
+        "assignee"
+      ],
+      "superseded_by": "v_bc_source_conflicts"
+    }
+  ]
+}

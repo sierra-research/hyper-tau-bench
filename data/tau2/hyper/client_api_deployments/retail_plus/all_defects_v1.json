@@ -1,0 +1,108 @@
+{
+  "id": "retail_plus/all_defects_v1",
+  "version": 6,
+  "domain": "retail_plus",
+  "client": {
+    "published_api_version": "3.1.0",
+    "deployed_api_version": "3.1.0+retail-all-defects.6",
+    "defects": [
+      {
+        "defect_id": "order_status_field_rename_v1",
+        "actual_behavior": "GET /v1/orders/{order_id} emits the order status under orderStatus even though the published OpenAPI requires the field name status.",
+        "disclosure_conditions": [
+          "The Developer identifies getOrder or GET /v1/orders/{order_id} and reports that the observed payload contains orderStatus while the published schema specifies status."
+        ],
+        "expected_remediation": "Normalize the deployed orderStatus field to the status field expected by the agent without dropping the status value.",
+        "client_can_deploy_fix": false
+      },
+      {
+        "defect_id": "refund_negative_amount_v1",
+        "actual_behavior": "GET /v1/orders/{order_id} returns refund payment amounts as negative values even though the published schema and canonical service represent refund amounts as positive values.",
+        "disclosure_conditions": [
+          "The Developer identifies getOrder or GET /v1/orders/{order_id} and reports observing a refund payment with a negative amount."
+        ],
+        "expected_remediation": "Normalize or otherwise tolerate the deployed signed refund representation without changing the requested refund amount.",
+        "client_can_deploy_fix": false
+      },
+      {
+        "defect_id": "return_async_completion_v1",
+        "actual_behavior": "POST /v1/orders/{order_id}/returns responds with 202 Accepted, a workflow ID, Location, and Retry-After even though the published OpenAPI documents a synchronous 200 response. GET the unadvertised Location resource until it reaches a terminal state.",
+        "disclosure_conditions": [
+          "The Developer identifies createOrderReturn or POST /v1/orders/{order_id}/returns and reports the observed 202 response together with its workflow ID or Location URL."
+        ],
+        "expected_remediation": "Follow the returned Location URL, respect Retry-After, wait through pending responses, and consume the terminal result without resubmitting the return mutation.",
+        "client_can_deploy_fix": false
+      },
+      {
+        "defect_id": "order_projection_lag_v1",
+        "actual_behavior": "After a successful order mutation, GET /v1/orders/{order_id} can continue returning the complete pre-write order projection for 1.5 to 5 seconds even though the mutation is already authoritative. The published OpenAPI incorrectly describes reads as strongly consistent.",
+        "disclosure_conditions": [
+          "The Developer identifies getOrder or GET /v1/orders/{order_id}, names a preceding successful order mutation, and reports that the immediate read still contains the pre-write state."
+        ],
+        "expected_remediation": "Treat the mutation receipt as authoritative, then retry the order detail read with bounded delay until the updated projection is visible; do not resubmit the mutation.",
+        "client_can_deploy_fix": false
+      }
+    ]
+  },
+  "capabilities": [
+    {
+      "id": "retail_partial_return_v1",
+      "operation_id": "createOrderReturn",
+      "missing_functionality": "Initiate a return for one or more selected items from a delivered order and refund those items to a customer-selected saved payment method."
+    }
+  ],
+  "defects": [
+    {
+      "id": "order_status_field_rename_v1",
+      "kind": "response_field_rename",
+      "operation_id": "getOrder",
+      "source_field": "status",
+      "target_field": "orderStatus"
+    },
+    {
+      "id": "refund_negative_amount_v1",
+      "kind": "response_amount_sign",
+      "operation_id": "getOrder",
+      "collection_path": ["payments"],
+      "discriminator_field": "transaction_type",
+      "discriminator_value": "refund",
+      "amount_field": "amount",
+      "sign": "negative"
+    },
+    {
+      "id": "return_async_completion_v1",
+      "kind": "async_completion",
+      "operation_id": "createOrderReturn",
+      "status_path": "/v1/return-workflows/{workflow_id}",
+      "min_delay_seconds": 1.5,
+      "max_delay_seconds": 5.0,
+      "retry_after_seconds": 1,
+      "seed": 20260827
+    },
+    {
+      "id": "order_projection_lag_v1",
+      "kind": "projection_lag",
+      "operation_id": "getOrder",
+      "trigger_operation_ids": [
+        "replaceOrderShippingAddress",
+        "replaceOrderPaymentMethod",
+        "createOrderCancellation",
+        "createOrderItemModification",
+        "createOrderReturn",
+        "createOrderExchange"
+      ],
+      "capture_timing": "before_trigger",
+      "start_condition": "after_trigger",
+      "resource_id_argument": "order_id",
+      "read_surfaces": [
+        {
+          "operation_id": "getOrder",
+          "resource_id_field": "order_id"
+        }
+      ],
+      "min_delay_seconds": 1.5,
+      "max_delay_seconds": 5.0,
+      "seed": 20260828
+    }
+  ]
+}

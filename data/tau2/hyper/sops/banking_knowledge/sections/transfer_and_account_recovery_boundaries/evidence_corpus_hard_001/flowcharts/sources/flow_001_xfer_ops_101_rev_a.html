@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>XFER-OPS-101 rev A — Human-agent transfer triage</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 1080px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #274b63; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #c3d4e2; }
+  .node { position: absolute; width: 300px; box-sizing: border-box; border: 2px solid #4a5b6d; border-radius: 6px; background: #fff; padding: 10px 12px; font-size: 13px; line-height: 1.35; color: #1d2733; }
+  .node .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding: 1px 6px; border-radius: 3px; margin-bottom: 6px; }
+  .entry { border-color: #1d6a44; } .entry .tag { background: #d9efe3; color: #17573a; }
+  .work { border-color: #4a5b6d; } .work .tag { background: #e6ebf0; color: #3a4a5a; }
+  .queue { border-color: #8a2f3c; } .queue .tag { background: #f6dde1; color: #6e2530; }
+  .terminal { border-color: #1d6a44; background: #f2faf5; } .terminal .tag { background: #d9efe3; color: #17573a; }
+  .decision { position: absolute; width: 300px; box-sizing: border-box; }
+  .decision .diamond { width: 280px; height: 128px; margin: 0 auto; background: #fff8e8; border: 2px solid #b08a1f; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 8px 14px; box-sizing: border-box; font-size: 13px; text-align: center; color: #4b3d10; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+  svg.edges { position: absolute; left: 0; top: 0; width: 1560px; height: 1080px; pointer-events: none; }
+  svg.edges path { stroke: #51606f; stroke-width: 2; fill: none; marker-end: url(#arrowxfera); }
+  .edge-label { position: absolute; font-size: 11px; font-weight: 600; color: #38424d; background: #fbfcfdcc; padding: 0 4px; border-radius: 2px; }
+  .sticky { position: absolute; width: 260px; box-sizing: border-box; padding: 10px 12px; font-size: 12px; line-height: 1.35; box-shadow: 2px 3px 6px rgba(0,0,0,0.12); }
+  .sticky.yellow { background: #fdf3c0; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>Human-agent transfer — triage by contact temperature</h1>
+    <div class="meta">XFER-OPS-101 rev A &nbsp;·&nbsp; Owner: D. Reeves, Support Floor Operations &nbsp;·&nbsp; Effective 2025-09-02 &nbsp;·&nbsp; Next review 2026-03 &nbsp;·&nbsp; Applies to: transfer_to_human_agents actions on consumer support contacts</div>
+  </div>
+
+  <svg class="edges" viewBox="0 0 1560 1080">
+    <defs><marker id="arrowxfera" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#51606f"></path></marker></defs>
+    <!-- entry -> upset? -->
+    <path d="M 190 212 L 190 262"></path>
+    <!-- upset? yes -> disposition read -->
+    <path d="M 340 326 L 430 326"></path>
+    <!-- upset? no -> operational? -->
+    <path d="M 190 394 L 190 450"></path>
+    <!-- operational? yes -> functional read -->
+    <path d="M 340 514 L 430 514"></path>
+    <!-- operational? no -> gap? -->
+    <path d="M 190 582 L 190 638"></path>
+    <!-- gap? yes -> gap read -->
+    <path d="M 340 702 L 430 702"></path>
+    <!-- gap? no -> other -->
+    <path d="M 190 770 L 190 828"></path>
+    <!-- reads -> terminal -->
+    <path d="M 830 326 L 1180 326 L 1180 302"></path>
+    <path d="M 990 514 L 1180 514 L 1180 366"></path>
+    <path d="M 830 702 L 1180 702 L 1180 366"></path>
+    <path d="M 340 896 L 1180 896 L 1180 366"></path>
+  </svg>
+
+  <span class="edge-label" style="left:352px;top:306px">upset caller</span>
+  <span class="edge-label" style="left:134px;top:414px">calm contact</span>
+  <span class="edge-label" style="left:352px;top:494px">operational</span>
+  <span class="edge-label" style="left:120px;top:602px">not operational</span>
+  <span class="edge-label" style="left:352px;top:682px">couldn't find</span>
+  <span class="edge-label" style="left:126px;top:790px">none of these</span>
+
+  <article class="node entry" style="left:40px;top:100px"><span class="tag">ENTRY</span>
+    A contact is heading to a human agent. Read the room first — the fastest accurate code usually follows the temperature of the call.
+  </article>
+
+  <div class="decision" style="left:40px;top:266px"><div class="diamond">Is the caller upset, or simply asking for a person?</div></div>
+
+  <article class="node work" style="left:430px;top:280px;width:400px"><span class="tag">DISPOSITION CODES</span>
+    Pick the disposition code that matches the caller's state: <span style="font-family:Consolas,monospace;font-size:11.5px">customer_frustrated_demands_human, supervisor_request_service_complaint, customer_requests_human_no_specific_reason, request_completed_customer_wants_human_followup</span>.
+  </article>
+
+  <div class="decision" style="left:40px;top:454px"><div class="diamond">Is there an operational issue on the account?</div></div>
+
+  <article class="node work" style="left:430px;top:468px;width:560px"><span class="tag">FUNCTIONAL CODES</span>
+    Match the scenario to a functional code: <span style="font-family:Consolas,monospace;font-size:11.5px">fraud_or_security_concern, account_closure_request, deceased_account_holder, legal_or_regulatory_matter, account_ownership_dispute, complex_billing_dispute, abusive_customer_behavior, third_party_inquiry, technical_system_error, customer_demands_after_unavailable_offer_refusal</span>.
+  </article>
+
+  <div class="decision" style="left:40px;top:642px"><div class="diamond">Did we fail to find or verify what they needed?</div></div>
+
+  <article class="node work" style="left:430px;top:656px;width:400px"><span class="tag">GAP CODES</span>
+    Knowledge and capability gaps: <span style="font-family:Consolas,monospace;font-size:11.5px">unconfirmed_external_communication, kb_search_unsuccessful_customer_requests_transfer, specialized_department_required, accessibility_or_special_needs</span>.
+  </article>
+
+  <article class="node work" style="left:40px;top:836px"><span class="tag">CATCH-ALL</span>
+    Nothing above fits: use <span style="font-family:Consolas,monospace;font-size:11.5px">other</span> and describe the situation in the summary.
+  </article>
+
+  <article class="node terminal" style="left:1180px;top:246px"><span class="tag">TRANSFER</span>
+    Make the <b>transfer_to_human_agents</b> call with the selected code and deliver the handbook's transfer line word-for-word.
+  </article>
+
+  <aside class="sticky yellow" style="left:900px;top:836px">
+    Working assumption: an upset caller wants acknowledgement before process. Coding the emotion first keeps the handoff summary honest about how the contact actually felt.
+  </aside>
+</div>
+</body>
+</html>

@@ -1,0 +1,1395 @@
+{
+  "id": "banking_debit_card_disputes_declines_pin_limits_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "debit_card_disputes_declines_pin_limits",
+  "display_name": "Debit-card disputes, declines, PIN locks, temporary limits, and Regulation E",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/debit_card_disputes_declines_pin_limits/source.md",
+    "heading": "## Debit-card disputes, declines, PIN locks, temporary limits, and Regulation E"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/debit_card_disputes_declines_pin_limits/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/debit_card_disputes_declines_pin_limits/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/debit_card_disputes_declines_pin_limits/client_overlay_debit_security_001/transformation_pack.json"
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook requirements from shared context: verify identity before account-specific information, get explicit confirmation before account-modifying actions, and use the exact transfer message when a transfer is performed.",
+      "Support console turns may mention document ids, internal tool results, and eligibility checks; Agent turns should give the customer the customer-visible next step or outcome.",
+      "Do not transform concrete KB tables, thresholds, statuses, fees, amounts, or condition-specific outcomes into vague dependency statements."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "identity verification before account-specific details",
+      "explicit customer confirmation before account-modifying actions",
+      "plain-language customer-facing outcomes",
+      "support-console notes for internal KB/tool evidence"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_018.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_027.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_028.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_031.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_032.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_033.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_034.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_035.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_036.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_037.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_039.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_040.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_041.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_checking_accounts_(general)_003.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_checking_accounts_(general)_004.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_checking_accounts_(general)_006.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_green_account_(checking)_007.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_green_account_(checking)_008.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_light_green_account_002.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_light_green_account_005.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_light_blue_account_002.json"
+    ],
+    "summary": "Filing and checking debit disputes, provisional credit, ATM and recurring-payment special cases, decline diagnostics, PIN-lock fraud-risk scoring, and temporary limit requests.",
+    "rules": [
+      "Preserve all values, tables, thresholds, statuses, fees, amounts, eligibility gates, tool/action names, and condition-to-outcome mappings from the source bundle.",
+      "Use the shared banking handbook for identity verification, explicit confirmation before account-modifying actions, discoverable-tool wrapper behavior, schema limits, and transfer wording.",
+      "Do not invent unsupported account fields, undocumented override mechanisms, undocumented tool names, or customer entitlements not present in the source bundle.",
+      "When a source document is internal, represent its internal checks in Support console turns or agent behavior rather than as exposed policy narration."
+    ],
+    "candidate": {
+      "id": "debit_card_disputes_declines_pin_limits",
+      "title": "Debit-card disputes, declines, PIN locks, temporary limits, and Regulation E",
+      "priority": 1,
+      "related_task_ids": [
+        "task_082",
+        "task_083",
+        "task_084",
+        "task_085",
+        "task_086",
+        "task_087",
+        "task_088",
+        "task_089",
+        "task_090",
+        "task_091",
+        "task_092"
+      ],
+      "recommended_case_count": 7,
+      "losslessness_risks": [
+        "Preserve dispute subtype distinctions and Regulation E timing/eligibility.",
+        "Preserve PIN-lock scoring thresholds and transfer triggers.",
+        "Preserve temporary limit conditions and minor-account limits."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "debit_card_disputes_declines_pin_limits_journey",
+        "label": "Debit-card disputes, declines, PIN locks, temporary limits, and Regulation E",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "debit_card_disputes_declines_pin_limits_path_a",
+        "label": "Transaction history, debit-card lookup, and PIN reset or change prerequisites",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_disputes_declines_pin_limits_journey",
+        "order": 1,
+        "description": "Policy path represented by case A.",
+        "fact_ids": [
+          "F002",
+          "F003",
+          "F004",
+          "F005",
+          "F006",
+          "F007",
+          "F008",
+          "F009",
+          "F010",
+          "F011",
+          "F012",
+          "F013",
+          "F014",
+          "F015",
+          "F016",
+          "F017",
+          "F018"
+        ]
+      },
+      {
+        "id": "debit_card_disputes_declines_pin_limits_path_b",
+        "label": "Debit-card dispute filing, category selection, card action mapping, and provisional credit",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_disputes_declines_pin_limits_journey",
+        "order": 2,
+        "description": "Policy path represented by case B.",
+        "fact_ids": [
+          "F019",
+          "F020",
+          "F021",
+          "F022",
+          "F023",
+          "F024",
+          "F025",
+          "F026",
+          "F027",
+          "F028",
+          "F029",
+          "F030",
+          "F031",
+          "F032",
+          "F033",
+          "F034",
+          "F035",
+          "F036",
+          "F037",
+          "F038",
+          "F039",
+          "F040",
+          "F041",
+          "F042",
+          "F043",
+          "F044",
+          "F045",
+          "F046",
+          "F047",
+          "F048",
+          "F049",
+          "F050",
+          "F051",
+          "F052",
+          "F053"
+        ]
+      },
+      {
+        "id": "debit_card_disputes_declines_pin_limits_path_c",
+        "label": "ATM dispute special procedures and recurring-payment dispute versus future block handling",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_disputes_declines_pin_limits_journey",
+        "order": 3,
+        "description": "Policy path represented by case C.",
+        "fact_ids": [
+          "F054",
+          "F055",
+          "F056",
+          "F057",
+          "F058",
+          "F059",
+          "F060",
+          "F061",
+          "F062",
+          "F063",
+          "F064",
+          "F065",
+          "F066",
+          "F067",
+          "F068",
+          "F069"
+        ]
+      },
+      {
+        "id": "debit_card_disputes_declines_pin_limits_path_d",
+        "label": "Dispute status checks, Regulation E rights, reporting channels, and regulatory timelines",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_disputes_declines_pin_limits_journey",
+        "order": 4,
+        "description": "Policy path represented by case D.",
+        "fact_ids": [
+          "F070",
+          "F071",
+          "F072",
+          "F073",
+          "F074",
+          "F075",
+          "F076",
+          "F077",
+          "F078",
+          "F079",
+          "F080",
+          "F081",
+          "F082",
+          "F083",
+          "F084",
+          "F085",
+          "F086",
+          "F087",
+          "F195"
+        ]
+      },
+      {
+        "id": "debit_card_disputes_declines_pin_limits_path_e",
+        "label": "Lost, stolen, fraud-sensitive decline codes and clearing or escalating security alerts",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_disputes_declines_pin_limits_journey",
+        "order": 5,
+        "description": "Policy path represented by case E.",
+        "fact_ids": [
+          "F088",
+          "F089",
+          "F090",
+          "F091",
+          "F092",
+          "F093",
+          "F094",
+          "F095",
+          "F096",
+          "F097",
+          "F098",
+          "F099",
+          "F100",
+          "F101",
+          "F102",
+          "F103",
+          "F104",
+          "F105",
+          "F106",
+          "F107"
+        ]
+      },
+      {
+        "id": "debit_card_disputes_declines_pin_limits_path_f",
+        "label": "Temporary debit-card limit requests and PIN-lock fraud-risk scoring",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_disputes_declines_pin_limits_journey",
+        "order": 6,
+        "description": "Policy path represented by case F.",
+        "fact_ids": [
+          "F108",
+          "F109",
+          "F110",
+          "F111",
+          "F112",
+          "F113",
+          "F114",
+          "F115",
+          "F116",
+          "F117",
+          "F118",
+          "F119",
+          "F120",
+          "F121",
+          "F122",
+          "F123",
+          "F124",
+          "F125",
+          "F126",
+          "F127",
+          "F128",
+          "F129",
+          "F130",
+          "F131",
+          "F132",
+          "F133",
+          "F134",
+          "F135",
+          "F136",
+          "F137",
+          "F138",
+          "F139",
+          "F140",
+          "F141",
+          "F142",
+          "F143",
+          "F144"
+        ]
+      },
+      {
+        "id": "debit_card_disputes_declines_pin_limits_path_g",
+        "label": "General error codes, balance or authorization-hold declines, Green Account declines, account limits, and Light Green or Light Blue account specifications",
+        "kind": "scenario_branch",
+        "parent_id": "debit_card_disputes_declines_pin_limits_journey",
+        "order": 7,
+        "description": "Policy path represented by case G.",
+        "fact_ids": [
+          "F145",
+          "F146",
+          "F147",
+          "F148",
+          "F149",
+          "F150",
+          "F151",
+          "F152",
+          "F153",
+          "F154",
+          "F155",
+          "F156",
+          "F157",
+          "F158",
+          "F159",
+          "F160",
+          "F161",
+          "F162",
+          "F163",
+          "F164",
+          "F165",
+          "F166",
+          "F167",
+          "F168",
+          "F169",
+          "F170",
+          "F171",
+          "F172",
+          "F173",
+          "F174",
+          "F175",
+          "F176",
+          "F177",
+          "F178",
+          "F179",
+          "F180",
+          "F181",
+          "F182",
+          "F183",
+          "F184",
+          "F185",
+          "F186",
+          "F187",
+          "F188",
+          "F189",
+          "F190",
+          "F191",
+          "F192",
+          "F193",
+          "F194"
+        ]
+      }
+    ],
+    "relations": []
+  },
+  "facts": [
+    {
+      "id": "F002",
+      "statement": "Agents can retrieve transaction history for a customer's checking or savings bank account using get_bank_account_transactions_9173(account_id) to review account activity, verify fees, check applied rebates, and investigate customer inquiries."
+    },
+    {
+      "id": "F003",
+      "statement": "get_bank_account_transactions_9173 takes account_id as the bank account ID and returns all transactions for that account in reverse chronological order, most recent first."
+    },
+    {
+      "id": "F004",
+      "statement": "Each bank-account transaction record contains transaction_id, account_id, date in MM/DD/YYYY format, description, amount in USD where positive values are credits and negative values are debits, type, and status; type is one of direct_deposit, debit_card_purchase, atm_withdrawal, atm_balance_inquiry, atm_fee, ach_transfer_in, ach_transfer_out, wire_transfer_in, wire_transfer_out, check_deposit, mobile_deposit, bill_pay, everyonepay, monthly_fee, overdraft_fee, fee_rebate, interest_credit, rebate_credit, or fee_refund; status is posted or pending."
+    },
+    {
+      "id": "F005",
+      "statement": "Supported reasons for a debit-card PIN change include the customer forgot the current PIN, suspects someone knows the PIN, wants a more memorable PIN, or is changing it as a periodic security best practice."
+    },
+    {
+      "id": "F006",
+      "statement": "Before a debit-card PIN can be reset or changed, the customer must be verified, must be the owner of the debit card, and the card must be ACTIVE; PIN changes cannot be performed on FROZEN, PENDING, or CLOSED cards."
+    },
+    {
+      "id": "F007",
+      "statement": "For a forgotten PIN reset, the agent must verify identity, ask the customer to confirm the last 4 digits of the card, ask for a new 4-digit PIN, validate the new PIN against PIN security requirements, use reset_debit_card_pin_6284 with card_id, last_4_digits, and new_pin, and confirm the PIN is changed and effective immediately."
+    },
+    {
+      "id": "F008",
+      "statement": "A new debit-card PIN must be exactly 4 digits, cannot be sequential such as 1234 or 4321, cannot be all the same digit such as 1111, and cannot be the customer's birth year or birth month/day."
+    },
+    {
+      "id": "F009",
+      "statement": "For a PIN change when the customer knows the current PIN, the agent must verify identity, ask the customer to confirm the current PIN for additional security, ask for a new 4-digit PIN, validate it against the same PIN security requirements, use change_debit_card_pin_6285 with card_id, current_pin, and new_pin, and confirm the PIN has been changed."
+    },
+    {
+      "id": "F010",
+      "statement": "Debit-card PIN changes take effect immediately."
+    },
+    {
+      "id": "F011",
+      "statement": "If a customer enters an incorrect current PIN 3 times, the debit card will be temporarily locked."
+    },
+    {
+      "id": "F012",
+      "statement": "Customers can also change their debit-card PIN at any Rho-Bank ATM."
+    },
+    {
+      "id": "F013",
+      "statement": "For security, PINs are never displayed or read back to customers."
+    },
+    {
+      "id": "F014",
+      "statement": "If a customer's debit card is frozen, they must unfreeze it before changing the PIN."
+    },
+    {
+      "id": "F015",
+      "statement": "Agents use get_debit_cards_by_account_id_7823(account_id) to retrieve all debit cards associated with a specific checking account."
+    },
+    {
+      "id": "F016",
+      "statement": "Debit card lookup returns card_id, account_id, user_id, card_number_last_4, status, issue_reason, expiration_date, date_issued, card_design, daily_purchase_limit, and daily_atm_limit; status is ACTIVE, PENDING, FROZEN, or CLOSED; issue_reason is new_account, first_card, lost, stolen, fraud, expired, damaged, upgrade, or bank_reissue; card_design is CLASSIC, PREMIUM, or CUSTOM; expiration_date is MM/YY."
+    },
+    {
+      "id": "F017",
+      "statement": "Debit card lookup is used before ordering a new card to check for active or pending cards, before activation to determine which activation tool to use from issue_reason, before freezing or unfreezing to verify the card exists and current status, before closing to confirm card_id and status, and for customer debit-card inquiries."
+    },
+    {
+      "id": "F018",
+      "statement": "get_debit_cards_by_account_id_7823 only returns debit cards for checking accounts; savings accounts do not have debit cards; multiple cards may be returned if the account has card history; full card numbers are never returned, only last 4 digits; if no cards exist, an empty list is returned."
+    },
+    {
+      "id": "F019",
+      "statement": "Before filing a debit-card transaction dispute, the agent must inform the customer of liability exposure based on when unauthorized activity was noticed: reported within 2 business days of statement has maximum liability $50, reported within 60 days of statement has maximum liability $500, and reported after 60 days has unlimited liability and the customer may not recover funds."
+    },
+    {
+      "id": "F020",
+      "statement": "When multiple duplicate debit-card transactions exist, dispute the earliest first transaction."
+    },
+    {
+      "id": "F021",
+      "statement": "Debit-card transaction dispute pre-filing requirements are: customer must be verified, transaction must be at least $1.00, transaction must be within 60 days old, maximum open disputes for the checking account tier must not be exceeded, debit card must be linked to an OPEN checking account, and ATM disputes require determining whether the ATM was Rho-Bank or third-party."
+    },
+    {
+      "id": "F022",
+      "statement": "Maximum open debit-card disputes are per account, not per customer, and are Entry Tier max 2, Mid Tier max 3, Premium Tier max 4, and Elite Tier max 5."
+    },
+    {
+      "id": "F023",
+      "statement": "The dispute filing tool is file_debit_card_transaction_dispute_6281."
+    },
+    {
+      "id": "F024",
+      "statement": "file_debit_card_transaction_dispute_6281 requires transaction_id, account_id, card_id, user_id, dispute_category, transaction_date, discovery_date, disputed_amount, transaction_type, card_in_possession, pin_compromised, contacted_merchant, police_report_filed, written_statement_provided, provisional_credit_eligible, and card_action."
+    },
+    {
+      "id": "F025",
+      "statement": "For file_debit_card_transaction_dispute_6281, transaction_id is found using get_bank_account_transactions_9173, account_id is the checking account linked to the debit card, card_id is the debit card ID, user_id is the customer's Rho-Bank user ID, transaction_date and discovery_date use MM/DD/YYYY format, and disputed_amount is the dollar amount being disputed."
+    },
+    {
+      "id": "F026",
+      "statement": "The dispute_category argument must be exactly one of: unauthorized_transaction for unauthorized use without suspected fraud, atm_cash_discrepancy for an ATM dispensing the wrong amount or no cash, atm_deposit_not_credited for ATM deposits that did not credit, duplicate_charge for the same transaction charged multiple times, incorrect_amount for wrong transaction amounts, goods_services_not_received for paid goods or services not received, recurring_charge_after_cancellation for subscriptions or automatic payments after cancellation, card_present_fraud for in-store or physical fraud, or card_not_present_fraud for online or phone fraud."
+    },
+    {
+      "id": "F027",
+      "statement": "For an unauthorized transaction, the agent must determine whether fraud is suspected; if fraud is suspected, use card_present_fraud for in-store or physical transactions and card_not_present_fraud for online or phone transactions; use unauthorized_transaction only when fraud is not suspected, such as a family member using the card without permission or the customer forgetting a transaction."
+    },
+    {
+      "id": "F028",
+      "statement": "The transaction_type argument must be exactly one of: pin_purchase for in-store purchases using a PIN, signature_purchase for in-store purchases using signature, online_purchase for card-not-present purchases, atm_withdrawal for ATM cash withdrawals, atm_deposit for ATM deposits, recurring_payment for subscriptions or automatic payments, or person_to_person for person-to-person transfers including EveryonePay; transaction_type is determined from the customer's circumstances."
+    },
+    {
+      "id": "F029",
+      "statement": "For dispute filing, ask whether the customer still has the physical debit card in their possession because card_in_possession affects fraud classification."
+    },
+    {
+      "id": "F030",
+      "statement": "For dispute filing, the agent must ask whether the customer believes their PIN may have been compromised, and pin_compromised must be exactly one of yes_shared when the customer shared the PIN, yes_observed when the PIN was observed or skimmed, no when the PIN was not compromised, or unknown when the customer is unsure."
+    },
+    {
+      "id": "F031",
+      "statement": "For non-fraud debit-card disputes, contacted_merchant is required and the agent must ask whether the customer attempted to resolve the issue directly with the merchant."
+    },
+    {
+      "id": "F032",
+      "statement": "For fraud disputes over $500, the agent must ask whether the customer filed a police report; if not, the agent must recommend filing one."
+    },
+    {
+      "id": "F033",
+      "statement": "For written_statement_provided, the customer must be asked whether they are willing to provide a written statement describing what happened, and the conversation can be used as the written statement if the customer agrees; set written_statement_provided to true if the customer agrees."
+    },
+    {
+      "id": "F034",
+      "statement": "The provisional_credit_eligible dispute argument must be determined based on the Debit Card Provisional Credit Guidelines."
+    },
+    {
+      "id": "F035",
+      "statement": "The card_action argument must be exactly keep_active, freeze_pending_investigation, or close_and_reissue, and records metadata only; the agent must separately perform the indicated card action after filing the dispute."
+    },
+    {
+      "id": "F036",
+      "statement": "Card action mapping by dispute category is: card_present_fraud to close_and_reissue, card_not_present_fraud to close_and_reissue, unauthorized_transaction to freeze_pending_investigation, atm_cash_discrepancy to keep_active, atm_deposit_not_credited to keep_active, duplicate_charge to keep_active, incorrect_amount to keep_active, goods_services_not_received to keep_active, and recurring_charge_after_cancellation to keep_active."
+    },
+    {
+      "id": "F037",
+      "statement": "When filing multiple disputes on the same card, each dispute's card_action parameter must be recorded according to that dispute's own category mapping and must not be changed because of other disputes."
+    },
+    {
+      "id": "F038",
+      "statement": "After filing multiple disputes on the same card, the actual card action performed must be the most severe action across all disputes, using severity order close_and_reissue greater than freeze_pending_investigation greater than keep_active."
+    },
+    {
+      "id": "F039",
+      "statement": "If multiple disputes on the same card produce keep_active for one dispute and freeze_pending_investigation for another, the dispute parameters remain keep_active and freeze_pending_investigation respectively, but the agent calls freeze_debit_card_3892 once for the card as the most severe actual action."
+    },
+    {
+      "id": "F040",
+      "statement": "Under Regulation E, Rho-Bank is required to provide provisional credit for debit-card disputes when all specified Debit Card Provisional Credit Guidelines conditions are met."
+    },
+    {
+      "id": "F041",
+      "statement": "Required provisional credit timing is within 10 business days of dispute filing for standard accounts and within 20 business days for new accounts opened less than 30 days."
+    },
+    {
+      "id": "F042",
+      "statement": "Provisional credit is required only if the customer reported the unauthorized transaction within 60 days of the statement date showing the transaction."
+    },
+    {
+      "id": "F043",
+      "statement": "Provisional credit is required only for dispute categories unauthorized_transaction, card_present_fraud, card_not_present_fraud, atm_cash_discrepancy, or duplicate_charge."
+    },
+    {
+      "id": "F044",
+      "statement": "Provisional credit is required only if the customer has provided a written statement describing the unauthorized transaction."
+    },
+    {
+      "id": "F045",
+      "statement": "Provisional credit is required only if the checking account is in OPEN status with no holds or restrictions."
+    },
+    {
+      "id": "F046",
+      "statement": "Provisional credit is not required, but may be offered at discretion, when the dispute category is goods_services_not_received, recurring_charge_after_cancellation, atm_deposit_not_credited, or incorrect_amount."
+    },
+    {
+      "id": "F047",
+      "statement": "Provisional credit is not required, but may be offered at discretion, when a customer has not contacted the merchant first for a non-fraud dispute."
+    },
+    {
+      "id": "F048",
+      "statement": "Provisional credit is not required, but may be offered at discretion, when the customer shared their PIN voluntarily and pin_compromised is yes_shared."
+    },
+    {
+      "id": "F049",
+      "statement": "Provisional credit is not required, but may be offered at discretion, when the account is less than 30 days old and the dispute is for a card-not-present transaction."
+    },
+    {
+      "id": "F050",
+      "statement": "Debit-card provisional credit is for the full disputed amount, unlike credit cards with tiered maximums, subject to a maximum of the full transaction amount and a liability offset that reduces the credit by the customer's late-reporting liability amount of $50 or $500."
+    },
+    {
+      "id": "F051",
+      "statement": "When provisional credit is issued, the bank has 45 business days to complete the investigation, extended from 10 days."
+    },
+    {
+      "id": "F052",
+      "statement": "For international transactions, POS transactions at merchants outside the US, or new accounts, the investigation timeline with provisional credit extends to 90 days."
+    },
+    {
+      "id": "F053",
+      "statement": "If an investigation finds against the customer by determining the transaction was authorized or the claim invalid, provisional credit will be reversed, the customer will be notified in writing at least 3 business days before reversal, and the customer has the right to request documentation supporting the finding."
+    },
+    {
+      "id": "F054",
+      "statement": "For Rho-Bank ATM cash discrepancy disputes where the machine dispensed the wrong amount or no cash, the agent must view recent transactions on the corresponding checking account to pull ATM journal records, compare the journal record to the customer claim, issue provisional credit immediately if discrepancy is confirmed, and inform the customer the claim cannot be validated but a formal dispute may still be filed if the journal shows the correct amount was dispensed."
+    },
+    {
+      "id": "F055",
+      "statement": "For Rho-Bank ATM deposit-not-credited disputes, the agent uses get_atm_deposit_images_8473 to retrieve envelope or check images, compares them to the expected deposit amount, and informs that deposit disputes may take up to 45 days due to physical verification needs."
+    },
+    {
+      "id": "F056",
+      "statement": "For a card retained by a Rho-Bank ATM, the card can be retrieved from a branch within 3 business days; the agent must offer either retrieval or closing the old card and ordering a replacement, and no dispute is needed unless there are also unauthorized transactions."
+    },
+    {
+      "id": "F057",
+      "statement": "For third-party ATM disputes at non-Rho-Bank ATMs including Allpoint network, bank partners, or independent ATMs, Rho-Bank must submit a chargeback request to the ATM owner or network."
+    },
+    {
+      "id": "F058",
+      "statement": "For third-party ATM disputes at non-Rho-Bank ATMs, the investigation timeline extends to 90 days, provisional credit is still required within 10 business days, and the customer may be asked to sign an affidavit if the disputed amount exceeds $200."
+    },
+    {
+      "id": "F059",
+      "statement": "For ATM cash discrepancy disputes exceeding $200, the customer must sign an Electronic Fund Transfer Error Resolution Affidavit."
+    },
+    {
+      "id": "F060",
+      "statement": "When an ATM cash discrepancy affidavit is required, the customer must be informed that the affidavit will be emailed to the registered email address, they have 10 business days to sign and return it, failure to return it may result in denial of the claim, and signing a false affidavit is a federal offense."
+    },
+    {
+      "id": "F061",
+      "statement": "Recurring debit-card charge issues have two different processes: a dispute process for past charges and a recurring block process to prevent future charges."
+    },
+    {
+      "id": "F062",
+      "statement": "The standard debit dispute process applies to recurring charges that already occurred when the customer cancelled with the merchant but was charged after cancellation, never authorized the recurring charge, or was charged an amount different from the agreed amount."
+    },
+    {
+      "id": "F063",
+      "statement": "For recurring charge disputes, dispute_category should be recurring_charge_after_cancellation."
+    },
+    {
+      "id": "F064",
+      "statement": "To prevent future recurring charges on a debit card, use the recurring block feature; it blocks all recurring or subscription payments on the card, not just a specific merchant."
+    },
+    {
+      "id": "F065",
+      "statement": "The recurring block process requires verifying customer identity, explaining that all recurring payments on the card will be blocked and not just one merchant, and using set_debit_card_recurring_block_7382 with card_id and block_recurring set to true to block or false to unblock."
+    },
+    {
+      "id": "F066",
+      "statement": "When setting a recurring block, the agent must inform the customer that the block takes effect within 24 hours, one-time purchases are not affected, only recurring or subscription charges are affected, the block does not cancel merchant subscriptions and the customer must still contact merchants directly, and the block remains active until the customer requests removal."
+    },
+    {
+      "id": "F067",
+      "statement": "If a customer was charged after cancellation and also wants to prevent future charges, the agent must first file the dispute for past charges, then set up the recurring block for future protection, and still advise the customer to confirm cancellation directly with the merchant in writing."
+    },
+    {
+      "id": "F068",
+      "statement": "If a customer only wants to block one merchant, the agent must advise the customer to cancel directly with that merchant because the recurring block affects all recurring payments and not just specific merchants."
+    },
+    {
+      "id": "F069",
+      "statement": "A customer can unblock recurring payments at any time by calling back."
+    },
+    {
+      "id": "F070",
+      "statement": "To retrieve a customer's debit-card dispute history and check the status of open disputes, use get_debit_dispute_status_7483(user_id: str)."
+    },
+    {
+      "id": "F071",
+      "statement": "get_debit_dispute_status_7483 returns a list of all debit-card disputes filed by the customer, including dispute_id, transaction_id, account_id, dispute_category, disputed_amount, filing_date, status, provisional_credit_issued, provisional_credit_amount, provisional_credit_date, expected_resolution_date, resolution if resolved, and resolution_date if resolved."
+    },
+    {
+      "id": "F072",
+      "statement": "Debit-card dispute statuses are OPEN for filed and investigation in progress, PENDING_DOCUMENTATION for waiting on customer documentation, UNDER_REVIEW for investigation complete and final review, PROVISIONAL_CREDIT_ISSUED for provisional credit applied with investigation ongoing, RESOLVED_CUSTOMER_FAVOR for credit permanent, RESOLVED_BANK_FAVOR for valid transaction and no credit issued, RESOLVED_PARTIAL for partial credit issued, PROVISIONAL_REVERSED for provisional credit reversed after investigation, and CLOSED_NO_RESPONSE for closure due to missing required documentation."
+    },
+    {
+      "id": "F073",
+      "statement": "When checking dispute status, the agent must verify regulatory timelines: for disputes that qualify for provisional credit, provisional credit should be issued within 10 days or 20 for new accounts, and investigation should complete within 45 days or 90 for international transactions, POS transactions at merchants outside the US, or new accounts."
+    },
+    {
+      "id": "F074",
+      "statement": "If a debit-card dispute appears to be exceeding regulatory timelines, the agent must escalate to a supervisor."
+    },
+    {
+      "id": "F075",
+      "statement": "Customers should contact Rho-Bank if they experience unauthorized transactions, ATM problems such as cash not dispensed, wrong amount dispensed, or deposits not credited, duplicate charges, incorrect amounts, subscription issues after cancellation, or paid-for purchases or services not received."
+    },
+    {
+      "id": "F076",
+      "statement": "When a customer files a debit-card dispute, Rho-Bank gathers information, may provide provisional credit for many dispute types typically within 10 business days, investigates the transaction which may involve contacting the merchant or ATM network, and notifies the customer of findings typically within 10 to 45 business days depending on complexity."
+    },
+    {
+      "id": "F077",
+      "statement": "To process a dispute quickly, the customer should have account information, transaction details including date, amount, and merchant if known, when they first noticed the issue, whether they still have the physical debit card, and any merchant communications."
+    },
+    {
+      "id": "F078",
+      "statement": "Customers can report an unauthorized debit-card transaction or file a dispute by phone at 1-800-RHO-BANK, available 24/7 for fraud reports, through the Mobile App Report Issue feature on a transaction, or online at rhobank.com/disputes."
+    },
+    {
+      "id": "F079",
+      "statement": "For suspected fraud, Rho-Bank recommends also filing a police report, especially for amounts over $500, because it can help with the investigation and may be required for certain claims."
+    },
+    {
+      "id": "F080",
+      "statement": "Regulation E applies to electronic fund transfers including debit card purchases by PIN and signature, ATM withdrawals and deposits, direct deposits, automatic bill payments, person-to-person transfers, and recurring electronic payments."
+    },
+    {
+      "id": "F081",
+      "statement": "Regulation E liability for unauthorized debit-card use is limited based on reporting speed: within 2 business days maximum $50, within 60 days maximum $500, and after 60 days the customer may be liable for the full amount."
+    },
+    {
+      "id": "F082",
+      "statement": "Under Regulation E, customers have the right to dispute errors including unauthorized transactions, incorrect transaction amounts, missing deposits or transfers, computational errors, and transactions not completed as instructed."
+    },
+    {
+      "id": "F083",
+      "statement": "When a customer reports a Regulation E error, Rho-Bank must investigate promptly, typically within 10 business days, report results to the customer within 3 business days of completing the investigation, and correct any confirmed errors within 1 business day of determination."
+    },
+    {
+      "id": "F084",
+      "statement": "For qualifying disputes, Rho-Bank must provide provisional temporary credit within 10 business days for standard accounts or within 20 business days for accounts open less than 30 days if the investigation takes longer than the applicable period."
+    },
+    {
+      "id": "F085",
+      "statement": "Regulation E documentation rights include receiving written confirmation of error resolution, requesting copies of documents used in the investigation, and receiving advance notice before provisional credit is reversed."
+    },
+    {
+      "id": "F086",
+      "statement": "To exercise Regulation E rights for an unauthorized or erroneous transaction, the customer should contact Rho-Bank customer service as soon as they notice the issue, provide transaction details, follow up with a written statement if requested, and keep records of all communications."
+    },
+    {
+      "id": "F087",
+      "statement": "Regulation E protections in this section apply specifically to debit card and electronic transactions, not credit cards; business accounts may have different protections than personal accounts; promptly reviewing statements helps identify issues quickly and maximize protections."
+    },
+    {
+      "id": "F088",
+      "statement": "Decline Code 41 means Lost Card; the agent must look up debit card information to confirm the card will have issue_reason lost or a status indicating lost, then check whether the customer actually reported it lost."
+    },
+    {
+      "id": "F089",
+      "statement": "For Decline Code 41, if the customer says they reported the card lost and found it, the old card cannot be reactivated; the agent checks for a replacement card, guides activation if a replacement exists with status PENDING, and offers to help order one if no replacement was ordered."
+    },
+    {
+      "id": "F090",
+      "statement": "For Decline Code 41, if the customer says they did not report the card lost, this is a security concern that someone else may have reported it; the agent must verify additional information, ask security questions, review recent transaction history for suspicious activity, and follow the lost debit card protocol."
+    },
+    {
+      "id": "F091",
+      "statement": "Decline Code 43 means Stolen Card and is security sensitive; the agent must use extra caution and must not immediately offer to unfreeze or reactivate."
+    },
+    {
+      "id": "F092",
+      "statement": "For Decline Code 43, enhanced verification requires full name, date of birth, last 4 of SSN, and recent transaction verification by reviewing transaction history and asking about 2 to 3 recent transactions."
+    },
+    {
+      "id": "F093",
+      "statement": "After enhanced verification for Decline Code 43, the agent explains that the card was reported stolen and that stolen cards cannot be reactivated, and can order a replacement card with a new number."
+    },
+    {
+      "id": "F094",
+      "statement": "If a Decline Code 43 customer insists they never reported the card stolen, it is a major security flag indicating someone may have account access; the agent must transfer the customer to the security team using transfer_to_human_agents and must not attempt to resolve it."
+    },
+    {
+      "id": "F095",
+      "statement": "Decline Codes 04 Capture Card and 07 Pick Up Card are internal-use-only fraud or security concern codes; the agent must not tell the customer the specific code or reason, should say transactions cannot be processed on the card and the customer should visit a Rho-Bank branch with valid ID, and should use transfer_to_human_agents if the customer presses for details."
+    },
+    {
+      "id": "F096",
+      "statement": "Decline Codes 34 and 59 indicate suspected fraud and are internal-use-only; the agent must not tell the customer the specific code or reason, must say a security matter affecting the card requires in-person verification at a branch with ID, and must not attempt to clear or explain the code."
+    },
+    {
+      "id": "F097",
+      "statement": "Agents must never tell a customer over the phone that their card has been flagged for fraud, because this could tip off a fraudster who has stolen the card."
+    },
+    {
+      "id": "F098",
+      "statement": "Customer-initiated fraud alerts are placed when a customer reports suspicious activity or requests additional security and can be cleared by customer service agents only after verifying identity and confirming that recent transactions are legitimate."
+    },
+    {
+      "id": "F099",
+      "statement": "Bank-initiated fraud alerts are placed by Rho-Bank fraud detection systems for high-risk patterns, cannot be cleared by customer service agents, and require security team review."
+    },
+    {
+      "id": "F100",
+      "statement": "Velocity blocks are automatic temporary holds on cards placed when unusual transaction patterns are detected, including multiple rapid transactions, geographically distant transactions in a short time, sudden spending changes, and multiple declined transactions followed by successful ones."
+    },
+    {
+      "id": "F101",
+      "statement": "Velocity blocks automatically expire after 30 minutes but can be cleared earlier by a customer service agent only after identity verification and a reasonable explanation for the unusual activity."
+    },
+    {
+      "id": "F102",
+      "statement": "Use clear_debit_card_fraud_alert_4892 to clear fraud alerts or velocity blocks on a customer's debit card."
+    },
+    {
+      "id": "F103",
+      "statement": "clear_debit_card_fraud_alert_4892 requires card_id and reason; reason must be customer_verified when clearing a customer-initiated fraud alert after identity verification and confirmation that recent transactions are legitimate, or velocity_clear when clearing a velocity block after identity verification and a reasonable explanation for the unusual activity."
+    },
+    {
+      "id": "F104",
+      "statement": "clear_debit_card_fraud_alert_4892 cannot clear bank-initiated fraud alerts; if attempting to clear one returns an error, the customer must be transferred to the security team."
+    },
+    {
+      "id": "F105",
+      "statement": "Before using clear_debit_card_fraud_alert_4892, the agent must always verify the customer's identity and document why the alert or block was cleared in the interaction notes."
+    },
+    {
+      "id": "F106",
+      "statement": "An alert or block may be cleared when the customer's identity is verified, and for fraud alerts the alert was customer-initiated and the customer confirms recent transactions are legitimate, or for velocity blocks the customer provides a reasonable explanation for unusual activity such as shopping spree or travel."
+    },
+    {
+      "id": "F107",
+      "statement": "Escalate to the security team when the fraud alert is bank-initiated, the customer cannot verify identity, the customer reports transactions they did not make, the agent suspects the caller may not be the account holder, or the explanation for unusual activity is suspicious or inconsistent."
+    },
+    {
+      "id": "F108",
+      "statement": "Before granting a temporary debit-card daily ATM withdrawal or purchase limit increase, verify all eligibility requirements: linked checking account is OPEN and in good standing, account is at least 60 days old, there are no overdraft fees in the last 30 days, and the debit card is ACTIVE."
+    },
+    {
+      "id": "F109",
+      "statement": "A temporary debit-card limit increase cannot exceed 150% of the current limit, which is a 50% maximum boost."
+    },
+    {
+      "id": "F110",
+      "statement": "Temporary debit-card limit increases last 24 hours and then automatically revert."
+    },
+    {
+      "id": "F111",
+      "statement": "Only one temporary debit-card limit increase is allowed per 24-hour period per card."
+    },
+    {
+      "id": "F112",
+      "statement": "Use request_temporary_debit_card_limit_increase_8374 with card_id, limit_type of atm or purchase, and new_limit for temporary debit-card limit increase requests."
+    },
+    {
+      "id": "F113",
+      "statement": "Third-party ATMs may have their own limits that Rho-Bank cannot override."
+    },
+    {
+      "id": "F114",
+      "statement": "When a debit card shows pin_locked = TRUE, agents must perform a comprehensive fraud risk assessment before unlocking and must not reveal the specific calculations to users."
+    },
+    {
+      "id": "F115",
+      "statement": "For a PIN-locked card, if pin_lock_reason is security_hold, the card cannot be unlocked by chat agents and the agent should offer to transfer the customer to the security team for that card."
+    },
+    {
+      "id": "F116",
+      "statement": "For a PIN-locked card, if another card on the same account also has pin_locked = TRUE, the agent must finish investigating all cards before any unlock, and each card must be scored individually because outcomes may differ."
+    },
+    {
+      "id": "F117",
+      "statement": "For a PIN-locked card, if any card on the account was replaced in the last 90 days with issue_reason stolen, enhanced verification is required."
+    },
+    {
+      "id": "F118",
+      "statement": "For a PIN-locked card, automatic escalation triggers must be checked before calculating fraud-risk flags; if any automatic trigger is present, follow that escalation path, otherwise proceed to score calculation."
+    },
+    {
+      "id": "F119",
+      "statement": "PIN-lock fraud-risk score calculation uses declined transaction history with type atm_withdrawal_declined or pos_declined and card data."
+    },
+    {
+      "id": "F120",
+      "statement": "PIN-lock Location Mismatch flag A1 compares city in the declined transaction description to the customer's address city: same city 0 points, different city same state 1 point, different state 2 points, and different country 3 points with critical severity."
+    },
+    {
+      "id": "F121",
+      "statement": "PIN-lock Location Scatter flag A2 scores whether declined attempts are from the same or multiple locations: all same location 0 points, 2 different locations 1 point, and 3 or more different locations 2 points."
+    },
+    {
+      "id": "F122",
+      "statement": "PIN-lock Travel Pattern Conflict flag A3 checks successful transactions from the last 7 days: if all successful transactions were in the customer's home city but declines are elsewhere, add 1 point; if the customer has recent transactions in various cities indicating travel, add 0 points."
+    },
+    {
+      "id": "F123",
+      "statement": "PIN-lock Time of Day flag B1 scores the hour of declined transaction: 6 AM to 10 PM is 0 points, 10 PM to 12 AM is 1 point, 12 AM to 2 AM is 2 points, and 2 AM to 6 AM is 3 points with high risk."
+    },
+    {
+      "id": "F124",
+      "statement": "PIN-lock Time Since Last Legitimate PIN Use flag B2 scores the interval since the customer last successfully used their PIN: less than 24 hours 0 points, 1 to 7 days 0 points, 7 to 30 days 1 point, and more than 30 days 2 points."
+    },
+    {
+      "id": "F125",
+      "statement": "PIN-lock Attempt Velocity flag B3 scores time between consecutive failed attempts: more than 5 minutes apart 0 points, 2 to 5 minutes apart 1 point, 1 to 2 minutes apart 2 points, and less than 1 minute apart 3 points with scripted attack severity."
+    },
+    {
+      "id": "F126",
+      "statement": "PIN-lock Amount Pattern flag C1 scores consecutive failed attempt amounts: consistent same amounts retried 0 points, increasing amounts 0 points, and decreasing amounts such as 800 to 500 to 300 is 2 points with fraud pattern severity."
+    },
+    {
+      "id": "F127",
+      "statement": "PIN-lock Round Number Testing flag C2 scores attempted amounts: mixed amounts 0 points, and all round hundreds such as 800, 500, or 300 is 1 point."
+    },
+    {
+      "id": "F128",
+      "statement": "PIN-lock Amount vs Historical Average flag C3 compares attempted amount to the customer's average ATM withdrawal from recent successful transactions: within 2x average 0 points, 2 to 5x average 1 point, and more than 5x average 2 points."
+    },
+    {
+      "id": "F129",
+      "statement": "PIN-lock Amount vs Daily Limit flag C4 compares attempted amount to the card's daily ATM withdrawal limit: less than 50% of limit 0 points, 50% to 80% of limit 0 points, 80% to 100% of limit 1 point, and multiple attempts totaling more than the daily limit 2 points."
+    },
+    {
+      "id": "F130",
+      "statement": "PIN-lock Lock Frequency flag D1 scores how many times the card's PIN was locked in the last 90 days: 0 prior locks 0 points, 1 prior lock 1 point, 2 prior locks 2 points, and 3 or more prior locks 3 points with automatic PIN reset required and cannot unlock."
+    },
+    {
+      "id": "F131",
+      "statement": "PIN-lock Card Age flag D2 scores how long the card has been active: more than 1 year 0 points, 6 to 12 months 0 points, 3 to 6 months 0 points, 1 to 3 months 1 point, and less than 1 month 2 points."
+    },
+    {
+      "id": "F132",
+      "statement": "PIN-lock Other Card Issues flag D3 scores other debit cards: all other cards have no issues 0 points, another card has a velocity block add 1 point, and another card has a fraud alert active add 2 points."
+    },
+    {
+      "id": "F133",
+      "statement": "PIN-lock Account Age flag E1 scores how long the account has been open: more than 2 years 0 points, 1 to 2 years 0 points, 6 to 12 months 0 points, 3 to 6 months 1 point, and less than 3 months 2 points."
+    },
+    {
+      "id": "F134",
+      "statement": "PIN-lock Overdraft History flag E2 scores recent transaction-history overdraft fees: no overdrafts 0 points, 1 overdraft 1 point, and 2 or more overdrafts 2 points."
+    },
+    {
+      "id": "F135",
+      "statement": "PIN-lock Low Balance Alert flag E3 scores current balance: more than $500 0 points, $100 to $500 0 points, $50 to $100 1 point, and less than $50 2 points with account may be abandoned or compromised severity."
+    },
+    {
+      "id": "F136",
+      "statement": "Subject to automatic escalation triggers and the rule that any single 3-point flag requires supervisor review regardless of total score, PIN-lock total score thresholds are: 0 to 4 LOW, unlock after standard identity verification; 5 to 7 MEDIUM, unlock only after asking whether the failed PIN attempts were the customer's; 8 to 10 HIGH, ask specific location and time questions and unlock only if the customer confirms and provides a satisfactory explanation; 11 to 14 VERY HIGH, cannot unlock on this call and require callback verification or enhanced verification with last 4 SSN plus security question; 15 or more CRITICAL, cannot unlock, check for successful unauthorized transactions, and recommend card closure and replacement."
+    },
+    {
+      "id": "F137",
+      "statement": "For PIN-lock scoring, if any single flag equals 3 points, escalate to supervisor review regardless of total score."
+    },
+    {
+      "id": "F138",
+      "statement": "For PIN-lock scores of 5 or higher, if the Location Mismatch flag is scored, ask whether the customer was at the declined-attempt location; if the customer says yes, remove location flags and recalculate, and if the customer says no, maintain the score and proceed with caution."
+    },
+    {
+      "id": "F139",
+      "statement": "For PIN-lock scores of 5 or higher, if the Amount Pattern flag is scored, ask whether the customer remembers trying the specific attempted amounts; if the customer confirms, remove the amount pattern flag, and if the customer denies or seems confused, maintain the flag."
+    },
+    {
+      "id": "F140",
+      "statement": "For PIN-lock scores of 5 or higher, if the Time of Day flag is scored 2 or more points, ask whether the customer was trying to use the card at that time; if the customer confirms, remove the time flag, and if the customer says they were asleep or similar, treat it as critical and likely fraud."
+    },
+    {
+      "id": "F141",
+      "statement": "After an eligible PIN unlock, post-unlock steps based on D1 Lock Frequency are: 0 prior locks standard unlock with no additional steps; 1 prior lock must offer PIN lock notifications; 2 prior locks must ask whether the customer wants a PIN reset to a new number because this is the third PIN lock in 90 days; 3 or more prior locks cannot unlock and must reset PIN."
+    },
+    {
+      "id": "F142",
+      "statement": "If a PIN-locked card cannot be unlocked due to score thresholds or automatic escalation triggers, first check transaction history for successful unauthorized transactions during the suspicious period."
+    },
+    {
+      "id": "F143",
+      "statement": "If a PIN-locked card cannot be unlocked and unauthorized transactions are found, file a dispute, close the card, and order a replacement."
+    },
+    {
+      "id": "F144",
+      "statement": "If a PIN-locked card cannot be unlocked and no unauthorized transactions are found, explain the security concern and offer options of card closure and replacement, transfer to the security team for investigation, or PIN reset that issues a new PIN and invalidates potential compromise; card closure and replacement is recommended if fraud is suspected."
+    },
+    {
+      "id": "F145",
+      "statement": "For common error codes, identify the error code, confirm the action the customer attempted, and follow the suggested resolution."
+    },
+    {
+      "id": "F146",
+      "statement": "Common error code resolutions are: Error 101 invalid account or routing details, ask customer to verify and re-enter account and routing numbers exactly as issued by their bank; Error 202 insufficient funds, suggest depositing funds or reducing the payment or transfer amount then retrying; Error 403 authentication failed, have customer reset password, confirm correct profile, and check for account security holds; Error 409 duplicate transaction request, advise waiting for the initial request to settle or cancel before attempting again; Error 429 too many attempts, recommend waiting before retrying and ensuring details are correct to avoid rate limits; Error 903 account closure request blocked, instruct customer to wait 48 hours and try again."
+    },
+    {
+      "id": "F147",
+      "statement": "If common errors persist, capture screenshots, timestamps, and the exact workflow leading to the error; verify device, browser, and app version details; and escalate with logs if multiple attempts produce the same result."
+    },
+    {
+      "id": "F148",
+      "statement": "Decline Code 05 Do Not Honor is a catch-all generic decline requiring investigation in order: card status, account status, fraud alert, then velocity block."
+    },
+    {
+      "id": "F149",
+      "statement": "For Decline Code 05 card status checks: if status is FROZEN, ask whether the customer wants to unfreeze and follow the freezing/unfreezing protocol if yes; if CLOSED, inform the customer the card is no longer active and check for another active card or offer replacement; if PENDING, follow activation protocol; if ACTIVE, continue to account status."
+    },
+    {
+      "id": "F150",
+      "statement": "For Decline Code 05 account status checks, look up linked checking account status; if account status is not OPEN, inform the customer the account has a restriction preventing transactions, do not provide specific details if status is SUSPENDED or RESTRICTED, and direct them to a branch or 1-800-RHO-ACCT for assistance."
+    },
+    {
+      "id": "F151",
+      "statement": "For Decline Code 05 fraud alert checks, if fraud_alert_active is TRUE and alert_source is customer_initiated, verify the customer's identity, ask the customer to verify recent transactions, and clear the alert only if they confirm all transactions are legitimate; if fraud_alert_active is TRUE and alert_source is bank_initiated, do not clear it, tell the customer additional security review is required, and transfer to human agents."
+    },
+    {
+      "id": "F152",
+      "statement": "For Decline Code 05 velocity block checks, if velocity_blocked is TRUE, inform the customer the card was temporarily blocked due to unusual activity patterns and automatically lifts after 30 minutes; to lift it early, verify identity, obtain a reasonable explanation for the unusual activity, and clear the velocity block only if that explanation is satisfactory."
+    },
+    {
+      "id": "F153",
+      "statement": "Decline Code 14 Invalid Card Number means the entered card number does not match records; possible causes and resolutions are typo, ask customer to verify correct card; replaced card, look up all debit cards and if newer ACTIVE card and older CLOSED card exist, tell customer to use the new card ending in the returned last 4, or if new card is PENDING help activate it; old saved card online, advise updating saved merchant card details."
+    },
+    {
+      "id": "F154",
+      "statement": "Decline Code 54 Expired Card requires looking up debit card information and checking expiration_date; if expired, check for a replacement with issue_reason expired and status PENDING or ACTIVE, guide activation if PENDING, direct customer to the new card if ACTIVE, and order a replacement if none exists."
+    },
+    {
+      "id": "F155",
+      "statement": "Decline Code 56 No Card Record means the card number format is valid but no record exists in Rho-Bank's system, unlike Code 14; possible causes are lost or stolen card fully purged, customer using a different bank's card, or merchant data entry error; ask customer to verify Rho-Bank logo, look up cards for the account, and if the last 4 does not match any card on file, offer to order a new card."
+    },
+    {
+      "id": "F156",
+      "statement": "An authorization hold is a temporary hold on funds that are not available for use; merchants use holds to verify the card is valid and has sufficient funds before providing goods or services, or to secure a temporary deposit that may be adjusted when the final amount is known."
+    },
+    {
+      "id": "F157",
+      "statement": "Authorization holds may not show immediately in recent transactions, but reduce available balance until released or finalized; if the merchant finalizes the charge, the hold converts to a posted transaction, and if the merchant releases or reduces the hold, the corresponding amount returns to available balance."
+    },
+    {
+      "id": "F158",
+      "statement": "Rho-Bank will keep a temporary hold on paycheck deposits that are then refunded, which can affect available balance shortly after a deposit posts."
+    },
+    {
+      "id": "F159",
+      "statement": "A lower or negative balance can be caused by overdraft protections temporarily covering transactions, authorization holds reducing available balance, pending card transactions and checks decreasing available funds before posting, or scheduled payments or transfers being earmarked."
+    },
+    {
+      "id": "F160",
+      "statement": "To review and resolve a lower or negative balance, check pending and posted activity, add funds or transfer money from another account, contact the merchant if a hold seems higher than expected, review and adjust overdraft settings, and contact support with transaction details and timestamps if something looks incorrect."
+    },
+    {
+      "id": "F161",
+      "statement": "Decline Code 51 Insufficient Funds requires first looking up the customer's checking account balance."
+    },
+    {
+      "id": "F162",
+      "statement": "For Decline Code 51, if balance appears sufficient for the transaction, check authorization holds, pending transactions, and overdraft settings."
+    },
+    {
+      "id": "F163",
+      "statement": "For Decline Code 51 authorization-hold checks, ask about recent holds that might reduce available balance; holds reduce available balance but do not show as posted transactions, common sources include gas stations often $75 to $150 pre-authorizations, hotels, car rentals, and restaurants with tip buffers, and release timing depends on the merchant's processing and settlement practices, typically 1 to 3 business days."
+    },
+    {
+      "id": "F164",
+      "statement": "For Decline Code 51 pending-transaction checks, review recent transaction history for pending status; pending debits reduce available balance, and the customer may be told the total of pending transactions that have not posted yet."
+    },
+    {
+      "id": "F165",
+      "statement": "For Decline Code 51 overdraft-setting checks, use the account's overdraft_pos_enabled field; Regulation E requires customer opt-in for POS and ATM overdraft coverage, and if overdraft_pos_enabled is FALSE, explain the account is not opted into overdraft coverage for debit-card purchases, offer to explain options, and reference the overdraft features documentation."
+    },
+    {
+      "id": "F166",
+      "statement": "For Decline Code 51, if balance is genuinely insufficient, inform the customer of the balance, offer options to transfer funds from another account or make a smaller transaction, and help with the transfer if the customer wants to transfer."
+    },
+    {
+      "id": "F167",
+      "statement": "Decline Code 52 No Checking Account means the PIN was accepted but the underlying checking account has issues; look up accounts, and if account status is CLOSED, tell the customer the linked checking account has been closed and the card can no longer be used, and discuss opening a new checking account if the customer wants to continue banking with Rho-Bank."
+    },
+    {
+      "id": "F168",
+      "statement": "For Decline Code 52, if the account exists and is OPEN but the customer still receives the code, treat it as a possible system synchronization issue and advise waiting 10 to 15 minutes and retrying."
+    },
+    {
+      "id": "F169",
+      "statement": "For Green Account declined transaction troubleshooting, quick checks are verifying available balance covers the full amount requested, reviewing pending authorizations that may reduce available balance, and checking decline notification message details if the customer received a decline notification."
+    },
+    {
+      "id": "F170",
+      "statement": "For Green Account merchant-specific decline troubleshooting, confirm the merchant did not attempt a higher amount than expected, and for subscription or recurring charges ensure funds are available on the charge date."
+    },
+    {
+      "id": "F171",
+      "statement": "For Green Account decline resolution, add funds and retry, contact the merchant to verify the attempted amount if decline persists after funding, and keep records of the decline notice if alerts were received."
+    },
+    {
+      "id": "F172",
+      "statement": "Common reasons a Green Account checking transaction is declined include requested amount exceeding available balance at authorization, pending card holds reducing available balance, and the merchant presenting a final amount higher than the initial estimate."
+    },
+    {
+      "id": "F173",
+      "statement": "To confirm and resolve a Green Account checking decline, check decline notification if alerts are received, review recent activity for pending holds or prior transactions using available funds, add funds and try again, and ask the merchant to confirm the amount submitted for authorization."
+    },
+    {
+      "id": "F174",
+      "statement": "To open a Light Green Account, the customer must be the primary account holder and be between 13 and 24 years old, and must remain within the 13 to 24 age range to maintain the account; eligibility is determined by date of birth at opening and ongoing, and once outside the range the customer is no longer eligible to maintain it."
+    },
+    {
+      "id": "F175",
+      "statement": "Light Green Account key specifications include no overdraft fees, 0.05% APY on account balance, $0.00 monthly maintenance fee, $12.50 returned deposit fee per returned item, $10.00 incoming domestic wire transfer fee per incoming wire, and debit card daily purchase limit of $250 per day."
+    },
+    {
+      "id": "F176",
+      "statement": "Light Green Account linked savings APY boosts are 0.65% APY boost for a linked Platinum Savings Account and 0.2% APY boost for a linked Diamond Elite Savings Account."
+    },
+    {
+      "id": "F177",
+      "statement": "To participate in the Light Green Account referral program, the referred person must deposit at least $100 within 90 days of opening the account, and the referrer must have opened their first Rho-Bank checking account at least 14 days ago."
+    },
+    {
+      "id": "F178",
+      "statement": "Spending limits and safety features for minors are card-based purchases capped at $300 per day, ATM cash withdrawals limited to $150 per day, EveryonePay person-to-person payments limited to $250 per day, parent or guardian notifications triggered for transactions at or above 62, and monitoring should align the alert threshold with typical spending patterns."
+    },
+    {
+      "id": "F179",
+      "statement": "Decline Code 57 Transaction Not Permitted to Cardholder means the card has restrictions blocking the transaction type, and the agent must check restrictions from debit-card lookup."
+    },
+    {
+      "id": "F180",
+      "statement": "For Decline Code 57 MCC blocks, check restricted_mccs; common blocks are gambling MCC 7995, adult content MCC 5967, and cryptocurrency MCC 6051; for gambling or adult content, do not remove MCC blocks over the phone and tell the customer these restrictions can only be modified through the mobile app or by visiting a branch in person."
+    },
+    {
+      "id": "F181",
+      "statement": "For Decline Code 57 international transactions, if international_enabled is FALSE and the transaction was international, inform that international transactions are blocked on the card and ask whether the customer wants them enabled."
+    },
+    {
+      "id": "F182",
+      "statement": "For Decline Code 57 online transactions, if online_enabled is FALSE, inform that online or card-not-present transactions are blocked on the card and ask whether the customer wants them enabled."
+    },
+    {
+      "id": "F183",
+      "statement": "For Decline Code 57 Teen or Light Green Account restrictions, if account_class is Light Green Account, parental controls may restrict certain transaction types; the primary account holder can modify these settings, and the agent must not modify parental controls without guardian authorization."
+    },
+    {
+      "id": "F184",
+      "statement": "Decline Code 58 Transaction Not Permitted to Terminal means the specific merchant terminal is blocked, typically because it is flagged; the customer or agent cannot resolve the terminal flag, and the customer should try a different register at the same store or a different merchant."
+    },
+    {
+      "id": "F185",
+      "statement": "For Decline Code 58, if the customer reports the issue at multiple unrelated terminals, it may indicate a card issue and the agent should follow Code 05 diagnostic steps."
+    },
+    {
+      "id": "F186",
+      "statement": "Decline Code 61 Exceeds Withdrawal Amount Limit means the transaction exceeds the card's daily purchase or ATM limit; check daily_purchase_limit, daily_atm_limit, daily_purchase_used, and daily_atm_used, then calculate and tell the customer the relevant daily limit, amount used, and remaining available amount."
+    },
+    {
+      "id": "F187",
+      "statement": "For Decline Code 61, if the customer needs a higher limit, a temporary increase lasts 24 hours, permanent increases depend on account tier, Elite tier can request permanent increases, and the agent can offer to request a temporary increase lasting 24 hours."
+    },
+    {
+      "id": "F188",
+      "statement": "For Decline Code 61 ATM limits at non-Rho ATMs, the other bank's ATM may have its own lower limit that Rho-Bank cannot override."
+    },
+    {
+      "id": "F189",
+      "statement": "Decline Code 62 Restricted Card can be caused by geographic restrictions; check allowed_regions and blocked_regions, and if the customer is traveling, explain the card is restricted to current regions and that the agent can add the travel region."
+    },
+    {
+      "id": "F190",
+      "statement": "For Decline Code 62, if the card was issued within the last 24 hours based on date_issued, a new-card security hold may be present while systems are being set up and should clear within 24 hours of activation."
+    },
+    {
+      "id": "F191",
+      "statement": "Decline Code 65 Activity Count Exceeded means too many transactions in the current period; check daily_transaction_count and daily_transaction_limit and explain the card allows the daily limit and the customer has made the current count."
+    },
+    {
+      "id": "F192",
+      "statement": "For Decline Code 65, transaction count limits are typically fixed and cannot be increased, so the customer must wait until midnight for reset; if the customer has multiple Rho-Bank accounts, they could use a different card."
+    },
+    {
+      "id": "F193",
+      "statement": "Light Blue Account quick facts are 0% APY on balance, $2,000 daily mobile check deposit limit, and 0 days early direct deposit before payday."
+    },
+    {
+      "id": "F194",
+      "statement": "For Light Blue Account, if the customer plans to deposit multiple checks in one day, they should track the total to stay within the $2,000 daily limit, and the account offers 0 days early access to direct deposits."
+    },
+    {
+      "id": "F195",
+      "statement": "Regulation E is a federal regulation implemented by the Consumer Financial Protection Bureau (CFPB) that governs electronic fund transfers (EFTs) and provides important consumer protections for debit card transactions."
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Transaction history, debit-card lookup, and PIN reset or change prerequisites",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F017",
+        "F018"
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Debit-card dispute filing, category selection, card action mapping, and provisional credit",
+      "included_fact_ids": [
+        "F019",
+        "F020",
+        "F021",
+        "F022",
+        "F023",
+        "F024",
+        "F025",
+        "F026",
+        "F027",
+        "F028",
+        "F029",
+        "F030",
+        "F031",
+        "F032",
+        "F033",
+        "F034",
+        "F035",
+        "F036",
+        "F037",
+        "F038",
+        "F039",
+        "F040",
+        "F041",
+        "F042",
+        "F043",
+        "F044",
+        "F045",
+        "F046",
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051",
+        "F052",
+        "F053"
+      ]
+    },
+    {
+      "id": "C",
+      "title": "ATM dispute special procedures and recurring-payment dispute versus future block handling",
+      "included_fact_ids": [
+        "F054",
+        "F055",
+        "F056",
+        "F057",
+        "F058",
+        "F059",
+        "F060",
+        "F061",
+        "F062",
+        "F063",
+        "F064",
+        "F065",
+        "F066",
+        "F067",
+        "F068",
+        "F069"
+      ]
+    },
+    {
+      "id": "D",
+      "title": "Dispute status checks, Regulation E rights, reporting channels, and regulatory timelines",
+      "included_fact_ids": [
+        "F070",
+        "F071",
+        "F072",
+        "F073",
+        "F074",
+        "F075",
+        "F076",
+        "F077",
+        "F078",
+        "F079",
+        "F080",
+        "F081",
+        "F082",
+        "F083",
+        "F084",
+        "F085",
+        "F086",
+        "F087",
+        "F195"
+      ]
+    },
+    {
+      "id": "E",
+      "title": "Lost, stolen, fraud-sensitive decline codes and clearing or escalating security alerts",
+      "included_fact_ids": [
+        "F088",
+        "F089",
+        "F090",
+        "F091",
+        "F092",
+        "F093",
+        "F094",
+        "F095",
+        "F096",
+        "F097",
+        "F098",
+        "F099",
+        "F100",
+        "F101",
+        "F102",
+        "F103",
+        "F104",
+        "F105",
+        "F106",
+        "F107"
+      ]
+    },
+    {
+      "id": "F",
+      "title": "Temporary debit-card limit requests and PIN-lock fraud-risk scoring",
+      "included_fact_ids": [
+        "F108",
+        "F109",
+        "F110",
+        "F111",
+        "F112",
+        "F113",
+        "F114",
+        "F115",
+        "F116",
+        "F117",
+        "F118",
+        "F119",
+        "F120",
+        "F121",
+        "F122",
+        "F123",
+        "F124",
+        "F125",
+        "F126",
+        "F127",
+        "F128",
+        "F129",
+        "F130",
+        "F131",
+        "F132",
+        "F133",
+        "F134",
+        "F135",
+        "F136",
+        "F137",
+        "F138",
+        "F139",
+        "F140",
+        "F141",
+        "F142",
+        "F143",
+        "F144"
+      ]
+    },
+    {
+      "id": "G",
+      "title": "General error codes, balance or authorization-hold declines, Green Account declines, account limits, and Light Green or Light Blue account specifications",
+      "included_fact_ids": [
+        "F145",
+        "F146",
+        "F147",
+        "F148",
+        "F149",
+        "F150",
+        "F151",
+        "F152",
+        "F153",
+        "F154",
+        "F155",
+        "F156",
+        "F157",
+        "F158",
+        "F159",
+        "F160",
+        "F161",
+        "F162",
+        "F163",
+        "F164",
+        "F165",
+        "F166",
+        "F167",
+        "F168",
+        "F169",
+        "F170",
+        "F171",
+        "F172",
+        "F173",
+        "F174",
+        "F175",
+        "F176",
+        "F177",
+        "F178",
+        "F179",
+        "F180",
+        "F181",
+        "F182",
+        "F183",
+        "F184",
+        "F185",
+        "F186",
+        "F187",
+        "F188",
+        "F189",
+        "F190",
+        "F191",
+        "F192",
+        "F193",
+        "F194"
+      ]
+    }
+  ]
+}

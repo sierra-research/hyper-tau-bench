@@ -1,0 +1,812 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1760">
+<title>Beacon Program Operations Working Boards</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    width: 1760px;
+    background: #fdfdfc;
+    color: #17181a;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    background-image: radial-gradient(circle, #e3e4e6 1px, transparent 1px);
+    background-size: 26px 26px;
+  }
+  .frame {
+    position: relative;
+    width: 1720px;
+    margin: 20px auto 34px auto;
+    background: #ffffff;
+    border: 1.5px solid #c9cbcf;
+    box-shadow: 0 1px 4px rgba(20,20,30,.06);
+    overflow: hidden;
+  }
+  .flabel {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 40;
+    background: #17181a;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    padding: 6px 16px;
+  }
+  .fnote {
+    position: absolute;
+    z-index: 40;
+    font-size: 10px;
+    color: #8a8d93;
+  }
+  svg.wires {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    pointer-events: none;
+  }
+  .wp { position: absolute; width: 2px; height: 2px; z-index: 1; }
+  .panel {
+    position: absolute;
+    background: #f2f3f5;
+    border: 1px solid #dcdee2;
+    border-radius: 10px;
+    z-index: 1;
+  }
+  .panel > .plabel {
+    position: absolute;
+    left: 14px;
+    top: -9px;
+    background: #5f6368;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .6px;
+    padding: 3px 10px;
+    border-radius: 3px;
+  }
+  .journey {
+    position: absolute;
+    background: #ffffff;
+    border: 1.2px solid #9aa0a8;
+    border-radius: 6px;
+    z-index: 3;
+  }
+  .journey > .jlabel {
+    position: absolute;
+    left: -1px;
+    top: -20px;
+    background: #3b3f46;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 3px 3px 0 0;
+    white-space: nowrap;
+  }
+  .sectionchip {
+    position: absolute;
+    z-index: 6;
+    background: #e8f0fe;
+    border: 1px solid #1a73e8;
+    color: #1a4fb8;
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .node, .deny, .terminal, .callout, .locknode {
+    position: absolute;
+    z-index: 5;
+    background: #fff;
+    border: 1.3px solid #23252a;
+    border-radius: 4px;
+    padding: 8px 10px;
+    font-size: 11px;
+    line-height: 1.3;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .node { width: 178px; min-height: 64px; }
+  .node .sys {
+    margin-top: 6px;
+    color: #4e7d74;
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    text-decoration: underline;
+  }
+  .node .sub, .deny .sub, .terminal .sub {
+    margin-top: 5px;
+    font-size: 9.5px;
+    color: #55585e;
+  }
+  .start {
+    border-radius: 26px;
+    background: #eef7ef;
+    border-color: #2e7d32;
+  }
+  .terminal {
+    width: 176px;
+    min-height: 52px;
+    border-radius: 26px;
+  }
+  .deny {
+    width: 190px;
+    min-height: 64px;
+    background: #fdf3f2;
+    border-color: #b3382e;
+  }
+  .locknode {
+    width: 208px;
+    background: #fff5f5;
+    border: 2px solid #b3382e;
+  }
+  .locknode .locktag {
+    font-weight: 800;
+    color: #b3382e;
+    font-size: 10px;
+    letter-spacing: .8px;
+    margin-bottom: 4px;
+  }
+  .decision {
+    position: absolute;
+    z-index: 5;
+    border: 1.6px solid #2e7d32;
+    background: #ffffff;
+    transform: rotate(45deg);
+    border-radius: 6px;
+  }
+  .decision > span {
+    position: absolute;
+    inset: 8px;
+    transform: rotate(-45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 10px;
+    line-height: 1.22;
+  }
+  .decision.neutral { border-color: #23252a; }
+  .handoff {
+    position: absolute;
+    z-index: 5;
+    width: 92px;
+    height: 92px;
+    border: 1.6px solid #2e7d32;
+    background: #f2fbf3;
+    transform: rotate(45deg);
+    border-radius: 6px;
+  }
+  .handoff > span {
+    position: absolute;
+    inset: 6px;
+    transform: rotate(-45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 8.5px;
+    font-weight: 700;
+    color: #1d5e21;
+    line-height: 1.25;
+  }
+  .callout {
+    text-align: left;
+    background: #f0f6fd;
+    border: 1.2px solid #7d9cc0;
+    font-size: 10px;
+    line-height: 1.35;
+  }
+  .callout .ctitle {
+    font-weight: 800;
+    font-size: 9.5px;
+    letter-spacing: .4px;
+    color: #2c568a;
+    margin-bottom: 4px;
+  }
+  .sticky {
+    position: absolute;
+    z-index: 20;
+    width: 168px;
+    padding: 10px 11px 20px 11px;
+    background: #fff59d;
+    box-shadow: 1px 3px 6px rgba(60,50,10,.22);
+    font-size: 10px;
+    line-height: 1.35;
+    text-align: left;
+  }
+  .sticky .sig {
+    position: absolute;
+    right: 9px;
+    bottom: 5px;
+    font-size: 8.5px;
+    color: #7c6f2a;
+    font-style: italic;
+  }
+  .sticky.green { background: #b9f6ca; }
+  .sticky.green .sig { color: #2c6e3f; }
+  .sticky.pink { background: #ffd0e0; }
+  .sticky.pink .sig { color: #8c4460; }
+  .sticky.blue { background: #cfe8ff; }
+  .sticky.blue .sig { color: #3a6a95; }
+  .r1 { transform: rotate(-1.4deg); }
+  .r2 { transform: rotate(1.1deg); }
+  .r3 { transform: rotate(-0.6deg); }
+  .r4 { transform: rotate(1.8deg); }
+  .miles {
+    position: absolute;
+    border: 1.2px solid #6f737a;
+    border-radius: 6px;
+    background: rgba(255,255,255,.72);
+    z-index: 3;
+  }
+  .miles > .mlabel {
+    position: absolute;
+    left: -1px;
+    top: -20px;
+    background: #17181a;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    white-space: nowrap;
+  }
+  .miles > .mship {
+    position: absolute;
+    right: 8px;
+    top: 6px;
+    font-size: 9px;
+    font-weight: 700;
+    color: #2e7d32;
+    background: #e9f6ea;
+    border: 1px solid #79b07d;
+    border-radius: 3px;
+    padding: 2px 7px;
+  }
+  .mwork {
+    position: absolute;
+    border: 2.2px solid #17181a;
+    border-radius: 8px;
+    z-index: 4;
+  }
+  .mwork > .wlabel {
+    position: absolute;
+    left: 10px;
+    top: -10px;
+    background: #17181a;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+  .dead {
+    position: absolute;
+    z-index: 6;
+    background: #f4f4f4;
+    border: 1.2px dashed #9a9da3;
+    border-radius: 4px;
+    padding: 8px 10px;
+    font-size: 10px;
+    line-height: 1.3;
+    color: #6b6e74;
+    text-align: center;
+  }
+  .dead .dtag {
+    display: inline-block;
+    margin-bottom: 4px;
+    font-size: 8.5px;
+    font-weight: 800;
+    letter-spacing: .8px;
+    color: #fff;
+    background: #9a3b32;
+    padding: 2px 7px;
+    border-radius: 2px;
+  }
+  .dead .dtag.parked { background: #8a6d1d; }
+  .strike-x { position: absolute; z-index: 7; pointer-events: none; }
+  .fence {
+    position: absolute;
+    z-index: 3;
+    background: repeating-linear-gradient(-45deg, #f6f2ea 0 14px, #efe9dc 14px 28px);
+    border: 1.6px dashed #a08949;
+    border-radius: 8px;
+  }
+  .fence > .flabel2 {
+    position: absolute;
+    left: 10px;
+    top: -11px;
+    background: #8a6d1d;
+    color: #fff;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: .6px;
+    padding: 3px 10px;
+    border-radius: 3px;
+  }
+  .chip {
+    position: absolute;
+    z-index: 8;
+    font-size: 9.5px;
+    font-weight: 700;
+    background: #eef0f3;
+    border: 1px solid #b9bdc4;
+    border-radius: 12px;
+    padding: 3px 11px;
+    color: #43464c;
+    white-space: nowrap;
+  }
+  .linkchip {
+    position: absolute;
+    z-index: 8;
+    font-size: 10px;
+    color: #1a4fb8;
+    text-decoration: underline;
+    white-space: nowrap;
+  }
+  .linkchip::before { content: "🔗 "; text-decoration: none; }
+  .avatar {
+    position: absolute;
+    z-index: 21;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,.25);
+  }
+  .cursor {
+    position: absolute;
+    z-index: 22;
+    font-size: 9px;
+    font-weight: 700;
+    color: #fff;
+    padding: 2px 7px;
+    border-radius: 2px 8px 8px 8px;
+    white-space: nowrap;
+  }
+  .cursor::before { content: "➤ "; font-size: 8px; }
+  .note {
+    position: absolute;
+    z-index: 8;
+    font-size: 9.5px;
+    color: #55585e;
+    line-height: 1.3;
+  }
+  .title-h1 {
+    font-size: 24px;
+    font-weight: 800;
+    text-align: center;
+    letter-spacing: .2px;
+  }
+  .title-meta {
+    font-size: 12px;
+    text-align: center;
+    color: #43464c;
+    margin-top: 6px;
+  }
+  .title-purpose {
+    font-size: 12px;
+    text-align: center;
+    color: #17181a;
+    margin-top: 14px;
+    line-height: 1.45;
+  }
+  .title-purpose b { text-decoration: underline; }
+  .titleblock { position: absolute; z-index: 10; }
+  table.changelog {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 10px;
+  }
+  table.changelog th, table.changelog td {
+    border: 1px solid #c3c6cb;
+    padding: 5px 8px;
+    text-align: left;
+    vertical-align: top;
+  }
+  table.changelog th { background: #eef0f3; font-size: 9.5px; letter-spacing: .4px; }
+  table.changelog td.sup { color: #8a8d93; }
+  .legend-item { display: flex; align-items: center; gap: 8px; margin: 5px 0; font-size: 10px; }
+</style>
+</head>
+<body>
+<div class="frame" id="opsframe1" style="height:1330px;">
+  <div class="flabel">FRAME 1 · COVER + LAUNCH READINESS EVIDENCE</div>
+  <div class="fnote" style="right:14px; top:8px;">northstar-outfitters · figboard export · 100%</div>
+
+  <svg class="wires" id="opswires1"></svg>
+
+  <div class="titleblock" style="left:470px; top:44px; width:780px;">
+    <div class="title-h1">Beacon Program Operations<br>Working Boards</div>
+    <div class="title-meta">Last Updated: 8.3.26 &nbsp;·&nbsp; Contact: <b><i>@Rob Calderon</i></b> &nbsp;·&nbsp; Board ref: BCN-OPS-04 · v0.6</div>
+    <div class="title-purpose"><b>Artifact Purpose:</b> Internal coordination flows for the Beacon program — evidence
+      handling, sampling logistics, incident intake, after-hours cover, reporting requests, and release comms.
+      Nothing on these frames describes customer-facing servicing; for servicing behavior see the Handbook and the
+      pending-order board (BCN-PO-11), which outrank anything drawn here.</div>
+  </div>
+
+  <div class="avatar" style="left:1250px; top:52px; background:#ef6c00;">RC</div>
+  <div class="avatar" style="left:1272px; top:52px; background:#283593;">MT</div>
+  <div class="avatar" style="left:1294px; top:52px; background:#00838f;">ND</div>
+  <div class="avatar" style="left:1316px; top:52px; background:#6d4c41;">HF</div>
+  <div class="avatar" style="left:1338px; top:52px; background:#7b1fa2;">PS</div>
+  <div class="note" style="left:1252px; top:82px;">+4 viewing</div>
+
+  <div class="journey" style="left:40px; top:70px; width:300px; height:170px;">
+    <div class="jlabel">HOW TO READ THIS BOARD</div>
+    <div style="padding:12px 14px; font-size:10.5px; line-height:1.5;">
+      Solid wires are the path a piece of work actually takes. Dashed wires are exceptions
+      or loops. Rounded green boxes start a flow, rounded plain boxes end one, red boxes stop it.
+      Stickies are commentary from the room, signed, and never instructions.
+    </div>
+  </div>
+
+  <div class="sticky r1" style="left:1245px; top:118px;">Frames 1–6 replaced the six separate diagrams that used to live in the wiki. One board, one export, one review date.<div class="sig">Rob Calderon</div></div>
+
+  <div class="panel" style="left:40px; top:300px; width:1640px; height:920px;">
+    <div class="plabel">LAUNCH READINESS EVIDENCE — HOW A PACKET GETS ACCEPTED</div>
+  </div>
+
+  <div class="sectionchip" style="left:70px; top:330px;">owner: release room</div>
+  <div class="sectionchip" style="left:220px; top:330px;">cadence: per milestone</div>
+
+  <div class="node start" id="ops1_intake" style="left:90px; top:420px;">Evidence packet arrives from a workstream<div class="sub">via the release-room folder, never DM</div></div>
+  <div class="decision" id="ops1_complete" style="left:410px; top:400px; width:120px; height:120px;"><span>Checklist files all present?</span></div>
+  <div class="deny" id="ops1_return" style="left:370px; top:640px;">Return to the workstream owner<div class="sub">with the missing-item list, same day</div></div>
+  <div class="node" id="ops1_qa" style="left:660px; top:428px;">Independent QA read<div class="sub">by someone outside the submitting team</div></div>
+  <div class="decision" id="ops1_blocking" style="left:960px; top:400px; width:120px; height:120px;"><span>Blocking issue found?</span></div>
+  <div class="node" id="ops1_issue" style="left:920px; top:660px;">Open a release issue and attach the packet<div class="sys">TRACKER</div></div>
+  <div class="terminal" id="ops1_note" style="left:1300px; top:432px;">Readiness note published<div class="sub">dated, in the release-room folder</div></div>
+  <div class="node" id="ops1_reread" style="left:1280px; top:660px;">Re-read after the fix lands<div class="sub">same reviewer where possible</div></div>
+
+  <div class="callout" style="left:90px; top:850px; width:400px;">
+    <div class="ctitle">WHY THE OUTSIDE READER RULE EXISTS</div>
+    The person who assembled a packet steers around its weak spot without noticing.
+    The outside reader has no reason to protect anything. Swapping readers between
+    teams is the entire quality mechanism here — keep it.
+  </div>
+
+  <div class="sticky green r2" style="left:560px; top:860px;">The June checklist template renamed two files. Packets built from the May template fail the completeness gate for a boring reason — check the template date before returning anything.<div class="sig">Mia Tran</div></div>
+  <div class="sticky r3" style="left:790px; top:880px;">Same-day return beats a polite Friday pile. An owner who hears nothing assumes acceptance.<div class="sig">Priya Shah</div></div>
+
+  <div class="chip" style="left:70px; top:1250px;">triage: release room, daily 9:40</div>
+  <div class="chip" style="left:330px; top:1250px;">escalations: #beacon-uat</div>
+</div>
+
+<div class="frame" id="opsframe2" style="height:1210px;">
+  <div class="flabel">FRAME 2 · WEEKLY QA SAMPLE — DRAW, COVER, ASSIGN</div>
+  <div class="fnote" style="right:14px; top:8px;">northstar-outfitters · figboard export · 100%</div>
+
+  <svg class="wires" id="opswires2"></svg>
+
+  <div class="panel" style="left:40px; top:60px; width:1640px; height:840px;">
+    <div class="plabel">SAMPLE MECHANICS — MONDAYS, AUTOMATED PULL</div>
+  </div>
+
+  <div class="node start" id="ops2_draw" style="left:80px; top:150px;">Weekly contact sample drawn<div class="sub">scheduled pull, same clock time every week</div></div>
+  <div class="node" id="ops2_dedupe" style="left:80px; top:360px;">Remove duplicate contacts<div class="sub">same customer, same issue, same week</div></div>
+  <div class="decision" id="ops2_coverage" style="left:400px; top:330px; width:124px; height:124px;"><span>Every channel represented?</span></div>
+  <div class="node" id="ops2_reserve" style="left:360px; top:600px;">Top up from the randomized reserve<div class="sub">same week's contacts only</div></div>
+  <div class="node" id="ops2_assign" style="left:680px; top:366px;">Assign two reviewers per contact<div class="sub">rotation sheet decides, not volunteering</div></div>
+  <div class="decision" id="ops2_disagree" style="left:990px; top:330px; width:124px; height:124px;"><span>Scores more than one band apart?</span></div>
+  <div class="node" id="ops2_calq" style="left:950px; top:600px;">Into the calibration queue<div class="sys">REVIEW TOOL</div></div>
+  <div class="terminal" id="ops2_archive" style="left:1330px; top:366px;">Sample archived with scores<div class="sub">read-only after Friday close</div></div>
+
+  <div class="callout" style="left:80px; top:760px; width:420px;">
+    <div class="ctitle">RESERVE DISCIPLINE</div>
+    The reserve exists to fix channel coverage, not to make interesting weeks more
+    interesting. Rows come from the same week's pool, drawn blind. If the reserve
+    keeps firing for the same channel, that's a finding about the channel, not the sample.
+  </div>
+
+  <div class="sticky blue r1" style="left:600px; top:770px;">The manual Monday pull retired 7.27 with full honors. The job posts to the channel if it fails — silence means it ran.<div class="sig">Beacon Deploys</div></div>
+  <div class="sticky r2" style="left:830px; top:790px;">Rotation sheet is the boss. The week I let people volunteer, the same three hands went up and the spread collapsed.<div class="sig">Bea Sandoval</div></div>
+
+  <div class="chip" style="left:70px; top:1140px;">owner: QA program</div>
+  <div class="chip" style="left:250px; top:1140px;">source config: rendered into the handbook, dated</div>
+</div>
+
+<div class="frame" id="opsframe3" style="height:1460px;">
+  <div class="flabel">FRAME 3 · CATALOG INCIDENT INTAKE</div>
+  <div class="fnote" style="right:14px; top:8px;">northstar-outfitters · figboard export · 100%</div>
+
+  <svg class="wires" id="opswires3"></svg>
+
+  <div class="panel" style="left:40px; top:60px; width:1640px; height:860px;">
+    <div class="plabel">FROM ALERT TO MONITORED INCIDENT</div>
+  </div>
+
+  <div class="node start" id="ops3_alert" style="left:80px; top:150px;">Catalog alert received<div class="sub">monitor, seller report, or floor post</div></div>
+  <div class="decision" id="ops3_facing" style="left:400px; top:120px; width:124px; height:124px;"><span>Customer-facing surface affected?</span></div>
+  <div class="terminal" id="ops3_bizhours" style="left:360px; top:400px;">Logged for business-hours review<div class="sub">morning queue, with the alert attached</div></div>
+  <div class="node" id="ops3_confirm" style="left:680px; top:156px;">Confirm the affected surface yourself<div class="sub">open the page; never triage from the alert text alone</div></div>
+  <div class="decision" id="ops3_sev" style="left:1000px; top:120px; width:124px; height:124px;"><span>Severity line met?</span></div>
+  <div class="node" id="ops3_page" style="left:960px; top:400px;">Page commerce on-call<div class="sys">PAGER</div></div>
+  <div class="node" id="ops3_incident" style="left:1330px; top:156px;">Create a monitored incident<div class="sub">timeline starts at first alert, not at creation</div></div>
+  <div class="terminal" id="ops3_recovered" style="left:1330px; top:430px;">Recovery verified on the page itself<div class="sub">screenshot into the incident before closing</div></div>
+
+  <div class="callout" style="left:80px; top:560px; width:430px;">
+    <div class="ctitle">THE SECOND-REPORT RULE</div>
+    Two reports of the same oddity inside an hour are one incident, not two coincidences.
+    Whoever holds triage merges them and says so in the channel, so the third reporter
+    joins a thread instead of opening a fourth.
+  </div>
+
+  <div class="sticky r1" style="left:600px; top:580px;">Confirm-the-surface saved us twice in July — both alerts described a page that had already healed by the time anyone looked.<div class="sig">Hank Fischer</div></div>
+  <div class="sticky pink r3" style="left:830px; top:600px;">Timeline honesty matters at the retro. Backdate to first alert every time, even when it makes us look slower.<div class="sig">Mia Tran</div></div>
+
+  <div class="panel" style="left:40px; top:960px; width:1640px; height:400px;">
+    <div class="plabel">PARKED — ENGAGED WITH, DECIDED ON BY NO ONE</div>
+  </div>
+  <div class="node dead" id="ops3_dead1" style="left:100px; top:1060px;">Auto-severity from seller-feed error rates<div class="sub">parked 6.18.26 — signal too noisy</div></div>
+  <div class="node dead" id="ops3_dead2" style="left:420px; top:1060px;">Direct seller paging for their own listings<div class="sub">parked 5.30.26 — contract question first</div></div>
+  <div class="node dead" id="ops3_dead3" style="left:740px; top:1060px;">Incident bot posts to the storefront status page<div class="sub">parked 7.9.26 — wording ownership unsettled</div></div>
+  <div class="sticky r2" style="left:1080px; top:1050px;">Parked means parked. Nothing in this lane changes what triage does today, and two of these have been "one meeting away" since spring.<div class="sig">Rob Calderon</div></div>
+
+  <div class="chip" style="left:70px; top:1390px;">triage rota: #beacon-payments-risk pinned</div>
+  <div class="chip" style="left:400px; top:1390px;">severity line: see on-call runbook, dated 7.2.26</div>
+</div>
+
+<div class="frame" id="opsframe4" style="height:1150px;">
+  <div class="flabel">FRAME 4 · AFTER-HOURS COORDINATION</div>
+  <div class="fnote" style="right:14px; top:8px;">northstar-outfitters · figboard export · 100%</div>
+
+  <svg class="wires" id="opswires4"></svg>
+
+  <div class="panel" style="left:40px; top:60px; width:1640px; height:780px;">
+    <div class="plabel">WHAT HAPPENS TO A SIGNAL AFTER SIX</div>
+  </div>
+
+  <div class="node start" id="ops4_signal" style="left:80px; top:150px;">After-hours signal lands<div class="sub">alert, voicemail tag, or floor lock-up note</div></div>
+  <div class="decision" id="ops4_maint" style="left:400px; top:120px; width:124px; height:124px;"><span>Inside a known maintenance window?</span></div>
+  <div class="terminal" id="ops4_attach" style="left:360px; top:400px;">Attach to the maintenance log<div class="sub">no page; morning note instead</div></div>
+  <div class="node" id="ops4_health" style="left:680px; top:156px;">Run the service health check<div class="sys">RUNBOOK §3</div></div>
+  <div class="decision" id="ops4_twofail" style="left:1000px; top:120px; width:124px; height:124px;"><span>Two consecutive checks fail?</span></div>
+  <div class="node" id="ops4_duty" style="left:960px; top:400px;">Notify the duty manager<div class="sub">named person on the laminated sheet, with backup</div></div>
+  <div class="terminal" id="ops4_morning" style="left:1330px; top:156px;">Morning follow-up scheduled<div class="sub">single check failures ride until daylight</div></div>
+
+  <div class="callout" style="left:80px; top:560px; width:430px;">
+    <div class="ctitle">WHY TWO CHECKS</div>
+    One failed check at midnight is usually the check, not the service. The second
+    run, ten minutes later, is what separates a wobble from a wake-up. Nobody gets
+    paged on a single red.
+  </div>
+
+  <div class="sticky green r2" style="left:600px; top:580px;">Quarterly routing test passed 7.21 — alerts landed where the runbook says. One contact had weekend notifications silenced; fixed same night.<div class="sig">Rob Calderon</div></div>
+  <div class="sticky r1" style="left:830px; top:600px;">The escalation sheet by the north pod is the current one. If yours says v2 in the corner, recycle it — the ghost-approver era is over.<div class="sig">Marcy Doyle</div></div>
+
+  <div class="chip" style="left:70px; top:1080px;">observer rota: standing, late shift</div>
+  <div class="chip" style="left:340px; top:1080px;">next drill: October, conductor swap</div>
+</div>
+
+<div class="frame" id="opsframe5" style="height:1380px;">
+  <div class="flabel">FRAME 5 · REPORTING REQUESTS + OWNERSHIP MAP</div>
+  <div class="fnote" style="right:14px; top:8px;">northstar-outfitters · figboard export · 100%</div>
+
+  <svg class="wires" id="opswires5"></svg>
+
+  <div class="panel" style="left:40px; top:60px; width:1640px; height:800px;">
+    <div class="plabel">HOW A REPORTING REQUEST BECOMES A WORKBOOK</div>
+  </div>
+
+  <div class="node start" id="ops5_request" style="left:80px; top:150px;">Reporting request arrives<div class="sub">form only — requests in DMs get the form link</div></div>
+  <div class="decision" id="ops5_purpose" style="left:400px; top:120px; width:124px; height:124px;"><span>Approved data purpose on file?</span></div>
+  <div class="deny" id="ops5_scope" style="left:360px; top:400px;">Returned with a scope question<div class="sub">what decision will this number change?</div></div>
+  <div class="node" id="ops5_query" style="left:680px; top:156px;">Build the governed query<div class="sub">named fields only; display labels carry the basis suffix</div></div>
+  <div class="node" id="ops5_peer" style="left:960px; top:156px;">Peer validation<div class="sub">second analyst, before anyone outside sees it</div></div>
+  <div class="decision" id="ops5_reconcile" style="left:1240px; top:120px; width:124px; height:124px;"><span>Totals reconcile with the daily view?</span></div>
+  <div class="node" id="ops5_fix" style="left:1200px; top:400px;">Correct the query and rerun<div class="sub">note what was wrong in the request thread</div></div>
+  <div class="terminal" id="ops5_publish" style="left:1480px; top:560px;">Dated workbook published<div class="sub">to the shared folder, never attached to email</div></div>
+
+  <div class="sticky blue r3" style="left:90px; top:600px;">Both resolution rates now carry basis labels everywhere a human reads them, including export headers. Files escape into email and lose their glossary.<div class="sig">Priya Shah</div></div>
+  <div class="sticky r2" style="left:320px; top:620px;">The scope question is not a rejection. Half the time the answer improves the request; the other half it dissolves it.<div class="sig">Aisha Karim</div></div>
+
+  <div class="panel" style="left:40px; top:900px; width:1640px; height:380px;">
+    <div class="plabel">OWNERSHIP MAP — WHO ANSWERS FOR WHICH REPORT FAMILY</div>
+  </div>
+  <div class="journey" style="left:80px; top:960px; width:360px; height:250px;">
+    <div class="jlabel">SERVICING VOLUMES</div>
+    <div style="padding:14px; font-size:10.5px; line-height:1.6;">Daily queue counts, handle patterns, digest first-line numbers.<br><br><b>Owner:</b> care program analytics<br><b>Backup:</b> named in the rota, not a list</div>
+  </div>
+  <div class="journey" style="left:490px; top:960px; width:360px; height:250px;">
+    <div class="jlabel">QUALITY + CALIBRATION</div>
+    <div style="padding:14px; font-size:10.5px; line-height:1.6;">Sample scores, spread, disagreement rates. Nothing customer-identifying leaves the review tool.<br><br><b>Owner:</b> QA program<br><b>Backup:</b> trainer on rotation</div>
+  </div>
+  <div class="journey" style="left:900px; top:960px; width:360px; height:250px;">
+    <div class="jlabel">FINANCE HANDOFFS</div>
+    <div style="padding:14px; font-size:10.5px; line-height:1.6;">Month-end export, sidecar manifest, corrected-file suffixes. Ping lands in the channel when the file does.<br><br><b>Owner:</b> reporting eng<br><b>Consumer:</b> finance data (Aisha's team)</div>
+  </div>
+  <div class="sticky r1" style="left:1330px; top:980px;">If a report family isn't on this map, the request form routes it to me and I find it a home. Unowned reports don't get built.<div class="sig">Priya Shah</div></div>
+
+  <div class="chip" style="left:70px; top:1310px;">request form: pinned in #beacon-reporting</div>
+  <div class="chip" style="left:390px; top:1310px;">subscriptions: silence means unsubscribe, annually</div>
+</div>
+
+<div class="frame" id="opsframe6" style="height:1120px;">
+  <div class="flabel">FRAME 6 · RELEASE COMMUNICATION PATH</div>
+  <div class="fnote" style="right:14px; top:8px;">northstar-outfitters · figboard export · 100%</div>
+
+  <svg class="wires" id="opswires6"></svg>
+
+  <div class="panel" style="left:40px; top:60px; width:1640px; height:760px;">
+    <div class="plabel">FROM DRAFTED NOTE TO CONFIRMED DELIVERY</div>
+  </div>
+
+  <div class="node start" id="ops6_draft" style="left:80px; top:150px;">Release note drafted<div class="sub">by the shipping team, in the template</div></div>
+  <div class="decision" id="ops6_audience" style="left:400px; top:120px; width:124px; height:124px;"><span>Audience list confirmed current?</span></div>
+  <div class="node" id="ops6_gaps" style="left:360px; top:400px;">Resolve owner gaps first<div class="sub">lists with ghosts don't ship notes</div></div>
+  <div class="node" id="ops6_review" style="left:680px; top:156px;">Legal and Brand read<div class="sub">one pass, both readers, same doc</div></div>
+  <div class="decision" id="ops6_changes" style="left:1000px; top:120px; width:124px; height:124px;"><span>Changes requested?</span></div>
+  <div class="node" id="ops6_revise" style="left:960px; top:400px;">Revise and resubmit<div class="sub">tracked changes stay on until sign-off</div></div>
+  <div class="node" id="ops6_schedule" style="left:1330px; top:156px;">Schedule the channel posts<div class="sys">COMMS TOOL</div></div>
+  <div class="terminal" id="ops6_receipts" style="left:1330px; top:430px;">Delivery receipts confirmed<div class="sub">unread critical audiences get a follow-up, once</div></div>
+
+  <div class="callout" style="left:80px; top:560px; width:430px;">
+    <div class="ctitle">ONE FOLLOW-UP, NOT THREE</div>
+    The follow-up exists for the person whose filter ate the note, not to nag the
+    person who read it and had nothing to say. One resend, then the record shows
+    delivery and the responsibility transfers to the reader.
+  </div>
+
+  <div class="sticky r2" style="left:600px; top:580px;">Microcopy plea: the template's subject line has room for what changed. "Beacon update" tells nobody anything and trains filters to eat us.<div class="sig">Noor Danesh</div></div>
+  <div class="sticky green r1" style="left:830px; top:600px;">Deploy notes and release notes are different animals. The bot writes the first kind; humans write this kind. Don't let the bot's format leak in here.<div class="sig">Beacon Deploys</div></div>
+
+  <div class="chip" style="left:70px; top:1050px;">template: comms folder, dated 6.12.26</div>
+  <div class="chip" style="left:360px; top:1050px;">board export: frames 1–6 · PNG · 8.3.26</div>
+  <div class="chip" style="left:700px; top:1050px;">next review: 9.7.26</div>
+</div>
+
+<script>
+const EDGES = [
+  ["opswires1","ops1_intake","ops1_complete","solid",""],
+  ["opswires1","ops1_complete","ops1_return","dashed","No — list what's missing"],
+  ["opswires1","ops1_complete","ops1_qa","solid","Yes"],
+  ["opswires1","ops1_qa","ops1_blocking","solid",""],
+  ["opswires1","ops1_blocking","ops1_issue","dashed","Yes"],
+  ["opswires1","ops1_blocking","ops1_note","solid","No"],
+  ["opswires1","ops1_issue","ops1_reread","solid","after the fix"],
+  ["opswires1","ops1_reread","ops1_note","dashed","clean read"],
+  ["opswires2","ops2_draw","ops2_dedupe","solid",""],
+  ["opswires2","ops2_dedupe","ops2_coverage","solid",""],
+  ["opswires2","ops2_coverage","ops2_reserve","dashed","No"],
+  ["opswires2","ops2_reserve","ops2_coverage","dashed","recheck"],
+  ["opswires2","ops2_coverage","ops2_assign","solid","Yes"],
+  ["opswires2","ops2_assign","ops2_disagree","solid","scores in"],
+  ["opswires2","ops2_disagree","ops2_calq","dashed","Yes"],
+  ["opswires2","ops2_disagree","ops2_archive","solid","No"],
+  ["opswires2","ops2_calq","ops2_archive","dashed","once adjudicated"],
+  ["opswires3","ops3_alert","ops3_facing","solid",""],
+  ["opswires3","ops3_facing","ops3_bizhours","dashed","No"],
+  ["opswires3","ops3_facing","ops3_confirm","solid","Yes"],
+  ["opswires3","ops3_confirm","ops3_sev","solid","seen it yourself"],
+  ["opswires3","ops3_sev","ops3_page","dashed","Yes"],
+  ["opswires3","ops3_sev","ops3_incident","solid","No — monitor"],
+  ["opswires3","ops3_page","ops3_incident","solid","handoff"],
+  ["opswires3","ops3_incident","ops3_recovered","solid","close"],
+  ["opswires4","ops4_signal","ops4_maint","solid",""],
+  ["opswires4","ops4_maint","ops4_attach","dashed","Yes"],
+  ["opswires4","ops4_maint","ops4_health","solid","No"],
+  ["opswires4","ops4_health","ops4_twofail","solid","results"],
+  ["opswires4","ops4_twofail","ops4_duty","dashed","Yes"],
+  ["opswires4","ops4_twofail","ops4_morning","solid","No"],
+  ["opswires4","ops4_duty","ops4_morning","solid","once stabilized"],
+  ["opswires5","ops5_request","ops5_purpose","solid",""],
+  ["opswires5","ops5_purpose","ops5_scope","dashed","No"],
+  ["opswires5","ops5_purpose","ops5_query","solid","Yes"],
+  ["opswires5","ops5_query","ops5_peer","solid",""],
+  ["opswires5","ops5_peer","ops5_reconcile","solid",""],
+  ["opswires5","ops5_reconcile","ops5_fix","dashed","No"],
+  ["opswires5","ops5_fix","ops5_peer","dashed","rerun"],
+  ["opswires5","ops5_reconcile","ops5_publish","solid","Yes"],
+  ["opswires6","ops6_draft","ops6_audience","solid",""],
+  ["opswires6","ops6_audience","ops6_gaps","dashed","No"],
+  ["opswires6","ops6_gaps","ops6_audience","dashed","fixed"],
+  ["opswires6","ops6_audience","ops6_review","solid","Yes"],
+  ["opswires6","ops6_review","ops6_changes","solid",""],
+  ["opswires6","ops6_changes","ops6_revise","dashed","Yes"],
+  ["opswires6","ops6_revise","ops6_review","dashed","resubmit"],
+  ["opswires6","ops6_changes","ops6_schedule","solid","No"],
+  ["opswires6","ops6_schedule","ops6_receipts","solid",""],
+];
+
+function centerOf(el, frame) {
+  const r = el.getBoundingClientRect();
+  const f = frame.getBoundingClientRect();
+  return {
+    x: r.left - f.left + r.width / 2,
+    y: r.top - f.top + r.height / 2,
+    w: r.width, h: r.height,
+  };
+}
+
+function anchor(b, side) {
+  if (side === "l") return { x: b.x - b.w / 2, y: b.y };
+  if (side === "r") return { x: b.x + b.w / 2, y: b.y };
+  if (side === "t") return { x: b.x, y: b.y - b.h / 2 };
+  return { x: b.x, y: b.y + b.h / 2 };
+}
+
+function draw() {
+  for (const [svgId, fromId, toId, kind, label] of EDGES) {
+    const svg = document.getElementById(svgId);
+    const frame = svg.closest(".frame");
+    const a = document.getElementById(fromId);
+    const b = document.getElementById(toId);
+    if (!a || !b) continue;
+    const A = centerOf(a, frame), B = centerOf(b, frame);
+    const dx = B.x - A.x, dy = B.y - A.y;
+    let p1, p2, d;
+    if (Math.abs(dx) > Math.abs(dy)) {
+      p1 = anchor(A, dx > 0 ? "r" : "l");
+      p2 = anchor(B, dx > 0 ? "l" : "r");
+      const midx = (p1.x + p2.x) / 2;
+      d = `M ${p1.x} ${p1.y} L ${midx} ${p1.y} L ${midx} ${p2.y} L ${p2.x} ${p2.y}`;
+    } else {
+      p1 = anchor(A, dy > 0 ? "b" : "t");
+      p2 = anchor(B, dy > 0 ? "t" : "b");
+      const midy = (p1.y + p2.y) / 2;
+      d = `M ${p1.x} ${p1.y} L ${p1.x} ${midy} L ${p2.x} ${midy} L ${p2.x} ${p2.y}`;
+    }
+    const ns = "http://www.w3.org/2000/svg";
+    const path = document.createElementNS(ns, "path");
+    path.setAttribute("d", d);
+    path.setAttribute("fill", "none");
+    path.setAttribute("stroke", kind === "dashed" ? "#8d939c" : "#31567d");
+    path.setAttribute("stroke-width", kind === "dashed" ? "1.4" : "1.8");
+    if (kind === "dashed") path.setAttribute("stroke-dasharray", "5 4");
+    svg.appendChild(path);
+    // arrowhead
+    const ah = document.createElementNS(ns, "path");
+    const angle = Math.atan2(p2.y - (Math.abs(dx) > Math.abs(dy) ? p2.y : (p1.y + p2.y) / 2 === p2.y ? p2.y : p2.y - Math.sign(dy) * 8), 0) || 0;
+    let tip;
+    if (Math.abs(dx) > Math.abs(dy)) {
+      const s = dx > 0 ? 1 : -1;
+      tip = `M ${p2.x} ${p2.y} l ${-7 * s} -4 l 0 8 z`;
+    } else {
+      const s = dy > 0 ? 1 : -1;
+      tip = `M ${p2.x} ${p2.y} l -4 ${-7 * s} l 8 0 z`;
+    }
+    ah.setAttribute("d", tip);
+    ah.setAttribute("fill", kind === "dashed" ? "#8d939c" : "#31567d");
+    svg.appendChild(ah);
+    if (label) {
+      const t = document.createElementNS(ns, "text");
+      const lx = (p1.x + p2.x) / 2, ly = (p1.y + p2.y) / 2 - 6;
+      t.setAttribute("x", lx);
+      t.setAttribute("y", ly);
+      t.setAttribute("text-anchor", "middle");
+      t.setAttribute("font-size", "9.5");
+      t.setAttribute("font-weight", "700");
+      t.setAttribute("fill", "#31567d");
+      t.setAttribute("paint-order", "stroke");
+      t.setAttribute("stroke", "#ffffff");
+      t.setAttribute("stroke-width", "3");
+      t.textContent = label;
+      svg.appendChild(t);
+    }
+  }
+  window.__boardReady = true;
+}
+draw();
+</script>
+</body>
+</html>

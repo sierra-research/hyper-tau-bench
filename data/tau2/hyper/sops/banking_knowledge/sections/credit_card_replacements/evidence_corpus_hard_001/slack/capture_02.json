@@ -1,0 +1,493 @@
+{
+  "capture_format": "slack_mcp_tool_call_log",
+  "server": "slack",
+  "captured_at": "2025-11-14T20:31:09Z",
+  "tool_calls": [
+    {
+      "call_id": "ccrpl-2-01",
+      "request": {
+        "method": "tools/call",
+        "params": {
+          "name": "slack_get_channel_history",
+          "arguments": {
+            "channel_id": "C0K4SUPENG",
+            "limit": 50,
+            "oldest": "1761800401.174245",
+            "latest": "1761886799.877370"
+          }
+        }
+      },
+      "response": {
+        "is_error": false,
+        "structured_content": {
+          "messages": [
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761829473.017995",
+              "thread_ts": "1761829473.017995",
+              "user_id": "U0C2QDIGB",
+              "text": "support-eng queue: 4 open escalations, oldest 22h. no active incidents.",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761829473017995"
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761833742.064870",
+              "thread_ts": "1761833742.064870",
+              "user_id": "U0C2BHOLT",
+              "text": "gateway config deploy 09:30-09:45, no expected impact, mentioning it so today's weirdness reports come with timestamps. thread if you see anything.",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761833742064870",
+              "reply_count": 3
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761837507.846120",
+              "thread_ts": "1761837507.846120",
+              "user_id": "U0C2COKAD",
+              "text": "fwiw I don't think the account-id-only thing on the pending-orders service is actually real - I passed the card number into 5765 in the sandbox yesterday and got a clean response back. thread if anyone cares",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761837507846120",
+              "reply_count": 11
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761849771.111745",
+              "thread_ts": "1761849771.111745",
+              "user_id": "U0C2LBRAN",
+              "text": "escalation incoming: pending-orders call failed twice on a closure precheck, capturing per the runbook. thread has details.",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761849771111745",
+              "reply_count": 6
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761855674.955495",
+              "thread_ts": "1761855674.955495",
+              "user_id": "U0C2YTANA",
+              "text": "related to this morning: sandbox refresh moves to weekly starting Monday, so sandbox behavior drifts less far from production between refreshes. this does not make sandbox results citable, see thread above :)",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761855674955495",
+              "reply_count": 2
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761858338.033620",
+              "thread_ts": "1761858338.033620",
+              "user_id": "U0C2TLANG",
+              "text": "observation from article analytics: runbook 3412 rev 4 views doubled since the retirement banner went on rev 3. the banner works. carry on.",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761858338033620",
+              "reply_count": 2
+            }
+          ]
+        }
+      }
+    },
+    {
+      "call_id": "ccrpl-2-02",
+      "request": {
+        "method": "tools/call",
+        "params": {
+          "name": "slack_get_thread_replies",
+          "arguments": {
+            "channel_id": "C0K4SUPENG",
+            "thread_ts": "1761837507.846120"
+          }
+        }
+      },
+      "response": {
+        "is_error": false,
+        "structured_content": {
+          "messages": [
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761837507.846120",
+              "thread_ts": "1761837507.846120",
+              "user_id": "U0C2COKAD",
+              "text": "fwiw I don't think the account-id-only thing on the pending-orders service is actually real - I passed the card number into 5765 in the sandbox yesterday and got a clean response back. thread if anyone cares",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761837507846120",
+              "reply_count": 11
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761837713.221120",
+              "thread_ts": "1761837507.846120",
+              "user_id": "U0C2MGRAN",
+              "text": "wait what. that contradicts everything I've been told to do",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761837713221120"
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761837990.986745",
+              "thread_ts": "1761837507.846120",
+              "user_id": "U0C2YTANA",
+              "text": "it doesn't, and this is worth spelling out because it's the third version of this claim this quarter: the sandbox coerces identifiers - it is deliberately forgiving so half-built tests don't die on input shape. production does not coerce. what you got back was the sandbox being polite, not the service accepting a card number.",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761837990986745"
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761838185.439870",
+              "thread_ts": "1761837507.846120",
+              "user_id": "U0C2COKAD",
+              "text": "the response had real-looking data in it though? not an error",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761838185439870"
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761838452.830495",
+              "thread_ts": "1761837507.846120",
+              "user_id": "U0C2YTANA",
+              "text": "the sandbox resolved your card number to its owning account and answered for the account. helpful for tests, catastrophic as a mental model. the contract pack is the contract - v1.3, the parameter section. if the pack says the argument shape, that is the shape, and no sandbox experiment overrides a published contract.",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761838452830495"
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761838736.408620",
+              "thread_ts": "1761837507.846120",
+              "user_id": "U0C2BHOLT",
+              "text": "receipts: found chris's sandbox call in the gateway log from yesterday 14:12, coercion flag is set on the request trace. production requests with the same input shape 4xx, we have those in the log too, mostly from august before the runbook got clearer",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761838736408620"
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761838928.424245",
+              "thread_ts": "1761837507.846120",
+              "user_id": "U0C2COKAD",
+              "text": "huh. okay, fully retracting. the sandbox should stamp coerced responses with a banner or something, this is a trap",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761838928424245"
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761839133.127370",
+              "thread_ts": "1761837507.846120",
+              "user_id": "U0C2YTANA",
+              "text": "agreed and it's on the tooling backlog as of now. you're not the first, won't be the last",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761839133127370"
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761839479.767995",
+              "thread_ts": "1761837507.846120",
+              "user_id": "U0C2DKAPO",
+              "text": "adding a sandbox-vs-production slide to the november refresher, this thread is the case study. names redacted chris",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761839479767995"
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761839582.596120",
+              "thread_ts": "1761837507.846120",
+              "user_id": "U0C2COKAD",
+              "text": "leave the name, cheap tuition",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761839582596120"
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761840284.861745",
+              "thread_ts": "1761837507.846120",
+              "user_id": "U0C2SRUIZ",
+              "text": "tooling ticket TOOL-2291 filed for the sandbox coercion banner. thread in the ticket links here",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761840284861745"
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761840510.814870",
+              "thread_ts": "1761837507.846120",
+              "user_id": "U0C2YTANA",
+              "text": "perfect. closing thought for the channel: when an experiment and a published contract disagree, the burden of proof is on the experiment. every time.",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761840510814870"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "call_id": "ccrpl-2-03",
+      "request": {
+        "method": "tools/call",
+        "params": {
+          "name": "slack_get_thread_replies",
+          "arguments": {
+            "channel_id": "C0K4SUPENG",
+            "thread_ts": "1761849771.111745"
+          }
+        }
+      },
+      "response": {
+        "is_error": false,
+        "structured_content": {
+          "messages": [
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761849771.111745",
+              "thread_ts": "1761849771.111745",
+              "user_id": "U0C2LBRAN",
+              "text": "escalation incoming: pending-orders call failed twice on a closure precheck, capturing per the runbook. thread has details.",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761849771111745",
+              "reply_count": 6
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761849926.705495",
+              "thread_ts": "1761849771.111745",
+              "user_id": "U0C2LBRAN",
+              "text": "sequence: first call timed out, waited, retried once - identical timeout. captured both raw responses, both timestamps, the account identifier, and the case id. opening SUPENG-8867 now rather than hammering it",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761849926705495"
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761850300.783620",
+              "thread_ts": "1761849771.111745",
+              "user_id": "U0C2YTANA",
+              "text": "8867 received, well-formed, taking it. one retry then escalate with the evidence is exactly what my queue wants - no forty-minute retry sagas, looking at you september",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761850300783620"
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761851293.299245",
+              "thread_ts": "1761849771.111745",
+              "user_id": "U0C2BHOLT",
+              "text": "gateway shows a 90-second window of upstream slowness 13:38-13:40, matches both of leah's timestamps. transient, self-healed, but the capture made that diagnosis take four minutes instead of forty",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761851293299245"
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761851752.502370",
+              "thread_ts": "1761849771.111745",
+              "user_id": "U0C2YTANA",
+              "text": "resolving 8867 as transient-upstream with brian's window attached. leah's precheck can rerun clean now",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761851752502370"
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761852155.642995",
+              "thread_ts": "1761849771.111745",
+              "user_id": "U0C2LBRAN",
+              "text": "reran, clean response, closure proceeding. case notes updated with the whole arc",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761852155642995"
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761852298.971120",
+              "thread_ts": "1761849771.111745",
+              "user_id": "U0C2MGRAN",
+              "text": "textbook. stealing 'no forty-minute retry sagas' for the desk wall",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761852298971120"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "call_id": "ccrpl-2-04",
+      "request": {
+        "method": "tools/call",
+        "params": {
+          "name": "slack_get_thread_replies",
+          "arguments": {
+            "channel_id": "C0K4SUPENG",
+            "thread_ts": "1761833742.064870"
+          }
+        }
+      },
+      "response": {
+        "is_error": false,
+        "structured_content": {
+          "messages": [
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761833742.064870",
+              "thread_ts": "1761833742.064870",
+              "user_id": "U0C2BHOLT",
+              "text": "gateway config deploy 09:30-09:45, no expected impact, mentioning it so today's weirdness reports come with timestamps. thread if you see anything.",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761833742064870",
+              "reply_count": 3
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761835937.549245",
+              "thread_ts": "1761833742.064870",
+              "user_id": "U0C2YTANA",
+              "text": "clean from my side, escalation console loads fine post-deploy",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761835937549245"
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761836566.752370",
+              "thread_ts": "1761833742.064870",
+              "user_id": "U0C2BHOLT",
+              "text": "confirmed complete 09:44, config diff archived",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761836566752370"
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761841821.892995",
+              "thread_ts": "1761833742.064870",
+              "user_id": "U0C2MGRAN",
+              "text": "closures desk saw nothing, for the record",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761841821892995"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "call_id": "ccrpl-2-05",
+      "request": {
+        "method": "tools/call",
+        "params": {
+          "name": "slack_get_thread_replies",
+          "arguments": {
+            "channel_id": "C0K4SUPENG",
+            "thread_ts": "1761855674.955495"
+          }
+        }
+      },
+      "response": {
+        "is_error": false,
+        "structured_content": {
+          "messages": [
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761855674.955495",
+              "thread_ts": "1761855674.955495",
+              "user_id": "U0C2YTANA",
+              "text": "related to this morning: sandbox refresh moves to weekly starting Monday, so sandbox behavior drifts less far from production between refreshes. this does not make sandbox results citable, see thread above :)",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761855674955495",
+              "reply_count": 2
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761856121.580495",
+              "thread_ts": "1761855674.955495",
+              "user_id": "U0C2BHOLT",
+              "text": "weekly is a good cadence, the drift complaints cluster in week 3 of the old monthly cycle",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761856121580495"
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761856517.158620",
+              "thread_ts": "1761855674.955495",
+              "user_id": "U0C2SRUIZ",
+              "text": "and TOOL-2291 (coercion banner) rides the same release train, so both halves of this morning's confusion get fixed",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761856517158620"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "call_id": "ccrpl-2-06",
+      "request": {
+        "method": "tools/call",
+        "params": {
+          "name": "slack_get_thread_replies",
+          "arguments": {
+            "channel_id": "C0K4SUPENG",
+            "thread_ts": "1761858338.033620"
+          }
+        }
+      },
+      "response": {
+        "is_error": false,
+        "structured_content": {
+          "messages": [
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761858338.033620",
+              "thread_ts": "1761858338.033620",
+              "user_id": "U0C2TLANG",
+              "text": "observation from article analytics: runbook 3412 rev 4 views doubled since the retirement banner went on rev 3. the banner works. carry on.",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761858338033620",
+              "reply_count": 2
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761858744.736745",
+              "thread_ts": "1761858338.033620",
+              "user_id": "U0C2GOTT",
+              "text": "and the october QA sample backs it up so far - zero retry sagas since the banner. will have real numbers at month end",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761858744736745"
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761859203.189870",
+              "thread_ts": "1761858338.033620",
+              "user_id": "U0C2TLANG",
+              "text": "the rare metric that moved the day the fix shipped. savoring it",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761859203189870"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "call_id": "ccrpl-2-07",
+      "request": {
+        "method": "tools/call",
+        "params": {
+          "name": "slack_search_messages",
+          "arguments": {
+            "query": "in:#support-eng 5765 card number sandbox",
+            "limit": 5
+          }
+        }
+      },
+      "response": {
+        "is_error": false,
+        "structured_content": {
+          "messages": [
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761837507.846120",
+              "thread_ts": "1761837507.846120",
+              "user_id": "U0C2COKAD",
+              "text": "fwiw I don't think the account-id-only thing on the pending-orders service is actually real - I passed the card number into 5765 in the sandbox yesterday and got a clean response back. thread if anyone cares",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761837507846120",
+              "reply_count": 11
+            },
+            {
+              "channel_id": "C0K4SUPENG",
+              "channel_name": "support-eng",
+              "ts": "1761838452.830495",
+              "thread_ts": "1761838452.830495",
+              "user_id": "U0C2YTANA",
+              "text": "the sandbox resolved your card number to its owning account and answered for the account. helpful for tests, catastrophic as a mental model. the contract pack is the contract - v1.3, the parameter section. if the pack says the argument shape, that is the shape, and no sandbox experiment overrides a published contract.",
+              "permalink": "https://rho-bank.example/slack/archives/C0K4SUPENG/p1761838452830495"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

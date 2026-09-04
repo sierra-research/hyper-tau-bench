@@ -1,0 +1,164 @@
+From: Priya Raman <priya.raman@rhobank.com>
+To: Bruno Ferreira <bruno.ferreira@rhobank.com>
+Cc: retention-ops <retention-ops@rhobank.com>
+Date: Wed, 29 Oct 2025 16:22:38 -0400
+Subject: RE: Old annual-fee waiver with no end date - closure call today
+Message-ID: <ccr-fc03e770@rhobank.com>
+In-Reply-To: <ccr-816e3b0e@rhobank.com>
+References: <ccr-665d6b17@rhobank.com>
+ <ccr-b0eda980@rhobank.com>
+ <ccr-077c8359@rhobank.com>
+ <ccr-a2a824dd@rhobank.com>
+ <ccr-ef97265e@rhobank.com>
+ <ccr-25849862@rhobank.com>
+ <ccr-6b230175@rhobank.com>
+ <ccr-f0f80e03@rhobank.com>
+ <ccr-f2aca2d3@rhobank.com>
+ <ccr-99bc574b@rhobank.com>
+ <ccr-816e3b0e@rhobank.com>
+Thread-Topic: Old annual-fee waiver with no end date - closure call today
+Thread-Index: 524c1c00c274bb36a2feac7b662aae24
+Accept-Language: en-US
+X-Auto-Response-Suppress: All
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+That account is already on the list from Friday's pull. Anything new
+goes on CSV-18274, not this thread - it will get read there. Closing
+here.
+
+Priya
+
+-----Original Message-----
+From: Bruno Ferreira <bruno.ferreira@rhobank.com>
+Sent: Wed, 29 Oct 2025 15:46:11 -0400
+To: retention-ops <retention-ops@rhobank.com>
+Subject: RE: Old annual-fee waiver with no end date - closure call today
+
+Hit one of these today. Per this thread: noted it in the case record,
+worked the closure normally, no drama. Flagging so the tally stays
+honest.
+
+-----Original Message-----
+From: Felix Osterberg <felix.osterberg@rhobank.com>
+Sent: Fri, 24 Oct 2025 09:33:28 -0400
+To: Marta Villanueva <marta.villanueva@rhobank.com>
+Cc: Nadia Osei <nadia.osei@rhobank.com>
+Subject: RE: Old annual-fee waiver with no end date - closure call today
+
+Count went to Marta and Nadia this morning.
+
+-----Original Message-----
+From: Nadia Osei <nadia.osei@rhobank.com>
+Sent: Thu, 23 Oct 2025 13:17:42 -0400
+To: retention-ops <retention-ops@rhobank.com>
+Cc: Priya Raman <priya.raman@rhobank.com>
+Subject: RE: Old annual-fee waiver with no end date - closure call today
+
+QA note while this is warm: replays that touch one of these accounts
+should reference the pack card for the flag tool, by name, the way
+Priya did. Folklore about old waivers is how folklore starts.
+
+-----Original Message-----
+From: Marta Villanueva <marta.villanueva@rhobank.com>
+Sent: Thu, 23 Oct 2025 08:52:17 -0400
+To: Felix Osterberg <felix.osterberg@rhobank.com>
+Cc: Nadia Osei <nadia.osei@rhobank.com>, Priya Raman <priya.raman@rhobank.com>
+Subject: RE: Old annual-fee waiver with no end date - closure call today
+
+Yes - send the count to me and Nadia, not to the floor list. The floor
+needs the discipline, not the census.
+
+-----Original Message-----
+From: Felix Osterberg <felix.osterberg@rhobank.com>
+Sent: Wed, 22 Oct 2025 14:28:54 -0400
+To: Marta Villanueva <marta.villanueva@rhobank.com>
+Cc: Priya Raman <priya.raman@rhobank.com>, retention-ops <retention-ops@rhobank.com>
+Subject: RE: Old annual-fee waiver with no end date - closure call today
+
+Platform can pull a count of accounts still carrying flags written
+through the old path, if ops wants the shape of the tail. Query is
+cheap, one afternoon.
+
+-----Original Message-----
+From: Marta Villanueva <marta.villanueva@rhobank.com>
+Sent: Wed, 22 Oct 2025 10:41:09 -0400
+To: Owen Caldwell <owen.caldwell@rhobank.com>
+Cc: retention-ops <retention-ops@rhobank.com>
+Subject: RE: Old annual-fee waiver with no end date - closure call today
+
+Work the closure normally. The old waiver is history on the account,
+not a blocker, and the closure flow does not care how the fee was
+treated in 2021. Note what you found in the case record so the trail
+is there, and carry on.
+
+-----Original Message-----
+From: Owen Caldwell <owen.caldwell@rhobank.com>
+Sent: Wed, 22 Oct 2025 10:15:33 -0400
+To: Priya Raman <priya.raman@rhobank.com>
+Cc: retention-ops <retention-ops@rhobank.com>
+Subject: RE: Old annual-fee waiver with no end date - closure call today
+
+Thanks - so what do I do with the account in front of me?
+
+-----Original Message-----
+From: Priya Raman <priya.raman@rhobank.com>
+Sent: Wed, 22 Oct 2025 09:48:26 -0400
+To: retention-ops <retention-ops@rhobank.com>
+Cc: Marta Villanueva <marta.villanueva@rhobank.com>, Felix Osterberg <felix.osterberg@rhobank.com>
+Subject: RE: Old annual-fee waiver with no end date - closure call today
+
+Here is the answer, and it is worth the whole floor reading it once.
+
+The flag on that account came in through waive_fee_legacy, a gateway
+entry left over from the old servicing stack. That path wrote fee
+waivers with no expiration and no recorded reason - which is exactly
+why accounts like Owen's and Tessa's exist. It is deprecated in
+CP-CARD-7 and it stays listed only so that records written through it
+still parse; nothing should be calling it, and to platform's knowledge
+nothing has in a long while.
+
+The discipline that replaced open-ended waivers is the flag tool. The
+operation card for apply_credit_card_account_flag_6147 in CP-CARD-7
+requires an expiration date and a reason on every flag, so nothing
+open-ended can be written in the first place. What goes in those
+fields is on the card itself - read it there, not from this email,
+because this email will go stale and the card will not.
+
+Priya
+
+-----Original Message-----
+From: Tessa Marsh <tessa.marsh@rhobank.com>
+Sent: Tue, 21 Oct 2025 11:39:57 -0400
+To: retention-ops <retention-ops@rhobank.com>
+Cc: Priya Raman <priya.raman@rhobank.com>
+Subject: RE: Old annual-fee waiver with no end date - closure call today
+
+For the pile: I saw one shaped exactly like this in September. Also
+old, also no end date, also nobody could say where it came from. I
+noted it in the case record and moved on.
+
+-----Original Message-----
+From: Marta Villanueva <marta.villanueva@rhobank.com>
+Sent: Tue, 21 Oct 2025 10:07:12 -0400
+To: Owen Caldwell <owen.caldwell@rhobank.com>
+Cc: retention-ops <retention-ops@rhobank.com>, Priya Raman <priya.raman@rhobank.com>
+Subject: RE: Old annual-fee waiver with no end date - closure call today
+
+Good catch. Looping platform directly - Priya, this smells like yours
+historically. Floor: hold the closure until we hear back, the account
+is not going anywhere today.
+
+-----Original Message-----
+From: Owen Caldwell <owen.caldwell@rhobank.com>
+Sent: Tue, 21 Oct 2025 09:23:41 -0400
+To: retention-ops <retention-ops@rhobank.com>
+Subject: Old annual-fee waiver with no end date - closure call today
+
+Closure call this morning: account shows an annual-fee waiver applied
+back in 2021, no end date on the flag, adn the fee has not billed
+since. Customer did not ask for it and does not know why it is there.
+Filed CSV-18274 with platform but asking here too since the ticket
+queue is running slow this week - is the account safe to work, and
+whose flag is that?

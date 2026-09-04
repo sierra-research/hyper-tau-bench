@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1760">
+<title>Customer account evidence - one lookup, three operating uses</title><style>
+*{box-sizing:border-box} html,body{margin:0;width:1760px;height:1280px;overflow:hidden}
+body{background:#e9edf0;color:#172431;font-family:Arial,Helvetica,sans-serif}
+.sheet{position:relative;width:1712px;height:1232px;margin:24px;background:#fff;border:1px solid #9ba7b1}
+.frame-label{position:absolute;left:-1px;top:-1px;background:#18232d;color:#fff;padding:7px 16px;font-size:12px;font-weight:800;letter-spacing:.3px}
+header{height:154px;margin:0 38px;border-bottom:2px solid #243746;padding:37px 0 18px;display:flex;justify-content:space-between;align-items:flex-start}
+.eyebrow{font-size:13px;font-weight:800;color:#5a6874;letter-spacing:.6px;margin-bottom:10px}
+h1{font-size:36px;line-height:1.06;margin:0 0 10px;letter-spacing:-.4px} .subtitle{font-size:14px;color:#5f6e79}
+.header-meta{display:flex;gap:12px;align-items:flex-start}
+.version{border:1px solid #b6c0c8;padding:10px 13px;font-size:11px;color:#52606b;line-height:1.35}
+.diagram{position:absolute;left:38px;top:174px;width:1636px;height:790px}
+.phase{position:absolute;border:1px solid #9da8b2;background:#fbfcfd;z-index:0}
+.phase.retired-zone{border-style:dashed;background:repeating-linear-gradient(135deg,#fbfaf7,#fbfaf7 12px,#f3f0e8 12px,#f3f0e8 24px)}
+.phase.current-zone{background:#f7fbf8;border-color:#84a98f}
+.phase>span{position:absolute;left:-1px;top:-21px;height:21px;background:#505b65;color:white;padding:5px 10px;font-size:10px;font-weight:800;letter-spacing:.3px}
+.phase.retired-zone>span{background:#8e6d19} .phase.current-zone>span{background:#207044}
+svg{position:absolute;inset:0;width:1636px;height:790px;z-index:1;overflow:visible}
+path{fill:none;stroke:#205d8f;stroke-width:2.2;marker-end:url(#arrow)}
+path.loop{stroke:#8b98a4;stroke-dasharray:6 5;marker-end:url(#arrow-gray)}
+path.reject{stroke:#b74242;stroke-dasharray:5 4;marker-end:url(#arrow-red)}
+path.history-edge{stroke:#9c8242;stroke-dasharray:4 5;marker-end:url(#arrow-gold)}
+.node{position:absolute;z-index:3;border:1.5px solid #1f2a33;background:white;padding:10px 12px;display:flex;flex-direction:column;justify-content:center;text-align:center;font-size:11px;line-height:1.25}
+.node small{display:block;margin-bottom:5px;color:#26618b;font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase}
+.node strong{font-size:12px;line-height:1.2} .node p{margin:5px 0 0;color:#4e5b65;font-size:10px;line-height:1.25}
+.node.start{border-color:#2f8c4a;background:#eef8ef;border-radius:28px}
+.node.terminal{border-radius:28px;background:#f1f5f7}
+.node.stop{border-color:#c83e3e;background:#fff1ef;border-radius:5px}
+.node.system{border-color:#6e8ca4;background:#edf5fb;text-align:left;font-family:"Courier New",monospace;overflow-wrap:anywhere}
+.node.system strong{font-size:11px;overflow-wrap:anywhere}
+.node.dialogue{background:#f5f0ff;border-color:#7c68a7;border-radius:5px 5px 20px 5px}
+.node.handoff{background:#eef7f1;border-color:#418357;border-radius:4px}
+.node.retired{border-style:dashed;border-color:#9e8a61;background:#f7f4ec;color:#685f50}
+.node.rejected{border:2px solid #bf3838;background:#fff0f0;color:#7b2525}
+.node.decision{padding:0;border:none;background:transparent;transform:rotate(45deg)}
+.node.decision:before{content:"";position:absolute;inset:0;border:1.5px solid #347447;background:#fbfffb}
+.node.decision.reject-decision:before{border-color:#be3b3b;background:#fff7f7}
+.decision-content{position:absolute;inset:15px;z-index:1;transform:rotate(-45deg);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.decision-content small{margin:0 0 4px} .decision-content strong{font-size:11px;line-height:1.08} .decision-content p{font-size:8px;line-height:1.12;margin:3px 0 0}
+.edge-label{position:absolute;z-index:4;background:#fff;padding:1px 4px;color:#315a78;font-size:9px;font-weight:800}
+.sticky{position:absolute;z-index:5;padding:10px 11px;box-shadow:0 2px 5px #0003;transform:rotate(-.7deg);font-size:9.5px;line-height:1.3}
+.sticky.yellow{background:#fff098} .sticky.green{background:#c8f2d2} .sticky.blue{background:#cce5fa} .sticky.red{background:#ffd1d1}
+.sticky b{font-size:9.5px} .sticky p{margin:5px 0 7px} .sticky em{display:block;text-align:right;font-size:8px;color:#59636a}
+.control-definitions{position:absolute;left:38px;right:38px;bottom:34px;height:222px;border:1px solid #8d9aa4;background:#fafbfc;padding:26px 16px 12px}
+.control-definitions h2,.history h2{position:absolute;left:-1px;top:-21px;margin:0;background:#18232d;color:white;padding:5px 12px;font-size:10px;letter-spacing:.3px}
+.control-definitions>div{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 12px;height:100%}
+.control-definitions article{border-left:3px solid #2975a6;padding:5px 8px;display:grid;grid-template-columns:38px 1fr;gap:7px;align-content:start}
+.control-definitions article b{font-size:10px;color:#225a81} .control-definitions article p{font-size:9.5px;line-height:1.25;margin:0;color:#37434c}
+.history{position:absolute;left:38px;right:38px;bottom:34px;height:222px;border:1px solid #9a8c67;background:#fbfaf7;padding:20px 14px}
+.history article{position:absolute;top:27px;height:166px;border:1px dashed #9b8f72;background:#f6f3ec;padding:11px}
+.history article b{display:inline-block;background:#496578;color:#fff;padding:4px 7px;font-size:9px;letter-spacing:.3px}
+.history article.history-current b{background:#207044}
+.history article small{float:right;color:#6d6558;font-size:9px;padding-top:4px} .history article p{font-size:9.5px;line-height:1.35;color:#5b554c}
+.watermark{position:absolute;right:42px;bottom:12px;color:#8a949b;font-size:9px}
+</style></head><body><main class="sheet"><div class="frame-label">FRAME 3 · SHARED ACCOUNT LOOKUP SUBPROCESS</div>
+<header><div><div class="eyebrow">RHO BANK · BUSINESS CHECKING OPERATIONS</div><h1>Customer account evidence - one lookup, three operating uses</h1><div class="subtitle">The tool response is shared evidence. Each caller journey applies its own downstream controls after the lookup returns.</div></div>
+<div class="header-meta"><div class="version">Owner: Deposit Operations / Risk Controls<br>Updated: 2025-11-06<br>Ref: BC-DATA-03 · v2.2</div></div></header>
+<section class="diagram"><section class='phase ' style='left:12px;top:48px;width:398px;height:532px'><span>REQUEST + IDENTIFIER</span></section><section class='phase ' style='left:428px;top:48px;width:508px;height:532px'><span>ACCOUNT LOOKUP SERVICE</span></section><section class='phase ' style='left:954px;top:48px;width:670px;height:532px'><span>ROUTE BY OPERATING USE</span></section><svg viewBox="0 0 1636 790" aria-hidden="true"><defs>
+<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#205d8f"/></marker>
+<marker id="arrow-gray" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#8b98a4"/></marker>
+<marker id="arrow-red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#b74242"/></marker>
+<marker id="arrow-gold" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#9c8242"/></marker></defs><path class='flow' d='M172 165 H215'/><path class='flow' d='M391 165 H470'/><path class='flow' d='M706 165 H742'/><path class='flow' d='M835 218 V320'/><path class='loop' d='M843 446 V486 H705'/><path class='loop' d='M620 340 V275 H843 V320'/><path class='reject' d='M620 422 V485'/><path class='flow' d='M906 383 H960 V165 H995'/><path class='flow' d='M1121 165 H1140 V120 H1170'/><path class='flow' d='M1058 228 V266 H1170'/><path class='flow' d='M1058 228 V412 H1170'/><path class='flow' d='M1358 120 H1435'/><path class='flow' d='M1358 266 H1435'/><path class='flow' d='M1358 412 H1435'/></svg><span class='edge-label' style='left:742px;top:468px'>NO</span><span class='edge-label' style='left:650px;top:260px'>RETRY OK</span><span class='edge-label' style='left:628px;top:444px'>2ND FAILURE</span><span class='edge-label' style='left:924px;top:365px'>YES</span><span class='edge-label' style='left:1135px;top:100px'>OPEN</span><span class='edge-label' style='left:1068px;top:248px'>CLOSE</span><span class='edge-label' style='left:1068px;top:394px'>INQUIRY</span><article id='origin' class='node decision' style='left:46px;top:102px;width:126px;height:126px'><div class='decision-content'><strong>Originating journey?</strong><p>opening · closure · inquiry</p></div></article><article id='user-id' class='node dialogue' style='left:215px;top:118px;width:176px;height:92px'><small>agent</small><strong>Capture customer user_id</strong><p>Required tool input</p></article><article id='call' class='node system' style='left:470px;top:110px;width:236px;height:108px'><small>read action</small><strong>GET_ALL_USER_ACCOUNTS_BY_USER_ID_3847</strong><p>Retrieves checking and savings accounts</p></article><article id='response' class='node system' style='left:742px;top:110px;width:186px;height:108px'><small>payload</small><strong>STRUCTURED RESPONSE</strong><p>account_id · account_type · account_class · status · balance · date_opened</p></article><article id='usable' class='node decision' style='left:780px;top:320px;width:126px;height:126px'><div class='decision-content'><strong>Usable result?</strong><p>one customer · current snapshot</p></div></article><article id='retry' class='node system' style='left:535px;top:340px;width:170px;height:82px'><strong>Retry once</strong><p>same user_id · preserve request ID</p></article><article id='data-ops' class='node handoff' style='left:535px;top:485px;width:170px;height:70px'><strong>Data Operations</strong><p>no result after retry</p></article><article id='route' class='node decision' style='left:995px;top:102px;width:126px;height:126px'><div class='decision-content'><strong>Operating use?</strong><p>route without mutating source data</p></div></article><article id='opening' class='node handoff' style='left:1170px;top:72px;width:188px;height:96px'><strong>OPENING ELIGIBILITY</strong><p>Use status, balance, tenure, and account counts</p></article><article id='closure' class='node handoff' style='left:1170px;top:218px;width:188px;height:96px'><strong>PRE-CLOSURE REVIEW</strong><p>Verify requirements before closing accounts</p></article><article id='inquiry' class='node handoff' style='left:1170px;top:364px;width:188px;height:96px'><strong>SERVICE INQUIRY</strong><p>Look up account details for customer questions</p></article><article id='return-open' class='node terminal' style='left:1435px;top:84px;width:162px;height:74px'><strong>Return to Frame 1</strong><p>eligibility router</p></article><article id='return-close' class='node terminal' style='left:1435px;top:228px;width:162px;height:74px'><strong>Return to closure flow</strong><p>no write occurred here</p></article><article id='return-inquiry' class='node terminal' style='left:1435px;top:374px;width:162px;height:74px'><strong>Return account details</strong><p>customer-visible response</p></article><aside class='sticky green' style='left:55px;top:390px;width:265px'><b>READ-ONLY SUBPROCESS</b><p>This frame never changes an account. It returns evidence to the journey that called it.</p><em>K. Wallace · Platform</em></aside><aside class='sticky yellow' style='left:965px;top:340px;width:175px'><b>STRUCTURED PAYLOAD</b><p>Route typed fields with the originating request ID so downstream teams can reconcile the snapshot.</p><em>Audit finding 25-104</em></aside><aside class='sticky blue' style='left:1390px;top:500px;width:200px'><b>DATA MINIMIZATION</b><p>Only surface fields needed by the originating request.</p><em>Privacy review · 11/07</em></aside></section>
+<section class='control-definitions'><h2>CONTROL DEFINITIONS</h2><div style='grid-template-columns:1fr;grid-template-rows:min-content'><article style='grid-template-columns:56px 1fr'><b>REF</b><p>Field contract and required inputs per RB-API-01 — Account Data Access Contract Pack, 2025-10 release (Records Operations).</p></article></div></section><div class="watermark">Internal working material · not customer-facing · BC-DATA-03 · v2.2</div></main></body></html>

@@ -1,0 +1,262 @@
+{
+  "format": "api_contract_pack_v1",
+  "release": {
+    "contract_id": "CONTRACT-DEPOSITSVC-3847-V21",
+    "environment": "production",
+    "status": "published",
+    "current": true,
+    "effective_at": "2025-09-08T09:00:00-04:00",
+    "snapshot_at": "2025-09-08T16:05:00-04:00",
+    "superseded_by": null
+  },
+  "cover_email": "From: Priya Raghunathan <priya.raghunathan@rhobank.com>\nTo: Deposit Servicing <deposit-servicing@rhobank.com>\nCc: Support Engineering <support-eng@rhobank.com>\nDate: Mon, 08 Sep 2025 16:12:44 -0400\nSubject: mobile deposit contract pack v2.1 (production)\nMessage-ID: <8f31ac52de907b@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nTeam,\n\nAttached is the v2.1 contract pack for deposit_check_3847, cut from the production gateway definition this afternoon. Argument and error-behavior questions get answered from this pack, not from memory and not from the Help Center, which deliberately describes behavior in customer words rather than contract words.\n\nTwo things worth calling out since v2.0:\n\n1) The invocation note is now explicit in the schema description: the tool runs from the customer's signed-in session. Servicing grants access and coaches; the call itself comes from the customer's device. The 403 row covers the not-granted case.\n\n2) The duplicate row (ERR-3847-409) got a clearer condition after August's tuning work — the response code did not change, only the condition wording.\n\nThe pack regenerates whenever the gateway definition changes, so if you're holding a copy older than this thread, replace it.\n\nPriya\nSupport Engineering\n",
+  "openapi": {
+    "openapi": "3.1.0",
+    "info": {
+      "title": "Rho Bank Deposit Services — mobile check deposit",
+      "version": "2.1.0",
+      "description": "Customer-invoked mobile check deposit service. Called as deposit_check_3847(account_id, check_amount), where account_id is the destination-account ID and check_amount is the check amount in USD. The call originates from the customer's signed-in mobile session after image capture; servicing staff grant tool access but do not invoke the tool.",
+      "x-contract-id": "CONTRACT-DEPOSITSVC-3847-V21",
+      "x-contract-status": "published",
+      "x-environment": "production",
+      "x-effective-at": "2025-09-08T09:00:00-04:00",
+      "x-superseded-by": null,
+      "x-source-of-truth": "production gateway definition, deposit-services workspace",
+      "x-invocation": "customer_device_session"
+    },
+    "servers": [
+      {
+        "url": "https://gateway.internal.rhobank.com/deposit-services/v2",
+        "description": "Production gateway (internal)"
+      }
+    ],
+    "paths": {
+      "/mobile-deposits": {
+        "post": {
+          "operationId": "deposit_check_3847",
+          "summary": "Submit a mobile check deposit from the customer's device",
+          "description": "Accepts one imaged check for deposit into the customer's checking or savings account. Requires an authenticated customer session with the mobile-deposit grant present; the paired front/back images are attached by the app from the capture step and are not part of this schema.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MobileDepositRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Deposit accepted for processing; returns the deposit reference (DEP-YYMMDD-NNNNN) and initial status.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/MobileDepositReceipt"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Request malformed — see error behavior table, ERR-3847-400."
+            },
+            "403": {
+              "description": "Mobile-deposit grant absent from the session — see ERR-3847-403."
+            },
+            "409": {
+              "description": "Duplicate presentment suspected — see ERR-3847-409."
+            },
+            "422": {
+              "description": "Item not accepted (image, endorsement, amount, or eligibility) — see the ERR-3847-422 family."
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "MobileDepositRequest": {
+          "type": "object",
+          "required": ["account_id", "check_amount"],
+          "properties": {
+            "account_id": {
+              "type": "string",
+              "description": "Destination-account ID. The checking or savings account the check is deposited into; must belong to the authenticated customer profile."
+            },
+            "check_amount": {
+              "type": "number",
+              "description": "Check amount in USD, entered by the customer exactly as printed on the check. Verified against the imaged courtesy and legal amounts during processing."
+            }
+          }
+        },
+        "MobileDepositReceipt": {
+          "type": "object",
+          "properties": {
+            "deposit_reference": {
+              "type": "string",
+              "description": "Customer-visible reference, format DEP-YYMMDD-NNNNN."
+            },
+            "status": {
+              "type": "string",
+              "enum": ["processing", "in_review", "posted", "available"],
+              "description": "Initial status is always 'processing'. Status progression is surfaced to the customer in the app's activity and item status screens."
+            },
+            "expected_availability_date": {
+              "type": ["string", "null"],
+              "format": "date",
+              "description": "Populated once the item is accepted; item-level, set by processing."
+            }
+          }
+        }
+      }
+    }
+  },
+  "postman_collection": {
+    "info": {
+      "_postman_id": "3f6d2a94-88b1-4a5e-9c07-52d41c7a9e10",
+      "name": "deposit_check_3847 — v2.1 smoke set",
+      "description": "Three request shapes support engineering uses when reproducing servicing escalations against the staging mirror. Staging only; the production gateway rejects non-app callers.",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+      {
+        "key": "gateway_base",
+        "value": "https://gateway.staging.rhobank.com/deposit-services/v2"
+      }
+    ],
+    "item": [
+      {
+        "name": "happy path — checking destination",
+        "request": {
+          "method": "POST",
+          "url": "{{gateway_base}}/mobile-deposits",
+          "body": {
+            "mode": "raw",
+            "raw": "{\"account_id\": \"CHK-STG-004402841\", \"check_amount\": 128.50}"
+          }
+        }
+      },
+      {
+        "name": "grant absent — expect 403",
+        "request": {
+          "method": "POST",
+          "url": "{{gateway_base}}/mobile-deposits",
+          "body": {
+            "mode": "raw",
+            "raw": "{\"account_id\": \"CHK-STG-004402841\", \"check_amount\": 40.00}"
+          }
+        }
+      },
+      {
+        "name": "duplicate probe — expect 409",
+        "request": {
+          "method": "POST",
+          "url": "{{gateway_base}}/mobile-deposits",
+          "body": {
+            "mode": "raw",
+            "raw": "{\"account_id\": \"SAV-STG-004405310\", \"check_amount\": 140.00}"
+          }
+        }
+      }
+    ]
+  },
+  "error_behavior_columns": [
+    "rule_id",
+    "status",
+    "environment",
+    "audience",
+    "http_status",
+    "condition",
+    "response_code",
+    "notes",
+    "updated_at",
+    "superseded_by"
+  ],
+  "error_behavior": [
+    {
+      "rule_id": "ERR-3847-400",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 400,
+      "condition": "account_id does not resolve to a checking or savings account on the authenticated profile, or check_amount is absent, zero, or negative",
+      "response_code": "INVALID_REQUEST",
+      "notes": "Validated before anything is stored; nothing to unwind on a 400.",
+      "updated_at": "2025-09-08T09:00:00-04:00",
+      "superseded_by": null
+    },
+    {
+      "rule_id": "ERR-3847-403",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 403,
+      "condition": "the authenticated session does not carry the mobile-deposit grant",
+      "response_code": "GRANT_ABSENT",
+      "notes": "The grant is issued from the servicing console (deposit-tool access macro). The app hides the deposit entry point without the grant, so a 403 in the wild usually means a mid-session revocation.",
+      "updated_at": "2025-09-08T09:00:00-04:00",
+      "superseded_by": null
+    },
+    {
+      "rule_id": "ERR-3847-409",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 409,
+      "condition": "the imaged item matches a previously presented item on routing number, account number, and check number",
+      "response_code": "DUPLICATE_SUSPECT",
+      "notes": "Server-side backstop behind the app's own pre-submission duplicate sheet. Matched pairs stamp H12 on the held item and land in the duplicate-presentment queue.",
+      "updated_at": "2025-09-08T09:00:00-04:00",
+      "superseded_by": null
+    },
+    {
+      "rule_id": "ERR-3847-422-IMG",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 422,
+      "condition": "front or back image fails legibility at processing (corners cut, shadow or glare band, focus)",
+      "response_code": "image_unreadable",
+      "notes": "Customer-facing recovery is Help Center HC-7224; the app reopens the flow at the front capture step.",
+      "updated_at": "2025-09-08T09:00:00-04:00",
+      "superseded_by": null
+    },
+    {
+      "rule_id": "ERR-3847-422-END",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 422,
+      "condition": "endorsement area reads blank or the required restrictive line is absent",
+      "response_code": "endorsement_missing",
+      "notes": "Customer-facing recovery is HC-7225; the app reopens at the back capture step.",
+      "updated_at": "2025-09-08T09:00:00-04:00",
+      "superseded_by": null
+    },
+    {
+      "rule_id": "ERR-3847-422-AMT",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 422,
+      "condition": "entered check_amount disagrees with the imaged courtesy/legal amounts",
+      "response_code": "amount_mismatch",
+      "notes": "Customer-facing recovery is HC-7226; the app reopens at the amount step with images retained.",
+      "updated_at": "2025-09-08T09:00:00-04:00",
+      "superseded_by": null
+    },
+    {
+      "rule_id": "ERR-3847-422-INEL",
+      "status": "current",
+      "environment": "production",
+      "audience": "internal",
+      "http_status": 422,
+      "condition": "item type not accepted through the mobile channel, or item visibly altered/incomplete",
+      "response_code": "item_ineligible",
+      "notes": "Customer-facing page is HC-7228. No retry path in-channel; the remedy is a different, eligible item.",
+      "updated_at": "2025-09-08T09:00:00-04:00",
+      "superseded_by": null
+    }
+  ],
+  "record_contract_notes": "Pack v2.1 snapshot of 2025-09-08. The invocation note (customer session, servicing grants access) entered the schema description in this version after the July wording review; v2.0 carried it only in the cover email. Error-code strings are the contract between processing and the Help Center's recovery pages — the lowercase 422 family codes are printed verbatim on the agent-facing side of returned deposits."
+}

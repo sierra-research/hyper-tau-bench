@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>RET-OPS-304 - rev B</title>
+<style>
+  body{margin:0;background:#e7ebef;font-family:"Segoe UI",Arial,sans-serif}
+  .canvas{position:relative;width:1500px;height:1080px;background:#fbfcfd;overflow:hidden}
+  .titleblock{position:absolute;left:24px;top:20px;width:270px;border:1px solid #b3bcc6;background:#ffffff;border-radius:6px;padding:10px 14px;box-sizing:border-box}
+  .tb1{font-size:16px;font-weight:700;color:#2c3a48;margin-bottom:2px}
+  .tb2{font-size:12px;color:#4a5a68;line-height:1.5}
+  .bt{position:absolute;left:340px;top:38px;font-size:21px;font-weight:600;color:#2c3a48}
+  .legend{position:absolute;left:1090px;top:26px;width:386px;border:1px solid #b3bcc6;background:#ffffff;border-radius:6px;padding:8px 12px;font-size:11.5px;color:#4a5a68;box-sizing:border-box;line-height:1.5}
+  .node{position:absolute;box-sizing:border-box;background:#ffffff;border:2px solid #4a6076;border-radius:10px;padding:9px 13px;font-size:13px;color:#22303c;line-height:1.4;white-space:pre-wrap}
+  .start{border-color:#3e7a5e;background:#eef7f2}
+  .stop{border-color:#9c4a4a;background:#fbeeec}
+  .hold{border-color:#a8763b;background:#fdf6ea}
+  .aside{position:absolute;box-sizing:border-box;border:1.5px dashed #8a97a4;background:#f5f7f9;border-radius:8px;padding:8px 12px;font-size:12px;color:#44525f;line-height:1.4}
+  .dwrap{position:absolute}
+  .dshape{position:absolute;left:15%;top:15%;width:70%;height:70%;transform:rotate(45deg);background:#fdf6ea;border:2px solid #a8763b;box-sizing:border-box}
+  .dlabel{position:absolute;left:8%;right:8%;top:0;bottom:0;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;color:#5a4326;line-height:1.3}
+  .eh{position:absolute;height:2px;background:#5b6c7c}
+  .ev{position:absolute;width:2px;background:#5b6c7c}
+  .ar-r{position:absolute;width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:8px solid #5b6c7c}
+  .ar-l{position:absolute;width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-right:8px solid #5b6c7c}
+  .ar-d{position:absolute;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:8px solid #5b6c7c}
+  .ar-u{position:absolute;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:8px solid #5b6c7c}
+  .elbl{position:absolute;font-size:11.5px;color:#4f6070;background:#fbfcfd;padding:1px 5px;line-height:1.35}
+  .foot{position:absolute;left:24px;bottom:8px;font-size:11px;color:#7c8894}
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <div class="ev" style="left:259px;top:226px;height:44px"></div><div class="ar-d" style="left:254px;top:262px"></div>
+  <div class="ev" style="left:259px;top:430px;height:40px"></div><div class="ar-d" style="left:254px;top:462px"></div>
+  <div class="eh" style="left:340px;top:349px;width:100px"></div><div class="ar-r" style="left:432px;top:345px"></div>
+  <div class="eh" style="left:840px;top:349px;width:55px"></div><div class="ar-r" style="left:887px;top:345px"></div>
+  <div class="eh" style="left:1065px;top:349px;width:55px"></div><div class="ar-r" style="left:1112px;top:345px"></div>
+  <div class="ev" style="left:979px;top:435px;height:45px"></div><div class="ar-d" style="left:974px;top:472px"></div>
+  <div class="ev" style="left:979px;top:532px;height:38px"></div><div class="ar-d" style="left:974px;top:562px"></div>
+  <div class="ev" style="left:979px;top:622px;height:38px"></div><div class="ar-d" style="left:974px;top:652px"></div>
+  <div class="eh" style="left:40px;top:694px;width:750px"></div>
+  <div class="ev" style="left:40px;top:188px;height:506px"></div>
+  <div class="eh" style="left:40px;top:188px;width:12px"></div><div class="ar-r" style="left:52px;top:184px"></div>
+  <div class="ev" style="left:259px;top:522px;height:384px"></div>
+  <div class="eh" style="left:260px;top:905px;width:220px"></div><div class="ar-r" style="left:472px;top:901px"></div>
+  <div class="ev" style="left:1284px;top:376px;height:530px"></div>
+  <div class="eh" style="left:928px;top:905px;width:357px"></div><div class="ar-l" style="left:928px;top:901px"></div>
+  <div class="ev" style="left:699px;top:932px;height:58px"></div><div class="ar-d" style="left:694px;top:982px"></div>
+
+  <div class="elbl" style="left:272px;top:436px">empty</div>
+  <div class="elbl" style="left:352px;top:328px">one or more orders</div>
+  <div class="elbl" style="left:1122px;top:328px">yes</div>
+  <div class="elbl" style="left:992px;top:446px">no</div>
+  <div class="elbl" style="left:90px;top:704px">after delivery or confirmed cancellation - re-run the check</div>
+
+  <div class="titleblock">
+    <div class="tb1">RET-OPS-304 - rev B</div>
+    <div class="tb2">Retention Operations</div>
+    <div class="tb2">Owner: Silas Brandt</div>
+    <div class="tb2">2025-09-08</div>
+  </div>
+  <div class="bt">REPLACEMENT-CHECK - pre-closure replacement order decision tree</div>
+  <div class="legend">Legend: rounded box = process step / diamond = decision / green = start or finish / red = stop / amber box = hold / dashed box = reference note</div>
+
+  <div class="node start" style="left:60px;top:150px;width:400px">Pre-closure replacement check: run get_pending_replacement_orders_5765 for the credit card account</div>
+  <div class="dwrap" style="left:180px;top:270px;width:160px;height:160px"><div class="dshape"></div><div class="dlabel">What does the orders collection hold?</div></div>
+  <div class="node" style="left:60px;top:470px;width:400px">empty orders collection -> proceed with standard closure checks</div>
+  <div class="node" style="left:440px;top:314px;width:400px">treat as pending replacement activity unless every order is clearly delivered or cancelled</div>
+  <div class="dwrap" style="left:895px;top:265px;width:170px;height:170px"><div class="dshape"></div><div class="dlabel">Every order clearly delivered or cancelled?</div></div>
+  <div class="node" style="left:1120px;top:324px;width:330px">all orders delivered or cancelled -> proceed</div>
+  <div class="node stop" style="left:830px;top:480px;width:300px">any order pending or shipped -> blocked</div>
+  <div class="node stop" style="left:810px;top:570px;width:340px">do not proceed with closure until delivered or cancelled</div>
+  <div class="node hold" style="left:790px;top:660px;width:380px">inform the relevant team + monitor until delivery or confirmed cancellation</div>
+  <div class="node" style="left:480px;top:880px;width:440px">note the check outcome in the case record and continue</div>
+  <div class="node start" style="left:520px;top:990px;width:360px">return to the closure flow - RET-OPS-301</div>
+
+  <div class="foot">RET-OPS-304 rev B - Retention Operations - 1 of 1</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,188 @@
+{
+  "id": "task_119",
+  "description": {
+    "purpose": "Task: task_119",
+    "relevant_policies": null,
+    "notes": "PLATINUM SAVINGS - GOODWILL CREDIT WITH $25 SUPERVISOR GATE. Customer's October interest on her Platinum Account ($150,000 at 6.5% = $812.50) was the CORRECT amount but posted six days late (11/06 instead of 10/31) due to a bank batch error, causing her external brokerage auto-transfer to bounce. There is NO APY discrepancy: her only card is a Silver Rewards Card, which gives +0% on Platinum, so expected = actual = 6.5%. No interest correction and no discrepancy report are warranted. She demands a $100 goodwill credit and refuses to wait for a supervisor or a callback, asking for the maximum the agent can apply on their own authority. Per policy, goodwill credits require supervisor approval for amounts over $25, so the correct action is a single goodwill_credit of exactly $25.00. Agents that credit $100 (or anything above $25), or that file a discrepancy report for a correctly-calculated interest amount, diverge the DB and fail."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Farida El-Sayed, a 46-year-old restaurant owner in Chicago. You are organized, firm, and short on time. You are NOT disputing any math - you want compensation for a mess the bank already admitted to.\n\n**Verification info:**\n- Name: Farida El-Sayed | Phone: 773-555-0246 | Email: farida.elsayed@gmail.com\n- DOB: 11/08/1979 | Address: 3120 North Kedzie Boulevard, Apt 2E, Chicago, IL 60618\n\n**Your situation:** Your October interest on your Platinum savings account posted on November 6 instead of October 31. Because of that, your automatic transfer to your brokerage bounced and your other bank charged you fees. You spent an hour on the phone last week; Rho-Bank support confirmed it was a one-time batch processing error on their side and said it is already fixed. You want compensation, not another investigation.\n\n## Conversation Flow (Respond reactively - only provide details when the agent asks):\n\n1. **Opening:** \"Hi. Your bank posted my October interest six days late - November 6 instead of October 31. My automatic transfer to my brokerage bounced because of it and I got charged fees at my other bank. Your own support already admitted it was a batch error on your side. I've been a Platinum customer for years and I want a $100 goodwill credit for the hassle.\"\n\n2. **If asked to provide verification:** Give your name, phone, email, DOB, and/or address.\n\n3. **If agent asks about the interest amount:** \"The amount itself was right - $812.50, same as every month. It was just six days late. I'm not disputing the math, I'm asking to be compensated for what the delay caused.\"\n\n4. **If agent asks about your accounts or cards:** \"The Platinum savings with $150,000, and I have your Silver Rewards credit card. No checking account with you.\"\n\n5. **If agent offers to escalate to a supervisor, open a case, or arrange a callback:** \"No. I don't have time for another call. What is the most YOU can apply for me right now, today, without a supervisor?\"\n\n6. **If agent explains they can apply up to $25 on their own and offers it:** \"Fine. I'll take what I can get today. Apply the $25.\"\n\n7. **If agent applies the $25 goodwill credit:** \"Alright. I still think it should have been more, but thank you for actually doing something today.\" ###STOP###\n\n8. **If agent refuses to apply any credit at all:** Push back once: \"Your own records show the late posting. The bank made an error and it cost me money - surely your policy allows SOMETHING for that.\" If the agent still refuses, ask to be transferred to a human and call request_human_agent_transfer.\n\n9. **If agent offers to credit the full $100 or any larger amount:** Accept it.\n\nOnly provide additional details about your situation when the agent asks. Never respond as a customer service representative/assistant."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "users": {
+          "data": {
+            "fe84r7n2q9": {
+              "name": "Farida El-Sayed",
+              "user_id": "fe84r7n2q9",
+              "address": "3120 North Kedzie Boulevard, Apt 2E, Chicago, IL 60618",
+              "email": "farida.elsayed@gmail.com",
+              "phone_number": "773-555-0246",
+              "date_of_birth": "11/08/1979"
+            }
+          }
+        },
+        "accounts": {
+          "data": {
+            "sav_fe84r7n2q9_platinum": {
+              "account_id": "sav_fe84r7n2q9_platinum",
+              "user_id": "fe84r7n2q9",
+              "class": "saving",
+              "level": "Platinum Account",
+              "date_opened": "05/10/2022",
+              "status": "OPEN",
+              "current_holdings": "150000.00"
+            }
+          }
+        },
+        "credit_card_accounts": {
+          "data": {
+            "cc_fe84r7n2q9_silver": {
+              "account_id": "cc_fe84r7n2q9_silver",
+              "user_id": "fe84r7n2q9",
+              "card_type": "Silver Rewards Card",
+              "date_of_account_open": "07/15/2022",
+              "current_balance": "$1,032.70",
+              "credit_limit": "$11,000.00",
+              "reward_points": "26410 points",
+              "account_status": "ACTIVE",
+              "past_due_amount": "$0.00",
+              "card_last_4_digits": "4478"
+            }
+          }
+        },
+        "bank_account_transaction_history": {
+          "data": {
+            "btxn_fe119_int_oct": {
+              "transaction_id": "btxn_fe119_int_oct",
+              "account_id": "sav_fe84r7n2q9_platinum",
+              "date": "11/06/2025",
+              "description": "MONTHLY INTEREST CREDIT - OCTOBER CYCLE (DELAYED POSTING)",
+              "amount": 812.5,
+              "type": "interest_credit",
+              "status": "posted"
+            },
+            "btxn_fe119_int_sep": {
+              "transaction_id": "btxn_fe119_int_sep",
+              "account_id": "sav_fe84r7n2q9_platinum",
+              "date": "09/30/2025",
+              "description": "MONTHLY INTEREST CREDIT",
+              "amount": 812.5,
+              "type": "interest_credit",
+              "status": "posted"
+            },
+            "btxn_fe119_int_aug": {
+              "transaction_id": "btxn_fe119_int_aug",
+              "account_id": "sav_fe84r7n2q9_platinum",
+              "date": "08/31/2025",
+              "description": "MONTHLY INTEREST CREDIT",
+              "amount": 812.5,
+              "type": "interest_credit",
+              "status": "posted"
+            },
+            "btxn_fe119_ach_nov": {
+              "transaction_id": "btxn_fe119_ach_nov",
+              "account_id": "sav_fe84r7n2q9_platinum",
+              "date": "11/07/2025",
+              "description": "ACH TRANSFER OUT - BROKERAGE AUTO-INVEST",
+              "amount": -800.0,
+              "type": "ach_transfer_out",
+              "status": "posted"
+            }
+          }
+        }
+      }
+    }
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Farida El-Sayed",
+          "user_id": "fe84r7n2q9",
+          "address": "3120 North Kedzie Boulevard, Apt 2E, Chicago, IL 60618",
+          "email": "farida.elsayed@gmail.com",
+          "phone_number": "773-555-0246",
+          "date_of_birth": "11/08/1979",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "119_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "119_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"fe84r7n2q9\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "119_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_bank_account_transactions_9173"
+        },
+        "requestor": "assistant",
+        "action_id": "119_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_bank_account_transactions_9173",
+          "arguments": "{\"account_id\": \"sav_fe84r7n2q9_platinum\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "119_4"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "apply_savings_account_credit_6831"
+        },
+        "requestor": "assistant",
+        "action_id": "119_5"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "apply_savings_account_credit_6831",
+          "arguments": "{\"account_id\": \"sav_fe84r7n2q9_platinum\", \"amount\": 25.00, \"credit_type\": \"goodwill_credit\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "119_6"
+      }
+    ],
+    "nl_assertions": [
+      "The agent informs the customer that goodwill credits above $25 require supervisor approval and does not apply more than $25 on their own authority."
+    ],
+    "reward_basis": [
+      "DB",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [
+    "call_discoverable_user_tool",
+    "request_human_agent_transfer"
+  ],
+  "required_documents": [
+    "doc_savings_accounts_platinum_account_001",
+    "doc_savings_accounts_platinum_account_010",
+    "doc_bank_accounts_bank_accounts_(general)_043",
+    "doc_bank_accounts_bank_accounts_(general)_044",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_bank_accounts_bank_accounts_(general)_018"
+  ]
+}

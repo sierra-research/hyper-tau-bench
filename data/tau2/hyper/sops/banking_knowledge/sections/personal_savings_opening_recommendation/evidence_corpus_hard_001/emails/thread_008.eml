@@ -1,0 +1,151 @@
+From: Dario Lenz <dario.lenz@rho-bank.com>
+To: Colin Mercer <colin.mercer@rho-bank.com>, Miriam Osei <miriam.osei@rho-bank.com>
+Cc: Devon Park <devon.park@rho-bank.com>, Yuki Tanaka <yuki.tanaka@rho-bank.com>
+Date: Wed, 05 Nov 2025 10:19:36 -0500
+Subject: RE: legacy reconciliation mismatch - savings openings missing
+Message-ID: <d38b99a0d6fda316d026@rho-bank.com>
+In-Reply-To: <fefc8e66496a0630d6da@rho-bank.com>
+References: <4e86cf30a0d9e3c12ad9@rho-bank.com> <5537119390f4f8b0a8de@rho-bank.com>
+ <c3a36a71f0e597eeccef@rho-bank.com> <7f1b371eb24ea0b74f05@rho-bank.com>
+ <2f755e1bb5b27a56d8e9@rho-bank.com> <eac066df22cc86aac085@rho-bank.com>
+ <089da8da86379dddda4b@rho-bank.com> <fefc8e66496a0630d6da@rho-bank.com>
+Thread-Topic: legacy reconciliation mismatch - savings openings missing
+Thread-Index: 5aa50bbb18aadda7749333d577117b98
+Accept-Language: en-US
+X-Auto-Response-Suppress: All
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Shorter answer than you feared: the batch was never right about savings, bu=
+t until this cycle nobody used its output for the deposit close - it fed a =
+branch summary where the gap did not matter. October is the first close pac=
+ket that leaned on it, so the exposure is this one cycle, and the October r=
+eport was re-run and re-issued this morning off V7. Last night's production=
+ run is clean, the reconciliation report now reads from the current contrac=
+t, and the job has an owner of record again - me, which I suppose is its ow=
+n kind of consequence.
+
+-----Original Message-----
+From: Colin Mercer <colin.mercer@rho-bank.com>
+Sent: Tue, 04 Nov 2025 16:41:19 -0500
+To: Dario Lenz <dario.lenz@rho-bank.com>
+Cc: Devon Park <devon.park@rho-bank.com>, Miriam Osei <miriam.osei@rho-bank=
+.com>, Yuki Tanaka <yuki.tanaka@rho-bank.com>
+Subject: RE: legacy reconciliation mismatch - savings openings missing
+
+So how long were we blind? Serious question - if month-end has been signing=
+ off against a checking-only lens, I want to know how many close packets ca=
+rry the same hole before I hand this upward.
+
+-----Original Message-----
+From: Dario Lenz <dario.lenz@rho-bank.com>
+Sent: Tue, 04 Nov 2025 11:26:52 -0500
+To: Yuki Tanaka <yuki.tanaka@rho-bank.com>, Colin Mercer <colin.mercer@rho-=
+bank.com>
+Cc: Devon Park <devon.park@rho-bank.com>, Miriam Osei <miriam.osei@rho-bank=
+.com>
+Subject: RE: legacy reconciliation mismatch - savings openings missing
+
+Because retirement closes a version to new callers; it does not switch the =
+old definition off. The retired definition stays callable so that nothing b=
+reaks overnight - pinned callers keep getting exactly the answers they alwa=
+ys got, which in this case means checking-only answers, quietly, forever. T=
+hat is the whole failure: no error, just an old lens. The batch never appea=
+red on the consumer list at the March retirement review, so it never got a =
+migration ticket. It has one now: re-pointed at V7 in the test bed this mor=
+ning, and the rerun of the 10-30 report there shows both of her October ope=
+nings exactly where they should be. Same rerun surfaced four other customer=
+s under-counted the same way. Production cutover is scheduled for tonight's=
+ window.
+
+-----Original Message-----
+From: Yuki Tanaka <yuki.tanaka@rho-bank.com>
+Sent: Mon, 03 Nov 2025 14:44:38 -0500
+To: Dario Lenz <dario.lenz@rho-bank.com>, Devon Park <devon.park@rho-bank.c=
+om>
+Cc: Colin Mercer <colin.mercer@rho-bank.com>, Miriam Osei <miriam.osei@rho-=
+bank.com>
+Subject: RE: legacy reconciliation mismatch - savings openings missing
+
+Records question, because the dates bother me: the current pack, CONTRACT-D=
+EPOSIT-3847-V7, carries the version history, and its changelog retires V1 o=
+n 2025-03-10. If V1 has been retired since March, how is a nightly job stil=
+l getting answers out of it at all? I would have expected it to fail loudly=
+ seven months ago.
+
+-----Original Message-----
+From: Dario Lenz <dario.lenz@rho-bank.com>
+Sent: Mon, 03 Nov 2025 10:37:23 -0500
+To: Devon Park <devon.park@rho-bank.com>, Colin Mercer <colin.mercer@rho-ba=
+nk.com>
+Cc: Miriam Osei <miriam.osei@rho-bank.com>, Yuki Tanaka <yuki.tanaka@rho-ba=
+nk.com>
+Subject: RE: legacy reconciliation mismatch - savings openings missing
+
+Thread pulled, and here is the knot: the batch's account lookup is still pi=
+nned to CONTRACT-DEPOSIT-3847-V1. I went back through the V1 pages in the p=
+ortal archive to be sure, and its lookup scope stops at checking - savings =
+was never part of what V1 returned, full stop. The report is not malfunctio=
+ning; it is faithfully executing a contract that was never built to answer =
+this question. Every savings account this desk has ever opened is invisible=
+ to that batch.
+
+-----Original Message-----
+From: Colin Mercer <colin.mercer@rho-bank.com>
+Sent: Fri, 31 Oct 2025 14:12:46 -0400
+To: Devon Park <devon.park@rho-bank.com>, Dario Lenz <dario.lenz@rho-bank.c=
+om>
+Cc: Miriam Osei <miriam.osei@rho-bank.com>, Yuki Tanaka <yuki.tanaka@rho-ba=
+nk.com>
+Subject: RE: legacy reconciliation mismatch - savings openings missing
+
+While you dig: the customer-facing side is handled - branch confirmed her a=
+ccounts directly from the register, and she has been told the summary she o=
+verheard about was an internal report error. But "internal report error" is=
+ a phrase I can use exactly once with this branch manager, so keep pulling =
+the thread.
+
+-----Original Message-----
+From: Devon Park <devon.park@rho-bank.com>
+Sent: Fri, 31 Oct 2025 09:53:17 -0400
+To: Miriam Osei <miriam.osei@rho-bank.com>, Colin Mercer <colin.mercer@rho-=
+bank.com>
+Cc: Yuki Tanaka <yuki.tanaka@rho-bank.com>, Dario Lenz <dario.lenz@rho-bank=
+.com>
+Subject: RE: legacy reconciliation mismatch - savings openings missing
+
+Half my side of the fence. The report comes off the old deposit reconciliat=
+ion batch - the nightly job that predates the register migration and never =
+picked up a new owner afterward. That job lives with platform, not with the=
+ console, so I am adding Dario Lenz from Deposit Platform Engineering, who =
+owns the contracts it calls. Dario, the question is why last night's run ca=
+nnot see two accounts the register plainly holds.
+
+-----Original Message-----
+From: Miriam Osei <miriam.osei@rho-bank.com>
+Sent: Thu, 30 Oct 2025 15:28:54 -0400
+To: Colin Mercer <colin.mercer@rho-bank.com>, Devon Park <devon.park@rho-ba=
+nk.com>
+Cc: Yuki Tanaka <yuki.tanaka@rho-bank.com>
+Subject: RE: legacy reconciliation mismatch - savings openings missing
+
+The register is not the one lying. Both of her October openings are sitting=
+ in the new-accounts extract, plain as day - opened mid-month, both live, f=
+unding on track. Whatever produced that report cannot see them. Devon, this=
+ smells like your side of the fence.
+
+-----Original Message-----
+From: Colin Mercer <colin.mercer@rho-bank.com>
+Sent: Thu, 30 Oct 2025 12:47:31 -0400
+To: Devon Park <devon.park@rho-bank.com>, Miriam Osei <miriam.osei@rho-bank=
+.com>
+Cc: Yuki Tanaka <yuki.tanaka@rho-bank.com>
+Subject: legacy reconciliation mismatch - savings openings missing
+
+Forwarding a flag from the month-end pre-close: last night's legacy deposit=
+ reconciliation report, dated 2025-10-30, lists one of our October customer=
+s with "no savings accounts found" - and this desk opened two savings accou=
+nts for that same customer this month. One of those systems is lying. Month=
+-end signs off against that report, so I need to know which one before Frid=
+ay's close packet goes up.

@@ -1,0 +1,508 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "rho-helpdesk",
+    "account": "rho-bank-card-support",
+    "workspace": "atlas-card-console",
+    "environment": "production",
+    "exported_at": "2025-11-03T08:41:37-05:00",
+    "timezone": "America/New_York",
+    "export_version": "2025.45",
+    "requested_by": "caleb.mun"
+  },
+  "cover_email": "From: Helpdesk Administration <helpdesk-admin@rhobank.com>\nTo: Caleb Mun <caleb.mun@rhobank.com>\nDate: Mon, 3 Nov 2025 08:47:02 -0500\nSubject: atlas-card-console workspace export (2025.45)\nMessage-ID: <hd-export-2025-45-atlascard@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nCaleb,\n\nFull production export of the atlas-card-console workspace - macros,\ntriggers, field definitions, policy contracts, SLA policies, and views,\nas of this morning's snapshot. This one includes the revised ordering\nand activation flow cards that went live today, so the training copies\nfloating around from last month are behind it.\n\nUsage counters are rolling windows computed at export time. Retired\nrows carry their status in the row itself; nothing has been filtered\nout of this export.\n\nHelpdesk Administration\n",
+  "macros": [
+    {
+      "macro_id": "MAC-5120",
+      "name": "Order a debit card — guided flow",
+      "description": "End-to-end conversational flow for ordering a debit card, standard orders and replacements both. Eligibility gates themselves are governed by CARD-OPS-310; this macro carries the step order and the quoting conduct. Revised 2025-11-03 with the tier-quoting step language after the October review of ordering contacts.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-11-03T08:00:00-05:00",
+      "updated_at": "2025-11-03T08:00:00-05:00",
+      "usage_30d": 1184,
+      "usage_90d": 3391,
+      "superseded_by": null,
+      "steps": [
+        "Verify the customer's identity — the first step to order a debit card, every time",
+        "Confirm which checking account the debit card should be linked to",
+        "Check eligibility requirements for the specified account (gates and order per CARD-OPS-310)",
+        "Ask the customer for the preferred delivery option and explain fees. For orders not governed by replacement tier-specific delivery rules the options are STANDARD, EXPEDITED, or RUSH. For replacement orders, ask only among the delivery options available for the customer's checking-account tier and explain the exact tier-specific fees",
+        "Ask for the preferred card design — CLASSIC, PREMIUM, or CUSTOM — and explain fees",
+        "Confirm the address where the customer would like the card mailed",
+        "Order via order_debit_card_5739",
+        "Inform the customer of the expected delivery timeframe and any applicable fees"
+      ]
+    },
+    {
+      "macro_id": "MAC-5121",
+      "name": "Freeze a debit card",
+      "description": "Temporary lock flow. The freeze disclosures (what declines, what still posts, how to undo it) are read from the flow card before the freeze runs; the four-disclosure wording is taught on calls and graded by QA from the call library.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-08-11T08:00:00-04:00",
+      "updated_at": "2025-10-02T15:22:41-04:00",
+      "usage_30d": 866,
+      "usage_90d": 2140,
+      "superseded_by": null,
+      "steps": [
+        "Verify the customer's identity — required before freezing",
+        "Confirm the customer is the owner of the debit card",
+        "Confirm the card is currently ACTIVE — PENDING, CLOSED, and already FROZEN cards cannot be frozen",
+        "Read the freeze disclosures from the flow card",
+        "Freeze via freeze_debit_card_3892 with card_id, then confirm the freeze was successful before wrapping up"
+      ]
+    },
+    {
+      "macro_id": "MAC-5122",
+      "name": "Unfreeze a debit card",
+      "description": "Reversal flow for a frozen card. The card is usable immediately after a successful unfreeze; there is no reactivation step.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-08-11T08:00:00-04:00",
+      "updated_at": "2025-10-02T15:22:41-04:00",
+      "usage_30d": 792,
+      "usage_90d": 1988,
+      "superseded_by": null,
+      "steps": [
+        "Verify the customer's identity — required before unfreezing",
+        "Confirm the customer is the owner of the debit card",
+        "Confirm the card is currently FROZEN",
+        "Confirm the linked checking account is still OPEN",
+        "Unfreeze via unfreeze_debit_card_3893 with card_id"
+      ]
+    },
+    {
+      "macro_id": "MAC-5123",
+      "name": "Close a debit card",
+      "description": "Permanent closure flow. Closure eligibility — permitted reasons, pending items, and the card-age rule with its security bypass — is governed by CARD-OPS-312; this macro carries the tool contract.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-08-11T08:00:00-04:00",
+      "updated_at": "2025-09-18T11:05:19-04:00",
+      "usage_30d": 623,
+      "usage_90d": 1702,
+      "superseded_by": null,
+      "steps": [
+        "Run the CARD-OPS-312 gates for the stated closure reason",
+        "Close via close_debit_card_4721 with card_id and reason",
+        "Confirm the CLOSED status on screen before wrapping up",
+        "If the reason was lost or stolen, run the cross-product wallet check before ending the contact"
+      ]
+    },
+    {
+      "macro_id": "MAC-5124",
+      "name": "Clear a card security hold",
+      "description": "Clearing flow for the alerts and holds the console can clear: customer-initiated fraud alerts and eligible velocity blocks. Bank-initiated fraud alerts are outside console scope — see the security-hold clearing contract. Clearing conduct (what counts as verified, what counts as a reasonable explanation, when to escalate) is taught on calls and graded by QA.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-08-11T08:00:00-04:00",
+      "updated_at": "2025-10-31T09:30:00-04:00",
+      "usage_30d": 1447,
+      "usage_90d": 2513,
+      "superseded_by": null,
+      "steps": [
+        "Verify the customer's identity",
+        "Read the alert row: who placed it decides whether the console can clear it",
+        "Clear via clear_debit_card_fraud_alert_4892 with card_id and reason",
+        "Set reason exactly per the reason field rows — customer_verified or velocity_clear",
+        "Document why the alert or block was cleared in the interaction notes"
+      ]
+    },
+    {
+      "macro_id": "MAC-5125",
+      "name": "Activate a debit card",
+      "description": "Activation flow card. Preconditions, the card-detail check, and tool selection by issue reason are governed by CARD-OPS-311 — the reissued board, not the August copy. This macro exists to pin the flow card to the board and keep the three tool tiles in one place on screen.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-11-03T08:00:00-05:00",
+      "updated_at": "2025-11-03T08:00:00-05:00",
+      "usage_30d": 2205,
+      "usage_90d": 6480,
+      "superseded_by": null,
+      "steps": [
+        "Run the CARD-OPS-311 preconditions in order",
+        "Collect and match the card details per the board",
+        "Select the activation tool from the issue reason — the board's selection frame, no shortcuts",
+        "Set the PIN and confirm activation, then run the post-activation script for the issue reason"
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "TRG-6410",
+      "name": "Route lost/stolen contacts to card security intake",
+      "description": "Routes contacts tagged lost_stolen to the card-security intake queue ahead of general card servicing.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 2,
+      "effective_at": "2025-08-11T08:00:00-04:00",
+      "updated_at": "2025-08-11T08:00:00-04:00",
+      "usage_30d": 3126,
+      "conditions": [
+        "contact.topic == 'debit_card' && contact.tag == 'lost_stolen'"
+      ],
+      "actions": [
+        "assign_queue card-security-intake",
+        "attach_form card_event_intake_v2"
+      ]
+    },
+    {
+      "trigger_id": "TRG-6411",
+      "name": "Route activation contacts to the activation queue",
+      "description": "Routes activation contacts to the card-activation queue with the activation flow card attached.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 4,
+      "effective_at": "2025-08-11T08:00:00-04:00",
+      "updated_at": "2025-11-03T08:00:00-05:00",
+      "usage_30d": 4188,
+      "conditions": [
+        "contact.topic == 'debit_card' && contact.tag == 'activation'"
+      ],
+      "actions": [
+        "assign_queue card-activation",
+        "attach_form activation_checklist_v5"
+      ]
+    },
+    {
+      "trigger_id": "TRG-6412",
+      "name": "Flag holiday-volume overflow to the surge view",
+      "description": "Adds the surge tag when card-security intake exceeds the staffing threshold; the surge view feeds the floor leads' wallboard.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 9,
+      "effective_at": "2025-10-27T08:00:00-04:00",
+      "updated_at": "2025-10-27T08:00:00-04:00",
+      "usage_30d": 411,
+      "conditions": [
+        "queue == 'card-security-intake' && queue.depth > 25"
+      ],
+      "actions": [
+        "add_tag surge",
+        "notify wallboard-floor-leads"
+      ]
+    }
+  ],
+  "policy_contracts": [
+    {
+      "contract_id": "CON-TIERQ-3",
+      "name": "Tier fee quoting on replacement orders",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "card-support-operations",
+      "scope": "All replacement debit-card orders placed through order_debit_card_5739. When using order_debit_card_5739 for a replacement debit card, the agent must provide exact delivery_fee and design_fee amounts based on tier rules — a range or an estimate does not satisfy the contract. The tier tables live in the entitlement workbook (CARD-ENT-04); the console does not restate them.",
+      "required_fields": [
+        "delivery_option",
+        "design",
+        "quoted_delivery_fee",
+        "quoted_design_fee"
+      ],
+      "closed_world": true,
+      "wrapper_rule": "The order form will not submit for a replacement until both quoted-fee fields are filled from the tier table.",
+      "effective_at": "2025-09-29T08:00:00-04:00",
+      "updated_at": "2025-11-03T08:00:00-05:00"
+    },
+    {
+      "contract_id": "CON-SECCLR-5",
+      "name": "Security-hold clearing scope",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "fraud-operations",
+      "scope": "clear_debit_card_fraud_alert_4892 is used to clear customer-service-clearable customer-initiated fraud alerts or eligible velocity blocks on a customer's debit card. It cannot clear bank-initiated fraud alerts — those are security-team scope, whoever is asking.",
+      "required_fields": [
+        "card_id",
+        "reason"
+      ],
+      "closed_world": true,
+      "wrapper_rule": "The reason parameter must be exactly one of customer_verified or velocity_clear; the console rejects free-text reasons.",
+      "effective_at": "2025-08-11T08:00:00-04:00",
+      "updated_at": "2025-10-31T09:30:00-04:00"
+    }
+  ],
+  "field_columns": [
+    "row_id",
+    "field_key",
+    "field_name",
+    "field_type",
+    "option_value",
+    "option_description",
+    "active",
+    "status",
+    "environment",
+    "updated_at"
+  ],
+  "fields": [
+    {
+      "row_id": "FLD-2200",
+      "field_key": "order_5739.checking_account_id",
+      "field_name": "Order argument: checking_account_id",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Required. The checking account the debit card will be linked to, confirmed with the customer before eligibility runs.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-08-11T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-2201",
+      "field_key": "order_5739.delivery_option",
+      "field_name": "Order argument: delivery_option",
+      "field_type": "dropdown",
+      "option_value": "STANDARD",
+      "option_description": "Standard delivery. Fee per the published fee page for standard orders; for replacements the tier table governs and STANDARD is offered on every tier.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-11-03T08:00:00-05:00"
+    },
+    {
+      "row_id": "FLD-2202",
+      "field_key": "order_5739.delivery_option",
+      "field_name": "Order argument: delivery_option",
+      "field_type": "dropdown",
+      "option_value": "EXPEDITED",
+      "option_description": "Expedited delivery where offered. On replacement orders, offer only if the customer's tier lists it, and quote the tier's exact delivery_fee.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-11-03T08:00:00-05:00"
+    },
+    {
+      "row_id": "FLD-2203",
+      "field_key": "order_5739.delivery_option",
+      "field_name": "Order argument: delivery_option",
+      "field_type": "dropdown",
+      "option_value": "RUSH",
+      "option_description": "Rush delivery where offered. On replacement orders, offer only if the customer's tier lists it, and quote the tier's exact delivery_fee.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-11-03T08:00:00-05:00"
+    },
+    {
+      "row_id": "FLD-2204",
+      "field_key": "order_5739.design",
+      "field_name": "Order argument: design",
+      "field_type": "dropdown",
+      "option_value": "CLASSIC",
+      "option_description": "The standard blue design; the default when the customer does not choose.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-08-11T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-2205",
+      "field_key": "order_5739.design",
+      "field_name": "Order argument: design",
+      "field_type": "dropdown",
+      "option_value": "PREMIUM",
+      "option_description": "Metallic silver finish. Quote the design fee — retail price on standard orders, tier price on replacements.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-08-11T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-2206",
+      "field_key": "order_5739.design",
+      "field_name": "Order argument: design",
+      "field_type": "dropdown",
+      "option_value": "CUSTOM",
+      "option_description": "Customer-uploaded image, subject to approval. Quote the design fee — retail price on standard orders, tier price on replacements.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-08-11T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-2207",
+      "field_key": "order_5739.mailing_address",
+      "field_name": "Order argument: mailing_address",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Required. Confirmed with the customer at the address step; the standard ordering procedure ships US domestic only.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-08-11T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-2210",
+      "field_key": "freeze_3892.card_id",
+      "field_name": "Freeze argument: card_id",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Required. The debit card to freeze; ownership must already be confirmed.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-08-11T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-2211",
+      "field_key": "unfreeze_3893.card_id",
+      "field_name": "Unfreeze argument: card_id",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Required. The frozen debit card to restore; the linked account's OPEN status is checked at the precondition step.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-08-11T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-2212",
+      "field_key": "close_4721.card_id",
+      "field_name": "Close argument: card_id",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Required. The debit card to close. Closure is permanent.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-08-11T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-2213",
+      "field_key": "close_4721.reason",
+      "field_name": "Close argument: reason",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Required. One of the permitted closing reasons per CARD-OPS-312; the board carries the list and the gates each reason runs.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-09-18T11:05:19-04:00"
+    },
+    {
+      "row_id": "FLD-2214",
+      "field_key": "clear_4892.card_id",
+      "field_name": "Clear argument: card_id",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Required. The debit card carrying the alert or block.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-08-11T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-2215",
+      "field_key": "clear_4892.reason",
+      "field_name": "Clear argument: reason",
+      "field_type": "dropdown",
+      "option_value": "customer_verified",
+      "option_description": "Use when clearing a customer-initiated fraud alert after the customer has verified their identity and confirmed their transactions are legitimate.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-31T09:30:00-04:00"
+    },
+    {
+      "row_id": "FLD-2216",
+      "field_key": "clear_4892.reason",
+      "field_name": "Clear argument: reason",
+      "field_type": "dropdown",
+      "option_value": "velocity_clear",
+      "option_description": "Use when clearing a velocity block after verifying the customer's identity and obtaining a reasonable explanation for the unusual activity.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-31T09:30:00-04:00"
+    },
+    {
+      "row_id": "FLD-2217",
+      "field_key": "activation.checklist_version",
+      "field_name": "Activation checklist version",
+      "field_type": "dropdown",
+      "option_value": "activation_checklist_v5",
+      "option_description": "Attached by the activation routing trigger; v5 tracks the reissued CARD-OPS-311.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-11-03T08:00:00-05:00"
+    },
+    {
+      "row_id": "FLD-2218",
+      "field_key": "activation.checklist_version",
+      "field_name": "Activation checklist version",
+      "field_type": "dropdown",
+      "option_value": "activation_checklist_v4",
+      "option_description": "Tracked the 2025-08-11 issue of the activation board.",
+      "active": false,
+      "status": "retired_2025-11-03",
+      "environment": "production",
+      "updated_at": "2025-11-03T08:00:00-05:00"
+    }
+  ],
+  "sla_policies": [
+    {
+      "policy_id": "SLA-508",
+      "name": "Lost/stolen same-contact containment",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "Card disposition (freeze or close) completed within the first contact",
+      "applies_to": "card-security-intake queue",
+      "updated_at": "2025-08-11T08:00:00-04:00"
+    },
+    {
+      "policy_id": "SLA-509",
+      "name": "Security-team referral pickup",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "Referrals from card-security intake picked up within 15 minutes during staffed hours",
+      "applies_to": "security-team referral queue",
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    }
+  ],
+  "views": [
+    {
+      "view_id": "VIEW-93",
+      "name": "Card security intake",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "queue == card-security-intake",
+        "status != closed"
+      ],
+      "updated_at": "2025-08-11T08:00:00-04:00"
+    },
+    {
+      "view_id": "VIEW-94",
+      "name": "Activation queue",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "queue == card-activation",
+        "status != closed"
+      ],
+      "updated_at": "2025-11-03T08:00:00-05:00"
+    },
+    {
+      "view_id": "VIEW-95",
+      "name": "Holiday surge wallboard",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "tag == surge"
+      ],
+      "updated_at": "2025-10-27T08:00:00-04:00"
+    }
+  ]
+}

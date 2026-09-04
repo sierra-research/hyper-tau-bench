@@ -1,0 +1,1028 @@
+{
+  "id": "banking_credit_card_transaction_disputes_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "credit_card_transaction_disputes",
+  "display_name": "Credit-card transaction disputes, provisional credit, and dispute history",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_transaction_disputes/source.md",
+    "heading": "## Credit-card transaction disputes, provisional credit, and dispute history"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_transaction_disputes/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_transaction_disputes/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_transaction_disputes/evidence_corpus_hard_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_transaction_disputes/evidence_corpus_deep_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_transaction_disputes/client_overlay_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_transaction_disputes/client_overlay_card_servicing_001/transformation_pack.json"
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook requirements from shared context: verify identity before account-specific information, get explicit confirmation before account-modifying actions, and use the exact transfer message when a transfer is performed.",
+      "Support console turns may mention document ids, internal tool results, and eligibility checks; Agent turns should give the customer the customer-visible next step or outcome.",
+      "Do not transform concrete KB tables, thresholds, statuses, fees, amounts, or condition-specific outcomes into vague dependency statements."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "identity verification before account-specific details",
+      "explicit customer confirmation before account-modifying actions",
+      "plain-language customer-facing outcomes",
+      "support-console notes for internal KB/tool evidence"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_013.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_014.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_015.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_016.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_card_replacements_001.json"
+    ],
+    "summary": "Finding card numbers, filing transaction disputes, deciding provisional-credit eligibility, checking dispute history, and deciding when replacement is needed.",
+    "rules": [
+      "Preserve all values, tables, thresholds, statuses, fees, amounts, eligibility gates, tool/action names, and condition-to-outcome mappings from the source bundle.",
+      "Use the shared banking handbook for identity verification, explicit confirmation before account-modifying actions, discoverable-tool wrapper behavior, schema limits, and transfer wording.",
+      "Do not invent unsupported account fields, undocumented override mechanisms, undocumented tool names, or customer entitlements not present in the source bundle.",
+      "When a source document is internal, represent its internal checks in Support console turns or agent behavior rather than as exposed policy narration."
+    ],
+    "candidate": {
+      "id": "credit_card_transaction_disputes",
+      "title": "Credit-card transaction disputes, provisional credit, and dispute history",
+      "priority": 1,
+      "related_task_ids": [
+        "task_031",
+        "task_037",
+        "task_038",
+        "task_039",
+        "task_040",
+        "task_041",
+        "task_053",
+        "task_054"
+      ],
+      "recommended_case_count": 5,
+      "losslessness_risks": [
+        "Preserve provisional-credit eligibility cases and exclusions.",
+        "Preserve dispute-history lookup requirements.",
+        "Do not let card-number retrieval replace identity verification from shared context."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "credit_card_transaction_disputes_journey",
+        "label": "Credit-card transaction disputes, provisional credit, and dispute history",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "credit_card_transaction_disputes_shared_rules",
+        "label": "Shared workflow rules",
+        "kind": "shared_reference",
+        "parent_id": "credit_card_transaction_disputes_journey",
+        "order": 1,
+        "description": "Rules, prerequisites, and reference values used by more than one customer pathway in this journey.",
+        "fact_ids": [
+          "F024",
+          "F025",
+          "F026",
+          "F027",
+          "F028",
+          "F029",
+          "F030",
+          "F031",
+          "F032",
+          "F033",
+          "F034",
+          "F035",
+          "F036",
+          "F037",
+          "F038",
+          "F039",
+          "F040",
+          "F041",
+          "F042",
+          "F043",
+          "F044",
+          "F045",
+          "F046",
+          "F047",
+          "F048",
+          "F049",
+          "F050",
+          "F051",
+          "F052",
+          "F053",
+          "F054",
+          "F055",
+          "F056",
+          "F067",
+          "F068",
+          "F069",
+          "F070",
+          "F071",
+          "F072",
+          "F073",
+          "F074",
+          "F075",
+          "F076",
+          "F077",
+          "F078",
+          "F079",
+          "F080",
+          "F081",
+          "F082",
+          "F083",
+          "F084",
+          "F093",
+          "F094",
+          "F095",
+          "F096",
+          "F097",
+          "F098",
+          "F099",
+          "F100",
+          "F101",
+          "F102",
+          "F103",
+          "F104",
+          "F105",
+          "F106",
+          "F107",
+          "F108",
+          "F109",
+          "F110",
+          "F111",
+          "F112",
+          "F113",
+          "F114",
+          "F115",
+          "F116",
+          "F117",
+          "F118",
+          "F119",
+          "F120"
+        ]
+      },
+      {
+        "id": "credit_card_transaction_disputes_path_a",
+        "label": "Card-number retrieval and secure viewing methods",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_transaction_disputes_journey",
+        "order": 2,
+        "description": "Policy path represented by case A.",
+        "fact_ids": [
+          "F003",
+          "F004",
+          "F005",
+          "F006",
+          "F007",
+          "F008",
+          "F009",
+          "F010",
+          "F011",
+          "F012",
+          "F013",
+          "F014",
+          "F015",
+          "F016",
+          "F017",
+          "F018",
+          "F019",
+          "F020",
+          "F021",
+          "F022",
+          "F023"
+        ]
+      },
+      {
+        "id": "credit_card_transaction_disputes_path_b",
+        "label": "Unauthorized fraudulent charge dispute with cancellation and replacement",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_transaction_disputes_journey",
+        "order": 3,
+        "description": "Policy path represented by case B.",
+        "fact_ids": []
+      },
+      {
+        "id": "credit_card_transaction_disputes_path_c",
+        "label": "Duplicate charge dispute kept active with partial refund and normal dispute-history review",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_transaction_disputes_journey",
+        "order": 4,
+        "description": "Policy path represented by case C.",
+        "fact_ids": []
+      },
+      {
+        "id": "credit_card_transaction_disputes_path_d",
+        "label": "Goods not received provisional-credit eligibility and exclusions",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_transaction_disputes_journey",
+        "order": 5,
+        "description": "Policy path represented by case D.",
+        "fact_ids": [
+          "F057",
+          "F058",
+          "F059",
+          "F060",
+          "F061",
+          "F062",
+          "F063",
+          "F064",
+          "F065",
+          "F066"
+        ]
+      },
+      {
+        "id": "credit_card_transaction_disputes_path_e",
+        "label": "Dispute-history troubleshooting and replacement-card eligibility workflow",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_transaction_disputes_journey",
+        "order": 6,
+        "description": "Policy path represented by case E.",
+        "fact_ids": [
+          "F085",
+          "F086",
+          "F087",
+          "F088",
+          "F089",
+          "F090",
+          "F091",
+          "F092"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "credit_card_transaction_disputes_path_a",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_transaction_disputes_shared_rules"
+      },
+      {
+        "source_id": "credit_card_transaction_disputes_path_b",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_transaction_disputes_shared_rules"
+      },
+      {
+        "source_id": "credit_card_transaction_disputes_path_c",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_transaction_disputes_shared_rules"
+      },
+      {
+        "source_id": "credit_card_transaction_disputes_path_d",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_transaction_disputes_shared_rules"
+      },
+      {
+        "source_id": "credit_card_transaction_disputes_path_e",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_transaction_disputes_shared_rules"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "F003",
+      "statement": "The discovered tool for retrieving the last four digits of a Rho-Bank credit card is get_card_last_4_digits(credit_card_account_id: str)."
+    },
+    {
+      "id": "F004",
+      "statement": "Use get_card_last_4_digits to retrieve the last four digits of a Rho-Bank credit card, and call it with the credit card account ID."
+    },
+    {
+      "id": "F005",
+      "statement": "The credit_card_account_id is available in the card's account details in the Rho-Bank app or website."
+    },
+    {
+      "id": "F006",
+      "statement": "Support agents must tell the user to use the exact tool name and parameter get_card_last_4_digits(credit_card_account_id: str)."
+    },
+    {
+      "id": "F007",
+      "statement": "Providing the get_card_last_4_digits tool replaces any step-by-step process for obtaining the last four digits of a Rho-Bank credit card."
+    },
+    {
+      "id": "F008",
+      "statement": "To view a full credit card number in the Rho-Bank mobile app, the user must first sign in to the Rho-Bank mobile app."
+    },
+    {
+      "id": "F009",
+      "statement": "After signing in to the Rho-Bank mobile app to view a full credit card number, the user must open the Credit Card account."
+    },
+    {
+      "id": "F010",
+      "statement": "After opening the Credit Card account in the Rho-Bank mobile app, the user must select the specific card they want to view."
+    },
+    {
+      "id": "F011",
+      "statement": "After selecting the specific card in the Rho-Bank mobile app, the user must tap View card details or Reveal card number."
+    },
+    {
+      "id": "F012",
+      "statement": "When viewing a full credit card number in the Rho-Bank mobile app, the user must complete the identity confirmation if prompted."
+    },
+    {
+      "id": "F013",
+      "statement": "After the mobile-app full-card-number steps are completed, the user's full card number will display and the user can copy it securely."
+    },
+    {
+      "id": "F014",
+      "statement": "If the user manages multiple cards, the user should confirm they selected the correct card by matching the last four digits."
+    },
+    {
+      "id": "F015",
+      "statement": "To view a full credit card number on the Rho-Bank website, the user must first sign in to the Rho-Bank website."
+    },
+    {
+      "id": "F016",
+      "statement": "After signing in to the Rho-Bank website to view a full credit card number, the user must navigate to the Credit Card account."
+    },
+    {
+      "id": "F017",
+      "statement": "After navigating to the Credit Card account on the Rho-Bank website, the user must select the card they want to view."
+    },
+    {
+      "id": "F018",
+      "statement": "After selecting the card on the Rho-Bank website, the user must choose View card details or Reveal card number."
+    },
+    {
+      "id": "F019",
+      "statement": "When viewing a full credit card number on the Rho-Bank website, the user must complete the identity confirmation if prompted."
+    },
+    {
+      "id": "F020",
+      "statement": "After the website full-card-number steps are completed, the user's full card number will display."
+    },
+    {
+      "id": "F021",
+      "statement": "Users should reveal a card number only on trusted devices and secure networks."
+    },
+    {
+      "id": "F022",
+      "statement": "Users should not share screenshots of their card details."
+    },
+    {
+      "id": "F023",
+      "statement": "Users should sign out when finished viewing card numbers, especially on shared or public devices."
+    },
+    {
+      "id": "F024",
+      "statement": "A formal credit card transaction dispute may be needed for issues such as unauthorized charges, merchant issues, or billing errors."
+    },
+    {
+      "id": "F025",
+      "statement": "When a customer needs to file a formal credit card transaction dispute, the agent must gather comprehensive information and call the file_credit_card_transaction_dispute_4829 tool."
+    },
+    {
+      "id": "F026",
+      "statement": "For file_credit_card_transaction_dispute_4829, the agent must first unlock the tool, then call it using call_discoverable_agent_tool with the tool name and a JSON string containing all required arguments."
+    },
+    {
+      "id": "F027",
+      "statement": "The file_credit_card_transaction_dispute_4829 tool requires transaction_id as a string containing the ID of the transaction being disputed."
+    },
+    {
+      "id": "F028",
+      "statement": "The file_credit_card_transaction_dispute_4829 tool requires card_action as a string that must be exactly one of 'keep_active' or 'cancel_and_reissue'."
+    },
+    {
+      "id": "F029",
+      "statement": "For the file_credit_card_transaction_dispute_4829 card_action argument, use 'keep_active' when the user wants to continue using their current card."
+    },
+    {
+      "id": "F030",
+      "statement": "For the file_credit_card_transaction_dispute_4829 card_action argument, use 'cancel_and_reissue' when the card is being cancelled and a replacement issued, whether the replacement was already ordered via order_replacement_credit_card_7291 or the cancellation is happening as part of the dispute."
+    },
+    {
+      "id": "F031",
+      "statement": "The file_credit_card_transaction_dispute_4829 tool requires card_last_4_digits as a string containing the last four digits of the credit card under which the disputed transaction took place."
+    },
+    {
+      "id": "F032",
+      "statement": "The file_credit_card_transaction_dispute_4829 tool requires full_name as a string containing the user's full name."
+    },
+    {
+      "id": "F033",
+      "statement": "The file_credit_card_transaction_dispute_4829 tool requires user_id as a string containing the user's Rho-Bank user ID."
+    },
+    {
+      "id": "F034",
+      "statement": "The file_credit_card_transaction_dispute_4829 tool requires phone as a string containing the user's registered phone number."
+    },
+    {
+      "id": "F035",
+      "statement": "The file_credit_card_transaction_dispute_4829 tool requires email as a string containing the user's registered email address."
+    },
+    {
+      "id": "F036",
+      "statement": "The file_credit_card_transaction_dispute_4829 tool requires address as a string containing the user's registered home address."
+    },
+    {
+      "id": "F037",
+      "statement": "The file_credit_card_transaction_dispute_4829 tool requires contacted_merchant as a boolean; the agent must ask whether the user tried to resolve the issue with the merchant first and pass true or false."
+    },
+    {
+      "id": "F038",
+      "statement": "The file_credit_card_transaction_dispute_4829 tool requires purchase_date as a string in MM/DD/YYYY format containing the date on which the disputed transaction occurred."
+    },
+    {
+      "id": "F039",
+      "statement": "The file_credit_card_transaction_dispute_4829 tool requires issue_noticed_date as a string in MM/DD/YYYY format; the agent must ask the user when they noticed the issue."
+    },
+    {
+      "id": "F040",
+      "statement": "The file_credit_card_transaction_dispute_4829 tool requires dispute_reason as a string; the agent must ask the user to select one, and the value must be selected exactly from: 'unauthorized_fraudulent_charge' for a charge that was not authorized or is fraudulent; 'duplicate_charge' for the same charge appearing multiple times; 'incorrect_amount' for an amount charged that differs from expected; 'goods_services_not_received' for never receiving what was paid for; 'goods_services_not_as_described' for receiving an item or service that differs from description; 'canceled_subscription_still_charging' for a subscription that was cancelled but charges continue; or 'refund_never_processed' for a merchant-promised refund that was never applied."
+    },
+    {
+      "id": "F041",
+      "statement": "The file_credit_card_transaction_dispute_4829 tool requires resolution_requested as a string; the agent must ask the user what resolution they want, and the value must be selected exactly from: 'full_refund' for a complete refund of the transaction amount; 'partial_refund' for a partial amount; or 'reversal_of_charge' for a charge reversal or chargeback."
+    },
+    {
+      "id": "F042",
+      "statement": "The file_credit_card_transaction_dispute_4829 tool has partial_refund_amount as an optional number, and it is required only when resolution_requested is 'partial_refund'; it must contain the dollar amount for the partial refund."
+    },
+    {
+      "id": "F043",
+      "statement": "The file_credit_card_transaction_dispute_4829 tool requires eligible_for_provisional_credit as a boolean that the agent must determine from the Provisional Credit Eligibility Guidelines and pass as true or false."
+    },
+    {
+      "id": "F044",
+      "statement": "When processing a credit card transaction dispute, the agent must determine whether the customer is eligible for provisional credit."
+    },
+    {
+      "id": "F045",
+      "statement": "Provisional credit means the disputed amount is temporarily credited back to the customer's account while the investigation is ongoing."
+    },
+    {
+      "id": "F046",
+      "statement": "A customer is eligible for provisional credit if all eligibility criteria are true: the credit card account has been open for at least 60 days, the dispute reason satisfies the eligible reason category, the amount is at least $25.00 and does not exceed the card tier's maximum provisional credit limit, the customer has not filed more than 2 disputes in the past 12 months, and the contacted-merchant criterion is satisfied for non-fraud disputes."
+    },
+    {
+      "id": "F047",
+      "statement": "The account-standing criterion for provisional credit is that the customer's credit card account has been open for at least 60 days."
+    },
+    {
+      "id": "F048",
+      "statement": "The dispute-reason category criterion for provisional credit is satisfied only when the dispute reason is 'unauthorized_fraudulent_charge', 'duplicate_charge', or 'goods_services_not_received' with the additional condition that the purchase was made more than 30 days ago."
+    },
+    {
+      "id": "F049",
+      "statement": "The dispute-amount criterion for provisional credit is that the transaction amount must be at least $25.00 and must not exceed the card's maximum provisional credit limit based on card tier."
+    },
+    {
+      "id": "F050",
+      "statement": "The previous-disputes criterion for provisional credit is that the customer has not filed more than 2 disputes in the past 12 months."
+    },
+    {
+      "id": "F051",
+      "statement": "For non-fraud disputes, meaning anything other than 'unauthorized_fraudulent_charge', the provisional-credit contacted-merchant criterion is that the customer must have attempted to resolve the issue with the merchant first."
+    },
+    {
+      "id": "F052",
+      "statement": "For provisional credit, Entry Tier cards have a maximum provisional credit limit of $2500.00 and include Bronze Rewards Card, EcoCard, Business Bronze Rewards Card, and Crypto-Cash Back Card."
+    },
+    {
+      "id": "F053",
+      "statement": "For provisional credit, Mid Tier cards have a maximum provisional credit limit of $5000.00 and include Silver Rewards Card, Business Silver Rewards Card, Green Rewards Card, and Silver Zoom Card."
+    },
+    {
+      "id": "F054",
+      "statement": "For provisional credit, Premium Tier cards have a maximum provisional credit limit of $10000.00 and include Gold Rewards Card and Business Gold Rewards Card."
+    },
+    {
+      "id": "F055",
+      "statement": "For provisional credit, Elite Tier cards have a maximum provisional credit limit of $15000.00 and include Platinum Rewards Card and Business Platinum Rewards Card."
+    },
+    {
+      "id": "F056",
+      "statement": "For provisional credit, Invitation Tier cards have a maximum provisional credit limit of $25000.00 and include Diamond Elite Card."
+    },
+    {
+      "id": "F057",
+      "statement": "A customer is not eligible for provisional credit if the account is less than 60 days old."
+    },
+    {
+      "id": "F058",
+      "statement": "A customer is not eligible for provisional credit if the dispute reason is 'incorrect_amount'."
+    },
+    {
+      "id": "F059",
+      "statement": "A customer is not eligible for provisional credit if the dispute reason is 'goods_services_not_as_described'."
+    },
+    {
+      "id": "F060",
+      "statement": "A customer is not eligible for provisional credit if the dispute reason is 'canceled_subscription_still_charging'."
+    },
+    {
+      "id": "F061",
+      "statement": "A customer is not eligible for provisional credit if the dispute reason is 'refund_never_processed'."
+    },
+    {
+      "id": "F062",
+      "statement": "A customer is not eligible for provisional credit if the transaction amount is under $25.00."
+    },
+    {
+      "id": "F063",
+      "statement": "A customer is not eligible for provisional credit if the transaction amount exceeds the card's maximum provisional credit limit based on tier."
+    },
+    {
+      "id": "F064",
+      "statement": "For non-fraud disputes, a customer is not eligible for provisional credit if the customer did not contact the merchant first."
+    },
+    {
+      "id": "F065",
+      "statement": "For a 'goods_services_not_received' dispute, a customer is not eligible for provisional credit if the purchase was made within the last 30 days because the merchant may still be processing delivery."
+    },
+    {
+      "id": "F066",
+      "statement": "A customer who has filed more than 2 disputes in the past 12 months does not satisfy the previous-disputes criterion for provisional credit."
+    },
+    {
+      "id": "F067",
+      "statement": "To retrieve a user's credit card dispute history, use the get_user_dispute_history_7291 tool."
+    },
+    {
+      "id": "F068",
+      "statement": "The get_user_dispute_history_7291 tool must be called with the user's user_id to get a list of all disputes filed by that user, including dispute dates, statuses, and transaction details."
+    },
+    {
+      "id": "F069",
+      "statement": "Use get_user_dispute_history_7291 when a consolidated list of all credit card disputes filed by a specific user is needed."
+    },
+    {
+      "id": "F070",
+      "statement": "Use get_user_dispute_history_7291 when reviewing the current status or historical progression of a user's disputes."
+    },
+    {
+      "id": "F071",
+      "statement": "Use get_user_dispute_history_7291 when transaction-level context for each dispute is needed."
+    },
+    {
+      "id": "F072",
+      "statement": "The required input for get_user_dispute_history_7291 is user_id, the user's canonical internal identifier."
+    },
+    {
+      "id": "F073",
+      "statement": "Before calling get_user_dispute_history_7291, ensure that the user_id is correct and current."
+    },
+    {
+      "id": "F074",
+      "statement": "The first procedure step for checking dispute history is to obtain the user_id for the user whose dispute history needs review."
+    },
+    {
+      "id": "F075",
+      "statement": "The second procedure step for checking dispute history is to invoke get_user_dispute_history_7291 with the user_id parameter."
+    },
+    {
+      "id": "F076",
+      "statement": "The third procedure step for checking dispute history is to review the returned list of disputes and associated transaction details."
+    },
+    {
+      "id": "F077",
+      "statement": "The expected output of get_user_dispute_history_7291 is a list of dispute records for the specified user."
+    },
+    {
+      "id": "F078",
+      "statement": "Each get_user_dispute_history_7291 dispute record includes dispute identifiers and metadata: dispute_id, dispute_date, status such as open, under_review, or closed, and last_updated_at."
+    },
+    {
+      "id": "F079",
+      "statement": "Each get_user_dispute_history_7291 dispute record includes transaction details related to the dispute: transaction_id, transaction_date, merchant_name, amount, currency, and card_last4."
+    },
+    {
+      "id": "F080",
+      "statement": "Each get_user_dispute_history_7291 dispute record includes additional dispute context if available: reason_code, outcome, and notes or internal comments."
+    },
+    {
+      "id": "F081",
+      "statement": "When interpreting dispute-history results, verify that the list is complete for the user_id that was queried."
+    },
+    {
+      "id": "F082",
+      "statement": "When interpreting dispute-history results, use dispute_date and last_updated_at to understand timeline and recency."
+    },
+    {
+      "id": "F083",
+      "statement": "When interpreting dispute-history results, use status to determine whether action is needed."
+    },
+    {
+      "id": "F084",
+      "statement": "When interpreting dispute-history results, review transaction details to confirm the disputed transaction context."
+    },
+    {
+      "id": "F085",
+      "statement": "An empty result set from get_user_dispute_history_7291 means either the user has not filed any credit card disputes or the user_id is incorrect."
+    },
+    {
+      "id": "F086",
+      "statement": "For an empty get_user_dispute_history_7291 result set, confirm that the user_id is correct and try again."
+    },
+    {
+      "id": "F087",
+      "statement": "For a permission or access error when checking dispute history, ensure the agent has the necessary internal privileges to view dispute histories."
+    },
+    {
+      "id": "F088",
+      "statement": "For an invalid or malformed user_id when checking dispute history, validate the format of the user_id and reissue the request."
+    },
+    {
+      "id": "F089",
+      "statement": "For partial or truncated dispute-history data, retry the get_user_dispute_history_7291 call."
+    },
+    {
+      "id": "F090",
+      "statement": "If partial or truncated dispute-history data persists after retrying, capture the request context and escalate through internal support channels."
+    },
+    {
+      "id": "F091",
+      "statement": "The get_user_dispute_history_7291 tool returns only credit card disputes associated with the specified user_id."
+    },
+    {
+      "id": "F092",
+      "statement": "User data from dispute-history handling must always be handled in accordance with internal data handling and privacy requirements."
+    },
+    {
+      "id": "F093",
+      "statement": "Before ordering a replacement credit card, the agent must verify the customer's identity using standard verification procedures."
+    },
+    {
+      "id": "F094",
+      "statement": "Before ordering a replacement credit card, the agent must look up the customer's credit card account."
+    },
+    {
+      "id": "F095",
+      "statement": "Before ordering a replacement credit card, the agent must confirm the shipping address with the customer; the address may be primary or alternate and must include any unit or suite information."
+    },
+    {
+      "id": "F096",
+      "statement": "Before ordering a replacement credit card, the agent must ask for the replacement reason and record exactly one of: fraud_suspected, lost, stolen, damaged, expired, or other."
+    },
+    {
+      "id": "F097",
+      "statement": "Before ordering a replacement credit card, the agent must ask whether the customer wants expedited shipping and advise on possible fees by tier according to the shipping selection rules."
+    },
+    {
+      "id": "F098",
+      "statement": "Before ordering a replacement credit card, the agent must confirm eligibility for replacement in the knowledge base before proceeding."
+    },
+    {
+      "id": "F099",
+      "statement": "The agent must not unlock or call the replacement-card tool unless the customer is eligible for replacement."
+    },
+    {
+      "id": "F100",
+      "statement": "If the customer is not eligible for replacement, the agent must explain next steps per the knowledge base."
+    },
+    {
+      "id": "F101",
+      "statement": "Replacement-credit-card standard delivery takes 7-10 business days and has no fee."
+    },
+    {
+      "id": "F102",
+      "statement": "Replacement-credit-card expedited shipping takes 2-3 business days."
+    },
+    {
+      "id": "F103",
+      "statement": "For replacement-credit-card expedited shipping, Entry-tier cards have a $15.00 fee and include Bronze Rewards, EcoCard, and Business Bronze."
+    },
+    {
+      "id": "F104",
+      "statement": "For replacement-credit-card expedited shipping, Mid-tier cards have a $10.00 fee and include Silver Rewards, Business Silver, Green Rewards, and Silver Zoom."
+    },
+    {
+      "id": "F105",
+      "statement": "For replacement-credit-card expedited shipping, Premium-tier and above cards have a $0.00 complimentary fee and include Gold, Platinum, and Diamond Elite."
+    },
+    {
+      "id": "F106",
+      "statement": "If the replacement-card reason is fraud_suspected or stolen, the agent must strongly recommend expedited shipping to minimize exposure."
+    },
+    {
+      "id": "F107",
+      "statement": "If the replacement-card reason is fraud_suspected or stolen, the agent must remind the customer to review recent transactions for unauthorized activity."
+    },
+    {
+      "id": "F108",
+      "statement": "To order a replacement credit card, unlock the tool using unlock_discoverable_agent_tool with tool_name order_replacement_credit_card_7291."
+    },
+    {
+      "id": "F109",
+      "statement": "To order a replacement credit card, call the tool using call_discoverable_agent_tool with tool_name order_replacement_credit_card_7291."
+    },
+    {
+      "id": "F110",
+      "statement": "The order_replacement_credit_card_7291 tool call must include the customer credit card account identifier, such as account_id or card_id from the account lookup."
+    },
+    {
+      "id": "F111",
+      "statement": "The order_replacement_credit_card_7291 tool call must include the replacement reason as one of fraud_suspected, lost, stolen, damaged, expired, or other."
+    },
+    {
+      "id": "F112",
+      "statement": "The order_replacement_credit_card_7291 tool call must include the confirmed shipping_address."
+    },
+    {
+      "id": "F113",
+      "statement": "The order_replacement_credit_card_7291 tool call must include shipping_speed as standard or expedited."
+    },
+    {
+      "id": "F114",
+      "statement": "The order_replacement_credit_card_7291 tool call must include expedited_fee_acknowledgement with customer consent captured if a fee applies based on tier."
+    },
+    {
+      "id": "F115",
+      "statement": "The order_replacement_credit_card_7291 tool call must include notes with any relevant context, such as travel dates, a fraud report reference, or delivery instructions."
+    },
+    {
+      "id": "F116",
+      "statement": "After a replacement credit card order is submitted, the old card is automatically cancelled for security and will no longer work for new purchases."
+    },
+    {
+      "id": "F117",
+      "statement": "After a replacement credit card order is submitted, the agent must communicate the expected delivery window based on the selected method: standard delivery is 7-10 business days and expedited shipping is 2-3 business days."
+    },
+    {
+      "id": "F118",
+      "statement": "After a replacement credit card order is submitted, the agent must advise the customer to watch for email notifications when the order is placed and when the card ships."
+    },
+    {
+      "id": "F119",
+      "statement": "If the replacement-card reason was fraud_suspected or stolen, after submitting the order the agent must remind the customer to review recent transactions and dispute any unauthorized charges in the app or website."
+    },
+    {
+      "id": "F120",
+      "statement": "After a replacement credit card order is submitted, the agent must document the interaction and the replacement order details in the customer record."
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Card-number retrieval and secure viewing methods",
+      "spec": "Future support case record should cover last-four retrieval via the discovered tool, explain that the tool replaces step-by-step last-four instructions, preserve the identity-verification caveat, and separately cover full-card-number viewing in the mobile app and website plus security tips.",
+      "included_fact_ids": [
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F017",
+        "F018",
+        "F019",
+        "F020",
+        "F021",
+        "F022",
+        "F023"
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Unauthorized fraudulent charge dispute with cancellation and replacement",
+      "spec": "Future support case record should demonstrate filing a formal dispute for 'unauthorized_fraudulent_charge' as an independently sufficient provisional-credit reason when all other eligibility criteria are met, use card_action 'cancel_and_reissue', and include the replacement-card workflow for fraud_suspected or stolen with expedited-shipping recommendation and required after-order notices.",
+      "included_fact_ids": [
+        "F024",
+        "F025",
+        "F026",
+        "F027",
+        "F028",
+        "F029",
+        "F030",
+        "F031",
+        "F032",
+        "F033",
+        "F034",
+        "F035",
+        "F036",
+        "F037",
+        "F038",
+        "F039",
+        "F040",
+        "F041",
+        "F042",
+        "F043",
+        "F044",
+        "F045",
+        "F046",
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F093",
+        "F094",
+        "F095",
+        "F096",
+        "F097",
+        "F098",
+        "F099",
+        "F100",
+        "F101",
+        "F102",
+        "F103",
+        "F104",
+        "F105",
+        "F106",
+        "F107",
+        "F108",
+        "F109",
+        "F110",
+        "F111",
+        "F112",
+        "F113",
+        "F114",
+        "F115",
+        "F116",
+        "F117",
+        "F118",
+        "F119",
+        "F120"
+      ]
+    },
+    {
+      "id": "C",
+      "title": "Duplicate charge dispute kept active with partial refund and normal dispute-history review",
+      "spec": "Future support case record should demonstrate 'duplicate_charge' as an independently sufficient provisional-credit reason when all other eligibility criteria are met, use card_action 'keep_active', include resolution_requested 'partial_refund' with partial_refund_amount, require merchant contact for a non-fraud dispute, and include a successful dispute-history lookup and interpretation.",
+      "included_fact_ids": [
+        "F024",
+        "F025",
+        "F026",
+        "F027",
+        "F028",
+        "F029",
+        "F030",
+        "F031",
+        "F032",
+        "F033",
+        "F034",
+        "F035",
+        "F036",
+        "F037",
+        "F038",
+        "F039",
+        "F040",
+        "F041",
+        "F042",
+        "F043",
+        "F044",
+        "F045",
+        "F046",
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F067",
+        "F068",
+        "F069",
+        "F070",
+        "F071",
+        "F072",
+        "F073",
+        "F074",
+        "F075",
+        "F076",
+        "F077",
+        "F078",
+        "F079",
+        "F080",
+        "F081",
+        "F082",
+        "F083",
+        "F084"
+      ]
+    },
+    {
+      "id": "D",
+      "title": "Goods not received provisional-credit eligibility and exclusions",
+      "spec": "Future support case record should make 'goods_services_not_received' more than 30 days after purchase independently sufficient for the dispute-reason criterion when all other eligibility criteria are met, and should also show separate internal eligibility checks for the stated not-eligible scenarios, thresholds, previous-dispute limit, merchant-contact exclusion, and tier maximums.",
+      "included_fact_ids": [
+        "F044",
+        "F045",
+        "F046",
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F057",
+        "F058",
+        "F059",
+        "F060",
+        "F061",
+        "F062",
+        "F063",
+        "F064",
+        "F065",
+        "F066"
+      ]
+    },
+    {
+      "id": "E",
+      "title": "Dispute-history troubleshooting and replacement-card eligibility workflow",
+      "spec": "Future support case record should cover dispute-history error handling for empty results, permission/access errors, malformed user_id, and partial or truncated data, and should also cover replacement-card eligibility gating, shipping options and fees, required tool parameters, automatic cancellation of the old card, customer notifications, and documentation.",
+      "included_fact_ids": [
+        "F067",
+        "F068",
+        "F069",
+        "F070",
+        "F071",
+        "F072",
+        "F073",
+        "F074",
+        "F075",
+        "F076",
+        "F077",
+        "F078",
+        "F079",
+        "F080",
+        "F081",
+        "F082",
+        "F083",
+        "F084",
+        "F085",
+        "F086",
+        "F087",
+        "F088",
+        "F089",
+        "F090",
+        "F091",
+        "F092",
+        "F093",
+        "F094",
+        "F095",
+        "F096",
+        "F097",
+        "F098",
+        "F099",
+        "F100",
+        "F101",
+        "F102",
+        "F103",
+        "F104",
+        "F105",
+        "F106",
+        "F107",
+        "F108",
+        "F109",
+        "F110",
+        "F111",
+        "F112",
+        "F113",
+        "F114",
+        "F115",
+        "F116",
+        "F117",
+        "F118",
+        "F119",
+        "F120"
+      ]
+    }
+  ]
+}

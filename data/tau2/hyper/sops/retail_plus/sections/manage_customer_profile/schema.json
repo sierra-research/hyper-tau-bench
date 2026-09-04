@@ -1,0 +1,239 @@
+{
+  "id": "retail_plus_manage_customer_profile_policy_fact_schema_001",
+  "domain": "retail_plus",
+  "display_name": "Update the customer profile",
+  "global_rules_path": "tau2/hyper/sops/retail_plus/global_rules.json",
+  "section_id": "manage_customer_profile",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/retail_plus_sop.md",
+    "heading": "## Updating the customer's default shipping address",
+    "component_headings": [
+      "## What you can do for customers",
+      "## Updating the customer's default shipping address"
+    ]
+  },
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": [
+      {
+        "section_id": "customer_identity",
+        "fact_ids": [
+          "one_customer_per_conversation_own_profile_only",
+          "multiple_requests_same_customer_allowed",
+          "identify_customer_first_every_time",
+          "lookup_by_account_id_email_or_name_zip",
+          "account_id_requires_email_or_name_zip_verification",
+          "pull_full_profile_after_verification"
+        ],
+        "relationship": "global_prerequisite",
+        "description": "Profile updates start only after the customer and account ownership are verified."
+      },
+      {
+        "section_id": "service_foundations",
+        "fact_ids": [
+          "customer_profile_fields",
+          "order_shipping_address_is_order_specific",
+          "documented_schema_is_complete",
+          "out_of_schema_requests_are_unsupported",
+          "read_and_write_documented_fields_only",
+          "profile_default_address_allowed_action",
+          "authorized_actions_are_closed_scope",
+          "cannot_add_new_payment_method",
+          "cannot_change_profile_email",
+          "record_changes_require_complete_recap_and_confirmation",
+          "ambiguous_confirmation_is_insufficient",
+          "responses_must_be_grounded_without_invention",
+          "clarify_before_irreversible_action",
+          "transfer_when_unsupported_request_is_escalated",
+          "transfer_when_handling_is_genuinely_unclear",
+          "transfer_uses_exact_notice"
+        ],
+        "relationship": "shared_reference",
+        "description": "Profile maintenance uses the shared profile model, channel scope, and record-change controls."
+      }
+    ]
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "update_default_shipping_address",
+        "label": "Update the default shipping address",
+        "kind": "procedure",
+        "fact_ids": [
+          "default_address_update_allowed"
+        ]
+      },
+      {
+        "id": "confirm_default_address",
+        "label": "Read back and confirm the new address",
+        "kind": "confirmation_gate",
+        "parent_id": "update_default_shipping_address",
+        "order": 1,
+        "fact_ids": [
+          "default_address_requires_readback_and_confirmation"
+        ]
+      },
+      {
+        "id": "write_default_address",
+        "label": "Update the profile default",
+        "kind": "record_mutation",
+        "parent_id": "update_default_shipping_address",
+        "order": 2,
+        "fact_ids": [
+          "default_address_affects_future_orders_only"
+        ]
+      },
+      {
+        "id": "existing_order_address_boundary",
+        "label": "Keep existing order addresses separate",
+        "kind": "scope_boundary",
+        "parent_id": "update_default_shipping_address",
+        "order": 3,
+        "fact_ids": [
+          "existing_order_addresses_changed_individually"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "write_default_address",
+        "type": "requires",
+        "target_id": "confirm_default_address"
+      },
+      {
+        "source_id": "existing_order_address_boundary",
+        "type": "constrains",
+        "target_id": "write_default_address"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "default_address_update_allowed",
+      "category": "profile_address",
+      "statement": "The agent can update the customer's default shipping address on the profile."
+    },
+    {
+      "id": "default_address_requires_readback_and_confirmation",
+      "category": "profile_address",
+      "statement": "For a default shipping address update, the customer gives the new address, the agent reads it back, gets confirmation, and then updates the profile."
+    },
+    {
+      "id": "default_address_affects_future_orders_only",
+      "category": "profile_address",
+      "statement": "The default shipping address is pre-filled on future orders and does not change the shipping address on existing orders."
+    },
+    {
+      "id": "existing_order_addresses_changed_individually",
+      "category": "profile_address",
+      "statement": "Existing orders have their own shipping addresses; if an existing order address needs to be changed, it has to be changed individually if the order remains eligible for that change."
+    }
+  ],
+  "transformations": [
+    {
+      "id": "manage_customer_profile_full_site_screenshots",
+      "representation": "website_screenshot",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/manage_customer_profile/bundles/retail_full_site/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/047_addresses.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/047_addresses.html",
+          "included_fact_ids": [
+            "default_address_affects_future_orders_only"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "retail_manage_customer_profile_support_transcripts",
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/manage_customer_profile/bundles/retail_full_site/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/retail_plus/sections/manage_customer_profile/support_transcripts_001/eval_manifest.json",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_customer_profile/support_transcripts_001/case_001.md",
+          "kit_filename": "case_001.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_customer_profile/support_transcripts_001/case_002.md",
+          "kit_filename": "case_002.md",
+          "included_fact_ids": [
+            "default_address_update_allowed",
+            "default_address_requires_readback_and_confirmation"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_customer_profile/support_transcripts_001/case_003.md",
+          "kit_filename": "case_003.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_customer_profile/support_transcripts_001/case_004.md",
+          "kit_filename": "case_004.md",
+          "included_fact_ids": [
+            "existing_order_addresses_changed_individually"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_customer_profile/support_transcripts_001/case_005.md",
+          "kit_filename": "case_005.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_customer_profile/support_transcripts_001/case_006.md",
+          "kit_filename": "case_006.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_customer_profile/support_transcripts_001/case_007.md",
+          "kit_filename": "case_007.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_customer_profile/support_transcripts_001/case_008.md",
+          "kit_filename": "case_008.md",
+          "included_fact_ids": []
+        }
+      ]
+    }
+  ],
+  "transformation_bundles": [
+    {
+      "id": "manage_customer_profile_multimodal",
+      "description": "One profile-update story told across two artifact sets: the NorthStar storefront capture (the Addresses page owns the default-address forward-only scope) and the QA-approved support case records (the agent's verbalized rules own the update capability, the read-back-and-confirm gate, and the per-order handling of in-flight addresses). Every section fact is owned by exactly one member; the one restatement a case needs for coherence is a declared dependency.",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/manage_customer_profile/bundles/retail_full_site/stub.md",
+      "fact_ids": [
+        "default_address_affects_future_orders_only",
+        "default_address_requires_readback_and_confirmation",
+        "default_address_update_allowed",
+        "existing_order_addresses_changed_individually"
+      ],
+      "members": [
+        {
+          "transformation_id": "manage_customer_profile_full_site_screenshots",
+          "primary": true,
+          "authoritative_fact_ids": [
+            "default_address_affects_future_orders_only"
+          ]
+        },
+        {
+          "transformation_id": "retail_manage_customer_profile_support_transcripts",
+          "authoritative_fact_ids": [
+            "default_address_requires_readback_and_confirmation",
+            "default_address_update_allowed",
+            "existing_order_addresses_changed_individually"
+          ],
+          "depends_on_fact_ids": [
+            "default_address_affects_future_orders_only"
+          ]
+        }
+      ]
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/retail_plus/hard_bundle_001/manage_customer_profile_transformation_pack.json"
+    }
+  ]
+}

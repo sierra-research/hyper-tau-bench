@@ -1,0 +1,1697 @@
+{
+  "id": "banking_checking_referral_programs_and_optimization_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "checking_referral_programs_and_optimization",
+  "display_name": "Checking referral programs, eligibility, and optimization",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/checking_referral_programs_and_optimization/source.md",
+    "heading": "## Checking referral programs, eligibility, and optimization"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/checking_referral_programs_and_optimization/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/checking_referral_programs_and_optimization/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/checking_referral_programs_and_optimization/evidence_corpus_hard_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/checking_referral_programs_and_optimization/client_overlay_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/checking_referral_programs_and_optimization/client_overlay_deposit_services_001/transformation_pack.json"
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook verification requirements before account-specific referral-history or account information.",
+      "Eligibility must be checked before recommending a referral program.",
+      "Support console turns may expose full comparison matrices and referral-history calculations; Agent turns should communicate the relevant eligibility conclusion and recommendation."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "eligibility verification before referral recommendations",
+      "exact rolling-window and tenure calculations",
+      "lossless bonus, cap, deposit, deadline, and product-term matrices"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_047.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_048.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_blue_account_010.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_bluest_account_003.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_dark_green_account_010.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_gold_years_account_010.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_green_fee-free_account_007.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_light_blue_account_007.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_purple_account_011.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_checking_accounts_beige_012.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_checking_accounts_cobalt_blue_005.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_checking_accounts_lime_green_003.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_checking_accounts_sky_blue_002.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_checking_accounts_true_blue_002.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_checking_accounts_world_blue_007.json"
+    ],
+    "summary": "Shared checking-referral eligibility and status rules, complete personal and business referral terms, and all supporting product facts from mixed-purpose referral documents.",
+    "rules": [
+      "Check referral eligibility and history before recommending a program.",
+      "Preserve every rolling-window boundary, tenure rule, status, bonus, annual cap, deposit threshold, deadline, and account-specific condition.",
+      "When a source document also contains non-referral product facts, preserve those facts before withholding the document.",
+      "Do not infer a unit for a source value whose unit is omitted; state the omission explicitly."
+    ],
+    "candidate": {
+      "id": "checking_referral_programs_and_optimization",
+      "title": "Checking referral programs, eligibility, and optimization",
+      "priority": 1,
+      "related_task_ids": [
+        "task_072",
+        "task_098",
+        "task_099",
+        "task_100",
+        "task_101",
+        "task_102"
+      ],
+      "recommended_case_count": 9,
+      "losslessness_risks": [
+        "Do not collapse the rolling 9-day window into a calendar-week or generic frequency limit.",
+        "Do not infer referral eligibility from an account the referrer owns; tenure starts at the earliest checking-account opening.",
+        "Keep referrer and referred bonuses, annual caps, deposits, deadlines, and tenure thresholds separate for every product.",
+        "Preserve non-referral benefit, fee, timing, support, transfer, and interest facts from mixed-purpose documents.",
+        "Preserve Sky Blue's tenure basis as its source's 'banking history' wording rather than narrowing it to checking history.",
+        "Preserve both stated 30-day retention anchors (after the qualifying period ends versus after the deposit is made) without merging them."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "checking_referral_programs_and_optimization_journey",
+        "label": "Checking referral programs, eligibility, and optimization",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "checking_referral_programs_and_optimization_shared_rules",
+        "label": "Shared workflow rules",
+        "kind": "shared_reference",
+        "parent_id": "checking_referral_programs_and_optimization_journey",
+        "order": 1,
+        "description": "Rules, prerequisites, and reference values used by more than one customer pathway in this journey.",
+        "fact_ids": [
+          "F002",
+          "F003",
+          "F004",
+          "F005",
+          "F006",
+          "F007",
+          "F008",
+          "F013",
+          "F014",
+          "F015",
+          "F016",
+          "F023",
+          "F024",
+          "F025",
+          "F026",
+          "F027",
+          "F028",
+          "F029",
+          "F030",
+          "F031",
+          "F040",
+          "F041",
+          "F042",
+          "F043",
+          "F044",
+          "F063",
+          "F069",
+          "F070",
+          "F071",
+          "F073",
+          "F074",
+          "F078",
+          "F079",
+          "F080",
+          "F081",
+          "F082",
+          "F085",
+          "F086",
+          "F087",
+          "F088",
+          "F089",
+          "F100",
+          "F101",
+          "F102",
+          "F103",
+          "F104",
+          "F129",
+          "F130",
+          "F141",
+          "F142",
+          "F143",
+          "F144",
+          "F145",
+          "F154",
+          "F155",
+          "F156",
+          "F177",
+          "F178"
+        ]
+      },
+      {
+        "id": "checking_referral_programs_and_optimization_path_a",
+        "label": "Shared referral eligibility, rolling-window calculation, deposit conditions, and status meanings",
+        "kind": "scenario_branch",
+        "parent_id": "checking_referral_programs_and_optimization_journey",
+        "order": 2,
+        "description": "Policy path represented by case A.",
+        "fact_ids": [
+          "F009",
+          "F010",
+          "F011",
+          "F012",
+          "F017",
+          "F018",
+          "F019",
+          "F020",
+          "F021",
+          "F022",
+          "F032",
+          "F033",
+          "F181"
+        ]
+      },
+      {
+        "id": "checking_referral_programs_and_optimization_path_b",
+        "label": "Personal checking referral matrix and supporting Blue, Purple, and program-usage terms",
+        "kind": "scenario_branch",
+        "parent_id": "checking_referral_programs_and_optimization_journey",
+        "order": 3,
+        "description": "Policy path represented by case B.",
+        "fact_ids": [
+          "F034",
+          "F035",
+          "F036",
+          "F037",
+          "F038",
+          "F039",
+          "F061",
+          "F062",
+          "F064",
+          "F065",
+          "F066",
+          "F067",
+          "F068",
+          "F072",
+          "F075",
+          "F076",
+          "F077",
+          "F083",
+          "F084",
+          "F090",
+          "F091",
+          "F092",
+          "F093",
+          "F094",
+          "F095",
+          "F096",
+          "F097",
+          "F098",
+          "F099"
+        ]
+      },
+      {
+        "id": "checking_referral_programs_and_optimization_path_c",
+        "label": "Bluest Account benefits and referral requirements",
+        "kind": "scenario_branch",
+        "parent_id": "checking_referral_programs_and_optimization_journey",
+        "order": 4,
+        "description": "Policy path represented by case C.",
+        "fact_ids": [
+          "F045",
+          "F046",
+          "F047",
+          "F048",
+          "F049",
+          "F050",
+          "F051",
+          "F052",
+          "F053",
+          "F054",
+          "F055",
+          "F056",
+          "F057",
+          "F058",
+          "F059",
+          "F060"
+        ]
+      },
+      {
+        "id": "checking_referral_programs_and_optimization_path_d",
+        "label": "Beige enterprise referrals and Cobalt Blue payment methods and referral requirements",
+        "kind": "scenario_branch",
+        "parent_id": "checking_referral_programs_and_optimization_journey",
+        "order": 5,
+        "description": "Policy path represented by case D.",
+        "fact_ids": [
+          "F105",
+          "F106",
+          "F107",
+          "F108",
+          "F109",
+          "F110",
+          "F111",
+          "F112",
+          "F113",
+          "F114",
+          "F115",
+          "F116",
+          "F117",
+          "F118",
+          "F119",
+          "F120",
+          "F121",
+          "F122",
+          "F123",
+          "F124",
+          "F125",
+          "F126",
+          "F127",
+          "F128"
+        ]
+      },
+      {
+        "id": "checking_referral_programs_and_optimization_path_e",
+        "label": "Lime Green manager service and referrals plus Sky Blue free-period referral eligibility",
+        "kind": "scenario_branch",
+        "parent_id": "checking_referral_programs_and_optimization_journey",
+        "order": 6,
+        "description": "Policy path represented by case E.",
+        "fact_ids": [
+          "F131",
+          "F132",
+          "F133",
+          "F134",
+          "F135",
+          "F136",
+          "F137",
+          "F138",
+          "F139",
+          "F140",
+          "F146",
+          "F147",
+          "F148",
+          "F149",
+          "F150",
+          "F151",
+          "F152",
+          "F153"
+        ]
+      },
+      {
+        "id": "checking_referral_programs_and_optimization_path_f",
+        "label": "True Blue thresholds and referrals plus World Blue interest and referrals",
+        "kind": "scenario_branch",
+        "parent_id": "checking_referral_programs_and_optimization_journey",
+        "order": 7,
+        "description": "Policy path represented by case F.",
+        "fact_ids": [
+          "F157",
+          "F158",
+          "F159",
+          "F160",
+          "F161",
+          "F162",
+          "F163",
+          "F164",
+          "F165",
+          "F166",
+          "F167",
+          "F168",
+          "F169",
+          "F170",
+          "F171",
+          "F172",
+          "F173",
+          "F174",
+          "F175",
+          "F176",
+          "F179",
+          "F180"
+        ]
+      },
+      {
+        "id": "checking_referral_programs_and_optimization_path_g",
+        "label": "Personal referral optimization at the rolling-window boundary",
+        "kind": "scenario_branch",
+        "parent_id": "checking_referral_programs_and_optimization_journey",
+        "order": 8,
+        "description": "Policy path represented by case G.",
+        "fact_ids": []
+      },
+      {
+        "id": "checking_referral_programs_and_optimization_path_h",
+        "label": "Business referral optimization with tenure and owned-product traps",
+        "kind": "scenario_branch",
+        "parent_id": "checking_referral_programs_and_optimization_journey",
+        "order": 9,
+        "description": "Policy path represented by case H.",
+        "fact_ids": []
+      },
+      {
+        "id": "checking_referral_programs_and_optimization_path_i",
+        "label": "Two-slot personal and business referral optimization",
+        "kind": "scenario_branch",
+        "parent_id": "checking_referral_programs_and_optimization_journey",
+        "order": 10,
+        "description": "Policy path represented by case I.",
+        "fact_ids": []
+      },
+      {
+        "id": "checking_referral_programs_and_optimization_path_j",
+        "label": "Multi-referral optimization after verified history corrects customer recollection",
+        "kind": "scenario_branch",
+        "parent_id": "checking_referral_programs_and_optimization_journey",
+        "order": 11,
+        "description": "Policy path represented by case J.",
+        "fact_ids": []
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "checking_referral_programs_and_optimization_path_a",
+        "type": "uses_shared_rules",
+        "target_id": "checking_referral_programs_and_optimization_shared_rules"
+      },
+      {
+        "source_id": "checking_referral_programs_and_optimization_path_b",
+        "type": "uses_shared_rules",
+        "target_id": "checking_referral_programs_and_optimization_shared_rules"
+      },
+      {
+        "source_id": "checking_referral_programs_and_optimization_path_c",
+        "type": "uses_shared_rules",
+        "target_id": "checking_referral_programs_and_optimization_shared_rules"
+      },
+      {
+        "source_id": "checking_referral_programs_and_optimization_path_d",
+        "type": "uses_shared_rules",
+        "target_id": "checking_referral_programs_and_optimization_shared_rules"
+      },
+      {
+        "source_id": "checking_referral_programs_and_optimization_path_e",
+        "type": "uses_shared_rules",
+        "target_id": "checking_referral_programs_and_optimization_shared_rules"
+      },
+      {
+        "source_id": "checking_referral_programs_and_optimization_path_f",
+        "type": "uses_shared_rules",
+        "target_id": "checking_referral_programs_and_optimization_shared_rules"
+      },
+      {
+        "source_id": "checking_referral_programs_and_optimization_path_g",
+        "type": "uses_shared_rules",
+        "target_id": "checking_referral_programs_and_optimization_shared_rules"
+      },
+      {
+        "source_id": "checking_referral_programs_and_optimization_path_h",
+        "type": "uses_shared_rules",
+        "target_id": "checking_referral_programs_and_optimization_shared_rules"
+      },
+      {
+        "source_id": "checking_referral_programs_and_optimization_path_i",
+        "type": "uses_shared_rules",
+        "target_id": "checking_referral_programs_and_optimization_shared_rules"
+      },
+      {
+        "source_id": "checking_referral_programs_and_optimization_path_j",
+        "type": "uses_shared_rules",
+        "target_id": "checking_referral_programs_and_optimization_shared_rules"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "F002",
+      "statement": "Before giving referral recommendations or referral-term information, check whether the user is eligible to submit referrals.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F003",
+      "statement": "A customer can receive at most 2 referral bonuses in any rolling 9-day window.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F004",
+      "statement": "The third referral and every subsequent referral inside the same rolling 9-day window are automatically denied.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F005",
+      "statement": "The rolling 9-day referral cap applies across all checking account types, so referrals for different products share the same cap.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F006",
+      "statement": "The rolling 9-day referral count uses the exact timestamps of recent referral bonuses rather than calendar weeks.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F007",
+      "statement": "A referral auto-denied for exceeding the rolling-window limit cannot be reinstated within that same 9-day window.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F008",
+      "statement": "A customer may have multiple referrals in progress even though no more than 2 referral bonuses can be received in a rolling 9-day window.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_048"
+    },
+    {
+      "id": "F009",
+      "statement": "A referred person must be a new Rho-Bank customer with no existing checking or savings account and no closed Rho-Bank account within the past 12 months.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F010",
+      "statement": "A former Rho-Bank customer must wait 12 months after the last account closure before becoming referral-eligible.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_048"
+    },
+    {
+      "id": "F011",
+      "statement": "The referrer and referred person cannot be registered at the same address.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F012",
+      "statement": "A referred person must be at least 18 years old, except that the Light Green Account permits a minor with a guardian.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F013",
+      "statement": "For a business referral, the referred business must have a different primary owner from every existing Rho-Bank business account, determined by the SSN of the primary authorized signer.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F014",
+      "statement": "Every checking referral program requires its stated referrer-tenure threshold before participation.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F015",
+      "statement": "Referral tenure is measured from the opening date of the referrer's earliest Rho-Bank checking account.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F016",
+      "statement": "The type of checking account a referrer owns does not affect tenure or restrict which checking product the referrer may recommend, provided the applicable tenure threshold is met.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F017",
+      "statement": "A qualifying referral deposit must be new money and cannot be transferred from another Rho-Bank account.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F018",
+      "statement": "Qualifying new money may arrive by external-bank transfer, direct deposit, mobile check deposit, or cash or check deposit at a branch.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_048"
+    },
+    {
+      "id": "F019",
+      "statement": "A qualifying referral deposit must remain in the referred account for at least 30 days after the qualifying period ends.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F020",
+      "statement": "If a referred account closes within 90 days after opening, the referral bonus may be reversed or clawed back.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F021",
+      "statement": "A referral bonus cannot be combined with another new-account promotion or sign-up bonus; only one promotional offer may apply to a new account.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F022",
+      "statement": "Only one referral code can be applied to a new account.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F023",
+      "statement": "Referral status COMPLETE means the referred person opened the account, met the criteria, and the bonuses will be paid.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F024",
+      "statement": "Referral status IN_PROGRESS means the new account is open and is still working toward the qualifying-deposit requirement.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F025",
+      "statement": "Referral status NO_PROGRESS means the referred person has not started an application.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F026",
+      "statement": "Referral status APPLIED means the application was submitted and is awaiting a decision or review.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F027",
+      "statement": "Referral status REJECTED means the referral was denied, including for a rolling-window or eligibility failure.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F028",
+      "statement": "Referral status ERROR means a system error occurred; try again later or contact support.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_048"
+    },
+    {
+      "id": "F029",
+      "statement": "Common referral-rejection causes are 2 bonuses in the past 9 days, an existing or recent Rho-Bank relationship, a shared registered address, or a business sharing a primary owner with an existing business account.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_048"
+    },
+    {
+      "id": "F030",
+      "statement": "After a rolling-window rejection, wait until the oldest qualifying referral is more than 9 days old before trying again.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_048"
+    },
+    {
+      "id": "F031",
+      "statement": "Before sending more referrals, track the exact timing of the last two successful referral bonuses.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F032",
+      "statement": "Both the referrer and referred accounts must remain in good standing for referral bonuses to be paid and retained.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_047"
+    },
+    {
+      "id": "F033",
+      "statement": "Referral deposit windows vary by product, typically between 60-120 days, so use the specific product's exact deadline.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_048"
+    },
+    {
+      "id": "F034",
+      "statement": "Blue Account paper statements cost $2.50 per month.",
+      "source_doc": "doc_checking_accounts_blue_account_010"
+    },
+    {
+      "id": "F035",
+      "statement": "Blue Account balances earn 0.01% APY.",
+      "source_doc": "doc_checking_accounts_blue_account_010"
+    },
+    {
+      "id": "F036",
+      "statement": "A Blue Account customer can set a low-balance alert at a chosen threshold, such as $62.",
+      "source_doc": "doc_checking_accounts_blue_account_010"
+    },
+    {
+      "id": "F037",
+      "statement": "A Blue Account transfer to another bank typically completes in 2 business days.",
+      "source_doc": "doc_checking_accounts_blue_account_010"
+    },
+    {
+      "id": "F038",
+      "statement": "A returned Blue Account deposit incurs a $15.00 fee.",
+      "source_doc": "doc_checking_accounts_blue_account_010"
+    },
+    {
+      "id": "F039",
+      "statement": "An incoming Blue Account domestic wire costs $12.50 per wire.",
+      "source_doc": "doc_checking_accounts_blue_account_010"
+    },
+    {
+      "id": "F040",
+      "statement": "A successful Blue Account referral pays the referrer $35.",
+      "source_doc": "doc_checking_accounts_blue_account_010"
+    },
+    {
+      "id": "F041",
+      "statement": "A successful Blue Account referral pays the referred person a $30 welcome bonus.",
+      "source_doc": "doc_checking_accounts_blue_account_010"
+    },
+    {
+      "id": "F042",
+      "statement": "A Blue Account referral requires the referred person to deposit at least $500 within 60 days after opening.",
+      "source_doc": "doc_checking_accounts_blue_account_010"
+    },
+    {
+      "id": "F043",
+      "statement": "A Blue Account referrer needs at least 30 days of Rho-Bank checking history measured from the earliest checking account.",
+      "source_doc": "doc_checking_accounts_blue_account_010"
+    },
+    {
+      "id": "F044",
+      "statement": "The Blue Account referral program permits up to 5 bonuses per calendar year.",
+      "source_doc": "doc_checking_accounts_blue_account_010"
+    },
+    {
+      "id": "F045",
+      "statement": "A Bluest Account balance earns 2.25% APY.",
+      "source_doc": "doc_checking_accounts_bluest_account_003"
+    },
+    {
+      "id": "F046",
+      "statement": "Bluest Account includes up to 10 complimentary domestic outgoing wires per calendar month.",
+      "source_doc": "doc_checking_accounts_bluest_account_003"
+    },
+    {
+      "id": "F047",
+      "statement": "Bluest Account incoming domestic wires have a $0.00 fee.",
+      "source_doc": "doc_checking_accounts_bluest_account_003"
+    },
+    {
+      "id": "F048",
+      "statement": "Bluest Account includes a dedicated personal banker for complex transactions, expedited support, and account planning.",
+      "source_doc": "doc_checking_accounts_bluest_account_003"
+    },
+    {
+      "id": "F049",
+      "statement": "Bluest Account rebates third-party ATM fees up to $50 per monthly statement cycle.",
+      "source_doc": "doc_checking_accounts_bluest_account_003"
+    },
+    {
+      "id": "F050",
+      "statement": "Bluest Account includes up to 3 complimentary personal-check orders each year.",
+      "source_doc": "doc_checking_accounts_bluest_account_003"
+    },
+    {
+      "id": "F051",
+      "statement": "Bluest Account provides a 75.0% discount on an eligible safe-deposit-box rental.",
+      "source_doc": "doc_checking_accounts_bluest_account_003"
+    },
+    {
+      "id": "F052",
+      "statement": "Bluest Account stop-payment requests have a waived fee of $0.",
+      "source_doc": "doc_checking_accounts_bluest_account_003"
+    },
+    {
+      "id": "F053",
+      "statement": "Bluest Account foreign ATM withdrawals have a $0.00 Rho-Bank fee, although third-party ATM-operator fees may still apply.",
+      "source_doc": "doc_checking_accounts_bluest_account_003"
+    },
+    {
+      "id": "F054",
+      "statement": "Linking eligible Silver Savings to Bluest Account activates a +0.45% APY boost.",
+      "source_doc": "doc_checking_accounts_bluest_account_003"
+    },
+    {
+      "id": "F055",
+      "statement": "Linking eligible Bronze Savings to Bluest Account activates a +0.7% APY boost.",
+      "source_doc": "doc_checking_accounts_bluest_account_003"
+    },
+    {
+      "id": "F056",
+      "statement": "A successful Bluest Account referral pays the referrer $75.",
+      "source_doc": "doc_checking_accounts_bluest_account_003"
+    },
+    {
+      "id": "F057",
+      "statement": "A successful Bluest Account referral pays the new member $50.",
+      "source_doc": "doc_checking_accounts_bluest_account_003"
+    },
+    {
+      "id": "F058",
+      "statement": "The Bluest Account referral program permits up to 8 bonuses per calendar year.",
+      "source_doc": "doc_checking_accounts_bluest_account_003"
+    },
+    {
+      "id": "F059",
+      "statement": "A Bluest Account referral requires a $2,000 deposit within 90 days.",
+      "source_doc": "doc_checking_accounts_bluest_account_003"
+    },
+    {
+      "id": "F060",
+      "statement": "A Bluest Account referrer needs at least 60 days of Rho-Bank checking history.",
+      "source_doc": "doc_checking_accounts_bluest_account_003"
+    },
+    {
+      "id": "F061",
+      "statement": "A successful Dark Green Account referral pays the referrer $40.",
+      "source_doc": "doc_checking_accounts_dark_green_account_010"
+    },
+    {
+      "id": "F062",
+      "statement": "A successful Dark Green Account referral pays the referred person a $30 welcome bonus.",
+      "source_doc": "doc_checking_accounts_dark_green_account_010"
+    },
+    {
+      "id": "F063",
+      "statement": "The Dark Green Account referral program permits up to 6 bonuses per year.",
+      "source_doc": "doc_checking_accounts_dark_green_account_010"
+    },
+    {
+      "id": "F064",
+      "statement": "A Dark Green Account referrer needs at least 45 days of Rho-Bank checking history.",
+      "source_doc": "doc_checking_accounts_dark_green_account_010"
+    },
+    {
+      "id": "F065",
+      "statement": "A Dark Green referral requires the referred person to open a Dark Green Account.",
+      "source_doc": "doc_checking_accounts_dark_green_account_010"
+    },
+    {
+      "id": "F066",
+      "statement": "A Dark Green Account referral requires at least $1,000 deposited within 60 days after opening.",
+      "source_doc": "doc_checking_accounts_dark_green_account_010"
+    },
+    {
+      "id": "F067",
+      "statement": "Dark Green referral bonuses are credited within 5-7 business days after qualification.",
+      "source_doc": "doc_checking_accounts_dark_green_account_010"
+    },
+    {
+      "id": "F068",
+      "statement": "The Dark Green referrer and new member must both keep their accounts in good standing.",
+      "source_doc": "doc_checking_accounts_dark_green_account_010"
+    },
+    {
+      "id": "F069",
+      "statement": "A successful Gold Years Account referral pays the referrer $50.",
+      "source_doc": "doc_checking_accounts_gold_years_account_010"
+    },
+    {
+      "id": "F070",
+      "statement": "A successful Gold Years Account referral pays the referred person a $75 welcome bonus.",
+      "source_doc": "doc_checking_accounts_gold_years_account_010"
+    },
+    {
+      "id": "F071",
+      "statement": "The Gold Years Account referral program permits up to 6 bonuses per calendar year.",
+      "source_doc": "doc_checking_accounts_gold_years_account_010"
+    },
+    {
+      "id": "F072",
+      "statement": "A Gold Years Account referrer needs at least 30 days of Rho-Bank checking history.",
+      "source_doc": "doc_checking_accounts_gold_years_account_010"
+    },
+    {
+      "id": "F073",
+      "statement": "A person referred to Gold Years must be eligible for the account by being at least 62 years old.",
+      "source_doc": "doc_checking_accounts_gold_years_account_010"
+    },
+    {
+      "id": "F074",
+      "statement": "A Gold Years Account referral requires at least $1,000 deposited within 90 days after opening.",
+      "source_doc": "doc_checking_accounts_gold_years_account_010"
+    },
+    {
+      "id": "F075",
+      "statement": "A Gold Years referrer can find the personalized referral link in account settings.",
+      "source_doc": "doc_checking_accounts_gold_years_account_010"
+    },
+    {
+      "id": "F076",
+      "statement": "The Gold Years referral link can be shared with eligible friends and family.",
+      "source_doc": "doc_checking_accounts_gold_years_account_010"
+    },
+    {
+      "id": "F077",
+      "statement": "Successful Gold Years referrals can be tracked in the rewards dashboard.",
+      "source_doc": "doc_checking_accounts_gold_years_account_010"
+    },
+    {
+      "id": "F078",
+      "statement": "A successful Green Fee-Free Account referral pays the referrer $20.",
+      "source_doc": "doc_checking_accounts_green_fee-free_account_007"
+    },
+    {
+      "id": "F079",
+      "statement": "A successful Green Fee-Free Account referral pays the new member a $35 welcome bonus.",
+      "source_doc": "doc_checking_accounts_green_fee-free_account_007"
+    },
+    {
+      "id": "F080",
+      "statement": "The Green Fee-Free Account referral program permits up to 4 bonuses per year.",
+      "source_doc": "doc_checking_accounts_green_fee-free_account_007"
+    },
+    {
+      "id": "F081",
+      "statement": "A Green Fee-Free Account referral requires at least $300 deposited within 60 days after opening.",
+      "source_doc": "doc_checking_accounts_green_fee-free_account_007"
+    },
+    {
+      "id": "F082",
+      "statement": "A Green Fee-Free Account referrer needs at least 30 days of Rho-Bank checking history.",
+      "source_doc": "doc_checking_accounts_green_fee-free_account_007"
+    },
+    {
+      "id": "F083",
+      "statement": "A Green Fee-Free referrer accesses the referral link from the account dashboard and shares it with potential new members.",
+      "source_doc": "doc_checking_accounts_green_fee-free_account_007"
+    },
+    {
+      "id": "F084",
+      "statement": "Green Fee-Free referrals and bonuses can be tracked in the rewards section.",
+      "source_doc": "doc_checking_accounts_green_fee-free_account_007"
+    },
+    {
+      "id": "F085",
+      "statement": "A successful Light Blue Account referral pays the referrer $30.",
+      "source_doc": "doc_checking_accounts_light_blue_account_007"
+    },
+    {
+      "id": "F086",
+      "statement": "A successful Light Blue Account referral pays the new member a $20 welcome bonus after the account is opened and funded.",
+      "source_doc": "doc_checking_accounts_light_blue_account_007"
+    },
+    {
+      "id": "F087",
+      "statement": "The Light Blue Account referral program permits up to 5 bonuses per calendar year.",
+      "source_doc": "doc_checking_accounts_light_blue_account_007"
+    },
+    {
+      "id": "F088",
+      "statement": "A Light Blue Account referral requires at least $500 deposited within 60 days after opening.",
+      "source_doc": "doc_checking_accounts_light_blue_account_007"
+    },
+    {
+      "id": "F089",
+      "statement": "A Light Blue Account referrer needs at least 30 days of Rho-Bank checking history.",
+      "source_doc": "doc_checking_accounts_light_blue_account_007"
+    },
+    {
+      "id": "F090",
+      "statement": "The Light Blue referral process is to share a unique link, have the referred person open Light Blue through it, and satisfy the $500 deposit requirement within 60 days.",
+      "source_doc": "doc_checking_accounts_light_blue_account_007"
+    },
+    {
+      "id": "F091",
+      "statement": "Purple Account has a $15.00 monthly maintenance fee.",
+      "source_doc": "doc_checking_accounts_purple_account_011"
+    },
+    {
+      "id": "F092",
+      "statement": "Maintaining a minimum daily Purple Account balance of $3,750 waives the monthly fee.",
+      "source_doc": "doc_checking_accounts_purple_account_011"
+    },
+    {
+      "id": "F093",
+      "statement": "Purple Account foreign-currency transactions are charged at 0%.",
+      "source_doc": "doc_checking_accounts_purple_account_011"
+    },
+    {
+      "id": "F094",
+      "statement": "Purple Account includes up to $30,000 of travel-insurance coverage.",
+      "source_doc": "doc_checking_accounts_purple_account_011"
+    },
+    {
+      "id": "F095",
+      "statement": "Purple Account emergency card replacement abroad typically arrives within 2 days, depending on location and delivery conditions.",
+      "source_doc": "doc_checking_accounts_purple_account_011"
+    },
+    {
+      "id": "F096",
+      "statement": "Purple Account includes multi-currency-wallet support.",
+      "source_doc": "doc_checking_accounts_purple_account_011"
+    },
+    {
+      "id": "F097",
+      "statement": "Purple Account includes up to 6 complimentary airport-lounge visits per year.",
+      "source_doc": "doc_checking_accounts_purple_account_011"
+    },
+    {
+      "id": "F098",
+      "statement": "A returned Purple Account deposit incurs a $20.00 fee.",
+      "source_doc": "doc_checking_accounts_purple_account_011"
+    },
+    {
+      "id": "F099",
+      "statement": "An incoming Purple Account domestic wire has a $0.00 fee.",
+      "source_doc": "doc_checking_accounts_purple_account_011"
+    },
+    {
+      "id": "F100",
+      "statement": "A successful Purple Account referral pays the referrer $45.",
+      "source_doc": "doc_checking_accounts_purple_account_011"
+    },
+    {
+      "id": "F101",
+      "statement": "A successful Purple Account referral pays the referred person $35.",
+      "source_doc": "doc_checking_accounts_purple_account_011"
+    },
+    {
+      "id": "F102",
+      "statement": "A Purple Account referral requires at least $1,000 deposited within 60 days after opening.",
+      "source_doc": "doc_checking_accounts_purple_account_011"
+    },
+    {
+      "id": "F103",
+      "statement": "The Purple Account referral program permits up to 6 bonuses per calendar year.",
+      "source_doc": "doc_checking_accounts_purple_account_011"
+    },
+    {
+      "id": "F104",
+      "statement": "A Purple Account referrer needs at least 45 days of Rho-Bank checking history.",
+      "source_doc": "doc_checking_accounts_purple_account_011"
+    },
+    {
+      "id": "F105",
+      "statement": "A successful Beige Account referral pays the referrer $500.",
+      "source_doc": "doc_business_checking_accounts_beige_012"
+    },
+    {
+      "id": "F106",
+      "statement": "A successful Beige Account referral pays the referred enterprise a $350 welcome bonus.",
+      "source_doc": "doc_business_checking_accounts_beige_012"
+    },
+    {
+      "id": "F107",
+      "statement": "The Beige Account referral program permits up to 15 bonuses per calendar year.",
+      "source_doc": "doc_business_checking_accounts_beige_012"
+    },
+    {
+      "id": "F108",
+      "statement": "The Beige source states its tenure requirement as '120 days since opening your first checking account with us.'",
+      "source_doc": "doc_business_checking_accounts_beige_012"
+    },
+    {
+      "id": "F109",
+      "statement": "A Beige referral requires the referred enterprise to open a Beige Account.",
+      "source_doc": "doc_business_checking_accounts_beige_012"
+    },
+    {
+      "id": "F110",
+      "statement": "The Beige source requires a deposit of at least $100,000 within 120 days.",
+      "source_doc": "doc_business_checking_accounts_beige_012"
+    },
+    {
+      "id": "F111",
+      "statement": "To participate in Beige referrals, contact the dedicated relationship manager for materials and introduce qualified enterprises to Beige benefits.",
+      "source_doc": "doc_business_checking_accounts_beige_012"
+    },
+    {
+      "id": "F112",
+      "statement": "The Beige relationship manager can facilitate enterprise introductions and track referrals.",
+      "source_doc": "doc_business_checking_accounts_beige_012"
+    },
+    {
+      "id": "F113",
+      "statement": "Beige referral bonuses are credited after every qualification requirement is confirmed.",
+      "source_doc": "doc_business_checking_accounts_beige_012"
+    },
+    {
+      "id": "F114",
+      "statement": "Beige referrals must establish new Beige Account relationships.",
+      "source_doc": "doc_business_checking_accounts_beige_012"
+    },
+    {
+      "id": "F115",
+      "statement": "Both enterprises in a Beige referral must maintain accounts in good standing.",
+      "source_doc": "doc_business_checking_accounts_beige_012"
+    },
+    {
+      "id": "F116",
+      "statement": "Beige premium referral bonuses reflect the enterprise-level relationship value.",
+      "source_doc": "doc_business_checking_accounts_beige_012"
+    },
+    {
+      "id": "F117",
+      "statement": "Cobalt Blue standard ACH transfers have no fee.",
+      "source_doc": "doc_business_checking_accounts_cobalt_blue_005"
+    },
+    {
+      "id": "F118",
+      "statement": "Cobalt Blue same-day ACH transfers have a $0.00 fee.",
+      "source_doc": "doc_business_checking_accounts_cobalt_blue_005"
+    },
+    {
+      "id": "F119",
+      "statement": "Cobalt Blue same-day ACH is subject to submission and approval cutoffs, so initiating early improves the chance of same-day delivery.",
+      "source_doc": "doc_business_checking_accounts_cobalt_blue_005"
+    },
+    {
+      "id": "F120",
+      "statement": "A Cobalt Blue outgoing domestic wire costs $20.00.",
+      "source_doc": "doc_business_checking_accounts_cobalt_blue_005"
+    },
+    {
+      "id": "F121",
+      "statement": "Use a Cobalt Blue domestic wire for confirmed, rapid delivery to a U.S. financial institution.",
+      "source_doc": "doc_business_checking_accounts_cobalt_blue_005"
+    },
+    {
+      "id": "F122",
+      "statement": "Cobalt Blue includes 5 incoming domestic wires per month at no charge.",
+      "source_doc": "doc_business_checking_accounts_cobalt_blue_005"
+    },
+    {
+      "id": "F123",
+      "statement": "Additional Cobalt Blue incoming domestic wires beyond the 5 included each month may incur a fee.",
+      "source_doc": "doc_business_checking_accounts_cobalt_blue_005"
+    },
+    {
+      "id": "F124",
+      "statement": "For Cobalt Blue, prefer standard ACH for routine payments with flexible timing.",
+      "source_doc": "doc_business_checking_accounts_cobalt_blue_005"
+    },
+    {
+      "id": "F125",
+      "statement": "For Cobalt Blue, use same-day ACH when delivery is needed on the same-day ACH timetable.",
+      "source_doc": "doc_business_checking_accounts_cobalt_blue_005"
+    },
+    {
+      "id": "F126",
+      "statement": "For Cobalt Blue, use a domestic wire for a time-sensitive or high-assurance payment.",
+      "source_doc": "doc_business_checking_accounts_cobalt_blue_005"
+    },
+    {
+      "id": "F127",
+      "statement": "A Cobalt Blue customer can review transfer status in the activity feed.",
+      "source_doc": "doc_business_checking_accounts_cobalt_blue_005"
+    },
+    {
+      "id": "F128",
+      "statement": "Saving Cobalt Blue beneficiary details reduces entry errors and speeds future payments.",
+      "source_doc": "doc_business_checking_accounts_cobalt_blue_005"
+    },
+    {
+      "id": "F129",
+      "statement": "A Cobalt Blue referral requires the referred business to deposit at least $7,500 within 90 days after opening.",
+      "source_doc": "doc_business_checking_accounts_cobalt_blue_005"
+    },
+    {
+      "id": "F130",
+      "statement": "A Cobalt Blue referrer needs 60 days of Rho-Bank checking history measured from the earliest-opened checking account.",
+      "source_doc": "doc_business_checking_accounts_cobalt_blue_005"
+    },
+    {
+      "id": "F131",
+      "statement": "A Lime Green direct message receives a response within 2 business hours.",
+      "source_doc": "doc_business_checking_accounts_lime_green_003"
+    },
+    {
+      "id": "F132",
+      "statement": "The Lime Green priority phone line has a maximum expected wait of 6 minutes.",
+      "source_doc": "doc_business_checking_accounts_lime_green_003"
+    },
+    {
+      "id": "F133",
+      "statement": "To reach a Lime Green dedicated manager, send a secure support-center message and select routing to the dedicated manager.",
+      "source_doc": "doc_business_checking_accounts_lime_green_003"
+    },
+    {
+      "id": "F134",
+      "statement": "For an urgent Lime Green issue, use the priority support line for elevated queuing subject to the 6-minute maximum wait.",
+      "source_doc": "doc_business_checking_accounts_lime_green_003"
+    },
+    {
+      "id": "F135",
+      "statement": "A Lime Green manager request should identify the transaction or transfer at issue.",
+      "source_doc": "doc_business_checking_accounts_lime_green_003"
+    },
+    {
+      "id": "F136",
+      "statement": "A Lime Green manager request should include relevant dates and counterparties.",
+      "source_doc": "doc_business_checking_accounts_lime_green_003"
+    },
+    {
+      "id": "F137",
+      "statement": "A Lime Green manager request should include screenshots of error messages when applicable.",
+      "source_doc": "doc_business_checking_accounts_lime_green_003"
+    },
+    {
+      "id": "F138",
+      "statement": "A Lime Green customer should set a preferred contact method for faster follow-up.",
+      "source_doc": "doc_business_checking_accounts_lime_green_003"
+    },
+    {
+      "id": "F139",
+      "statement": "For a time-sensitive Lime Green request, state the deadline in the initial message; the manager responds within 2 business hours.",
+      "source_doc": "doc_business_checking_accounts_lime_green_003"
+    },
+    {
+      "id": "F140",
+      "statement": "If Lime Green messaging is not fast enough, use the priority phone line for a live update within the 6-minute window.",
+      "source_doc": "doc_business_checking_accounts_lime_green_003"
+    },
+    {
+      "id": "F141",
+      "statement": "A successful Lime Green referral pays the referrer $200.",
+      "source_doc": "doc_business_checking_accounts_lime_green_003"
+    },
+    {
+      "id": "F142",
+      "statement": "A successful Lime Green referral pays the referred business a $150 welcome bonus.",
+      "source_doc": "doc_business_checking_accounts_lime_green_003"
+    },
+    {
+      "id": "F143",
+      "statement": "The Lime Green referral program permits up to 12 bonuses per year.",
+      "source_doc": "doc_business_checking_accounts_lime_green_003"
+    },
+    {
+      "id": "F144",
+      "statement": "A Lime Green referral requires the referred business to deposit at least $15,000 within 90 days.",
+      "source_doc": "doc_business_checking_accounts_lime_green_003"
+    },
+    {
+      "id": "F145",
+      "statement": "A Lime Green referrer needs at least 90 days of Rho-Bank checking history.",
+      "source_doc": "doc_business_checking_accounts_lime_green_003"
+    },
+    {
+      "id": "F146",
+      "statement": "A Lime Green dedicated manager can provide personalized referral strategies and tracking.",
+      "source_doc": "doc_business_checking_accounts_lime_green_003"
+    },
+    {
+      "id": "F147",
+      "statement": "Sky Blue monthly maintenance fees are waived for a free period of 6 months.",
+      "source_doc": "doc_business_checking_accounts_sky_blue_002"
+    },
+    {
+      "id": "F148",
+      "statement": "Sky Blue account features continue to operate normally during the free period.",
+      "source_doc": "doc_business_checking_accounts_sky_blue_002"
+    },
+    {
+      "id": "F149",
+      "statement": "The Sky Blue free period starts when the account opens and runs for 6 months.",
+      "source_doc": "doc_business_checking_accounts_sky_blue_002"
+    },
+    {
+      "id": "F150",
+      "statement": "A Sky Blue customer can track remaining free-period time in the billing or plan-details screen.",
+      "source_doc": "doc_business_checking_accounts_sky_blue_002"
+    },
+    {
+      "id": "F151",
+      "statement": "After the Sky Blue free period ends, the monthly maintenance fee becomes $25.00.",
+      "source_doc": "doc_business_checking_accounts_sky_blue_002"
+    },
+    {
+      "id": "F152",
+      "statement": "Sky Blue service continues without action when the free period ends because billing updates automatically.",
+      "source_doc": "doc_business_checking_accounts_sky_blue_002"
+    },
+    {
+      "id": "F153",
+      "statement": "A Sky Blue customer should confirm the free-period end date in billing settings and set reminders for the transition to $25.00.",
+      "source_doc": "doc_business_checking_accounts_sky_blue_002"
+    },
+    {
+      "id": "F154",
+      "statement": "A Sky Blue customer may participate in referrals during the free period after becoming eligible.",
+      "source_doc": "doc_business_checking_accounts_sky_blue_002"
+    },
+    {
+      "id": "F155",
+      "statement": "A Sky Blue referral requires the referred startup to deposit at least $10,000 within 90 days after opening.",
+      "source_doc": "doc_business_checking_accounts_sky_blue_002"
+    },
+    {
+      "id": "F156",
+      "statement": "A Sky Blue referrer must meet the 45-day tenure threshold, which the source bases on their banking history with Rho-Bank.",
+      "source_doc": "doc_business_checking_accounts_sky_blue_002"
+    },
+    {
+      "id": "F157",
+      "statement": "True Blue charges a $75.00 monthly maintenance fee unless the waiver threshold is met.",
+      "source_doc": "doc_business_checking_accounts_true_blue_002"
+    },
+    {
+      "id": "F158",
+      "statement": "True Blue waives its $75.00 monthly maintenance fee when the balance is at least $50,000 during the statement period.",
+      "source_doc": "doc_business_checking_accounts_true_blue_002"
+    },
+    {
+      "id": "F159",
+      "statement": "True Blue requires at least $25,000 to maintain the account and access premium features.",
+      "source_doc": "doc_business_checking_accounts_true_blue_002"
+    },
+    {
+      "id": "F160",
+      "statement": "Falling below $25,000 in True Blue may limit premium features until the balance is restored.",
+      "source_doc": "doc_business_checking_accounts_true_blue_002"
+    },
+    {
+      "id": "F161",
+      "statement": "A negative True Blue balance may incur a $25.00 overdraft fee per occurrence.",
+      "source_doc": "doc_business_checking_accounts_true_blue_002"
+    },
+    {
+      "id": "F162",
+      "statement": "A True Blue customer should monitor both the $25,000 minimum and $50,000 fee-waiver thresholds and transfer funds promptly when a shortfall is expected to avoid the source-stated $25.00 and preserve waiver eligibility.",
+      "source_doc": "doc_business_checking_accounts_true_blue_002"
+    },
+    {
+      "id": "F163",
+      "statement": "A successful True Blue referral pays the referrer $350.",
+      "source_doc": "doc_business_checking_accounts_true_blue_002"
+    },
+    {
+      "id": "F164",
+      "statement": "A successful True Blue referral pays the new member $250.",
+      "source_doc": "doc_business_checking_accounts_true_blue_002"
+    },
+    {
+      "id": "F165",
+      "statement": "The True Blue referral program permits up to 15 bonuses per year.",
+      "source_doc": "doc_business_checking_accounts_true_blue_002"
+    },
+    {
+      "id": "F166",
+      "statement": "The True Blue source requires the referred business to deposit $50,000 within 120 days of opening.",
+      "source_doc": "doc_business_checking_accounts_true_blue_002"
+    },
+    {
+      "id": "F167",
+      "statement": "A True Blue referrer needs at least 90 days of Rho-Bank checking history measured from the oldest checking account.",
+      "source_doc": "doc_business_checking_accounts_true_blue_002"
+    },
+    {
+      "id": "F168",
+      "statement": "True Blue referral bonuses are paid after qualification is confirmed and remain subject to the annual limit of 15.",
+      "source_doc": "doc_business_checking_accounts_true_blue_002"
+    },
+    {
+      "id": "F169",
+      "statement": "A World Blue eligible USD balance earns 1.0% APY.",
+      "source_doc": "doc_business_checking_accounts_world_blue_007"
+    },
+    {
+      "id": "F170",
+      "statement": "World Blue interest is compounded daily.",
+      "source_doc": "doc_business_checking_accounts_world_blue_007"
+    },
+    {
+      "id": "F171",
+      "statement": "World Blue interest accrues on eligible USD funds and is credited according to the statement cycle.",
+      "source_doc": "doc_business_checking_accounts_world_blue_007"
+    },
+    {
+      "id": "F172",
+      "statement": "For World Blue funds held in multiple currencies, only USD balances earn the 1.0% APY.",
+      "source_doc": "doc_business_checking_accounts_world_blue_007"
+    },
+    {
+      "id": "F173",
+      "statement": "A World Blue customer can track accrued and credited interest in account activity and statements.",
+      "source_doc": "doc_business_checking_accounts_world_blue_007"
+    },
+    {
+      "id": "F174",
+      "statement": "A World Blue customer can export transaction data to reconcile interest income in the general ledger.",
+      "source_doc": "doc_business_checking_accounts_world_blue_007"
+    },
+    {
+      "id": "F175",
+      "statement": "When appropriate, keeping World Blue operational reserves in USD allows them to benefit from daily compounding.",
+      "source_doc": "doc_business_checking_accounts_world_blue_007"
+    },
+    {
+      "id": "F176",
+      "statement": "A World Blue customer can align currency-conversion and payout timing with cash needs so idle USD remains interest-bearing as long as practical.",
+      "source_doc": "doc_business_checking_accounts_world_blue_007"
+    },
+    {
+      "id": "F177",
+      "statement": "A successful World Blue referral pays the referrer $300.",
+      "source_doc": "doc_business_checking_accounts_world_blue_007"
+    },
+    {
+      "id": "F178",
+      "statement": "A successful World Blue referral pays the referred business a $200 welcome bonus.",
+      "source_doc": "doc_business_checking_accounts_world_blue_007"
+    },
+    {
+      "id": "F179",
+      "statement": "The World Blue referral program permits up to 12 bonuses per calendar year.",
+      "source_doc": "doc_business_checking_accounts_world_blue_007"
+    },
+    {
+      "id": "F180",
+      "statement": "World Blue referral bonuses are typically credited within 7-10 business days after qualification, and both accounts must remain in good standing for payment.",
+      "source_doc": "doc_business_checking_accounts_world_blue_007"
+    },
+    {
+      "id": "F181",
+      "statement": "The referral FAQ separately anchors retention to the deposit itself: after the qualifying deposit is made, it must remain in the account for at least 30 additional days, which differs from the internal terms' anchor of 30 days after the qualifying period ends.",
+      "source_doc": "doc_bank_accounts_bank_accounts_(general)_048"
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Shared referral eligibility, rolling-window calculation, deposit conditions, and status meanings",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F017",
+        "F018",
+        "F019",
+        "F020",
+        "F021",
+        "F022",
+        "F023",
+        "F024",
+        "F025",
+        "F026",
+        "F027",
+        "F028",
+        "F029",
+        "F030",
+        "F031",
+        "F032",
+        "F033",
+        "F181"
+      ],
+      "case_spec": "A verified customer asks how checking referrals work. Use exact referral timestamps to evaluate the 2-in-9-day cross-product cap before making recommendations, then explain new-customer, address, age, ownership, tenure, deposit, stacking, clawback, good-standing, and status rules."
+    },
+    {
+      "id": "B",
+      "title": "Personal checking referral matrix and supporting Blue, Purple, and program-usage terms",
+      "included_fact_ids": [
+        "F034",
+        "F035",
+        "F036",
+        "F037",
+        "F038",
+        "F039",
+        "F040",
+        "F041",
+        "F042",
+        "F043",
+        "F044",
+        "F061",
+        "F062",
+        "F063",
+        "F064",
+        "F065",
+        "F066",
+        "F067",
+        "F068",
+        "F069",
+        "F070",
+        "F071",
+        "F072",
+        "F073",
+        "F074",
+        "F075",
+        "F076",
+        "F077",
+        "F078",
+        "F079",
+        "F080",
+        "F081",
+        "F082",
+        "F083",
+        "F084",
+        "F085",
+        "F086",
+        "F087",
+        "F088",
+        "F089",
+        "F090",
+        "F091",
+        "F092",
+        "F093",
+        "F094",
+        "F095",
+        "F096",
+        "F097",
+        "F098",
+        "F099",
+        "F100",
+        "F101",
+        "F102",
+        "F103",
+        "F104"
+      ],
+      "case_spec": "A verified customer compares Blue, Dark Green, Gold Years, Green Fee-Free, Light Blue, and Purple referral programs. Preserve each referrer bonus, referred bonus, annual cap, deposit threshold, deadline, tenure, product-specific eligibility, payment timing, participation step, and all supporting Blue and Purple FAQ terms."
+    },
+    {
+      "id": "C",
+      "title": "Bluest Account benefits and referral requirements",
+      "included_fact_ids": [
+        "F045",
+        "F046",
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F057",
+        "F058",
+        "F059",
+        "F060"
+      ],
+      "case_spec": "A verified customer asks for a lossless Bluest benefits and referral review. Preserve every quick-reference value, third-party ATM caveat, linked-savings boost, referral bonus, annual cap, deposit deadline, and tenure threshold."
+    },
+    {
+      "id": "D",
+      "title": "Beige enterprise referrals and Cobalt Blue payment methods and referral requirements",
+      "included_fact_ids": [
+        "F105",
+        "F106",
+        "F107",
+        "F108",
+        "F109",
+        "F110",
+        "F111",
+        "F112",
+        "F113",
+        "F114",
+        "F115",
+        "F116",
+        "F117",
+        "F118",
+        "F119",
+        "F120",
+        "F121",
+        "F122",
+        "F123",
+        "F124",
+        "F125",
+        "F126",
+        "F127",
+        "F128",
+        "F129",
+        "F130"
+      ],
+      "case_spec": "A verified business customer compares Beige referral participation with Cobalt Blue transfer methods and referral qualification."
+    },
+    {
+      "id": "E",
+      "title": "Lime Green manager service and referrals plus Sky Blue free-period referral eligibility",
+      "included_fact_ids": [
+        "F131",
+        "F132",
+        "F133",
+        "F134",
+        "F135",
+        "F136",
+        "F137",
+        "F138",
+        "F139",
+        "F140",
+        "F141",
+        "F142",
+        "F143",
+        "F144",
+        "F145",
+        "F146",
+        "F147",
+        "F148",
+        "F149",
+        "F150",
+        "F151",
+        "F152",
+        "F153",
+        "F154",
+        "F155",
+        "F156"
+      ],
+      "case_spec": "A verified business customer asks about Lime Green dedicated-manager response commitments and referrals, then Sky Blue free-period and referral rules."
+    },
+    {
+      "id": "F",
+      "title": "True Blue thresholds and referrals plus World Blue interest and referrals",
+      "included_fact_ids": [
+        "F157",
+        "F158",
+        "F159",
+        "F160",
+        "F161",
+        "F162",
+        "F163",
+        "F164",
+        "F165",
+        "F166",
+        "F167",
+        "F168",
+        "F169",
+        "F170",
+        "F171",
+        "F172",
+        "F173",
+        "F174",
+        "F175",
+        "F176",
+        "F177",
+        "F178",
+        "F179",
+        "F180"
+      ],
+      "case_spec": "A verified business customer compares True Blue fee and balance thresholds with World Blue USD interest, then reviews both referral programs. Keep thresholds, fees, interest scope, credit timing, bonuses, caps, deposits, deadlines, and tenure distinct."
+    },
+    {
+      "id": "G",
+      "title": "Personal referral optimization at the rolling-window boundary",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F008",
+        "F015",
+        "F016",
+        "F024",
+        "F030",
+        "F031",
+        "F040",
+        "F041",
+        "F042",
+        "F043",
+        "F044",
+        "F078",
+        "F079",
+        "F080",
+        "F081",
+        "F082",
+        "F085",
+        "F086",
+        "F087",
+        "F088",
+        "F089"
+      ],
+      "case_spec": "A verified customer has one COMPLETE referral bonus 10 days ago and one IN_PROGRESS referral 4 days ago. Preserve that IN_PROGRESS is not a paid bonus, so neither record currently consumes the 2-in-9-day bonus cap. Compare eligible personal programs for a referred person bringing $600 and recommend the highest combined bonus without requiring the referrer to own that product."
+    },
+    {
+      "id": "H",
+      "title": "Business referral optimization with tenure and owned-product traps",
+      "included_fact_ids": [
+        "F002",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F129",
+        "F130",
+        "F155",
+        "F156",
+        "F177",
+        "F178"
+      ],
+      "case_spec": "A verified business customer with 65 days of checking tenure owns World Blue and asks for the best referrer bonus for a new company depositing $31,000. Combine this section's referral facts with the approved business-checking records: World Blue pays $300 but requires 90 days of tenure, while Hunter Green pays the highest currently eligible referrer bonus at $175 and requires 60 days. Make Hunter Green the recommendation even though the customer does not own it."
+    },
+    {
+      "id": "I",
+      "title": "Two-slot personal and business referral optimization",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F014",
+        "F015",
+        "F016",
+        "F063",
+        "F069",
+        "F070",
+        "F071",
+        "F073",
+        "F074",
+        "F078",
+        "F079",
+        "F080",
+        "F081",
+        "F082",
+        "F100",
+        "F101",
+        "F102",
+        "F103",
+        "F104",
+        "F141",
+        "F142",
+        "F143",
+        "F144",
+        "F145",
+        "F154",
+        "F155",
+        "F156"
+      ],
+      "case_spec": "A verified customer has no successful bonuses inside the rolling 9-day window and wants four referrals. Use the two available cross-product slots for the highest eligible personal and business combined bonuses: Purple for an age-71 customer depositing $1,200 and Sky Blue for a two-year-old startup depositing $12,000. Preserve annual caps and the five-year-old company's Sky Blue ineligibility."
+    },
+    {
+      "id": "J",
+      "title": "Multi-referral optimization after verified history corrects customer recollection",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F023",
+        "F024",
+        "F025",
+        "F026",
+        "F027",
+        "F028",
+        "F029",
+        "F030",
+        "F031",
+        "F063",
+        "F071",
+        "F080",
+        "F087",
+        "F103",
+        "F143",
+        "F154",
+        "F155",
+        "F156"
+      ],
+      "case_spec": "A verified customer wants several personal and business referrals but misremembers recent timestamps and annual counts. The exact history has one COMPLETE bonus 4 days ago, so only one slot remains. Use referral-history records rather than the recollection, enforce the shared rolling cap, and prioritize only the highest-value referral currently eligible."
+    }
+  ]
+}

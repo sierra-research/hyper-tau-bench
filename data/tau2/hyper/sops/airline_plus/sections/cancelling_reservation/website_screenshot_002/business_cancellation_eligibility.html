@@ -1,0 +1,1108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trip details | Meridian Airlines</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --navy: #172f4f;
+        --deep-navy: #10243e;
+        --blue: #0078b9;
+        --bright-blue: #0097ce;
+        --red: #c51f3a;
+        --ink: #24364b;
+        --muted: #5f6f81;
+        --line: #d5dce4;
+        --soft-line: #e8edf2;
+        --canvas: #f3f5f7;
+        --pale-blue: #eef7fb;
+        --white: #ffffff;
+        --shadow: 0 2px 8px rgba(16, 36, 62, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: var(--canvas);
+      }
+
+      body {
+        min-width: 1180px;
+        margin: 0;
+        color: var(--ink);
+        background:
+          linear-gradient(180deg, #ffffff 0, #ffffff 120px, transparent 120px),
+          var(--canvas);
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        line-height: 1.45;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button {
+        font: inherit;
+      }
+
+      .utility-bar {
+        height: 36px;
+        color: #d7e2ed;
+        background: var(--deep-navy);
+        font-size: 12px;
+      }
+
+      .utility-inner,
+      .nav-inner,
+      .breadcrumb-inner,
+      .page-shell,
+      .footer-inner {
+        width: 1180px;
+        margin: 0 auto;
+      }
+
+      .utility-inner {
+        display: flex;
+        height: 100%;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 27px;
+      }
+
+      .utility-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        white-space: nowrap;
+      }
+
+      .utility-icon {
+        width: 13px;
+        height: 13px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.7;
+      }
+
+      .main-nav {
+        height: 78px;
+        border-bottom: 1px solid #cbd4de;
+        background: var(--white);
+      }
+
+      .nav-inner {
+        display: flex;
+        height: 100%;
+        align-items: center;
+      }
+
+      .brand {
+        display: flex;
+        min-width: 248px;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand-mark {
+        position: relative;
+        width: 42px;
+        height: 44px;
+        overflow: hidden;
+        transform: skew(-7deg);
+      }
+
+      .brand-mark::before,
+      .brand-mark::after {
+        position: absolute;
+        width: 14px;
+        height: 56px;
+        content: "";
+        transform: rotate(28deg);
+      }
+
+      .brand-mark::before {
+        top: -7px;
+        left: 9px;
+        background: linear-gradient(180deg, #25a5d6, #07558f);
+      }
+
+      .brand-mark::after {
+        right: 7px;
+        bottom: -8px;
+        background: linear-gradient(180deg, #e04b58, #b31533);
+      }
+
+      .brand-name {
+        color: var(--navy);
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 0.045em;
+      }
+
+      .primary-nav {
+        display: flex;
+        height: 100%;
+        align-items: center;
+        gap: 35px;
+      }
+
+      .primary-nav a {
+        position: relative;
+        display: flex;
+        height: 100%;
+        align-items: center;
+        color: #344b65;
+        font-size: 14px;
+      }
+
+      .primary-nav a.active::after {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 3px;
+        content: "";
+        background: var(--blue);
+      }
+
+      .nav-spacer {
+        flex: 1;
+      }
+
+      .search {
+        display: inline-flex;
+        width: 38px;
+        height: 38px;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        color: var(--navy);
+        background: transparent;
+      }
+
+      .search svg {
+        width: 20px;
+        height: 20px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+      }
+
+      .account {
+        display: flex;
+        margin-left: 18px;
+        align-items: center;
+        gap: 10px;
+        color: var(--blue);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .account-badge {
+        display: inline-flex;
+        width: 34px;
+        height: 34px;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #bad6e7;
+        border-radius: 50%;
+        color: #215d82;
+        background: #edf7fc;
+        font-size: 12px;
+      }
+
+      .breadcrumb {
+        border-bottom: 1px solid #d9dfe6;
+        background: #fafbfc;
+      }
+
+      .breadcrumb-inner {
+        display: flex;
+        height: 48px;
+        align-items: center;
+        gap: 10px;
+        color: #58697c;
+        font-size: 12px;
+      }
+
+      .breadcrumb-home {
+        color: var(--blue);
+      }
+
+      .breadcrumb-divider {
+        color: #a4afba;
+      }
+
+      .page-shell {
+        padding: 32px 0 38px;
+      }
+
+      .page-title-row {
+        display: flex;
+        margin-bottom: 22px;
+        align-items: flex-end;
+        justify-content: space-between;
+      }
+
+      .eyebrow {
+        margin-bottom: 5px;
+        color: #637487;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        color: var(--navy);
+        font-size: 31px;
+        font-weight: 500;
+        line-height: 1.15;
+      }
+
+      .confirmation {
+        color: #596a7c;
+        font-size: 13px;
+        text-align: right;
+      }
+
+      .confirmation strong {
+        display: block;
+        margin-top: 2px;
+        color: var(--navy);
+        font-size: 17px;
+        letter-spacing: 0.11em;
+      }
+
+      .trip-hero {
+        position: relative;
+        display: grid;
+        min-height: 188px;
+        overflow: hidden;
+        border-top: 5px solid var(--blue);
+        background: var(--white);
+        box-shadow: var(--shadow);
+        grid-template-columns: 1fr 360px;
+      }
+
+      .trip-summary {
+        display: flex;
+        padding: 31px 34px 29px;
+        align-items: center;
+      }
+
+      .date-block {
+        width: 75px;
+        flex: 0 0 auto;
+        border: 1px solid #cbd6df;
+        text-align: center;
+      }
+
+      .date-month {
+        padding: 5px 4px;
+        color: white;
+        background: var(--navy);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+      }
+
+      .date-day {
+        padding: 8px 4px 1px;
+        color: var(--navy);
+        font-size: 28px;
+        font-weight: 400;
+        line-height: 1;
+      }
+
+      .date-weekday {
+        padding: 4px 4px 8px;
+        color: #6b7a8a;
+        font-size: 11px;
+      }
+
+      .route-summary {
+        margin-left: 27px;
+      }
+
+      .route-title {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        color: var(--navy);
+        font-size: 28px;
+        font-weight: 400;
+      }
+
+      .route-arrow {
+        display: inline-flex;
+        width: 72px;
+        align-items: center;
+      }
+
+      .route-arrow::before {
+        width: 100%;
+        height: 1px;
+        content: "";
+        background: #7f91a4;
+      }
+
+      .route-arrow::after {
+        width: 7px;
+        height: 7px;
+        margin-left: -7px;
+        border-top: 1px solid #7f91a4;
+        border-right: 1px solid #7f91a4;
+        content: "";
+        transform: rotate(45deg);
+      }
+
+      .trip-meta {
+        display: flex;
+        margin-top: 14px;
+        align-items: center;
+        gap: 19px;
+        color: #5d6d7e;
+        font-size: 13px;
+      }
+
+      .trip-meta span {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      .trip-meta span + span {
+        padding-left: 19px;
+        border-left: 1px solid #d5dce3;
+      }
+
+      .meta-icon {
+        width: 15px;
+        height: 15px;
+        fill: none;
+        stroke: #718296;
+        stroke-width: 1.6;
+      }
+
+      .route-art {
+        position: relative;
+        overflow: hidden;
+        border-left: 1px solid #dde4ea;
+        background:
+          radial-gradient(circle at 15px 15px, rgba(35, 107, 148, 0.12) 1px, transparent 1.5px) 0 0 / 25px 25px,
+          linear-gradient(135deg, #f2f8fb, #e3f0f6);
+      }
+
+      .route-art::before,
+      .route-art::after {
+        position: absolute;
+        content: "";
+        border: 1px solid rgba(35, 103, 144, 0.22);
+        border-radius: 50%;
+      }
+
+      .route-art::before {
+        top: -64px;
+        right: -20px;
+        width: 250px;
+        height: 250px;
+      }
+
+      .route-art::after {
+        right: 52px;
+        bottom: -86px;
+        width: 205px;
+        height: 205px;
+      }
+
+      .map-line {
+        position: absolute;
+        top: 92px;
+        left: 50px;
+        width: 260px;
+        height: 2px;
+        background: linear-gradient(90deg, var(--red), #8a9bad 48%, var(--blue));
+        transform: rotate(-10deg);
+      }
+
+      .map-dot {
+        position: absolute;
+        z-index: 2;
+        width: 12px;
+        height: 12px;
+        border: 3px solid white;
+        border-radius: 50%;
+        box-shadow: 0 0 0 1px #315e7a;
+      }
+
+      .map-dot.one {
+        top: 104px;
+        left: 47px;
+        background: var(--red);
+      }
+
+      .map-dot.two {
+        top: 59px;
+        right: 47px;
+        background: var(--blue);
+      }
+
+      .map-plane {
+        position: absolute;
+        top: 66px;
+        left: 171px;
+        z-index: 2;
+        color: #315e7a;
+        font-size: 22px;
+        transform: rotate(-10deg);
+      }
+
+      .tabs {
+        display: flex;
+        margin-top: 24px;
+        border-bottom: 1px solid #cbd5df;
+        background: var(--white);
+      }
+
+      .tab {
+        position: relative;
+        padding: 16px 25px 15px;
+        color: #4c6076;
+        font-size: 13px;
+      }
+
+      .tab.active {
+        color: var(--navy);
+        font-weight: 700;
+      }
+
+      .tab.active::after {
+        position: absolute;
+        right: 19px;
+        bottom: -1px;
+        left: 19px;
+        height: 3px;
+        content: "";
+        background: var(--red);
+      }
+
+      .content-grid {
+        display: grid;
+        margin-top: 22px;
+        align-items: start;
+        gap: 24px;
+        grid-template-columns: minmax(0, 1fr) 390px;
+      }
+
+      .panel {
+        border: 1px solid var(--line);
+        background: var(--white);
+        box-shadow: var(--shadow);
+      }
+
+      .panel-heading {
+        display: flex;
+        min-height: 58px;
+        padding: 17px 21px;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--soft-line);
+      }
+
+      .panel-heading h2 {
+        margin: 0;
+        color: var(--navy);
+        font-size: 18px;
+        font-weight: 500;
+      }
+
+      .panel-heading-link {
+        color: var(--blue);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .segment {
+        display: grid;
+        min-height: 166px;
+        padding: 25px 24px;
+        align-items: center;
+        grid-template-columns: 105px minmax(0, 1fr) 132px;
+      }
+
+      .segment + .segment {
+        border-top: 1px solid var(--soft-line);
+      }
+
+      .segment-date {
+        color: #617286;
+        font-size: 12px;
+      }
+
+      .segment-date strong {
+        display: block;
+        margin-bottom: 3px;
+        color: var(--navy);
+        font-size: 14px;
+      }
+
+      .flight-line {
+        display: grid;
+        align-items: center;
+        grid-template-columns: 105px 1fr 105px;
+      }
+
+      .airport-time {
+        color: var(--navy);
+        font-size: 13px;
+      }
+
+      .airport-time strong {
+        display: block;
+        margin-bottom: 2px;
+        font-size: 24px;
+        font-weight: 400;
+        line-height: 1;
+      }
+
+      .airport-code {
+        margin-top: 7px;
+        color: #5f7083;
+        font-size: 12px;
+      }
+
+      .flight-track {
+        position: relative;
+        height: 1px;
+        margin: 0 18px;
+        background: #aebac6;
+      }
+
+      .flight-track::before,
+      .flight-track::after {
+        position: absolute;
+        top: -4px;
+        width: 8px;
+        height: 8px;
+        border: 1px solid #71869b;
+        border-radius: 50%;
+        content: "";
+        background: white;
+      }
+
+      .flight-track::before {
+        left: -1px;
+      }
+
+      .flight-track::after {
+        right: -1px;
+      }
+
+      .track-plane {
+        position: absolute;
+        top: -11px;
+        left: calc(50% - 10px);
+        color: #56758c;
+        background: white;
+        font-size: 16px;
+      }
+
+      .flight-number {
+        padding-left: 22px;
+        border-left: 1px solid #dde3e9;
+        color: #667689;
+        font-size: 12px;
+      }
+
+      .flight-number strong {
+        display: block;
+        margin-bottom: 3px;
+        color: var(--navy);
+        font-size: 15px;
+      }
+
+      .traveler-panel {
+        margin-top: 20px;
+      }
+
+      .traveler-list {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .traveler {
+        display: flex;
+        min-height: 86px;
+        padding: 18px 20px;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .traveler + .traveler {
+        border-left: 1px solid var(--soft-line);
+      }
+
+      .traveler-avatar {
+        display: inline-flex;
+        width: 38px;
+        height: 38px;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        color: #2e627f;
+        background: #edf5f9;
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .traveler-name {
+        color: var(--navy);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .traveler-label {
+        margin-top: 2px;
+        color: #758395;
+        font-size: 11px;
+      }
+
+      .fare-panel {
+        border-top: 5px solid var(--navy);
+      }
+
+      .fare-panel .panel-heading {
+        min-height: 55px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+      }
+
+      .fare-table {
+        padding: 4px 21px 0;
+      }
+
+      .fare-row {
+        display: flex;
+        min-height: 48px;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--soft-line);
+      }
+
+      .fare-label {
+        color: #69798b;
+        font-size: 12px;
+      }
+
+      .fare-value {
+        color: var(--navy);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .fare-disclosure {
+        margin: 8px 21px 14px;
+        padding-top: 10px;
+        border-top: 1px solid var(--soft-line);
+        color: #7a8795;
+        font-size: 10px;
+        line-height: 1.3;
+        white-space: nowrap;
+      }
+
+      .fare-disclosure strong {
+        color: #687685;
+        font-weight: 700;
+      }
+
+      .fare-disclosure-dot {
+        margin: 0 5px;
+        color: #adb6c0;
+      }
+
+      .aside-links {
+        margin-top: 20px;
+      }
+
+      .aside-link {
+        display: flex;
+        min-height: 54px;
+        padding: 15px 18px;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--soft-line);
+        color: #36536e;
+        font-size: 12px;
+      }
+
+      .aside-link:last-child {
+        border-bottom: 0;
+      }
+
+      .chevron {
+        color: var(--blue);
+        font-size: 18px;
+      }
+
+      .notice-strip {
+        display: flex;
+        margin-top: 22px;
+        padding: 15px 18px;
+        align-items: center;
+        gap: 13px;
+        border: 1px solid #d7e4ec;
+        color: #52697d;
+        background: var(--pale-blue);
+        font-size: 12px;
+      }
+
+      .notice-icon {
+        display: inline-flex;
+        width: 25px;
+        height: 25px;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #6ca3c2;
+        border-radius: 50%;
+        color: #35769c;
+        font-family: Georgia, serif;
+        font-weight: 700;
+      }
+
+      footer {
+        border-top: 4px solid var(--red);
+        color: #cad5e0;
+        background: var(--deep-navy);
+      }
+
+      .footer-inner {
+        display: grid;
+        min-height: 126px;
+        padding: 28px 0;
+        grid-template-columns: 1.7fr 1fr 1fr 1fr;
+      }
+
+      .footer-brand {
+        color: white;
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+
+      .footer-copy {
+        max-width: 300px;
+        margin-top: 9px;
+        color: #9eb0c2;
+        font-size: 10px;
+      }
+
+      .footer-column {
+        font-size: 11px;
+      }
+
+      .footer-column strong {
+        display: block;
+        margin-bottom: 8px;
+        color: white;
+        font-size: 11px;
+      }
+
+      .footer-column span {
+        display: block;
+        margin-top: 5px;
+        color: #aebdca;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="utility-bar">
+        <div class="utility-inner">
+          <span class="utility-link">
+            <svg class="utility-icon" viewBox="0 0 16 16" aria-hidden="true">
+              <circle cx="8" cy="8" r="6"></circle>
+              <path d="M2.5 8h11M8 2c1.8 1.7 2.7 3.7 2.7 6S9.8 12.3 8 14M8 2C6.2 3.7 5.3 5.7 5.3 8S6.2 12.3 8 14"></path>
+            </svg>
+            English
+          </span>
+          <span class="utility-link">Contact Meridian</span>
+          <span class="utility-link">Receipts and refunds</span>
+          <span class="utility-link">Help</span>
+        </div>
+      </div>
+      <div class="main-nav">
+        <div class="nav-inner">
+          <a class="brand" href="#">
+            <span class="brand-mark" aria-hidden="true"></span>
+            <span class="brand-name">Meridian Airlines</span>
+          </a>
+          <nav class="primary-nav" aria-label="Primary">
+            <a href="#">Book</a>
+            <a class="active" href="#">Manage trips</a>
+            <a href="#">Travel information</a>
+            <a href="#">Meridian Rewards</a>
+          </nav>
+          <div class="nav-spacer"></div>
+          <button class="search" aria-label="Search">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="10.5" cy="10.5" r="6.4"></circle>
+              <path d="m15.2 15.2 4.4 4.4"></path>
+            </svg>
+          </button>
+          <div class="account">
+            <span class="account-badge">WE</span>
+            <span>Wei Everett</span>
+          </div>
+        </div>
+      </div>
+      <div class="breadcrumb">
+        <div class="breadcrumb-inner">
+          <span class="breadcrumb-home">Home</span>
+          <span class="breadcrumb-divider">/</span>
+          <span class="breadcrumb-home">Your trips</span>
+          <span class="breadcrumb-divider">/</span>
+          <span>Trip details</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <div class="page-title-row">
+        <div>
+          <div class="eyebrow">Your trip</div>
+          <h1>Dallas / Fort Worth to Los Angeles</h1>
+        </div>
+        <div class="confirmation">
+          Confirmation code
+          <strong>A8BR8R</strong>
+        </div>
+      </div>
+
+      <section class="trip-hero" aria-label="Trip summary">
+        <div class="trip-summary">
+          <div class="date-block">
+            <div class="date-month">MAY</div>
+            <div class="date-day">22</div>
+            <div class="date-weekday">Wednesday</div>
+          </div>
+          <div class="route-summary">
+            <div class="route-title">
+              <span>DFW</span>
+              <span class="route-arrow" aria-hidden="true"></span>
+              <span>LAX</span>
+              <span class="route-arrow" aria-hidden="true"></span>
+              <span>DFW</span>
+            </div>
+            <div class="trip-meta">
+              <span>
+                <svg class="meta-icon" viewBox="0 0 18 18" aria-hidden="true">
+                  <circle cx="9" cy="6" r="3"></circle>
+                  <path d="M3.5 16c.4-3.2 2.2-5 5.5-5s5.1 1.8 5.5 5"></path>
+                </svg>
+                3 travelers
+              </span>
+              <span>Round trip</span>
+              <span>May 22–26</span>
+            </div>
+          </div>
+        </div>
+        <div class="route-art" aria-hidden="true">
+          <span class="map-line"></span>
+          <span class="map-dot one"></span>
+          <span class="map-dot two"></span>
+          <span class="map-plane">✈</span>
+        </div>
+      </section>
+
+      <nav class="tabs" aria-label="Trip sections">
+        <a class="tab active" href="#">Trip details</a>
+        <a class="tab" href="#">Travelers</a>
+        <a class="tab" href="#">Day of travel</a>
+        <a class="tab" href="#">Receipts</a>
+      </nav>
+
+      <div class="content-grid">
+        <div>
+          <section class="panel">
+            <div class="panel-heading">
+              <h2>Flights</h2>
+              <span class="panel-heading-link">View flight information</span>
+            </div>
+
+            <article class="segment">
+              <div class="segment-date">
+                <strong>Wed, May 22</strong>
+                Dallas to Los Angeles
+              </div>
+              <div class="flight-line">
+                <div class="airport-time">
+                  <strong>3:00 AM</strong>
+                  <div class="airport-code">DFW</div>
+                </div>
+                <div class="flight-track">
+                  <span class="track-plane">✈</span>
+                </div>
+                <div class="airport-time">
+                  <strong>6:00 AM</strong>
+                  <div class="airport-code">LAX</div>
+                </div>
+              </div>
+              <div class="flight-number">
+                <strong>MER711</strong>
+                Nonstop
+              </div>
+            </article>
+
+            <article class="segment">
+              <div class="segment-date">
+                <strong>Sun, May 26</strong>
+                Los Angeles to Dallas
+              </div>
+              <div class="flight-line">
+                <div class="airport-time">
+                  <strong>12:00 PM</strong>
+                  <div class="airport-code">LAX</div>
+                </div>
+                <div class="flight-track">
+                  <span class="track-plane">✈</span>
+                </div>
+                <div class="airport-time">
+                  <strong>3:00 PM</strong>
+                  <div class="airport-code">DFW</div>
+                </div>
+              </div>
+              <div class="flight-number">
+                <strong>MER210</strong>
+                Nonstop
+              </div>
+            </article>
+          </section>
+
+          <section class="panel traveler-panel">
+            <div class="panel-heading">
+              <h2>Travelers</h2>
+              <span class="panel-heading-link">View traveler details</span>
+            </div>
+            <div class="traveler-list">
+              <div class="traveler">
+                <span class="traveler-avatar">WE</span>
+                <div>
+                  <div class="traveler-name">Wei Everett</div>
+                  <div class="traveler-label">Traveler 1</div>
+                </div>
+              </div>
+              <div class="traveler">
+                <span class="traveler-avatar">AW</span>
+                <div>
+                  <div class="traveler-name">Arjun Winslow</div>
+                  <div class="traveler-label">Traveler 2</div>
+                </div>
+              </div>
+              <div class="traveler">
+                <span class="traveler-avatar">AB</span>
+                <div>
+                  <div class="traveler-name">Amina Beaumont</div>
+                  <div class="traveler-label">Traveler 3</div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <aside>
+          <section class="panel fare-panel">
+            <div class="panel-heading">
+              <h2>Fare details</h2>
+            </div>
+            <div class="fare-table">
+              <div class="fare-row">
+                <span class="fare-label">Cabin</span>
+                <span class="fare-value">Business</span>
+              </div>
+              <div class="fare-row">
+                <span class="fare-label">Trip type</span>
+                <span class="fare-value">Round trip</span>
+              </div>
+              <div class="fare-row">
+                <span class="fare-label">Travelers</span>
+                <span class="fare-value">3</span>
+              </div>
+              <div class="fare-row">
+                <span class="fare-label">Flight segments</span>
+                <span class="fare-value">2</span>
+              </div>
+            </div>
+
+            <div class="fare-disclosure">
+              Cancellation: <strong>Eligible</strong>
+              <span class="fare-disclosure-dot">•</span>
+              qualifying condition: <strong>Business cabin</strong>
+            </div>
+          </section>
+
+          <section class="panel aside-links">
+            <div class="aside-link">
+              <span>Trip contact information</span>
+              <span class="chevron">›</span>
+            </div>
+            <div class="aside-link">
+              <span>Passenger details</span>
+              <span class="chevron">›</span>
+            </div>
+            <div class="aside-link">
+              <span>Flight notifications</span>
+              <span class="chevron">›</span>
+            </div>
+          </section>
+        </aside>
+      </div>
+
+      <div class="notice-strip">
+        <span class="notice-icon">i</span>
+        <span>
+          Flight information can change. Review your trip details again before
+          departure.
+        </span>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand">Meridian Airlines</div>
+          <div class="footer-copy">
+            © 2024 Meridian Airlines. All rights reserved.
+          </div>
+        </div>
+        <div class="footer-column">
+          <strong>Help</strong>
+          <span>Contact us</span>
+          <span>Travel alerts</span>
+          <span>Site map</span>
+        </div>
+        <div class="footer-column">
+          <strong>About Meridian</strong>
+          <span>Company</span>
+          <span>Newsroom</span>
+          <span>Careers</span>
+        </div>
+        <div class="footer-column">
+          <strong>Legal</strong>
+          <span>Privacy</span>
+          <span>Terms</span>
+          <span>Accessibility</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

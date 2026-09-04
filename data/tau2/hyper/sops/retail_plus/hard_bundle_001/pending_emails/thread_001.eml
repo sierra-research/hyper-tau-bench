@@ -1,0 +1,123 @@
+From: Mia Tran <mia.tran@northstaroutfitters.com>
+To: Noah Brandt <noah.brandt@northstaroutfitters.com>,
+ Evan Kessler <evan.kessler@northstaroutfitters.com>,
+ Marcy Doyle <marcy.doyle@northstaroutfitters.com>
+Date: Thu, 19 Feb 2026 10:10:18 -0500
+Subject: RE: Sandbox refresh cadence and memo field masking
+Message-ID: <4e18a8bd0127.d37ddca2@mail.northstaroutfitters.com>
+In-Reply-To: <83b78ff5c066.a9bb769e@mail.northstaroutfitters.com>
+References: <c1e80ef259e1.a711c528@mail.northstaroutfitters.com>
+ <247e39c153b5.cf43b650@mail.northstaroutfitters.com>
+ <7a564a49eade.8f72d39f@mail.northstaroutfitters.com>
+ <d7cf293a8afd.ee9e64ee@mail.northstaroutfitters.com>
+ <f6ef8ceef1dd.6d72e91a@mail.northstaroutfitters.com>
+ <83b78ff5c066.a9bb769e@mail.northstaroutfitters.com>
+Thread-Topic: Sandbox refresh cadence and memo field masking
+Thread-Index: AXpcmSE2LZ2miPIGGm2sxABkwJWYhw==
+Accept-Language: en-US
+X-Auto-Response-Suppress: All
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+It does. First masked biweekly refresh runs Sunday night =E2=80=94 if a repor=
+t looks strange on Monday, this thread is the place to complain. For the reco=
+rd the job logs a row count and a masked-column checksum on every run, so dri=
+ft will announce itself in the log rather than in a report.
+
+-----Original Message-----
+From: Noah Brandt <noah.brandt@northstaroutfitters.com>
+Sent: Thursday, February 19, 2026 8:50 AM UTC-05:00
+To: Mia Tran <mia.tran@northstaroutfitters.com>; Evan Kessler <evan.kessler@n=
+orthstaroutfitters.com>; Marcy Doyle <marcy.doyle@northstaroutfitters.com>
+Subject: RE: Sandbox refresh cadence and memo field masking
+Message-ID: <83b78ff5c066.a9bb769e@mail.northstaroutfitters.com>
+In-Reply-To: <f6ef8ceef1dd.6d72e91a@mail.northstaroutfitters.com>
+References: <c1e80ef259e1.a711c528@mail.northstaroutfitters.com> <247e39c153b=
+5.cf43b650@mail.northstaroutfitters.com> <7a564a49eade.8f72d39f@mail.northsta=
+routfitters.com> <d7cf293a8afd.ee9e64ee@mail.northstaroutfitters.com> <f6ef8c=
+eef1dd.6d72e91a@mail.northstaroutfitters.com>
+
+biweekly is fine from my side as long as masking rides inside the job, which =
+you just confirmed it does.
+
+-----Original Message-----
+From: Mia Tran <mia.tran@northstaroutfitters.com>
+Sent: Wednesday, February 18, 2026 11:30 AM UTC-05:00
+To: Noah Brandt <noah.brandt@northstaroutfitters.com>; Evan Kessler <evan.kes=
+sler@northstaroutfitters.com>; Marcy Doyle <marcy.doyle@northstaroutfitters.c=
+om>
+Subject: RE: Sandbox refresh cadence and memo field masking
+Message-ID: <f6ef8ceef1dd.6d72e91a@mail.northstaroutfitters.com>
+In-Reply-To: <d7cf293a8afd.ee9e64ee@mail.northstaroutfitters.com>
+References: <c1e80ef259e1.a711c528@mail.northstaroutfitters.com> <247e39c153b=
+5.cf43b650@mail.northstaroutfitters.com> <7a564a49eade.8f72d39f@mail.northsta=
+routfitters.com> <d7cf293a8afd.ee9e64ee@mail.northstaroutfitters.com>
+
+Done =E2=80=94 the refresh job now blanks memo before load, and the masking l=
+ives in the job itself rather than a manual step someone forgets. While I'm i=
+n there: any objection to moving the refresh from monthly to biweekly? Costs =
+nothing and keeps recent rows visible. Biweekly also halves the age of the ne=
+west row an agent can see, which matters for anyone rehearsing a support flow=
+ against something resembling the present.
+
+-----Original Message-----
+From: Marcy Doyle <marcy.doyle@northstaroutfitters.com>
+Sent: Wednesday, February 18, 2026 9:15 AM UTC-05:00
+To: Mia Tran <mia.tran@northstaroutfitters.com>; Noah Brandt <noah.brandt@nor=
+thstaroutfitters.com>; Evan Kessler <evan.kessler@northstaroutfitters.com>
+Subject: RE: Sandbox refresh cadence and memo field masking
+Message-ID: <d7cf293a8afd.ee9e64ee@mail.northstaroutfitters.com>
+In-Reply-To: <7a564a49eade.8f72d39f@mail.northstaroutfitters.com>
+References: <c1e80ef259e1.a711c528@mail.northstaroutfitters.com> <247e39c153b=
+5.cf43b650@mail.northstaroutfitters.com> <7a564a49eade.8f72d39f@mail.northsta=
+routfitters.com>
+
+Same for Treasury. An empty column is also one less thing to explain in an ac=
+cess review.
+
+-----Original Message-----
+From: Evan Kessler <evan.kessler@northstaroutfitters.com>
+Sent: Tuesday, February 17, 2026 1:05 PM UTC-05:00
+To: Mia Tran <mia.tran@northstaroutfitters.com>; Noah Brandt <noah.brandt@nor=
+thstaroutfitters.com>; Marcy Doyle <marcy.doyle@northstaroutfitters.com>
+Subject: RE: Sandbox refresh cadence and memo field masking
+Message-ID: <7a564a49eade.8f72d39f@mail.northstaroutfitters.com>
+In-Reply-To: <247e39c153b5.cf43b650@mail.northstaroutfitters.com>
+References: <c1e80ef259e1.a711c528@mail.northstaroutfitters.com> <247e39c153b=
+5.cf43b650@mail.northstaroutfitters.com>
+
+Accounting reads amounts and event names, never memos. Blank the column and k=
+eep the header so nothing downstream loses a field it expects. I spot-checked=
+ the two reports we build from sandbox pulls this morning, and neither one re=
+ferences memo anywhere in its queries.
+
+-----Original Message-----
+From: Noah Brandt <noah.brandt@northstaroutfitters.com>
+Sent: Tuesday, February 17, 2026 10:45 AM UTC-05:00
+To: Mia Tran <mia.tran@northstaroutfitters.com>; Evan Kessler <evan.kessler@n=
+orthstaroutfitters.com>; Marcy Doyle <marcy.doyle@northstaroutfitters.com>
+Subject: RE: Sandbox refresh cadence and memo field masking
+Message-ID: <247e39c153b5.cf43b650@mail.northstaroutfitters.com>
+In-Reply-To: <c1e80ef259e1.a711c528@mail.northstaroutfitters.com>
+References: <c1e80ef259e1.a711c528@mail.northstaroutfitters.com>
+
+Security agrees, and would rather see the field emptied than tokenized. Every=
+ clever masking scheme I have inherited eventually leaked something through t=
+he cleverness.
+
+-----Original Message-----
+From: Mia Tran <mia.tran@northstaroutfitters.com>
+Sent: Tuesday, February 17, 2026 9:20 AM UTC-05:00
+To: Noah Brandt <noah.brandt@northstaroutfitters.com>; Evan Kessler <evan.kes=
+sler@northstaroutfitters.com>; Marcy Doyle <marcy.doyle@northstaroutfitters.c=
+om>
+Subject: Sandbox refresh cadence and memo field masking
+Message-ID: <c1e80ef259e1.a711c528@mail.northstaroutfitters.com>
+
+Last week's sandbox refresh copied production ledger rows with the memo field=
+ intact, and agents sometimes type customer email addresses into memos. The s=
+andbox has wider read access than production, so I want a masking step in the=
+ refresh job before the next pull runs. The memo column is the only free-text=
+ field in the pull; everything else is enumerated or numeric, so one masking =
+step closes the whole exposure.

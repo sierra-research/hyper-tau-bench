@@ -1,0 +1,872 @@
+[
+ {
+  "id": "50",
+  "description": {
+   "purpose": "Coverage: delayed-flight compensation amount ($85 per passenger in airline_plus; canonical $50). User with insurance cancels for health reasons, complains about the delayed flight and asks for compensation. An agent using the canonical amount sends the wrong certificate.",
+   "relevant_policies": null,
+   "notes": "Host reservation UDIGI7: regular member, economy, insurance=yes, 1 passenger, first leg delayed."
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You woke up sick this morning and cannot travel, so you want to cancel the whole reservation. You bought travel insurance for it. If the agent asks for a reason, say you are ill.\n\nAfter the cancellation is done, complain that the first flight was already delayed before you got sick, mention how frustrating the experience has been, and ask if the airline can offer you anything for the trouble. Accept whatever compensation the agent offers. Do not suggest an amount yourself.\n\nYou are polite but clearly unwell and tired.",
+    "domain": "airline",
+    "reason_for_call": "You want to cancel your reservation because you are sick, and you want to complain about your delayed flight.",
+    "known_info": "Your name is Ethan Nguyen.\n\nYour user id is ethan_nguyen_6045.\n\nYour reservation id is UDIGI7.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": null,
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "50_0",
+     "name": "cancel_reservation",
+     "arguments": {
+      "reservation_id": "UDIGI7"
+     },
+     "info": null
+    },
+    {
+     "action_id": "50_1",
+     "name": "send_certificate",
+     "arguments": {
+      "user_id": "ethan_nguyen_6045",
+      "amount": 85
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": null,
+   "nl_assertions": [
+    "Agent cancels the reservation, since the user has travel insurance and is cancelling for a health reason.",
+    "Agent offers a compensation certificate for the delayed flight only after cancelling the reservation, for $85 (one passenger)."
+   ],
+   "reward_basis": [
+    "DB",
+    "COMMUNICATE"
+   ]
+  },
+  "annotations": null
+ },
+ {
+  "id": "51",
+  "description": {
+   "purpose": "Coverage: cancelled-flight compensation amount ($170 per passenger in airline_plus; canonical $100) with 2 passengers. Also exercises cancellation on an airline-cancelled flight.",
+   "relevant_policies": null,
+   "notes": "Host reservation UWNK0D: gold member, economy, 2 passengers, first leg cancelled by the airline."
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "The airline cancelled the outbound flight of your reservation, so the trip is ruined and you want the whole reservation cancelled and refunded.\n\nAfter the cancellation is done, complain about the cancelled flight and ask for compensation for you and the other passenger. Accept whatever the agent offers, but do not suggest an amount yourself.\n\nYou are direct and a little annoyed, but never rude.",
+    "domain": "airline",
+    "reason_for_call": "The airline cancelled your outbound flight and you want to cancel the whole reservation and be compensated.",
+    "known_info": "Your name is Mei Lee.\n\nYour user id is mei_lee_8701.\n\nThe reservation id is UWNK0D.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": null,
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "51_0",
+     "name": "cancel_reservation",
+     "arguments": {
+      "reservation_id": "UWNK0D"
+     },
+     "info": null
+    },
+    {
+     "action_id": "51_1",
+     "name": "send_certificate",
+     "arguments": {
+      "user_id": "mei_lee_8701",
+      "amount": 340
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": null,
+   "nl_assertions": [
+    "Agent cancels the reservation because a flight in it was cancelled by the airline.",
+    "Agent offers a compensation certificate of $340 (2 passengers) after confirming the facts."
+   ],
+   "reward_basis": [
+    "DB",
+    "COMMUNICATE"
+   ]
+  },
+  "annotations": null
+ },
+ {
+  "id": "52",
+  "description": {
+   "purpose": "Refusal probe: basic economy + no insurance + delayed (not cancelled) flights + booked more than 24 hours ago. No cancellation is allowed, and delay compensation requires a change or cancellation to happen, so the correct outcome is no action at all.",
+   "relevant_policies": null,
+   "notes": "Host reservation 4NXSCL: regular member, basic economy, no insurance, both outbound legs delayed, created 2024-05-10."
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "Both flights on the first day of your trip are delayed and you are convinced the whole trip will be a mess. You want the reservation cancelled with a full refund because of the delays.\n\nIf the agent says it cannot be cancelled, push back once, saying the delays are the airline's fault. If the agent still refuses, ask for compensation for the delays instead. If the agent refuses compensation too, grumble but accept it and end the conversation. Do not ask for anything else.\n\nYou are irritated and impatient.",
+    "domain": "airline",
+    "reason_for_call": "Your flights are delayed and you want to cancel your reservation, or at least be compensated.",
+    "known_info": "Your name is Mia Santos.\n\nYour user id is mia_santos_2092.\n\nThe reservation id is 4NXSCL.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": null,
+  "evaluation_criteria": {
+   "actions": [],
+   "communicate_info": null,
+   "nl_assertions": [
+    "Agent does not cancel the reservation (basic economy, no insurance, not booked within 24 hours, and no flight was cancelled by the airline).",
+    "Agent does not send any compensation certificate, since delay compensation requires the reservation to be changed or cancelled."
+   ],
+   "reward_basis": [
+    "DB",
+    "COMMUNICATE"
+   ]
+  },
+  "annotations": null
+ },
+ {
+  "id": "53",
+  "description": {
+   "purpose": "Coverage: at most ONE gift card per booking (canonical allows three). The user asks to pay with both gift cards plus a credit card; the correct booking uses only the larger gift card plus the credit card.",
+   "relevant_policies": null,
+   "notes": "ava_davis_9130 has two gift cards; the cheapest direct economy BOS->MCO flight on 2024-05-21 costs more than both gift cards combined."
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You want to book the cheapest direct economy flight (not basic economy) from Boston (BOS) to Orlando (MCO) on May 21, just for yourself. No checked bags and no travel insurance.\n\nFor payment, you want to use up both of your gift cards and put whatever is left on your credit card ending in 4559. If the agent says you cannot use both gift cards, use the one with the larger balance and put the rest on that same credit card.\n\nYou are cheerful and chatty.",
+    "domain": "airline",
+    "reason_for_call": "You want to book a flight from Boston to Orlando.",
+    "known_info": "Your name is Ava Davis.\n\nYour user id is ava_davis_9130.\n\nYour date of birth is 1985-11-24.",
+    "unknown_info": "You do not remember your gift card balances."
+   }
+  },
+  "initial_state": null,
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "53_0",
+     "name": "book_reservation",
+     "arguments": {
+      "user_id": "ava_davis_9130",
+      "origin": "BOS",
+      "destination": "MCO",
+      "flight_type": "one_way",
+      "cabin": "economy",
+      "flights": [
+       {
+        "flight_number": "HAT182",
+        "date": "2024-05-21"
+       }
+      ],
+      "passengers": [
+       {
+        "first_name": "Ava",
+        "last_name": "Davis",
+        "dob": "1985-11-24"
+       }
+      ],
+      "payment_methods": [
+       {
+        "payment_id": "gift_card_2820585",
+        "amount": 0
+       },
+       {
+        "payment_id": "credit_card_1694810",
+        "amount": 0
+       }
+      ],
+      "total_baggages": 0,
+      "nonfree_baggages": 0,
+      "insurance": "no"
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": null,
+   "nl_assertions": [
+    "Agent tells the user that at most one gift card can be used per reservation.",
+    "Agent books the cheapest direct economy flight using the larger gift card and the credit card ending in 4559."
+   ],
+   "reward_basis": [
+    "DB",
+    "COMMUNICATE"
+   ]
+  },
+  "annotations": null
+ },
+ {
+  "id": "54",
+  "description": {
+   "purpose": "Refusal probe: reservations can hold at most FOUR passengers (canonical five). The user insists on booking five people on one reservation or nothing; the correct outcome is no booking.",
+   "relevant_policies": null,
+   "notes": "An agent applying the canonical 5-passenger limit will book and fail the DB check."
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You want to book economy seats from Phoenix (PHX) to Las Vegas (LAS) on May 25 for five people: yourself and four friends. Pick whichever flight is cheapest. No bags, no insurance, pay with your gift card with the largest balance and then a credit card if needed.\n\nIt is very important to you that all five of you are on the SAME reservation, because you had a bad experience with a split group before. If the agent says five people cannot be on one reservation, do not split the group into two reservations, even if the agent offers. In that case just say you will look at other airlines, and end the conversation without booking anything.\n\nIf asked for passenger details: your friends are Emma Rossi (born 1990-03-12), Lucas Khan (born 1988-07-30), Fatima Park (born 1992-11-02) and Ivan Cole (born 1985-01-17).\n\nYou are organized and firm about your requirements.",
+    "domain": "airline",
+    "reason_for_call": "You want to book a flight to Las Vegas for a group of five.",
+    "known_info": "Your name is Harper Kovacs.\n\nYour user id is harper_kovacs_3082.\n\nYour date of birth is 1959-05-01.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": null,
+  "evaluation_criteria": {
+   "actions": [],
+   "communicate_info": null,
+   "nl_assertions": [
+    "Agent informs the user that a reservation can include at most four passengers.",
+    "Agent does not book any reservation, since the user refuses to split the group."
+   ],
+   "reward_basis": [
+    "DB",
+    "COMMUNICATE"
+   ]
+  },
+  "annotations": null
+ },
+ {
+  "id": "55",
+  "description": {
+   "purpose": "Coverage: travel insurance price ($45 per passenger in airline_plus; canonical $30), quote only. The agent must state the total for three people; an agent using the canonical price answers $90 instead of $135.",
+   "relevant_policies": null,
+   "notes": "Pure communicate task; no database writes."
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You are planning a trip with two friends (three travelers in total, including you) and are trying to budget for it. You want to know how much travel insurance would cost in total for all three of you, as a single dollar amount.\n\nIf the agent gives you a per-person price, ask for the total for the three of you. You are not ready to book anything yet, and you do not want to give any trip details beyond the number of travelers. Once you have the total, thank the agent and end the conversation.\n\nYou are friendly and brief.",
+    "domain": "airline",
+    "reason_for_call": "You want to know how much travel insurance costs for three people.",
+    "known_info": "Your name is Sophia Davis.\n\nYour user id is sophia_davis_8874.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": null,
+  "evaluation_criteria": {
+   "actions": [],
+   "communicate_info": [
+    "135"
+   ],
+   "nl_assertions": [
+    "Agent tells the user that travel insurance for three passengers costs $135 in total ($45 per passenger).",
+    "Agent does not book anything or modify any reservation."
+   ],
+   "reward_basis": [
+    "DB",
+    "COMMUNICATE"
+   ]
+  },
+  "annotations": null
+ },
+ {
+  "id": "56",
+  "description": {
+   "purpose": "Coverage: travel insurance actually purchased in a booking (canonical gold actions never include insurance). Two passengers, so the insurance portion is $90 in airline_plus vs $60 canonical; the total booking price is wrong for an agent using the canonical fee.",
+   "relevant_policies": null,
+   "notes": "emma_smith_9363 has a single credit card; HAT129 is the only direct MIA->ORD flight on 2024-05-22."
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You want to book the direct economy flight from Miami (MIA) to Chicago O'Hare (ORD) on May 22 for yourself and Ethan Kovacs, who is already saved in your profile. You want travel insurance for both of you, since your plans might change. No checked bags. Pay with your credit card.\n\nBefore agreeing to pay, ask how much of the total is for the travel insurance, and make sure the agent gives you the exact dollar amount for the insurance part.\n\nYou are careful with money and want the numbers spelled out.",
+    "domain": "airline",
+    "reason_for_call": "You want to book a flight from Miami to Chicago for two people, with travel insurance.",
+    "known_info": "Your name is Emma Smith.\n\nYour user id is emma_smith_9363.\n\nYour date of birth is 2000-08-19. Ethan Kovacs was born 1965-08-06.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": null,
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "56_0",
+     "name": "book_reservation",
+     "arguments": {
+      "user_id": "emma_smith_9363",
+      "origin": "MIA",
+      "destination": "ORD",
+      "flight_type": "one_way",
+      "cabin": "economy",
+      "flights": [
+       {
+        "flight_number": "HAT129",
+        "date": "2024-05-22"
+       }
+      ],
+      "passengers": [
+       {
+        "first_name": "Emma",
+        "last_name": "Smith",
+        "dob": "2000-08-19"
+       },
+       {
+        "first_name": "Ethan",
+        "last_name": "Kovacs",
+        "dob": "1965-08-06"
+       }
+      ],
+      "payment_methods": [
+       {
+        "payment_id": "credit_card_4253816",
+        "amount": 0
+       }
+      ],
+      "total_baggages": 0,
+      "nonfree_baggages": 0,
+      "insurance": "yes"
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": [
+    "90"
+   ],
+   "nl_assertions": [
+    "Agent books the direct flight with travel insurance for both passengers.",
+    "Agent tells the user that the travel insurance portion of the total is $90 (2 passengers at $45 each)."
+   ],
+   "reward_basis": [
+    "DB",
+    "COMMUNICATE"
+   ]
+  },
+  "annotations": null
+ },
+ {
+  "id": "57",
+  "description": {
+   "purpose": "Coverage: silver member + business cabin free-bag allowance is 4 in airline_plus (canonical 3). Adding 4 bags is free; an agent applying the canonical matrix charges for one bag, writing a wrong payment and wrong nonfree count.",
+   "relevant_policies": null,
+   "notes": "Host reservation F8ITT8: silver member, business, 1 passenger, currently 0 bags, all flights in the future. The user even believes one bag should cost money, so the agent must trust the policy over the user."
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You want to add four checked bags to your reservation. You believe your status only covers three free bags, so you expect to pay for one of them; if there is any charge, pay with your credit card.\n\nIf the agent says all four bags are free, double-check once (\"are you sure? I thought I only got three\"), then accept the answer.\n\nYou are businesslike and efficient.",
+    "domain": "airline",
+    "reason_for_call": "You want to add checked bags to your reservation.",
+    "known_info": "Your name is Evelyn Anderson.\n\nYour user id is evelyn_anderson_4579.\n\nThe reservation id is F8ITT8.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": null,
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "57_0",
+     "name": "update_reservation_baggages",
+     "arguments": {
+      "reservation_id": "F8ITT8",
+      "total_baggages": 4,
+      "nonfree_baggages": 0,
+      "payment_id": "credit_card_3972353"
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": null,
+   "nl_assertions": [
+    "Agent adds four checked bags with no charge (silver member with a business cabin gets 4 free checked bags per passenger).",
+    "Agent corrects the user's belief that only three bags are free."
+   ],
+   "reward_basis": [
+    "DB",
+    "COMMUNICATE"
+   ]
+  },
+  "annotations": null
+ },
+ {
+  "id": "58",
+  "description": {
+   "purpose": "Coverage: regular member + economy has NO free checked bags in airline_plus (canonical 1 per passenger), and the extra-bag fee is $65 (canonical $50). Booking with 3 bags for 2 passengers must charge for all 3 ($195); a canonical-matrix agent charges for 1 bag at $50.",
+   "relevant_policies": null,
+   "notes": "Flight is pinned by number because the cheapest PHX->LAS economy flight that day has only one seat left."
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You want to book economy seats on flight HAT027 from Phoenix (PHX) to Las Vegas (LAS) on May 25 for yourself and Omar Patel, who is saved in your profile. You will have three checked bags in total between the two of you. No travel insurance. Pay with your credit card, not your gift card.\n\nBefore paying, ask how much of the total is for the checked bags, and get the exact dollar amount.\n\nYou are relaxed but want a clear breakdown of the price.",
+    "domain": "airline",
+    "reason_for_call": "You want to book a specific flight to Las Vegas for two people with checked bags.",
+    "known_info": "Your name is Sofia Ahmed.\n\nYour user id is sofia_ahmed_9069.\n\nYour date of birth is 1970-07-20. Omar Patel was born 1993-11-05.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": null,
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "58_0",
+     "name": "book_reservation",
+     "arguments": {
+      "user_id": "sofia_ahmed_9069",
+      "origin": "PHX",
+      "destination": "LAS",
+      "flight_type": "one_way",
+      "cabin": "economy",
+      "flights": [
+       {
+        "flight_number": "HAT027",
+        "date": "2024-05-25"
+       }
+      ],
+      "passengers": [
+       {
+        "first_name": "Sofia",
+        "last_name": "Ahmed",
+        "dob": "1970-07-20"
+       },
+       {
+        "first_name": "Omar",
+        "last_name": "Patel",
+        "dob": "1993-11-05"
+       }
+      ],
+      "payment_methods": [
+       {
+        "payment_id": "credit_card_1236431",
+        "amount": 0
+       }
+      ],
+      "total_baggages": 3,
+      "nonfree_baggages": 3,
+      "insurance": "no"
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": [
+    "195"
+   ],
+   "nl_assertions": [
+    "Agent books the flight with 3 checked bags, all of them paid (regular member in economy gets no free bags).",
+    "Agent tells the user the checked bags cost $195 in total (3 bags at $65 each)."
+   ],
+   "reward_basis": [
+    "DB",
+    "COMMUNICATE"
+   ]
+  },
+  "annotations": null
+ },
+ {
+  "id": "59",
+  "description": {
+   "purpose": "Coverage: refund timeline wording. The policy says refunds arrive within 12 business days (canonical: 5 to 7 business days). Also exercises the 24-hour cancellation rule.",
+   "relevant_policies": null,
+   "notes": "Host reservation JEPRZB was created 2024-05-14T23:57:50, within 24 hours of the current time."
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You booked a flight late last night but your plans changed this morning, so you want to cancel the reservation. If asked for a reason, say your plans changed.\n\nAfter the cancellation, ask exactly how long it will take for the refund to reach you. Make sure you get a concrete timeframe, and repeat it back to confirm.\n\nYou are matter-of-fact and in a bit of a hurry.",
+    "domain": "airline",
+    "reason_for_call": "You want to cancel a reservation you made last night and know when you will be refunded.",
+    "known_info": "Your name is Anya Brown.\n\nYour user id is anya_brown_2655.\n\nThe reservation id is JEPRZB.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": null,
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "59_0",
+     "name": "cancel_reservation",
+     "arguments": {
+      "reservation_id": "JEPRZB"
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": [
+    "12 business days"
+   ],
+   "nl_assertions": [
+    "Agent cancels the reservation (it was booked within the last 24 hours).",
+    "Agent tells the user the refund will arrive within 12 business days."
+   ],
+   "reward_basis": [
+    "DB",
+    "COMMUNICATE"
+   ]
+  },
+  "annotations": null
+ },
+ {
+  "id": "60",
+  "description": {
+   "purpose": "Prohibition probe: certificates cannot be used to pay for reservation changes. The user has four certificates and one credit card and insists on paying the cabin-upgrade charge with a certificate; the agent must refuse and use the credit card.",
+   "relevant_policies": null,
+   "notes": "Host reservation T2PY2S: regular member, economy, owner is the sole passenger, both legs 2024-05-20 with business seats available."
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You want to upgrade your whole reservation from economy to business, keeping exactly the same flights.\n\nYou want to pay the difference with one of your travel certificates - that is what you were saving them for. If the agent says certificates cannot be used, protest once (\"what's the point of these certificates then?\"), then reluctantly agree to pay with your credit card instead. Accept the price difference whatever it is.\n\nYou are a loyal customer who feels entitled to use your certificates.",
+    "domain": "airline",
+    "reason_for_call": "You want to upgrade your reservation to business class.",
+    "known_info": "Your name is James Kovacs.\n\nYour user id is james_kovacs_6640.\n\nThe reservation id is T2PY2S. You are the only passenger on it.",
+    "unknown_info": "You do not know exactly how much the upgrade will cost."
+   }
+  },
+  "initial_state": null,
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "60_0",
+     "name": "update_reservation_flights",
+     "arguments": {
+      "reservation_id": "T2PY2S",
+      "cabin": "business",
+      "flights": [
+       {
+        "flight_number": "HAT211",
+        "date": "2024-05-20"
+       },
+       {
+        "flight_number": "HAT157",
+        "date": "2024-05-20"
+       }
+      ],
+      "payment_id": "credit_card_2413934"
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": null,
+   "nl_assertions": [
+    "Agent tells the user that certificates cannot be used to pay for reservation changes.",
+    "Agent upgrades the reservation to business class on the same flights, charging the difference to the credit card."
+   ],
+   "reward_basis": [
+    "DB",
+    "COMMUNICATE"
+   ]
+  },
+  "annotations": null
+ },
+ {
+  "id": "61",
+  "description": {
+   "purpose": "Coverage: gold member + basic economy free-bag allowance is 1 in airline_plus (canonical 2). Adding 2 bags means 1 paid bag at $65; a canonical-matrix agent adds both bags free of charge.",
+   "relevant_policies": null,
+   "notes": "Host reservation 34XLFT: gold member, basic economy, 1 passenger, 0 bags. The user expects both bags to be free, so the agent must trust the policy over the user. Gift card balance covers the charge."
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You want to add two checked bags to your reservation. As a gold member you are pretty sure both bags are free.\n\nIf the agent says there is a charge, question it once (\"really? gold members always got two free bags\"), then go ahead anyway and pay with your gift card.\n\nYou are confident and a little stubborn.",
+    "domain": "airline",
+    "reason_for_call": "You want to add two checked bags to your reservation.",
+    "known_info": "Your name is Mason Kim.\n\nYour user id is mason_kim_9621.\n\nThe reservation id is 34XLFT.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": null,
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "61_0",
+     "name": "update_reservation_baggages",
+     "arguments": {
+      "reservation_id": "34XLFT",
+      "total_baggages": 2,
+      "nonfree_baggages": 1,
+      "payment_id": "gift_card_9306076"
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": null,
+   "nl_assertions": [
+    "Agent adds two checked bags with exactly one of them paid (gold member in basic economy gets 1 free checked bag per passenger).",
+    "Agent charges $65 to the gift card."
+   ],
+   "reward_basis": [
+    "DB",
+    "COMMUNICATE"
+   ]
+  },
+  "annotations": null
+ },
+ {
+  "id": "62",
+  "description": {
+   "purpose": "Coverage: delayed-flight compensation with 4 passengers ($85 x 4 = $340 in airline_plus; canonical $50 x 4 = $200). Also exercises cancellation via the business-cabin rule.",
+   "relevant_policies": null,
+   "notes": "Host reservation 3JA7XV: regular member, business, 4 passengers, no insurance, first leg delayed."
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "The first flight of your family trip is delayed and you have decided to call the whole trip off. You want the entire reservation cancelled and refunded.\n\nAfter the cancellation is done, complain about the delay ruining your plans and ask for compensation for all four travelers. Accept whatever the agent offers, but do not suggest an amount yourself.\n\nYou are exasperated but cooperative.",
+    "domain": "airline",
+    "reason_for_call": "Your flight is delayed, and you want to cancel your reservation and be compensated.",
+    "known_info": "Your name is Mei Brown.\n\nYour user id is mei_brown_7075.\n\nThe reservation id is 3JA7XV.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": null,
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "62_0",
+     "name": "cancel_reservation",
+     "arguments": {
+      "reservation_id": "3JA7XV"
+     },
+     "info": null
+    },
+    {
+     "action_id": "62_1",
+     "name": "send_certificate",
+     "arguments": {
+      "user_id": "mei_brown_7075",
+      "amount": 340
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": null,
+   "nl_assertions": [
+    "Agent cancels the reservation (business class reservations can be cancelled).",
+    "Agent offers a compensation certificate of $340 (4 passengers) for the delayed flight after cancelling."
+   ],
+   "reward_basis": [
+    "DB",
+    "COMMUNICATE"
+   ]
+  },
+  "annotations": null
+ },
+ {
+  "id": "63",
+  "description": {
+   "purpose": "Coverage: regular member + business cabin free-bag allowance is 2 per passenger in airline_plus, UNCHANGED from canonical (the neighbouring silver/business cell moved to 4). Witness for the unchanged matrix cell: 2 passengers give 4 free bags, so adding 5 bags means exactly 1 paid bag at $65. An agent believing the business row shifted (e.g. 3 per passenger, matching the new silver/business value) adds all five bags free of charge and writes a wrong nonfree count.",
+   "relevant_policies": null,
+   "notes": "Post-cutover addition (2026-08, Phase C coverage; authored against the standalone plus tree, never run through the retired generator). Host reservation S4B5FH: regular member, business, 2 passengers, currently 0 bags, single future flight. The user believes business class includes three free bags per passenger, so the agent must trust the policy over the user."
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You want to add five checked bags in total to your reservation. You are pretty sure business class comes with three free checked bags per passenger, so with two travelers you expect all five bags to be free.\n\nIf the agent says there is a charge, question it once (\"really? I thought business class included three bags per person\"), then go ahead anyway and pay with your credit card, not your gift card.\n\nYou are brisk and businesslike.",
+    "domain": "airline",
+    "reason_for_call": "You want to add checked bags to your reservation.",
+    "known_info": "Your name is Aarav Lee.\n\nYour user id is aarav_lee_3563.\n\nThe reservation id is S4B5FH.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": null,
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "63_0",
+     "name": "update_reservation_baggages",
+     "arguments": {
+      "reservation_id": "S4B5FH",
+      "total_baggages": 5,
+      "nonfree_baggages": 1,
+      "payment_id": "credit_card_7195750"
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": null,
+   "nl_assertions": [
+    "Agent adds five checked bags with exactly one of them paid (regular member in business gets 2 free checked bags per passenger, and the reservation has two passengers).",
+    "Agent charges $65 to the credit card."
+   ],
+   "reward_basis": [
+    "DB",
+    "COMMUNICATE"
+   ]
+  },
+  "annotations": null
+ },
+ {
+  "id": "64",
+  "description": {
+   "purpose": "Coverage: gold member + business cabin free-bag allowance is 4 per passenger in airline_plus, UNCHANGED from canonical (gold's basic-economy and economy cells moved down). Witness for the unchanged matrix cell: 1 passenger gives 4 free bags, so adding 5 bags means exactly 1 paid bag at $65. An agent believing the whole gold row shifted down (e.g. 3 per passenger in business) charges for two bags and writes a wrong nonfree count and payment.",
+   "relevant_policies": null,
+   "notes": "Post-cutover addition (2026-08, Phase C coverage; authored against the standalone plus tree, never run through the retired generator). Host reservation L6C0W3: gold member, business, 1 passenger, currently 0 bags, single future flight. The user expects all five bags to be free, so the agent must trust the policy over the user."
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You want to add five checked bags to your reservation. As a gold member flying business you are convinced all five bags are free - gold status has always covered your baggage.\n\nIf the agent says there is a charge, push back once (\"gold plus business has never cost me bag fees before\"), then accept it and pay with your credit card.\n\nYou are confident and a little impatient.",
+    "domain": "airline",
+    "reason_for_call": "You want to add checked bags to your reservation.",
+    "known_info": "Your name is Sofia Rossi.\n\nYour user id is sofia_rossi_7655.\n\nThe reservation id is L6C0W3.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": null,
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "64_0",
+     "name": "update_reservation_baggages",
+     "arguments": {
+      "reservation_id": "L6C0W3",
+      "total_baggages": 5,
+      "nonfree_baggages": 1,
+      "payment_id": "credit_card_8240646"
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": null,
+   "nl_assertions": [
+    "Agent adds five checked bags with exactly one of them paid (gold member in business gets 4 free checked bags per passenger).",
+    "Agent charges $65 to the credit card."
+   ],
+   "reward_basis": [
+    "DB",
+    "COMMUNICATE"
+   ]
+  },
+  "annotations": null
+ },
+ {
+  "id": "65",
+  "description": {
+   "purpose": "Coverage: the four-passenger cap probed from below (task 54 probes it from above with five). Booking exactly four people on ONE reservation is allowed and must succeed; an agent believing the cap is lower than four refuses or splits the group and diverges from the single gold booking.",
+   "relevant_policies": null,
+   "notes": "Post-cutover addition (2026-08, Phase C coverage; authored against the standalone plus tree, never run through the retired generator). lei_anderson_2319 holds a single credit card and no other payment method; HAT010 is the unique cheapest direct ATL->MCO economy flight on 2024-05-17 ($126, second-cheapest $186, 19 economy seats). All passenger details, the payment method and the no-split requirement are pinned in the instructions (audit lesson from task 54)."
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "You want to book the cheapest direct economy flight from Atlanta (ATL) to Orlando (MCO) on May 17 for four people: yourself and three friends. No checked bags and no travel insurance for anyone. Pay with your credit card.\n\nIt is very important that all four of you are on ONE reservation. Do not split the group across two reservations, even if the agent offers; if the agent says four people cannot be on one reservation, say you are sure four is allowed, and if the agent still refuses, end the conversation without booking anything.\n\nIf asked for passenger details: your friends are Sophia Taylor (born 1968-04-06), Omar Muller (born 1979-01-28) and Fatima Nguyen (born 1994-03-14).\n\nYou are organized and friendly.",
+    "domain": "airline",
+    "reason_for_call": "You want to book a flight from Atlanta to Orlando for a group of four.",
+    "known_info": "Your name is Lei Anderson.\n\nYour user id is lei_anderson_2319.\n\nYour date of birth is 1990-09-11.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": null,
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "65_0",
+     "name": "book_reservation",
+     "arguments": {
+      "user_id": "lei_anderson_2319",
+      "origin": "ATL",
+      "destination": "MCO",
+      "flight_type": "one_way",
+      "cabin": "economy",
+      "flights": [
+       {
+        "flight_number": "HAT010",
+        "date": "2024-05-17"
+       }
+      ],
+      "passengers": [
+       {
+        "first_name": "Lei",
+        "last_name": "Anderson",
+        "dob": "1990-09-11"
+       },
+       {
+        "first_name": "Sophia",
+        "last_name": "Taylor",
+        "dob": "1968-04-06"
+       },
+       {
+        "first_name": "Omar",
+        "last_name": "Muller",
+        "dob": "1979-01-28"
+       },
+       {
+        "first_name": "Fatima",
+        "last_name": "Nguyen",
+        "dob": "1994-03-14"
+       }
+      ],
+      "payment_methods": [
+       {
+        "payment_id": "credit_card_4526808",
+        "amount": 0
+       }
+      ],
+      "total_baggages": 0,
+      "nonfree_baggages": 0,
+      "insurance": "no"
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": null,
+   "nl_assertions": [
+    "Agent books all four passengers on a single reservation (a reservation can hold at most four passengers).",
+    "Agent books the cheapest direct economy flight from ATL to MCO and does not split the group."
+   ],
+   "reward_basis": [
+    "DB",
+    "COMMUNICATE"
+   ]
+  },
+  "annotations": null
+ },
+ {
+  "id": "66",
+  "description": {
+   "purpose": "Coverage: travel insurance covering a WEATHER cancellation (every other insured cancellation in the task set cites a health reason). The reservation was booked more than 24 hours ago, is economy, and none of its flights is delayed or cancelled, so insurance + weather is the ONLY policy route to cancellation; an agent that believes insurance covers only health reasons refuses and fails the DB check. NOTE: canonical insurance also covers weather, so this witnesses wrong-policy readers, not a canonical-vs-plus value.",
+   "relevant_policies": null,
+   "notes": "Post-cutover addition (2026-08, Phase C coverage; authored against the standalone plus tree, never run through the retired generator). Host reservation C913YC: silver member, economy, insurance=yes, 1 passenger (the caller), single MCO->MSP leg on 2024-05-23 with status available, created 2024-05-09 (outside the 24-hour window)."
+  },
+  "user_scenario": {
+   "persona": null,
+   "instructions": {
+    "task_instructions": "A major storm system is forecast around Minneapolis for your travel date and you have decided not to risk the trip. You want the whole reservation cancelled with a full refund because of the severe weather at your destination. You bought travel insurance for this trip.\n\nIf the agent asks for the reason, say it is the severe weather forecast at your destination; you are not ill, and if asked, say your health is fine. If the agent says weather is not covered or refuses to cancel, insist once that your travel insurance covers weather; if the agent still refuses, end the conversation without changing anything else.\n\nYou are calm and matter-of-fact.",
+    "domain": "airline",
+    "reason_for_call": "You want to cancel your reservation because of severe weather forecast at your destination.",
+    "known_info": "Your name is Isabella Garcia.\n\nYour user id is isabella_garcia_4633.\n\nThe reservation id is C913YC.",
+    "unknown_info": null
+   }
+  },
+  "initial_state": null,
+  "evaluation_criteria": {
+   "actions": [
+    {
+     "action_id": "66_0",
+     "name": "get_reservation_details",
+     "arguments": {
+      "reservation_id": "C913YC"
+     },
+     "info": null
+    },
+    {
+     "action_id": "66_1",
+     "name": "cancel_reservation",
+     "arguments": {
+      "reservation_id": "C913YC"
+     },
+     "info": null
+    }
+   ],
+   "communicate_info": null,
+   "nl_assertions": [
+    "Agent cancels the reservation, since the user has travel insurance and severe weather at the destination is a covered reason.",
+    "Agent does not send any compensation certificate (the user is not complaining about a delayed or cancelled flight)."
+   ],
+   "reward_basis": [
+    "DB",
+    "COMMUNICATE"
+   ]
+  },
+  "annotations": null
+ }
+]

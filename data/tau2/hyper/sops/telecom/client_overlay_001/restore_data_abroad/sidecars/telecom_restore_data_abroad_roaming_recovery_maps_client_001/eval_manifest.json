@@ -1,0 +1,70 @@
+{
+  "id": "telecom_restore_data_abroad_process_flowchart_001",
+  "representation": "process_flowchart",
+  "snapshot": "2026-08-08T16:30:00-07:00",
+  "artifact_count": 2,
+  "artifacts": [
+    {
+      "raster": "roaming_recovery_01_intake_phone.png",
+      "text_source": "roaming_recovery_01_intake_phone.txt",
+      "kit_filename": "roaming_recovery_01_intake_phone.png",
+      "width": 1760,
+      "height": 1280,
+      "authoritative_fact_ids": [
+        "roaming_has_phone_and_carrier_layers",
+        "abroad_data_requires_layers_active_line_data_usage",
+        "applies_to_abroad_customer_with_bad_data",
+        "check_phone_side_roaming_first",
+        "phone_roaming_off_enable_and_rerun"
+      ],
+      "dependent_fact_ids": [
+        "identify_line_before_carrier_roaming_check",
+        "explain_carrier_roaming_needed_when_off",
+        "rerun_speed_test_after_carrier_step"
+      ]
+    },
+    {
+      "raster": "roaming_recovery_02_outcomes.png",
+      "text_source": "roaming_recovery_02_outcomes.txt",
+      "kit_filename": "roaming_recovery_02_outcomes.png",
+      "width": 1760,
+      "height": 1280,
+      "authoritative_fact_ids": [
+        "close_when_both_layers_on_and_excellent"
+      ],
+      "dependent_fact_ids": [
+        "rerun_speed_test_after_carrier_step"
+      ]
+    }
+  ],
+  "cross_references": [
+    {
+      "source": "map_1",
+      "target": "ROAM-248"
+    },
+    {
+      "source": "map_1",
+      "target": "ROAM-251"
+    },
+    {
+      "source": "map_2",
+      "target": "ROAM-264"
+    },
+    {
+      "source": "map_2",
+      "target": "NW-DATA-2101"
+    }
+  ],
+  "distribution": {
+    "expose_to_developer_agent": [
+      "roaming_recovery_01_intake_phone.png",
+      "roaming_recovery_02_outcomes.png"
+    ],
+    "keep_author_side": [
+      "roaming_recovery_01_intake_phone.txt",
+      "roaming_recovery_02_outcomes.txt",
+      "eval_manifest.json",
+      "README.md"
+    ]
+  }
+}

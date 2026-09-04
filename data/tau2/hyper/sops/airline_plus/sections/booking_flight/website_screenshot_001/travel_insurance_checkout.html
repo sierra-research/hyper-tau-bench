@@ -1,0 +1,1160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Review and pay | Meridian Airlines</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --navy: #142d4f;
+        --deep-navy: #0d2547;
+        --blue: #0877bd;
+        --bright-blue: #0a84d2;
+        --red: #c51f3a;
+        --ink: #23354d;
+        --muted: #5d6b7d;
+        --line: #d8dee6;
+        --soft-line: #e8edf2;
+        --canvas: #f4f6f8;
+        --pale-blue: #eef7fc;
+        --white: #ffffff;
+        --shadow: 0 3px 12px rgba(12, 35, 65, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: var(--canvas);
+      }
+
+      body {
+        margin: 0;
+        min-width: 1120px;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 84% 11%, rgba(40, 145, 207, 0.07), transparent 26rem),
+          var(--canvas);
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 15px;
+        line-height: 1.45;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .utility-bar {
+        height: 38px;
+        color: #dce7f3;
+        background: var(--deep-navy);
+        font-size: 12px;
+      }
+
+      .utility-inner,
+      .main-nav-inner,
+      .progress-inner,
+      .page-shell,
+      .footer-inner {
+        width: 1180px;
+        margin: 0 auto;
+      }
+
+      .utility-inner {
+        display: flex;
+        height: 100%;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 26px;
+      }
+
+      .utility-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        letter-spacing: 0.01em;
+      }
+
+      .tiny-icon {
+        width: 14px;
+        height: 14px;
+        opacity: 0.86;
+      }
+
+      .main-nav {
+        height: 74px;
+        border-bottom: 1px solid #cfd7e1;
+        background: var(--white);
+      }
+
+      .main-nav-inner {
+        display: flex;
+        height: 100%;
+        align-items: center;
+      }
+
+      .brand {
+        display: flex;
+        min-width: 250px;
+        align-items: center;
+        gap: 13px;
+      }
+
+      .brand-mark {
+        position: relative;
+        width: 39px;
+        height: 39px;
+        overflow: hidden;
+        border-radius: 3px;
+        background: #f7fafc;
+      }
+
+      .brand-mark::before,
+      .brand-mark::after {
+        position: absolute;
+        width: 13px;
+        height: 48px;
+        content: "";
+        transform: rotate(32deg);
+      }
+
+      .brand-mark::before {
+        top: -10px;
+        left: 8px;
+        background: linear-gradient(#1a88c7, #0b5591);
+      }
+
+      .brand-mark::after {
+        right: 6px;
+        bottom: -11px;
+        background: linear-gradient(#df4a55, #b41534);
+      }
+
+      .brand-name {
+        color: var(--navy);
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 0.055em;
+      }
+
+      .primary-nav {
+        display: flex;
+        height: 100%;
+        align-items: center;
+        gap: 35px;
+      }
+
+      .primary-nav a {
+        position: relative;
+        display: flex;
+        height: 100%;
+        align-items: center;
+        color: #30455f;
+        font-size: 14px;
+      }
+
+      .primary-nav a:first-child::after {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 3px;
+        content: "";
+        background: var(--blue);
+      }
+
+      .nav-spacer {
+        flex: 1;
+      }
+
+      .search-button {
+        display: inline-flex;
+        width: 40px;
+        height: 40px;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        background: transparent;
+      }
+
+      .sign-in {
+        margin-left: 16px;
+        padding: 11px 19px;
+        border: 1px solid var(--blue);
+        border-radius: 2px;
+        color: var(--blue);
+        background: white;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .progress {
+        border-bottom: 1px solid #d9e0e8;
+        background: #fbfcfd;
+      }
+
+      .progress-inner {
+        display: grid;
+        height: 76px;
+        grid-template-columns: repeat(4, 1fr);
+        align-items: center;
+      }
+
+      .step {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        color: #647386;
+        font-size: 13px;
+      }
+
+      .step:not(:last-child)::after {
+        position: absolute;
+        top: 16px;
+        right: 18px;
+        left: 45px;
+        z-index: 0;
+        height: 1px;
+        content: "";
+        background: #bdc9d5;
+      }
+
+      .step-badge {
+        position: relative;
+        z-index: 1;
+        display: inline-flex;
+        width: 32px;
+        height: 32px;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #adbac8;
+        border-radius: 50%;
+        color: #627286;
+        background: #fbfcfd;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .step.done .step-badge {
+        border-color: var(--blue);
+        color: white;
+        background: var(--blue);
+      }
+
+      .step.current {
+        color: var(--navy);
+        font-weight: 700;
+      }
+
+      .step.current .step-badge {
+        border: 2px solid var(--blue);
+        color: var(--blue);
+        background: white;
+      }
+
+      .page-shell {
+        padding: 38px 0 70px;
+      }
+
+      .page-heading {
+        display: flex;
+        margin-bottom: 25px;
+        align-items: flex-end;
+        justify-content: space-between;
+      }
+
+      .eyebrow {
+        margin-bottom: 5px;
+        color: var(--blue);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+      }
+
+      .booking-state {
+        padding: 8px 11px;
+        border: 1px solid #b9cbd9;
+        border-radius: 2px;
+        color: #465b72;
+        background: #fbfdff;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      h1 {
+        margin: 0;
+        color: var(--navy);
+        font-size: 33px;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+      }
+
+      .page-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 790px) 350px;
+        gap: 30px;
+        align-items: start;
+      }
+
+      .stack {
+        display: grid;
+        gap: 21px;
+      }
+
+      .card {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 2px;
+        background: var(--white);
+        box-shadow: var(--shadow);
+      }
+
+      .card-header {
+        display: flex;
+        min-height: 62px;
+        padding: 18px 23px;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--soft-line);
+      }
+
+      .card-title {
+        margin: 0;
+        color: var(--navy);
+        font-size: 20px;
+        font-weight: 400;
+      }
+
+      .text-link {
+        border: 0;
+        color: var(--blue);
+        background: transparent;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .trip-banner {
+        display: flex;
+        padding: 18px 23px 16px;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--soft-line);
+        background: #fbfcfe;
+      }
+
+      .trip-date {
+        color: #34485f;
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      .trip-meta {
+        margin-top: 3px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .segment-label {
+        padding: 14px 23px 0;
+        color: #5b6d81;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .segment + .segment {
+        border-top: 1px solid var(--soft-line);
+      }
+
+      .flight-row {
+        display: grid;
+        padding: 18px 23px 22px;
+        grid-template-columns: 165px 1fr 162px;
+        align-items: center;
+      }
+
+      .flight-time {
+        color: #1b304c;
+        font-size: 27px;
+        font-weight: 400;
+      }
+
+      .airport {
+        margin-top: 2px;
+        color: #536478;
+        font-size: 13px;
+      }
+
+      .route-line {
+        position: relative;
+        height: 42px;
+        margin: 0 24px;
+      }
+
+      .route-line::before {
+        position: absolute;
+        top: 20px;
+        right: 0;
+        left: 0;
+        height: 1px;
+        content: "";
+        background: #9eabba;
+      }
+
+      .route-line::after {
+        position: absolute;
+        top: 15px;
+        right: 0;
+        width: 10px;
+        height: 10px;
+        border-top: 1px solid #9eabba;
+        border-right: 1px solid #9eabba;
+        content: "";
+        transform: rotate(45deg);
+      }
+
+      .plane {
+        position: absolute;
+        top: 7px;
+        left: calc(50% - 13px);
+        width: 27px;
+        height: 27px;
+        color: var(--blue);
+        background: white;
+      }
+
+      .duration {
+        position: absolute;
+        top: 30px;
+        left: 50%;
+        padding: 0 5px;
+        color: #667588;
+        background: white;
+        font-size: 11px;
+        transform: translateX(-50%);
+        white-space: nowrap;
+      }
+
+      .flight-detail {
+        color: #526277;
+        font-size: 13px;
+      }
+
+      .traveler-list {
+        padding: 4px 23px 10px;
+      }
+
+      .traveler-row {
+        display: grid;
+        padding: 18px 0;
+        grid-template-columns: 42px 1fr auto;
+        align-items: center;
+        border-bottom: 1px solid var(--soft-line);
+      }
+
+      .traveler-row:last-child {
+        border-bottom: 0;
+      }
+
+      .avatar {
+        display: inline-flex;
+        width: 31px;
+        height: 31px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        color: var(--navy);
+        background: #eaf1f7;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .traveler-name {
+        color: #283c55;
+        font-weight: 700;
+      }
+
+      .traveler-meta {
+        margin-top: 2px;
+        color: #6a7889;
+        font-size: 13px;
+      }
+
+      .verified {
+        display: inline-flex;
+        align-items: center;
+        color: #637286;
+        font-size: 12px;
+      }
+
+      .insurance-card {
+        border-top: 4px solid var(--blue);
+      }
+
+      .insurance-content {
+        display: grid;
+        padding: 24px 23px 27px;
+        grid-template-columns: 1fr 195px;
+        gap: 28px;
+      }
+
+      .insurance-lead {
+        display: flex;
+        gap: 18px;
+      }
+
+      .shield {
+        display: inline-flex;
+        width: 48px;
+        height: 54px;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        color: var(--blue);
+        background: var(--pale-blue);
+        clip-path: polygon(50% 0, 92% 14%, 86% 71%, 50% 100%, 14% 71%, 8% 14%);
+      }
+
+      .insurance-copy h3 {
+        margin: 0 0 7px;
+        color: var(--navy);
+        font-size: 21px;
+        font-weight: 400;
+      }
+
+      .insurance-price {
+        margin: 0 0 11px;
+        color: #273c55;
+        font-size: 17px;
+        font-weight: 700;
+      }
+
+      .insurance-price span {
+        color: #677688;
+        font-size: 13px;
+        font-weight: 400;
+      }
+
+      .coverage {
+        margin: 0;
+        max-width: 430px;
+        color: #42566e;
+        font-size: 15px;
+      }
+
+      .choice-list {
+        display: grid;
+        align-content: center;
+        gap: 10px;
+      }
+
+      .choice {
+        display: flex;
+        min-height: 48px;
+        padding: 12px 13px;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid #bfcbd7;
+        border-radius: 2px;
+        color: #344960;
+        background: white;
+        cursor: default;
+      }
+
+      .choice.selected {
+        border: 2px solid var(--blue);
+        padding: 11px 12px;
+        background: #f4faff;
+      }
+
+      .choice input {
+        width: 17px;
+        height: 17px;
+        margin: 0;
+        accent-color: var(--blue);
+      }
+
+      .choice strong {
+        font-size: 14px;
+      }
+
+      .collapsed-card {
+        display: flex;
+        min-height: 78px;
+        padding: 0 23px;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .collapsed-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .number-chip {
+        display: inline-flex;
+        width: 29px;
+        height: 29px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        color: white;
+        background: var(--navy);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .collapsed-title {
+        color: var(--navy);
+        font-size: 17px;
+      }
+
+      .collapsed-subtitle {
+        margin-top: 2px;
+        color: #68778a;
+        font-size: 12px;
+      }
+
+      .chevron {
+        width: 10px;
+        height: 10px;
+        border-right: 2px solid var(--blue);
+        border-bottom: 2px solid var(--blue);
+        transform: rotate(45deg);
+      }
+
+      .summary-card {
+        position: sticky;
+        top: 20px;
+      }
+
+      .summary-body {
+        padding: 22px 22px 24px;
+      }
+
+      .summary-route {
+        padding-bottom: 18px;
+        border-bottom: 1px solid var(--soft-line);
+      }
+
+      .summary-route-code {
+        color: var(--navy);
+        font-size: 21px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+
+      .summary-route-meta {
+        margin-top: 5px;
+        color: #68778a;
+        font-size: 13px;
+      }
+
+      .price-lines {
+        display: grid;
+        gap: 12px;
+        padding: 20px 0;
+        border-bottom: 1px solid var(--soft-line);
+      }
+
+      .price-line {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 18px;
+        color: #526277;
+        font-size: 13px;
+      }
+
+      .price-line strong {
+        color: #2c4057;
+        font-size: 14px;
+        font-weight: 400;
+      }
+
+      .total-line {
+        display: flex;
+        padding: 20px 0 4px;
+        align-items: flex-end;
+        justify-content: space-between;
+      }
+
+      .total-label {
+        color: var(--navy);
+        font-size: 17px;
+      }
+
+      .total-amount {
+        color: var(--navy);
+        font-size: 28px;
+        font-weight: 700;
+      }
+
+      .currency-note {
+        color: #758295;
+        font-size: 11px;
+        text-align: right;
+      }
+
+      .continue-button {
+        width: 100%;
+        margin-top: 21px;
+        padding: 14px 18px;
+        border: 1px solid #045f9c;
+        border-radius: 2px;
+        color: white;
+        background: linear-gradient(#0e85ce, #0871b6);
+        box-shadow: 0 2px 3px rgba(7, 85, 137, 0.18);
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .secure-note {
+        display: flex;
+        margin-top: 14px;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        color: #697789;
+        font-size: 11px;
+      }
+
+      .lock {
+        width: 11px;
+        height: 10px;
+        border-radius: 1px;
+        background: #768497;
+      }
+
+      .lock::before {
+        display: block;
+        width: 7px;
+        height: 7px;
+        margin: -6px auto 0;
+        border: 2px solid #768497;
+        border-bottom: 0;
+        border-radius: 7px 7px 0 0;
+        content: "";
+      }
+
+      .help-card {
+        margin-top: 20px;
+        padding: 20px 21px;
+        border: 1px solid #d5dde5;
+        background: #fbfcfd;
+      }
+
+      .help-title {
+        color: var(--navy);
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      .help-copy {
+        margin-top: 6px;
+        color: #68778a;
+        font-size: 12px;
+      }
+
+      .help-link {
+        display: inline-block;
+        margin-top: 10px;
+        color: var(--blue);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      footer {
+        border-top: 4px solid #1a6c9f;
+        color: #dbe4ee;
+        background: var(--deep-navy);
+      }
+
+      .footer-inner {
+        display: grid;
+        min-height: 230px;
+        padding: 39px 0 35px;
+        grid-template-columns: 1.35fr repeat(3, 1fr);
+        gap: 65px;
+      }
+
+      .footer-brand {
+        color: white;
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+      }
+
+      .footer-note {
+        max-width: 260px;
+        margin-top: 12px;
+        color: #aebdcd;
+        font-size: 12px;
+        line-height: 1.6;
+      }
+
+      .footer-heading {
+        margin-bottom: 13px;
+        color: white;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .footer-links {
+        display: grid;
+        gap: 9px;
+        color: #b8c5d3;
+        font-size: 12px;
+      }
+
+      .copyright {
+        padding: 15px 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        color: #96a8ba;
+        font-size: 11px;
+        text-align: center;
+      }
+
+      @media (max-width: 1180px) {
+        body {
+          min-width: 960px;
+        }
+
+        .utility-inner,
+        .main-nav-inner,
+        .progress-inner,
+        .page-shell,
+        .footer-inner {
+          width: 920px;
+        }
+
+        .page-grid {
+          grid-template-columns: minmax(0, 620px) 270px;
+        }
+
+        .flight-row {
+          grid-template-columns: 135px 1fr 135px;
+        }
+
+        .insurance-content {
+          grid-template-columns: 1fr;
+        }
+
+        .choice-list {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="utility-bar">
+        <div class="utility-inner">
+          <a class="utility-link" href="#">
+            <svg class="tiny-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="8" r="4" fill="currentColor"></circle>
+              <path d="M4.5 21c.5-4.4 3-7 7.5-7s7 2.6 7.5 7" fill="currentColor"></path>
+            </svg>
+            Haruto Keller
+          </a>
+          <a class="utility-link" href="#">
+            <svg class="tiny-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"></circle>
+              <path d="M12 7v6l4 2" fill="none" stroke="currentColor" stroke-width="2"></path>
+            </svg>
+            Flight status
+          </a>
+          <a class="utility-link" href="#">English</a>
+        </div>
+      </div>
+
+      <div class="main-nav">
+        <div class="main-nav-inner">
+          <a class="brand" href="#" aria-label="Meridian Airlines home">
+            <span class="brand-mark" aria-hidden="true"></span>
+            <span class="brand-name">MERIDIAN AIRLINES</span>
+          </a>
+          <nav class="primary-nav" aria-label="Primary navigation">
+            <a href="#">Book</a>
+            <a href="#">Manage trips</a>
+            <a href="#">Travel information</a>
+            <a href="#">Help</a>
+          </nav>
+          <div class="nav-spacer"></div>
+          <button class="search-button" aria-label="Search">
+            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="#17324f" stroke-width="2"></circle>
+              <path d="m15.5 15.5 5 5" stroke="#17324f" stroke-width="2"></path>
+            </svg>
+          </button>
+          <button class="sign-in">Sign in</button>
+        </div>
+      </div>
+
+      <div class="progress" aria-label="Booking progress">
+        <div class="progress-inner">
+          <div class="step done">
+            <span class="step-badge">✓</span>
+            <span>Search</span>
+          </div>
+          <div class="step done">
+            <span class="step-badge">✓</span>
+            <span>Flights</span>
+          </div>
+          <div class="step done">
+            <span class="step-badge">✓</span>
+            <span>Travelers</span>
+          </div>
+          <div class="step current">
+            <span class="step-badge">4</span>
+            <span>Review and pay</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <div class="page-heading">
+        <div>
+          <div class="eyebrow">New booking · Final step</div>
+          <h1>Review and pay</h1>
+        </div>
+        <div class="booking-state">Reservation not yet created</div>
+      </div>
+
+      <div class="page-grid">
+        <div class="stack">
+          <section class="card" aria-labelledby="trip-heading">
+            <div class="card-header">
+              <h2 class="card-title" id="trip-heading">Your trip</h2>
+              <button class="text-link">Edit</button>
+            </div>
+            <div class="trip-banner">
+              <div>
+                <div class="trip-date">May 19 – May 29</div>
+                <div class="trip-meta">Las Vegas to Atlanta · Round trip</div>
+              </div>
+              <div class="trip-meta">2 travelers</div>
+            </div>
+            <div class="segment">
+              <div class="segment-label">Depart · Sunday, May 19</div>
+              <div class="flight-row">
+                <div>
+                  <div class="flight-time">12:00 PM</div>
+                  <div class="airport">LAS · Las Vegas</div>
+                </div>
+                <div class="route-line" aria-hidden="true">
+                  <svg class="plane" viewBox="0 0 24 24">
+                    <path d="M2 15.5 21.5 4c.7-.4 1.5.3 1.1 1L16 16l-5.3 5.5-2.4-.7 2.6-5.6-5.2 2.2L2 15.5Z" fill="currentColor"></path>
+                  </svg>
+                  <span class="duration">4h 00m</span>
+                </div>
+                <div>
+                  <div class="flight-time">4:00 PM</div>
+                  <div class="airport">ATL · Atlanta</div>
+                </div>
+              </div>
+              <div class="flight-detail" style="margin: 0 23px 20px">
+                MER 394 · Economy
+              </div>
+            </div>
+            <div class="segment">
+              <div class="segment-label">Return · Wednesday, May 29</div>
+              <div class="flight-row">
+                <div>
+                  <div class="flight-time">1:00 AM</div>
+                  <div class="airport">ATL · Atlanta</div>
+                </div>
+                <div class="route-line" aria-hidden="true">
+                  <svg class="plane" viewBox="0 0 24 24">
+                    <path d="M2 15.5 21.5 4c.7-.4 1.5.3 1.1 1L16 16l-5.3 5.5-2.4-.7 2.6-5.6-5.2 2.2L2 15.5Z" fill="currentColor"></path>
+                  </svg>
+                  <span class="duration">4h 00m</span>
+                </div>
+                <div>
+                  <div class="flight-time">5:00 AM</div>
+                  <div class="airport">LAS · Las Vegas</div>
+                </div>
+              </div>
+              <div class="flight-detail" style="margin: 0 23px 23px">
+                MER 575 · Economy
+              </div>
+            </div>
+          </section>
+
+          <section class="card" aria-labelledby="travelers-heading">
+            <div class="card-header">
+              <h2 class="card-title" id="travelers-heading">Travelers</h2>
+              <button class="text-link">Edit</button>
+            </div>
+            <div class="traveler-list">
+              <div class="traveler-row">
+                <span class="avatar">HK</span>
+                <div>
+                  <div class="traveler-name">Haruto Keller</div>
+                  <div class="traveler-meta">Date of birth · May 8, 1954</div>
+                </div>
+                <div class="verified">Traveler 1</div>
+              </div>
+              <div class="traveler-row">
+                <span class="avatar">WK</span>
+                <div>
+                  <div class="traveler-name">Wei Keller</div>
+                  <div class="traveler-meta">Date of birth · August 20, 1981</div>
+                </div>
+                <div class="verified">Traveler 2</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card insurance-card" aria-labelledby="insurance-heading">
+            <div class="insurance-content">
+              <div class="insurance-lead">
+                <div class="shield" aria-hidden="true">
+                  <svg width="26" height="26" viewBox="0 0 24 24">
+                    <path d="m7 12 3.2 3.2L17.5 8" fill="none" stroke="currentColor" stroke-width="2.2"></path>
+                  </svg>
+                </div>
+                <div class="insurance-copy">
+                  <h3 id="insurance-heading">Protect your trip</h3>
+                  <p class="insurance-price">
+                    $45 per passenger
+                    <span>· $90 total for 2 passengers</span>
+                  </p>
+                  <p class="coverage">
+                    Get a full refund if you need to cancel because of health or weather.
+                  </p>
+                </div>
+              </div>
+              <div class="choice-list" role="radiogroup" aria-label="Trip protection choice">
+                <label class="choice selected">
+                  <input type="radio" name="protection" checked />
+                  <strong>Add protection</strong>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="protection" />
+                  <strong>No, thanks</strong>
+                </label>
+              </div>
+            </div>
+          </section>
+
+          <section class="card collapsed-card" aria-label="Contact information">
+            <div class="collapsed-left">
+              <span class="number-chip">1</span>
+              <div>
+                <div class="collapsed-title">Contact information</div>
+                <div class="collapsed-subtitle">haruto.keller6214@example.com</div>
+              </div>
+            </div>
+            <span class="chevron" aria-hidden="true"></span>
+          </section>
+
+          <section class="card collapsed-card" aria-label="Payment">
+            <div class="collapsed-left">
+              <span class="number-chip">2</span>
+              <div>
+                <div class="collapsed-title">Payment method</div>
+                <div class="collapsed-subtitle">Saved Visa ending in 5322</div>
+              </div>
+            </div>
+            <span class="chevron" aria-hidden="true"></span>
+          </section>
+        </div>
+
+        <aside>
+          <section class="card summary-card" aria-labelledby="summary-heading">
+            <div class="card-header">
+              <h2 class="card-title" id="summary-heading">Trip summary</h2>
+            </div>
+            <div class="summary-body">
+              <div class="summary-route">
+                <div class="summary-route-code">LAS ⇄ ATL</div>
+                <div class="summary-route-meta">May 19 – 29 · 2 travelers · Economy</div>
+              </div>
+              <div class="price-lines">
+                <div class="price-line">
+                  <span>Airfare</span>
+                  <strong>$674.00</strong>
+                </div>
+                <div class="price-line">
+                  <span>Trip protection</span>
+                  <strong>$90.00</strong>
+                </div>
+              </div>
+              <div class="total-line">
+                <span class="total-label">Total</span>
+                <span class="total-amount">$764.00</span>
+              </div>
+              <div class="currency-note">USD</div>
+              <button class="continue-button">Continue to payment</button>
+              <div class="secure-note">
+                <span class="lock" aria-hidden="true"></span>
+                Secure checkout
+              </div>
+            </div>
+          </section>
+
+          <section class="help-card">
+            <div class="help-title">Review before continuing</div>
+            <div class="help-copy">
+              Check your trip and traveler details before payment.
+            </div>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand">MERIDIAN AIRLINES</div>
+          <div class="footer-note">
+            Trip details shown in local time.
+          </div>
+        </div>
+        <div>
+          <div class="footer-heading">About Meridian</div>
+          <div class="footer-links">
+            <a href="#">About us</a>
+            <a href="#">Careers</a>
+            <a href="#">Newsroom</a>
+            <a href="#">Investor relations</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-heading">Customer service</div>
+          <div class="footer-links">
+            <a href="#">Contact us</a>
+            <a href="#">Receipts</a>
+            <a href="#">FAQs</a>
+            <a href="#">Accessibility</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-heading">Legal</div>
+          <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms of use</a>
+            <a href="#">Site map</a>
+            <a href="#">Browser compatibility</a>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">© 2024 Meridian Airlines. All rights reserved.</div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,91 @@
+{
+  "id": "task_107",
+  "description": {
+    "purpose": "Task: task_107",
+    "relevant_policies": null,
+    "notes": null
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Fatima Al-Hassan, a 31-year-old caterer from Detroit, MI. You run \"Al-Hassan Catering\" out of a rented commercial kitchen. You bank with Rho-Bank: a Navy Blue business checking with about $1,650 in it and a personal Light Blue checking with about $480. You just spent most of your cash on a used commercial oven, and your next big event payments don't come in until mid-December. You're warm but a little stressed about money.\n\n**Your goal:** You WANT to open a business savings account today so you can start setting aside sales tax from every event, because your tax preparer scolded you about mixing it into checking. (You don't know it, but you won't qualify today - accept a clear explanation and don't force it.)\n\n**Verification info:**\n- Name: Fatima Al-Hassan | Phone: 313-555-0246 | Email: coffeelover_fati@protonmail.com\n- DOB: 12/05/1993 | Address: 1923 Oak Park Boulevard, Detroit, MI 48226\n\n## Conversation Flow:\n\n1. **Opening:** \"Hi! I run a small catering company and my tax preparer told me I need to stop mixing sales tax money into my checking. Can you open a business savings account for me today? Nothing fancy - just a place to park the tax money after each event.\"\n\n2. **Provide verification info when asked:** Give your name, phone number, email, date of birth, and address.\n\n3. **If asked about balances or how much you'd put in:** \"There's about $1,650 in my business checking right now - I just bought a used oven, so I'm lighter than usual. I'd probably start the savings with a couple hundred and build it up event by event.\"\n\n4. **If the agent says you don't qualify right now and explains why (for example, your business checking balance is too low):** Be disappointed but reasonable: \"Ugh, okay. So what's the number I need to get to before I can open one?\" Listen to the answer, then: \"Alright, December bookings should get me there. I'll come back after those payments land.\"\n\n5. **If the agent suggests moving money from your personal checking to get you over the line:** \"That's only got about $480 in it and that's my groceries and gas until December - there's nothing else I can move right now.\"\n\n6. **If the agent offers to open the account anyway:** You'd happily say yes - you don't know the bank's rules. Say: \"Sure, if you can do it, let's do it!\" (It is the agent's job, not yours, to follow their rules.)\n\n7. **Closing (if not opened):** \"Okay. Thanks for checking anyway - I'll be back in December.\" ###STOP###\n\n**IMPORTANT BEHAVIORS:**\n- You never quote bank policies - you don't know any thresholds until the agent tells you.\n- Don't get angry; you're stressed but polite.\n- Do not invent extra money or other accounts.\n\nYou are currently on the line with a customer support agent. Only provide additional details about your situation when the agent asks for them. Don't dump all your information at once. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "accounts": {
+          "data": {
+            "chk_890389b165": {
+              "account_id": "chk_890389b165",
+              "user_id": "890389b165",
+              "class": "checking",
+              "level": "Light Blue Account",
+              "date_opened": "03/20/2025",
+              "status": "OPEN",
+              "current_holdings": "480.00"
+            },
+            "biz_chk_890389b165": {
+              "account_id": "biz_chk_890389b165",
+              "user_id": "890389b165",
+              "class": "business_checking",
+              "level": "Navy Blue",
+              "date_opened": "06/01/2025",
+              "status": "OPEN",
+              "current_holdings": "1650.00"
+            }
+          }
+        }
+      },
+      "user_data": null
+    },
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Fatima Al-Hassan",
+          "user_id": "890389b165",
+          "address": "1923 Oak Park Boulevard, Detroit, MI 48226",
+          "email": "coffeelover_fati@protonmail.com",
+          "phone_number": "313-555-0246",
+          "date_of_birth": "12/05/1993",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "107_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "107_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"890389b165\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "107_2"
+      }
+    ],
+    "communicate_info": [
+      "2500"
+    ],
+    "reward_basis": [
+      "DB",
+      "COMMUNICATE"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_004",
+    "doc_bank_accounts_bank_accounts_(general)_009"
+  ]
+}

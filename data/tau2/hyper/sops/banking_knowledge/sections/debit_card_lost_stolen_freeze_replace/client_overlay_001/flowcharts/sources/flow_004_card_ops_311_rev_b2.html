@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1760">
+<title>Activating a debit card - simplified two-branch selection</title><style>
+*{box-sizing:border-box} html,body{margin:0;width:1760px;height:1280px;overflow:hidden}
+body{background:#e9edf0;color:#172431;font-family:Arial,Helvetica,sans-serif}
+.sheet{position:relative;width:1712px;height:1232px;margin:24px;background:#fff;border:1px solid #9ba7b1}
+.frame-label{position:absolute;left:-1px;top:-1px;background:#18232d;color:#fff;padding:7px 16px;font-size:12px;font-weight:800;letter-spacing:.3px}
+header{height:154px;margin:0 38px;border-bottom:2px solid #243746;padding:37px 0 18px;display:flex;justify-content:space-between;align-items:flex-start}
+.eyebrow{font-size:13px;font-weight:800;color:#5a6874;letter-spacing:.6px;margin-bottom:10px}
+h1{font-size:36px;line-height:1.06;margin:0 0 10px;letter-spacing:-.4px} .subtitle{font-size:14px;color:#5f6e79}
+.header-meta{display:flex;gap:12px;align-items:flex-start}
+.version{border:1px solid #b6c0c8;padding:10px 13px;font-size:11px;color:#52606b;line-height:1.35}
+.diagram{position:absolute;left:38px;top:174px;width:1636px;height:700px}
+.phase{position:absolute;border:1px solid #9da8b2;background:#fbfcfd;z-index:0}
+.phase.current-zone{background:#f7fbf8;border-color:#84a98f}
+.phase>span{position:absolute;left:-1px;top:-21px;height:21px;background:#505b65;color:white;padding:5px 10px;font-size:10px;font-weight:800;letter-spacing:.3px}
+.phase.current-zone>span{background:#207044}
+svg{position:absolute;inset:0;width:1636px;height:700px;z-index:1;overflow:visible}
+path{fill:none;stroke:#205d8f;stroke-width:2.2;marker-end:url(#arrow)}
+path.loop{stroke:#8b98a4;stroke-dasharray:6 5;marker-end:url(#arrow-gray)}
+path.reject{stroke:#b74242;stroke-dasharray:5 4;marker-end:url(#arrow-red)}
+.node{position:absolute;z-index:3;border:1.5px solid #1f2a33;background:white;padding:10px 12px;display:flex;flex-direction:column;justify-content:center;text-align:center;font-size:11px;line-height:1.25}
+.node small{display:block;margin-bottom:5px;color:#26618b;font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase}
+.node strong{font-size:12px;line-height:1.2} .node p{margin:5px 0 0;color:#4e5b65;font-size:10px;line-height:1.25}
+.node.start{border-color:#2f8c4a;background:#eef8ef;border-radius:28px}
+.node.terminal{border-radius:28px;background:#f1f5f7}
+.node.stop{border-color:#c83e3e;background:#fff1ef;border-radius:5px}
+.node.system{border-color:#6e8ca4;background:#edf5fb;text-align:left;font-family:"Courier New",monospace;overflow-wrap:anywhere}
+.node.system strong{font-size:11px;overflow-wrap:anywhere}
+.node.dialogue{background:#f5f0ff;border-color:#7c68a7;border-radius:5px 5px 20px 5px}
+.node.decision{padding:0;border:none;background:transparent;transform:rotate(45deg)}
+.node.decision:before{content:"";position:absolute;inset:0;border:1.5px solid #347447;background:#fbfffb}
+.decision-content{position:absolute;inset:15px;z-index:1;transform:rotate(-45deg);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.decision-content small{margin:0 0 4px} .decision-content strong{font-size:11px;line-height:1.08} .decision-content p{font-size:8px;line-height:1.12;margin:3px 0 0}
+.edge-label{position:absolute;z-index:4;background:#fff;padding:1px 4px;color:#315a78;font-size:9px;font-weight:800}
+.sticky{position:absolute;z-index:5;padding:10px 11px;box-shadow:0 2px 5px #0003;transform:rotate(-.7deg);font-size:9.5px;line-height:1.3}
+.sticky.yellow{background:#fff098} .sticky.green{background:#c8f2d2} .sticky.blue{background:#cce5fa} .sticky.red{background:#ffd1d1}
+.sticky b{font-size:9.5px} .sticky p{margin:5px 0 7px} .sticky em{display:block;text-align:right;font-size:8px;color:#59636a}
+.gate-notes{position:absolute;left:38px;right:38px;bottom:34px;height:290px;border:1px solid #8d9aa4;background:#fafbfc;padding:26px 16px 12px}
+.gate-notes h2{position:absolute;left:-1px;top:-21px;margin:0;background:#18232d;color:white;padding:5px 12px;font-size:10px;letter-spacing:.3px}
+.gate-notes>div{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 12px;align-content:start;height:100%}
+.gate-notes article{border-left:3px solid #2975a6;padding:5px 8px;display:grid;grid-template-columns:52px 1fr;gap:7px;align-content:start}
+.gate-notes article b{font-size:10px;color:#225a81} .gate-notes article p{font-size:9.5px;line-height:1.25;margin:0;color:#37434c}
+.watermark{position:absolute;right:42px;bottom:12px;color:#8a949b;font-size:9px}
+</style></head><body><main class="sheet"><div class="frame-label">CARD OPS · ACTIVATION</div>
+<header><div><div class="eyebrow">RHO BANK · CARD OPERATIONS · DEBIT CARD DESK</div><h1>Activating a debit card - simplified two-branch selection</h1><div class="subtitle">Applies when a customer has received a new debit card and wants to activate it with customer service. Same preconditions as v2; the selection step collapses to one question - did the customer report the old card, or did the bank generate the new one?</div></div>
+<div class="header-meta"><div class="version">Owner: Bettina Sandoval · Card Operations<br>Prepared: T. Kubiak · circulated 2025-10-24<br>Ref: CARD-OPS-311 · rev B2</div></div></header>
+<section class="diagram"><section class='phase' style='left:12px;top:48px;width:1612px;height:180px'><span>PRECONDITIONS - ALL FIVE, IN ORDER</span></section><section class='phase' style='left:12px;top:258px;width:790px;height:190px'><span>CARD DETAILS</span></section><section class='phase current-zone' style='left:822px;top:258px;width:802px;height:410px'><span>TOOL SELECTION - ONE QUESTION, TWO FAMILIES</span></section><section class='phase' style='left:12px;top:478px;width:790px;height:190px'><span>PIN · COMPLETION</span></section><svg viewBox="0 0 1636 700" aria-hidden="true"><defs>
+<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#205d8f"/></marker>
+<marker id="arrow-gray" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#8b98a4"/></marker>
+<marker id="arrow-red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#b74242"/></marker></defs>
+<path class='flow' d='M195 138 H240'/>
+<path class='flow' d='M440 138 H485'/>
+<path class='flow' d='M685 138 H730'/>
+<path class='flow' d='M930 138 H975'/>
+<path class='flow' d='M1175 138 H1220'/>
+<path class='flow' d='M1300 175 V205 H120 V300'/>
+<path class='flow' d='M235 335 H280'/>
+<path class='flow' d='M480 340 H535'/>
+<path class='reject' d='M400 415 V445 H535'/>
+<path class='flow' d='M700 340 H860'/>
+<path class='flow' d='M1010 300 V285 H1060'/>
+<path class='flow' d='M1010 375 H1060'/>
+<path class='flow' d='M1010 415 V450 H1060'/>
+<path class='flow' d='M935 415 V520 H120 V545'/>
+<path class='flow' d='M255 580 H310'/>
+<path class='flow' d='M560 580 H610'/>
+</svg>
+<span class='edge-label' style='left:1240px;top:208px'>ALL PRECONDITIONS MET</span>
+<span class='edge-label' style='left:245px;top:318px'>COLLECTED</span>
+<span class='edge-label' style='left:492px;top:322px'>MATCH</span>
+<span class='edge-label' style='left:428px;top:448px'>REPEATED MISMATCH</span>
+<span class='edge-label' style='left:712px;top:322px'>VERIFIED REASON</span>
+<span class='edge-label' style='left:1022px;top:268px'>FIRST CARD</span>
+<span class='edge-label' style='left:1022px;top:358px'>CUSTOMER REPORTED</span>
+<span class='edge-label' style='left:1022px;top:434px'>BANK GENERATED</span>
+<span class='edge-label' style='left:200px;top:524px'>TOOL SUCCEEDED</span>
+<span class='edge-label' style='left:262px;top:563px'>PIN SET</span>
+<article class='node start' style='left:35px;top:105px;width:160px;height:66px'><strong>Card in hand, ready to activate</strong></article>
+<article class='node decision' style='left:240px;top:78px;width:120px;height:120px'><div class='decision-content'><strong>Customer verified?</strong><p>precondition 1</p></div></article>
+<article class='node decision' style='left:485px;top:78px;width:120px;height:120px'><div class='decision-content'><strong>Physical card in possession?</strong><p>precondition 2</p></div></article>
+<article class='node decision' style='left:730px;top:78px;width:120px;height:120px'><div class='decision-content'><strong>Card status PENDING?</strong><p>precondition 3 · not already ACTIVE</p></div></article>
+<article class='node decision' style='left:975px;top:78px;width:120px;height:120px'><div class='decision-content'><strong>Linked account OPEN?</strong><p>precondition 4</p></div></article>
+<article class='node decision' style='left:1220px;top:78px;width:120px;height:120px'><div class='decision-content'><strong>Card not expired?</strong><p>precondition 5 · expiration_date</p></div></article>
+<article class='node dialogue' style='left:45px;top:300px;width:190px;height:80px'><strong>COLLECT THE CARD DETAILS</strong><p>Last 4 digits printed on the card · expiration in MM/YY · 3-digit CVV on the back</p></article>
+<article class='node decision' style='left:280px;top:275px;width:120px;height:120px'><div class='decision-content'><strong>Details match the account?</strong><p>verify before any tool runs</p></div></article>
+<article class='node stop' style='left:535px;top:420px;width:250px;height:56px'><strong>LOCKED - BRANCH VISIT</strong><p>Repeated mismatches lock the card for security - the count that trips the lock is on the desk security card; the customer must visit a branch in person.</p></article>
+<article class='node system' style='left:535px;top:290px;width:250px;height:100px'><small>ASK</small><strong>Who triggered this card?</strong><p>If the customer reported the old card, it is a replacement. If the bank generated the new card on its own, it is a reissue.</p></article>
+<article class='node decision' style='left:860px;top:280px;width:150px;height:150px'><div class='decision-content'><strong>Customer report, bank renewal, or first card?</strong><p>one question replaces the reason-code read</p></div></article>
+<article class='node system' style='left:1060px;top:250px;width:440px;height:70px'><small>FIRST CARD FOR THE ACCOUNT</small><strong>activate_debit_card_8291</strong><p>brand-new account relationships only</p></article>
+<article class='node system' style='left:1060px;top:340px;width:440px;height:70px'><small>CUSTOMER REPORTED THE OLD CARD</small><strong>activate_debit_card_8292</strong><p>lost, stolen, fraud, damaged - anything the customer called in about</p></article>
+<article class='node system' style='left:1060px;top:430px;width:440px;height:70px'><small>BANK GENERATED THE NEW CARD</small><strong>activate_debit_card_8293</strong><p>expired renewals, design upgrades, bulk reissue waves</p></article>
+<article class='node dialogue' style='left:45px;top:545px;width:210px;height:80px'><strong>SET THE PIN</strong><p>Exactly 4 digits. Not sequential like 1234, not repeating like 1111.</p></article>
+<article class='node system' style='left:310px;top:545px;width:250px;height:80px'><small>AUTOMATIC</small><strong>Prior-card deactivation</strong><p>Previous cards on the account deactivate when the new card activates.</p></article>
+<article class='node terminal' style='left:610px;top:552px;width:180px;height:64px'><strong>CONFIRM ACTIVE</strong><p>Post-activation scripts run per the issue reason</p></article>
+<aside class='sticky yellow' style='left:835px;top:490px;width:300px'><b>WHY COLLAPSE IT?</b><p>New hires keep stalling on the reason-code read mid-call. One conversational question should cover every case the desk actually sees. Floor-testing with the November cohort this week.</p><em>T. Kubiak · 11/14</em></aside>
+<aside class='sticky blue' style='left:1160px;top:530px;width:300px'><b>DAMAGED - WHICH FAMILY?</b><p>Customers call in about damaged cards, so it rides with the reported family here. Does the console mapping agree? Need to confirm against the tool tables before this goes wide.</p><em>S. Ramanathan · QA · 11/17</em></aside>
+<aside class='sticky yellow' style='left:1360px;top:150px;width:200px'><b>EXPIRED CARD IN HAND</b><p>Precondition 5 reads the card being activated, not the old one. An expired replacement can't activate - order again.</p><em>T. Kubiak · 09/14</em></aside>
+</section>
+<section class='gate-notes'><h2>SIMPLIFIED SELECTION NOTES</h2><div>
+<article><b>B2-1</b><p>Selection collapses to one conversational question. The reason-code read stays available as a fallback when the customer's answer is ambiguous.</p></article>
+<article><b>B2-2</b><p>activate_debit_card_8291: first card on the account.</p></article>
+<article><b>B2-3</b><p>activate_debit_card_8292: the customer reported the old card - lost, stolen, fraud, or damaged.</p></article>
+<article><b>B2-4</b><p>activate_debit_card_8293: the bank generated the card - expiration renewals, design upgrades, bulk reissue waves.</p></article>
+<article><b>B2-5</b><p>Card details unchanged from v2: last 4 digits, expiration in MM/YY, 3-digit CVV, matched to the account before any tool runs.</p></article>
+<article><b>B2-6</b><p>? open item - does the detail-mismatch lock belong on this frame or the security frame? Parked for the desk sync.</p></article>
+<article><b>B2-7</b><p>PIN step unchanged from v2.</p></article>
+<article><b>B2-8</b><p>Prior-card deactivation unchanged from v2.</p></article>
+<article><b>B2-9</b><p>Post-activation scripts keyed to the two families instead of the reason code; wording to be confirmed with QA.</p></article>
+</div></section><div class="watermark">Internal working material · not customer-facing · CARD-OPS-311 · rev B2</div></main></body></html>

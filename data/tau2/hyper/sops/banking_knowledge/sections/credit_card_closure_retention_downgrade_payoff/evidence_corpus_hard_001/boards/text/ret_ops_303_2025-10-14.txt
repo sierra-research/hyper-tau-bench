@@ -1,0 +1,33 @@
+RET-OPS-303 - rev A
+Retention Operations
+Owner: Silas Brandt
+2025-10-14
+PAYOFF-FROM-CHECKING - pay a credit card from Rho checking
+Legend: rounded box = process step / diamond = decision / green = start or finish / red = stop / dashed box = reference note
+
+# Nodes
+Customer asks to pay off a credit card balance from their Rho checking account
+In scope for the desk: the agent may process the payment directly when funds come from a Rho checking account
+Verify the customer's identity (standard procedures)
+Look up the checking account - confirm a Rho checking account with sufficient funds to cover the payment amount
+Checking balance covers the amount?
+Balance does not cover the amount - do not process the transfer
+Look up the credit card account - confirm the outstanding balance
+confirm the payment amount and authorization
+unlock pay_credit_card_from_checking_9182, then call it
+Payment posted - confirm with the customer and note the case
+look up both accounts to obtain account IDs and verify balances
+Path: verify identity -> look up the checking account (sufficient funds) -> look up the credit card account (outstanding balance) -> confirm the payment amount and authorization -> unlock pay_credit_card_from_checking_9182, then call it
+
+# Edges
+Customer asks to pay off... -> In scope for the desk... [in scope]
+In scope for the desk... -> Verify the customer's identity (standard procedures) [1]
+Verify the customer's identity (standard procedures) -> Look up the checking account... [2]
+Look up the checking account... -> Checking balance covers the amount? [check funds]
+Checking balance covers the amount? -> Balance does not cover the amount - do not process the transfer [no]
+Checking balance covers the amount? -> Look up the credit card account... [3]
+Look up the credit card account... -> confirm the payment amount and authorization [4]
+confirm the payment amount and authorization -> unlock pay_credit_card_from_checking_9182, then call it [5]
+unlock pay_credit_card_from_checking_9182, then call it -> Payment posted - confirm with the customer and note the case [done]
+
+RET-OPS-303 rev A - Retention Operations - 1 of 1

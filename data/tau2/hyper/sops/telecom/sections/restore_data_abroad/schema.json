@@ -1,0 +1,371 @@
+{
+  "id": "telecom_restore_data_abroad_policy_fact_schema_001",
+  "domain": "telecom",
+  "display_name": "Restore mobile data abroad",
+  "global_rules_path": "tau2/hyper/sops/telecom/global_rules.json",
+  "section_id": "restore_data_abroad",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/telecom_sop.md",
+    "heading": "## Roaming"
+  },
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": [
+      {
+        "section_id": "customer_identity",
+        "fact_ids": [
+          "identify_customer_before_technical_support",
+          "phone_side_troubleshooting_can_begin_first",
+          "phone_side_checks_available_before_account",
+          "device_side_uses_symptom_and_phone_checks",
+          "open_account_for_carrier_side_information",
+          "open_account_for_carrier_side_change",
+          "carrier_side_workflow_examples",
+          "lookup_account_or_line_by_phone_number",
+          "phone_lookup_covers_contact_and_line_numbers",
+          "lookup_account_by_customer_id",
+          "lookup_account_by_name_requires_dob",
+          "dob_required_for_verification",
+          "account_change_requires_identity_line_and_confirmation"
+        ],
+        "relationship": "global_prerequisite",
+        "description": "The abroad-data workflow starts phone-side and opens the account record only when the carrier-side roaming allowance must be read or changed."
+      },
+      {
+        "section_id": "service_foundations",
+        "fact_ids": [
+          "can_enable_or_disable_carrier_roaming_on_active_line",
+          "can_guide_customer_side_phone_actions",
+          "can_guide_customer_side_checks",
+          "carrier_roaming_allowance_required_for_abroad_data",
+          "phone_checks_show_device_side_state",
+          "affected_line_is_number_being_troubleshot",
+          "phone_checks_reflect_carrier_state_after_account_changes",
+          "customer_records_contents",
+          "records_are_source_of_truth_for_account_decisions",
+          "data_blocked_at_or_above_limit_plus_refueled",
+          "ground_responses_in_customer_reports_records_and_phone_checks",
+          "responses_concise_accurate_no_speculation",
+          "one_customer_care_action_at_a_time",
+          "wait_for_result_before_next_step",
+          "carrier_side_change_requires_exact_explanation_and_confirmation",
+          "close_case_only_after_final_check_shows_resolved",
+          "setting_toggle_reports_new_state",
+          "speed_test_fails_without_mobile_data",
+          "speed_scale_by_network_generation"
+        ],
+        "relationship": "shared_reference",
+        "description": "Abroad-data work uses the shared phone-check model, roaming-allowance reflection, data-availability arithmetic, confirmation controls, and speed-test semantics."
+      }
+    ]
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "restore_data_abroad",
+        "label": "Restore mobile data abroad",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "roaming_model",
+        "label": "The two roaming layers",
+        "kind": "rule_set",
+        "parent_id": "restore_data_abroad",
+        "order": 1,
+        "fact_ids": [
+          "roaming_has_phone_and_carrier_layers",
+          "abroad_data_requires_layers_active_line_data_usage"
+        ]
+      },
+      {
+        "id": "abroad_entry",
+        "label": "Route abroad customers with bad data",
+        "kind": "entry_conditions",
+        "parent_id": "restore_data_abroad",
+        "order": 2,
+        "fact_ids": [
+          "applies_to_abroad_customer_with_bad_data"
+        ]
+      },
+      {
+        "id": "phone_side_roaming",
+        "label": "Check phone-side data roaming",
+        "kind": "step",
+        "parent_id": "restore_data_abroad",
+        "order": 3,
+        "fact_ids": [
+          "check_phone_side_roaming_first",
+          "phone_roaming_off_enable_and_rerun"
+        ]
+      },
+      {
+        "id": "carrier_side_roaming",
+        "label": "Check the carrier-side allowance",
+        "kind": "procedure",
+        "parent_id": "restore_data_abroad",
+        "order": 4,
+        "fact_ids": [
+          "identify_line_before_carrier_roaming_check",
+          "explain_carrier_roaming_needed_when_off"
+        ]
+      },
+      {
+        "id": "carrier_roaming_confirmation",
+        "label": "Confirm before enabling roaming",
+        "kind": "confirmation_gate",
+        "parent_id": "carrier_side_roaming",
+        "order": 1,
+        "fact_ids": [
+          "confirm_before_enabling_carrier_roaming"
+        ]
+      },
+      {
+        "id": "enable_carrier_roaming",
+        "label": "Enable roaming on the line",
+        "kind": "record_mutation",
+        "parent_id": "carrier_side_roaming",
+        "order": 2,
+        "fact_ids": [
+          "enable_carrier_roaming_after_confirmation"
+        ]
+      },
+      {
+        "id": "abroad_verification",
+        "label": "Rerun the speed test and route the result",
+        "kind": "verification_gate",
+        "parent_id": "restore_data_abroad",
+        "order": 5,
+        "fact_ids": [
+          "rerun_speed_test_after_carrier_step",
+          "close_when_both_layers_on_and_excellent",
+          "working_but_slow_returns_to_slow_data_steps",
+          "unavailable_with_both_layers_on_returns_to_mobile_data_settings"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "phone_side_roaming",
+        "type": "requires",
+        "target_id": "abroad_entry"
+      },
+      {
+        "source_id": "carrier_side_roaming",
+        "type": "evaluated_after",
+        "target_id": "phone_side_roaming"
+      },
+      {
+        "source_id": "enable_carrier_roaming",
+        "type": "requires",
+        "target_id": "carrier_roaming_confirmation"
+      },
+      {
+        "source_id": "abroad_verification",
+        "type": "uses_result_from",
+        "target_id": "carrier_side_roaming"
+      },
+      {
+        "source_id": "abroad_verification",
+        "type": "governed_by",
+        "target_id": "roaming_model"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "roaming_has_phone_and_carrier_layers",
+      "category": "roaming_model",
+      "statement": "Roaming has two layers: the phone's data roaming setting and the carrier-side roaming allowance on the line."
+    },
+    {
+      "id": "abroad_data_requires_layers_active_line_data_usage",
+      "category": "roaming_model",
+      "statement": "Abroad mobile data works when both roaming layers are on, the line is active, mobile data is on, and data usage is available."
+    },
+    {
+      "id": "applies_to_abroad_customer_with_bad_data",
+      "category": "entry_conditions",
+      "statement": "The roaming workflow applies to a customer abroad with unavailable or unreliable mobile data."
+    },
+    {
+      "id": "check_phone_side_roaming_first",
+      "category": "phone_side_roaming",
+      "statement": "First, ask the customer to check phone-side data roaming."
+    },
+    {
+      "id": "phone_roaming_off_enable_and_rerun",
+      "category": "phone_side_roaming",
+      "statement": "If phone-side data roaming is off, ask the customer to turn it on and rerun the speed test."
+    },
+    {
+      "id": "identify_line_before_carrier_roaming_check",
+      "category": "carrier_side_roaming",
+      "statement": "If data remains unavailable or unreliable after the phone-side roaming check, identify the affected line and check carrier-side roaming."
+    },
+    {
+      "id": "explain_carrier_roaming_needed_when_off",
+      "category": "carrier_side_roaming",
+      "statement": "If carrier-side roaming is off, explain that roaming needs to be enabled on the line at no cost."
+    },
+    {
+      "id": "confirm_before_enabling_carrier_roaming",
+      "category": "carrier_side_roaming",
+      "statement": "Get the customer's confirmation before enabling roaming on the line."
+    },
+    {
+      "id": "enable_carrier_roaming_after_confirmation",
+      "category": "carrier_side_roaming",
+      "statement": "After the customer confirms, enable roaming on the line at no cost."
+    },
+    {
+      "id": "rerun_speed_test_after_carrier_step",
+      "category": "verification",
+      "statement": "After the carrier-side roaming check, and after enabling roaming if it was off, ask the customer to rerun the speed test."
+    },
+    {
+      "id": "close_when_both_layers_on_and_excellent",
+      "category": "verification",
+      "statement": "Close an abroad data case when both phone-side and carrier-side roaming are on and the speed test is excellent."
+    },
+    {
+      "id": "working_but_slow_returns_to_slow_data_steps",
+      "category": "workflow_routing",
+      "statement": "If both roaming layers are on and mobile data works but the speed test is below excellent, return to the slow-data steps in the mobile-data workflow."
+    },
+    {
+      "id": "unavailable_with_both_layers_on_returns_to_mobile_data_settings",
+      "category": "workflow_routing",
+      "statement": "If mobile data is still unavailable after both roaming layers are confirmed on, return to the mobile-data workflow at the mobile-data setting check."
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/telecom/hard_bundle_001/restore_data_abroad_transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/telecom/client_overlay_001/restore_data_abroad_client_transformation_pack.json"
+    }
+  ],
+  "transformations": [
+    {
+      "id": "telecom_restore_data_abroad_explicit_rules",
+      "representation": "explicit_rules"
+    },
+    {
+      "id": "telecom_restore_data_abroad_jira_decision_export",
+      "representation": "jira_issue_export",
+      "stub_path": "tau2/hyper/sops/telecom/sections/restore_data_abroad/bundles/jira_flowchart/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_data_abroad/jira_issue_export_001/eval_manifest.json",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_data_abroad/jira_issue_export_001/jira_issue_export.json",
+          "kit_filename": "jira_issue_export.json",
+          "reference_id": "northline-travel-care-jira-snapshot",
+          "artifact_ref": "northline-travel-care-jira-snapshot",
+          "included_fact_ids": [
+            "identify_line_before_carrier_roaming_check",
+            "explain_carrier_roaming_needed_when_off",
+            "confirm_before_enabling_carrier_roaming",
+            "enable_carrier_roaming_after_confirmation",
+            "rerun_speed_test_after_carrier_step"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "telecom_restore_data_abroad_roaming_recovery_maps",
+      "representation": "process_flowchart",
+      "stub_path": "tau2/hyper/sops/telecom/sections/restore_data_abroad/bundles/jira_flowchart/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_data_abroad/process_flowchart_001_roaming_recovery/roaming_recovery_01_intake_phone.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_data_abroad/process_flowchart_001_roaming_recovery/roaming_recovery_01_intake_phone.txt",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_data_abroad/process_flowchart_001_roaming_recovery/eval_manifest.json",
+          "kit_filename": "roaming_recovery_01_intake_phone.png",
+          "reference_id": "roaming-recovery-map-v3-01",
+          "artifact_ref": "roaming-recovery-map-v3-01",
+          "included_fact_ids": [
+            "roaming_has_phone_and_carrier_layers",
+            "abroad_data_requires_layers_active_line_data_usage",
+            "applies_to_abroad_customer_with_bad_data",
+            "check_phone_side_roaming_first",
+            "phone_roaming_off_enable_and_rerun"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/restore_data_abroad/process_flowchart_001_roaming_recovery/roaming_recovery_02_outcomes.png",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/restore_data_abroad/process_flowchart_001_roaming_recovery/roaming_recovery_02_outcomes.txt",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/restore_data_abroad/process_flowchart_001_roaming_recovery/eval_manifest.json",
+          "kit_filename": "roaming_recovery_02_outcomes.png",
+          "reference_id": "roaming-recovery-map-v3-02",
+          "artifact_ref": "roaming-recovery-map-v3-02",
+          "included_fact_ids": [
+            "close_when_both_layers_on_and_excellent",
+            "working_but_slow_returns_to_slow_data_steps",
+            "unavailable_with_both_layers_on_returns_to_mobile_data_settings"
+          ]
+        }
+      ]
+    }
+  ],
+  "transformation_bundles": [
+    {
+      "id": "restore_data_abroad_jira_flowchart_archive",
+      "description": "A linked Restore Data Abroad corpus in which two 1760-by-1280 decision maps own the phone-side, entry, operating-model, and outcome-routing facts while a 24-issue Jira Cloud export owns five carrier-side decisions amid rejected alternatives, superseded pilots, implementation work, and realistic adjacent travel projects.",
+      "stub_path": "tau2/hyper/sops/telecom/sections/restore_data_abroad/bundles/jira_flowchart/stub.md",
+      "fact_ids": [
+        "roaming_has_phone_and_carrier_layers",
+        "abroad_data_requires_layers_active_line_data_usage",
+        "applies_to_abroad_customer_with_bad_data",
+        "check_phone_side_roaming_first",
+        "phone_roaming_off_enable_and_rerun",
+        "identify_line_before_carrier_roaming_check",
+        "explain_carrier_roaming_needed_when_off",
+        "confirm_before_enabling_carrier_roaming",
+        "enable_carrier_roaming_after_confirmation",
+        "rerun_speed_test_after_carrier_step",
+        "close_when_both_layers_on_and_excellent",
+        "working_but_slow_returns_to_slow_data_steps",
+        "unavailable_with_both_layers_on_returns_to_mobile_data_settings"
+      ],
+      "members": [
+        {
+          "transformation_id": "telecom_restore_data_abroad_roaming_recovery_maps",
+          "primary": true,
+          "authoritative_fact_ids": [
+            "roaming_has_phone_and_carrier_layers",
+            "abroad_data_requires_layers_active_line_data_usage",
+            "applies_to_abroad_customer_with_bad_data",
+            "check_phone_side_roaming_first",
+            "phone_roaming_off_enable_and_rerun",
+            "close_when_both_layers_on_and_excellent",
+            "working_but_slow_returns_to_slow_data_steps",
+            "unavailable_with_both_layers_on_returns_to_mobile_data_settings"
+          ],
+          "depends_on_fact_ids": [
+            "identify_line_before_carrier_roaming_check",
+            "explain_carrier_roaming_needed_when_off",
+            "confirm_before_enabling_carrier_roaming",
+            "enable_carrier_roaming_after_confirmation",
+            "rerun_speed_test_after_carrier_step"
+          ]
+        },
+        {
+          "transformation_id": "telecom_restore_data_abroad_jira_decision_export",
+          "authoritative_fact_ids": [
+            "identify_line_before_carrier_roaming_check",
+            "explain_carrier_roaming_needed_when_off",
+            "confirm_before_enabling_carrier_roaming",
+            "enable_carrier_roaming_after_confirmation",
+            "rerun_speed_test_after_carrier_step"
+          ],
+          "depends_on_fact_ids": [
+            "check_phone_side_roaming_first",
+            "phone_roaming_off_enable_and_rerun"
+          ]
+        }
+      ]
+    }
+  ]
+}

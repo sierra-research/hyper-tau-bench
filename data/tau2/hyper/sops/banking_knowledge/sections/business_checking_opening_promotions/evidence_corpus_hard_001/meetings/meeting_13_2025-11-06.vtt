@@ -1,0 +1,379 @@
+WEBVTT
+
+00:00:00.800 --> 00:00:42.201
+<v Maya Chen>Okay, recording on — this is the records operations sweep for the sixth of November, the long one we promised ourselves in September and then kept not scheduling. Agenda is on the shared doc: leftovers from the last sweep, capture backlog, the pipeline walkthrough, storage, tooling, naming, the archive walkthrough — which is most of the hour, so pace yourselves — catalog hygiene, access review, records requests, and the retention calendar. Nothing in this meeting decides product anything. This is plumbing. If a product question comes up, we park it and route it to the owner.
+
+00:00:42.321 --> 00:00:44.923
+<v Noah Kim>Plumbing hour. I brought coffee.
+
+00:00:45.103 --> 00:00:50.010
+<v Kira Wallace>And I have the pipeline board up whenever you want it.
+
+00:00:50.130 --> 00:00:55.659
+<v Elena Park>I have a folder of horrors ready for the naming section. Genuinely excited.
+
+00:00:55.839 --> 00:01:03.060
+<v Priya Shah>I am mostly here for the requests item, but I reserve the right to heckle throughout.
+
+00:01:03.180 --> 00:01:26.604
+<v Maya Chen>One word on why this one is scheduled long, since two of you asked. The short sweeps keep the queue moving; they never leave time to actually open the folders and look. Today we look. If that means we spend four minutes watching a folder tree scroll in silence, that is the meeting working, not the meeting failing.
+
+00:01:26.784 --> 00:01:29.622
+<v Noah Kim>The silence is load-bearing. Got it.
+
+00:01:29.742 --> 00:01:58.647
+<v Maya Chen>Noted and welcomed. Leftovers first, so they stop haunting the doc. The September sweep left three actions. One, the diagram index got its owner column — done, and people actually use it. Two, the recordings mailbox got a retention entry in the catalog — done. Three, the catalog note backfill for the spring captures — rolled twice now, and I want to talk about it under hygiene instead of pretending it will finish itself.
+
+00:01:58.827 --> 00:02:06.422
+<v Noah Kim>It will not finish itself. I own that one and I brought numbers, so yes, park it for hygiene.
+
+00:02:06.542 --> 00:02:12.125
+<v Maya Chen>Parked. Backlog, then. Where is the capture queue as of this morning?
+
+00:02:12.305 --> 00:02:33.898
+<v Noah Kim>Nine items. Six are the routine monthly re-captures of the marketing pages, two are diagram re-renders that came in after last week's title edits, and one is the resource-center page, which is the problem child — the render job hangs at the footer and has now hung three runs in a row.
+
+00:02:34.018 --> 00:02:37.416
+<v Maya Chen>Hangs how? Times out, or sits forever?
+
+00:02:37.596 --> 00:02:55.039
+<v Noah Kim>Sits until the runner kills it. The page loads fine in a browser. Something in the print step dislikes one of the footer assets, is my guess, but I stopped guessing after the second run and filed it with the tooling folks instead.
+
+00:02:55.159 --> 00:03:04.826
+<v Kira Wallace>Ticket link in the doc, please, so the next person who hits it finds your run notes instead of rediscovering the hang from scratch.
+
+00:03:05.006 --> 00:03:18.917
+<v Noah Kim>Already linked. And while I have the floor: every capture that did land this month went out with the standard strip — owner, capture date, catalog reference, catalog note. No exceptions, including the archive mirrors.
+
+00:03:19.037 --> 00:03:26.369
+<v Priya Shah>Say the no-exceptions part again, slowly, because that is the part I get asked about from outside.
+
+00:03:26.549 --> 00:03:45.289
+<v Noah Kim>Every capture wears the same strip. Live page, archived page, does not matter — the strip is identical in form on all of them. What tells you which is which is the catalog, the dates, and the records around the file. Not a different costume on the file itself.
+
+00:03:45.409 --> 00:04:19.414
+<v Kira Wallace>For the two new hires who will watch this recording later — the strip anatomy, once. Four fields, always the same order: the owner, meaning the team that answers for the page; the capture date, which is the date of the snapshot, not the date of the page's content; the catalog reference, which is how you find the entry; and the catalog note, one line on why the capture exists. If you can read those four fields, you can navigate the whole archive.
+
+00:04:19.594 --> 00:04:30.658
+<v Elena Park>And the fields are boring on purpose. The day a strip gets creative is the day someone starts reading strips for meaning instead of reading the records.
+
+00:04:30.778 --> 00:04:39.881
+<v Maya Chen>Which is the whole design, and it only works if it stays boring and uniform. Okay — the two diagram re-renders?
+
+00:04:40.061 --> 00:04:50.052
+<v Noah Kim>Waiting on Kira's sign-off on the retitled owner lines, then they run tonight. The titles changed when the owner moved teams; nothing else changed.
+
+00:04:50.172 --> 00:04:52.623
+<v Kira Wallace>Signed this morning. Run them.
+
+00:04:52.803 --> 00:05:03.873
+<v Maya Chen>Pipeline walkthrough, then. Kira, the floor is yours — and go slower than you think you need to. Half the room has never seen the middle stages.
+
+00:05:03.993 --> 00:05:31.914
+<v Kira Wallace>Sharing now. This is the capture pipeline board — BC-REC-07, for anyone filing things later. Left to right: request intake, scheduling, capture, strip application, catalog entry, publication to the index, and archive mirroring. Seven stages. And the failure I actually care about is never the capture itself — it is a capture that lands without a catalog entry, because that file exists and nobody can find it, which is the worst of both worlds.
+
+00:05:32.094 --> 00:05:34.694
+[Kira walks the board stage by stage while the group follows]
+
+00:06:16.694 --> 00:06:21.280
+<v Kira Wallace>Questions on the middle, since that is where things stall.
+
+00:06:21.460 --> 00:06:32.537
+<v Elena Park>Who owns a request once it is scheduled? Intake was me for the campaign pages, but I honestly could not tell you who owns mine right now.
+
+00:06:32.657 --> 00:06:50.056
+<v Kira Wallace>Scheduling assigns a runner, and the runner owns it through catalog entry. Ownership shows in the queue view, second column. If that column is ever blank, that is a bug and I want it reported, not worked around by asking in the hallway.
+
+00:06:50.236 --> 00:06:53.149
+<v Noah Kim>The hallway method does work, though.
+
+00:06:53.269 --> 00:06:58.388
+<v Kira Wallace>The hallway method is how two captures got made twice last month.
+
+00:06:58.568 --> 00:07:03.409
+<v Maya Chen>Point taken on both sides. Publication and mirroring — anything pending?
+
+00:07:03.529 --> 00:07:26.667
+<v Kira Wallace>Mirroring runs nightly and has been quiet. Publication had one wrinkle: the index update and the capture landed out of order once last week, so for about an hour the index pointed at the previous capture. It self-healed on the next cycle. I wrote it up anyway, because an hour is plenty of time for somebody to cite the wrong one.
+
+00:07:26.847 --> 00:07:34.885
+<v Priya Shah>Good write-up — I read it. The citation risk is exactly why the write-up matters more than the fix.
+
+00:07:35.005 --> 00:07:41.029
+<v Maya Chen>Storage, quickly, because the dashboard made me wince. Elena, you pulled the numbers?
+
+00:07:41.209 --> 00:08:07.912
+<v Elena Park>I did. The archive grew by about a fifth this year, and the growth is almost entirely the meeting recordings — video is heavy and we keep everything. Documents and captures are a rounding error next to it. Two options on the table: move recordings older than two years to cold storage with the catalog entries staying put, or keep buying space and stop talking about it.
+
+00:08:08.032 --> 00:08:10.632
+[Elena shares the storage dashboard; the group reads the trend chart]
+
+00:08:34.632 --> 00:08:45.040
+<v Noah Kim>Cold storage, with the retrieval time written into the catalog entry so nobody is surprised when an old recording takes a day to come back.
+
+00:08:45.160 --> 00:08:54.477
+<v Kira Wallace>Agreed, as long as retrieval is a request with an owner and not a mystery. The catalog entry stays; only the bytes move.
+
+00:08:54.657 --> 00:09:05.775
+<v Priya Shah>No objection, with one condition: nothing that is part of an open records request moves until the request closes. Check the request log before each batch.
+
+00:09:05.895 --> 00:09:15.181
+<v Elena Park>All reasonable. I will draft the move plan with those three conditions and bring it to the next sweep — nothing moves before then.
+
+00:09:15.361 --> 00:09:20.466
+<v Maya Chen>Good. Tooling, while we are in the machinery. Noah, the runner update?
+
+00:09:20.586 --> 00:09:47.564
+<v Noah Kim>The capture runner got its version bump last week. Two visible changes: the print step embeds the capture date in the file metadata now, which is genuinely useful, and the metadata field names shifted, which quietly broke my verification diff for a day. The diff is fixed and I added a check so a field rename fails loudly next time instead of passing silently.
+
+00:09:47.744 --> 00:09:57.860
+<v Kira Wallace>That silent pass is the scary half. A verification step that stops verifying and keeps smiling is worse than no step, because everyone relaxes.
+
+00:09:57.980 --> 00:10:11.351
+<v Noah Kim>Which is why the new check screams. Rollback plan is documented in the same note if the metadata change causes trouble downstream — one command, back to the previous runner, captures unaffected.
+
+00:10:11.531 --> 00:10:15.706
+<v Maya Chen>Lovely. The drive migration — status, in one breath.
+
+00:10:15.826 --> 00:10:35.102
+<v Elena Park>Copied, verified, old tree is read-only as of Monday. Two wrinkles: permissions did not carry on one team folder, which is fixed and written up, and the copy created a duplicate campaign subtree that I have not deleted, because deleting things during a migration week is how legends are born.
+
+00:10:35.282 --> 00:10:38.133
+<v Noah Kim>Leave it a month. Cheap insurance.
+
+00:10:38.253 --> 00:10:46.820
+<v Elena Park>That is the plan. It is labeled as the migration duplicate in the folder description — description, not filename, before anyone asks.
+
+00:10:47.000 --> 00:10:49.830
+<v Maya Chen>Naming. Elena, your folder of horrors.
+
+00:10:49.950 --> 00:11:27.029
+<v Elena Park>Highlights only, I promise. I have a file whose name is the word untitled four times in a row. I have two different files in two folders with the same name and different contents. I have a name with an emoji in it that sorts to the top of every listing and cannot be typed into a search box. And I have the classics — a double extension, a name that is just somebody's initials, and a handful with verdict words baked into the filename, which we keep agreeing to stop doing.
+
+00:11:27.209 --> 00:11:55.083
+<v Priya Shah>The verdict words are the ones I care about. A name is not a record. If the name says what the thing is, fine. The moment the name starts telling you what to think of the thing, we have a problem — because names carry no dates and nobody signs a filename. That is what the catalog and the dated records are for.
+
+00:11:55.203 --> 00:12:14.236
+<v Kira Wallace>The convention we already run for captures generalizes cleanly: what it is, which surface, and the date. Chronology comes from dates and references. Anything about standing lives in the catalog and the dated records, where it can be traced to an actual decision by an actual owner.
+
+00:12:14.416 --> 00:12:26.825
+<v Noah Kim>Can we write that as three bullets and pin it somewhere findable? Every time this comes up we agree out loud and then next quarter's files look exactly the same.
+
+00:12:26.945 --> 00:12:37.030
+<v Maya Chen>Yes. Elena drafts the bullets, Priya reads them, and they go in the folder guide, not in a meeting memory. That is an action.
+
+00:12:37.210 --> 00:12:41.088
+<v Elena Park>Taking it. And I get to fix the emoji.
+
+00:12:41.208 --> 00:12:56.809
+<v Maya Chen>Archive walkthrough. I am sharing the tree and we are going to click through it folder by folder, top to bottom. Interrupt whenever something looks wrong — fresh eyes are the entire point of doing this live. Campaigns first.
+
+00:12:56.989 --> 00:12:59.589
+[Maya shares the archive tree and opens the campaigns folder]
+
+00:13:35.589 --> 00:13:58.967
+<v Maya Chen>Campaigns are foldered by month. Each month holds the launch materials, the cards, and the closing report once a campaign has closed. The thing that gets misfiled here is anything that spans months — those file under the start month, with a shortcut from the other months, and about half the shortcuts are missing.
+
+00:13:59.147 --> 00:14:05.574
+<v Elena Park>I can sweep the shortcuts as part of the naming pass. Same folders, same afternoon.
+
+00:14:05.694 --> 00:14:08.293
+<v Maya Chen>Taken. Product page captures next.
+
+00:14:08.473 --> 00:14:11.073
+[the group clicks through the capture folders in silence]
+
+00:14:51.073 --> 00:15:07.224
+<v Noah Kim>For the tape, since clicks do not record: the capture folders are by product, each capture is date-named, and the catalog reference on the strip matches the folder entry. We spot-checked a handful just now and every one lined up.
+
+00:15:07.404 --> 00:15:37.000
+<v Kira Wallace>One structural thing worth saying while the folder is open: the rendered screenshots and the page sources live in sibling folders, same names, different extensions. The screenshot is what a visitor saw; the source is what the tooling needs for a re-render. They travel together, and a capture is not complete unless both landed. If you ever find one without the other, that is a pipeline miss — log it against the run, not against the page.
+
+00:15:37.120 --> 00:15:40.956
+<v Elena Park>Is that pairing checked anywhere, or is it eyeballs?
+
+00:15:41.136 --> 00:15:49.025
+<v Kira Wallace>The mirror job counts pairs nightly and complains on mismatch. Eyeballs are the backup, which is what today is for.
+
+00:15:49.145 --> 00:16:16.363
+<v Maya Chen>Diagrams. This is the folder where the email threads matter — each retired diagram's decision lives in a dated thread keyed to the diagram reference, and the folder index carries the thread link. That index column is new since last month. If you find a diagram whose decision thread is not linked, that is a gap; log it, do not fix it silently.
+
+00:16:16.543 --> 00:16:27.095
+<v Kira Wallace>Two of mine got the column retrofit last week and it reads well. The link is the difference between an archive and a junk drawer.
+
+00:16:27.215 --> 00:16:44.884
+<v Priya Shah>It is also the answer to the question I get from outside reviewers, which is: how do you know that one is retired? Answer: dated record, linked from the index, signed by the owner. Never the file itself telling you.
+
+00:16:45.064 --> 00:16:48.848
+<v Maya Chen>Email archive, since we are next to it.
+
+00:16:48.968 --> 00:16:51.568
+[Maya opens the email archive folder; the group reads the index]
+
+00:17:17.568 --> 00:17:42.059
+<v Maya Chen>Threads are foldered by quarter and keyed by the reference they decide on — a diagram, a page, a campaign. The export is read-only by design. If somebody needs a thread corrected, the correction is a new dated message in the live system, and the next export picks it up. We do not edit history in place, ever, even for typos.
+
+00:17:42.179 --> 00:17:49.940
+<v Noah Kim>Same discipline as the Slack exports one folder down — snapshots, read-only, dated. If it happened, it stays happened.
+
+00:17:50.120 --> 00:18:02.574
+<v Elena Park>Wait — one broken thing, right here while we are looking. The second row of the email index, the thread link opens the folder itself instead of the thread. Recursion. Neat, but wrong.
+
+00:18:02.694 --> 00:18:13.840
+<v Maya Chen>Well caught. That is the live demo working as intended. Logging it now, and I will fix the row after the meeting rather than mid-share.
+
+00:18:14.020 --> 00:18:15.822
+<v Maya Chen>Meeting recordings next.
+
+00:18:15.942 --> 00:18:18.542
+[Maya opens the recordings mailbox and scrolls the series]
+
+00:18:48.542 --> 00:19:26.734
+<v Maya Chen>The series mailbox has every session this year, and two housekeeping notes on it. First, the September fourth recording has no audio for roughly the first minute — the transcript covers the gap and there is a note pinned to the entry, so please do not re-report it; it is known. Second, transcripts come back from the vendor as spoken, and we do not edit them afterward. If someone misspoke on tape, the correction goes in the follow-up notes with a date. The caption file stays as spoken. The tape stays the tape.
+
+00:19:26.854 --> 00:19:38.352
+<v Noah Kim>Support cases run the same way, for what it is worth — the transcript is the record, and corrections ride in the case notes, never in the transcript.
+
+00:19:38.532 --> 00:19:43.011
+<v Maya Chen>Same discipline, yes. Speaking of which — support case exports?
+
+00:19:43.131 --> 00:20:00.399
+<v Noah Kim>Exported monthly into the archive with the case headers intact. October's export ran clean. The only recurring annoyance is people asking for a case by what happened in it instead of by the case number, which is a search problem, not a filing problem.
+
+00:20:00.579 --> 00:20:09.074
+<v Elena Park>A search problem we could soften by using the topic line that already exists in the export index and that nobody uses.
+
+00:20:09.194 --> 00:20:14.731
+<v Noah Kim>Because nobody knows it exists. Put that in the folder guide too.
+
+00:20:14.911 --> 00:20:34.334
+<v Elena Park>While we are on search — a genuine gripe. The index search matches on names and references but not on the catalog notes, so the one field with actual words in it is invisible to the search box. Half my hallway questions would evaporate if notes were searchable.
+
+00:20:34.454 --> 00:20:55.577
+<v Maya Chen>That is a real gap and it is on the tooling list, not ours to build in this room. What we can do meanwhile is what Noah is about to do anyway — make the notes worth searching, so the day the box catches up there is something behind it.
+
+00:20:55.757 --> 00:20:59.484
+<v Noah Kim>The backfill suddenly has a fan club. Wonderful.
+
+00:20:59.604 --> 00:21:04.945
+<v Maya Chen>Also an action. Last folder — intake documents — and then hygiene.
+
+00:21:05.125 --> 00:21:07.725
+[Maya opens the intake folder; the group reads the index]
+
+00:21:31.725 --> 00:21:44.684
+<v Maya Chen>Intake documents are filed by intake date with the requesting team in the entry. This folder is boring, which is what success looks like in here. Moving on before anyone gets ideas.
+
+00:21:44.864 --> 00:21:50.001
+<v Maya Chen>Catalog hygiene — Noah, your rolled-over backfill, with the numbers you promised.
+
+00:21:50.121 --> 00:22:18.968
+<v Noah Kim>The spring captures went into the catalog before we standardized the catalog note, so a few dozen entries have a reference and a date but an empty note field. I sampled the archive this week: everything from June onward is complete; the gap is entirely March through May. Proposal: I backfill the notes over the next two weeks, each note written fresh, in today's words, carrying today's date.
+
+00:22:19.148 --> 00:22:41.530
+<v Priya Shah>Say the dating part precisely, because it is the part that matters. A backfilled note written this month must say it was written this month. Nothing gets a spring date it did not earn — a note that pretends to be older than it is would be quietly manufacturing history.
+
+00:22:41.650 --> 00:22:52.695
+<v Noah Kim>Agreed, and that is how the June batch was done: note text plus written-on date, sitting next to the original capture date. Two dates, no pretending.
+
+00:22:52.875 --> 00:23:01.135
+<v Maya Chen>Then the action is the March-through-May batch on that pattern, done before the next sweep. No more rolling it.
+
+00:23:01.255 --> 00:23:04.940
+<v Noah Kim>Done before the next sweep. On the record.
+
+00:23:05.120 --> 00:23:08.034
+<v Maya Chen>Access review. Kira, you ran it?
+
+00:23:08.154 --> 00:23:31.501
+<v Kira Wallace>I did, yesterday. Write access to the archive is eleven people, which is two more than it should be — both are departures whose access outlived them by a quarter. Removed as of this morning, and the review is now a standing calendar item instead of a thing we remember in November. Read access stays wide, deliberately. Read wide, write narrow.
+
+00:23:31.681 --> 00:23:33.823
+<v Priya Shah>And the service accounts?
+
+00:23:33.943 --> 00:23:52.452
+<v Kira Wallace>Three, all documented: the capture runner, the mirror job, and the export job. Each writes to exactly its own corner and nothing else. The runner cannot touch the email archive; the export job cannot touch captures. Boundaries checked as part of the same review.
+
+00:23:52.632 --> 00:23:58.628
+<v Maya Chen>Records requests. Two open. Priya, walk them — both came through your door.
+
+00:23:58.748 --> 00:24:34.578
+<v Priya Shah>First one: the internal audit team wants the October campaign materials as they stood on two specific dates, together with the dated decision records around them. Assembly rules are the usual: copies, never originals; no annotations; read-only delivery; and a cover note that lists what was included and as of when. The cover note describes — it never explains. If audit wants interpretation, that is a conversation with the owner, on the record, not a paragraph I compose into a delivery note.
+
+00:24:34.758 --> 00:24:36.480
+<v Kira Wallace>And the second?
+
+00:24:36.600 --> 00:24:59.247
+<v Priya Shah>Smaller — a team lead wants the recording and notes of one spring session for onboarding a new hire. Routine; it goes out this week. The one rule worth saying on tape: requests are fulfilled from the archive, never from personal copies, because personal folders are where stale versions go to look official.
+
+00:24:59.427 --> 00:25:04.232
+<v Noah Kim>Strong agree. My personal folder is a museum of stale versions.
+
+00:25:04.352 --> 00:25:16.951
+<v Maya Chen>An honest museum, at least. Let us do the second one right now, live, since it is small — it doubles as the walkthrough for anyone who has never fulfilled one.
+
+00:25:17.131 --> 00:25:19.731
+[Priya assembles the request in the delivery folder while sharing her screen]
+
+00:25:57.731 --> 00:26:28.514
+<v Priya Shah>Narrating what I just did. Located the session in the recordings mailbox and confirmed the catalog entry matches. Copied the recording and the notes into a fresh delivery folder — copies, not moves. Set the folder read-only. Cover note lists two items, their dates, the request reference, and today's date, and says nothing else. Delivery logged in the request log with me as the fulfiller. Total elapsed time: under four minutes, most of it typing the note.
+
+00:26:28.694 --> 00:26:34.769
+<v Elena Park>Genuinely useful to watch. The read-only step is the one I would have forgotten.
+
+00:26:34.889 --> 00:26:44.055
+<v Priya Shah>It is the one everyone forgets, which is why it is second-to-last on the checklist, right before the log entry.
+
+00:26:44.235 --> 00:26:55.769
+<v Maya Chen>Incident recap, then calendar, then we escape. The misfiled deck from late October — I want the records-side version on tape since this is the records meeting.
+
+00:26:55.889 --> 00:27:24.412
+<v Elena Park>Short version: in late October, a pre-decision campaign deck showed up in the live support folder while the underlying decision was still open. Support flagged it in a day — the folder audience noticed before we did, to their credit. It came out of the live folder, and because people already held links, the file was replaced with a short note pointing to the governing October card rather than left as a dead link.
+
+00:27:24.592 --> 00:27:34.639
+<v Kira Wallace>The pointer-note practice is the part to keep. A vanished file breeds hallway copies; a note that says where to look instead breeds correct behavior.
+
+00:27:34.759 --> 00:27:47.052
+<v Priya Shah>And the umbrella lesson for this room: the live folder is an audience, not a workspace. Things enter it when their decision is complete, and not a day before.
+
+00:27:47.232 --> 00:28:06.963
+<v Maya Chen>On the month in numbers, so the tape has them in words: forty-one captures landed, six re-renders, zero missed mirror runs, two requests fulfilled before these two, and one incident — the deck — closed with a written recap. The trend lines are flat and boring, which is the goal.
+
+00:28:07.083 --> 00:28:28.437
+<v Maya Chen>Retention calendar, last item. The next quarterly sweep lands inside the holiday freeze, so the December question is what runs unattended and what waits for January. Proposal: mirroring and the monthly captures run as scheduled — they are unattended anyway — and everything needing a human, the naming pass included, waits for the January calendar.
+
+00:28:28.617 --> 00:28:34.810
+<v Kira Wallace>Agreed for the pipeline side. The freeze exists so nobody does careful work tired.
+
+00:28:34.930 --> 00:28:47.162
+<v Elena Park>Also agreed, with one exception — if the shortcut sweep is not finished before the freeze, I would rather finish it than leave the campaign folders half-linked over the break.
+
+00:28:47.342 --> 00:28:54.816
+<v Maya Chen>Fair. Finish it or do not start the final leg. No half-swept folders sitting for a month.
+
+00:28:54.936 --> 00:29:10.116
+<v Priya Shah>And requests do not freeze. If one arrives in late December it gets acknowledged with a date, even if the assembly itself waits for January. The acknowledgment is the part with a clock on it.
+
+00:29:10.296 --> 00:29:24.918
+<v Kira Wallace>Who is holding the pager over the freeze? The unattended jobs still fail occasionally, and the failure mode we planned for is a person reading the run log the next morning, not the same week in January.
+
+00:29:25.038 --> 00:29:42.732
+<v Maya Chen>Rotation is on the doc — one name a week across the freeze, checking the mirror log and the capture log each morning, fixing nothing, filing everything. The instruction is deliberately just look and log. January cleans up with full staff and fresh eyes.
+
+00:29:42.912 --> 00:30:15.117
+<v Noah Kim>Look and log I can do from a couch. Sold. And a war story for the two new hires, since it is the same lesson: the last time a capture run failed during a quiet week, it was the building fire drill — the runner box got powered off mid-run, politely, by facilities. The morning log read like nonsense until someone thought to ask what happened in the building that day. Context lives outside the log. Ask about the day, not just the error.
+
+00:30:15.237 --> 00:30:19.729
+<v Elena Park>That story is the entire records discipline in one anecdote, honestly.
+
+00:30:19.909 --> 00:30:28.285
+<v Noah Kim>December me thanks you all for the clarity. November me is going to go stare at a footer asset.
+
+00:30:28.405 --> 00:31:24.028
+<v Maya Chen>Actions, for the recording. Noah chases the resource-center render ticket, runs the March-through-May note backfill on the two-date pattern, and adds the topic line to the folder guide. Kira runs the two diagram re-renders tonight, keeps the ownership-column bug on her list, and turns the access review into a standing calendar item. Elena drafts the naming bullets, fixes the emoji, sweeps the campaign shortcuts before the freeze or not at all, drafts the cold-storage move plan, and deletes the migration duplicate in a month — calendar reminder and all. Priya reads the naming bullets and runs both requests, one of which she already finished while we watched. I fix the recursive email index row, update the folder index, and put today's notes and this recording in the series mailbox. Anyone's favorite grievance missing?
+
+00:31:24.208 --> 00:31:26.757
+<v Noah Kim>The coffee machine on four.
+
+00:31:26.877 --> 00:31:35.060
+<v Maya Chen>Out of scope. Chronically. Okay — thanks, everyone. This was overdue and considerably less painful than advertised. Recording off.

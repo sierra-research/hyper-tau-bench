@@ -1,0 +1,98 @@
+From: Lena Petrossian <lena.petrossian@rhobank.com>
+To: Renee Okafor <renee.okafor@rhobank.com>
+Cc: Jaewon Park <jaewon.park@rhobank.com>
+Date: Fri, 7 Nov 2025 10:41:32 -0500
+Subject: RE: RHOAPP-4471 - resume banner truncation at 430
+Message-ID: <pca-ff04fde3@rhobank.com>
+In-Reply-To: <pca-b76b6a6b@rhobank.com>
+References: <pca-2305fa2a@rhobank.com>
+ <pca-e0475ec0@rhobank.com>
+ <pca-34ae02d6@rhobank.com>
+ <pca-2c65922c@rhobank.com>
+ <pca-89215812@rhobank.com>
+ <pca-b76b6a6b@rhobank.com>
+Thread-Topic: RHOAPP-4471 - resume banner truncation at 430
+Thread-Index: 7adba3abba0e221acb934af7c4b03d0b
+Accept-Language: en-US
+X-Auto-Response-Suppress: All
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Production push went out with the morning train, 4471 is closed.
+Renee - yes, I will capture the chooser and the form step off a
+production build and send them over, realistically next week once
+the store version settles.
+
+-----Original Message-----
+From: Renee Okafor <renee.okafor@rhobank.com>
+Sent: Thu, 6 Nov 2025 15:22:44 -0500
+To: Lena Petrossian <lena.petrossian@rhobank.com>, Jaewon Park <jaewon.park@rhobank.com>
+Subject: RE: RHOAPP-4471 - resume banner truncation at 430
+
+Riding this thread with an ops ask: once the fix is on production,
+can someone capture clean screens of the apply flow - the card
+chooser and the form step - for the ops binder? The ones in there
+predate the banner entirely, and the floor keeps asking what the
+resume state looks like.
+
+-----Original Message-----
+From: Lena Petrossian <lena.petrossian@rhobank.com>
+Sent: Thu, 6 Nov 2025 09:36:19 -0500
+To: Jaewon Park <jaewon.park@rhobank.com>
+Cc: Renee Okafor <renee.okafor@rhobank.com>
+Subject: RE: RHOAPP-4471 - resume banner truncation at 430
+
+Verified on 4.18.2: both 430 devices, banner wraps to two lines, full
+stop visible, chooser screen clean as well. Marking 4471 fixed once
+the release note lands. Nice quick turn.
+
+-----Original Message-----
+From: Jaewon Park <jaewon.park@rhobank.com>
+Sent: Wed, 5 Nov 2025 11:47:53 -0500
+To: Lena Petrossian <lena.petrossian@rhobank.com>
+Cc: Renee Okafor <renee.okafor@rhobank.com>
+Subject: RE: RHOAPP-4471 - resume banner truncation at 430
+
+Same component, single layout source - the fix lands everywhere the
+banner renders. Build 4.18.2 is on the QA channel as of 11:30 with
+the constraint change in.
+
+-----Original Message-----
+From: Lena Petrossian <lena.petrossian@rhobank.com>
+Sent: Wed, 5 Nov 2025 10:14:28 -0500
+To: Jaewon Park <jaewon.park@rhobank.com>
+Cc: Renee Okafor <renee.okafor@rhobank.com>
+Subject: RE: RHOAPP-4471 - resume banner truncation at 430
+
+Before it merges: the card chooser screen renders the same banner
+component when there is a saved application. Does the constraint fix
+cover it there too, or does that screen carry its own copy of the
+layout?
+
+-----Original Message-----
+From: Jaewon Park <jaewon.park@rhobank.com>
+Sent: Tue, 4 Nov 2025 13:26:41 -0500
+To: Lena Petrossian <lena.petrossian@rhobank.com>
+Cc: Renee Okafor <renee.okafor@rhobank.com>
+Subject: RE: RHOAPP-4471 - resume banner truncation at 430
+
+can repro. The banner container inherits a fixed width from the
+tablet layout instead of the phone constraint - one-line fix plus a
+wrap rule so long copy breaks to two lines instead of clipping. Fix
+is in review this afternoon, QA build tonight if it clears.
+
+-----Original Message-----
+From: Lena Petrossian <lena.petrossian@rhobank.com>
+Sent: Tue, 4 Nov 2025 09:52:17 -0500
+To: Jaewon Park <jaewon.park@rhobank.com>
+Cc: Renee Okafor <renee.okafor@rhobank.com>
+Subject: RHOAPP-4471 - resume banner truncation at 430
+
+Logged RHOAPP-4471 this morning: the "Pick up where you left off"
+banner on the apply flow truncates at 430-wide viewports - the text
+clips after "left" with no ellipsis, so it reads as a different
+sentence. Repro on both 430 test devices and the simulator;
+screenshots and the device matrix are on the ticket. Flagging here
+because the apply flow is in the demo rotation for Thursday's
+readout.

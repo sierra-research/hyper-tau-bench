@@ -1,0 +1,193 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "Rho Helpdesk",
+    "account": "rho-bank-consumer-and-business",
+    "workspace": "customer-support-core",
+    "environment": "production",
+    "exported_at": "2025-11-12T09:40:00-05:00",
+    "timezone": "America/New_York",
+    "export_version": "2025.46",
+    "requested_by": "priya.natarajan@rhobank.com"
+  },
+  "cover_email": "From: Helpdesk Administration <helpdesk-admin@rhobank.com>\nTo: Priya Natarajan <priya.natarajan@rhobank.com>\nDate: Wed, 12 Nov 2025 09:52:17 -0500\nSubject: customer-support-core workspace export (2025.46)\nMessage-ID: <hd-export-2025-46-supportcore@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nPriya,\n\nAttached is the customer-support-core workspace export you requested for the November configuration review. Same packaging as the deposit-servicing export from last week: cover note, macro and trigger definitions, the policy contract, the field inventory as CSV, SLA policies, and saved views.\n\nTwo packaging notes. First, the export includes objects in every lifecycle state, so the October recovery-macro change shows up as both the retired object and its replacement — that is expected, the audit trail wants both. Second, field option rows are one row per picklist value, which is why the transfer_reason field accounts for most of the CSV; the picklist mirrors the reason list on the floor board, and the board is where selection guidance lives, not in this export.\n\nConfiguration only, as always: this is what the workspace does when a macro runs or a trigger fires. Operating policy for transfers and recovery contacts is owned by the published ops boards, the dated Security Operations issuances, and the floor records.\n\nIf a row looks off, reply on this thread and I will pull the object history.\n\nHelpdesk Administration\n",
+  "macros": [
+    {
+      "macro_id": "MAC-7412",
+      "name": "Human transfer — reason-coded handoff",
+      "description": "Packages a human-agent handoff: applies the selected transfer reason code, carries the contact summary, and invokes transfer_to_human_agents. Reason-code selection is governed by the floor routing board XFER-OPS-101; this macro is the application step only.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-03-17",
+      "updated_at": "2025-10-14",
+      "usage_30d": 1418,
+      "usage_90d": 4276,
+      "superseded_by": null,
+      "steps": [
+        "Set ticket_type = human_transfer_request",
+        "Set transfer_reason to the selected reason code (picklist; one value required)",
+        "Populate the transfer summary field from the contact record",
+        "Invoke transfer_to_human_agents with the reason code and summary",
+        "Deliver the scripted transfer line to the customer and set status = transferred"
+      ]
+    },
+    {
+      "macro_id": "MAC-7515",
+      "name": "Account recovery — bypass code logging",
+      "description": "Logs identity verification for an Account Recovery Bypass Code event through the log_verification tool. When using log_verification for an Account Recovery Bypass Code, enter the bypass code in place of personal information so the system records that a bypass method was used.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-10-22",
+      "updated_at": "2025-10-23",
+      "usage_30d": 4,
+      "usage_90d": 9,
+      "superseded_by": null,
+      "steps": [
+        "Set log_verification.name = 9K2X7M4P1N8Q3R5T6A",
+        "Set log_verification.user_id = 9K2X7M4P1N8Q3R5T6A",
+        "Set log_verification.address = 9K2X7M4P1N8Q3R5T6A",
+        "Set log_verification.email = 9K2X7M4P1N8Q3R5T6A",
+        "Set log_verification.phone_number = 9K2X7M4P1N8Q3R5T6A",
+        "Set log_verification.date_of_birth = 9K2X7M4P1N8Q3R5T6A",
+        "Set log_verification.time_verified = the actual verification timestamp",
+        "Submit the log_verification entry and return to the recovery workflow"
+      ]
+    },
+    {
+      "macro_id": "MAC-7301",
+      "name": "Recovery verification — profile prefill (LEGACY)",
+      "description": "Prefilled the log_verification identity fields from the located customer profile (name, address, email, phone, date of birth) before submission. Retired from the recovery workflow in October 2025; see the change notice on the workspace change log for the replacement.",
+      "active": false,
+      "environment": "production",
+      "status": "disabled_legacy",
+      "effective_at": "2025-04-02",
+      "updated_at": "2025-10-22",
+      "usage_30d": 0,
+      "usage_90d": 11,
+      "superseded_by": "MAC-7515",
+      "steps": [
+        "Locate the customer profile on the recovery contact",
+        "Copy profile name, address, email, phone_number, and date_of_birth into the log_verification fields",
+        "Set log_verification.time_verified = submission time",
+        "Submit the log_verification entry"
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "TRG-6220",
+      "name": "Guard: transfer reason required",
+      "description": "Validation guard on the human-transfer macro; blocks handoffs submitted without a reason code.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 2,
+      "effective_at": "2025-03-17",
+      "updated_at": "2025-03-17",
+      "usage_30d": 37,
+      "conditions": [
+        "macro MAC-7412 submitted",
+        "transfer_reason is empty"
+      ],
+      "actions": [
+        "reject submission — a transfer reason code is required",
+        "notify submitting agent with the validation message"
+      ]
+    },
+    {
+      "trigger_id": "TRG-6294",
+      "name": "Guard: bypass log completeness",
+      "description": "Validation guard on the bypass logging macro; blocks partial submissions.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 1,
+      "effective_at": "2025-10-22",
+      "updated_at": "2025-10-22",
+      "usage_30d": 1,
+      "conditions": [
+        "macro MAC-7515 submitted",
+        "any log_verification identity field is empty or time_verified is empty"
+      ],
+      "actions": [
+        "reject submission — all seven log_verification fields must be populated",
+        "route the contact to the Security Operations review queue"
+      ]
+    },
+    {
+      "trigger_id": "TRG-6180",
+      "name": "Route: recovery contacts to recovery queue",
+      "description": "Assigns account recovery tickets to the recovery specialist group.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 4,
+      "effective_at": "2025-01-20",
+      "updated_at": "2025-06-09",
+      "usage_30d": 61,
+      "conditions": [
+        "ticket_type = account_recovery"
+      ],
+      "actions": [
+        "set group = Recovery Desk",
+        "apply SLA-341"
+      ]
+    }
+  ],
+  "policy_contracts": [
+    {
+      "contract_id": "CON-0904",
+      "name": "customer-support-core workspace configuration scope",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Helpdesk Administration",
+      "scope": "Ticket routing, macros, and validation guards for the customer-support-core workspace at this snapshot. Configuration only; transfer reason-code selection policy, account-recovery verification procedure, and interaction-level operating rules are owned by the published ops boards, the dated Security Operations issuances, and the floor records.",
+      "required_fields": ["ticket_type", "transfer_reason"],
+      "closed_world": {
+        "complete": false,
+        "unlisted_behavior": "review"
+      },
+      "effective_at": "2025-01-20",
+      "updated_at": "2025-10-22"
+    }
+  ],
+  "field_columns": ["row_id", "field_key", "field_name", "field_type", "option_value", "active", "status", "environment", "updated_at"],
+  "fields": [
+    {"row_id": "F-001", "field_key": "ticket_type", "field_name": "Ticket type", "field_type": "picklist", "option_value": "human_transfer_request", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"},
+    {"row_id": "F-002", "field_key": "ticket_type", "field_name": "Ticket type", "field_type": "picklist", "option_value": "account_recovery", "active": true, "status": "current", "environment": "production", "updated_at": "2025-01-20"},
+    {"row_id": "F-003", "field_key": "ticket_type", "field_name": "Ticket type", "field_type": "picklist", "option_value": "general_servicing", "active": true, "status": "current", "environment": "production", "updated_at": "2024-11-18"},
+    {"row_id": "F-010", "field_key": "transfer_reason", "field_name": "Transfer reason", "field_type": "picklist", "option_value": "fraud_or_security_concern", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"},
+    {"row_id": "F-011", "field_key": "transfer_reason", "field_name": "Transfer reason", "field_type": "picklist", "option_value": "account_closure_request", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"},
+    {"row_id": "F-012", "field_key": "transfer_reason", "field_name": "Transfer reason", "field_type": "picklist", "option_value": "deceased_account_holder", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"},
+    {"row_id": "F-013", "field_key": "transfer_reason", "field_name": "Transfer reason", "field_type": "picklist", "option_value": "legal_or_regulatory_matter", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"},
+    {"row_id": "F-014", "field_key": "transfer_reason", "field_name": "Transfer reason", "field_type": "picklist", "option_value": "account_ownership_dispute", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"},
+    {"row_id": "F-015", "field_key": "transfer_reason", "field_name": "Transfer reason", "field_type": "picklist", "option_value": "complex_billing_dispute", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"},
+    {"row_id": "F-016", "field_key": "transfer_reason", "field_name": "Transfer reason", "field_type": "picklist", "option_value": "abusive_customer_behavior", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"},
+    {"row_id": "F-017", "field_key": "transfer_reason", "field_name": "Transfer reason", "field_type": "picklist", "option_value": "third_party_inquiry", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"},
+    {"row_id": "F-018", "field_key": "transfer_reason", "field_name": "Transfer reason", "field_type": "picklist", "option_value": "technical_system_error", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"},
+    {"row_id": "F-019", "field_key": "transfer_reason", "field_name": "Transfer reason", "field_type": "picklist", "option_value": "customer_demands_after_unavailable_offer_refusal", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"},
+    {"row_id": "F-020", "field_key": "transfer_reason", "field_name": "Transfer reason", "field_type": "picklist", "option_value": "unconfirmed_external_communication", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"},
+    {"row_id": "F-021", "field_key": "transfer_reason", "field_name": "Transfer reason", "field_type": "picklist", "option_value": "kb_search_unsuccessful_customer_requests_transfer", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"},
+    {"row_id": "F-022", "field_key": "transfer_reason", "field_name": "Transfer reason", "field_type": "picklist", "option_value": "specialized_department_required", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"},
+    {"row_id": "F-023", "field_key": "transfer_reason", "field_name": "Transfer reason", "field_type": "picklist", "option_value": "accessibility_or_special_needs", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"},
+    {"row_id": "F-024", "field_key": "transfer_reason", "field_name": "Transfer reason", "field_type": "picklist", "option_value": "customer_frustrated_demands_human", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"},
+    {"row_id": "F-025", "field_key": "transfer_reason", "field_name": "Transfer reason", "field_type": "picklist", "option_value": "supervisor_request_service_complaint", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"},
+    {"row_id": "F-026", "field_key": "transfer_reason", "field_name": "Transfer reason", "field_type": "picklist", "option_value": "customer_requests_human_no_specific_reason", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"},
+    {"row_id": "F-027", "field_key": "transfer_reason", "field_name": "Transfer reason", "field_type": "picklist", "option_value": "request_completed_customer_wants_human_followup", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"},
+    {"row_id": "F-028", "field_key": "transfer_reason", "field_name": "Transfer reason", "field_type": "picklist", "option_value": "other", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"},
+    {"row_id": "F-030", "field_key": "verification_method", "field_name": "Verification method", "field_type": "picklist", "option_value": "standard_two_factor", "active": true, "status": "current", "environment": "production", "updated_at": "2025-01-20"},
+    {"row_id": "F-031", "field_key": "verification_method", "field_name": "Verification method", "field_type": "picklist", "option_value": "bypass_code", "active": true, "status": "current", "environment": "production", "updated_at": "2025-10-22"},
+    {"row_id": "F-032", "field_key": "transfer_summary", "field_name": "Transfer summary", "field_type": "text", "option_value": "", "active": true, "status": "current", "environment": "production", "updated_at": "2025-03-17"}
+  ],
+  "sla_policies": [
+    {"policy_id": "SLA-337", "name": "Support core — transfer handoff pickup", "active": true, "status": "current", "environment": "production", "target": "15 minutes to human pickup after transfer", "applies_to": "ticket_type = human_transfer_request", "updated_at": "2025-05-12"},
+    {"policy_id": "SLA-341", "name": "Recovery desk — first response", "active": true, "status": "current", "environment": "production", "target": "4 business hours first response", "applies_to": "group = Recovery Desk", "updated_at": "2025-06-09"}
+  ],
+  "views": [
+    {"view_id": "VW-104", "name": "Support core — open transfers", "active": true, "status": "current", "filters": ["ticket_type = human_transfer_request", "status != transferred"], "updated_at": "2025-10-14"},
+    {"view_id": "VW-118", "name": "Recovery desk — working queue", "active": true, "status": "current", "filters": ["group = Recovery Desk", "status != solved-pending-close"], "updated_at": "2025-06-09"}
+  ]
+}

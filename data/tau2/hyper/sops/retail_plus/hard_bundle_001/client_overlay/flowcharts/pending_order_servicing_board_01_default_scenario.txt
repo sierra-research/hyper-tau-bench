@@ -1,0 +1,61 @@
+Frame 1 - Cover and default scenario (current state), Beacon pending-order
+servicing flow (cancel + change) milestones. Last updated 7.28.26, contact
+@Priya Shah, board ref BCN-PO-11 v0.9. Artifact purpose: progressive
+assisted-servicing journeys showing how Project Beacon pending-order
+milestones reached production; the default scenario is the flow as it runs in
+servicing today and reflects standing rulings CR8 and RD5, the split half
+of QS4, and the EM arc as it stands. Milestone frames further down are
+history - context, not current policy.
+
+Default scenario flow:
+1. Verified customer asks to cancel or change an order (assisted channel, one
+   customer per conversation).
+2. Confirm the order identifier with the customer.
+3. Pull the order up and check its status before anything else - this check
+   is not optional on any path.
+4. Order status?
+   - processed: cancel/change is off the table in this flow. Explain why. If
+     the customer is stuck on that processed order and really wants it
+     stopped, transfer to a person.
+   - delivered: no cancellation here. Redirect the customer into the Returns
+     journey instead (handoff to Journey: Delivered Orders).
+   - cancelled: it is already cancelled; there is nothing left to cancel.
+     Explain that.
+   - pending: servicing can proceed. Cancellation is only possible while the
+     order still sits at pending - and the same gate holds for every change
+     lane below.
+5. What does the customer need?
+   - cancel the pending order (Frame 2)
+   - change the shipping address (Frame 3, top lane)
+   - swap the payment method (Frame 3, bottom lane)
+   - change items in the order (Frame 4, read it twice)
+   - anything else (splitting a shipment, put-a-note-in-the-box asks, etc.)
+     is unsupported in assisted servicing. Decline politely; offer a
+     transfer if the customer wants to push it.
+
+Gate callout (read first): every change lane on this board assumes the agent
+has confirmed the order status is pending immediately before acting; re-check
+on every new request in the same conversation because a pending order can
+move to processed mid-chat.
+
+Supporting board context (commentary, not policy statements of their own):
+- Legend for node shapes; superseded/parked cards are not policy; stickies
+  are commentary.
+- Sticky: this is the flow that is live in servicing today; a disagreeing
+  screenshot is stale (Beacon Deploys).
+- Sticky, red-circled: the identity + verification gate happens before
+  anything on this board; it lives in the Handbook (Dana Whitfield).
+- Sticky: QS4 standing ruling - care does not split shipments; the quantity
+  half went to the desk joint review at the steering readout - status lives
+  in #beacon-fulfillment-scope, not on this board (Rob Calderon).
+- Sticky: EM3 - the email-change wording sits with Care Enablement; their
+  bulletin is the operating reference when it lands; watch #beacon-identity
+  (Grace Okafor).
+- Sticky: question about a possible fifth lane for cancelling a single item;
+  today that is an item change conversation, not a partial cancel; parked
+  (Mia Tran).
+- Parked card, no decision: self-serve cancel button in the account portal;
+  nothing on this frame changes if it ships.
+- Link chips to the project plan, #beacon-order-servicing, and the Beacon
+  assisted-servicing runbook. Footer: internal working material, NorthStar
+  Outfitters, Project Beacon.

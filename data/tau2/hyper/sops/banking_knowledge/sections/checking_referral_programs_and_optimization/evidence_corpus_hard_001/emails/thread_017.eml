@@ -1,0 +1,91 @@
+From: Dana Whitfield <dana.whitfield@rhobank.com>
+To: Ajay Nair <ajay.nair@rhobank.com>
+Cc: June Osei <june.osei@rhobank.com>
+Date: Thu, 25 Sep 2025 09:47:56 -0400
+Subject: RE: Weekly referral report - completions spike
+Message-ID: <10de5e75c31e752a4297@rhobank.com>
+In-Reply-To: <5e71356f10e21372a9ab@rhobank.com>
+References: <6dbc395f1dee04794b0b@rhobank.com>
+ <4a02f51a23193f7caead@rhobank.com> <76cf1b44cd5bc352001c@rhobank.com>
+ <02dd71d2e4f81546f12f@rhobank.com> <5e71356f10e21372a9ab@rhobank.com>
+Thread-Topic: Weekly referral report - completions spike
+Thread-Index: f7e500b7f4a5b025412220143d596462
+Accept-Language: en-US
+X-Auto-Response-Suppress: All
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Patched report reran clean for last week: completions flat, not
++40. Resending the summary this morning with a one-line correction
+so nobody quotes the bad number back at us in December.
+
+Dana
+
+-----Original Message-----
+From: Ajay Nair <ajay.nair@rhobank.com>
+Sent: Wed, 24 Sep 2025 11:33:28 -0400
+To: June Osei <june.osei@rhobank.com>
+Cc: Dana Whitfield <dana.whitfield@rhobank.com>
+Subject: RE: Weekly referral report - completions spike
+
+No -- your extract keys on referral id already, which is exactly
+the dedupe the weekly was missing. Only the weekly summary was
+wrong.
+
+Ajay
+
+-----Original Message-----
+From: June Osei <june.osei@rhobank.com>
+Sent: Wed, 24 Sep 2025 09:52:41 -0400
+To: Ajay Nair <ajay.nair@rhobank.com>
+Cc: Dana Whitfield <dana.whitfield@rhobank.com>
+Subject: RE: Weekly referral report - completions spike
+
+Does this touch anything finance reads? My qualified count comes
+off the same warehouse.
+
+June
+
+-----Original Message-----
+From: Ajay Nair <ajay.nair@rhobank.com>
+Sent: Tue, 23 Sep 2025 16:38:12 -0400
+To: Dana Whitfield <dana.whitfield@rhobank.com>
+Cc: June Osei <june.osei@rhobank.com>
+Subject: RE: Weekly referral report - completions spike
+
+Confirmed. Any application with a retry gets counted once per pass
+through the pipeline, so the outage week double- and
+triple-counts. Fix is a dedupe on referral id before the status
+join. Patched query is in staging with last week's data as the
+test case.
+
+Ajay
+
+-----Original Message-----
+From: Ajay Nair <ajay.nair@rhobank.com>
+Sent: Mon, 22 Sep 2025 14:26:53 -0400
+To: Dana Whitfield <dana.whitfield@rhobank.com>
+Cc: June Osei <june.osei@rhobank.com>
+Subject: RE: Weekly referral report - completions spike
+
+Plausible -- the extract joins on status history, not current
+status. Give me a day.
+
+Ajay
+
+-----Original Message-----
+From: Dana Whitfield <dana.whitfield@rhobank.com>
+Sent: Mon, 22 Sep 2025 10:41:37 -0400
+To: Ajay Nair <ajay.nair@rhobank.com>
+Cc: June Osei <june.osei@rhobank.com>
+Subject: Weekly referral report - completions spike
+
+The weekly referral report says completions are up 40% week over
+week. The console queue does not look like a 40% week. My guess:
+applications that error out and get retried are being counted at
+each pass, because the spike lines up with the retry wave from the
+outage on the 16th. Can you check the extract before this number
+reaches a deck?
+
+Dana

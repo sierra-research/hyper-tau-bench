@@ -1,0 +1,187 @@
+{
+  "id": "task_142",
+  "description": {
+    "purpose": "Task: task_142",
+    "relevant_policies": null,
+    "notes": "FREEZE-IS-CORRECT / CLOSE-IS-WRONG + MINIMUM CARD AGE GATE. Customer Nadia Petrov misplaced her Blue Account debit card INSIDE her apartment (saw it Tuesday night, refuses to call it lost) and wants it cancelled and replaced today before a trip tomorrow. Two levers: (1) Freeze vs close decision - per the freezing/unfreezing procedure, a misplaced card the customer is still looking for should be FROZEN, not closed; (2) Minimum card age - the card was reissued 11/06/2025 (8 days ago), and the 14-day minimum card age requirement blocks closure for non-security reasons (lost/stolen/fraud bypass does NOT apply because the customer explicitly says the card is not lost). Agent must inform the customer they cannot close the card yet, provide the earliest eligible closure date (November 20, 2025), and freeze the card instead. Replacement timing also moots the request: standard 7-10 business days / expedited 3-5 business days cannot beat a Saturday 11/15 departure. Golden ends with the card FROZEN - any closure or replacement order fails the DB check. Card: dbc_np63e8b2c4_blue (8341). Account: chk_np63e8b2c4_blue (Blue Account, MID)."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Nadia Petrov, a 29-year-old ER nurse living in Chicago. You're organized but rushed - you work long shifts and you're leaving on a trip tomorrow morning.\n\n**Your situation:** Rho-Bank recently reissued your Blue Account debit card (your old one expired at the end of October). The new card arrived about a week ago. You misplaced it somewhere in your apartment - you specifically remember seeing it on your kitchen counter on Tuesday night, but this morning you can't find it and you don't have time to tear the place apart. You leave tomorrow (Saturday) morning for a week in Denver. Your plan: just cancel the card and have a fresh one sent out.\n\n**Verification info:**\n- Name: Nadia Petrov | Phone: 773-555-0416 | Email: nadia.petrov.rn@gmail.com\n- DOB: 01/27/1996 | Address: 2214 West Argyle Street, Apt 2, Chicago, IL 60625\n\n## Conversation Flow (Only follow the below flows if the agent brings up any of the points, otherwise, just follow the agent's guidance to the best of your ability):\n\n1. **Opening:** \"Hi, I need to cancel my Blue Account debit card and get a new one sent out today if possible. I can't find the card and I'm leaving on a trip tomorrow morning.\"\n\n2. **Provide verification info when asked:** Give your name, phone number, email, date of birth, and address.\n\n3. **If the agent asks whether the card is lost or stolen:** \"No, I wouldn't say lost - it's definitely somewhere in my apartment. I saw it on my kitchen counter Tuesday night. I just can't put my hands on it this morning and I don't have time to keep looking. That's why I figured I'd just cancel it and start fresh.\"\n\n4. **If the agent asks whether anyone else could have it or whether you suspect fraud:** \"No, nothing like that. I live alone. It's under a pile of mail somewhere, knowing me.\"\n\n5. **If the agent explains the card cannot be closed yet:** Be surprised: \"Wait, really? Why not? When would I be able to close it?\"\n\n6. **If the agent asks how soon you need a replacement or explains delivery timing:** \"I leave tomorrow morning, Saturday. Could a new card even reach me before then?\" If the agent says no option would arrive by tomorrow: \"Then honestly there's no point ordering anything right now.\"\n\n7. **If the agent offers to temporarily freeze the card instead:** Accept: \"Okay, that actually makes more sense. Yes, please freeze it while I keep looking. If it hasn't turned up after my trip I'll call back.\"\n\n8. **If the agent insists on closing the card anyway or offers to close it as lost:** Push back: \"I don't want to report it lost when I know it's in my apartment. Let's not do anything drastic.\"\n\n9. **After the freeze is confirmed:** \"Perfect. I'll dig through the mail pile when I'm back from Denver. Thanks for your help!\" ###STOP###\n\nOnly provide additional details about your situation when the agent asks for them. Don't dump all your information at once. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "users": {
+          "data": {
+            "np63e8b2c4": {
+              "name": "Nadia Petrov",
+              "user_id": "np63e8b2c4",
+              "address": "2214 West Argyle Street, Apt 2, Chicago, IL 60625",
+              "email": "nadia.petrov.rn@gmail.com",
+              "phone_number": "773-555-0416",
+              "date_of_birth": "01/27/1996"
+            }
+          }
+        },
+        "accounts": {
+          "data": {
+            "chk_np63e8b2c4_blue": {
+              "account_id": "chk_np63e8b2c4_blue",
+              "user_id": "np63e8b2c4",
+              "class": "checking",
+              "level": "Blue Account",
+              "date_opened": "03/12/2024",
+              "status": "OPEN",
+              "current_holdings": "6200.00"
+            }
+          }
+        },
+        "debit_cards": {
+          "data": {
+            "dbc_np63e8b2c4_blue": {
+              "card_id": "dbc_np63e8b2c4_blue",
+              "account_id": "chk_np63e8b2c4_blue",
+              "user_id": "np63e8b2c4",
+              "cardholder_name": "NADIA PETROV",
+              "last_4_digits": "8341",
+              "cvv": "512",
+              "status": "ACTIVE",
+              "issue_date": "11/06/2025",
+              "expiration_date": "11/30/2029",
+              "issue_reason": "bank_reissue"
+            }
+          }
+        },
+        "bank_account_transaction_history": {
+          "data": {
+            "btxn_9f2e61c07a44": {
+              "transaction_id": "btxn_9f2e61c07a44",
+              "account_id": "chk_np63e8b2c4_blue",
+              "date": "11/07/2025",
+              "description": "DIRECT DEPOSIT - NORTHSIDE MEDICAL CENTER",
+              "amount": 2310.0,
+              "type": "direct_deposit",
+              "status": "posted"
+            },
+            "btxn_4c81da3f5b29": {
+              "transaction_id": "btxn_4c81da3f5b29",
+              "account_id": "chk_np63e8b2c4_blue",
+              "date": "11/09/2025",
+              "description": "MARIANOS #8532 CHICAGO IL",
+              "amount": -76.43,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            },
+            "btxn_e7d05b92c816": {
+              "transaction_id": "btxn_e7d05b92c816",
+              "account_id": "chk_np63e8b2c4_blue",
+              "date": "11/11/2025",
+              "description": "CTA VENTRA RELOAD",
+              "amount": -25.0,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            },
+            "btxn_1b6fa84dc253": {
+              "transaction_id": "btxn_1b6fa84dc253",
+              "account_id": "chk_np63e8b2c4_blue",
+              "date": "11/12/2025",
+              "description": "WALGREENS #6118 CHICAGO IL",
+              "amount": -18.67,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            }
+          }
+        }
+      },
+      "user_data": null
+    },
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Nadia Petrov",
+          "user_id": "np63e8b2c4",
+          "address": "2214 West Argyle Street, Apt 2, Chicago, IL 60625",
+          "email": "nadia.petrov.rn@gmail.com",
+          "phone_number": "773-555-0416",
+          "date_of_birth": "01/27/1996",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "142_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "142_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"np63e8b2c4\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "142_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_debit_cards_by_account_id_7823"
+        },
+        "requestor": "assistant",
+        "action_id": "142_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_debit_cards_by_account_id_7823",
+          "arguments": "{\"account_id\": \"chk_np63e8b2c4_blue\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "142_4"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "freeze_debit_card_3892"
+        },
+        "requestor": "assistant",
+        "action_id": "142_5"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "freeze_debit_card_3892",
+          "arguments": "{\"card_id\": \"dbc_np63e8b2c4_blue\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "142_6"
+      }
+    ],
+    "nl_assertions": [
+      "The agent does not close or cancel the debit card and informs the customer that the earliest date the card could be closed is November 20, 2025."
+    ],
+    "reward_basis": [
+      "DB",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_bank_accounts_bank_accounts_(general)_023",
+    "doc_bank_accounts_bank_accounts_(general)_025",
+    "doc_bank_accounts_bank_accounts_(general)_026",
+    "doc_bank_accounts_bank_accounts_(general)_028"
+  ]
+}

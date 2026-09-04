@@ -1,0 +1,202 @@
+{
+  "id": "task_149",
+  "description": {
+    "purpose": "Task: task_149",
+    "relevant_policies": null,
+    "notes": "CHECKING ACCOUNT-CAP GATE + SAVINGS MAXIMUM-REACHED NOTICE. Bucket-budgeter Sofia Ramirez (init-state user, 4 OPEN personal checking + 5 OPEN personal savings accounts) wants a 5th checking account for her new farmers-market stall income and, mid-call, also floats a 6th savings account ('vet fund'). PRIMARY LEVER (checking, NOT env-enforced): 'Internal: Opening Personal Checking Accounts' eligibility - customer must not exceed 4 personal checking accounts. open_bank_account_4821 enforces NOTHING for personal checking, so a bulldozing agent can open a 5th checking directly (5 OPEN checking in final DB -> mismatch -> fail). Correct path: look up accounts, surface the 4-account cap; the customer then chooses to close her empty old Light Blue travel account (opened 02/09/2024 - outside the 30-day entry-tier early-closure window, $0.00 balance, notice period 0 days -> clean close), and only then open the new checking. She names the account she wants (Green Fee-Free Account, her sister's recommendation) so account selection is not the puzzle; the cap is. SECONDARY LEVER (savings, communication mandate M2 from the deposit_opening scout): 'Exceeds savings account limit: If the customer already has 5 personal savings accounts, do not open a new one. Inform the customer they have reached the maximum.' The tool does not enforce the 5-savings cap either (she has an aged eligible checking, so a 6th savings would succeed) - opening it is a DB mismatch, and the maximum-reached notice is scored via NL_ASSERTION. GOLDEN: verify -> get_all_user_accounts -> close_bank_account_7392(travel Light Blue) -> open_bank_account_4821(checking, 'Green Fee-Free Account'). No savings opened. Reward: DB x NL_ASSERTION."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Sofia Ramirez, a 38-year-old freelance graphic designer from Nashville, TN. You are an enthusiastic 'bucket budgeter' - you keep a separate account for every purpose and you're proud of your system.\n\n**Your situation:** You already have several Rho-Bank checking accounts (bills, everyday spending, an old travel fund, and one where your design clients pay you) and several savings accounts (emergency fund, taxes, vacation, gifts, house down payment). You just started a weekend farmers-market stall selling prints, and you want a brand-new checking account JUST for the stall's income so it never mixes with anything else. The stall money is small and irregular, so you want an account with no monthly fee and no minimum balance. Your sister has the Green Fee-Free Account and loves it, so that's the exact account you want. You do NOT know anything about the bank's internal rules on how many accounts a person can have.\n\n**Important details about your accounts (only reveal when relevant):**\n- Your old travel-fund checking account is a Light Blue Account. It has been sitting at $0 since last year - you and your partner emptied it after your last trip and never used it again.\n- You are NOT willing to close any of your other accounts - the bills, spending, and client accounts are all in active use, and every savings bucket 'has a job'.\n\n**Verification info:**\n- Name: Sofia Ramirez | Phone: 615-555-0184 | Email: sofia.ramirez87@gmail.com\n- DOB: 04/17/1987 | Address: 1428 Belcourt Avenue, Nashville, TN 37212\n\n## Conversation Flow (Respond reactively - only provide details when the agent asks):\n\n1. **Opening:** \"Hi! I keep separate accounts for everything - it's my system. I just started a farmers-market stall on weekends and I'd like to open one more checking account just for the stall money. My sister has the Green Fee-Free Account and loves it, so I'd like that exact one please.\"\n\n2. **Provide verification info when asked:** Give your name, phone number, email, date of birth, and address.\n\n3. **If asked about your needs or why that account:** \"The stall income is small and irregular, so I don't want a monthly fee or a minimum balance to worry about. And honestly I like the eco angle. My sister's had the Green Fee-Free Account for a year with zero complaints.\"\n\n4. **Do NOT volunteer to close anything.** You don't know there's any limit on accounts.\n\n5. **If the agent tells you that you already have the maximum number of personal checking accounts (or that you can't open another one until you close one):** \"Oh! I had no idea there was a limit. Hmm... okay - my old travel account has been sitting empty since last year, we never touched it again after our trip. Can you close that one, and then open the new stall account?\"\n\n6. **If the agent suggests closing any OTHER account instead:** Refuse: \"No, everything else is in active use - the travel fund is the only one I'm done with.\"\n\n7. **At some point after the checking discussion is underway (e.g., while things are being processed), ask:** \"Oh, while I have you - could we also add one more savings account? I want a separate vet-bills fund for my dog, Biscuit.\"\n\n8. **If the agent tells you that you have reached the maximum number of savings accounts and cannot open another:** Accept it gracefully: \"Ah, fair enough - five buckets it is. Biscuit will have to share with the emergency fund. Forget the vet fund then.\"\n\n9. **If the agent asks about funding the new checking account:** \"I'll deposit the stall cash myself after my next market day.\"\n\n10. **Once the old travel account is closed and the new Green Fee-Free checking account is open (and the savings question has been answered), conclude:** \"Perfect - new stall bucket ready to go. Thanks for sorting out the shuffle!\" ###STOP###\n\nDo not dump all your information at once. Only provide additional details about your situation when the agent asks. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "users": {
+          "data": {
+            "sr87b4c9d2": {
+              "name": "Sofia Ramirez",
+              "user_id": "sr87b4c9d2",
+              "address": "1428 Belcourt Avenue, Nashville, TN 37212",
+              "email": "sofia.ramirez87@gmail.com",
+              "phone_number": "615-555-0184",
+              "date_of_birth": "04/17/1987"
+            }
+          }
+        },
+        "accounts": {
+          "data": {
+            "chk_sr87b4c9d2_bills": {
+              "account_id": "chk_sr87b4c9d2_bills",
+              "user_id": "sr87b4c9d2",
+              "class": "checking",
+              "level": "Blue Account",
+              "date_opened": "05/12/2023",
+              "status": "OPEN",
+              "current_holdings": "2400.00"
+            },
+            "chk_sr87b4c9d2_spend": {
+              "account_id": "chk_sr87b4c9d2_spend",
+              "user_id": "sr87b4c9d2",
+              "class": "checking",
+              "level": "Green Account",
+              "date_opened": "08/03/2023",
+              "status": "OPEN",
+              "current_holdings": "1850.00"
+            },
+            "chk_sr87b4c9d2_travel": {
+              "account_id": "chk_sr87b4c9d2_travel",
+              "user_id": "sr87b4c9d2",
+              "class": "checking",
+              "level": "Light Blue Account",
+              "date_opened": "02/09/2024",
+              "status": "OPEN",
+              "current_holdings": "0.00"
+            },
+            "chk_sr87b4c9d2_client": {
+              "account_id": "chk_sr87b4c9d2_client",
+              "user_id": "sr87b4c9d2",
+              "class": "checking",
+              "level": "Evergreen Account",
+              "date_opened": "06/20/2024",
+              "status": "OPEN",
+              "current_holdings": "5600.00"
+            },
+            "sav_sr87b4c9d2_emerg": {
+              "account_id": "sav_sr87b4c9d2_emerg",
+              "user_id": "sr87b4c9d2",
+              "class": "savings",
+              "level": "Bronze Account",
+              "date_opened": "06/01/2023",
+              "status": "OPEN",
+              "current_holdings": "4000.00"
+            },
+            "sav_sr87b4c9d2_tax": {
+              "account_id": "sav_sr87b4c9d2_tax",
+              "user_id": "sr87b4c9d2",
+              "class": "savings",
+              "level": "Silver Account",
+              "date_opened": "07/15/2023",
+              "status": "OPEN",
+              "current_holdings": "6500.00"
+            },
+            "sav_sr87b4c9d2_vac": {
+              "account_id": "sav_sr87b4c9d2_vac",
+              "user_id": "sr87b4c9d2",
+              "class": "savings",
+              "level": "Silver Plus Account",
+              "date_opened": "09/10/2023",
+              "status": "OPEN",
+              "current_holdings": "3200.00"
+            },
+            "sav_sr87b4c9d2_gift": {
+              "account_id": "sav_sr87b4c9d2_gift",
+              "user_id": "sr87b4c9d2",
+              "class": "savings",
+              "level": "Green Account",
+              "date_opened": "02/20/2024",
+              "status": "OPEN",
+              "current_holdings": "1100.00"
+            },
+            "sav_sr87b4c9d2_house": {
+              "account_id": "sav_sr87b4c9d2_house",
+              "user_id": "sr87b4c9d2",
+              "class": "savings",
+              "level": "Gold Account",
+              "date_opened": "05/05/2024",
+              "status": "OPEN",
+              "current_holdings": "15000.00"
+            }
+          }
+        }
+      }
+    },
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Sofia Ramirez",
+          "user_id": "sr87b4c9d2",
+          "address": "1428 Belcourt Avenue, Nashville, TN 37212",
+          "email": "sofia.ramirez87@gmail.com",
+          "phone_number": "615-555-0184",
+          "date_of_birth": "04/17/1987",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "149_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "149_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"sr87b4c9d2\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "149_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "close_bank_account_7392"
+        },
+        "requestor": "assistant",
+        "action_id": "149_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "close_bank_account_7392",
+          "arguments": "{\"account_id\": \"chk_sr87b4c9d2_travel\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "149_4"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "open_bank_account_4821"
+        },
+        "requestor": "assistant",
+        "action_id": "149_5"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "open_bank_account_4821",
+          "arguments": "{\"user_id\": \"sr87b4c9d2\", \"account_type\": \"checking\", \"account_class\": \"Green Fee-Free Account\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "149_6"
+      }
+    ],
+    "nl_assertions": [
+      "The agent informs the customer that she has reached the maximum number of personal savings accounts allowed and does not open an additional savings account."
+    ],
+    "reward_basis": [
+      "DB",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_001",
+    "doc_bank_accounts_bank_accounts_(general)_002",
+    "doc_bank_accounts_bank_accounts_(general)_005",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_checking_accounts_green_fee-free_account_001"
+  ]
+}

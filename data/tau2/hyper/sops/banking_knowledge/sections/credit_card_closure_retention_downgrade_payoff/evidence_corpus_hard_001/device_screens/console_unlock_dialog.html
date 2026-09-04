@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Enable session tool</title>
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{width:1440px;height:1150px;overflow:hidden}
+body{position:relative;background:#f3f6f9;color:#1b2a3a;font:15px/1.5 -apple-system,'Segoe UI',Arial,sans-serif}
+.top{height:56px;background:#092a4e;color:#fff;display:flex;align-items:center;gap:24px;padding:0 28px}
+.brand{font-size:19px;font-weight:700;white-space:nowrap}
+.search{background:#173f67;color:#c8d9ea;border-radius:7px;padding:9px 18px;flex:1;font-size:14px}
+.user{white-space:nowrap;font-size:14px}
+.shell{display:grid;grid-template-columns:220px 1fr;height:1094px}
+.side{background:#fff;border-right:1px solid #dfe6ee;padding:18px 12px}
+.side div{padding:9px 12px;border-radius:7px;margin:2px 0;color:#4c5c6e;font-size:14px}
+.side .active{background:#e8f1fb;color:#0b4f91;font-weight:600}
+.main{padding:22px 30px;max-width:1180px}
+.crumb{font-size:12px;color:#6d7c8c;letter-spacing:.04em;text-transform:uppercase;margin-bottom:12px}
+.titlebar{display:flex;align-items:flex-start;gap:16px;margin-bottom:6px}
+h1{font-size:26px;font-weight:650}
+.sub{color:#657486;margin-top:2px}
+.chip{padding:5px 12px;border-radius:13px;font-size:12px;font-weight:600;white-space:nowrap}
+.chip.ok{border:1px solid #7bbb96;background:#eaf7ef;color:#17643a}
+.chip.neutral{border:1px solid #b9c4d0;background:#eef2f6;color:#4c5c6e}
+.chipset{margin-left:auto;display:flex;gap:8px}
+.meta{display:flex;gap:12px;margin:14px 0 4px}
+.meta div{background:#fff;border:1px solid #dfe6ee;border-radius:8px;padding:10px 14px;font-size:13px}
+.meta b{display:block;font-size:11px;color:#68788a;font-weight:600;letter-spacing:.03em;text-transform:uppercase;margin-bottom:3px}
+.blocks{display:grid;grid-template-columns:repeat(auto-fit,minmax(430px,1fr));gap:14px;margin-top:16px}
+.card{background:#fff;border:1px solid #dfe6ee;border-radius:10px;padding:16px 18px;box-shadow:0 1px 5px #17324c0a}
+.card.wide{grid-column:1/-1}
+.card h2{font-size:14px;font-weight:650;color:#20374f;margin-bottom:10px}
+dl.kv div{display:flex;gap:12px;padding:6px 0;border-bottom:1px solid #f0f3f7}
+dl.kv div:last-child{border-bottom:0}
+dl.kv dt{width:44%;color:#5a6b7d;font-size:13.5px}
+dl.kv dd{flex:1;font-weight:550}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;display:flex;gap:12px;padding:8px 0;border-bottom:1px solid #f0f3f7;align-items:baseline}
+ol.steps li:last-child{border-bottom:0}
+ol.steps li:before{content:counter(s);flex:0 0 24px;height:24px;border-radius:50%;background:#eef2f6;color:#4c5c6e;font-size:12.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
+ol.steps .done:before{background:#eaf7ef;color:#17643a}
+ol.steps .now:before{background:#0b5cab;color:#fff}
+ol.steps .state{margin-left:auto;font-size:12px;color:#68788a;white-space:nowrap}
+ul.tl{list-style:none}
+ul.tl li{display:flex;gap:12px;padding:6px 0;border-bottom:1px solid #f0f3f7}
+ul.tl li:last-child{border-bottom:0}
+ul.tl .t{color:#68788a;font-size:12.5px;white-space:nowrap;padding-top:1px}
+.dim{position:absolute;left:0;top:56px;right:0;bottom:0;background:rgba(9,23,40,.55)}
+.modal{position:absolute;left:440px;top:300px;width:560px;background:#fff;border-radius:12px;box-shadow:0 24px 60px rgba(7,20,36,.45)}
+.modal .hd{padding:18px 22px 0}
+.modal .hd h2{font-size:18px;font-weight:700;color:#14212e}
+.modal .hd p{font-size:13.5px;color:#657486;margin-top:4px}
+.modal .bd{padding:16px 22px 6px}
+.toolrow{background:#f4f7fa;border:1px solid #dfe6ee;border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:12px}
+.toolrow b{font-size:11px;color:#68788a;font-weight:600;letter-spacing:.03em;text-transform:uppercase}
+.toolrow code{background:#eef2f6;border:1px solid #d7dfe8;border-radius:5px;padding:3px 9px;font-family:'SF Mono',Menlo,Consolas,monospace;font-size:13px;color:#0b4f91}
+.scope{margin-top:16px}
+.scope b{display:block;font-size:11px;color:#68788a;font-weight:600;letter-spacing:.03em;text-transform:uppercase;margin-bottom:8px}
+.radio{display:flex;gap:11px;align-items:flex-start;padding:10px 12px;border:1px solid #dfe6ee;border-radius:8px;margin-bottom:8px}
+.radio.sel{border-color:#0b5cab;background:#f2f8fe}
+.radio .dot{flex:0 0 16px;height:16px;border-radius:50%;border:2px solid #b9c4d0;margin-top:2px;position:relative}
+.radio.sel .dot{border-color:#0b5cab}
+.radio.sel .dot:after{content:'';position:absolute;left:2px;top:2px;width:8px;height:8px;border-radius:50%;background:#0b5cab}
+.radio .lbl{font-size:13.5px;color:#22303d;font-weight:600}
+.radio .hint{font-size:12.5px;color:#7b8a99;font-weight:400;margin-top:1px}
+.radio.off{opacity:.55}
+.auditnote{font-size:12.5px;color:#7b8a99;margin:10px 2px 0}
+.modal .ft{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px 18px;border-top:1px solid #eef2f6;margin-top:14px}
+.btn{border:0;border-radius:7px;padding:9px 18px;font:600 14px inherit;font-family:inherit}
+.btn.primary{background:#0b5cab;color:#fff}
+.btn.ghost{background:#fff;color:#4c5c6e;border:1px solid #c4cfdb}
+</style></head><body>
+<div class="top"><div class="brand">RHO &middot; CareDesk</div><div class="search">Search customers, accounts, tools, and product reference</div><div class="user">Tessa M. &#9662;</div></div>
+<div class="shell"><aside class="side"><div class="">Customer overview</div><div class="">Accounts</div><div class="">Account actions</div><div class="">Cards</div><div class="active">Payments</div><div class="">Disputes</div><div class="">Cases</div><div class="">Product reference</div><div class="">Team tools</div></aside>
+<main class="main"><div class="crumb">Care Desk / Payments / Card payoff</div>
+<div class="titlebar"><div><h1>Pay a credit card from checking</h1><div class="sub">Case CS-48213 &middot; Danielle Okonkwo &middot; Opened 2025-11-14 09:21 ET</div></div><div class="chipset"><span class="chip ok">Identity verified</span><span class="chip neutral">Payoff request</span></div></div>
+<div class="meta"><div><b>Card account</b>Platinum Rewards Card &middot; CC-****-8841</div><div><b>Funding account</b>Everyday Checking &middot; CHK-****-2276</div><div><b>Channel</b>Phone</div></div>
+<div class="blocks">
+<section class="card wide"><h2>Payoff workflow</h2>
+<ol class="steps">
+<li class="done"><span>Verify the customer's identity</span><span class="state">Completed 09:24</span></li>
+<li class="done"><span>Confirm the card and the funding checking account</span><span class="state">Completed 09:33</span></li>
+<li class="now"><span>Enable the session tool for card payoff</span><span class="state">In progress</span></li>
+<li><span>Submit the payment and confirm with the customer</span><span class="state">Pending</span></li>
+</ol></section>
+<section class="card"><h2>Accounts on file</h2>
+<dl class="kv">
+<div><dt>Platinum Rewards Card</dt><dd>CC-****-8841 &middot; Open</dd></div>
+<div><dt>Everyday Checking</dt><dd>CHK-****-2276 &middot; Open</dd></div>
+<div><dt>Account holder</dt><dd>Danielle Okonkwo</dd></div>
+</dl></section>
+<section class="card"><h2>Case timeline</h2>
+<ul class="tl">
+<li><span class="t">09:21</span><span>Case opened &mdash; inbound phone</span></li>
+<li><span class="t">09:24</span><span>Identity verified using standard verification procedures</span></li>
+<li><span class="t">09:31</span><span>Customer asked to pay off the card from Rho checking</span></li>
+<li><span class="t">09:33</span><span>Card and checking accounts confirmed on file</span></li>
+</ul></section>
+</div>
+</main></div>
+<div class="dim"></div>
+<div class="modal">
+<div class="hd"><h2>Enable session tool</h2><p>This tool is enabled per servicing session. Confirm the tool and scope to continue.</p></div>
+<div class="bd">
+<div class="toolrow"><b>Tool</b><code>pay_credit_card_from_checking_9182</code></div>
+<div class="scope"><b>Scope</b>
+<div class="radio sel"><span class="dot"></span><span><span class="lbl">This session only</span><div class="hint">The tool is disabled automatically when the session ends.</div></span></div>
+<div class="radio off"><span class="dot"></span><span><span class="lbl">Standing enablement</span><div class="hint">Not available for discoverable tools.</div></span></div>
+</div>
+<p class="auditnote">Enablement and every call made with the tool are recorded in the case audit log.</p>
+</div>
+<div class="ft"><button class="btn ghost">Cancel</button><button class="btn primary">Enable tool</button></div>
+</div>
+</body></html>

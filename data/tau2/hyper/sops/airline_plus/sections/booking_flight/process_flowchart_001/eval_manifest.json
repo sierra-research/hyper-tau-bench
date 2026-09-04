@@ -1,0 +1,68 @@
+{
+  "id": "airline_booking_flight_process_flowchart_001",
+  "representation": "process_flowchart",
+  "context": "customer_authored_new_booking_process_map",
+  "agent_facing_artifact": "booking_process_map.png",
+  "author_source_artifact": "booking_process_map.html",
+  "text_source_artifact": "booking_process_map.txt",
+  "generation": {
+    "generation_mode": "deterministic_html_svg",
+    "rendering_mode": "browser_full_page_screenshot",
+    "viewport": {
+      "width": 1760,
+      "height": 1180
+    },
+    "purpose": "Keep all workflow text deterministic while reproducing the terse wording, long routed connectors, system labels, and uneven information density of a working process-map export."
+  },
+  "target_facts": [
+    {
+      "id": "booking_step_sequence",
+      "statement": "Booking a flight follows seven steps in order: identify the customer, collect trip details, find available flights, collect passenger information, calculate the total, prepare saved payment methods, and then confirm before the reservation write processes payment and books."
+    },
+    {
+      "id": "collect_trip_details",
+      "statement": "Collect trip type, origin, destination, preferred dates, and cabin class."
+    },
+    {
+      "id": "direct_or_connecting_allowed",
+      "statement": "Trips can be direct nonstop or connecting one-stop trips."
+    },
+    {
+      "id": "final_confirmation_before_booking",
+      "statement": "Before creating the reservation, present flights, passengers, cabin, baggage, insurance, total cost, and payment methods, and get explicit confirmation."
+    }
+  ],
+  "permitted_supporting_echoes": [
+    "Booking begins by identifying the customer and pulling up the profile.",
+    "Find available matching flights and present suitable options.",
+    "Collect passenger information before calculating the total.",
+    "Identify the customer by retrieving the profile."
+  ],
+  "grounded_distractors": [
+    "Generic profile, availability, pricing, payment, and reservation service labels",
+    "Illustrative API request and response snippets",
+    "Version and process-reference footer",
+    "Separate-journey references",
+    "Interface naming note",
+    "Large unused areas and long connector runs",
+    "Search and payment retry paths"
+  ],
+  "excluded_claims": [
+    "The flowchart defines pricing, eligibility, baggage, insurance, passenger-count, or payment-validation values",
+    "Generic service and API labels are required implementation identifiers",
+    "Retry paths define new policy, escalation rules, or customer-visible promises",
+    "Separate-journey references define the policy for those journeys",
+    "The diagram defines modification, cancellation, compensation, or escalation policy",
+    "Any unstated price, baggage, insurance, passenger-limit, or payment rule can be inferred from the diagram"
+  ],
+  "distribution": {
+    "expose_to_developer_agent": [
+      "booking_process_map.png"
+    ],
+    "keep_author_side": [
+      "booking_process_map.html",
+      "booking_process_map.txt",
+      "eval_manifest.json"
+    ]
+  }
+}

@@ -1,0 +1,383 @@
+WEBVTT
+
+NOTE Cloud recording transcript
+NOTE Meeting: Settings Instrumentation Review
+NOTE Date: 2025-02-13
+
+00:00:00.000 --> 00:00:15.000
+<v Omar Diallo>Thanks for joining Settings Instrumentation Review. We will take two minutes to settle in, review the open actions, and then work the evidence rather than read slides aloud.
+
+00:00:16.870 --> 00:00:29.953
+<v Mateo Silva>I am back. My internet was out for the first standup, which is a humbling way to start an instrumentation day.
+
+00:00:30.153 --> 00:00:31.853
+[brief silence while the test account refreshes]
+
+00:00:32.133 --> 00:00:46.073
+<v Sofia Alvarez>All good. I have the failed and fixed runs open side by side so we do not spend ten minutes hunting timestamps.
+
+00:00:46.433 --> 00:00:59.396
+<v Mateo Silva>I am good. I have a hard stop at the scheduled end of Settings Instrumentation Review, but no conflict before then.
+
+00:00:59.836 --> 00:01:10.450
+<v Victor Chen>Doing well. I am joining from the project room and have settings instrumentation event trace on screen.
+
+00:01:12.670 --> 00:01:27.670
+<v Omar Diallo>Thanks, everyone. Moving to prior actions for Settings Instrumentation Review; please say done, blocked, or a new date rather than giving the whole project history.
+
+00:01:27.870 --> 00:01:42.870
+<v Mateo Silva>My first action is recorded as 'Mateo aligns the wrapper event.' The draft is done and linked in the agenda; the independent check is still open.
+
+00:01:43.150 --> 00:01:58.150
+<v Aisha Grant>I own the independent check for 'Mateo aligns the wrapper event.' I can finish today after I get the current build, so status is blocked for access, not analysis.
+
+00:01:58.510 --> 00:01:59.410
+<v Victor Chen>Right.
+
+00:01:59.850 --> 00:02:14.288
+<v Nia Foster>My second action is 'Nia exposes the returned state in staging.' That is complete, including the dated note we asked for last week.
+
+00:02:14.408 --> 00:02:29.408
+<v Sofia Alvarez>For my action, 'Sofia reruns the interrupted-confirmation case,' I need another day. The source arrived late and I do not want to sign off from the screenshot alone.
+
+00:02:29.608 --> 00:02:44.608
+<v Omar Diallo>Okay, new date tomorrow by noon. Keep the old date visible in the settings instrumentation event trace action log so the slip does not disappear.
+
+00:02:44.888 --> 00:02:56.736
+<v Grace Okafor>My last listed action is 'Grace reviews the explanation example.' The implementation portion is done; content-owner confirmation remains open.
+
+00:02:59.196 --> 00:03:14.196
+<v Omar Diallo>Now blockers. The known one is one build reports the requested target before the carrier event returns the actual state. Anything new that changes today's order?
+
+00:03:14.636 --> 00:03:29.636
+<v Mateo Silva>No new policy blocker for Settings Instrumentation Review. I do have a test-account issue, but somebody else can run the case while service desk works it.
+
+00:03:29.756 --> 00:03:44.756
+<v Aisha Grant>My only timing blocker is another review in the final fifteen minutes. If you need me on subject-change confirmation case, please take it before parking lot.
+
+00:03:46.706 --> 00:04:01.706
+<v Omar Diallo>Agenda is instrumentation event, target versus returned state, subject-change confirmation case, QA evidence and release logging. I propose we take the evidence-heavy item first and leave stale sandbox aliases, cache timing, and release smoke-test coverage for the last ten minutes.
+
+00:04:01.986 --> 00:04:16.986
+<v Nia Foster>Can we take subject-change confirmation case before target versus returned state? One owner has to leave early, and the first item will probably expose what we need for the second anyway.
+
+00:04:17.346 --> 00:04:26.965
+<v Omar Diallo>Yes. I have reordered the shared Settings Instrumentation Review agenda. Anything else before we start?
+
+00:04:27.405 --> 00:04:42.405
+<v Victor Chen>Please reserve five minutes for explicit owners in Settings Instrumentation Review. The last working session ended with three collective follow-ups and no one person assigned.
+
+00:04:44.275 --> 00:04:55.506
+<v Omar Diallo>Let's take instrumentation event now. Start with the failed case, and then we can compare the clean one.
+
+00:04:55.706 --> 00:04:57.798
+<v Grace Okafor>Okay, got it.
+
+00:04:58.078 --> 00:05:13.078
+<v Mateo Silva>Before we leave instrumentation event, the action log has one item done, one waiting for verification, and no owner change since the invite went out.
+
+00:05:13.438 --> 00:05:28.438
+<v Mateo Silva>My update is in settings instrumentation event trace. I left the review comment open because one build reports the requested target before the carrier event returns the actual state; the content itself has not been silently rewritten.
+
+00:05:28.878 --> 00:05:38.875
+<v Victor Chen>I mean the customer-facing state in Settings Instrumentation Review, not the request we sent underneath it.
+
+00:05:38.995 --> 00:05:53.995
+<v Aisha Grant>I can verify the instrumentation event update against calibration case 3. I need the current build and original timestamp, not another screenshot pasted into chat.
+
+00:05:54.195 --> 00:06:09.195
+<v Aisha Grant>From the floor side, the instrumentation event timing is workable. Please publish the new due date before regional handoff so supervisors do not chase the old one.
+
+00:06:10.875 --> 00:06:25.875
+<v Sofia Alvarez>Training is waiting on the meaning of instrumentation event, not layout. We can continue accessibility and room work while the content owner finishes the check.
+
+00:06:27.985 --> 00:06:41.068
+<v Grace Okafor>That is the right separation. instrumentation event remains open for verification; it is not an invitation to revive the retired approach.
+
+00:06:41.508 --> 00:06:56.508
+<v Omar Diallo>I have updated the action row for Mateo aligns the wrapper event. The prior date stays visible, and the next review is on the calendar.
+
+00:06:56.628 --> 00:07:09.333
+<v Omar Diallo>That gets us to target versus returned state. Before anyone summarizes it, can the owner show us the underlying check?
+
+00:07:09.533 --> 00:07:24.533
+<v Ravi Menon>For target versus returned state, I ran the current path this morning. The event and the visible surface agree in the clean case; the delayed case is where the ambiguity starts.
+
+00:07:24.813 --> 00:07:39.748
+<v Omar Diallo>The trace in settings instrumentation event trace shows the requested value, accepted event, and returned state separately. The old screenshot collapses the middle two.
+
+00:07:40.108 --> 00:07:55.108
+<v Sofia Alvarez>For target versus returned state, that explains the score split. Half the reviewers treated the request as the result, while the other half waited for the returned state.
+
+00:07:55.548 --> 00:08:10.548
+<v Grace Okafor>Which target versus returned state state is available to the adviser when the customer asks the follow-up? I want the answer tied to evidence, not system intent.
+
+00:08:10.668 --> 00:08:11.903
+<v Victor Chen>That tracks.
+
+00:08:13.853 --> 00:08:28.853
+<v Ravi Menon>At that moment in target versus returned state, only the earlier observation is visible. The new state becomes usable after the event completes and the relevant surface refreshes.
+
+00:08:31.233 --> 00:08:46.233
+<v Omar Diallo>Then the target versus returned state example should leave a beat for the refresh. The current edit jumps from the click to the new screen and teaches accidental simultaneity.
+
+00:08:46.593 --> 00:09:01.150
+<v Nia Foster>Action captured as Nia exposes the returned state in staging; the edit and independent rerun will land together so nobody reviews mismatched versions.
+
+00:09:01.590 --> 00:09:13.936
+<v Omar Diallo>Okay. For subject-change confirmation case, I have the comments open beside settings instrumentation event trace. Which one is still unresolved?
+
+00:09:14.056 --> 00:09:28.373
+<v Ravi Menon>The unresolved disagreement on subject-change confirmation case is narrow: everyone accepts the clean case, but the group is reading review case 5 differently.
+
+00:09:28.573 --> 00:09:43.573
+<v Sofia Alvarez>My read of subject-change confirmation case is that the example lacks a usable result. A likely outcome is not enough to score the next step as grounded.
+
+00:09:43.853 --> 00:09:58.853
+<v Victor Chen>I agree on the subject-change confirmation case evidence gap, although the underlying service behaved as designed. The issue is what can be observed at that point in the interaction.
+
+00:09:59.213 --> 00:10:14.213
+<v Grace Okafor>That is the important subject-change confirmation case distinction. We should not describe a correct backend as a resolved customer issue until the appropriate observation exists.
+
+00:10:16.403 --> 00:10:31.403
+<v Omar Diallo>That will make subject-change confirmation case clearer to supervisors if we keep the messy example. The perfect demo is why the pilot teams started taking the shortcut.
+
+00:10:33.623 --> 00:10:48.623
+<v Nia Foster>I will keep the disputed subject-change confirmation case result out of the success-rate numerator until the review label is final. Reporting should not settle the argument for us.
+
+00:10:48.823 --> 00:11:03.823
+<v Mateo Silva>I hear convergence on the evidence question and a separate follow-up for stale sandbox aliases, cache timing, and release smoke-test coverage. I have put the latter in parking lot.
+
+00:11:04.103 --> 00:11:17.684
+<v Omar Diallo>We're at QA evidence and release logging. I would like the counterexample first because the happy path is not where we disagreed.
+
+00:11:18.044 --> 00:11:18.944
+<v Grace Okafor>Yep.
+
+00:11:19.384 --> 00:11:34.384
+<v Aisha Grant>For QA evidence and release logging, the learner material still points to the review copy of settings instrumentation event trace. I can correct the link as soon as the owner posts the signed version.
+
+00:11:34.504 --> 00:11:49.504
+<v Nia Foster>Please test the settings instrumentation event trace link for QA evidence and release logging from instructor and learner roles. My admin account opens both paths and will hide a permission mistake.
+
+00:11:49.704 --> 00:12:04.704
+<v Grace Okafor>Regional coverage for QA evidence and release logging is ready, but the west session needs the update by tomorrow noon to avoid a second facilitator download.
+
+00:12:04.984 --> 00:12:19.984
+<v Grace Okafor>Presentation edits for QA evidence and release logging are fine. If a sentence changes meaning during cleanup, route it back through dated review instead of calling it copyediting.
+
+00:12:22.444 --> 00:12:37.444
+<v Nia Foster>The dashboard label for QA evidence and release logging can be old for a day. I would rather mark the refresh late than create another artifact copy.
+
+00:12:40.334 --> 00:12:55.334
+<v Grace Okafor>I will complete Grace reviews the explanation example, add the forward link from the retired file, and post one canonical URL in the channel.
+
+00:12:55.454 --> 00:13:09.651
+<v Sofia Alvarez>Can we pause on the Settings Instrumentation Review example? That sounds like a new rule, and I do not think it is one.
+
+00:13:09.851 --> 00:13:24.851
+<v Victor Chen>That closes the launch need for QA evidence and release logging. The remaining work on stale sandbox aliases, cache timing, and release smoke-test coverage has owners but does not hold today's conclusion.
+
+00:13:25.131 --> 00:13:40.131
+<v Nia Foster>In the failed instrumentation event case, the screen reader issue does not alter the decision, but it does affect whether learners can perceive the evidence we expect them to use.
+
+00:13:40.491 --> 00:13:55.491
+<v Victor Chen>Before we close target versus returned state, the proposed sentence adds certainty that the evidence does not support. Removing three words makes it both shorter and more accurate.
+
+00:13:55.931 --> 00:14:10.931
+<v Ravi Menon>I support closing subject-change confirmation case today if Sofia reruns the interrupted-confirmation case remains a verification follow-up rather than an unrecorded condition on the decision.
+
+00:14:11.051 --> 00:14:26.051
+<v Aisha Grant>That matters in QA evidence and release logging, because I checked Nia exposes the returned state in staging against the shared calendar. The proposed due date avoids the release freeze and still leaves one business day for independent review.
+
+00:14:26.251 --> 00:14:41.251
+<v Mateo Silva>Looking at settings instrumentation event trace, I can demonstrate one build reports the requested target before the carrier event returns the actual state in under two minutes. The useful part is the pause after the action, not the button click itself.
+
+00:14:41.531 --> 00:14:42.731
+[screen sharing starts]
+
+00:14:43.091 --> 00:14:45.560
+<v Victor Chen>I see it now.
+
+00:14:47.750 --> 00:15:02.068
+<v Omar Diallo>I want to slow that down. The example is plausible, but it skips the distinction we wrote down in settings instrumentation event trace.
+
+00:15:04.288 --> 00:15:19.288
+<v Omar Diallo>In the failed subject-change confirmation case case, there are two questions under one heading: what the system does and what the training screenshot should emphasize. They can have different owners.
+
+00:15:19.488 --> 00:15:34.488
+<v Nia Foster>Before we close QA evidence and release logging, for action Nia exposes the returned state in staging, I have the draft ready. I am blocked only on the independent check, not on writing or access.
+
+00:15:34.768 --> 00:15:49.768
+<v Omar Diallo>For the instrumentation event case, I will put this in parking lot with a March date. It is a reasonable enhancement and not required to close today's agenda item.
+
+00:15:50.128 --> 00:16:05.128
+<v Victor Chen>Sorry, said all of that on mute. Short version for instrumentation event: run the test, and leave settings instrumentation event trace alone until the owner signs off.
+
+00:16:07.668 --> 00:16:22.668
+<v Nia Foster>I think Settings Instrumentation Review has enough evidence to play back the current conclusion, but I want the owner to say it rather than infer it from the demo.
+
+00:16:22.788 --> 00:16:35.494
+<v Omar Diallo>After a setting toggle completes, the phone reports the new setting state. Use that returned state before choosing another step.
+
+00:16:35.694 --> 00:16:50.694
+<v Victor Chen>That matches my Settings Instrumentation Review notes. I will record the supporting check and follow-up owner separately so the conclusion is not buried in the action list.
+
+00:16:50.974 --> 00:17:05.974
+<v Ravi Menon>No objection. The neighboring work on stale sandbox aliases, cache timing, and release smoke-test coverage remains open and should not be read as an exception to what we just agreed.
+
+00:17:08.434 --> 00:17:23.434
+<v Victor Chen>That matters in target versus returned state, because I can own the first half of that follow-up. I need a second owner for the regional communication because I will be offline Friday afternoon.
+
+00:17:23.874 --> 00:17:38.874
+<v Mateo Silva>Looking at settings instrumentation event trace, I would not make the metric green yet. The sample passed, but the cohort was selected for availability and is not representative of all traffic.
+
+00:17:38.994 --> 00:17:53.994
+<v Omar Diallo>The reason I am asking about QA evidence and release logging is that the blocker we named—one build reports the requested target before the carrier event returns the actual state—can be reproduced without changing the customer example. I will add the build and timestamp to the test note.
+
+00:17:54.194 --> 00:17:56.165
+<v Grace Okafor>Sorry—go ahead.
+
+00:17:58.545 --> 00:18:13.545
+<v Omar Diallo>We are drifting from QA evidence and release logging into stale sandbox aliases, cache timing, and release smoke-test coverage. I am putting that in parking lot and bringing us back to the evidence on screen.
+
+00:18:16.355 --> 00:18:31.355
+<v Nia Foster>For instrumentation event, the second run matters because the first used an admin account. The second run reproduces what an instructor or adviser will actually see.
+
+00:18:33.195 --> 00:18:48.195
+<v Sofia Alvarez>On target versus returned state, the independent reviewer reached the same conclusion through a different screen. That is reassuring, but we should still name the canonical evidence surface.
+
+00:18:48.315 --> 00:19:03.315
+<v Omar Diallo>On subject-change confirmation case, the evidence I have is from the current build, not the November pilot. I can share the timestamp after the call.
+
+00:19:03.515 --> 00:19:18.515
+<v Nia Foster>That matters in QA evidence and release logging, because I am looking at the dated copy now. The comment is present, but the effective paragraph has not changed, which is the correct state while we review.
+
+00:19:18.795 --> 00:19:33.795
+<v Mateo Silva>Looking at settings instrumentation event trace, the wording is concise, but it answers a different question. We still need to say which surface or line the statement refers to.
+
+00:19:34.155 --> 00:19:49.155
+<v Omar Diallo>The reason I am asking about target versus returned state is that a quick note on one build reports the requested target before the carrier event returns the actual state: release operations can mitigate the presentation issue, but it cannot resolve the underlying ownership question.
+
+00:19:49.595 --> 00:20:04.595
+<v Ravi Menon>In the failed subject-change confirmation case case, let me play back what I heard: the evidence is sufficient for today's item, while stale sandbox aliases, cache timing, and release smoke-test coverage remains a separate follow-up.
+
+00:20:04.715 --> 00:20:15.449
+<v Omar Diallo>Wait—can you leave settings instrumentation event trace on screen? I was looking at the wrong row.
+
+00:20:18.099 --> 00:20:33.099
+<v Aisha Grant>Before we close QA evidence and release logging, we can keep the meeting recording as context, but the final artifact needs the decision in a form people can find without replaying an hour.
+
+00:20:34.779 --> 00:20:49.779
+<v Omar Diallo>For instrumentation event, the most useful customer report is the one that conflicts with the first screen state. It forces us to say which evidence updates when.
+
+00:20:50.139 --> 00:21:05.139
+<v Nia Foster>The settings instrumentation event trace comment from regional operations is about staffing at handoff, not the customer interaction. I moved it to stale sandbox aliases, cache timing, and release smoke-test coverage with the original author tagged.
+
+00:21:05.579 --> 00:21:20.579
+<v Mateo Silva>The settings instrumentation event trace version date is correct, but the meeting note calls it final before signoff. I will change the note to review so chronology stays honest.
+
+00:21:20.699 --> 00:21:22.294
+<v Victor Chen>Yeah, exactly.
+
+00:21:22.494 --> 00:21:37.494
+<v Nia Foster>For QA evidence and release logging, I am comfortable with the evidence and the owner. My remaining concern belongs to stale sandbox aliases, cache timing, and release smoke-test coverage, and I have no objection to parking it.
+
+00:21:37.774 --> 00:21:52.774
+<v Nia Foster>Can we capture that as an action instead of solving it verbally? The owner who maintains settings instrumentation event trace is not in the room today.
+
+00:21:53.134 --> 00:22:08.134
+<v Victor Chen>Before we close target versus returned state, I can validate this from a non-admin account after the meeting. My current permissions bypass exactly the failure path we are discussing.
+
+00:22:11.024 --> 00:22:26.024
+<v Omar Diallo>For the subject-change confirmation case case, we should test that with a delayed event. Right now the sandbox returns before a human speaker can finish the next sentence.
+
+00:22:27.544 --> 00:22:42.544
+<v Aisha Grant>That matters in QA evidence and release logging, because the instructor test account still cannot open the review sheet. That is an access blocker for preparation, not a reason to duplicate the file.
+
+00:22:42.744 --> 00:22:57.744
+<v Sofia Alvarez>I was talking to a muted mic just now. For QA evidence and release logging, count me as a yes on the test; settings instrumentation event trace should not change before the owner review.
+
+00:22:58.024 --> 00:23:13.024
+<v Mateo Silva>Looking at settings instrumentation event trace, the action log says Mateo aligns the wrapper event. Is that still the owner and due date, or did the staffing change this morning move it?
+
+00:23:13.384 --> 00:23:27.941
+<v Omar Diallo>I compared settings instrumentation event trace with the meeting notes. The conclusion matches, but one explanatory example still uses the retired screen label.
+
+00:23:28.381 --> 00:23:43.381
+<v Omar Diallo>On subject-change confirmation case, the meeting invite promised a decision, but the evidence still supports only a test result. I would rather record that honestly and schedule the owner review.
+
+00:23:43.501 --> 00:23:58.501
+<v Nia Foster>For QA evidence and release logging, I would keep both the concise answer and the longer audit explanation. They serve different readers and should not be collapsed into one awkward paragraph.
+
+00:23:58.701 --> 00:24:13.701
+<v Omar Diallo>The accessibility fix in settings instrumentation event trace changes reading order and visible labels. It should be reviewed alongside the original so nobody mistakes improved presentation for new policy.
+
+00:24:16.431 --> 00:24:31.431
+<v Nia Foster>That matters in target versus returned state, because engineering can expose the state we receive. We should not manufacture a friendlier state just because the raw transition is awkward to explain.
+
+00:24:31.791 --> 00:24:32.691
+<v Grace Okafor>Mm-hm.
+
+00:24:34.881 --> 00:24:49.881
+<v Mateo Silva>Looking at settings instrumentation event trace, if we keep the old example, the retirement date has to travel with it. A folder name is not enough once somebody downloads the slide.
+
+00:24:52.101 --> 00:25:07.101
+<v Omar Diallo>We are drifting from subject-change confirmation case into stale sandbox aliases, cache timing, and release smoke-test coverage. I am putting that in parking lot and bringing us back to the evidence on screen.
+
+00:25:09.751 --> 00:25:24.751
+<v Grace Okafor>The reason I am asking about QA evidence and release logging is that the customer-language version should stay conversational. The setting, line, and consequence need precision; the greeting does not need standardization.
+
+00:25:25.031 --> 00:25:40.031
+<v Nia Foster>In the failed instrumentation event case, that distinction matters for trust in the archive. We should preserve why people made the earlier call rather than presenting it as careless.
+
+00:25:40.391 --> 00:25:41.841
+[brief crosstalk]
+
+00:25:42.281 --> 00:25:57.281
+<v Grace Okafor>Before we close target versus returned state, I am comfortable closing this agenda item after one more test. Please name the test and owner so 'one more' does not become an indefinite hold.
+
+00:25:57.401 --> 00:26:12.401
+<v Omar Diallo>The owner for Sofia reruns the interrupted-confirmation case should attach the failed run as well as the successful one; otherwise the review of subject-change confirmation case will look easier than it was.
+
+00:26:12.601 --> 00:26:27.601
+<v Nia Foster>For the settings instrumentation event trace audit trail, please state whether the old example was superseded by evidence, a build change, or a scope decision. Those histories are not interchangeable.
+
+00:26:29.631 --> 00:26:44.631
+<v Mateo Silva>Looking at settings instrumentation event trace, the open question from stale sandbox aliases, cache timing, and release smoke-test coverage does not block this path. It needs its own owner because the people in this room cannot decide it by implication.
+
+00:26:47.091 --> 00:27:02.091
+<v Omar Diallo>We have nine minutes left. Parking lot contains stale sandbox aliases, cache timing, and release smoke-test coverage; none of those items changes the conclusion recorded today.
+
+00:27:02.531 --> 00:27:17.531
+<v Sofia Alvarez>I need two minutes on the Settings Instrumentation Review access item. settings instrumentation event trace opens for me, but the instructor test account still lands on the request-access page.
+
+00:27:17.651 --> 00:27:32.651
+<v Mateo Silva>I can pair with release operations after Settings Instrumentation Review. We will validate settings instrumentation event trace through the same account rather than send a second copy.
+
+00:27:34.601 --> 00:27:49.601
+<v Omar Diallo>Good. Moving to owners and dates for Settings Instrumentation Review. I will read each one back, and please correct me now if the owner or deliverable is wrong.
+
+00:27:49.881 --> 00:27:50.781
+<v Victor Chen>Right.
+
+00:27:51.141 --> 00:28:01.995
+<v Mateo Silva>My action is 'Mateo aligns the wrapper event.' I will post the link today by four Eastern.
+
+00:28:02.435 --> 00:28:17.435
+<v Nia Foster>The log has me for 'Nia exposes the returned state in staging.' My due date is tomorrow noon because I need the overnight event run.
+
+00:28:17.555 --> 00:28:30.021
+<v Sofia Alvarez>I own 'Sofia reruns the interrupted-confirmation case.' I will mark the old version with a forward link, not delete it.
+
+00:28:30.221 --> 00:28:45.221
+<v Grace Okafor>And I have 'Grace reviews the explanation example.' If the review changes meaning, I will bring it back rather than silently update the slide.
+
+00:28:45.501 --> 00:28:52.651
+<v Omar Diallo>Any final objection to the Settings Instrumentation Review summary or owners?
+
+00:28:53.011 --> 00:29:05.974
+<v Mateo Silva>No objection. Please include the 2025-02-13 meeting date in the Slack follow-up; 'today's sync' will be impossible to resolve next week.
+
+00:29:06.414 --> 00:29:21.414
+<v Omar Diallo>Will do. Thanks, everyone. The Settings Instrumentation Review transcript, action log, and settings instrumentation event trace link will be posted together; next meeting keeps the usual check-in and action review.

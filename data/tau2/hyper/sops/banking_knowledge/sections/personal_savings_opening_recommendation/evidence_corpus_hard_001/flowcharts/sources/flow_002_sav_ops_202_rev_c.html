@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SAV-OPS-202 rev C — Personal Savings Opening — Opening Sequence</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 1310px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #4a5568; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #cdd6e0; }
+  .node { position: absolute; width: 300px; box-sizing: border-box; border: 2px solid #4a5b6d; border-radius: 6px; background: #fff; padding: 10px 12px; font-size: 13px; line-height: 1.35; color: #1d2733; }
+  .node .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding: 1px 6px; border-radius: 3px; margin-bottom: 6px; }
+  .entry { border-color: #1d6a44; } .entry .tag { background: #d9efe3; color: #17573a; }
+  .read { border-color: #2b5f8f; } .read .tag { background: #dcebf7; color: #234d73; }
+  .work { border-color: #4a5b6d; } .work .tag { background: #e6ebf0; color: #3a4a5a; }
+  .terminal { border-color: #1d6a44; background: #f2faf5; } .terminal .tag { background: #d9efe3; color: #17573a; }
+  .decision { position: absolute; width: 300px; box-sizing: border-box; }
+  .decision .diamond { width: 280px; height: 132px; margin: 0 auto; background: #fff8e8; border: 2px solid #b08a1f; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 8px 16px; box-sizing: border-box; font-size: 12.5px; text-align: center; color: #4b3d10; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+  svg.edges { position: absolute; left: 0; top: 0; width: 1560px; height: 1310px; pointer-events: none; }
+  svg.edges path { stroke: #51606f; stroke-width: 2; fill: none; marker-end: url(#arr202c); }
+  .edge-label { position: absolute; font-size: 11px; font-weight: 600; color: #38424d; background: #fbfcfdcc; padding: 0 4px; border-radius: 2px; }
+  .sticky { position: absolute; width: 280px; box-sizing: border-box; padding: 10px 12px; font-size: 12px; line-height: 1.35; box-shadow: 2px 3px 6px rgba(0,0,0,0.12); }
+  .sticky.yellow { background: #fdf3c0; } .sticky.green { background: #d9efe3; }
+  .control-definitions { position: absolute; left: 24px; top: 1080px; width: 1512px; box-sizing: border-box; border: 2px solid #4a5568; background: #f4f8fc; border-radius: 6px; padding: 14px 18px; }
+  .control-definitions h2 { margin: 0 0 8px; font-size: 14px; letter-spacing: 0.4px; color: #4a5568; }
+  .control-definitions dl { margin: 0; font-size: 12.5px; line-height: 1.45; color: #1d2733; }
+  .control-definitions dt { font-weight: 700; font-family: "Consolas", monospace; margin-top: 7px; }
+  .control-definitions dd { margin: 1px 0 0 14px; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>Personal Savings Opening — Opening Sequence</h1>
+    <div class="meta">SAV-OPS-202 rev C &nbsp;·&nbsp; Approved 2025-10-06 (M. Osei, Deposit Desk) &nbsp;·&nbsp; Mandatory for every personal savings opening</div>
+  </div>
+
+  <svg class="edges" viewBox="0 0 1560 1310">
+    <defs><marker id="arr202c" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#51606f"></path></marker></defs>
+    <!-- entry -> step1 -->
+    <path d="M 190 272 L 190 316"></path>
+    <!-- step1 -> step2 -->
+    <path d="M 190 404 L 190 456"></path>
+    <!-- step2 -> decision -->
+    <path d="M 190 654 L 190 706"></path>
+    <!-- decision no -> stop terminal (left hook) -->
+    <path d="M 40 776 L 20 776 L 20 970 L 36 970"></path>
+    <!-- decision yes -> step3 -->
+    <path d="M 340 776 L 394 776 L 394 725 L 444 725"></path>
+    <!-- step3 -> step4 (up) -->
+    <path d="M 598 656 L 598 530"></path>
+    <!-- step4 -> step5 (across) -->
+    <path d="M 748 450 L 894 450"></path>
+    <!-- step5 -> step6 (down) -->
+    <path d="M 1048 522 L 1048 596"></path>
+    <!-- step6 -> terminal -->
+    <path d="M 1048 712 L 1048 786"></path>
+  </svg>
+
+  <span class="edge-label" style="left:30px;top:856px">no — a requirement failed</span>
+  <span class="edge-label" style="left:350px;top:748px">yes — all requirements confirmed</span>
+
+  <article class="node entry" style="left:40px;top:100px;width:340px"><span class="tag">ENTRY — FIXED ORDER</span>
+    A personal savings opening runs in one order: verify identity, check
+    eligibility requirements, confirm account selection with the customer, use
+    open_bank_account_4821 to open the account, arrange the opening deposit, and
+    confirm completion. The steps below walk that sequence; do not reorder them.
+  </article>
+
+  <article class="node read" style="left:40px;top:320px"><span class="tag">STEP 1 — VERIFY</span>
+    Authenticate the customer and confirm identity verification status on file
+    before anything else.
+  </article>
+
+  <article class="node read" style="left:40px;top:460px;width:340px"><span class="tag">STEP 2 — ELIGIBILITY</span>
+    Run the eligibility requirements from the gates board: confirm an active
+    checking account exists and meets the 14-day tenure requirement; count
+    existing personal savings accounts and confirm the customer is below the
+    5-account limit; review account status to confirm there is no collections
+    activity and no negative balance.
+  </article>
+
+  <div class="decision" style="left:40px;top:710px"><div class="diamond">All eligibility requirements met?</div></div>
+
+  <article class="node work" style="left:40px;top:920px"><span class="tag">TERMINAL — NOT ELIGIBLE</span>
+    The opening stops here. Explain which requirement failed and what would clear
+    it; the gates board governs the detail.
+  </article>
+
+  <article class="node work" style="left:448px;top:660px"><span class="tag">STEP 3 — SELECTION</span>
+    Discuss available personal savings account options with the customer and
+    confirm the selection out loud. Capture the exact account_class string for
+    the selected product on the case — the string travels into the open call as
+    confirmed.
+  </article>
+
+  <article class="node work" style="left:448px;top:380px"><span class="tag">STEP 4 — OPEN</span>
+    Open the account with open_bank_account_4821: account_type must be set to
+    "savings" and account_class must be the confirmed account_class from step 3.
+    The full signature lives in the opening-console workspace export.
+  </article>
+
+  <article class="node work" style="left:898px;top:380px"><span class="tag">STEP 5 — OPENING DEPOSIT</span>
+    Arrange the opening deposit. Immediate funding runs through the opening
+    console's funding-transfer macro; if the customer defers, follow the desk's
+    deferred-funding disclosure and note the outcome on the case.
+  </article>
+
+  <article class="node work" style="left:898px;top:600px"><span class="tag">STEP 6 — CONFIRM COMPLETION</span>
+    Close the loop with the customer: provide the new account details and confirm
+    either the funding status or the funding deadline.
+  </article>
+
+  <article class="node terminal" style="left:898px;top:790px"><span class="tag">TERMINAL — OPENED AND CONFIRMED</span>
+    The case carries the confirmed selection, the tool result, and the funding
+    position.
+  </article>
+
+  <aside class="sticky yellow" style="left:460px;top:100px">
+    <strong>Gates detail lives on SAV-OPS-201.</strong> Step 2 is a run-through;
+    the gates board (current revision) prints the operative phrasings and the
+    stop rule. When step 2 and the gates board seem to differ, work from the
+    gates board.
+  </aside>
+
+  <aside class="sticky green" style="left:1150px;top:100px;width:300px">
+    <strong>Ordering — checks before the call.</strong> The agent calls
+    open_bank_account_4821 only after identity verification, eligibility
+    checking, and account selection confirmation are complete. Nothing about a
+    busy queue changes that.
+  </aside>
+
+  <div class="control-definitions">
+    <h2>TOOL REFERENCE</h2>
+    <dl>
+      <dt>open_bank_account_4821</dt>
+      <dd>Opens the account (step 4). Parameter contract and field definitions
+      live in the opening-console workspace export (Devon Park's team owns the
+      console); this board does not restate signatures.</dd>
+      <dt>opening-deposit transfer</dt>
+      <dd>Immediate funding (step 5) runs through the opening console's
+      funding-transfer macro, which carries its own run condition in the
+      workspace export. Deferred funding follows the desk's disclosure guidance
+      and is noted on the case.</dd>
+    </dl>
+  </div>
+</div>
+</body>
+</html>

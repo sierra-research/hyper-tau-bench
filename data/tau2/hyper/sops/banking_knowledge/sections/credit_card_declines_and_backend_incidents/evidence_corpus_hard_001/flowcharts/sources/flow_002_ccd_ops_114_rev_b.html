@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CCD-OPS-114 rev B — Decline intake routing</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 980px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #4a5568; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #cdd6e0; }
+  .node { position: absolute; box-sizing: border-box; background: #fff; border: 2px solid #35506e; border-radius: 8px; padding: 10px 12px; font-size: 13.5px; color: #1d2833; line-height: 1.35; }
+  .start { border-color: #2e7d54; background: #f2faf5; }
+  .decision { border-color: #a2662a; background: #fdf7ee; }
+  .note { position: absolute; box-sizing: border-box; background: #fffbe8; border: 1px solid #d9c98a; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; color: #4c4630; line-height: 1.35; }
+  .edge { position: absolute; background: #55677a; }
+  .h { height: 2px; } .v { width: 2px; }
+  .lbl { position: absolute; font-size: 11.5px; color: #55677a; background: #fbfcfd; padding: 0 4px; }
+  .foot { position: absolute; left: 24px; bottom: 12px; font-size: 11.5px; color: #7b8794; }
+  .stamp { position: absolute; right: 24px; top: 76px; font-size: 12px; color: #6b7885; border: 1px solid #b9c4cf; border-radius: 6px; padding: 6px 10px; background: #f4f6f8; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>CCD-OPS-114 rev B — Decline intake routing</h1>
+    <div class="meta">Card Support Operations &middot; 2025-07-30</div>
+  </div>
+
+  <div class="node start" style="left:56px; top:140px; width:280px;">Customer reports a credit card purchase decline</div>
+
+  <div class="node decision" style="left:56px; top:240px; width:280px;">Identity verified and card located?</div>
+
+  <div class="node" style="left:420px; top:230px; width:300px;">Review card status, recent authorizations, and merchant or category holds per the knowledge base.</div>
+
+  <div class="node decision" style="left:420px; top:350px; width:300px;">Customer asks to speak to a human agent?</div>
+
+  <div class="node" style="left:800px; top:340px; width:330px;">Transfer with transfer_to_human_agents on the first request. Declines are high-frustration contacts; route to a specialist without delay and log findings so far in the case record.</div>
+
+  <div class="node" style="left:420px; top:470px; width:300px;">Continue troubleshooting; close with a summary of decline causes found and next steps.</div>
+
+  <div class="edge v" style="left:194px; top:184px; height:56px;"></div>
+  <div class="edge h" style="left:336px; top:262px; width:84px;"></div>
+  <div class="lbl" style="left:348px; top:246px;">yes</div>
+  <div class="edge v" style="left:568px; top:290px; height:60px;"></div>
+  <div class="edge h" style="left:720px; top:372px; width:80px;"></div>
+  <div class="lbl" style="left:730px; top:356px;">yes</div>
+  <div class="edge v" style="left:568px; top:410px; height:60px;"></div>
+  <div class="lbl" style="left:576px; top:430px;">no</div>
+
+  <div class="note" style="left:800px; top:470px; width:330px;">Rationale: the 2025-06 queue review found decline calls averaging 2.4 escalation touches. One-touch transfer is the simplest fix on the table; alternative is a counted-request sequence (see design-review notes).</div>
+
+  <div class="note" style="left:56px; top:620px; width:660px;">Open questions from the 2025-07-30 review: does one-touch transfer starve the diagnostic lane of findings? Do the specialist queues have the headroom? Comments to T. Okafor by 08/06.</div>
+
+  <div class="foot">CCD-OPS-114 rev B &middot; Card Support Operations &middot; internal — not customer-facing</div>
+</div>
+</body>
+</html>

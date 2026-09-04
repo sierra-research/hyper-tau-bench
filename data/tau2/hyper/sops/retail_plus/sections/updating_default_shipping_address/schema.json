@@ -1,0 +1,102 @@
+{
+  "id": "retail_plus_updating_default_shipping_address_policy_fact_schema_001",
+  "domain": "retail_plus",
+  "studio_hidden": true,
+  "section_id": "updating_default_shipping_address",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/retail_plus_sop.md",
+    "heading": "## Updating the customer's default shipping address"
+  },
+  "rendered_section_path": "tau2/hyper/sops/retail_plus/sections/updating_default_shipping_address/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/updating_default_shipping_address/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "response_phrasing_context": {
+    "selected_rule_ids": [
+      "never_say_unfortunately",
+      "max_one_apology_per_conversation",
+      "no_premature_outcome_language",
+      "identifier_minimization",
+      "avoid_repeated_openings",
+      "no_generic_service_invitations",
+      "no_support_deflection",
+      "customer_visible_failure_language",
+      "no_long_menu_dumps",
+      "match_warmth_to_outcome",
+      "no_first_person_cant",
+      "no_internal_tool_mentions",
+      "no_policy_jargon"
+    ],
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "The no_generic_service_invitations rule must still allow current-request procedural completeness checks required by one-shot item changes and exchanges.",
+      "Transfer language must use the exact SOP-mandated message even when other phrasing rules are active."
+    ],
+    "rules_path": "tau2/hyper/response_phrasing/retail_plus_response_phrasing.yaml"
+  },
+  "style_exemplar": {
+    "id": "customer_support_chat",
+    "path": "tau2/hyper/sops/retail_plus/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "profile-level address update",
+      "distinguish future default address from existing order shipping addresses"
+    ]
+  },
+  "facts": [
+    {
+      "id": "default_address_update_allowed",
+      "category": "profile_address",
+      "statement": "The agent can update the customer's default shipping address on the profile.",
+      "canonical_source": "Updating the customer's default shipping address"
+    },
+    {
+      "id": "default_address_requires_readback_and_confirmation",
+      "category": "profile_address",
+      "statement": "For a default shipping address update, the customer gives the new address, the agent reads it back, gets confirmation, and then updates the profile.",
+      "canonical_source": "Updating the customer's default shipping address"
+    },
+    {
+      "id": "default_address_affects_future_orders_only",
+      "category": "profile_address",
+      "statement": "The default shipping address is pre-filled on future orders and does not change the shipping address on existing orders.",
+      "canonical_source": "Updating the customer's default shipping address"
+    },
+    {
+      "id": "existing_order_addresses_changed_individually",
+      "category": "profile_address",
+      "statement": "Existing orders have their own shipping addresses; if an existing order address needs to be changed, it has to be changed individually.",
+      "canonical_source": "Updating the customer's default shipping address"
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Default address update for future orders",
+      "included_fact_ids": [
+        "default_address_update_allowed",
+        "default_address_requires_readback_and_confirmation",
+        "default_address_affects_future_orders_only"
+      ],
+      "style_notes": [
+        "customer wants profile default changed",
+        "agent confirms it applies to future orders"
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Existing order address handled separately",
+      "included_fact_ids": [
+        "default_address_affects_future_orders_only",
+        "existing_order_addresses_changed_individually"
+      ],
+      "style_notes": [
+        "customer assumes default update fixes an existing order",
+        "agent distinguishes profile and order-level addresses"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1801 @@
+{
+ "fps": 24,
+ "width": 1440,
+ "height": 900,
+ "recordings": [
+  {
+   "slug": "recording_01_log_closure_reason",
+   "kit_filename": "screen_recording_01.mp4",
+   "title": "Log a closure reason",
+   "duration_seconds": 28,
+   "fact_ids": [
+    "F022"
+   ],
+   "states": [
+    {
+     "id": "s1",
+     "dwell_seconds": 6,
+     "screen": {
+      "module": "Account actions",
+      "title": "Closure workspace \u2014 CC-3301-8044",
+      "chip": {
+       "label": "Identity verified",
+       "tone": "ok"
+      },
+      "blocks": [
+       {
+        "type": "kv",
+        "heading": "Account",
+        "rows": [
+         {
+          "label": "Card",
+          "value": "CC-3301-8044",
+          "note": null
+         },
+         {
+          "label": "Status",
+          "value": "Open",
+          "note": null
+         },
+         {
+          "label": "Case",
+          "value": "CS-88214",
+          "note": null
+         }
+        ]
+       },
+       {
+        "type": "callout",
+        "tone": "info",
+        "text": "The reason has to be on the record before this closure request moves \u2014 ask the customer why they're closing, then log it below."
+       }
+      ]
+     },
+     "actions": [
+      {
+       "at_seconds": 4.2,
+       "type": "move",
+       "target": "cue:Log closure reason",
+       "text": null
+      }
+     ]
+    },
+    {
+     "id": "s2",
+     "dwell_seconds": 10,
+     "screen": {
+      "module": "Account actions",
+      "title": "Log closure reason",
+      "chip": null,
+      "blocks": [
+       {
+        "type": "form",
+        "heading": "Log closure reason",
+        "action_id": "log_credit_card_closure_reason_4521",
+        "fields": [
+         {
+          "label": "Closure reason",
+          "value": "not_using_card",
+          "placeholder": "Select a reason",
+          "help": "Logged after the customer explains why \u2014 the workspace won't move the closure forward without it."
+         },
+         {
+          "label": "Card account",
+          "value": "CC-3301-8044",
+          "placeholder": null,
+          "help": null
+         },
+         {
+          "label": "User id",
+          "value": "USR-5821-36",
+          "placeholder": null,
+          "help": null
+         }
+        ],
+        "submit": {
+         "label": "Log reason",
+         "enabled": true,
+         "note": null
+        }
+       }
+      ]
+     },
+     "actions": [
+      {
+       "at_seconds": 8.6,
+       "type": "type",
+       "target": "cue:Closure reason",
+       "text": "not_using_card"
+      },
+      {
+       "at_seconds": 14.8,
+       "type": "click",
+       "target": "cue:Log reason",
+       "text": null
+      }
+     ]
+    },
+    {
+     "id": "s3",
+     "dwell_seconds": 6,
+     "screen": {
+      "module": "Account actions",
+      "title": "Servicing record written",
+      "chip": {
+       "label": "Saved",
+       "tone": "ok"
+      },
+      "blocks": [
+       {
+        "type": "kv",
+        "heading": "Servicing record",
+        "rows": [
+         {
+          "label": "Reason",
+          "value": "not_using_card",
+          "note": null
+         },
+         {
+          "label": "Logged by",
+          "value": "Amira C.",
+          "note": null
+         },
+         {
+          "label": "Logged at",
+          "value": "10:42:17 PT",
+          "note": null
+         }
+        ]
+       }
+      ]
+     },
+     "actions": []
+    },
+    {
+     "id": "s4",
+     "dwell_seconds": 6,
+     "screen": {
+      "module": "Account actions",
+      "title": "Account activity \u2014 CC-3301-8044",
+      "chip": null,
+      "blocks": [
+       {
+        "type": "timeline",
+        "heading": "Account activity",
+        "items": [
+         {
+          "time": "10:42",
+          "text": "Closure reason logged (log_credit_card_closure_reason_4521)"
+         },
+         {
+          "time": "10:31",
+          "text": "Identity verified \u2014 voice channel"
+         },
+         {
+          "time": "09:58",
+          "text": "Statement generated"
+         }
+        ]
+       }
+      ]
+     },
+     "actions": []
+    }
+   ],
+   "events": [
+    {
+     "kind": "context",
+     "start_seconds": 0,
+     "end_seconds": 6,
+     "fact_ids": null,
+     "disposition": null,
+     "caption": "Closure workspace open, identity verified"
+    },
+    {
+     "kind": "authoritative",
+     "start_seconds": 6,
+     "end_seconds": 16,
+     "fact_ids": [
+      "F022"
+     ],
+     "disposition": null,
+     "caption": "Reason asked first, then logged through the reason action"
+    },
+    {
+     "kind": "context",
+     "start_seconds": 16,
+     "end_seconds": 22,
+     "fact_ids": null,
+     "disposition": null,
+     "caption": "Servicing record writes"
+    },
+    {
+     "kind": "context",
+     "start_seconds": 22,
+     "end_seconds": 28,
+     "fact_ids": null,
+     "disposition": null,
+     "caption": "Activity timeline shows the entry"
+    }
+   ],
+   "timeline": [
+    {
+     "start": 0,
+     "end": 6,
+     "text": "CareDesk, Account actions module, closure workspace for card CC-3301-8044 on case CS-88214. The identity chip reads verified, and an info note above the form says the reason has to be on the record before the closure request moves."
+    },
+    {
+     "start": 6,
+     "end": 16,
+     "text": "The agent opens the Log closure reason form. Help text under the reason field: ask the customer why they want to close first; the agent then logs that reason with log_credit_card_closure_reason_4521. The form's action id shows the same name. Reason selected: not_using_card."
+    },
+    {
+     "start": 16,
+     "end": 22,
+     "text": "Log reason is clicked. The servicing record writes with reason not_using_card, logged by Amira C. at 10:42:17 PT, and the Saved chip turns green."
+    },
+    {
+     "start": 22,
+     "end": 28,
+     "text": "The account activity timeline refreshes and the new closure-reason entry sits at the top, stamped 10:42, above the earlier identity-verification line."
+    }
+   ],
+   "anchors": {
+    "F022": "logs that reason with log_credit_card_closure_reason_4521"
+   }
+  },
+  {
+   "slug": "recording_02_downgrade_workflow",
+   "kit_filename": "screen_recording_02.mp4",
+   "title": "Guided downgrade, start to record",
+   "duration_seconds": 38,
+   "fact_ids": [
+    "F043",
+    "F046"
+   ],
+   "states": [
+    {
+     "id": "s1",
+     "dwell_seconds": 6,
+     "screen": {
+      "module": "Customer overview",
+      "title": "Profile \u2014 customer USR-7745-08",
+      "chip": {
+       "label": "Identity verified",
+       "tone": "ok"
+      },
+      "blocks": [
+       {
+        "type": "kv",
+        "heading": "Cards on profile",
+        "rows": [
+         {
+          "label": "CC-9273-4415",
+          "value": "Platinum Rewards Card \u2014 personal",
+          "note": "open"
+         }
+        ]
+       }
+      ]
+     },
+     "actions": [
+      {
+       "at_seconds": 4.5,
+       "type": "click",
+       "target": "cue:Cards on profile",
+       "text": null
+      }
+     ]
+    },
+    {
+     "id": "s2",
+     "dwell_seconds": 9,
+     "screen": {
+      "module": "Account actions",
+      "title": "Downgrade \u2014 guided steps",
+      "chip": null,
+      "blocks": [
+       {
+        "type": "table",
+        "heading": "Downgrade steps",
+        "columns": [
+         "Step",
+         "State"
+        ],
+        "rows": [
+         [
+          "1 \u00b7 Verify the customer's identity",
+          "done"
+         ],
+         [
+          "2 \u00b7 Confirm the customer wants to proceed and understands the benefit changes",
+          "in progress"
+         ],
+         [
+          "3 \u00b7 Tell the customer: account history and credit line preserved; rewards rates and benefits move to the new tier",
+          "pending"
+         ],
+         [
+          "4 \u00b7 Process via downgrade_credit_card_3847",
+          "pending"
+         ]
+        ]
+       }
+      ]
+     },
+     "actions": [
+      {
+       "at_seconds": 11.3,
+       "type": "move",
+       "target": "cue:Downgrade steps",
+       "text": null
+      }
+     ]
+    },
+    {
+     "id": "s3",
+     "dwell_seconds": 8,
+     "screen": {
+      "module": "Account actions",
+      "title": "Downgrade \u2014 confirmations",
+      "chip": null,
+      "blocks": [
+       {
+        "type": "form",
+        "heading": "Confirmations",
+        "action_id": null,
+        "fields": [
+         {
+          "label": "Customer confirms proceeding",
+          "value": "Yes",
+          "placeholder": null,
+          "help": null
+         },
+         {
+          "label": "Customer understands benefit changes",
+          "value": "Yes",
+          "placeholder": null,
+          "help": "Read step 3 aloud before ticking this: history and credit line stay; rewards rates and benefits match the new tier."
+         },
+         {
+          "label": "Target product",
+          "value": "Bronze Rewards Card",
+          "placeholder": null,
+          "help": null
+         }
+        ],
+        "submit": {
+         "label": "Process downgrade",
+         "enabled": true,
+         "note": null
+        }
+       }
+      ]
+     },
+     "actions": [
+      {
+       "at_seconds": 17.4,
+       "type": "type",
+       "target": "cue:Customer confirms proceeding",
+       "text": "Yes"
+      },
+      {
+       "at_seconds": 19.6,
+       "type": "type",
+       "target": "cue:Customer understands benefit changes",
+       "text": "Yes"
+      },
+      {
+       "at_seconds": 22.1,
+       "type": "click",
+       "target": "cue:Process downgrade",
+       "text": null
+      }
+     ]
+    },
+    {
+     "id": "s4",
+     "dwell_seconds": 7,
+     "screen": {
+      "module": "Account actions",
+      "title": "Downgrade \u2014 processing",
+      "chip": {
+       "label": "Processing",
+       "tone": "neutral"
+      },
+      "blocks": [
+       {
+        "type": "callout",
+        "tone": "info",
+        "text": "downgrade_credit_card_3847 running \u2014 product change in flight for CC-9273-4415."
+       },
+       {
+        "type": "table",
+        "heading": "Downgrade steps",
+        "columns": [
+         "Step",
+         "State"
+        ],
+        "rows": [
+         [
+          "1 \u00b7 Verify the customer's identity",
+          "done"
+         ],
+         [
+          "2 \u00b7 Confirm the customer wants to proceed and understands the benefit changes",
+          "done"
+         ],
+         [
+          "3 \u00b7 Tell the customer: account history and credit line preserved; rewards rates and benefits move to the new tier",
+          "done"
+         ],
+         [
+          "4 \u00b7 Process via downgrade_credit_card_3847",
+          "running"
+         ]
+        ]
+       }
+      ]
+     },
+     "actions": []
+    },
+    {
+     "id": "s5",
+     "dwell_seconds": 8,
+     "screen": {
+      "module": "Account actions",
+      "title": "Product change record",
+      "chip": {
+       "label": "Completed",
+       "tone": "ok"
+      },
+      "blocks": [
+       {
+        "type": "kv",
+        "heading": "Product change",
+        "rows": [
+         {
+          "label": "From",
+          "value": "Platinum Rewards Card",
+          "note": null
+         },
+         {
+          "label": "To",
+          "value": "Bronze Rewards Card",
+          "note": null
+         },
+         {
+          "label": "Recorded",
+          "value": "2025-10-29 10:51 PT",
+          "note": null
+         }
+        ]
+       },
+       {
+        "type": "timeline",
+        "heading": "Account activity",
+        "items": [
+         {
+          "time": "10:51",
+          "text": "Product change completed (downgrade_credit_card_3847)"
+         },
+         {
+          "time": "10:44",
+          "text": "Downgrade confirmations recorded"
+         }
+        ]
+       }
+      ]
+     },
+     "actions": []
+    }
+   ],
+   "events": [
+    {
+     "kind": "context",
+     "start_seconds": 0,
+     "end_seconds": 6,
+     "fact_ids": null,
+     "disposition": null,
+     "caption": "Verified profile, personal Platinum card selected"
+    },
+    {
+     "kind": "authoritative",
+     "start_seconds": 6,
+     "end_seconds": 15,
+     "fact_ids": [
+      "F043"
+     ],
+     "disposition": null,
+     "caption": "The guided panel lays out the ordered downgrade steps"
+    },
+    {
+     "kind": "context",
+     "start_seconds": 15,
+     "end_seconds": 23,
+     "fact_ids": null,
+     "disposition": null,
+     "caption": "Confirmations entered, target chosen"
+    },
+    {
+     "kind": "authoritative",
+     "start_seconds": 23,
+     "end_seconds": 30,
+     "fact_ids": [
+      "F046"
+     ],
+     "disposition": null,
+     "caption": "The downgrade action processes the change"
+    },
+    {
+     "kind": "context",
+     "start_seconds": 30,
+     "end_seconds": 38,
+     "fact_ids": null,
+     "disposition": null,
+     "caption": "Product change record and activity entry"
+    }
+   ],
+   "timeline": [
+    {
+     "start": 0,
+     "end": 6,
+     "text": "Customer overview for USR-7745-08 with the identity chip green. One personal card on the profile \u2014 CC-9273-4415, a Platinum Rewards Card \u2014 and the agent clicks through to Account actions."
+    },
+    {
+     "start": 6,
+     "end": 15,
+     "text": "Guided downgrade panel, four steps listed on the left: verify the customer's identity first, then confirm the customer wants to proceed and understands the benefit changes, then the preserved-versus-changed disclosure \u2014 account history and credit line stay, rewards rates and benefits move to the new tier \u2014 then process with downgrade_credit_card_3847 named on step four. Steps one and two already show done."
+    },
+    {
+     "start": 15,
+     "end": 23,
+     "text": "On the confirmations form both attestations are set to Yes \u2014 proceeding, and benefit changes understood, with help text repeating the preserved-versus-changed disclosure \u2014 and the target product reads Bronze Rewards Card. Process downgrade is clicked."
+    },
+    {
+     "start": 23,
+     "end": 30,
+     "text": "Process downgrade fires: processed using downgrade_credit_card_3847 per the callout, and the steps table flips to running."
+    },
+    {
+     "start": 30,
+     "end": 38,
+     "text": "The product change record lands: from Platinum Rewards Card to Bronze Rewards Card, recorded 2025-10-29 10:51 PT, with a matching account-activity entry naming the completed action."
+    }
+   ],
+   "anchors": {
+    "F043": "verify the customer's identity first, then confirm",
+    "F046": "processed using downgrade_credit_card_3847"
+   }
+  },
+  {
+   "slug": "recording_03_payoff_workflow",
+   "kit_filename": "screen_recording_03.mp4",
+   "title": "Pay a card balance from checking",
+   "duration_seconds": 45,
+   "fact_ids": [
+    "F056",
+    "F059",
+    "F061",
+    "F062",
+    "F063",
+    "F064"
+   ],
+   "states": [
+    {
+     "id": "s1",
+     "dwell_seconds": 7,
+     "screen": {
+      "module": "Payments",
+      "title": "Pay card from checking",
+      "chip": {
+       "label": "Identity verified",
+       "tone": "ok"
+      },
+      "blocks": [
+       {
+        "type": "kv",
+        "heading": "Accounts",
+        "rows": [
+         {
+          "label": "Checking CHK-2207-55",
+          "value": "$1,240.55 available",
+          "note": null
+         },
+         {
+          "label": "Card CC-8834-2846",
+          "value": "$312.40 outstanding",
+          "note": null
+         }
+        ]
+       },
+       {
+        "type": "table",
+        "heading": "Payoff steps",
+        "columns": [
+         "Step",
+         "State"
+        ],
+        "rows": [
+         [
+          "1 \u00b7 Verify identity",
+          "done"
+         ],
+         [
+          "2 \u00b7 Look up checking \u2014 funds sufficient",
+          "done"
+         ],
+         [
+          "3 \u00b7 Look up card \u2014 outstanding balance confirmed",
+          "done"
+         ],
+         [
+          "4 \u00b7 Confirm amount with customer; authorization to transfer",
+          "in progress"
+         ],
+         [
+          "5 \u00b7 Unlock pay_credit_card_from_checking_9182",
+          "pending"
+         ],
+         [
+          "6 \u00b7 Call pay_credit_card_from_checking_9182",
+          "pending"
+         ]
+        ]
+       }
+      ]
+     },
+     "actions": [
+      {
+       "at_seconds": 5.1,
+       "type": "move",
+       "target": "cue:Payoff steps",
+       "text": null
+      }
+     ]
+    },
+    {
+     "id": "s2",
+     "dwell_seconds": 10,
+     "screen": {
+      "module": "Payments",
+      "title": "Payment details",
+      "chip": null,
+      "blocks": [
+       {
+        "type": "form",
+        "heading": "Payment details",
+        "action_id": null,
+        "fields": [
+         {
+          "label": "Amount",
+          "value": "1500.00",
+          "placeholder": "0.00",
+          "help": "Must be positive and can't exceed the checking balance ($1,240.55) or the card's outstanding balance ($312.40)."
+         }
+        ],
+        "submit": {
+         "label": "Continue",
+         "enabled": false,
+         "note": "Amount exceeds the card's outstanding balance"
+        }
+       }
+      ]
+     },
+     "actions": [
+      {
+       "at_seconds": 9.7,
+       "type": "type",
+       "target": "cue:Amount",
+       "text": "1500.00"
+      }
+     ]
+    },
+    {
+     "id": "s3",
+     "dwell_seconds": 9,
+     "screen": {
+      "module": "Payments",
+      "title": "Payment details",
+      "chip": null,
+      "blocks": [
+       {
+        "type": "form",
+        "heading": "Payment details",
+        "action_id": null,
+        "fields": [
+         {
+          "label": "Amount",
+          "value": "312.40",
+          "placeholder": "0.00",
+          "help": "Must be positive and can't exceed the checking balance ($1,240.55) or the card's outstanding balance ($312.40)."
+         },
+         {
+          "label": "Customer authorized transfer",
+          "value": "Yes",
+          "placeholder": null,
+          "help": "The account ids and user on this payment have to match the authenticated customer, and the amount has to be the one the customer authorized."
+         },
+         {
+          "label": "Acting user",
+          "value": "USR-3118-42",
+          "placeholder": null,
+          "help": "Matches the authenticated session."
+         }
+        ],
+        "submit": {
+         "label": "Continue",
+         "enabled": true,
+         "note": null
+        }
+       }
+      ]
+     },
+     "actions": [
+      {
+       "at_seconds": 18.9,
+       "type": "type",
+       "target": "cue:Amount",
+       "text": "312.40"
+      },
+      {
+       "at_seconds": 22.6,
+       "type": "click",
+       "target": "cue:Customer authorized transfer",
+       "text": null
+      },
+      {
+       "at_seconds": 25.2,
+       "type": "click",
+       "target": "cue:Continue",
+       "text": null
+      }
+     ]
+    },
+    {
+     "id": "s4",
+     "dwell_seconds": 9,
+     "screen": {
+      "module": "Payments",
+      "title": "Invoking the payoff action",
+      "chip": {
+       "label": "Unlocked \u00b7 this session",
+       "tone": "neutral"
+      },
+      "blocks": [
+       {
+        "type": "callout",
+        "tone": "info",
+        "text": "call_discoverable_agent_tool \u2192 pay_credit_card_from_checking_9182 with the required arguments."
+       },
+       {
+        "type": "kv",
+        "heading": "Arguments",
+        "rows": [
+         {
+          "label": "checking_account_id",
+          "value": "CHK-2207-55",
+          "note": null
+         },
+         {
+          "label": "credit_card_account_id",
+          "value": "CC-8834-2846",
+          "note": null
+         },
+         {
+          "label": "user_id",
+          "value": "USR-3118-42",
+          "note": null
+         },
+         {
+          "label": "amount",
+          "value": "312.40",
+          "note": null
+         }
+        ]
+       }
+      ]
+     },
+     "actions": []
+    },
+    {
+     "id": "s5",
+     "dwell_seconds": 10,
+     "screen": {
+      "module": "Payments",
+      "title": "Transfer result",
+      "chip": {
+       "label": "Posted",
+       "tone": "ok"
+      },
+      "blocks": [
+       {
+        "type": "kv",
+        "heading": "Transfer result",
+        "rows": [
+         {
+          "label": "Debited from checking",
+          "value": "$312.40",
+          "note": null
+         },
+         {
+          "label": "Card balance reduced by",
+          "value": "$312.40",
+          "note": null
+         },
+         {
+          "label": "New checking balance",
+          "value": "$928.15",
+          "note": null
+         },
+         {
+          "label": "New card balance",
+          "value": "$0.00",
+          "note": null
+         }
+        ]
+       },
+       {
+        "type": "timeline",
+        "heading": "Account activity",
+        "items": [
+         {
+          "time": "14:07",
+          "text": "Payment posted \u2014 checking $928.15, card $0.00"
+         },
+         {
+          "time": "14:06",
+          "text": "Customer authorization recorded"
+         }
+        ]
+       }
+      ]
+     },
+     "actions": []
+    }
+   ],
+   "events": [
+    {
+     "kind": "context",
+     "start_seconds": 0,
+     "end_seconds": 7,
+     "fact_ids": null,
+     "disposition": null,
+     "caption": "Both accounts loaded with balances"
+    },
+    {
+     "kind": "authoritative",
+     "start_seconds": 7,
+     "end_seconds": 15,
+     "fact_ids": [
+      "F056"
+     ],
+     "disposition": null,
+     "caption": "The stepper shows the required payoff order"
+    },
+    {
+     "kind": "distractor",
+     "start_seconds": 15,
+     "end_seconds": 20,
+     "fact_ids": null,
+     "disposition": "failed",
+     "caption": "Overlarge amount refused before anything runs"
+    },
+    {
+     "kind": "authoritative",
+     "start_seconds": 20,
+     "end_seconds": 26,
+     "fact_ids": [
+      "F061"
+     ],
+     "disposition": null,
+     "caption": "Amount bounds enforced by the form"
+    },
+    {
+     "kind": "authoritative",
+     "start_seconds": 26,
+     "end_seconds": 31,
+     "fact_ids": [
+      "F062"
+     ],
+     "disposition": null,
+     "caption": "Ownership and authorization checks on the payment"
+    },
+    {
+     "kind": "authoritative",
+     "start_seconds": 31,
+     "end_seconds": 36,
+     "fact_ids": [
+      "F059"
+     ],
+     "disposition": null,
+     "caption": "Unlocked action invoked through the discoverable-tool caller"
+    },
+    {
+     "kind": "authoritative",
+     "start_seconds": 36,
+     "end_seconds": 41,
+     "fact_ids": [
+      "F063"
+     ],
+     "disposition": null,
+     "caption": "Debit and card reduction post together"
+    },
+    {
+     "kind": "authoritative",
+     "start_seconds": 41,
+     "end_seconds": 45,
+     "fact_ids": [
+      "F064"
+     ],
+     "disposition": null,
+     "caption": "Confirmation shows both new balances"
+    }
+   ],
+   "timeline": [
+    {
+     "start": 0,
+     "end": 7,
+     "text": "Payments module, pay-card-from-checking workspace. Checking CHK-2207-55 shows $1,240.55 available and card CC-8834-2846 shows $312.40 outstanding; the identity chip is green."
+    },
+    {
+     "start": 7,
+     "end": 15,
+     "text": "The Payoff steps table sits on the left, six rows with steps one through three already done and the Unlock pay_credit_card_from_checking_9182 row still pending, Call pay_credit_card_from_checking_9182 queued after it. The agent scrolls past the table to the payment form."
+    },
+    {
+     "start": 15,
+     "end": 20,
+     "text": "First attempt types 1500.00 into the amount field. Continue stays disabled with the note that the amount exceeds the card's outstanding balance \u2014 nothing runs."
+    },
+    {
+     "start": 20,
+     "end": 26,
+     "text": "Help under the amount field: the amount must be positive and can't exceed the checking balance ($1,240.55) or the card's outstanding balance ($312.40). Corrected to 312.40, the form comes alive."
+    },
+    {
+     "start": 26,
+     "end": 31,
+     "text": "The authorization row is ticked. Help text beside it: the account ids and user on the payment have to match the authenticated customer, and the amount has to be the one the customer authorized. Acting user USR-3118-42 matches the session badge."
+    },
+    {
+     "start": 31,
+     "end": 36,
+     "text": "With the action unlocked for this session, the call goes out through call_discoverable_agent_tool to pay_credit_card_from_checking_9182, the argument panel listing checking_account_id CHK-2207-55, credit_card_account_id CC-8834-2846, user_id USR-3118-42, and amount 312.40."
+    },
+    {
+     "start": 36,
+     "end": 41,
+     "text": "The transfer posts both sides at once: $312.40 debited from checking and the card balance reduced by the same amount."
+    },
+    {
+     "start": 41,
+     "end": 45,
+     "text": "The confirmation lists the new balances for both accounts \u2014 checking $928.15 and card $0.00 \u2014 with the Posted chip green and a matching activity entry."
+    }
+   ],
+   "anchors": {
+    "F056": "Unlock pay_credit_card_from_checking_9182",
+    "F059": "goes out through call_discoverable_agent_tool",
+    "F061": "can't exceed the checking balance ($1,240.55)",
+    "F062": "have to match the authenticated customer",
+    "F063": "the card balance reduced by the same amount",
+    "F064": "checking $928.15 and card $0.00"
+   }
+  },
+  {
+   "slug": "recording_04_statement_credit_workflow",
+   "kit_filename": "screen_recording_04.mp4",
+   "title": "Statement credit, unlock to confirmation",
+   "duration_seconds": 33,
+   "fact_ids": [
+    "F100"
+   ],
+   "states": [
+    {
+     "id": "s1",
+     "dwell_seconds": 7,
+     "screen": {
+      "module": "Account actions",
+      "title": "Discoverable actions",
+      "chip": null,
+      "blocks": [
+       {
+        "type": "table",
+        "heading": "Actions",
+        "columns": [
+         "Action",
+         "State"
+        ],
+        "rows": [
+         [
+          "apply_statement_credit_8472",
+          "Locked"
+         ],
+         [
+          "pay_credit_card_from_checking_9182",
+          "Locked"
+         ]
+        ]
+       },
+       {
+        "type": "callout",
+        "tone": "info",
+        "text": "Actions unlock per session. Unlock only what the case in front of you needs."
+       }
+      ]
+     },
+     "actions": [
+      {
+       "at_seconds": 4.8,
+       "type": "click",
+       "target": "cue:Actions",
+       "text": null
+      }
+     ]
+    },
+    {
+     "id": "s2",
+     "dwell_seconds": 10,
+     "screen": {
+      "module": "Account actions",
+      "title": "apply_statement_credit_8472 \u2014 arguments",
+      "chip": {
+       "label": "Unlocked \u00b7 this session",
+       "tone": "neutral"
+      },
+      "blocks": [
+       {
+        "type": "form",
+        "heading": "Arguments (JSON)",
+        "action_id": "apply_statement_credit_8472",
+        "fields": [
+         {
+          "label": "Arguments",
+          "value": "{\"user_id\": \"USR-4091-73\", \"credit_card_account_id\": \"CC-1187-3350\", \"amount\": 27.50, \"reason\": \"goodwill_adjustment\"}",
+          "placeholder": "{ }",
+          "help": "Every required field rides in this one JSON string \u2014 the call takes it whole."
+         }
+        ],
+        "submit": {
+         "label": "Validate and call",
+         "enabled": true,
+         "note": null
+        }
+       }
+      ]
+     },
+     "actions": [
+      {
+       "at_seconds": 11.4,
+       "type": "type",
+       "target": "cue:Arguments",
+       "text": "{\"user_id\": \"USR-4091-73\", ...}"
+      },
+      {
+       "at_seconds": 15.9,
+       "type": "click",
+       "target": "cue:Validate and call",
+       "text": null
+      }
+     ]
+    },
+    {
+     "id": "s3",
+     "dwell_seconds": 8,
+     "screen": {
+      "module": "Account actions",
+      "title": "Invoking the credit action",
+      "chip": {
+       "label": "Running",
+       "tone": "neutral"
+      },
+      "blocks": [
+       {
+        "type": "callout",
+        "tone": "info",
+        "text": "call_discoverable_agent_tool \u00b7 apply_statement_credit_8472 \u00b7 arguments validated, posting."
+       }
+      ]
+     },
+     "actions": []
+    },
+    {
+     "id": "s4",
+     "dwell_seconds": 8,
+     "screen": {
+      "module": "Account actions",
+      "title": "Credit result",
+      "chip": {
+       "label": "Confirmed",
+       "tone": "ok"
+      },
+      "blocks": [
+       {
+        "type": "kv",
+        "heading": "Credit result",
+        "rows": [
+         {
+          "label": "Posted",
+          "value": "-$27.50",
+          "note": null
+         },
+         {
+          "label": "Reference",
+          "value": "SC-30281",
+          "note": null
+         },
+         {
+          "label": "Card",
+          "value": "CC-1187-3350",
+          "note": null
+         }
+        ]
+       }
+      ]
+     },
+     "actions": [
+      {
+       "at_seconds": 29.5,
+       "type": "move",
+       "target": "cue:Credit result",
+       "text": null
+      }
+     ]
+    }
+   ],
+   "events": [
+    {
+     "kind": "context",
+     "start_seconds": 0,
+     "end_seconds": 7,
+     "fact_ids": null,
+     "disposition": null,
+     "caption": "Discoverable actions panel, credit action unlocked for the session"
+    },
+    {
+     "kind": "authoritative",
+     "start_seconds": 7,
+     "end_seconds": 28,
+     "fact_ids": [
+      "F100"
+     ],
+     "disposition": null,
+     "caption": "Unlock, args JSON, call, and the confirmation \u2014 the full credit sequence"
+    },
+    {
+     "kind": "context",
+     "start_seconds": 28,
+     "end_seconds": 33,
+     "fact_ids": null,
+     "disposition": null,
+     "caption": "Reference number on the result"
+    }
+   ],
+   "timeline": [
+    {
+     "start": 0,
+     "end": 7,
+     "text": "Discoverable actions panel in Account actions. The apply_statement_credit_8472 row flips from Locked to Unlocked for this session when the agent clicks it; the payoff action row stays locked."
+    },
+    {
+     "start": 7,
+     "end": 17,
+     "text": "Panel copy above the form lists the sequence: unlock apply_statement_credit_8472, prepare the arguments JSON with every required field, call it through call_discoverable_agent_tool handing over that JSON string. The agent types the arguments \u2014 user USR-4091-73, card CC-1187-3350, amount 27.50, reason goodwill_adjustment \u2014 into the single arguments field; its help text says the call takes the string whole."
+    },
+    {
+     "start": 17,
+     "end": 25,
+     "text": "Validate and call is clicked. The running callout names call_discoverable_agent_tool with apply_statement_credit_8472 and reports the arguments validated."
+    },
+    {
+     "start": 25,
+     "end": 33,
+     "text": "Result panel: credit SC-30281 posted at -$27.50 against CC-1187-3350, Confirmed chip green. The agent checks the amount against the request before closing the tab."
+    }
+   ],
+   "anchors": {
+    "F100": "call it through call_discoverable_agent_tool handing over"
+   }
+  },
+  {
+   "slug": "recording_05_address_note_distractor",
+   "kit_filename": "screen_recording_05.mp4",
+   "title": "Address edit refused from a case note",
+   "duration_seconds": 22,
+   "fact_ids": [],
+   "states": [
+    {
+     "id": "s1",
+     "dwell_seconds": 7,
+     "screen": {
+      "module": "Cases",
+      "title": "Case CS-90233 \u2014 closure follow-up",
+      "chip": {
+       "label": "Open",
+       "tone": "neutral"
+      },
+      "blocks": [
+       {
+        "type": "kv",
+        "heading": "Case",
+        "rows": [
+         {
+          "label": "Type",
+          "value": "Card servicing \u2014 closure follow-up",
+          "note": null
+         },
+         {
+          "label": "Opened",
+          "value": "2025-10-31",
+          "note": null
+         }
+        ]
+       },
+       {
+        "type": "form",
+        "heading": "Case note",
+        "action_id": null,
+        "fields": [
+         {
+          "label": "Note",
+          "value": "",
+          "placeholder": "Add a note to this case",
+          "help": null
+         }
+        ],
+        "submit": {
+         "label": "Save note",
+         "enabled": true,
+         "note": null
+        }
+       }
+      ]
+     },
+     "actions": [
+      {
+       "at_seconds": 4.6,
+       "type": "click",
+       "target": "cue:Case note",
+       "text": null
+      }
+     ]
+    },
+    {
+     "id": "s2",
+     "dwell_seconds": 8,
+     "screen": {
+      "module": "Cases",
+      "title": "Case CS-90233 \u2014 closure follow-up",
+      "chip": {
+       "label": "Open",
+       "tone": "neutral"
+      },
+      "blocks": [
+       {
+        "type": "form",
+        "heading": "Case note",
+        "action_id": null,
+        "fields": [
+         {
+          "label": "Note",
+          "value": "Customer new mailing address: 118 Alder Ct, Unit 4 \u2014 apply to profile",
+          "placeholder": null,
+          "help": null
+         }
+        ],
+        "submit": {
+         "label": "Apply as profile update",
+         "enabled": true,
+         "note": null
+        }
+       }
+      ]
+     },
+     "actions": [
+      {
+       "at_seconds": 9.8,
+       "type": "type",
+       "target": "cue:Note",
+       "text": "Customer new mailing address: 118 Alder Ct, Unit 4 \u2014 apply to profile"
+      },
+      {
+       "at_seconds": 13.7,
+       "type": "click",
+       "target": "cue:Apply as profile update",
+       "text": null
+      }
+     ]
+    },
+    {
+     "id": "s3",
+     "dwell_seconds": 7,
+     "screen": {
+      "module": "Cases",
+      "title": "Case CS-90233 \u2014 closure follow-up",
+      "chip": {
+       "label": "Note saved as text",
+       "tone": "neutral"
+      },
+      "blocks": [
+       {
+        "type": "callout",
+        "tone": "warn",
+        "text": "Profile edits can't run from a servicing case \u2014 address changes go through the profile workspace."
+       },
+       {
+        "type": "timeline",
+        "heading": "Case activity",
+        "items": [
+         {
+          "time": "11:36",
+          "text": "Note saved (plain text) \u2014 no profile change applied"
+         }
+        ]
+       }
+      ]
+     },
+     "actions": []
+    }
+   ],
+   "events": [
+    {
+     "kind": "context",
+     "start_seconds": 0,
+     "end_seconds": 7,
+     "fact_ids": null,
+     "disposition": null,
+     "caption": "Closure follow-up case open, empty note composer"
+    },
+    {
+     "kind": "distractor",
+     "start_seconds": 7,
+     "end_seconds": 16,
+     "fact_ids": null,
+     "disposition": "rejected",
+     "caption": "Address edit attempted from the note panel and refused"
+    },
+    {
+     "kind": "context",
+     "start_seconds": 16,
+     "end_seconds": 22,
+     "fact_ids": null,
+     "disposition": null,
+     "caption": "Note kept as plain text only"
+    }
+   ],
+   "timeline": [
+    {
+     "start": 0,
+     "end": 7,
+     "text": "Cases module, case CS-90233, a card-servicing closure follow-up opened 2025-10-31. The note composer is empty and the agent clicks into it."
+    },
+    {
+     "start": 7,
+     "end": 16,
+     "text": "The agent types a new mailing address into the note \u2014 118 Alder Ct, Unit 4 \u2014 and clicks Apply as profile update. A warning callout refuses it: profile edits can't run from a servicing case, address changes go through the profile workspace."
+    },
+    {
+     "start": 16,
+     "end": 22,
+     "text": "The note saves as plain text only, and the case activity line confirms no profile change was applied."
+    }
+   ],
+   "anchors": {}
+  },
+  {
+   "slug": "recording_06_dashboard_detour",
+   "kit_filename": "screen_recording_06.mp4",
+   "title": "Queue dashboard detour",
+   "duration_seconds": 26,
+   "fact_ids": [],
+   "states": [
+    {
+     "id": "s1",
+     "dwell_seconds": 8,
+     "screen": {
+      "module": "Team tools",
+      "title": "Queue health \u2014 intraday",
+      "chip": null,
+      "blocks": [
+       {
+        "type": "table",
+        "heading": "Queues",
+        "columns": [
+         "Queue",
+         "Waiting",
+         "Median handle"
+        ],
+        "rows": [
+         [
+          "Card Servicing",
+          "7",
+          "8m 12s"
+         ],
+         [
+          "Disputes",
+          "3",
+          "11m 48s"
+         ],
+         [
+          "Payments",
+          "2",
+          "5m 03s"
+         ]
+        ]
+       }
+      ]
+     },
+     "actions": [
+      {
+       "at_seconds": 5.9,
+       "type": "move",
+       "target": "cue:Queues",
+       "text": null
+      }
+     ]
+    },
+    {
+     "id": "s2",
+     "dwell_seconds": 9,
+     "screen": {
+      "module": "Team tools",
+      "title": "Queue health \u2014 filtered",
+      "chip": {
+       "label": "Loading",
+       "tone": "neutral"
+      },
+      "blocks": [
+       {
+        "type": "form",
+        "heading": "Filter",
+        "action_id": null,
+        "fields": [
+         {
+          "label": "Search",
+          "value": "card closures week 30",
+          "placeholder": "Filter queues and tags",
+          "help": null
+         }
+        ],
+        "submit": {
+         "label": "Refresh",
+         "enabled": true,
+         "note": null
+        }
+       },
+       {
+        "type": "callout",
+        "tone": "info",
+        "text": "Widget loading \u2014 large date range selected."
+       }
+      ]
+     },
+     "actions": [
+      {
+       "at_seconds": 10.4,
+       "type": "type",
+       "target": "cue:Search",
+       "text": "card closures week 30"
+      },
+      {
+       "at_seconds": 14.2,
+       "type": "click",
+       "target": "cue:Refresh",
+       "text": null
+      }
+     ]
+    },
+    {
+     "id": "s3",
+     "dwell_seconds": 9,
+     "screen": {
+      "module": "Team tools",
+      "title": "Queue health \u2014 filtered",
+      "chip": {
+       "label": "Data delayed",
+       "tone": "warn"
+      },
+      "blocks": [
+       {
+        "type": "callout",
+        "tone": "warn",
+        "text": "Data delayed 41 minutes \u2014 reporting pipeline backfill in progress. Retry after the backfill completes."
+       }
+      ]
+     },
+     "actions": [
+      {
+       "at_seconds": 22.7,
+       "type": "click",
+       "target": "cue:Queue health \u2014 filtered",
+       "text": null
+      }
+     ]
+    }
+   ],
+   "events": [
+    {
+     "kind": "context",
+     "start_seconds": 0,
+     "end_seconds": 8,
+     "fact_ids": null,
+     "disposition": null,
+     "caption": "Intraday queue board, three queues listed"
+    },
+    {
+     "kind": "distractor",
+     "start_seconds": 8,
+     "end_seconds": 17,
+     "fact_ids": null,
+     "disposition": "failed",
+     "caption": "Filtered widget times out on refresh"
+    },
+    {
+     "kind": "context",
+     "start_seconds": 17,
+     "end_seconds": 26,
+     "fact_ids": null,
+     "disposition": null,
+     "caption": "Stale-data banner, panel closed"
+    }
+   ],
+   "timeline": [
+    {
+     "start": 0,
+     "end": 8,
+     "text": "Team tools, intraday queue health. Three queues on the board \u2014 Card Servicing with 7 waiting at 8m 12s median handle, Disputes with 3, Payments with 2."
+    },
+    {
+     "start": 8,
+     "end": 17,
+     "text": "The agent filters for card closures in week 30 and hits Refresh. The widget hangs on the large date range and never paints."
+    },
+    {
+     "start": 17,
+     "end": 26,
+     "text": "A warning banner lands instead of the chart: data delayed 41 minutes, reporting pipeline backfill in progress. The agent closes the panel without getting the number."
+    }
+   ],
+   "anchors": {}
+  },
+  {
+   "slug": "recording_07_legacy_macro_rejected",
+   "kit_filename": "screen_recording_07.mp4",
+   "title": "Legacy macro run refused",
+   "duration_seconds": 41,
+   "fact_ids": [],
+   "states": [
+    {
+     "id": "s1",
+     "dwell_seconds": 10,
+     "screen": {
+      "module": "Team tools",
+      "title": "Macro archive",
+      "chip": null,
+      "blocks": [
+       {
+        "type": "table",
+        "heading": "Archived macros",
+        "columns": [
+         "Name",
+         "Last used",
+         "State"
+        ],
+        "rows": [
+         [
+          "Closure wrap-up (legacy)",
+          "2025-05-21",
+          "archived"
+         ],
+         [
+          "Fee apology draft (legacy)",
+          "2025-03-12",
+          "archived"
+         ],
+         [
+          "Address confirm (legacy)",
+          "2025-04-28",
+          "archived"
+         ]
+        ]
+       }
+      ]
+     },
+     "actions": [
+      {
+       "at_seconds": 7.3,
+       "type": "click",
+       "target": "cue:Archived macros",
+       "text": null
+      }
+     ]
+    },
+    {
+     "id": "s2",
+     "dwell_seconds": 11,
+     "screen": {
+      "module": "Team tools",
+      "title": "Closure wrap-up (legacy) \u2014 preview",
+      "chip": {
+       "label": "Archived",
+       "tone": "neutral"
+      },
+      "blocks": [
+       {
+        "type": "kv",
+        "heading": "Macro",
+        "rows": [
+         {
+          "label": "Name",
+          "value": "Closure wrap-up (legacy)",
+          "note": null
+         },
+         {
+          "label": "Body",
+          "value": "Thanks for calling {bank}. Your request {case} is complete.",
+          "note": "template variables unresolved"
+         }
+        ]
+       },
+       {
+        "type": "form",
+        "heading": "Run",
+        "action_id": null,
+        "fields": [
+         {
+          "label": "Target case",
+          "value": "CS-90233",
+          "placeholder": "Case id",
+          "help": null
+         }
+        ],
+        "submit": {
+         "label": "Run against case",
+         "enabled": true,
+         "note": null
+        }
+       }
+      ]
+     },
+     "actions": [
+      {
+       "at_seconds": 15.6,
+       "type": "type",
+       "target": "cue:Target case",
+       "text": "CS-90233"
+      },
+      {
+       "at_seconds": 19.8,
+       "type": "click",
+       "target": "cue:Run against case",
+       "text": null
+      }
+     ]
+    },
+    {
+     "id": "s3",
+     "dwell_seconds": 10,
+     "screen": {
+      "module": "Team tools",
+      "title": "Closure wrap-up (legacy) \u2014 preview",
+      "chip": {
+       "label": "Blocked",
+       "tone": "warn"
+      },
+      "blocks": [
+       {
+        "type": "callout",
+        "tone": "warn",
+        "text": "Legacy macros are read-only in the archive \u2014 this one can't run against live cases. Use the current wrap-up flow in Account actions."
+       }
+      ]
+     },
+     "actions": [
+      {
+       "at_seconds": 27.4,
+       "type": "move",
+       "target": "cue:Closure wrap-up (legacy) \u2014 preview",
+       "text": null
+      }
+     ]
+    },
+    {
+     "id": "s4",
+     "dwell_seconds": 10,
+     "screen": {
+      "module": "Team tools",
+      "title": "Macro archive",
+      "chip": null,
+      "blocks": [
+       {
+        "type": "table",
+        "heading": "Archived macros",
+        "columns": [
+         "Name",
+         "Last run attempt",
+         "State"
+        ],
+        "rows": [
+         [
+          "Closure wrap-up (legacy)",
+          "2025-11-04",
+          "archived"
+         ],
+         [
+          "Fee apology draft (legacy)",
+          "\u2014",
+          "archived"
+         ],
+         [
+          "Address confirm (legacy)",
+          "\u2014",
+          "archived"
+         ]
+        ]
+       }
+      ]
+     },
+     "actions": []
+    }
+   ],
+   "events": [
+    {
+     "kind": "context",
+     "start_seconds": 0,
+     "end_seconds": 10,
+     "fact_ids": null,
+     "disposition": null,
+     "caption": "Macro archive list, three legacy entries"
+    },
+    {
+     "kind": "context",
+     "start_seconds": 10,
+     "end_seconds": 21,
+     "fact_ids": null,
+     "disposition": null,
+     "caption": "Legacy wrap-up macro opened in preview"
+    },
+    {
+     "kind": "distractor",
+     "start_seconds": 21,
+     "end_seconds": 31,
+     "fact_ids": null,
+     "disposition": "rejected",
+     "caption": "Run attempt on the archived macro refused with a warning"
+    },
+    {
+     "kind": "context",
+     "start_seconds": 31,
+     "end_seconds": 41,
+     "fact_ids": null,
+     "disposition": null,
+     "caption": "Archive unchanged, last-run-attempt column updates"
+    }
+   ],
+   "timeline": [
+    {
+     "start": 0,
+     "end": 10,
+     "text": "Team tools, macro archive. Three legacy macros listed \u2014 Closure wrap-up, Fee apology draft, Address confirm \u2014 all in the archived state, last used between March and May."
+    },
+    {
+     "start": 10,
+     "end": 21,
+     "text": "The agent opens Closure wrap-up (legacy). The preview shows a stale template body with unresolved variables, and the agent types case CS-90233 into the target field and clicks Run against case."
+    },
+    {
+     "start": 21,
+     "end": 31,
+     "text": "A warning callout blocks it in the next state: legacy macros are read-only in the archive and can't run against live cases; the current wrap-up flow in Account actions is pointed to instead. The chip flips to Blocked."
+    },
+    {
+     "start": 31,
+     "end": 41,
+     "text": "Back on the archive list nothing has changed except bookkeeping \u2014 the Closure wrap-up row now shows a last run attempt of 2025-11-04, still archived."
+    }
+   ],
+   "anchors": {}
+  }
+ ]
+}

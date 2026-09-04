@@ -1,0 +1,145 @@
+WEBVTT
+
+00:00:03.726 --> 00:00:39.009
+<v Margo Hale>Alright, this is the Q4 referral retro, Wednesday November twelfth, and we've got the full cast: growth, finance, web, app, support, QA, and Tomas for the business desk. We booked forty-five minutes and I intend to use them, because this quarter had a launch, two wind-downs, one incident, and a proposal we killed, and every one of those has a lesson in it. Format is readouts then discussion. Gideon, you asked to go first.
+
+00:00:41.055 --> 00:01:38.407
+<v Gideon Frank>I did, because finance's readout frames the rest. The quarter did what we designed it to do. The two refreshed consumer programs are tracking to the acquisition model, redemption pacing is inside the band we costed, and the caps are doing their job, the distribution of bonuses per customer has exactly the shape we wanted, a wide base and a short tail. The wind-downs on the business side came in clean from an exposure standpoint. And the one thing I want on the record: the discipline of numbers living in dated notes and documents held up this cycle, and every dispute we did get was resolvable by pointing at a dated source. That's new. Keep it.
+
+00:01:42.930 --> 00:01:50.195
+<v Margo Hale>Web next. Irwin, the honest version, including the part where I made your week hard.
+
+00:01:52.896 --> 00:02:48.749
+<v Irwin Doyle>The honest version is the plan worked but I don't love that we needed it. We went to go-live with interim copy on two product pages because the rebuilds weren't done, and as of today they're still not done, legal's second read is scheduled for next week. So for two weeks and counting, the interim pages have been doing the job, pointing people at the app dashboard and card services instead of showing stale offers. Traffic on those pages is normal, bounce is fine, and support tells me the confusion calls are low single digits per day. The lesson I'm taking: interim-by-design beats late-and-wrong, and I want interim copy to be a standing pattern for every future refresh, drafted in the same sprint as the offer decision, not improvised in the last week.
+
+00:02:53.505 --> 00:03:35.162
+<v Priscilla Ng>Adding the mechanical note for the record: the archive-then-interim sequence on go-live morning ran exactly as rehearsed, old pages captured to the content library at seven, interim live by eight, and we have the capture refs if anyone needs the before state. The one wrinkle was self-inflicted, a staging capture of the dead Blitz page was still sitting in the shared library folder, and someone in a training cohort found it and asked if it was current. It is labeled as staging in the ref, but I'd like us to talk about whether dead drafts belong in the same folder as live captures.
+
+00:03:37.877 --> 00:03:43.486
+<v Margo Hale>Flagging that for the discussion block, it's a real question. Support readout. Shreya.
+
+00:03:47.307 --> 00:04:35.401
+<v Shreya Banerjee>Support's quarter in three numbers, spoken loosely: cap-related complaints are down by more than half compared to the spring cycle, screening-related escalations are near zero since readiness, and link-tool questions spiked for exactly one day, which was the incident, and I'll hand that to Karim rather than steal his story. The calibration in mid-October is the single highest-leverage thing we did. The complaint pattern before it was always the same, an agent explaining the weekly cap wrong in one of two specific ways, and since the sixteenth I have not seen a single new complaint with that signature. The tape plus the QA rubric closed a failure mode. My ask for next cycle is one calibration per quarter as a standing item, not just when complaints force it.
+
+00:04:40.336 --> 00:05:16.777
+<v Nadia Petrov>QA rides on that. The kept-call library grew by four entries this quarter, all referral-related, ratified across two norming sessions, and the newer agents are audibly imitating them, which is the whole point. The library now covers the link handoff end to end and three distinct flavors of turning a request down well. What's missing, and I'll put it on my own list, is a kept call for the attribution-dispute conversation on the business side, Tomas has candidates but none of them are clean enough to keep yet.
+
+00:05:17.845 --> 00:06:16.430
+<v Tomas Lindgren>The desk's readout is mostly the wind-downs, so let me do those. Two programs closed to new referrals this quarter, on their documented dates, and the desk load around each closure was a two-week bump of the same three questions: am I losing my in-flight bonus, can I squeeze one more in, and why is it closing. The document-first habit carried it. I want to credit the September walkthrough, we drilled exactly the panicking-customer conversation two weeks before the desk started having it daily, and the difference between rehearsed and unrehearsed was audible on the tapes. One process gap did bite us twice: a customer got a draft version of a terms document from an agent's old email, quoted the draft numbers at the desk, and we burned twenty minutes on confusion the filename convention should have prevented. Both cases traced to forwarding old mail instead of pulling from the desk share.
+
+00:06:20.083 --> 00:06:30.095
+<v Margo Hale>Which is the second item for the discussion block, drafts in the wild. App. Karim, your quarter had the incident, take your time.
+
+00:06:32.813 --> 00:07:33.105
+<v Karim Haddad>Two halves, the release and the incident. Release first: three nine shipped in mid-October with the reworked status legend and the needs-attention view, and the design goal was that a customer whose referral goes sideways can find out what happened and what to do without calling us. Early signal is good, the legend sheet gets opened a lot in the first week of a referral's life and the needs-attention view resolves most of its visits without a support contact following within a day. The label rename generated the confusion we predicted, people on the old version asking why their friend's app says something different, and I owed the support channel a note about it, which went out the first week of November, later than it should have.
+
+00:07:35.668 --> 00:08:35.210
+<v Karim Haddad>Now the incident, November fifth, and I'll do the full anatomy because the lessons are all in the details. At nine twelve in the morning we shipped a backend config change meant to tighten rate limiting on an unrelated endpoint. The change had a scoping bug, and for four hours and change, the link generation service was returning errors for a slice of requests, weighted toward exactly the customers doing what we tell them to do, running the tool themselves. Support saw it immediately, the channel thread from that morning is a model of what good escalation looks like, timestamps, error strings, affected-customer counts, no speculation. We rolled back at one thirty, links generated after the rollback were fine, and every referral that errored during the window was retriable, nothing was lost, because the failure was at generation, before any record existed.
+
+00:08:38.613 --> 00:09:42.731
+<v Karim Haddad>Lessons, three of them. One, the error the customers saw was generic, it said try again later without saying anything true about why, and a better message was one sprint of work we'd deprioritized twice, that's now done and shipping this week. Two, support's first question was whether errored referrals would auto-retry, and engineering's answer took ninety minutes to produce, which is ninety minutes of agents hedging on the phones. The behavior is now documented where support can find it. Three, and this is the one I care about, the incident never touched referral records or statuses, but two customers got told by well-meaning agents that their existing referrals might be affected, because in the fog it was hard to say confidently what the blast radius was. Blast-radius clarity needs to be in the first responder message, not discovered by the third.
+
+00:09:46.490 --> 00:10:07.402
+<v Shreya Banerjee>I'll co-sign the escalation praise and add the human note: the agent who ran that thread had been here five weeks. The reason it went well is that the channel has a visible pattern to imitate. Same mechanism as the kept calls. Patterns propagate, which is an argument for curating them deliberately everywhere, not just in QA.
+
+00:10:11.260 --> 00:10:25.743
+<v Gideon Frank>Before we leave the incident, finance's question for the record, since I'll be asked: was there any bonus exposure in the window? Anything that paid or failed to pay because of it?
+
+00:10:31.377 --> 00:10:59.868
+<v Karim Haddad>None, and I can say that flatly because of where the failure sat. Link generation is upstream of everything that has money attached. A link that never generated created no referral record, no attribution, no bonus obligation in either direction. The affected customers lost time and patience, not entitlements, and the retries after rollback put them exactly where they'd have been at nine in the morning.
+
+00:11:02.521 --> 00:11:11.478
+<v Tomas Lindgren>Same question from the desk angle: my customers submit through the portal as often as through the link. Did the portal path wobble?
+
+00:11:16.938 --> 00:11:43.989
+<v Karim Haddad>The portal path rides the same service, so yes in principle, but the desk's volume in that window was two submissions, both errored cleanly, both resubmitted the same day by the customers. Louise confirmed both by close of business. If either had been time-sensitive against a program window we'd have had a real problem, which is one more reason the better error message mattered.
+
+00:11:50.254 --> 00:12:06.310
+<v Nadia Petrov>And to tie it to Shreya's point: I'm clipping that channel thread into the training set alongside the kept calls, with the timestamps intact. It's the first non-call artifact in the set, and it earns its place the same way, complete pattern, clean execution.
+
+00:12:14.677 --> 00:12:27.279
+<v Margo Hale>Good. Let's take the stretch break here, five minutes, because the next block is dense. I'm leaving the recording running, so mind what you say about your fantasy league.
+
+00:17:25.420 --> 00:17:37.396
+<v Margo Hale>Alright, we're back. One more topic before my readout, because Shreya put it on the agenda: the label rename fallout. Give us the shape of it.
+
+00:17:41.752 --> 00:18:07.923
+<v Shreya Banerjee>Small but persistent. A handful of contacts a week, all the same shape: two people compare dashboards on different app versions, see different words for the same referral state, and one of them concludes something is wrong with their referral. No harm in any of them, just reassurance calls, but the reassurance was improvised until Karim's note gave the phones a shared sentence.
+
+00:18:09.499 --> 00:18:49.560
+<v Karim Haddad>For the minutes, since not everyone was in the release review: the rename wasn't cosmetic. The old label read as if the customer should do something, and the support data said people called when they saw it. The new legend names the state after what the applicant did, and the two exception states route to an in-context explanation instead of a one-line label. The design bet is that a customer who taps gets a complete answer where they're standing, and the early dashboard numbers back it.
+
+00:18:54.312 --> 00:19:20.827
+<v Irwin Doyle>Web's piece of that bet, also for the minutes: the dashboard help article got rewritten in late October to stop paraphrasing status labels entirely. It teaches the navigation and sends people to the in-app legend for meanings. One source for semantics instead of two drifting ones. The old article restated the labels and it aged badly every time the app moved.
+
+00:19:23.802 --> 00:19:43.666
+<v Margo Hale>Which is the same lesson as the go-live note again, one dated source and pointers to it. Last readout topic, program integrity, because Nadia and I promised the audit committee a quarterly word on it and this recording is where the word lives.
+
+00:19:48.894 --> 00:20:26.722
+<v Nadia Petrov>It was a quiet quarter, which is the headline. Three integrity flags total. One was a customer who invited her own small business under a second email, the checks caught the overlap at application and the referral simply didn't attach, and the support call afterward was short because the agent could point at the program page saying exactly that. One was the mail-merge pattern on the business side, which Tomas's desk caught conversationally before it became a review problem, and I want that on the record as prevention working. The third is still in review and I won't characterize it while it is.
+
+00:20:32.712 --> 00:20:49.045
+<v Tomas Lindgren>The desk note on the second one: the customer was gracious about it, and the reason the conversation worked is that the conduct expectations are written where we can read them to people. Reading beats reciting, quarter after quarter.
+
+00:20:52.021 --> 00:21:21.231
+<v Gideon Frank>And finance's interest in integrity is simple: every flag that gets caught at application or at the desk costs us a conversation, and every one that gets caught at review costs us a clawback and usually a complaint. Three flags, two caught early, one pending, zero clawbacks. That line is the one I report upward. Whatever the desk and the checks are doing, it's cheaper than the alternative.
+
+00:21:25.722 --> 00:22:37.193
+<v Margo Hale>Good quarter on that front, agreed, and the third one stays out of the minutes until review closes. Okay, my readout, then discussion. The refresh itself: both go-live messages went out on schedule on the thirtieth, morning of, to both lists, and I want to acknowledge the near miss in the second one, a wrong figure survived into the final draft and got caught in the thread before send. Caught is the system working, but I've changed my drafting process anyway, the numbers table now gets pasted from the signed finance sheet, never retyped, because retyping is where that error came from. The Blitz, to close that loop for the record: proposed in September, finance said no in writing on the thirtieth of September, and the concept is dead, the only artifact that survives is a staging capture in the content library, which brings us neatly to Priscilla's question. Discussion block, drafts and dead things. Go.
+
+00:22:40.516 --> 00:22:59.145
+<v Priscilla Ng>My position: the content library should be complete, including dead drafts, because the library is a record, not a menu. The fix for the training-cohort confusion isn't deleting history, it's that whoever builds training decks shouldn't be browsing the raw library. Curate a teaching set.
+
+00:23:05.521 --> 00:23:28.300
+<v Tomas Lindgren>Same conclusion from the desk side for documents. I don't want draft files purged, I want them impossible to mistake for current at the moment of sending, and the filename convention already does that if people pull from the share instead of their own sent mail. The failure is the workflow, not the archive.
+
+00:23:34.045 --> 00:23:53.064
+<v Nadia Petrov>And the QA angle: both confusions this quarter, the Blitz capture and the drafted terms, were resolved by someone checking a date against a dated source, which is exactly the muscle we train. So the archives are fine, the muscle works, keep both, add the curation layer for training materials.
+
+00:23:55.253 --> 00:24:25.596
+<v Gideon Frank>I'll push on one edge of it, because complete archives have a cost too. The Blitz capture is harmless precisely because the rejection has a paper trail with a date. If we're committing to keep dead drafts around forever, we're also committing to killing things in writing, every time, dated, no pocket vetoes. The archive is only safe when every corpse has a certificate.
+
+00:24:30.218 --> 00:24:52.469
+<v Margo Hale>That's fair, and it's already how I want us operating. Nothing dies in a hallway. If a proposal ends, it ends in a dated message someone can find, and the two we killed this cycle both have one. Put it in the minutes as a norm: dated verdicts, always.
+
+00:24:57.019 --> 00:25:09.911
+<v Priscilla Ng>Works for me, and it makes the teaching-set job easier, the curated set can carry the pairing, artifact plus verdict, which is honestly the most instructive shape for trainees anyway.
+
+00:25:14.081 --> 00:25:36.330
+<v Margo Hale>Consensus, then: archives stay complete, dated verdicts as a norm, training materials get a curated set, Priscilla owns the teaching-set proposal, Tomas re-circulates the pull-from-share habit at the desk. Next block: spring cycle, early positions, because the planning calendar starts sooner than anyone wants. Gideon, you had a structural ask.
+
+00:25:40.436 --> 00:26:08.389
+<v Gideon Frank>I do. This cycle we refreshed two programs on one day, which concentrated the risk and, to be fair, concentrated the effort too. For spring I want us to at least cost out staggering: one program flips, two weeks of observation, then the next. The interim-page pattern makes staggering cheap on the web side, and finance gets a natural experiment out of the sequencing.
+
+00:26:11.057 --> 00:26:39.185
+<v Irwin Doyle>Web can support either shape if the interim copy is drafted early, that's the real constraint, not the calendar. My hesitation on staggering is narrative: two go-live notes two weeks apart means two mornings where the desk has to be sharp about which program flipped, and the confusion calls we do get are exactly the ones where a customer heard about the other program's change.
+
+00:26:44.499 --> 00:27:03.813
+<v Shreya Banerjee>Support's experience says simultaneous was actually fine this cycle because there was one note, one date, one sentence to say on the phones. I'd want to see the staggering benefit priced before I trade that away. But I'm open, and either way the readiness format doesn't change.
+
+00:27:06.709 --> 00:27:35.366
+<v Ada Okonjo>From the business side, a request whichever way you go: give me the spring dates as soon as they're penciled. Both of my wind-downs this quarter landed adjacent to your go-live by accident, and the desk absorbed three overlapping waves of customer questions in five weeks. Sequencing across the whole portfolio, not just within the consumer programs, would have spread that load.
+
+00:27:39.019 --> 00:28:12.389
+<v Margo Hale>That's a real miss on my part this cycle, the calendars never sat side by side until the desk was already underwater. For spring they start joined. Decision for today: Gideon costs out staggering with Irwin's narrative concern and Shreya's one-note point in the memo, Ada's calendar merges into the planning sheet from day one, and we pick a shape at the January planning session, not before. Last block, next cycle. Quick wants, one each.
+
+00:28:16.690 --> 00:28:27.233
+<v Gideon Frank>Standing quarterly calibration, as Shreya said, and I want the numbers-table-not-retyped rule written into the go-live checklist, not just Margo's personal habit.
+
+00:28:30.843 --> 00:28:44.776
+<v Irwin Doyle>Interim copy drafted the same week the offer decision is made. And the two rebuilt pages live before the spring cycle planning starts, which is a promise I'm making publicly so I keep it.
+
+00:28:49.058 --> 00:29:01.469
+<v Karim Haddad>The support-facing release note goes out the day a label or flow changes, not when I get around to it. It's a template now, there's no excuse left.
+
+00:29:04.662 --> 00:29:16.361
+<v Shreya Banerjee>Readiness sessions stay conduct-only, it aged perfectly, and I want the incident-response pattern from the fifth written up as a channel pinned example the way QA pins kept calls.
+
+00:29:21.431 --> 00:29:28.732
+<v Nadia Petrov>A kept call for the attribution dispute by end of quarter, and norming stays biweekly through the spring refresh.
+
+00:29:32.512 --> 00:29:41.181
+<v Tomas Lindgren>A calmer quarter. Failing that, the wind-down playbook we improvised written down while we still remember why each step exists.
+
+00:29:46.477 --> 00:30:13.977
+<v Margo Hale>All noted and all in the minutes. This was a good quarter, people. Two programs launched clean, two retired clean, one bad idea killed with a paper trail, one incident handled like grown-ups. The pattern under all of it is the same: dated sources, visible examples, and nobody working from memory. Let's do it again in the spring. Thanks, everyone.

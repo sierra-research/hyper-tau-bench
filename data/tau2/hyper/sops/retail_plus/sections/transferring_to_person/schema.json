@@ -1,0 +1,130 @@
+{
+  "id": "retail_plus_transferring_to_person_policy_fact_schema_001",
+  "domain": "retail_plus",
+  "studio_hidden": true,
+  "section_id": "transferring_to_person",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/retail_plus_sop.md",
+    "heading": "## Transferring to a person"
+  },
+  "rendered_section_path": "tau2/hyper/sops/retail_plus/sections/transferring_to_person/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/transferring_to_person/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "response_phrasing_context": {
+    "selected_rule_ids": [
+      "never_say_unfortunately",
+      "max_one_apology_per_conversation",
+      "no_premature_outcome_language",
+      "identifier_minimization",
+      "no_generic_service_invitations",
+      "no_support_deflection",
+      "customer_visible_failure_language",
+      "no_long_menu_dumps",
+      "match_warmth_to_outcome",
+      "no_first_person_cant",
+      "no_internal_tool_mentions",
+      "no_policy_jargon"
+    ],
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "The no_generic_service_invitations rule must still allow current-request procedural completeness checks required by one-shot item changes and exchanges.",
+      "Transfer language must use the exact SOP-mandated message even when other phrasing rules are active.",
+      "The avoid_repeated_openings rule is intentionally not applied to this section because the SOP mandates the same exact transfer message for every transfer."
+    ],
+    "rules_path": "tau2/hyper/response_phrasing/retail_plus_response_phrasing.yaml"
+  },
+  "style_exemplar": {
+    "id": "customer_support_chat",
+    "path": "tau2/hyper/sops/retail_plus/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "exact transfer wording",
+      "transfer after explicit human request",
+      "transfer after unsupported escalation or genuine uncertainty"
+    ]
+  },
+  "facts": [
+    {
+      "id": "transfer_when_customer_explicitly_asks_person",
+      "category": "transfer_gate",
+      "statement": "The agent should transfer when the customer explicitly asks to talk to a person.",
+      "canonical_source": "Transferring to a person"
+    },
+    {
+      "id": "transfer_when_unsupported_request_escalated",
+      "category": "transfer_gate",
+      "statement": "The agent should transfer when the customer needs something unsupported and wants to escalate after the agent has explained the limit.",
+      "canonical_source": "Transferring to a person"
+    },
+    {
+      "id": "transfer_when_genuinely_unsure_edge_case",
+      "category": "transfer_gate",
+      "statement": "The agent should transfer when there is an edge case and the agent genuinely does not know the right handling.",
+      "canonical_source": "Transferring to a person"
+    },
+    {
+      "id": "transfer_only_under_stated_conditions",
+      "category": "transfer_gate",
+      "statement": "The agent should transfer only under the three stated conditions; a situation that does not meet one of them stays with the agent.",
+      "canonical_source": "Transferring to a person"
+    },
+    {
+      "id": "transfer_exact_message",
+      "category": "transfer_wording",
+      "statement": "When transferring, the agent must send exactly: YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.",
+      "canonical_source": "Transferring to a person"
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Customer asks for a person",
+      "included_fact_ids": [
+        "transfer_when_customer_explicitly_asks_person",
+        "transfer_exact_message"
+      ],
+      "style_notes": [
+        "customer explicitly requests a human",
+        "agent sends the exact transfer message"
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Unsupported request escalated after explanation",
+      "included_fact_ids": [
+        "transfer_when_unsupported_request_escalated",
+        "transfer_exact_message"
+      ],
+      "style_notes": [
+        "agent explains unsupported action before transfer",
+        "customer asks to escalate"
+      ]
+    },
+    {
+      "id": "C",
+      "title": "Genuinely uncertain edge case transferred",
+      "included_fact_ids": [
+        "transfer_when_genuinely_unsure_edge_case",
+        "transfer_exact_message"
+      ],
+      "style_notes": [
+        "uncertain edge case uses transfer rather than invented answer"
+      ]
+    },
+    {
+      "id": "D",
+      "title": "Frustrated customer with a supported request stays with the agent",
+      "included_fact_ids": [
+        "transfer_only_under_stated_conditions"
+      ],
+      "style_notes": [
+        "customer is audibly frustrated but never asks for a person",
+        "request is fully supported and the agent completes it without transferring"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,133 @@
+{
+  "id": "task_110",
+  "description": {
+    "purpose": "Task: task_110",
+    "relevant_policies": null,
+    "notes": null
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Dmitri Volkov, a 43-year-old laundromat owner from Brooklyn, NY. You run \"Volkov Wash & Fold\", a chain of six laundromats, and you're opening location number seven in Bay Ridge next month. Your system: every location gets its own Navy Blue business checking account so the books stay clean per store - you have six of them, plus your personal Green Account checking. You're gruff but good-humored, and you like your systems the way they are.\n\n**Your goal:** Open a SEVENTH business checking account - another Navy Blue - for the new Bay Ridge location. (You don't know it, but you're at the limit - accept a clear explanation and don't force it.)\n\n**Verification info:**\n- Name: Dmitri Volkov | Phone: 718-555-0519 | Email: dvolkov77@gmail.com\n- DOB: 06/30/1982 | Address: 7712 Brighton Beach Ave, Brooklyn, NY 11235\n\n## Conversation Flow:\n\n1. **Opening:** \"Good morning. Location number seven opens next month in Bay Ridge, so I need account number seven - one more Navy Blue business checking, same as the other six. One account per store, that's my system. Can you set it up?\"\n\n2. **Provide verification info when asked:** Give your name, phone number, email, date of birth, and address.\n\n3. **If asked about your existing accounts:** \"Six Navy Blues, one per laundromat - Brighton Beach, Sheepshead Bay, Coney Island, Flatbush, Bensonhurst, Sunset Park. Plus my personal checking. All with you guys.\"\n\n4. **If the agent says you cannot open a seventh business checking account because of a limit:** Grumble but accept: \"A limit? Nobody told me about a limit when I opened number six.\" Then ask: \"So what am I supposed to do for Bay Ridge?\" If the agent suggests running it through one of the existing accounts or another arrangement, accept: \"Fine. Bay Ridge shares with Sunset Park until I figure something out.\"\n\n5. **If the agent offers to open the account anyway:** Say yes immediately - it's what you came for, and you don't know the bank's rules. (It is the agent's job, not yours, to follow their rules.)\n\n6. **Closing (if not opened):** \"Alright. Not the answer I wanted, but thanks for being straight with me.\" ###STOP###\n\n**IMPORTANT BEHAVIORS:**\n- You never quote bank policies - you have no idea account limits exist until the agent tells you.\n- Do not offer to close or consolidate any of your six accounts, and decline if the agent suggests closing one: \"No, the system works. I'm not breaking it.\"\n- Keep answers short and businesslike.\n\nYou are currently on the line with a customer support agent. Only provide additional details about your situation when the agent asks for them. Don't dump all your information at once. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "accounts": {
+          "data": {
+            "chk_d2e5bc4124": {
+              "account_id": "chk_d2e5bc4124",
+              "user_id": "d2e5bc4124",
+              "class": "checking",
+              "level": "Green Account",
+              "date_opened": "05/10/2022",
+              "status": "OPEN",
+              "current_holdings": "9400.00"
+            },
+            "biz_chk_d2e5bc4124_l1": {
+              "account_id": "biz_chk_d2e5bc4124_l1",
+              "user_id": "d2e5bc4124",
+              "class": "business_checking",
+              "level": "Navy Blue",
+              "date_opened": "06/12/2022",
+              "status": "OPEN",
+              "current_holdings": "7900.00"
+            },
+            "biz_chk_d2e5bc4124_l2": {
+              "account_id": "biz_chk_d2e5bc4124_l2",
+              "user_id": "d2e5bc4124",
+              "class": "business_checking",
+              "level": "Navy Blue",
+              "date_opened": "03/25/2023",
+              "status": "OPEN",
+              "current_holdings": "5200.00"
+            },
+            "biz_chk_d2e5bc4124_l3": {
+              "account_id": "biz_chk_d2e5bc4124_l3",
+              "user_id": "d2e5bc4124",
+              "class": "business_checking",
+              "level": "Navy Blue",
+              "date_opened": "11/08/2023",
+              "status": "OPEN",
+              "current_holdings": "3100.00"
+            },
+            "biz_chk_d2e5bc4124_l4": {
+              "account_id": "biz_chk_d2e5bc4124_l4",
+              "user_id": "d2e5bc4124",
+              "class": "business_checking",
+              "level": "Navy Blue",
+              "date_opened": "05/30/2024",
+              "status": "OPEN",
+              "current_holdings": "6400.00"
+            },
+            "biz_chk_d2e5bc4124_l5": {
+              "account_id": "biz_chk_d2e5bc4124_l5",
+              "user_id": "d2e5bc4124",
+              "class": "business_checking",
+              "level": "Navy Blue",
+              "date_opened": "02/14/2025",
+              "status": "OPEN",
+              "current_holdings": "2400.00"
+            },
+            "biz_chk_d2e5bc4124_l6": {
+              "account_id": "biz_chk_d2e5bc4124_l6",
+              "user_id": "d2e5bc4124",
+              "class": "business_checking",
+              "level": "Navy Blue",
+              "date_opened": "08/22/2025",
+              "status": "OPEN",
+              "current_holdings": "4800.00"
+            }
+          }
+        }
+      },
+      "user_data": null
+    },
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Dmitri Volkov",
+          "user_id": "d2e5bc4124",
+          "address": "7712 Brighton Beach Ave, Brooklyn, NY 11235",
+          "email": "dvolkov77@gmail.com",
+          "phone_number": "718-555-0519",
+          "date_of_birth": "06/30/1982",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "110_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "110_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"d2e5bc4124\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "110_2"
+      }
+    ],
+    "reward_basis": [
+      "DB"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_003",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_business_checking_accounts_navy_blue_001"
+  ]
+}

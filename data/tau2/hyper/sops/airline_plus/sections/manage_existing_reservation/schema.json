@@ -1,0 +1,1864 @@
+{
+  "id": "airline_plus_manage_existing_reservation_policy_fact_schema_001",
+  "domain": "airline_plus",
+  "display_name": "Manage existing reservation",
+  "global_rules_path": "tau2/hyper/sops/airline_plus/global_rules.json",
+  "section_id": "manage_existing_reservation",
+  "composed_from_sections": [
+    "authorized_scope",
+    "modifying_reservation",
+    "cancelling_reservation",
+    "compensation_certificates"
+  ],
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/airline_plus_sop.md",
+    "heading": "## Manage an Existing Reservation",
+    "component_headings": [
+      "## 2. What you're authorized to do",
+      "## 8. Modifying a Reservation",
+      "## 9. Cancelling a Reservation",
+      "## 10. Compensation and Certificates"
+    ]
+  },
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": [
+      {
+        "section_id": "customer_identity",
+        "fact_ids": [
+          "customer_provided_user_id_required_for_reservation_actions"
+        ],
+        "relationship": "shared_reference",
+        "description": "Modification and cancellation start only after the customer has provided the user ID required for reservation actions."
+      }
+    ]
+  },
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/airline_plus/hard_bundle_001/manage_transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/airline_plus/hard_bundle_001/client_overlay/manage_client_transformation_pack.json"
+    }
+  ],
+  "transformations": [
+    {
+      "id": "manage_scope_email_archive",
+      "representation": "email_thread_archive",
+      "stub_path": "tau2/hyper/sops/airline_plus/sections/manage_existing_reservation/bundles/manage_existing_reservation_multimodal/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/010_RE_Initial_servicing_categories_for_the_purple_build.eml",
+          "kit_filename": "010_RE_Initial_servicing_categories_for_the_purple_build.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/011_RE_Servicing_matrix_revision_after_baggage_review.eml",
+          "kit_filename": "011_RE_Servicing_matrix_revision_after_baggage_review.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/012_RE_Interim_servicing_mix_for_UAT_round_two.eml",
+          "kit_filename": "012_RE_Interim_servicing_mix_for_UAT_round_two.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/013_RE_Queue_taxonomy_cleanup_reservation_servicing.eml",
+          "kit_filename": "013_RE_Queue_taxonomy_cleanup_reservation_servicing.eml",
+          "included_fact_ids": [
+            "modify_existing_reservation_allowed"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/014_RE_Room_dial_in_and_recording_plan.eml",
+          "kit_filename": "014_RE_Room_dial_in_and_recording_plan.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/015_RE_Cancellation_pilot_acceptance_notes.eml",
+          "kit_filename": "015_RE_Cancellation_pilot_acceptance_notes.eml",
+          "included_fact_ids": [
+            "cancel_reservation_allowed_when_policy_allows"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/016_RE_Coverage_plan_for_the_holiday_test_week.eml",
+          "kit_filename": "016_RE_Coverage_plan_for_the_holiday_test_week.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/017_RE_Service_recovery_certificate_controls.eml",
+          "kit_filename": "017_RE_Service_recovery_certificate_controls.eml",
+          "included_fact_ids": [
+            "compensation_allowed_in_specific_cases"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/018_RE_Ticket_category_names_for_weekly_reporting.eml",
+          "kit_filename": "018_RE_Ticket_category_names_for_weekly_reporting.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/019_RE_Final_pass_on_pilot_journey_inventory.eml",
+          "kit_filename": "019_RE_Final_pass_on_pilot_journey_inventory.eml",
+          "included_fact_ids": [
+            "authorized_actions_closed_scope"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/020_RE_Status_page_banner_feed_and_copy_review.eml",
+          "kit_filename": "020_RE_Status_page_banner_feed_and_copy_review.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/021_RE_Contact_detail_correction_option_from_journey_workshop.eml",
+          "kit_filename": "021_RE_Contact_detail_correction_option_from_journey_workshop.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/022_RE_Icon_and_spacing_audit_for_the_agent_workspace.eml",
+          "kit_filename": "022_RE_Icon_and_spacing_audit_for_the_agent_workspace.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/023_RE_Profile_fields_in_the_assisted_channel.eml",
+          "kit_filename": "023_RE_Profile_fields_in_the_assisted_channel.eml",
+          "included_fact_ids": [
+            "cannot_change_profile_identifying_information"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/024_RE_CRM_label_cleanup_before_enablement.eml",
+          "kit_filename": "024_RE_CRM_label_cleanup_before_enablement.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/025_RE_One_time_card_entry_fallback_discussed_for_checkout.eml",
+          "kit_filename": "025_RE_One_time_card_entry_fallback_discussed_for_checkout.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/026_RE_Save_first_option_for_cards_not_already_on_profile.eml",
+          "kit_filename": "026_RE_Save_first_option_for_cards_not_already_on_profile.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/027_RE_Procurement_appendix_and_invoice_contact_cleanup.eml",
+          "kit_filename": "027_RE_Procurement_appendix_and_invoice_contact_cleanup.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/028_RE_Limited_unsaved_card_exception_for_servicing_collections.eml",
+          "kit_filename": "028_RE_Limited_unsaved_card_exception_for_servicing_collections.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/029_RE_Secure_link_direction_after_payment_controls_review.eml",
+          "kit_filename": "029_RE_Secure_link_direction_after_payment_controls_review.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/030_RE_Payment_instrument_handling_for_assisted_transactions.eml",
+          "kit_filename": "030_RE_Payment_instrument_handling_for_assisted_transactions.eml",
+          "included_fact_ids": [
+            "cannot_accept_unsaved_payment_method"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/031_RE_Archive_cleanup_for_old_test_reservations.eml",
+          "kit_filename": "031_RE_Archive_cleanup_for_old_test_reservations.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/032_RE_Post_departure_requests_in_pilot_UAT.eml",
+          "kit_filename": "032_RE_Post_departure_requests_in_pilot_UAT.eml",
+          "included_fact_ids": [
+            "cannot_alter_departed_flight"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/033_RE_Executive_demo_agenda_and_presenter_order.eml",
+          "kit_filename": "033_RE_Executive_demo_agenda_and_presenter_order.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/034_RE_Launch_week_communications_checklist.eml",
+          "kit_filename": "034_RE_Launch_week_communications_checklist.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/035_RE_Localization_glossary_review_for_pilot_materials.eml",
+          "kit_filename": "035_RE_Localization_glossary_review_for_pilot_materials.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/036_RE_Post_pilot_survey_routing_and_response_ownership.eml",
+          "kit_filename": "036_RE_Post_pilot_survey_routing_and_response_ownership.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/040_RE_Early_brainstorm_servicing_request_buckets.eml",
+          "kit_filename": "040_RE_Early_brainstorm_servicing_request_buckets.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/043_RE_Compensation_rows_in_the_weekly_reporting_sample.eml",
+          "kit_filename": "043_RE_Compensation_rows_in_the_weekly_reporting_sample.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/046_RE_Meridian_Care_escalation_rota_for_the_pilot.eml",
+          "kit_filename": "046_RE_Meridian_Care_escalation_rota_for_the_pilot.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/047_RE_Logging_compensation_mentions_in_servicing_notes.eml",
+          "kit_filename": "047_RE_Logging_compensation_mentions_in_servicing_notes.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/048_RE_February_goodwill_batch_reconciliation.eml",
+          "kit_filename": "048_RE_February_goodwill_batch_reconciliation.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/049_RE_Verification_checklist_for_disruption_claims.eml",
+          "kit_filename": "049_RE_Verification_checklist_for_disruption_claims.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/email_thread_archive_001/050_RE_Care_page_copy_check_for_certificate_tiers.eml",
+          "kit_filename": "050_RE_Care_page_copy_check_for_certificate_tiers.eml",
+          "included_fact_ids": []
+        }
+      ]
+    },
+    {
+      "id": "manage_scope_kickoff_document",
+      "representation": "customer_kickoff_document",
+      "stub_path": "tau2/hyper/sops/airline_plus/sections/manage_existing_reservation/bundles/manage_existing_reservation_multimodal/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/customer_kickoff_document_001/airline_agent_discovery_intake.md",
+          "kit_filename": "airline_agent_discovery_intake.md",
+          "eval_manifest_path": "tau2/hyper/sops/airline_plus/sections/authorized_scope/customer_kickoff_document_001/eval_manifest.json",
+          "included_fact_ids": [
+            "cannot_add_payment_method",
+            "cannot_change_passenger_count_existing_reservation"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "modification_visual_hybrid_screenshots",
+      "representation": "website_screenshot",
+      "stub_path": "tau2/hyper/sops/airline_plus/sections/manage_existing_reservation/bundles/manage_existing_reservation_multimodal/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/website_screenshot_002/travel_certificate_unavailable_with_images.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/website_screenshot_002/travel_certificate_unavailable.html",
+          "included_fact_ids": [
+            "travel_certificates_not_allowed_for_modification_payment"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/website_screenshot_003/gift_card_insufficient_balance_with_images.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/website_screenshot_003/gift_card_insufficient_balance.html",
+          "included_fact_ids": [
+            "modification_gift_card_must_cover_charge"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "modification_visual_hybrid_records",
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/airline_plus/sections/manage_existing_reservation/bundles/manage_existing_reservation_multimodal/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_001.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_002.md",
+          "included_fact_ids": [
+            "reservation_id_or_profile_lookup",
+            "basic_economy_no_flight_changes",
+            "checked_bags_can_be_added_not_removed",
+            "additional_checked_bag_cost"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_003.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_004.md",
+          "included_fact_ids": [
+            "non_basic_flight_change_preserve_origin_destination_trip_type",
+            "flight_change_kept_segments_preserve_original_price",
+            "flight_change_new_segments_use_current_price",
+            "flight_change_customer_pays_or_refunded_difference"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_005.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_006.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_007.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_008.md",
+          "included_fact_ids": [
+            "basic_economy_cabin_change_allowed_if_eligible",
+            "cabin_change_whole_reservation_only",
+            "cabin_change_reprice_all_segments_current_new_cabin_rate",
+            "cabin_change_payment_or_refund_difference"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_009.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_010.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_011.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_012.md",
+          "included_fact_ids": [
+            "cabin_change_blocked_if_any_segment_flying_or_landed",
+            "cabin_change_whole_reservation_only"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_013.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_014.md",
+          "included_fact_ids": [
+            "checked_bags_can_be_added_not_removed",
+            "additional_checked_bag_cost",
+            "insurance_cannot_be_added_after_booking"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_015.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_016.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_017.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_018.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_019.md",
+          "included_fact_ids": [
+            "cabin_change_blocked_if_any_segment_flying_or_landed",
+            "cabin_change_whole_reservation_only",
+            "cabin_change_reprice_all_segments_current_new_cabin_rate",
+            "cabin_change_payment_or_refund_difference",
+            "modification_payment_single_saved_card_or_gift_card"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_020.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_021.md",
+          "included_fact_ids": [
+            "non_basic_flight_change_preserve_origin_destination_trip_type",
+            "flight_change_new_segments_use_current_price",
+            "flight_change_customer_pays_or_refunded_difference",
+            "modification_policy_not_system_enforced"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_022.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_023.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/bundles/modification_visual_hybrid/training_records/case_024.md",
+          "included_fact_ids": []
+        }
+      ]
+    },
+    {
+      "id": "modification_visual_hybrid_slack_mcp",
+      "representation": "slack_mcp_dump",
+      "stub_path": "tau2/hyper/sops/airline_plus/sections/manage_existing_reservation/bundles/manage_existing_reservation_multimodal/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/slack_mcp_dump_001/eval_manifest.json",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/modifying_reservation/slack_mcp_dump_001/reservation_servicing_slack_mcp_capture.json",
+          "kit_filename": "reservation_servicing_slack_mcp_capture.json",
+          "included_fact_ids": [
+            "passenger_name_or_dob_can_be_updated",
+            "passenger_count_cannot_change",
+            "supervisor_cannot_change_passenger_count"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cancellation_operations_presentation",
+      "representation": "process_presentation",
+      "stub_path": "tau2/hyper/sops/airline_plus/sections/manage_existing_reservation/bundles/manage_existing_reservation_multimodal/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/cancelling_reservation/process_presentation_001/cancellation_operations_workbook.pdf",
+          "kit_filename": "cancellation_operations_workbook.pdf",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/cancelling_reservation/process_presentation_001/cancellation_operations_workbook.txt",
+          "author_source_path": "tau2/hyper/sops/airline_plus/sections/cancelling_reservation/process_presentation_001/cancellation_operations_workbook.pptx",
+          "eval_manifest_path": "tau2/hyper/sops/airline_plus/sections/cancelling_reservation/process_presentation_001/eval_manifest.json",
+          "page_fact_ids": [
+            {
+              "page": 2,
+              "fact_ids": [
+                "cancel_identify_reservation",
+                "cancel_reason_required"
+              ]
+            },
+            {
+              "page": 3,
+              "fact_ids": [
+                "cancel_reason_options"
+              ]
+            },
+            {
+              "page": 4,
+              "fact_ids": [
+                "departed_flight_blocks_cancellation"
+              ]
+            },
+            {
+              "page": 5,
+              "fact_ids": [
+                "within_24_hours_allows_cancellation",
+                "airline_cancelled_flight_allows_cancellation",
+                "business_cabin_allows_cancellation"
+              ]
+            },
+            {
+              "page": 6,
+              "fact_ids": [
+                "insurance_health_weather_allows_cancellation",
+                "otherwise_cancellation_not_allowed"
+              ]
+            },
+            {
+              "page": 7,
+              "fact_ids": [
+                "cancellation_not_system_enforced",
+                "refund_original_payment_methods",
+                "refund_arrival_window"
+              ]
+            }
+          ],
+          "included_fact_ids": [
+            "cancel_identify_reservation",
+            "cancel_reason_required",
+            "cancel_reason_options",
+            "departed_flight_blocks_cancellation",
+            "within_24_hours_allows_cancellation",
+            "airline_cancelled_flight_allows_cancellation",
+            "business_cabin_allows_cancellation",
+            "insurance_health_weather_allows_cancellation",
+            "otherwise_cancellation_not_allowed",
+            "cancellation_not_system_enforced",
+            "refund_original_payment_methods",
+            "refund_arrival_window"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compensation_full_site_screenshots",
+      "representation": "website_screenshot",
+      "stub_path": "tau2/hyper/sops/airline_plus/sections/manage_existing_reservation/bundles/manage_existing_reservation_multimodal/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/001_home.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/001_home.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/002_book_search.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/002_book_search.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/003_flight_results.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/003_flight_results.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/004_fare_comparison.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/004_fare_comparison.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/005_traveler_details.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/005_traveler_details.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/006_seat_selection.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/006_seat_selection.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/007_trip_extras.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/007_trip_extras.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/008_review_trip.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/008_review_trip.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/009_payment.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/009_payment.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/010_booking_confirmation.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/010_booking_confirmation.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/011_sign_in.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/011_sign_in.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/012_create_account.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/012_create_account.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/013_account_overview.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/013_account_overview.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/014_profile.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/014_profile.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/015_saved_travelers.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/015_saved_travelers.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/016_wallet.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/016_wallet.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/017_trip_list.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/017_trip_list.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/018_trip_overview.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/018_trip_overview.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/019_flight_status.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/019_flight_status.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/020_check_in.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/020_check_in.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/021_boarding_pass.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/021_boarding_pass.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/022_receipts.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/022_receipts.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/023_route_map.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/023_route_map.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/024_destinations.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/024_destinations.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/025_destination_los_angeles.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/025_destination_los_angeles.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/026_destination_boston.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/026_destination_boston.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/027_travel_information.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/027_travel_information.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/028_airport_guide.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/028_airport_guide.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/029_accessibility.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/029_accessibility.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/030_help_center.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/030_help_center.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/031_contact_us.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/031_contact_us.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/032_travel_alerts.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/032_travel_alerts.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/033_care_center.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/033_care_center.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/034_care_eligibility_member.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/034_care_eligibility_member.html",
+          "included_fact_ids": [
+            "qualifies_silver_or_gold"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/035_care_eligibility_protection.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/035_care_eligibility_protection.html",
+          "included_fact_ids": [
+            "qualifies_insurance"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/036_care_eligibility_business.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/036_care_eligibility_business.html",
+          "included_fact_ids": [
+            "qualifies_business"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/037_cancelled_flight_certificate.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/037_cancelled_flight_certificate.html",
+          "included_fact_ids": [
+            "cancelled_flight_certificate_amount"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/screenshots/038_delayed_flight_certificate.png",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/website_screenshot_001_full_site/pages/038_delayed_flight_certificate.html",
+          "included_fact_ids": [
+            "delayed_flight_certificate_amount"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compensation_website_hybrid_records",
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/airline_plus/sections/manage_existing_reservation/bundles/manage_existing_reservation_multimodal/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_013.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_007.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_018.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_003.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_011.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_016.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_009.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_006.md",
+          "included_fact_ids": [
+            "deny_regular_no_insurance_economy_or_basic"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_014.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_001.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_019.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_004.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_012.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_020.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_010.md",
+          "included_fact_ids": [
+            "verify_facts_before_compensation"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_002.md",
+          "included_fact_ids": [
+            "never_proactively_offer_compensation"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_015.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_008.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_017.md",
+          "included_fact_ids": [
+            "certificates_goodwill_specific_situations"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_005.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_024.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_021.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_028.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_023.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_030.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_025.md",
+          "included_fact_ids": [
+            "no_other_compensation_reasons"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_022.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_027.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_026.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/compensation_certificates/bundles/compensation_website_hybrid/training_records/case_029.md",
+          "included_fact_ids": []
+        }
+      ]
+    }
+  ],
+  "policy_structure": {
+    "units": [
+      {
+        "id": "manage_existing_reservation_journey",
+        "label": "Manage an existing reservation",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "manage_channel_scope",
+        "label": "Lookup and channel boundaries",
+        "kind": "entry_conditions",
+        "parent_id": "manage_existing_reservation_journey",
+        "order": 1,
+        "description": "Shared entry capabilities and channel limits for all existing-reservation branches.",
+        "fact_ids": [
+          "modify_existing_reservation_allowed",
+          "cancel_reservation_allowed_when_policy_allows",
+          "compensation_allowed_in_specific_cases",
+          "authorized_actions_closed_scope",
+          "cannot_add_payment_method",
+          "cannot_change_profile_identifying_information",
+          "cannot_change_passenger_count_existing_reservation",
+          "cannot_accept_unsaved_payment_method",
+          "cannot_alter_departed_flight"
+        ]
+      },
+      {
+        "id": "modification_policy",
+        "label": "Modifying a reservation",
+        "kind": "section",
+        "fact_ids": [],
+        "parent_id": "manage_existing_reservation_journey",
+        "order": 2
+      },
+      {
+        "id": "identify_reservation_step",
+        "label": "Identify the reservation",
+        "kind": "step",
+        "parent_id": "modification_policy",
+        "order": 1,
+        "fact_ids": [
+          "reservation_id_or_profile_lookup"
+        ]
+      },
+      {
+        "id": "flight_change_decision",
+        "label": "Changing flights",
+        "kind": "decision",
+        "parent_id": "modification_policy",
+        "order": 2,
+        "fact_ids": [
+          "basic_economy_no_flight_changes",
+          "non_basic_flight_change_preserve_origin_destination_trip_type",
+          "flight_change_kept_segments_preserve_original_price",
+          "flight_change_new_segments_use_current_price",
+          "flight_change_customer_pays_or_refunded_difference"
+        ]
+      },
+      {
+        "id": "cabin_change_decision",
+        "label": "Changing cabin class",
+        "kind": "decision",
+        "parent_id": "modification_policy",
+        "order": 3,
+        "fact_ids": [
+          "cabin_change_blocked_if_any_segment_flying_or_landed",
+          "basic_economy_cabin_change_allowed_if_eligible",
+          "cabin_change_whole_reservation_only",
+          "cabin_change_reprice_all_segments_current_new_cabin_rate",
+          "cabin_change_payment_or_refund_difference"
+        ]
+      },
+      {
+        "id": "baggage_change_decision",
+        "label": "Changing baggage",
+        "kind": "decision",
+        "parent_id": "modification_policy",
+        "order": 4,
+        "fact_ids": [
+          "checked_bags_can_be_added_not_removed",
+          "additional_checked_bag_cost",
+          "insurance_cannot_be_added_after_booking"
+        ]
+      },
+      {
+        "id": "passenger_change_decision",
+        "label": "Changing passenger details",
+        "kind": "decision",
+        "parent_id": "modification_policy",
+        "order": 5,
+        "fact_ids": [
+          "passenger_name_or_dob_can_be_updated",
+          "passenger_count_cannot_change",
+          "supervisor_cannot_change_passenger_count"
+        ]
+      },
+      {
+        "id": "modification_payment_decision",
+        "label": "Settling flight or cabin price differences",
+        "kind": "decision",
+        "parent_id": "modification_policy",
+        "order": 6,
+        "description": "This payment rule is scoped to flight and cabin changes, not every modification type.",
+        "fact_ids": [
+          "modification_payment_single_saved_card_or_gift_card",
+          "travel_certificates_not_allowed_for_modification_payment",
+          "modification_gift_card_must_cover_charge"
+        ]
+      },
+      {
+        "id": "manual_policy_enforcement",
+        "label": "Manual flight-change policy enforcement",
+        "kind": "tooling_constraint",
+        "parent_id": "modification_policy",
+        "order": 7,
+        "fact_ids": [
+          "modification_policy_not_system_enforced"
+        ]
+      },
+      {
+        "id": "cancellation_workflow",
+        "label": "Cancelling a reservation",
+        "kind": "procedure",
+        "fact_ids": [],
+        "parent_id": "manage_existing_reservation_journey",
+        "order": 3
+      },
+      {
+        "id": "identify_cancellation_reservation",
+        "label": "Identify the reservation",
+        "kind": "step",
+        "parent_id": "cancellation_workflow",
+        "order": 1,
+        "fact_ids": [
+          "cancel_identify_reservation"
+        ]
+      },
+      {
+        "id": "determine_cancellation_reason",
+        "label": "Determine the cancellation reason",
+        "kind": "step",
+        "parent_id": "cancellation_workflow",
+        "order": 2,
+        "fact_ids": [
+          "cancel_reason_required",
+          "cancel_reason_options"
+        ]
+      },
+      {
+        "id": "cancellation_eligibility",
+        "label": "Check cancellation eligibility",
+        "kind": "decision",
+        "parent_id": "cancellation_workflow",
+        "order": 3,
+        "fact_ids": []
+      },
+      {
+        "id": "departed_flight_cancellation_gate",
+        "label": "Block departed reservations",
+        "kind": "blocking_gate",
+        "parent_id": "cancellation_eligibility",
+        "order": 1,
+        "fact_ids": [
+          "departed_flight_blocks_cancellation"
+        ]
+      },
+      {
+        "id": "allowed_cancellation_conditions",
+        "label": "Alternative allowed conditions",
+        "kind": "eligibility_set",
+        "parent_id": "cancellation_eligibility",
+        "order": 2,
+        "description": "Any one condition is sufficient after the departed-flight gate passes.",
+        "fact_ids": [
+          "within_24_hours_allows_cancellation",
+          "airline_cancelled_flight_allows_cancellation",
+          "business_cabin_allows_cancellation",
+          "insurance_health_weather_allows_cancellation"
+        ]
+      },
+      {
+        "id": "cancellation_default_denial",
+        "label": "Deny when no allowed condition applies",
+        "kind": "default_outcome",
+        "parent_id": "cancellation_eligibility",
+        "order": 3,
+        "fact_ids": [
+          "otherwise_cancellation_not_allowed"
+        ]
+      },
+      {
+        "id": "manual_cancellation_enforcement",
+        "label": "Manually enforce eligibility",
+        "kind": "tooling_constraint",
+        "parent_id": "cancellation_eligibility",
+        "order": 4,
+        "fact_ids": [
+          "cancellation_not_system_enforced"
+        ]
+      },
+      {
+        "id": "cancellation_refund",
+        "label": "Process and explain the refund",
+        "kind": "step",
+        "parent_id": "cancellation_workflow",
+        "order": 4,
+        "fact_ids": [
+          "refund_original_payment_methods",
+          "refund_arrival_window"
+        ]
+      },
+      {
+        "id": "compensation_policy",
+        "label": "Compensation and travel certificates",
+        "kind": "section",
+        "fact_ids": [],
+        "parent_id": "manage_existing_reservation_journey",
+        "order": 4
+      },
+      {
+        "id": "compensation_scope",
+        "label": "Scope and customer trigger",
+        "kind": "rule_set",
+        "parent_id": "compensation_policy",
+        "order": 1,
+        "fact_ids": [
+          "certificates_goodwill_specific_situations",
+          "never_proactively_offer_compensation"
+        ]
+      },
+      {
+        "id": "compensation_qualification_gate",
+        "label": "Customer qualification gate",
+        "kind": "decision",
+        "parent_id": "compensation_policy",
+        "order": 2,
+        "description": "Qualification permits scenario consideration but is not sufficient by itself.",
+        "fact_ids": [
+          "deny_regular_no_insurance_economy_or_basic",
+          "qualifies_silver_or_gold",
+          "qualifies_insurance",
+          "qualifies_business"
+        ]
+      },
+      {
+        "id": "covered_compensation_scenarios",
+        "label": "Covered compensation scenarios",
+        "kind": "decision",
+        "parent_id": "compensation_policy",
+        "order": 4,
+        "fact_ids": []
+      },
+      {
+        "id": "cancelled_flight_compensation",
+        "label": "Airline-cancelled flight",
+        "kind": "scenario",
+        "parent_id": "covered_compensation_scenarios",
+        "order": 1,
+        "fact_ids": [
+          "cancelled_flight_certificate_amount"
+        ]
+      },
+      {
+        "id": "delayed_flight_compensation",
+        "label": "Delayed flight with change or cancellation",
+        "kind": "scenario",
+        "parent_id": "covered_compensation_scenarios",
+        "order": 2,
+        "fact_ids": [
+          "delayed_flight_certificate_amount"
+        ]
+      },
+      {
+        "id": "unsupported_compensation_reasons",
+        "label": "All other reasons",
+        "kind": "default_outcome",
+        "parent_id": "covered_compensation_scenarios",
+        "order": 3,
+        "fact_ids": [
+          "no_other_compensation_reasons"
+        ]
+      },
+      {
+        "id": "compensation_verification",
+        "label": "Verify facts before offering compensation",
+        "kind": "verification_gate",
+        "parent_id": "compensation_policy",
+        "order": 3,
+        "fact_ids": [
+          "verify_facts_before_compensation"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "modification_payment_decision",
+        "type": "applies_to",
+        "target_id": "flight_change_decision"
+      },
+      {
+        "source_id": "modification_payment_decision",
+        "type": "applies_to",
+        "target_id": "cabin_change_decision"
+      },
+      {
+        "source_id": "flight_change_decision",
+        "type": "requires_check",
+        "target_id": "manual_policy_enforcement"
+      },
+      {
+        "source_id": "cancellation_eligibility",
+        "type": "uses_input_from",
+        "target_id": "determine_cancellation_reason"
+      },
+      {
+        "source_id": "allowed_cancellation_conditions",
+        "type": "evaluated_after",
+        "target_id": "departed_flight_cancellation_gate"
+      },
+      {
+        "source_id": "cancellation_default_denial",
+        "type": "otherwise_after",
+        "target_id": "allowed_cancellation_conditions"
+      },
+      {
+        "source_id": "cancellation_eligibility",
+        "type": "manually_enforced_by",
+        "target_id": "manual_cancellation_enforcement"
+      },
+      {
+        "source_id": "cancellation_refund",
+        "type": "requires",
+        "target_id": "cancellation_eligibility"
+      },
+      {
+        "source_id": "covered_compensation_scenarios",
+        "type": "requires",
+        "target_id": "compensation_qualification_gate"
+      },
+      {
+        "source_id": "cancelled_flight_compensation",
+        "type": "requires",
+        "target_id": "compensation_verification"
+      },
+      {
+        "source_id": "delayed_flight_compensation",
+        "type": "requires",
+        "target_id": "compensation_verification"
+      },
+      {
+        "source_id": "unsupported_compensation_reasons",
+        "type": "otherwise_after",
+        "target_id": "cancelled_flight_compensation"
+      },
+      {
+        "source_id": "unsupported_compensation_reasons",
+        "type": "otherwise_after",
+        "target_id": "delayed_flight_compensation"
+      },
+      {
+        "source_id": "modification_policy",
+        "type": "requires",
+        "target_id": "manage_channel_scope"
+      },
+      {
+        "source_id": "cancellation_workflow",
+        "type": "requires",
+        "target_id": "manage_channel_scope"
+      },
+      {
+        "source_id": "compensation_policy",
+        "type": "service_recovery_after",
+        "target_id": "cancellation_workflow"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "modify_existing_reservation_allowed",
+      "category": "authorized_actions",
+      "statement": "Customer service can modify flights, cabin class, baggage, or passenger details on an existing reservation, subject to the modification rules."
+    },
+    {
+      "id": "cancel_reservation_allowed_when_policy_allows",
+      "category": "authorized_actions",
+      "statement": "Customer service can cancel a reservation when the cancellation policy allows it."
+    },
+    {
+      "id": "compensation_allowed_in_specific_cases",
+      "category": "authorized_actions",
+      "statement": "Customer service can issue travel-certificate compensation only in the specific situations covered by the airline's compensation policy."
+    },
+    {
+      "id": "authorized_actions_closed_scope",
+      "category": "authorized_actions",
+      "statement": "Looking up information, booking a new reservation, modifying an existing reservation, cancelling a reservation, and issuing travel-certificate compensation are the complete set of things customer service can help customers with through this channel."
+    },
+    {
+      "id": "cannot_add_payment_method",
+      "category": "channel_limits",
+      "statement": "Customer service cannot add a new payment method to a customer account."
+    },
+    {
+      "id": "cannot_change_profile_identifying_information",
+      "category": "channel_limits",
+      "statement": "Customer service cannot change the email or other identifying information on a customer profile."
+    },
+    {
+      "id": "cannot_change_passenger_count_existing_reservation",
+      "category": "channel_limits",
+      "statement": "Customer service cannot change the number of passengers on an existing reservation."
+    },
+    {
+      "id": "cannot_accept_unsaved_payment_method",
+      "category": "channel_limits",
+      "statement": "Customer service cannot accept a payment method that is not already saved on the customer's profile."
+    },
+    {
+      "id": "cannot_alter_departed_flight",
+      "category": "channel_limits",
+      "statement": "Customer service cannot alter anything about a flight that has already departed."
+    },
+    {
+      "id": "reservation_id_or_profile_lookup",
+      "category": "identification",
+      "statement": "The customer should provide a reservation identifier; if they do not know it, look up the profile and help find the right reservation.",
+      "canonical_source": "Identifying the reservation",
+      "outside_section_duplication": {
+        "status": "semantic_duplicate",
+        "notes": "Profile and reservation lookup are broadly authorized and described in identity/profile sections."
+      }
+    },
+    {
+      "id": "basic_economy_no_flight_changes",
+      "category": "flight_changes",
+      "statement": "Basic economy reservations cannot have their flights changed.",
+      "canonical_source": "Changing flights",
+      "outside_section_duplication": {
+        "status": "unique_to_section",
+        "notes": "Basic economy is defined elsewhere, but this flight-change ban is section-specific."
+      }
+    },
+    {
+      "id": "non_basic_flight_change_preserve_origin_destination_trip_type",
+      "category": "flight_changes",
+      "statement": "Other cabin classes can change flights only if origin, destination, and trip type remain the same.",
+      "canonical_source": "Changing flights",
+      "outside_section_duplication": {
+        "status": "background_only",
+        "notes": "Origin, destination, and trip type are schema fields elsewhere; the modification constraint is section-specific."
+      }
+    },
+    {
+      "id": "flight_change_kept_segments_preserve_original_price",
+      "category": "flight_changes",
+      "statement": "Kept flight segments preserve their original reservation prices during a flight change.",
+      "canonical_source": "Changing flights",
+      "outside_section_duplication": {
+        "status": "background_only",
+        "notes": "Reservation segment prices are defined elsewhere, but this preservation rule is section-specific."
+      }
+    },
+    {
+      "id": "flight_change_new_segments_use_current_price",
+      "category": "flight_changes",
+      "statement": "New flight segments use current prices during a flight change.",
+      "canonical_source": "Changing flights",
+      "outside_section_duplication": {
+        "status": "background_only",
+        "notes": "Current per-cabin prices are defined elsewhere, but this modification pricing rule is section-specific."
+      }
+    },
+    {
+      "id": "flight_change_customer_pays_or_refunded_difference",
+      "category": "flight_changes",
+      "statement": "For flight changes, the customer pays or is refunded the difference between the old and new totals.",
+      "canonical_source": "Changing flights",
+      "outside_section_duplication": {
+        "status": "partial_duplicate",
+        "notes": "Payment and refund history are schema fields, and cancellation refunds are described elsewhere; flight-change difference handling is section-specific."
+      }
+    },
+    {
+      "id": "modification_policy_not_system_enforced",
+      "category": "tooling",
+      "statement": "The system does not enforce flight-change eligibility rules automatically; the agent must verify that the requested flight change is allowed before submitting it.",
+      "canonical_source": "Changing flights",
+      "outside_section_duplication": {
+        "status": "partial_duplicate",
+        "notes": "The cancellation section has an analogous non-enforcement warning, but the modification warning is section-specific."
+      }
+    },
+    {
+      "id": "cabin_change_blocked_if_any_segment_flying_or_landed",
+      "category": "cabin_changes",
+      "statement": "Cabin class cannot be changed if any flight in the reservation has departed, including flying or landed statuses.",
+      "canonical_source": "Changing cabin class",
+      "outside_section_duplication": {
+        "status": "semantic_duplicate",
+        "notes": "The authorization and cancellation sections both expose departed-flight limits, and flight statuses are defined elsewhere."
+      }
+    },
+    {
+      "id": "basic_economy_cabin_change_allowed_if_eligible",
+      "category": "cabin_changes",
+      "statement": "All otherwise eligible reservations, including basic economy reservations, can change cabin class.",
+      "canonical_source": "Changing cabin class",
+      "outside_section_duplication": {
+        "status": "unique_to_section",
+        "notes": "Cabin classes are defined elsewhere, but this basic-economy cabin-change permission is section-specific."
+      }
+    },
+    {
+      "id": "cabin_change_whole_reservation_only",
+      "category": "cabin_changes",
+      "statement": "Cabin class must be the same across all flights; the agent cannot change cabin for only one segment.",
+      "canonical_source": "Changing cabin class",
+      "outside_section_duplication": {
+        "status": "semantic_duplicate",
+        "notes": "The reservation schema says a reservation has one cabin class and all passengers fly the same cabin."
+      }
+    },
+    {
+      "id": "cabin_change_reprice_all_segments_current_new_cabin_rate",
+      "category": "cabin_changes",
+      "statement": "When only cabin changes, every kept segment must expose current availability and pricing for the requested cabin, and all kept segments are repriced at that cabin's current rate.",
+      "canonical_source": "Changing cabin class",
+      "outside_section_duplication": {
+        "status": "background_only",
+        "notes": "Current cabin pricing exists elsewhere, but the all-segments repricing rule is section-specific."
+      }
+    },
+    {
+      "id": "cabin_change_payment_or_refund_difference",
+      "category": "cabin_changes",
+      "statement": "If the new cabin is more expensive, the customer pays the difference; if cheaper, the customer receives a refund.",
+      "canonical_source": "Changing cabin class",
+      "outside_section_duplication": {
+        "status": "partial_duplicate",
+        "notes": "Payment/refund records and cancellation refunds exist elsewhere; cabin-change difference handling is section-specific."
+      }
+    },
+    {
+      "id": "checked_bags_can_be_added_not_removed",
+      "category": "baggage_changes",
+      "statement": "Checked bags can be added to an existing reservation but not removed.",
+      "canonical_source": "Changing baggage",
+      "outside_section_duplication": {
+        "status": "partial_duplicate",
+        "notes": "Baggage fields and booking add-bag instructions exist elsewhere; the no-removal rule is section-specific."
+      }
+    },
+    {
+      "id": "additional_checked_bag_cost",
+      "category": "baggage_changes",
+      "statement": "Each additional checked bag costs $65.",
+      "canonical_source": "Changing baggage",
+      "outside_section_duplication": {
+        "status": "semantic_duplicate",
+        "notes": "The booking section states the same additional checked bag price."
+      }
+    },
+    {
+      "id": "insurance_cannot_be_added_after_booking",
+      "category": "baggage_changes",
+      "statement": "Travel insurance cannot be added after the initial booking.",
+      "canonical_source": "Changing baggage",
+      "outside_section_duplication": {
+        "status": "partial_duplicate",
+        "notes": "Insurance is described as a booking-time choice elsewhere, but the post-booking ban is section-specific."
+      }
+    },
+    {
+      "id": "passenger_name_or_dob_can_be_updated",
+      "category": "passenger_changes",
+      "statement": "Passenger details such as name and date of birth can be updated.",
+      "canonical_source": "Changing passengers",
+      "outside_section_duplication": {
+        "status": "background_only",
+        "notes": "Name and date of birth are passenger fields elsewhere; update permission is section-specific."
+      }
+    },
+    {
+      "id": "passenger_count_cannot_change",
+      "category": "passenger_changes",
+      "statement": "The number of passengers on an existing reservation cannot be changed.",
+      "canonical_source": "Changing passengers",
+      "outside_section_duplication": {
+        "status": "semantic_duplicate",
+        "notes": "The authorization section explicitly forbids changing passenger count."
+      }
+    },
+    {
+      "id": "supervisor_cannot_change_passenger_count",
+      "category": "passenger_changes",
+      "statement": "Even a human supervisor cannot change passenger count on an existing reservation.",
+      "canonical_source": "Changing passengers",
+      "outside_section_duplication": {
+        "status": "unique_to_section",
+        "notes": "The passenger-count ban exists elsewhere, but the supervisor non-override is section-specific."
+      }
+    },
+    {
+      "id": "modification_payment_single_saved_card_or_gift_card",
+      "category": "modification_payments",
+      "statement": "When flights or cabin class are changed and there is a price difference, the customer must provide a single saved gift card or credit card from their profile to pay or receive the difference.",
+      "canonical_source": "Payment for modifications",
+      "outside_section_duplication": {
+        "status": "partial_duplicate",
+        "notes": "Saved-payment requirements exist elsewhere; the one-method modification rule is section-specific."
+      }
+    },
+    {
+      "id": "travel_certificates_not_allowed_for_modification_payment",
+      "category": "modification_payments",
+      "statement": "Travel certificates cannot be used for flight or cabin modification payments.",
+      "canonical_source": "Payment for modifications",
+      "outside_section_duplication": {
+        "status": "partial_duplicate",
+        "notes": "Certificates are defined and allowed in booking payments elsewhere; the modification ban is section-specific."
+      }
+    },
+    {
+      "id": "modification_gift_card_must_cover_charge",
+      "category": "modification_payments",
+      "statement": "A gift card used for a flight or cabin modification charge must have enough balance to cover the full charge.",
+      "canonical_source": "Payment for modifications",
+      "outside_section_duplication": {
+        "status": "semantic_duplicate",
+        "notes": "The booking payment section states that gift cards and certificates must have sufficient balance."
+      }
+    },
+    {
+      "id": "cancel_identify_reservation",
+      "category": "identification",
+      "statement": "Cancellation starts by getting the reservation identifier; if the customer does not know it, look up their profile and help them find the right reservation."
+    },
+    {
+      "id": "cancel_reason_required",
+      "category": "reason",
+      "statement": "The agent asks why the customer wants to cancel."
+    },
+    {
+      "id": "cancel_reason_options",
+      "category": "reason",
+      "statement": "Cancellation reasons are change of plans, airline cancelled the flight, health or weather reasons covered by insurance, or other reasons."
+    },
+    {
+      "id": "departed_flight_blocks_cancellation",
+      "category": "eligibility",
+      "statement": "If any flight in the reservation is flying or landed, the agent cannot process cancellation and transfers to a human supervisor."
+    },
+    {
+      "id": "within_24_hours_allows_cancellation",
+      "category": "eligibility",
+      "statement": "If no flight in the reservation is flying or landed, cancellation is allowed if the reservation was made within the last 24 hours, compared with current system time."
+    },
+    {
+      "id": "airline_cancelled_flight_allows_cancellation",
+      "category": "eligibility",
+      "statement": "If no flight in the reservation is flying or landed, cancellation is allowed if the airline cancelled one of the reservation's flights."
+    },
+    {
+      "id": "business_cabin_allows_cancellation",
+      "category": "eligibility",
+      "statement": "If no flight in the reservation is flying or landed, cancellation is allowed if the reservation is in business cabin class."
+    },
+    {
+      "id": "insurance_health_weather_allows_cancellation",
+      "category": "eligibility",
+      "statement": "If no flight in the reservation is flying or landed, cancellation is allowed if the reservation has travel insurance and the reason is health or weather."
+    },
+    {
+      "id": "otherwise_cancellation_not_allowed",
+      "category": "eligibility",
+      "statement": "If no flight in the reservation is flying or landed and no allowed condition is met, the reservation cannot be cancelled."
+    },
+    {
+      "id": "cancellation_not_system_enforced",
+      "category": "tooling",
+      "statement": "The cancellation system does not enforce these rules, so the agent must verify eligibility before processing."
+    },
+    {
+      "id": "refund_original_payment_methods",
+      "category": "refund",
+      "statement": "Cancellation refunds go back to the original payment methods."
+    },
+    {
+      "id": "refund_arrival_window",
+      "category": "refund",
+      "statement": "Tell the customer the refund will arrive within 12 business days."
+    },
+    {
+      "id": "certificates_goodwill_specific_situations",
+      "category": "scope",
+      "statement": "Travel certificates are goodwill compensation only in the specific situations covered by the airline's compensation policy."
+    },
+    {
+      "id": "never_proactively_offer_compensation",
+      "category": "scope",
+      "statement": "The agent must never proactively offer compensation; address it only if the customer brings it up or explicitly asks."
+    },
+    {
+      "id": "deny_regular_no_insurance_economy_or_basic",
+      "category": "qualification",
+      "statement": "Do not compensate a customer who is regular, has no travel insurance, and is flying economy or basic economy; all three conditions must be true to deny on this basis."
+    },
+    {
+      "id": "qualifies_silver_or_gold",
+      "category": "qualification",
+      "statement": "A silver or gold member meets the customer-qualification gate for compensation consideration, but compensation still requires a covered compensation scenario."
+    },
+    {
+      "id": "qualifies_insurance",
+      "category": "qualification",
+      "statement": "A customer with travel insurance meets the customer-qualification gate for compensation consideration, but compensation still requires a covered compensation scenario."
+    },
+    {
+      "id": "qualifies_business",
+      "category": "qualification",
+      "statement": "A customer flying business class meets the customer-qualification gate for compensation consideration, but compensation still requires a covered compensation scenario."
+    },
+    {
+      "id": "cancelled_flight_certificate_amount",
+      "category": "scenario",
+      "statement": "For an airline-cancelled flight complaint, the agent may offer a travel certificate worth $170 per passenger after verifying the flight was cancelled."
+    },
+    {
+      "id": "delayed_flight_certificate_amount",
+      "category": "scenario",
+      "statement": "For a delayed flight complaint where the customer wants to change or cancel, the agent may offer $85 per passenger after confirming the delay and after actually processing the change or cancellation."
+    },
+    {
+      "id": "no_other_compensation_reasons",
+      "category": "scenario",
+      "statement": "Do not offer compensation for any other reason; explain that the agent is unable to assist and transfer if needed."
+    },
+    {
+      "id": "verify_facts_before_compensation",
+      "category": "verification",
+      "statement": "Always verify facts before offering compensation; look up flight status and do not rely solely on the customer."
+    }
+  ],
+  "transformation_bundles": [
+    {
+      "id": "manage_existing_reservation_multimodal",
+      "description": "One existing-reservation journey combines channel-boundary correspondence, discovery intake, modification records and payment screenshots, a Slack decision history, cancellation operations material, and disruption-recovery records and web pages. Each fact has one authoritative artifact.",
+      "stub_path": "tau2/hyper/sops/airline_plus/sections/manage_existing_reservation/bundles/manage_existing_reservation_multimodal/stub.md",
+      "fact_ids": [
+        "modify_existing_reservation_allowed",
+        "cancel_reservation_allowed_when_policy_allows",
+        "compensation_allowed_in_specific_cases",
+        "authorized_actions_closed_scope",
+        "cannot_add_payment_method",
+        "cannot_change_profile_identifying_information",
+        "cannot_change_passenger_count_existing_reservation",
+        "cannot_accept_unsaved_payment_method",
+        "cannot_alter_departed_flight",
+        "reservation_id_or_profile_lookup",
+        "basic_economy_no_flight_changes",
+        "non_basic_flight_change_preserve_origin_destination_trip_type",
+        "flight_change_kept_segments_preserve_original_price",
+        "flight_change_new_segments_use_current_price",
+        "flight_change_customer_pays_or_refunded_difference",
+        "modification_policy_not_system_enforced",
+        "cabin_change_blocked_if_any_segment_flying_or_landed",
+        "basic_economy_cabin_change_allowed_if_eligible",
+        "cabin_change_whole_reservation_only",
+        "cabin_change_reprice_all_segments_current_new_cabin_rate",
+        "cabin_change_payment_or_refund_difference",
+        "checked_bags_can_be_added_not_removed",
+        "additional_checked_bag_cost",
+        "insurance_cannot_be_added_after_booking",
+        "passenger_name_or_dob_can_be_updated",
+        "passenger_count_cannot_change",
+        "supervisor_cannot_change_passenger_count",
+        "modification_payment_single_saved_card_or_gift_card",
+        "travel_certificates_not_allowed_for_modification_payment",
+        "modification_gift_card_must_cover_charge",
+        "cancel_identify_reservation",
+        "cancel_reason_required",
+        "cancel_reason_options",
+        "departed_flight_blocks_cancellation",
+        "within_24_hours_allows_cancellation",
+        "airline_cancelled_flight_allows_cancellation",
+        "business_cabin_allows_cancellation",
+        "insurance_health_weather_allows_cancellation",
+        "otherwise_cancellation_not_allowed",
+        "cancellation_not_system_enforced",
+        "refund_original_payment_methods",
+        "refund_arrival_window",
+        "certificates_goodwill_specific_situations",
+        "never_proactively_offer_compensation",
+        "deny_regular_no_insurance_economy_or_basic",
+        "qualifies_silver_or_gold",
+        "qualifies_insurance",
+        "qualifies_business",
+        "cancelled_flight_certificate_amount",
+        "delayed_flight_certificate_amount",
+        "no_other_compensation_reasons",
+        "verify_facts_before_compensation"
+      ],
+      "members": [
+        {
+          "transformation_id": "manage_scope_kickoff_document",
+          "primary": true,
+          "authoritative_fact_ids": [
+            "cannot_add_payment_method",
+            "cannot_change_passenger_count_existing_reservation"
+          ]
+        },
+        {
+          "transformation_id": "manage_scope_email_archive",
+          "authoritative_fact_ids": [
+            "modify_existing_reservation_allowed",
+            "cancel_reservation_allowed_when_policy_allows",
+            "compensation_allowed_in_specific_cases",
+            "authorized_actions_closed_scope",
+            "cannot_change_profile_identifying_information",
+            "cannot_accept_unsaved_payment_method",
+            "cannot_alter_departed_flight"
+          ]
+        },
+        {
+          "transformation_id": "modification_visual_hybrid_screenshots",
+          "authoritative_fact_ids": [
+            "travel_certificates_not_allowed_for_modification_payment",
+            "modification_gift_card_must_cover_charge"
+          ]
+        },
+        {
+          "transformation_id": "modification_visual_hybrid_records",
+          "authoritative_fact_ids": [
+            "reservation_id_or_profile_lookup",
+            "basic_economy_no_flight_changes",
+            "non_basic_flight_change_preserve_origin_destination_trip_type",
+            "flight_change_kept_segments_preserve_original_price",
+            "flight_change_new_segments_use_current_price",
+            "flight_change_customer_pays_or_refunded_difference",
+            "modification_policy_not_system_enforced",
+            "cabin_change_blocked_if_any_segment_flying_or_landed",
+            "basic_economy_cabin_change_allowed_if_eligible",
+            "cabin_change_whole_reservation_only",
+            "cabin_change_reprice_all_segments_current_new_cabin_rate",
+            "cabin_change_payment_or_refund_difference",
+            "checked_bags_can_be_added_not_removed",
+            "additional_checked_bag_cost",
+            "insurance_cannot_be_added_after_booking",
+            "modification_payment_single_saved_card_or_gift_card"
+          ],
+          "depends_on_fact_ids": [
+            "travel_certificates_not_allowed_for_modification_payment",
+            "modification_gift_card_must_cover_charge"
+          ]
+        },
+        {
+          "transformation_id": "modification_visual_hybrid_slack_mcp",
+          "authoritative_fact_ids": [
+            "passenger_name_or_dob_can_be_updated",
+            "passenger_count_cannot_change",
+            "supervisor_cannot_change_passenger_count"
+          ],
+          "depends_on_fact_ids": []
+        },
+        {
+          "transformation_id": "cancellation_operations_presentation",
+          "authoritative_fact_ids": [
+            "cancel_identify_reservation",
+            "cancel_reason_required",
+            "cancel_reason_options",
+            "departed_flight_blocks_cancellation",
+            "within_24_hours_allows_cancellation",
+            "airline_cancelled_flight_allows_cancellation",
+            "business_cabin_allows_cancellation",
+            "insurance_health_weather_allows_cancellation",
+            "otherwise_cancellation_not_allowed",
+            "cancellation_not_system_enforced",
+            "refund_original_payment_methods",
+            "refund_arrival_window"
+          ]
+        },
+        {
+          "transformation_id": "compensation_full_site_screenshots",
+          "authoritative_fact_ids": [
+            "qualifies_silver_or_gold",
+            "qualifies_insurance",
+            "qualifies_business",
+            "cancelled_flight_certificate_amount",
+            "delayed_flight_certificate_amount"
+          ]
+        },
+        {
+          "transformation_id": "compensation_website_hybrid_records",
+          "authoritative_fact_ids": [
+            "certificates_goodwill_specific_situations",
+            "never_proactively_offer_compensation",
+            "deny_regular_no_insurance_economy_or_basic",
+            "no_other_compensation_reasons",
+            "verify_facts_before_compensation"
+          ],
+          "depends_on_fact_ids": [
+            "qualifies_silver_or_gold",
+            "qualifies_insurance",
+            "qualifies_business",
+            "cancelled_flight_certificate_amount",
+            "delayed_flight_certificate_amount"
+          ]
+        }
+      ]
+    }
+  ],
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/airline_plus_sop.md",
+      "src/tau2/domains/airline/data_model.py"
+    ],
+    "summary": "Global airline constraints that must stay true even when this section is rendered as realistic transcripts.",
+    "rules": [
+      "Treat allowed values as closed sets. Do not add realistic airline concepts unless they are documented here or in the source facts.",
+      "Use cabin display names exactly as basic economy, economy, or business.",
+      "Do not invent new reservation fields, override flags, audit trails, waiver codes, or follow-up reminder fields.",
+      "Do not invent payment instruments or entitlement programs beyond the documented payment methods and membership levels."
+    ],
+    "allowed_values": {
+      "cabin_classes": [
+        "basic economy",
+        "economy",
+        "business"
+      ],
+      "trip_types": [
+        "one-way",
+        "round-trip"
+      ],
+      "flight_statuses": [
+        "available",
+        "on time",
+        "delayed",
+        "flying",
+        "landed",
+        "cancelled"
+      ],
+      "payment_method_types": [
+        "credit card",
+        "gift card",
+        "travel certificate"
+      ],
+      "membership_levels": [
+        "regular",
+        "silver",
+        "gold"
+      ]
+    },
+    "closed_sets": [
+      {
+        "field": "cabin_classes",
+        "allowed_values": [
+          "basic economy",
+          "economy",
+          "business"
+        ],
+        "forbidden_terms": [
+          "premium economy",
+          "first class",
+          "main cabin",
+          "economy plus",
+          "comfort plus",
+          "business first"
+        ],
+        "reason": "The airline domain has exactly three cabin classes."
+      },
+      {
+        "field": "trip_types",
+        "allowed_values": [
+          "one-way",
+          "round-trip"
+        ],
+        "forbidden_terms": [
+          "multi-city",
+          "open-jaw"
+        ],
+        "reason": "Reservations use only one-way or round-trip trip types."
+      },
+      {
+        "field": "payment_method_types",
+        "allowed_values": [
+          "credit card",
+          "gift card",
+          "travel certificate"
+        ],
+        "forbidden_terms": [
+          "cash",
+          "paypal",
+          "apple pay",
+          "bank transfer",
+          "airline miles",
+          "points payment",
+          "travel voucher"
+        ],
+        "reason": "The airline domain only models credit cards, gift cards, and travel certificates."
+      }
+    ],
+    "forbidden_terms": [
+      {
+        "term": "manual override flag",
+        "reason": "The reservation schema does not include override flags."
+      },
+      {
+        "term": "waiver code",
+        "reason": "The reservation schema and tools do not include waiver codes."
+      },
+      {
+        "term": "audit trail",
+        "reason": "The SOP explicitly says audit-trail fields are not part of the documented schema."
+      },
+      {
+        "term": "follow-up reminder",
+        "reason": "The SOP explicitly says follow-up reminder fields are not part of the documented schema."
+      }
+    ]
+  }
+}

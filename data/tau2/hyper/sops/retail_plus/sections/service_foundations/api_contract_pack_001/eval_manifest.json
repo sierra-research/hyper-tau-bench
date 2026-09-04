@@ -1,0 +1,165 @@
+{
+  "representation": "api_contract_pack",
+  "filename": "northstar_retail_record_contract_2026-06-12.zip",
+  "authoritative_fact_ids": [
+    "customer_profile_fields",
+    "customers_can_save_any_number_of_payment_methods",
+    "order_records_owner",
+    "order_records_payment_history",
+    "round_money_arithmetic_before_storage",
+    "stored_money_rejects_float_precision_artifacts",
+    "stored_money_uses_cent_precision"
+  ],
+  "authority_rule": {
+    "environment": "production",
+    "status": "published",
+    "current": true,
+    "superseded_by": null,
+    "examples_are_authoritative": false
+  },
+  "fact_evidence": [
+    {
+      "fact_id": "customer_profile_fields",
+      "claim_type": "published_schema_rule",
+      "files": [
+        "openapi.yaml",
+        "record_contract_notes.md"
+      ],
+      "authority_source_ids": [
+        "CONTRACT-CARE-V3",
+        "SCHEMA-USER-V3"
+      ],
+      "locations": [
+        "components.schemas.User.required",
+        "components.schemas.User.properties",
+        "Customer and order record boundaries"
+      ],
+      "corroborating_source_ids": [
+        "POSTMAN-USER-READ"
+      ]
+    },
+    {
+      "fact_id": "customers_can_save_any_number_of_payment_methods",
+      "claim_type": "published_schema_rule",
+      "files": [
+        "openapi.yaml",
+        "record_contract_notes.md"
+      ],
+      "authority_source_ids": [
+        "CONTRACT-CARE-V3",
+        "SCHEMA-USER-V3"
+      ],
+      "locations": [
+        "components.schemas.User.properties.payment_methods",
+        "Saved payment-method cardinality"
+      ],
+      "corroborating_source_ids": [
+        "POSTMAN-USER-MANY-METHODS"
+      ]
+    },
+    {
+      "fact_id": "order_records_owner",
+      "claim_type": "published_schema_rule",
+      "files": [
+        "openapi.yaml",
+        "record_contract_notes.md"
+      ],
+      "authority_source_ids": [
+        "CONTRACT-CARE-V3",
+        "SCHEMA-ORDER-V3"
+      ],
+      "locations": [
+        "components.schemas.Order.required",
+        "components.schemas.Order.properties.user_id",
+        "Customer and order record boundaries"
+      ],
+      "corroborating_source_ids": [
+        "POSTMAN-ORDER-READ"
+      ]
+    },
+    {
+      "fact_id": "order_records_payment_history",
+      "claim_type": "published_schema_rule",
+      "files": [
+        "openapi.yaml",
+        "record_contract_notes.md"
+      ],
+      "authority_source_ids": [
+        "CONTRACT-CARE-V3",
+        "SCHEMA-ORDER-V3",
+        "SCHEMA-PAYMENT-HISTORY-V3"
+      ],
+      "locations": [
+        "components.schemas.Order.properties.payment_history",
+        "components.schemas.PaymentHistoryEntry",
+        "Customer and order record boundaries"
+      ],
+      "corroborating_source_ids": [
+        "POSTMAN-ORDER-READ"
+      ]
+    },
+    {
+      "fact_id": "round_money_arithmetic_before_storage",
+      "claim_type": "published_storage_rule",
+      "files": [
+        "openapi.yaml",
+        "record_contract_notes.md"
+      ],
+      "authority_source_ids": [
+        "CONTRACT-CARE-V3",
+        "SCHEMA-MONEY-V3"
+      ],
+      "locations": [
+        "components.schemas.Money.x-northstar-storage.round-arithmetic-before-write",
+        "Arithmetic before persistence"
+      ],
+      "corroborating_source_ids": [
+        "POSTMAN-MONEY-ROUNDING"
+      ]
+    },
+    {
+      "fact_id": "stored_money_rejects_float_precision_artifacts",
+      "claim_type": "published_storage_rule",
+      "files": [
+        "openapi.yaml",
+        "record_contract_notes.md"
+      ],
+      "authority_source_ids": [
+        "CONTRACT-CARE-V3",
+        "SCHEMA-MONEY-V3"
+      ],
+      "locations": [
+        "components.schemas.Money.x-northstar-storage.reject-float-artifacts",
+        "Stored-money invariant"
+      ],
+      "corroborating_source_ids": [
+        "POSTMAN-MONEY-FLOAT-REJECT"
+      ]
+    },
+    {
+      "fact_id": "stored_money_uses_cent_precision",
+      "claim_type": "published_storage_rule",
+      "files": [
+        "openapi.yaml",
+        "record_contract_notes.md"
+      ],
+      "authority_source_ids": [
+        "CONTRACT-CARE-V3",
+        "SCHEMA-MONEY-V3"
+      ],
+      "locations": [
+        "components.schemas.Money",
+        "Stored-money invariant"
+      ],
+      "corroborating_source_ids": [
+        "POSTMAN-MONEY-VALID"
+      ]
+    }
+  ],
+  "expected_counts": {
+    "zip_members": 5,
+    "postman_examples": 10,
+    "error_rows": 12,
+    "authoritative_facts": 7
+  }
+}

@@ -1,0 +1,57 @@
+Frame 3 - Address change and payment-method swap on pending orders. Two
+independent lanes; both re-enter from the Frame 1 router.
+
+Lane A - shipping address on the order:
+1. Pending confirmed - customer wants the order shipped somewhere else.
+2. Customer gives the new address - all fields (name, street, unit, city,
+   state, zip).
+3. Read the whole address back to the customer, field by field.
+4. Customer confirms the read-back?
+   - No: correction offered - capture the fixed field(s), read back again.
+   - Yes: update the shipping address on the order.
+5. End - address updated. Status stays pending. No money moves on an address
+   change.
+
+Lane A stickies and cards (commentary): this lane is the order's address
+only - the profile's default address is a separate journey and updating one
+never touches the other (Felix Navarro); even a one-letter street-name typo
+goes through the full read-back loop (Iris Kovac); parked with no decision:
+address-validation API autocomplete for the assisted flow.
+
+Lane B - payment-method swap:
+1. Pending confirmed - customer wants to pay with a different method.
+2. Customer picks the replacement from methods already saved on their
+   profile; nothing gets added mid-flow.
+3. Different from the original, and exactly ONE method?
+   - No: same method as the original, or any ask to split the total across
+     two methods, is not eligible. One different saved method is the entire
+     menu.
+4. Replacement is a gift card?
+   - Yes: balance covers the ENTIRE order total? If the balance is short of
+     the total, stop - the swap cannot proceed. No partial cover, no topping
+     up the difference from a second method.
+   - No (card / PayPal), or gift-card balance covers the total: proceed.
+5. Execute the swap: charge the new method; refund the original method for
+   the full order amount.
+6. Original method type?
+   - Original was a gift card: refund lands back on it immediately.
+   - Original was credit card / PayPal: refund takes 3 to 6 business days.
+7. End - swap complete. Order status stays pending after the swap.
+
+Lane B callouts and stickies (commentary): why saved-only - adding a
+brand-new instrument mid-conversation was cut from scope in the M2 planning
+round; saved methods already went through the website's verification path.
+Sequencing gotcha - the refund of the original method starts when the swap
+executes, not when the order ships (Tomas Egan). Parked with no decision:
+split-tender (two cards) for orders over $500, raised 6.2.26, conflicts with
+the one-method gate.
+
+Wholesale fence (wholesale pilot only - not consumer policy, fenced 5.6.26):
+context so nobody copies it by accident; the wholesale pilot runs its own
+servicing lane for wholesale accounts and none of it applies to the consumer
+flow above. Wholesale-only cards: payment changes route through the account
+rep with refunds issued as credit memos on the wholesale ledger; net-30
+invoicing makes "payment method" a purchase-order field with no gift-card
+concept in the wholesale lane. Sticky: every box inside the fence says
+"wholesale" because a credit-memo screenshot once ended up in a consumer
+training doc (Bea Sandoval).

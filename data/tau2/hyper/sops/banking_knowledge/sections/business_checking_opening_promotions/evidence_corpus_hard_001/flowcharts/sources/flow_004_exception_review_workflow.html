@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1760">
+<title>Business checking eligibility - exception review</title><style>
+*{box-sizing:border-box} html,body{margin:0;width:1760px;height:1280px;overflow:hidden}
+body{background:#e9edf0;color:#172431;font-family:Arial,Helvetica,sans-serif}
+.sheet{position:relative;width:1712px;height:1232px;margin:24px;background:#fff;border:1px solid #9ba7b1}
+.frame-label{position:absolute;left:-1px;top:-1px;background:#18232d;color:#fff;padding:7px 16px;font-size:12px;font-weight:800;letter-spacing:.3px}
+header{height:154px;margin:0 38px;border-bottom:2px solid #243746;padding:37px 0 18px;display:flex;justify-content:space-between;align-items:flex-start}
+.eyebrow{font-size:13px;font-weight:800;color:#5a6874;letter-spacing:.6px;margin-bottom:10px}
+h1{font-size:36px;line-height:1.06;margin:0 0 10px;letter-spacing:-.4px} .subtitle{font-size:14px;color:#5f6e79}
+.header-meta{display:flex;gap:12px;align-items:flex-start}
+.version{border:1px solid #b6c0c8;padding:10px 13px;font-size:11px;color:#52606b;line-height:1.35}
+.diagram{position:absolute;left:38px;top:174px;width:1636px;height:790px}
+.phase{position:absolute;border:1px solid #9da8b2;background:#fbfcfd;z-index:0}
+.phase.retired-zone{border-style:dashed;background:repeating-linear-gradient(135deg,#fbfaf7,#fbfaf7 12px,#f3f0e8 12px,#f3f0e8 24px)}
+.phase.current-zone{background:#f7fbf8;border-color:#84a98f}
+.phase>span{position:absolute;left:-1px;top:-21px;height:21px;background:#505b65;color:white;padding:5px 10px;font-size:10px;font-weight:800;letter-spacing:.3px}
+.phase.retired-zone>span{background:#8e6d19} .phase.current-zone>span{background:#207044}
+svg{position:absolute;inset:0;width:1636px;height:790px;z-index:1;overflow:visible}
+path{fill:none;stroke:#205d8f;stroke-width:2.2;marker-end:url(#arrow)}
+path.loop{stroke:#8b98a4;stroke-dasharray:6 5;marker-end:url(#arrow-gray)}
+path.reject{stroke:#b74242;stroke-dasharray:5 4;marker-end:url(#arrow-red)}
+path.history-edge{stroke:#9c8242;stroke-dasharray:4 5;marker-end:url(#arrow-gold)}
+.node{position:absolute;z-index:3;border:1.5px solid #1f2a33;background:white;padding:10px 12px;display:flex;flex-direction:column;justify-content:center;text-align:center;font-size:11px;line-height:1.25}
+.node small{display:block;margin-bottom:5px;color:#26618b;font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase}
+.node strong{font-size:12px;line-height:1.2} .node p{margin:5px 0 0;color:#4e5b65;font-size:10px;line-height:1.25}
+.node.start{border-color:#2f8c4a;background:#eef8ef;border-radius:28px}
+.node.terminal{border-radius:28px;background:#f1f5f7}
+.node.stop{border-color:#c83e3e;background:#fff1ef;border-radius:5px}
+.node.system{border-color:#6e8ca4;background:#edf5fb;text-align:left;font-family:"Courier New",monospace;overflow-wrap:anywhere}
+.node.system strong{font-size:11px;overflow-wrap:anywhere}
+.node.dialogue{background:#f5f0ff;border-color:#7c68a7;border-radius:5px 5px 20px 5px}
+.node.handoff{background:#eef7f1;border-color:#418357;border-radius:4px}
+.node.retired{border-style:dashed;border-color:#9e8a61;background:#f7f4ec;color:#685f50}
+.node.rejected{border:2px solid #bf3838;background:#fff0f0;color:#7b2525}
+.node.decision{padding:0;border:none;background:transparent;transform:rotate(45deg)}
+.node.decision:before{content:"";position:absolute;inset:0;border:1.5px solid #347447;background:#fbfffb}
+.node.decision.reject-decision:before{border-color:#be3b3b;background:#fff7f7}
+.decision-content{position:absolute;inset:15px;z-index:1;transform:rotate(-45deg);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.decision-content small{margin:0 0 4px} .decision-content strong{font-size:11px;line-height:1.08} .decision-content p{font-size:8px;line-height:1.12;margin:3px 0 0}
+.edge-label{position:absolute;z-index:4;background:#fff;padding:1px 4px;color:#315a78;font-size:9px;font-weight:800}
+.sticky{position:absolute;z-index:5;padding:10px 11px;box-shadow:0 2px 5px #0003;transform:rotate(-.7deg);font-size:9.5px;line-height:1.3}
+.sticky.yellow{background:#fff098} .sticky.green{background:#c8f2d2} .sticky.blue{background:#cce5fa} .sticky.red{background:#ffd1d1}
+.sticky b{font-size:9.5px} .sticky p{margin:5px 0 7px} .sticky em{display:block;text-align:right;font-size:8px;color:#59636a}
+.control-definitions{position:absolute;left:38px;right:38px;bottom:34px;height:222px;border:1px solid #8d9aa4;background:#fafbfc;padding:26px 16px 12px}
+.control-definitions h2,.history h2{position:absolute;left:-1px;top:-21px;margin:0;background:#18232d;color:white;padding:5px 12px;font-size:10px;letter-spacing:.3px}
+.control-definitions>div{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 12px;height:100%}
+.control-definitions article{border-left:3px solid #2975a6;padding:5px 8px;display:grid;grid-template-columns:38px 1fr;gap:7px;align-content:start}
+.control-definitions article b{font-size:10px;color:#225a81} .control-definitions article p{font-size:9.5px;line-height:1.25;margin:0;color:#37434c}
+.history{position:absolute;left:38px;right:38px;bottom:34px;height:222px;border:1px solid #9a8c67;background:#fbfaf7;padding:20px 14px}
+.history article{position:absolute;top:27px;height:166px;border:1px dashed #9b8f72;background:#f6f3ec;padding:11px}
+.history article b{display:inline-block;background:#496578;color:#fff;padding:4px 7px;font-size:9px;letter-spacing:.3px}
+.history article.history-current b{background:#207044}
+.history article small{float:right;color:#6d6558;font-size:9px;padding-top:4px} .history article p{font-size:9.5px;line-height:1.35;color:#5b554c}
+.watermark{position:absolute;right:42px;bottom:12px;color:#8a949b;font-size:9px}
+</style></head><body><main class="sheet"><div class="frame-label">FRAME 4 · EXCEPTION REVIEW WORKFLOW</div>
+<header><div><div class="eyebrow">RHO BANK · BUSINESS CHECKING OPERATIONS</div><h1>Business checking eligibility - exception review</h1><div class="subtitle">Working-session process map for account-history exceptions, manager review, and data-correction handoffs.</div></div>
+<div class="header-meta"><div class="version">Owner: Deposit Operations / Risk Controls<br>Updated: 2025-11-14<br>Ref: BC-ARCH-04 · v0.6</div></div></header>
+<section class="diagram"><section class='phase ' style='left:12px;top:48px;width:1110px;height:532px'><span>EXCEPTION REVIEW WORKFLOW</span></section><section class='phase ' style='left:1140px;top:48px;width:484px;height:532px'><span>DATA-CORRECTION HANDOFF</span></section><svg viewBox="0 0 1636 790" aria-hidden="true"><defs>
+<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#205d8f"/></marker>
+<marker id="arrow-gray" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#8b98a4"/></marker>
+<marker id="arrow-red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#b74242"/></marker>
+<marker id="arrow-gold" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#9c8242"/></marker></defs><path class='flow' d='M210 154 H260'/><path class='flow' d='M323 220 V330'/><path class='flow' d='M386 157 H445'/><path class='flow' d='M633 155 H685'/><path class='flow' d='M748 220 V330'/><path class='flow' d='M811 157 H860'/><path class='flow' d='M956 194 V330'/><path class='flow' d='M1356 151 H1405'/><path class='flow' d='M1263 190 V326'/><path class='flow' d='M1356 370 H1405'/></svg><span class='edge-label' style='left:332px;top:260px'>NO</span><span class='edge-label' style='left:398px;top:140px'>YES</span><span class='edge-label' style='left:757px;top:260px'>NO</span><span class='edge-label' style='left:821px;top:140px'>YES</span><span class='edge-label' style='left:965px;top:248px'>REVIEW RESULT</span><span class='edge-label' style='left:1272px;top:248px'>DATA ISSUE</span><article id='pilot-entry' class='node start' style='left:42px;top:115px;width:168px;height:78px'><strong>Eligibility gate failed</strong><p>Review trigger: closed-account or low-balance result</p></article><article id='one-closed' class='node decision' style='left:260px;top:94px;width:126px;height:126px'><div class='decision-content'><strong>Exactly one CLOSED account?</strong><p>screening question</p></div></article><article id='pilot-stop' class='node terminal' style='left:245px;top:330px;width:168px;height:78px'><strong>Exception not eligible</strong><p>More than one closed account</p></article><article id='manual-review' class='node handoff' style='left:445px;top:116px;width:188px;height:78px'><strong>Create manual-review case</strong><p>Copy balances and account counts</p></article><article id='manager' class='node decision' style='left:685px;top:94px;width:126px;height:126px'><div class='decision-content'><strong>Manager approves exception?</strong><p>email confirmation</p></div></article><article id='manager-stop' class='node terminal' style='left:668px;top:330px;width:168px;height:78px'><strong>Exception not approved</strong><p>Exception declined</p></article><article id='override' class='node handoff' style='left:860px;top:116px;width:192px;height:78px'><strong>Apply documented exception</strong><p>Record manager rationale in case</p></article><article id='pilot-open' class='node terminal' style='left:876px;top:330px;width:170px;height:82px'><strong>Continue opening review</strong><p>Return exception result to the opening workflow</p></article><article id='current' class='node start' style='left:1170px;top:112px;width:186px;height:78px'><strong>New opening request</strong><p>Standard assisted-flow entry</p></article><article id='frame1' class='node handoff' style='left:1405px;top:112px;width:184px;height:78px'><strong>Eligibility reference</strong><p>Continue with the documented gate sequence</p></article><article id='correct' class='node handoff' style='left:1170px;top:326px;width:186px;height:88px'><strong>Source record appears wrong?</strong><p>Open a data-correction case outside the opening attempt</p></article><article id='restart' class='node terminal' style='left:1405px;top:332px;width:184px;height:76px'><strong>Restart after correction</strong><p>Fresh snapshot · no inherited override</p></article><aside class='sticky yellow' style='left:470px;top:450px;width:260px'><b>WORKSHOP RATIONALE</b><p>The concept centralizes account-count checks, manager review, and the exception rationale in one case.</p><em>Operations workshop · 08/04</em></aside><aside class='sticky blue' style='left:1180px;top:455px;width:330px'><b>DATA CORRECTION DEPENDENCY</b><p>When a profile appears wrong, complete the correction outside the attempt and restart against a fresh snapshot.</p><em>Deposit Ops review</em></aside></section>
+<section class='history'><h2>WORKSHOP RECORD</h2><article class='' style='left:20px;width:300px'><b>CONCEPT</b><small>2025-07-21</small><p>Explore a documented exception for one closed account.</p></article><article class='' style='left:340px;width:300px'><b>WORKSHOP</b><small>2025-08-04</small><p>Map manual account counts, balance review, and manager approval.</p></article><article class='' style='left:660px;width:300px'><b>CONTROL REVIEW</b><small>2025-08-18</small><p>Risk evaluated source-data freshness and approval consistency.</p></article><article class='' style='left:980px;width:570px'><b>RECORDS HANDOFF</b><small>2025-11-14</small><p>Diagram reference registered as BC-ARCH-04 in the operating records index.</p></article></section><div class="watermark">Internal working material · not customer-facing · BC-ARCH-04 · v0.6</div></main></body></html>

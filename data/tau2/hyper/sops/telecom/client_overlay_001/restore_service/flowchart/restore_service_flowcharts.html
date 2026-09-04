@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Restore Service decision charts</title>
+  <style>
+    :root {
+      --ink: #15233d;
+      --muted: #617089;
+      --paper: #f4f6f9;
+      --panel: #ffffff;
+      --line: #2f5d8c;
+      --blue: #1769e0;
+      --blue-soft: #eaf2ff;
+      --teal: #087f78;
+      --teal-soft: #e6f7f3;
+      --amber: #9a6205;
+      --amber-soft: #fff4d6;
+      --red: #b13a46;
+      --red-soft: #fff0f1;
+      --green: #277342;
+      --green-soft: #eaf7ee;
+      --violet: #6450af;
+      --violet-soft: #f0edff;
+      --gray-soft: #edf0f4;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      width: 1760px;
+      height: 1280px;
+      overflow: hidden;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+    }
+
+    [hidden] { display: none !important; }
+
+    .frame {
+      position: relative;
+      width: 1760px;
+      height: 1280px;
+      overflow: hidden;
+      background:
+        linear-gradient(rgba(31, 58, 91, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(31, 58, 91, 0.035) 1px, transparent 1px),
+        var(--paper);
+      background-size: 32px 32px;
+    }
+
+    .frame-header {
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 142px;
+      padding: 25px 42px 22px 48px;
+      color: white;
+      background: linear-gradient(112deg, #10254f 0%, #17437b 64%, #087f78 100%);
+      border-bottom: 8px solid #d8e4f5;
+    }
+
+    .frame-number {
+      display: inline-block;
+      margin-bottom: 7px;
+      padding: 4px 10px;
+      color: #10254f;
+      background: white;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 38px;
+      line-height: 1.02;
+      letter-spacing: -0.025em;
+    }
+
+    .subtitle {
+      margin-top: 7px;
+      font-size: 17px;
+      color: #dae7fb;
+    }
+
+    .doc-meta {
+      position: absolute;
+      top: 27px;
+      right: 44px;
+      width: 315px;
+      font-size: 13px;
+      line-height: 1.55;
+      color: #dce8fb;
+      text-align: right;
+    }
+
+    .board {
+      position: absolute;
+      left: 34px;
+      top: 169px;
+      width: 1692px;
+      height: 1040px;
+      border: 1px solid #cbd3df;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.86);
+      box-shadow: 0 8px 22px rgba(28, 48, 78, 0.08);
+    }
+
+    .lane-label {
+      position: absolute;
+      z-index: 8;
+      padding: 5px 11px;
+      color: white;
+      background: #596270;
+      border-radius: 3px;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .node {
+      position: absolute;
+      z-index: 5;
+      display: grid;
+      place-items: center;
+      padding: 14px 17px;
+      border: 2px solid #253b58;
+      border-radius: 4px;
+      background: var(--panel);
+      color: var(--ink);
+      font-size: 17px;
+      line-height: 1.26;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(26, 44, 70, 0.07);
+    }
+
+    .node strong { font-weight: 850; }
+    .node small {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
+    .start, .terminal {
+      border-radius: 28px;
+      border-color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .action {
+      border-color: var(--teal);
+      background: var(--teal-soft);
+    }
+
+    .linked {
+      border-color: var(--violet);
+      background: var(--violet-soft);
+    }
+
+    .route {
+      border-color: var(--amber);
+      background: var(--amber-soft);
+    }
+
+    .handoff {
+      border-color: var(--red);
+      background: var(--red-soft);
+    }
+
+    .success {
+      border-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .outside {
+      border-color: #8994a5;
+      background: var(--gray-soft);
+      color: #405069;
+    }
+
+    .decision-wrap {
+      position: absolute;
+      z-index: 5;
+      width: 168px;
+      height: 168px;
+    }
+
+    .diamond {
+      position: absolute;
+      inset: 12px;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      border: 2px solid #2e5f4a;
+      background: #f3fbf6;
+      transform: rotate(45deg);
+      box-shadow: 0 4px 10px rgba(26, 44, 70, 0.07);
+    }
+
+    .diamond > span {
+      display: block;
+      width: 116px;
+      font-size: 15px;
+      line-height: 1.18;
+      text-align: center;
+      transform: rotate(-45deg);
+    }
+
+    .connector-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      width: 1692px;
+      height: 1040px;
+      pointer-events: none;
+    }
+
+    .edge {
+      fill: none;
+      stroke: var(--line);
+      stroke-width: 4;
+      stroke-linecap: square;
+      stroke-linejoin: miter;
+      marker-end: url(#arrow);
+    }
+
+    .edge.alt { stroke: #708096; }
+    .edge.good { stroke: var(--green); }
+    .edge.bad { stroke: var(--red); }
+    .edge.link { stroke: var(--violet); stroke-dasharray: 9 7; }
+    .edge.context { stroke: #9aa4b2; stroke-width: 3; stroke-dasharray: 7 7; }
+
+    .edge-label {
+      position: absolute;
+      z-index: 7;
+      padding: 3px 7px;
+      color: #2f5276;
+      background: rgba(255, 255, 255, 0.94);
+      font-size: 13px;
+      font-weight: 850;
+      letter-spacing: 0.025em;
+      text-transform: uppercase;
+    }
+
+    .sticky {
+      position: absolute;
+      z-index: 6;
+      padding: 13px 14px 16px;
+      border: 1px solid #d4bd67;
+      background: #fff2a9;
+      color: #3f3b28;
+      font-size: 13px;
+      line-height: 1.35;
+      box-shadow: 4px 5px 9px rgba(38, 42, 48, 0.13);
+      transform: rotate(-1.2deg);
+    }
+
+    .sticky.blue {
+      border-color: #91b4d8;
+      background: #dceeff;
+      transform: rotate(1deg);
+    }
+
+    .parked {
+      position: absolute;
+      z-index: 5;
+      padding: 12px 14px;
+      border: 2px dashed #9da5b0;
+      background: #f5f5f3;
+      color: #68717d;
+      font-size: 13px;
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .parked b {
+      display: block;
+      margin-bottom: 4px;
+      color: #59616c;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .legend {
+      position: absolute;
+      left: 52px;
+      bottom: 20px;
+      display: flex;
+      gap: 24px;
+      color: #667385;
+      font-size: 12px;
+    }
+
+    .legend span::before {
+      content: "";
+      display: inline-block;
+      width: 14px;
+      height: 10px;
+      margin-right: 6px;
+      vertical-align: -1px;
+      border: 2px solid #253b58;
+      background: white;
+    }
+
+    .legend .decision-key::before {
+      border-color: #2e5f4a;
+      background: #f3fbf6;
+      transform: rotate(45deg);
+    }
+
+    .legend .handoff-key::before {
+      border-color: var(--red);
+      background: var(--red-soft);
+    }
+
+    .legend .linked-key::before {
+      border-color: var(--violet);
+      background: var(--violet-soft);
+    }
+
+    .footer {
+      position: absolute;
+      right: 42px;
+      bottom: 18px;
+      color: #737f90;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<section class="frame" id="frame1">
+  <header class="frame-header">
+    <div class="frame-number">Chart 1 of 3 · Signal triage</div>
+    <h1>Is this a Restore Service case?</h1>
+    <div class="subtitle">Start with visible cellular state; branch before touching account records.</div>
+    <div class="doc-meta">Northline Care Enablement<br>Published · revision 3.3<br>Effective 08 August 2026</div>
+  </header>
+  <div class="board">
+    <div class="lane-label" style="left:20px;top:-12px">Restore Service entry and network-state gate</div>
+    <div class="lane-label" style="left:1337px;top:-12px;background:#7c8796">Adjacent journeys · context only</div>
+
+    <svg class="connector-layer" viewBox="0 0 1692 1040" aria-hidden="true">
+      <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#2f5d8c"/></marker></defs>
+      <path class="edge" d="M290 173 H365"/>
+      <path class="edge" d="M625 173 H683"/>
+      <path class="edge alt" d="M839 173 H958"/>
+      <path class="edge context" d="M1198 173 H1262 V322 H1350"/>
+      <path class="edge context" d="M1262 322 V452 H1350"/>
+      <path class="edge" d="M761 251 V355"/>
+      <path class="edge" d="M761 455 V502"/>
+      <path class="edge alt" d="M839 580 H995"/>
+      <path class="edge" d="M761 658 V765"/>
+      <path class="edge" d="M1240 580 H1300 V843 H839"/>
+      <path class="edge good" d="M761 921 V950 H1105"/>
+      <path class="edge bad" d="M683 843 H480 V948"/>
+      <path class="edge link" d="M1105 987 H1305"/>
+    </svg>
+
+    <div class="node start" style="left:55px;top:115px;width:235px;height:116px;font-size:16px">
+      Phone shows <strong>no service</strong> or cannot connect to the cellular network
+    </div>
+    <div class="node action" style="left:365px;top:120px;width:260px;height:106px">
+      Ask the customer to <strong>check the status bar first</strong>
+    </div>
+    <div class="decision-wrap" style="left:677px;top:89px"><div class="diamond"><span>Connected cellular service shown?</span></div></div>
+    <div class="node outside" style="left:958px;top:116px;width:240px;height:114px">
+      <strong>Stop this workflow</strong>
+      <small>This is not a no-service issue; handle the reported symptom.</small>
+    </div>
+
+    <div class="node outside" style="left:1350px;top:270px;width:280px;height:104px">
+      Bars present, but mobile data is slow or unavailable
+      <small>Adjacent mobile-data journey</small>
+    </div>
+    <div class="node outside" style="left:1350px;top:400px;width:280px;height:104px">
+      Bars present, but picture messages fail
+      <small>Adjacent MMS journey</small>
+    </div>
+
+    <div class="node action" style="left:625px;top:355px;width:272px;height:100px">
+      Ask the customer to check <strong>cellular network status</strong>
+    </div>
+    <div class="decision-wrap" style="left:677px;top:496px"><div class="diamond"><span>Airplane mode on?</span></div></div>
+    <div class="node action" style="left:995px;top:525px;width:245px;height:110px">
+      Ask the customer to <strong>turn airplane mode off</strong>
+      <small>Then recheck the status bar.</small>
+    </div>
+    <div class="decision-wrap" style="left:677px;top:759px"><div class="diamond"><span>Connected after the relevant check?</span></div></div>
+    <div class="node linked" style="left:1105px;top:940px;width:200px;height:94px">
+      Connected-service completion gate
+      <small>Shown in the companion recording</small>
+    </div>
+    <div class="node terminal" style="left:300px;top:948px;width:300px;height:76px">
+      Continue to <strong>Chart 2 · SIM + APN</strong>
+    </div>
+
+    <div class="sticky" style="left:1020px;top:715px;width:235px">
+      Case note: “I already restarted twice.” Prior attempts are context; follow the decision gates shown here.
+    </div>
+    <div class="parked" style="left:1385px;top:690px;width:205px">
+      <b>Parked idea · not policy</b>
+      “Start every case with a reboot.” This proposal is not in the published flow.
+    </div>
+
+    <div class="edge-label" style="left:862px;top:148px">Yes</div>
+    <div class="edge-label" style="left:730px;top:292px">No</div>
+    <div class="edge-label" style="left:880px;top:552px">Yes</div>
+    <div class="edge-label" style="left:730px;top:704px">No</div>
+    <div class="edge-label" style="left:845px;top:817px">No</div>
+    <div class="edge-label" style="left:880px;top:950px">Yes</div>
+
+    <div class="legend"><span>Agent step</span><span class="decision-key">Decision gate</span><span class="linked-key">Linked evidence</span><span class="handoff-key">Handoff</span></div>
+  </div>
+  <div class="footer">Internal working material · RS-3.3-01</div>
+</section>
+
+<section class="frame" id="frame2">
+  <header class="frame-header">
+    <div class="frame-number">Chart 2 of 3 · SIM and device recovery</div>
+    <h1>Which SIM branch applies?</h1>
+    <div class="subtitle">Read the reported SIM state, then use the recording for APN recovery.</div>
+    <div class="doc-meta">Northline Care Enablement<br>Published · revision 3.3<br>Effective 08 August 2026</div>
+  </header>
+  <div class="board">
+    <div class="lane-label" style="left:20px;top:-12px">SIM-state decision tree</div>
+    <div class="lane-label" style="left:1300px;top:-12px;background:#6450af">Companion recording controls APN steps</div>
+
+    <svg class="connector-layer" viewBox="0 0 1692 1040" aria-hidden="true">
+      <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#2f5d8c"/></marker></defs>
+      <path class="edge" d="M295 154 H380"/>
+      <path class="edge" d="M640 154 H704"/>
+      <path class="edge link" d="M860 154 H990"/>
+      <path class="edge link" d="M1162 231 V344"/>
+      <path class="edge good" d="M1240 424 H1420"/>
+      <path class="edge bad" d="M1162 502 V965 H560"/>
+    </svg>
+
+    <div class="node start" style="left:50px;top:104px;width:245px;height:100px;font-size:16px">
+      From Chart 1: network status checked and service is still unavailable
+    </div>
+    <div class="node action" style="left:380px;top:104px;width:260px;height:100px">
+      Ask the customer to <strong>check the SIM status screen</strong>
+    </div>
+    <div class="decision-wrap" style="left:698px;top:70px"><div class="diamond"><span>What SIM state is reported?</span></div></div>
+
+    <div class="node linked" style="left:990px;top:99px;width:345px;height:132px">
+      <strong>Active SIM + service unavailable</strong>
+      <small>Open the companion APN recovery recording and follow its successful path.</small>
+    </div>
+    <div class="decision-wrap" style="left:1078px;top:340px"><div class="diamond"><span>Recording ends with connected service?</span></div></div>
+    <div class="node success" style="left:1420px;top:383px;width:220px;height:82px">
+      Service restored
+      <small>Use the recording’s completion gate.</small>
+    </div>
+    <div class="node terminal" style="left:270px;top:940px;width:290px;height:82px">
+      Continue to <strong>Chart 3 · carrier side</strong>
+    </div>
+
+    <div class="sticky blue" style="left:70px;top:690px;width:195px">
+      Prior device history: customer says a reboot was attempted before contact. This note does not replace a shown gate.
+    </div>
+    <div class="parked" style="left:1380px;top:900px;width:220px">
+      <b>Parked idea · not policy</b>
+      Factory reset proposal. Not part of the supported Restore Service path.
+    </div>
+
+    <div class="edge-label" style="left:880px;top:130px">Active</div>
+    <div class="edge-label" style="left:1290px;top:398px">Yes</div>
+    <div class="edge-label" style="left:1180px;top:545px">No</div>
+
+    <div class="legend"><span>Agent step</span><span class="decision-key">Decision gate</span><span class="linked-key">Linked evidence</span><span class="handoff-key">Handoff</span></div>
+  </div>
+  <div class="footer">Internal working material · RS-3.3-02</div>
+</section>
+
+<section class="frame" id="frame3">
+  <header class="frame-header">
+    <div class="frame-number">Chart 3 of 3 · Carrier-side diagnosis</div>
+    <h1>Is line suspension preventing service?</h1>
+    <div class="subtitle">Read carrier state only after the supported device path fails; then route by suspension cause.</div>
+    <div class="doc-meta">Northline Care Enablement<br>Published · revision 3.3<br>Effective 08 August 2026</div>
+  </header>
+  <div class="board">
+    <div class="lane-label" style="left:20px;top:-12px">Carrier-side routing and final handoff</div>
+    <div class="lane-label" style="left:1320px;top:-12px;background:#9a6205">Related workflow exits</div>
+
+    <svg class="connector-layer" viewBox="0 0 1692 1040" aria-hidden="true">
+      <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#2f5d8c"/></marker></defs>
+      <path class="edge" d="M300 163 H390"/>
+      <path class="edge" d="M690 163 H738"/>
+      <path class="edge alt" d="M894 163 H1045"/>
+      <path class="edge" d="M816 241 V385"/>
+      <path class="edge" d="M894 463 H1050"/>
+      <path class="edge" d="M1300 463 H1360 V660"/>
+      <path class="edge good" d="M1360 816 V941 H1290"/>
+      <path class="edge bad" d="M1444 735 H1500 V845"/>
+      <path class="edge context" d="M365 480 H215 V680"/>
+    </svg>
+
+    <div class="node start" style="left:50px;top:108px;width:250px;height:110px;font-size:16px">
+      From Chart 2: supported device-side checks did not restore service
+    </div>
+    <div class="node action" style="left:390px;top:105px;width:300px;height:116px">
+      Identify the <strong>affected line</strong> and check whether the line is <strong>suspended</strong>
+    </div>
+    <div class="decision-wrap" style="left:732px;top:79px"><div class="diamond"><span>Line suspended?</span></div></div>
+
+    <div class="node action" style="left:1045px;top:104px;width:285px;height:118px">
+      Confirm the device-side checks are complete
+      <small>No supported suspension flow applies.</small>
+    </div>
+
+    <div class="decision-wrap" style="left:732px;top:379px"><div class="diamond"><span>Suspension cause?</span></div></div>
+    <div class="node route" style="left:1050px;top:408px;width:250px;height:110px">
+      <strong>Overdue bill</strong>
+      <small>Use the overdue-bill resumption flow.</small>
+    </div>
+    <div class="decision-wrap" style="left:1276px;top:654px"><div class="diamond"><span>Supported flow restores service?</span></div></div>
+
+    <div class="node linked" style="left:1080px;top:897px;width:205px;height:88px">
+      Connected-service completion gate
+      <small>Companion recording</small>
+    </div>
+    <div class="node handoff" style="left:1350px;top:845px;width:300px;height:165px">
+      <strong>Service remains unresolved</strong>
+      <small>When the device-side checks are complete and no supported suspension flow restores service, record the handoff with the transfer or escalation control, then give the required transfer message.</small>
+    </div>
+
+    <div class="sticky" style="left:90px;top:430px;width:275px">
+      Account note: a billing conversation appears in history. Current line status—not the note—controls this branch.
+    </div>
+    <div class="parked" style="left:85px;top:680px;width:220px">
+      <b>Parked idea · not policy</b>
+      Automatic resumption based only on a payment promise. Not in the published path.
+    </div>
+
+    <div class="edge-label" style="left:925px;top:140px">No</div>
+    <div class="edge-label" style="left:785px;top:300px">Yes</div>
+    <div class="edge-label" style="left:930px;top:440px">Overdue</div>
+    <div class="edge-label" style="left:1462px;top:706px">No</div>
+    <div class="edge-label" style="left:1298px;top:872px">Yes</div>
+
+    <div class="legend"><span>Agent step</span><span class="decision-key">Decision gate</span><span class="linked-key">Linked evidence</span><span class="handoff-key">Handoff</span></div>
+  </div>
+  <div class="footer">Internal working material · RS-3.3-03</div>
+</section>
+
+<script>
+  const requested = new URLSearchParams(window.location.search).get("frame") || "1";
+  document.querySelectorAll(".frame").forEach((frame) => {
+    frame.hidden = frame.id !== `frame${requested}`;
+  });
+  window.__boardReady = true;
+</script>
+</body>
+</html>

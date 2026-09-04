@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>RATE-OPS-102 rev A — Interest discrepancies</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 1100px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #6b6f76; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #d6dade; }
+  .node { position: absolute; width: 300px; box-sizing: border-box; border: 2px solid #4a5b6d; border-radius: 6px; background: #fff; padding: 10px 12px; font-size: 13px; line-height: 1.35; color: #1d2733; }
+  .node .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding: 1px 6px; border-radius: 3px; margin-bottom: 6px; }
+  .entry { border-color: #1d6a44; } .entry .tag { background: #d9efe3; color: #17573a; }
+  .read { border-color: #2b5f8f; } .read .tag { background: #dcebf7; color: #234d73; }
+  .work { border-color: #4a5b6d; } .work .tag { background: #e6ebf0; color: #3a4a5a; }
+  .terminal { border-color: #1d6a44; background: #f2faf5; } .terminal .tag { background: #d9efe3; color: #17573a; }
+  .decision { position: absolute; width: 300px; box-sizing: border-box; }
+  .decision .diamond { width: 280px; height: 132px; margin: 0 auto; background: #fff8e8; border: 2px solid #b08a1f; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 8px 16px; box-sizing: border-box; font-size: 12.5px; text-align: center; color: #4b3d10; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+  svg.edges { position: absolute; left: 0; top: 0; width: 1560px; height: 1100px; pointer-events: none; }
+  svg.edges path { stroke: #51606f; stroke-width: 2; fill: none; marker-end: url(#arrowc); }
+  .edge-label { position: absolute; font-size: 11px; font-weight: 600; color: #38424d; background: #fbfcfdcc; padding: 0 4px; border-radius: 2px; }
+  .sticky { position: absolute; width: 280px; box-sizing: border-box; padding: 10px 12px; font-size: 12px; line-height: 1.35; box-shadow: 2px 3px 6px rgba(0,0,0,0.12); }
+  .sticky.yellow { background: #fdf3c0; } .sticky.pink { background: #fbdce4; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>Interest discrepancies — investigate and escalate</h1>
+    <div class="meta">RATE-OPS-102 rev A &nbsp;·&nbsp; 2025-09-30 &nbsp;·&nbsp; Rate-ops working group, ahead of the October reissue of the schedule</div>
+  </div>
+
+  <svg class="edges" viewBox="0 0 1560 1100">
+    <defs><marker id="arrowc" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#51606f"></path></marker></defs>
+    <!-- entry -> verify -->
+    <path d="M 190 208 L 190 262"></path>
+    <!-- verify -> investigate -->
+    <path d="M 190 380 L 190 440"></path>
+    <!-- investigate -> diamond -->
+    <path d="M 190 590 L 190 646"></path>
+    <!-- diamond yes -> report first -->
+    <path d="M 340 714 L 448 714 L 448 660"></path>
+    <!-- report first -> wait -->
+    <path d="M 598 532 L 598 460 L 690 460 L 748 460"></path>
+    <!-- wait -> credit -->
+    <path d="M 898 530 L 898 620 L 958 620"></path>
+    <!-- credit -> terminal -->
+    <path d="M 1108 760 L 1108 830"></path>
+    <!-- diamond no -> explain -->
+    <path d="M 40 714 L 20 714 L 20 900 L 40 900"></path>
+  </svg>
+
+  <span class="edge-label" style="left:352px;top:688px">yes — discrepancy exists</span>
+  <span class="edge-label" style="left:30px;top:780px">no</span>
+
+  <article class="node entry" style="left:40px;top:100px"><span class="tag">ENTRY</span>
+    Customer disputes a savings interest amount. Open the investigation checklist.
+  </article>
+
+  <article class="node read" style="left:40px;top:266px"><span class="tag">STEP 1 — VERIFY</span>
+    Verify identity and account ownership; pull accounts and the interest
+    transaction.
+  </article>
+
+  <article class="node work" style="left:40px;top:444px"><span class="tag">STEP 2 — INVESTIGATE</span>
+    Review the product documentation, add up the applicable APY components, and
+    compare expected interest against what posted.
+  </article>
+
+  <div class="decision" style="left:40px;top:646px"><div class="diamond">Discrepancy between expected and actual interest?</div></div>
+
+  <article class="node work" style="left:448px;top:532px"><span class="tag">STEP 3 — REPORT FIRST</span>
+    Report first: submit the discrepancy to the backend team so the investigation
+    confirms the amount before any money moves.
+  </article>
+
+  <article class="node work" style="left:748px;top:394px"><span class="tag">STEP 4 — AWAIT CONFIRMATION</span>
+    Hold the case open until the backend confirms the corrected amount (target two
+    business days).
+  </article>
+
+  <article class="node work" style="left:958px;top:566px"><span class="tag">STEP 5 — CREDIT</span>
+    Apply the confirmed credit to the customer's account and notify the customer.
+  </article>
+
+  <article class="node terminal" style="left:958px;top:834px"><span class="tag">TERMINAL</span>
+    Case closed after backend confirmation and credit.
+  </article>
+
+  <article class="node work" style="left:40px;top:854px"><span class="tag">TERMINAL — NO DISCREPANCY</span>
+    Walk the customer through the components; nothing filed.
+  </article>
+
+  <aside class="sticky pink" style="left:748px;top:100px">
+    Open question for review: does holding the credit behind backend confirmation
+    leave the customer short for up to two days? Flagged for the sign-off
+    meeting.
+  </aside>
+
+  <aside class="sticky yellow" style="left:1060px;top:100px">
+    Routing and tool steps still open — to be settled against the October
+    reissue of the schedule.
+  </aside>
+</div>
+</body>
+</html>

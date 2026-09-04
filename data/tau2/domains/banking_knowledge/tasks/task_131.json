@@ -1,0 +1,70 @@
+{
+  "id": "task_131",
+  "description": {
+    "purpose": "Task: task_131",
+    "relevant_policies": null,
+    "notes": "REPLACEMENT CARD - STOLEN CARD ON A PREMIUM-TIER ACCOUNT (COMPLIMENTARY EXPEDITED + MANDATED WARNINGS). Existing db customer Isabella Fernandez's Diamond Elite Card was physically stolen from her gym locker an hour ago (no fraudulent charges seen yet). Levers: (1) reason precision - the replacement reason must be recorded as 'stolen', not 'fraud_suspected' (she has the facts of a physical theft; a sloppy agent that records fraud_suspected fails DB via the order record); (2) fee-by-tier - she is fee-averse and only accepts expedited shipping if it costs nothing; Diamond Elite is premium-tier-and-above, so expedited is $0.00 complimentary - an agent that wrongly quotes a fee makes her decline expedited -> expedited_shipping=false -> DB mismatch; (3) the doc's mandates for stolen cards: strongly recommend expedited shipping and remind the customer to review recent transactions for unauthorized activity (nl assertions)."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Isabella Fernandez, a 32-year-old event photographer from Miami, FL. You are a bit shaken but practical. You have several cards with Rho-Bank; this call is about your Diamond Elite Card.\n\n**Your situation:** About an hour ago someone broke into your locker at the gym and stole your wallet - your Diamond Elite Card was in it. You checked the app in the parking lot and didn't see any charges you don't recognize, at least not yet. You want the stolen card shut down and a new one sent. One quirk: your old bank once hit you with a $25 rush-delivery fee, so you refuse to pay extra for fast shipping - but you'll gladly take fast shipping if it's free.\n\n**Your shipping rule (important):** If expedited/rush shipping is free or complimentary, accept it. If the agent says it costs any fee, decline it and take standard shipping.\n\n**Information you know and should provide when asked:**\n- Your full name: Isabella Fernandez\n- Your phone number: 305-555-0729\n- Your email: bella_fernandez92@yahoo.com\n- Your date of birth: 12/19/1992\n- Your home address: 742 Sunset Boulevard, Miami, FL 33101 (ship the replacement here)\n\n## Conversation Flow:\n\n1. **Opening:** \"Hi - someone broke into my gym locker about an hour ago and stole my wallet. My Diamond Elite Card was in it. I need that card killed and a replacement sent to me, please.\"\n\n2. **Provide verification info when asked:** Give your name, phone number, email, date of birth as requested.\n\n3. **If asked whether there are unauthorized charges:** \"I checked the app right away and didn't see anything weird yet. But whoever took it has had it for an hour now.\"\n\n4. **If asked to clarify what happened / the reason:** \"It was stolen. Physically taken out of my locker along with my whole wallet. I filed a report with the gym's front desk.\"\n\n5. **If the agent recommends or offers expedited shipping:** Ask about the cost first. \"Is there a fee for the fast shipping? My old bank charged me $25 for that once and I'm not doing that again.\"\n\n6. **If told expedited shipping is complimentary/free for your card:** Accept. \"Oh, it's included? Great, yes, send it expedited then.\"\n\n7. **If told expedited shipping costs a fee:** Decline. \"No, I'm not paying for shipping. Standard is fine.\"\n\n8. **If asked to confirm the shipping address:** \"My home address - 742 Sunset Boulevard, Miami, FL 33101.\"\n\n9. **If the agent advises you to keep an eye on your transactions or dispute anything unauthorized:** \"Good idea - I'll go through the last few days tonight and call back if anything looks off.\"\n\n10. **After the replacement order is placed:** Thank the agent and end the conversation. \"Thank you, that's a huge relief. Bye.\" ###STOP###\n\nDo not dump all your information at once. Only provide additional details about your situation when the agent asks. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": null,
+      "user_data": null
+    },
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Isabella Fernandez",
+          "user_id": "f9bf8de0be",
+          "address": "742 Sunset Boulevard, Miami, FL 33101",
+          "email": "bella_fernandez92@yahoo.com",
+          "phone_number": "305-555-0729",
+          "date_of_birth": "12/19/1992",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "131_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "order_replacement_credit_card_7291"
+        },
+        "requestor": "assistant",
+        "action_id": "131_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "order_replacement_credit_card_7291",
+          "arguments": "{\"credit_card_account_id\": \"cc_f9bf8de0be_diamond\", \"user_id\": \"f9bf8de0be\", \"shipping_address\": \"742 Sunset Boulevard, Miami, FL 33101\", \"reason\": \"stolen\", \"expedited_shipping\": true}"
+        },
+        "requestor": "assistant",
+        "action_id": "131_2"
+      }
+    ],
+    "nl_assertions": [
+      "The agent recommends expedited shipping for the replacement because the card was stolen.",
+      "The agent tells the customer that expedited shipping is complimentary (no fee) for her card's tier.",
+      "The agent reminds the customer to review her recent transactions for unauthorized activity."
+    ],
+    "reward_basis": [
+      "DB",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_credit_cards_credit_card_replacements_001",
+    "doc_credit_cards_credit_card_replacements_002"
+  ]
+}

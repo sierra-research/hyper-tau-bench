@@ -1,0 +1,1010 @@
+{
+  "id": "banking_credit_card_replacements_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "credit_card_replacements",
+  "display_name": "Credit-card replacement ordering, shipping, rejection, and pending-order checks",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_replacements/source.md",
+    "heading": "## Credit-card replacement ordering, shipping, rejection, and pending-order checks"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_replacements/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_replacements/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_replacements/evidence_corpus_hard_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_replacements/evidence_corpus_deep_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_replacements/client_overlay_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/credit_card_replacements/client_overlay_card_servicing_001/transformation_pack.json"
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook requirements from shared context: verify identity before account-specific information, get explicit confirmation before account-modifying actions, and use the exact transfer message when a transfer is performed.",
+      "Support console turns may mention document ids, internal tool results, and eligibility checks; Agent turns should give the customer the customer-visible next step or outcome.",
+      "Do not transform concrete KB tables, thresholds, statuses, fees, amounts, or condition-specific outcomes into vague dependency statements."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "identity verification before account-specific details",
+      "explicit customer confirmation before account-modifying actions",
+      "plain-language customer-facing outcomes",
+      "support-console notes for internal KB/tool evidence"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_card_replacements_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_card_replacements_002.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_card_replacements_003.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_card_replacements_004.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_card_replacements_005.json"
+    ],
+    "summary": "Replacement-card eligibility, shipping options and fees, consequences of replacement, rejected requests, and pending replacement order checks.",
+    "rules": [
+      "Preserve all values, tables, thresholds, statuses, fees, amounts, eligibility gates, tool/action names, and condition-to-outcome mappings from the source bundle.",
+      "Use the shared banking handbook for identity verification, explicit confirmation before account-modifying actions, discoverable-tool wrapper behavior, schema limits, and transfer wording.",
+      "Do not invent unsupported account fields, undocumented override mechanisms, undocumented tool names, or customer entitlements not present in the source bundle.",
+      "When a source document is internal, represent its internal checks in Support console turns or agent behavior rather than as exposed policy narration."
+    ],
+    "candidate": {
+      "id": "credit_card_replacements",
+      "title": "Credit-card replacement ordering, shipping, rejection, and pending-order checks",
+      "priority": 1,
+      "related_task_ids": [
+        "task_036",
+        "task_037",
+        "task_038",
+        "task_039",
+        "task_043",
+        "task_044",
+        "task_045",
+        "task_047",
+        "task_048",
+        "task_049",
+        "task_053",
+        "task_054"
+      ],
+      "recommended_case_count": 5,
+      "losslessness_risks": [
+        "Preserve shipping fees, timing, and option-specific restrictions.",
+        "Preserve pending-order blockers.",
+        "Preserve rejection reasons separately from transfer or dispute handling."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "credit_card_replacements_journey",
+        "label": "Credit-card replacement ordering, shipping, rejection, and pending-order checks",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "credit_card_replacements_shared_rules",
+        "label": "Shared workflow rules",
+        "kind": "shared_reference",
+        "parent_id": "credit_card_replacements_journey",
+        "order": 1,
+        "description": "Rules, prerequisites, and reference values used by more than one customer pathway in this journey.",
+        "fact_ids": [
+          "F002",
+          "F003",
+          "F004",
+          "F005",
+          "F006",
+          "F007",
+          "F008",
+          "F009",
+          "F012",
+          "F021",
+          "F022",
+          "F023",
+          "F024",
+          "F025",
+          "F026",
+          "F027",
+          "F028",
+          "F029",
+          "F030",
+          "F031",
+          "F032",
+          "F033",
+          "F034",
+          "F035",
+          "F038",
+          "F041",
+          "F045",
+          "F046",
+          "F047",
+          "F048",
+          "F049",
+          "F050",
+          "F051",
+          "F052",
+          "F053",
+          "F054",
+          "F055",
+          "F056",
+          "F057",
+          "F058",
+          "F061",
+          "F074",
+          "F075"
+        ]
+      },
+      {
+        "id": "credit_card_replacements_path_a",
+        "label": "Eligible damaged-card replacement with standard delivery",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_replacements_journey",
+        "order": 2,
+        "description": "Policy path represented by case A.",
+        "fact_ids": [
+          "F011"
+        ]
+      },
+      {
+        "id": "credit_card_replacements_path_b",
+        "label": "Eligible stolen-card replacement with entry-tier expedited shipping fee",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_replacements_journey",
+        "order": 3,
+        "description": "Policy path represented by case B.",
+        "fact_ids": [
+          "F013",
+          "F017",
+          "F019",
+          "F037"
+        ]
+      },
+      {
+        "id": "credit_card_replacements_path_c",
+        "label": "Eligible fraud_suspected replacement with mid-tier expedited shipping fee",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_replacements_journey",
+        "order": 4,
+        "description": "Policy path represented by case C.",
+        "fact_ids": [
+          "F014",
+          "F016",
+          "F018",
+          "F036"
+        ]
+      },
+      {
+        "id": "credit_card_replacements_path_d",
+        "label": "Eligible lost-card replacement with premium complimentary expedited shipping for travel need",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_replacements_journey",
+        "order": 5,
+        "description": "Policy path represented by case D.",
+        "fact_ids": [
+          "F015",
+          "F020"
+        ]
+      },
+      {
+        "id": "credit_card_replacements_path_e",
+        "label": "Replacement request rejected because an existing replacement is still processing",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_replacements_journey",
+        "order": 6,
+        "description": "Policy path represented by case E.",
+        "fact_ids": [
+          "F039",
+          "F040"
+        ]
+      },
+      {
+        "id": "credit_card_replacements_path_f",
+        "label": "Entry-tier replacement request rejected for exceeding 60-day limit",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_replacements_journey",
+        "order": 7,
+        "description": "Policy path represented by case F.",
+        "fact_ids": [
+          "F042"
+        ]
+      },
+      {
+        "id": "credit_card_replacements_path_g",
+        "label": "Mid-tier replacement request rejected for exceeding 60-day limit",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_replacements_journey",
+        "order": 8,
+        "description": "Policy path represented by case G.",
+        "fact_ids": [
+          "F043"
+        ]
+      },
+      {
+        "id": "credit_card_replacements_path_h",
+        "label": "Premium-tier-and-above replacement request rejected for exceeding 60-day limit",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_replacements_journey",
+        "order": 9,
+        "description": "Policy path represented by case H.",
+        "fact_ids": [
+          "F044"
+        ]
+      },
+      {
+        "id": "credit_card_replacements_path_i",
+        "label": "Account-closure precheck returns no pending replacement orders",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_replacements_journey",
+        "order": 10,
+        "description": "Policy path represented by case I.",
+        "fact_ids": [
+          "F059",
+          "F060",
+          "F067"
+        ]
+      },
+      {
+        "id": "credit_card_replacements_path_j",
+        "label": "Account-closure precheck blocked by non-final replacement order",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_replacements_journey",
+        "order": 11,
+        "description": "Policy path represented by case J.",
+        "fact_ids": [
+          "F062",
+          "F063",
+          "F065",
+          "F066"
+        ]
+      },
+      {
+        "id": "credit_card_replacements_path_k",
+        "label": "Account-closure precheck with multiple final replacement orders",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_replacements_journey",
+        "order": 12,
+        "description": "Policy path represented by case K.",
+        "fact_ids": [
+          "F064",
+          "F076"
+        ]
+      },
+      {
+        "id": "credit_card_replacements_path_l",
+        "label": "Pending-order check troubleshooting for invalid credit_card_account_id",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_replacements_journey",
+        "order": 13,
+        "description": "Policy path represented by case L.",
+        "fact_ids": [
+          "F068",
+          "F069"
+        ]
+      },
+      {
+        "id": "credit_card_replacements_path_m",
+        "label": "Pending-order check troubleshooting for permission or access denied",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_replacements_journey",
+        "order": 14,
+        "description": "Policy path represented by case M.",
+        "fact_ids": [
+          "F070",
+          "F071"
+        ]
+      },
+      {
+        "id": "credit_card_replacements_path_n",
+        "label": "Pending-order check troubleshooting for non-successful empty or ambiguous response",
+        "kind": "scenario_branch",
+        "parent_id": "credit_card_replacements_journey",
+        "order": 15,
+        "description": "Policy path represented by case N.",
+        "fact_ids": [
+          "F072",
+          "F073"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "credit_card_replacements_path_a",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_replacements_shared_rules"
+      },
+      {
+        "source_id": "credit_card_replacements_path_b",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_replacements_shared_rules"
+      },
+      {
+        "source_id": "credit_card_replacements_path_c",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_replacements_shared_rules"
+      },
+      {
+        "source_id": "credit_card_replacements_path_d",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_replacements_shared_rules"
+      },
+      {
+        "source_id": "credit_card_replacements_path_e",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_replacements_shared_rules"
+      },
+      {
+        "source_id": "credit_card_replacements_path_f",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_replacements_shared_rules"
+      },
+      {
+        "source_id": "credit_card_replacements_path_g",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_replacements_shared_rules"
+      },
+      {
+        "source_id": "credit_card_replacements_path_h",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_replacements_shared_rules"
+      },
+      {
+        "source_id": "credit_card_replacements_path_i",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_replacements_shared_rules"
+      },
+      {
+        "source_id": "credit_card_replacements_path_j",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_replacements_shared_rules"
+      },
+      {
+        "source_id": "credit_card_replacements_path_k",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_replacements_shared_rules"
+      },
+      {
+        "source_id": "credit_card_replacements_path_l",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_replacements_shared_rules"
+      },
+      {
+        "source_id": "credit_card_replacements_path_m",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_replacements_shared_rules"
+      },
+      {
+        "source_id": "credit_card_replacements_path_n",
+        "type": "uses_shared_rules",
+        "target_id": "credit_card_replacements_shared_rules"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "F002",
+      "statement": "Before ordering a replacement credit card, the agent must verify the customer's identity using standard verification procedures."
+    },
+    {
+      "id": "F003",
+      "statement": "Before ordering a replacement credit card, the agent must look up the customer's credit card account."
+    },
+    {
+      "id": "F004",
+      "statement": "Before ordering a replacement credit card, the agent must confirm the shipping address with the customer, using either a primary or alternate address and including any unit or suite information."
+    },
+    {
+      "id": "F005",
+      "statement": "Before ordering a replacement credit card, the agent must ask for the replacement reason and record exactly one of: fraud_suspected, lost, stolen, damaged, expired, or other."
+    },
+    {
+      "id": "F006",
+      "statement": "Before ordering a replacement credit card, the agent must ask whether the customer wants expedited shipping and advise on possible fees by card tier."
+    },
+    {
+      "id": "F007",
+      "statement": "Before proceeding with a replacement credit card order, the agent must confirm eligibility for replacement in the knowledge base."
+    },
+    {
+      "id": "F008",
+      "statement": "The agent must not unlock or call the replacement credit card ordering tool unless the customer is eligible for replacement."
+    },
+    {
+      "id": "F009",
+      "statement": "If the customer is not eligible for a replacement credit card, the agent must explain next steps per the knowledge base."
+    },
+    {
+      "id": "F011",
+      "statement": "Standard replacement credit card delivery takes 7–10 business days and has no fee for all cardholders."
+    },
+    {
+      "id": "F012",
+      "statement": "Expedited replacement credit card shipping takes 2–3 business days."
+    },
+    {
+      "id": "F013",
+      "statement": "Entry-tier expedited replacement credit card shipping costs $15.00; the exact entry-tier names source-listed for this fee row are Bronze Rewards, Bronze Rewards Card, EcoCard, Business Bronze, and Business Bronze Rewards Card."
+    },
+    {
+      "id": "F014",
+      "statement": "Mid-tier expedited replacement credit card shipping costs $10.00; the exact mid-tier names source-listed for this fee row are Silver Rewards, Silver Rewards Card, Business Silver, Business Silver Rewards Card, Green Rewards, Green Rewards Card, Silver Zoom, and Silver Zoom Card."
+    },
+    {
+      "id": "F015",
+      "statement": "Premium-tier and above expedited replacement credit card shipping costs $0.00 and is complimentary; the exact premium-tier-and-above names source-listed for this fee row are Gold, Gold Rewards Card, Business Gold Rewards Card, Platinum, Platinum Rewards Card, Business Platinum Rewards Card, Diamond Elite, and Diamond Elite Card."
+    },
+    {
+      "id": "F016",
+      "statement": "If the replacement reason is fraud_suspected, the agent must strongly recommend expedited shipping to minimize exposure or reduce the window for potential misuse."
+    },
+    {
+      "id": "F017",
+      "statement": "If the replacement reason is stolen, the agent must strongly recommend expedited shipping to minimize exposure or reduce the window for potential misuse."
+    },
+    {
+      "id": "F018",
+      "statement": "If the replacement reason is fraud_suspected, the agent must remind the customer to review recent transactions for unauthorized activity."
+    },
+    {
+      "id": "F019",
+      "statement": "If the replacement reason is stolen, the agent must remind the customer to review recent transactions for unauthorized activity."
+    },
+    {
+      "id": "F020",
+      "statement": "If the customer has upcoming travel or urgent payment needs, expedited shipping can help ensure the customer receives the replacement card within the accelerated timeframe."
+    },
+    {
+      "id": "F021",
+      "statement": "After eligibility is confirmed and before calling the order tool, the agent must unlock the discoverable replacement order tool using unlock_discoverable_agent_tool with tool_name order_replacement_credit_card_7291."
+    },
+    {
+      "id": "F022",
+      "statement": "After unlocking the discoverable replacement order tool, the agent must call it using call_discoverable_agent_tool with tool_name order_replacement_credit_card_7291."
+    },
+    {
+      "id": "F023",
+      "statement": "The replacement credit card order tool call must include the customer credit card account identifier, such as account_id or card_id from the account lookup."
+    },
+    {
+      "id": "F024",
+      "statement": "The replacement credit card order tool call must include the replacement reason as one of: fraud_suspected, lost, stolen, damaged, expired, or other."
+    },
+    {
+      "id": "F025",
+      "statement": "The replacement credit card order tool call must include shipping_address as the confirmed address."
+    },
+    {
+      "id": "F026",
+      "statement": "The replacement credit card order tool call must include shipping_speed as standard or expedited."
+    },
+    {
+      "id": "F027",
+      "statement": "The replacement credit card order tool call must include expedited_fee_acknowledgement with customer consent captured if a fee applies based on card tier."
+    },
+    {
+      "id": "F028",
+      "statement": "The replacement credit card order tool call must include notes for any relevant context, such as travel dates, fraud report reference, or delivery instructions."
+    },
+    {
+      "id": "F029",
+      "statement": "When a replacement credit card order is submitted, the current or old card is cancelled for security and can no longer be used for new purchases."
+    },
+    {
+      "id": "F030",
+      "statement": "When a replacement credit card is ordered, a new card is created with a different card number and CVV."
+    },
+    {
+      "id": "F031",
+      "statement": "When a replacement credit card is ordered, the account number remains unchanged, so recurring payments linked to the account continue without interruption."
+    },
+    {
+      "id": "F032",
+      "statement": "After submitting a replacement credit card order, the agent must communicate the expected delivery window based on the selected shipping method: standard is 7–10 business days and expedited is 2–3 business days."
+    },
+    {
+      "id": "F033",
+      "statement": "The customer receives an email when the replacement order is placed and another email when the card ships, and after submitting the order the agent must advise the customer to watch or track email for these notifications and updates."
+    },
+    {
+      "id": "F034",
+      "statement": "The customer should follow any activation instructions included with the new replacement card."
+    },
+    {
+      "id": "F035",
+      "statement": "After receiving the new replacement card, the customer should update any saved card details with merchants."
+    },
+    {
+      "id": "F036",
+      "statement": "For a fraud_suspected replacement after submission, the agent must remind the customer to review recent transactions and dispute any unauthorized charges in the app or website; the suspected-fraud next-step guidance also instructs the customer to review recent transactions in the Rho-Bank app or website and report any unauthorized charges."
+    },
+    {
+      "id": "F037",
+      "statement": "If the replacement reason is stolen, the agent must remind the customer to review recent transactions and dispute any unauthorized charges in the app or website."
+    },
+    {
+      "id": "F038",
+      "statement": "After submitting a replacement credit card order, the agent must document the interaction and replacement order details in the customer record."
+    },
+    {
+      "id": "F039",
+      "statement": "A customer cannot submit another replacement credit card request while an existing replacement request is still being processed."
+    },
+    {
+      "id": "F040",
+      "statement": "When an existing replacement request is still being processed, the customer must wait until the current replacement is delivered or cancelled before submitting a new replacement request."
+    },
+    {
+      "id": "F041",
+      "statement": "Replacement credit card requests are limited within a 60-day period to help protect the account."
+    },
+    {
+      "id": "F042",
+      "statement": "Entry-tier cardholders are limited to up to 2 replacement credit card requests per 60-day period."
+    },
+    {
+      "id": "F043",
+      "statement": "Mid-tier cardholders are limited to up to 3 replacement credit card requests per 60-day period."
+    },
+    {
+      "id": "F044",
+      "statement": "Premium-tier and above cardholders are limited to up to 4 replacement credit card requests per 60-day period."
+    },
+    {
+      "id": "F045",
+      "statement": "A replacement credit card request is rejected or the customer is not eligible when the customer has exceeded the replacement limit for the applicable card tier within the 60-day period."
+    },
+    {
+      "id": "F046",
+      "statement": "If the customer believes they have a legitimate need for an additional replacement beyond the tier limit, the next step is to contact customer support to request a manual review of the case."
+    },
+    {
+      "id": "F047",
+      "statement": "To check whether a credit card account has pending replacement card orders, use the get_pending_replacement_orders_5765 tool."
+    },
+    {
+      "id": "F048",
+      "statement": "The get_pending_replacement_orders_5765 tool must be called with credit_card_account_id to check for outstanding replacement card orders for that account."
+    },
+    {
+      "id": "F049",
+      "statement": "The pending replacement order check is important before processing account closures because accounts with pending replacement orders cannot be closed until the replacement is delivered or the order is cancelled."
+    },
+    {
+      "id": "F050",
+      "statement": "A prerequisite for using get_pending_replacement_orders_5765 is having the correct credit_card_account_id."
+    },
+    {
+      "id": "F051",
+      "statement": "A prerequisite for using get_pending_replacement_orders_5765 is having permission to use the tool."
+    },
+    {
+      "id": "F052",
+      "statement": "A prerequisite for using get_pending_replacement_orders_5765 is being able to authenticate to the internal environment where the tool is available."
+    },
+    {
+      "id": "F053",
+      "statement": "The first procedure step for checking pending replacement card orders is to locate the credit_card_account_id for the account being reviewed."
+    },
+    {
+      "id": "F054",
+      "statement": "The second procedure step for checking pending replacement card orders is to invoke get_pending_replacement_orders_5765 with the credit_card_account_id parameter."
+    },
+    {
+      "id": "F055",
+      "statement": "The third procedure step for checking pending replacement card orders is to review the response for any outstanding replacement card orders."
+    },
+    {
+      "id": "F056",
+      "statement": "The fourth procedure step for checking pending replacement card orders is to document the result in the customer's case notes before proceeding with any account closure steps."
+    },
+    {
+      "id": "F057",
+      "statement": "A successful get_pending_replacement_orders_5765 response contains orders as a collection of replacement order records, or an empty collection if none are pending."
+    },
+    {
+      "id": "F058",
+      "statement": "Typical replacement order record fields are order_id, status with examples including pending, shipped, delivered, and cancelled, created_at, latest_event_at, and optional notes."
+    },
+    {
+      "id": "F059",
+      "statement": "A successful get_pending_replacement_orders_5765 response with an empty collection of orders is the source's empty-collection case for no pending orders."
+    },
+    {
+      "id": "F060",
+      "statement": "If there are no pending replacement orders, the agent may proceed with account closure checks per standard procedures."
+    },
+    {
+      "id": "F061",
+      "statement": "If one or more replacement orders are returned, treat the account as having pending replacement activity unless every order is clearly delivered or cancelled."
+    },
+    {
+      "id": "F062",
+      "statement": "If one or more replacement orders are returned, do not proceed with account closure until every returned replacement order is clearly delivered or cancelled."
+    },
+    {
+      "id": "F063",
+      "statement": "If any replacement order is in a non-final state, such as pending or shipped, consider the account blocked from closure."
+    },
+    {
+      "id": "F064",
+      "statement": "If all replacement orders are final with delivered or cancelled status, proceed with standard closure checks."
+    },
+    {
+      "id": "F065",
+      "statement": "If replacement orders are pending, inform the relevant team that the account cannot be closed."
+    },
+    {
+      "id": "F066",
+      "statement": "If replacement orders are pending, monitor until delivery or confirm cancellation of the order."
+    },
+    {
+      "id": "F067",
+      "statement": "If no replacement orders are pending, note the check outcome in the case record and continue with the closure process."
+    },
+    {
+      "id": "F068",
+      "statement": "If get_pending_replacement_orders_5765 returns an invalid credit_card_account_id issue, re-verify that the identifier is an account-level identifier, not a card-level identifier."
+    },
+    {
+      "id": "F069",
+      "statement": "If get_pending_replacement_orders_5765 returns an invalid credit_card_account_id issue, confirm the identifier format and source."
+    },
+    {
+      "id": "F070",
+      "statement": "If get_pending_replacement_orders_5765 returns permission or access denied, ensure the agent's role has access to run get_pending_replacement_orders_5765."
+    },
+    {
+      "id": "F071",
+      "statement": "If get_pending_replacement_orders_5765 returns permission or access denied, re-authenticate if the session may have expired."
+    },
+    {
+      "id": "F072",
+      "statement": "If get_pending_replacement_orders_5765 returns an empty response that is not the valid successful response with an empty orders collection, or returns an ambiguous response, retry the call."
+    },
+    {
+      "id": "F073",
+      "statement": "If ambiguity in a get_pending_replacement_orders_5765 response persists after retry, escalate to the support engineering queue with the call context and the credit_card_account_id."
+    },
+    {
+      "id": "F074",
+      "statement": "Best practice is to always run the pending replacement order check immediately before initiating any account closure workflow."
+    },
+    {
+      "id": "F075",
+      "statement": "Best practice is to record the timestamp and outcome of the pending replacement order check in the customer record."
+    },
+    {
+      "id": "F076",
+      "statement": "If multiple replacement orders appear, review each status and proceed only when all orders are delivered or cancelled."
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Eligible damaged-card replacement with standard delivery",
+      "spec": "Future case record should show an eligible customer requesting replacement for a damaged card, selecting standard delivery, giving explicit confirmation before submission, and receiving post-order consequences and next steps. The case should include internal support-console evidence for account lookup, eligibility, tool unlock, tool call, and customer-record documentation.",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F011",
+        "F021",
+        "F022",
+        "F023",
+        "F024",
+        "F025",
+        "F026",
+        "F028",
+        "F029",
+        "F030",
+        "F031",
+        "F032",
+        "F033",
+        "F034",
+        "F035",
+        "F038"
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Eligible stolen-card replacement with entry-tier expedited shipping fee",
+      "spec": "Future case record should show an eligible entry-tier customer whose reason is stolen, with expedited shipping strongly recommended, support-console evidence listing the exact source-listed entry-tier fee-row names (Bronze Rewards, Bronze Rewards Card, EcoCard, Business Bronze, Business Bronze Rewards Card), the $15.00 fee disclosed and acknowledged before submission, and stolen-card transaction-review and dispute guidance handled without conflating with fraud_suspected.",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F012",
+        "F013",
+        "F017",
+        "F019",
+        "F021",
+        "F022",
+        "F023",
+        "F024",
+        "F025",
+        "F026",
+        "F027",
+        "F028",
+        "F029",
+        "F030",
+        "F031",
+        "F032",
+        "F033",
+        "F034",
+        "F035",
+        "F037",
+        "F038"
+      ]
+    },
+    {
+      "id": "C",
+      "title": "Eligible fraud_suspected replacement with mid-tier expedited shipping fee",
+      "spec": "Future case record should show an eligible mid-tier customer whose reason is fraud_suspected, with expedited shipping strongly recommended, support-console evidence listing the exact source-listed mid-tier fee-row names (Silver Rewards, Silver Rewards Card, Business Silver, Business Silver Rewards Card, Green Rewards, Green Rewards Card, Silver Zoom, Silver Zoom Card), the $10.00 fee disclosed and acknowledged before submission, and suspected-fraud transaction guidance preserving both the instruction to dispute unauthorized charges in the app or website and the instruction to report unauthorized charges in the Rho-Bank app or website, handled independently of a stolen-card reason.",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F012",
+        "F014",
+        "F016",
+        "F018",
+        "F021",
+        "F022",
+        "F023",
+        "F024",
+        "F025",
+        "F026",
+        "F027",
+        "F028",
+        "F029",
+        "F030",
+        "F031",
+        "F032",
+        "F033",
+        "F034",
+        "F035",
+        "F036",
+        "F038"
+      ]
+    },
+    {
+      "id": "D",
+      "title": "Eligible lost-card replacement with premium complimentary expedited shipping for travel need",
+      "spec": "Future case record should show an eligible premium-tier-or-above customer whose reason is lost, who has upcoming travel or urgent payment needs, selects expedited shipping, support-console evidence listing the exact source-listed premium-tier-and-above fee-row names (Gold, Gold Rewards Card, Business Gold Rewards Card, Platinum, Platinum Rewards Card, Business Platinum Rewards Card, Diamond Elite, Diamond Elite Card), and a $0.00 complimentary expedited shipping charge. The case should not rely on stolen or fraud_suspected conditions.",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F012",
+        "F015",
+        "F020",
+        "F021",
+        "F022",
+        "F023",
+        "F024",
+        "F025",
+        "F026",
+        "F028",
+        "F029",
+        "F030",
+        "F031",
+        "F032",
+        "F033",
+        "F034",
+        "F035",
+        "F038"
+      ]
+    },
+    {
+      "id": "E",
+      "title": "Replacement request rejected because an existing replacement is still processing",
+      "spec": "Future case record should show the eligibility check finding an existing replacement request still being processed, no unlock or order-tool call, and next-step explanation that the customer must wait until delivery or cancellation before another replacement request.",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F007",
+        "F008",
+        "F009",
+        "F039",
+        "F040"
+      ]
+    },
+    {
+      "id": "F",
+      "title": "Entry-tier replacement request rejected for exceeding 60-day limit",
+      "spec": "Future case record should show an entry-tier customer who has already reached the limit of 2 replacements in the 60-day period, is found ineligible, receives no tool unlock or order submission, and is given the manual-review path if they claim a legitimate need.",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F007",
+        "F008",
+        "F009",
+        "F041",
+        "F042",
+        "F045",
+        "F046"
+      ]
+    },
+    {
+      "id": "G",
+      "title": "Mid-tier replacement request rejected for exceeding 60-day limit",
+      "spec": "Future case record should show a mid-tier customer who has already reached the limit of 3 replacements in the 60-day period, is found ineligible, receives no tool unlock or order submission, and is given the manual-review path if they claim a legitimate need.",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F007",
+        "F008",
+        "F009",
+        "F041",
+        "F043",
+        "F045",
+        "F046"
+      ]
+    },
+    {
+      "id": "H",
+      "title": "Premium-tier-and-above replacement request rejected for exceeding 60-day limit",
+      "spec": "Future case record should show a premium-tier-or-above customer who has already reached the limit of 4 replacements in the 60-day period, is found ineligible, receives no tool unlock or order submission, and is given the manual-review path if they claim a legitimate need.",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F007",
+        "F008",
+        "F009",
+        "F041",
+        "F044",
+        "F045",
+        "F046"
+      ]
+    },
+    {
+      "id": "I",
+      "title": "Account-closure precheck returns no pending replacement orders",
+      "spec": "Future case record should show the pending replacement order check performed immediately before an account closure workflow with correct prerequisites, a valid successful response containing an empty orders collection, case-note documentation, timestamp and outcome recording, and continuation to standard closure checks.",
+      "included_fact_ids": [
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F057",
+        "F058",
+        "F059",
+        "F060",
+        "F067",
+        "F074",
+        "F075"
+      ]
+    },
+    {
+      "id": "J",
+      "title": "Account-closure precheck blocked by non-final replacement order",
+      "spec": "Future case record should show the pending replacement order check returning at least one non-final order such as pending or shipped, the account treated as blocked from closure, the relevant team informed, monitoring until delivery or cancellation, and timestamp and outcome recorded.",
+      "included_fact_ids": [
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F057",
+        "F058",
+        "F061",
+        "F062",
+        "F063",
+        "F065",
+        "F066",
+        "F074",
+        "F075"
+      ]
+    },
+    {
+      "id": "K",
+      "title": "Account-closure precheck with multiple final replacement orders",
+      "spec": "Future case record should show multiple returned replacement orders, each status reviewed, all orders clearly delivered or cancelled, and standard closure checks allowed only because every order is final.",
+      "included_fact_ids": [
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F057",
+        "F058",
+        "F061",
+        "F064",
+        "F074",
+        "F075",
+        "F076"
+      ]
+    },
+    {
+      "id": "L",
+      "title": "Pending-order check troubleshooting for invalid credit_card_account_id",
+      "spec": "Future case record should show get_pending_replacement_orders_5765 returning an invalid credit_card_account_id issue and support re-verifying that the identifier is account-level rather than card-level, then confirming identifier format and source.",
+      "included_fact_ids": [
+        "F047",
+        "F048",
+        "F050",
+        "F053",
+        "F068",
+        "F069"
+      ]
+    },
+    {
+      "id": "M",
+      "title": "Pending-order check troubleshooting for permission or access denied",
+      "spec": "Future case record should show get_pending_replacement_orders_5765 failing with permission or access denied and support checking role access to the tool and re-authenticating if the session may have expired.",
+      "included_fact_ids": [
+        "F047",
+        "F051",
+        "F052",
+        "F070",
+        "F071"
+      ]
+    },
+    {
+      "id": "N",
+      "title": "Pending-order check troubleshooting for non-successful empty or ambiguous response",
+      "spec": "Future case record should show get_pending_replacement_orders_5765 producing an empty response that is not the valid successful empty orders collection, or producing an ambiguous response, support retrying the call, and escalation to the support engineering queue with call context and credit_card_account_id if ambiguity persists.",
+      "included_fact_ids": [
+        "F047",
+        "F048",
+        "F054",
+        "F055",
+        "F072",
+        "F073"
+      ]
+    }
+  ]
+}

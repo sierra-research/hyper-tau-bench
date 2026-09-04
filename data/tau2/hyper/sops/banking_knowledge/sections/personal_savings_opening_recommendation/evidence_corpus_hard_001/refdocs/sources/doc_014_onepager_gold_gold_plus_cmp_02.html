@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tier Comparison — Gold Savings Account to Gold Plus — CMP-GLD-GPL-02</title>
+<style>
+  @page { size: Letter; margin: 0.75in 0.8in; }
+  * { box-sizing: border-box; }
+  body { font-family: "Georgia", "Times New Roman", serif; color: #1c2430; margin: 0; font-size: 10.5pt; line-height: 1.45; }
+  .doc-band { border-bottom: 3px solid #123c64; padding-bottom: 10px; margin-bottom: 18px; }
+  .doc-band .bank { font-family: "Helvetica Neue", Arial, sans-serif; font-weight: 700; font-size: 15pt; color: #123c64; letter-spacing: 0.4px; }
+  .doc-band h1 { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 13pt; margin: 6px 0 0 0; font-weight: 600; }
+  .control { width: 100%; border-collapse: collapse; margin: 10px 0 0 0; font-family: "Helvetica Neue", Arial, sans-serif; font-size: 8.5pt; }
+  .control td { border: 1px solid #b9c4d0; padding: 3px 8px; }
+  .control td.k { background: #eef2f7; font-weight: 600; width: 16%; white-space: nowrap; }
+  .panels { display: flex; gap: 12px; margin: 16px 0; }
+  .panel { flex: 1; border: 1px solid #c8d2dd; padding: 10px 12px; }
+  .panel h2 { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 10.5pt; color: #123c64; margin: 0 0 6px 0; border-bottom: 1px solid #c8d2dd; padding-bottom: 3px; }
+  .panel p { font-size: 9.5pt; margin: 6px 0; }
+  .big { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 26pt; font-weight: 700; color: #123c64; margin: 4px 0 0 0; }
+  .big-cap { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 8pt; color: #5a6672; margin: 0 0 8px 0; }
+  h2.strip { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 11pt; color: #123c64; border-bottom: 1px solid #c8d2dd; padding-bottom: 3px; margin: 22px 0 8px 0; }
+  table.strip { width: 100%; border-collapse: collapse; margin: 8px 0 12px 0; font-size: 9pt; }
+  table.strip th { background: #123c64; color: #fff; font-family: "Helvetica Neue", Arial, sans-serif; font-size: 8.5pt; text-align: left; padding: 5px 8px; }
+  table.strip td { border: 1px solid #c8d2dd; padding: 4px 8px; }
+  .slot { font-family: "Courier New", Courier, monospace; font-size: 8pt; background: #f1f3f0; padding: 1px 4px; white-space: nowrap; }
+  .m { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 8.5pt; color: #7a4a1f; background: #fbf4ea; border-left: 3px solid #c98a4b; padding: 5px 10px; margin: 8px 0; }
+  .footer { margin-top: 26px; border-top: 1px solid #c8d2dd; padding-top: 6px; font-family: "Helvetica Neue", Arial, sans-serif; font-size: 7.5pt; color: #6a7684; }
+</style>
+</head>
+<body>
+
+<div class="doc-band">
+  <div class="bank">RHO BANK</div>
+  <h1>Tier Comparison One-Pager &#8212; Gold Savings Account &#8594; Gold Plus</h1>
+  <table class="control">
+    <tr>
+      <td class="k">Comparison ref</td><td>CMP-GLD-GPL-02</td>
+      <td class="k">Prepared</td><td>2025-09-29</td>
+    </tr>
+    <tr>
+      <td class="k">Compares</td><td>Gold Savings Account &#8594; Gold Plus</td>
+      <td class="k">Source</td><td>product configuration register</td>
+    </tr>
+    <tr>
+      <td class="k">Custodian</td><td colspan="3">Deposit Products Records (document control)</td>
+    </tr>
+  </table>
+</div>
+
+<p>One page, three answers: what the money earns, where the surplus goes, and who
+picks up the phone. Opening terms, minimums, and fees stay on the Account Opening
+Profiles; the strip at the bottom pulls its figures from the register at export.</p>
+
+<div class="panels">
+  <div class="panel">
+    <h2>Earn</h2>
+    <p class="big">6.0%</p>
+    <p class="big-cap">on eligible balances &#8212; Gold Plus</p>
+    <p>The Gold Savings Account rate prints from the register at
+    <span class="slot">{register: gld.apy_base}</span> alongside it, so the customer
+    sees both numbers on one line.</p>
+  </div>
+  <div class="panel">
+    <h2>Put the surplus to work</h2>
+    <p>Gold Plus can sweep what the customer does not need day to day into
+    investments, automatically, so less of the balance sits earning nothing. The
+    threshold prints from <span class="slot">{register: gpl.sweep_threshold}</span>.</p>
+  </div>
+  <div class="panel">
+    <h2>Looked after, quarter by quarter</h2>
+    <p>A named specialist sits down with the customer each quarter, and Gold Plus
+    requests route to a faster support lane. Regular check-ins mean course corrections
+    happen while they are still small.</p>
+  </div>
+</div>
+
+<div class="m">6.0 keyed in by hand to size the display figure &#8212; re-pull every
+slot from the register before this goes to Yuki.</div>
+
+<h2 class="strip">The numbers, in one strip</h2>
+
+<table class="strip">
+  <tr><th></th><th>Gold Savings Account</th><th>Gold Plus</th></tr>
+  <tr>
+    <td>Opening deposit</td>
+    <td><span class="slot">{register: gld.opening_deposit_min}</span></td>
+    <td><span class="slot">{register: gpl.opening_deposit_min}</span></td>
+  </tr>
+  <tr>
+    <td>Balance to maintain</td>
+    <td><span class="slot">{register: gld.min_balance_maintain}</span></td>
+    <td><span class="slot">{register: gpl.min_balance_maintain}</span></td>
+  </tr>
+  <tr>
+    <td>Withdrawals per month</td>
+    <td><span class="slot">{register: gld.withdrawals_monthly_limit}</span></td>
+    <td><span class="slot">{register: gpl.withdrawals_monthly_limit}</span></td>
+  </tr>
+</table>
+
+<div class="m">check the sweep wording with Sylvia &#8212; and does the strip want the
+maintenance fee row back, or does that stay on the profile sheets?</div>
+
+<div class="footer">
+  Rho Bank &#8212; internal. Tier comparison CMP-GLD-GPL-02 (Gold Savings Account
+  &#8594; Gold Plus), prepared 2025-09-29.
+</div>
+
+</body>
+</html>

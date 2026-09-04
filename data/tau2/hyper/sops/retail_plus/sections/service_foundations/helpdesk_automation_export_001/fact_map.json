@@ -1,0 +1,374 @@
+{
+  "representation": "helpdesk_automation_export",
+  "filename": "northstar_care_admin_export_2026-06-05.zip",
+  "facts": {
+    "customer_information_lookup_allowed": {
+      "file": "policy_contracts.json",
+      "object_ids": [
+        "CONTRACT-1001"
+      ],
+      "locations": [
+        "policy_contracts[].information_access"
+      ],
+      "claim_type": "positive_capability"
+    },
+    "pending_order_allowed_actions": {
+      "file": "macros.json",
+      "object_ids": [
+        "MAC-1001",
+        "MAC-1002",
+        "MAC-1003",
+        "MAC-1004",
+        "MAC-1005"
+      ],
+      "locations": [
+        "macros[].steps",
+        "macros[].integration_action"
+      ],
+      "claim_type": "positive_capability"
+    },
+    "delivered_order_allowed_actions": {
+      "file": "macros.json",
+      "object_ids": [
+        "MAC-1010",
+        "MAC-1011",
+        "MAC-1012"
+      ],
+      "locations": [
+        "macros[].steps",
+        "macros[].integration_action"
+      ],
+      "claim_type": "positive_capability"
+    },
+    "profile_default_address_allowed_action": {
+      "file": "macros.json",
+      "object_ids": [
+        "MAC-1020"
+      ],
+      "locations": [
+        "macros[].steps",
+        "macros[].integration_action"
+      ],
+      "claim_type": "positive_capability"
+    },
+    "authorized_actions_are_closed_scope": {
+      "file": "macros.json",
+      "object_ids": [
+        "CONTRACT-1001",
+        "MAC-1005",
+        "MAC-1012",
+        "MAC-1020",
+        "MAC-1060"
+      ],
+      "locations": [
+        "policy_contracts[].closed_world",
+        "macros[].steps"
+      ],
+      "claim_type": "closed_world_policy",
+      "closure_object_ids": [
+        "CONTRACT-1001"
+      ],
+      "files": [
+        "policy_contracts.json",
+        "macros.json"
+      ]
+    },
+    "processed_orders_wait_until_delivered": {
+      "file": "macros.json",
+      "object_ids": [
+        "CONTRACT-1001",
+        "MAC-1030",
+        "MAC-1031",
+        "MAC-1032"
+      ],
+      "locations": [
+        "policy_contracts[].closed_world",
+        "macros[].steps"
+      ],
+      "claim_type": "closed_world_policy",
+      "closure_object_ids": [
+        "CONTRACT-1001"
+      ],
+      "files": [
+        "policy_contracts.json",
+        "macros.json"
+      ]
+    },
+    "cancelled_orders_have_no_further_action": {
+      "file": "macros.json",
+      "object_ids": [
+        "CONTRACT-1001",
+        "MAC-1040"
+      ],
+      "locations": [
+        "policy_contracts[].closed_world",
+        "macros[].steps",
+        "policy_contracts[].information_access"
+      ],
+      "claim_type": "closed_world_policy",
+      "closure_object_ids": [
+        "CONTRACT-1001"
+      ],
+      "files": [
+        "policy_contracts.json",
+        "macros.json"
+      ]
+    },
+    "cannot_modify_or_cancel_shipped_order": {
+      "file": "macros.json",
+      "object_ids": [
+        "CONTRACT-1001",
+        "MAC-1050"
+      ],
+      "locations": [
+        "policy_contracts[].closed_world",
+        "macros[].steps"
+      ],
+      "claim_type": "closed_world_policy",
+      "closure_object_ids": [
+        "CONTRACT-1001"
+      ],
+      "files": [
+        "policy_contracts.json",
+        "macros.json"
+      ]
+    },
+    "order_status_values_are_closed_and_exact": {
+      "file": "fields.csv",
+      "object_ids": [
+        "CONTRACT-1002",
+        "FLD-STATUS-01",
+        "FLD-STATUS-02",
+        "FLD-STATUS-03",
+        "FLD-STATUS-04",
+        "FLD-STATUS-05",
+        "FLD-STATUS-06",
+        "FLD-STATUS-07"
+      ],
+      "locations": [
+        "policy_contracts[].closed_world",
+        "field_key=order.status",
+        "option_value"
+      ],
+      "claim_type": "closed_world_policy",
+      "closure_object_ids": [
+        "CONTRACT-1002"
+      ],
+      "files": [
+        "policy_contracts.json",
+        "fields.csv"
+      ]
+    },
+    "pending_status_meaning": {
+      "file": "fields.csv",
+      "object_ids": [
+        "FLD-STATUS-01"
+      ],
+      "locations": [
+        "operational_definition"
+      ],
+      "claim_type": "authoritative_definition"
+    },
+    "processed_status_meaning": {
+      "file": "fields.csv",
+      "object_ids": [
+        "FLD-STATUS-02"
+      ],
+      "locations": [
+        "operational_definition"
+      ],
+      "claim_type": "authoritative_definition"
+    },
+    "delivered_status_meaning": {
+      "file": "fields.csv",
+      "object_ids": [
+        "FLD-STATUS-03"
+      ],
+      "locations": [
+        "operational_definition"
+      ],
+      "claim_type": "authoritative_definition"
+    },
+    "cancelled_status_meaning": {
+      "file": "fields.csv",
+      "object_ids": [
+        "FLD-STATUS-04"
+      ],
+      "locations": [
+        "operational_definition"
+      ],
+      "claim_type": "authoritative_definition"
+    },
+    "pending_items_modified_status_meaning": {
+      "file": "fields.csv",
+      "object_ids": [
+        "CONTRACT-1001",
+        "FLD-STATUS-05"
+      ],
+      "locations": [
+        "policy_contracts[].closed_world",
+        "operational_definition"
+      ],
+      "claim_type": "closed_world_policy",
+      "closure_object_ids": [
+        "CONTRACT-1001"
+      ],
+      "files": [
+        "policy_contracts.json",
+        "fields.csv"
+      ]
+    },
+    "return_requested_status_meaning": {
+      "file": "fields.csv",
+      "object_ids": [
+        "FLD-STATUS-06"
+      ],
+      "locations": [
+        "operational_definition"
+      ],
+      "claim_type": "authoritative_definition"
+    },
+    "exchange_requested_status_meaning": {
+      "file": "fields.csv",
+      "object_ids": [
+        "FLD-STATUS-07"
+      ],
+      "locations": [
+        "operational_definition"
+      ],
+      "claim_type": "authoritative_definition"
+    },
+    "cancellation_reason_values_are_closed_and_exact": {
+      "file": "fields.csv",
+      "object_ids": [
+        "CONTRACT-1002",
+        "FLD-CANCEL-01",
+        "FLD-CANCEL-02"
+      ],
+      "locations": [
+        "policy_contracts[].closed_world",
+        "field_key=order.cancel_reason",
+        "option_value"
+      ],
+      "claim_type": "closed_world_policy",
+      "closure_object_ids": [
+        "CONTRACT-1002"
+      ],
+      "files": [
+        "policy_contracts.json",
+        "fields.csv"
+      ]
+    },
+    "cancelled_order_optional_field": {
+      "file": "fields.csv",
+      "object_ids": [
+        "FLD-OPT-01"
+      ],
+      "locations": [
+        "field_key",
+        "required_when"
+      ],
+      "claim_type": "conditional_schema_rule"
+    },
+    "return_optional_fields": {
+      "file": "fields.csv",
+      "object_ids": [
+        "FLD-OPT-02",
+        "FLD-OPT-03"
+      ],
+      "locations": [
+        "field_key",
+        "required_when"
+      ],
+      "claim_type": "conditional_schema_rule"
+    },
+    "exchange_optional_fields": {
+      "file": "fields.csv",
+      "object_ids": [
+        "FLD-OPT-04",
+        "FLD-OPT-05",
+        "FLD-OPT-06",
+        "FLD-OPT-07"
+      ],
+      "locations": [
+        "field_key",
+        "required_when"
+      ],
+      "claim_type": "conditional_schema_rule"
+    },
+    "optional_order_fields_are_closed": {
+      "file": "fields.csv",
+      "object_ids": [
+        "CONTRACT-1002",
+        "FLD-OPT-01",
+        "FLD-OPT-02",
+        "FLD-OPT-03",
+        "FLD-OPT-04",
+        "FLD-OPT-05",
+        "FLD-OPT-06",
+        "FLD-OPT-07"
+      ],
+      "locations": [
+        "policy_contracts[].closed_world",
+        "group_name=conditional_order_fields"
+      ],
+      "claim_type": "closed_world_policy",
+      "closure_object_ids": [
+        "CONTRACT-1002"
+      ],
+      "files": [
+        "policy_contracts.json",
+        "fields.csv"
+      ]
+    },
+    "pending_item_modification_replaces_items_in_place": {
+      "file": "triggers.json",
+      "object_ids": [
+        "TRG-2002"
+      ],
+      "locations": [
+        "triggers[].actions"
+      ],
+      "claim_type": "deterministic_machine_rule"
+    },
+    "pending_item_modification_sets_exact_status": {
+      "file": "triggers.json",
+      "object_ids": [
+        "TRG-2003"
+      ],
+      "locations": [
+        "triggers[].actions"
+      ],
+      "claim_type": "deterministic_machine_rule"
+    },
+    "pending_item_modification_appends_payment_history": {
+      "file": "triggers.json",
+      "object_ids": [
+        "TRG-2004"
+      ],
+      "locations": [
+        "triggers[].actions"
+      ],
+      "claim_type": "deterministic_machine_rule"
+    },
+    "pending_item_modification_adds_no_fields": {
+      "file": "triggers.json",
+      "object_ids": [
+        "CONTRACT-1003",
+        "TRG-2005"
+      ],
+      "locations": [
+        "policy_contracts[].closed_world",
+        "triggers[].write_contract"
+      ],
+      "claim_type": "closed_world_policy",
+      "closure_object_ids": [
+        "CONTRACT-1003"
+      ],
+      "files": [
+        "policy_contracts.json",
+        "triggers.json"
+      ]
+    }
+  }
+}

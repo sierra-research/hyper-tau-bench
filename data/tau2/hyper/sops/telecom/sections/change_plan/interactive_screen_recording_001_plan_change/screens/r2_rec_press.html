@@ -1,0 +1,311 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+*{box-sizing:border-box;margin:0}
+html{zoom:2}
+html,body{width:1280px;height:800px;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  font-size:13px;color:#1c2433;background:#f3f5f8;display:flex;
+  -webkit-font-smoothing:antialiased}
+b{font-weight:600}
+
+/* left icon rail */
+.rail{width:64px;background:#14264a;display:flex;flex-direction:column;
+  align-items:center;padding:12px 0;gap:4px;flex:none}
+.rail .mark{width:34px;height:34px;border-radius:9px;background:#2f6fed;
+  color:#fff;font-weight:700;font-size:17px;display:flex;align-items:center;
+  justify-content:center;margin-bottom:14px}
+.rail .ric{width:40px;height:40px;border-radius:10px;display:flex;
+  align-items:center;justify-content:center;color:#8fa3c8}
+.rail .ric.on{background:#2b4370;color:#fff}
+.rail .ric svg{width:19px;height:19px}
+.rail .spacer{flex:1}
+.rail .me{width:32px;height:32px;border-radius:50%;background:#3b82f6;
+  color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;
+  justify-content:center;position:relative}
+.rail .me i{position:absolute;right:-1px;bottom:-1px;width:9px;height:9px;
+  border-radius:50%;background:#22c55e;border:2px solid #14264a}
+
+.app{flex:1;display:flex;flex-direction:column;min-width:0}
+
+/* top bar */
+.top{height:52px;background:#fff;border-bottom:1px solid #e2e6ee;display:flex;
+  align-items:center;padding:0 16px;gap:14px;flex:none;position:relative;z-index:30}
+.top .crumb{font-size:14px;font-weight:600;color:#14264a;white-space:nowrap}
+.top .crumb span{color:#8b94a7;font-weight:400}
+.top .search{flex:1;max-width:430px;height:32px;margin-left:8px;position:relative}
+.top .search input{width:100%;height:100%;border:1px solid #d6dbe6;
+  border-radius:8px;background:#f6f8fb;padding:0 12px 0 32px;font-size:12.5px;
+  color:#1c2433;outline:none;font-family:inherit}
+.top .search.focus input{border-color:#2f6fed;background:#fff;
+  box-shadow:0 0 0 3px #2f6fed26}
+.top .search .sic{position:absolute;left:10px;top:8px;width:15px;height:15px;
+  color:#8b94a7}
+.top .grow{flex:1}
+.top .env{font-size:10.5px;font-weight:700;letter-spacing:.06em;color:#9a3412;
+  background:#ffedd5;border:1px solid #fed7aa;border-radius:5px;padding:3px 7px}
+.top .bell{position:relative;color:#5b6472;width:20px;height:20px}
+.top .bell i{position:absolute;top:-2px;right:-2px;width:7px;height:7px;
+  border-radius:50%;background:#ef4444;border:1.5px solid #fff}
+
+/* search dropdown */
+.sugg{position:absolute;top:36px;left:0;width:430px;background:#fff;
+  border:1px solid #d6dbe6;border-radius:10px;box-shadow:0 12px 32px #1c243326;
+  padding:6px;z-index:40}
+.sugg .shead{font-size:10.5px;font-weight:700;letter-spacing:.05em;
+  color:#8b94a7;padding:6px 10px 4px;text-transform:uppercase}
+.sugg .srow{display:flex;align-items:center;gap:9px;padding:8px 10px;
+  border-radius:7px;font-size:12.5px;color:#1c2433}
+.sugg .srow.hot{background:#eef3fe}
+.sugg .srow .tag{margin-left:auto;font-size:10.5px;color:#8b94a7}
+.sugg .snone{padding:8px 10px;font-size:12px;color:#8b94a7}
+
+.body{flex:1;display:flex;min-height:0}
+
+/* chat rail */
+.chat{width:336px;background:#fff;border-right:1px solid #e2e6ee;display:flex;
+  flex-direction:column;flex:none}
+.chat .chead{padding:12px 14px 10px;border-bottom:1px solid #eef1f6}
+.chat .chead .who{display:flex;align-items:center;gap:9px}
+.chat .cav{width:30px;height:30px;border-radius:50%;background:#e5e9f2;
+  color:#42506b;font-size:11.5px;font-weight:700;display:flex;
+  align-items:center;justify-content:center;position:relative;flex:none}
+.chat .cav i{position:absolute;right:-1px;bottom:-1px;width:8px;height:8px;
+  border-radius:50%;background:#22c55e;border:2px solid #fff}
+.chat .cname{font-size:13.5px;font-weight:600}
+.chat .csub{font-size:11px;color:#8b94a7;margin-top:1px}
+.chat .sess{margin-left:auto;font-size:10.5px;color:#8b94a7;
+  border:1px solid #e2e6ee;border-radius:5px;padding:2px 6px;align-self:flex-start}
+.chat .msgs{flex:1;overflow:hidden;padding:12px 14px;display:flex;
+  flex-direction:column;gap:10px;justify-content:flex-end}
+.chat .msgs>*{flex:none}
+.msg{max-width:82%;padding:8px 11px;border-radius:12px;font-size:12.5px;
+  line-height:1.42}
+.msg.cust{background:#f1f3f8;color:#1c2433;align-self:flex-start;
+  border-bottom-left-radius:4px}
+.msg.agent{background:#2f6fed;color:#fff;align-self:flex-end;
+  border-bottom-right-radius:4px}
+.mtime{font-size:10px;color:#9aa3b5;margin-top:-6px}
+.mtime.left{align-self:flex-start;padding-left:4px}
+.mtime.right{align-self:flex-end;padding-right:4px}
+.msys{align-self:center;text-align:center;font-size:10.5px;color:#8b94a7;
+  display:flex;align-items:center;gap:8px;width:100%}
+.msys:before,.msys:after{content:"";flex:1;height:1px;background:#eef1f6}
+.mcard{align-self:flex-end;width:88%;border:1px solid #d6dbe6;border-radius:10px;
+  overflow:hidden;font-size:12px}
+.mcard .mchead{background:#f6f8fb;border-bottom:1px solid #e9edf4;
+  padding:7px 10px;font-weight:600;font-size:11.5px;color:#42506b}
+.mcard .mcrow{padding:7px 10px;border-bottom:1px solid #f1f3f8;line-height:1.4}
+.mcard .mcrow:last-child{border-bottom:0}
+.mcard .mcrow .sub{color:#69738a;font-size:11px}
+.mcard .mcbtns{display:flex;gap:8px;padding:8px 10px;background:#fbfcfe}
+.mcard .mcbtn{flex:1;text-align:center;border-radius:7px;padding:6px 0;
+  font-weight:600;font-size:11.5px;border:1px solid #cfd6e4;color:#42506b}
+.mcard .mcbtn.pri{background:#2f6fed;border-color:#2f6fed;color:#fff}
+.typing{align-self:flex-start;background:#f1f3f8;border-radius:12px;
+  border-bottom-left-radius:4px;padding:10px 13px;display:flex;gap:4px}
+.typing i{width:6px;height:6px;border-radius:50%;background:#9aa3b5}
+.chat .quick{padding:8px 14px 0;display:flex;gap:6px;flex-wrap:wrap}
+.chat .qr{font-size:11px;color:#2f6fed;border:1px solid #bcd0f7;
+  border-radius:999px;padding:4px 10px;background:#f6f9ff}
+.chat .qr.pressed{background:#dbe7fd}
+.chat .cfoot{padding:8px 14px 12px}
+.chat .composer{border:1px solid #d6dbe6;border-radius:10px;background:#fff;
+  padding:9px 11px;font-size:12.5px;color:#9aa3b5;display:flex;align-items:center}
+.chat .composer.focus{border-color:#2f6fed;box-shadow:0 0 0 3px #2f6fed26}
+.chat .composer .ctext{color:#1c2433;white-space:pre}
+.chat .composer .send{margin-left:auto;color:#c3cad8;width:16px;height:16px}
+.chat .composer.focus .send{color:#2f6fed}
+
+/* workspace */
+.work{flex:1;min-width:0;display:flex;flex-direction:column;padding:14px 18px 0}
+.cust-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.cust-head .bigav{width:40px;height:40px;border-radius:50%;background:#eef1f6;
+  color:#42506b;font-weight:700;font-size:14px;display:flex;align-items:center;
+  justify-content:center;flex:none}
+.cust-head .bigav.known{background:#dbeafe;color:#1d4ed8}
+.cust-head .nm{font-size:16px;font-weight:700}
+.cust-head .meta{font-size:11.5px;color:#69738a;margin-top:1px}
+.cust-head .chips{margin-left:auto;display:flex;gap:8px}
+.chip{font-size:11px;font-weight:600;border-radius:999px;padding:4px 10px;
+  display:flex;align-items:center;gap:5px}
+.chip:before{content:"";width:6px;height:6px;border-radius:50%}
+.chip.amber{background:#fef3c7;color:#92400e}.chip.amber:before{background:#d97706}
+.chip.green{background:#dcfce7;color:#166534}.chip.green:before{background:#16a34a}
+.chip.blue{background:#dbeafe;color:#1e40af}.chip.blue:before{background:#2563eb}
+.chip.grey{background:#eef1f6;color:#5b6472}.chip.grey:before{background:#9aa3b5}
+
+.tabs{display:flex;gap:2px;border-bottom:1px solid #e2e6ee;margin-bottom:14px}
+.tab{padding:9px 13px;font-size:12.5px;font-weight:600;color:#69738a;
+  border-bottom:2px solid transparent;display:flex;align-items:center;gap:6px}
+.tab.on{color:#2f6fed;border-bottom-color:#2f6fed}
+.tab .lock{width:11px;height:11px;color:#b3bac9}
+
+.cols{flex:1;display:flex;gap:14px;min-height:0}
+.main{flex:1;min-width:0}
+.side{width:270px;flex:none;display:flex;flex-direction:column;gap:12px}
+
+.card{background:#fff;border:1px solid #e2e6ee;border-radius:11px;
+  box-shadow:0 1px 2px #1c24330a}
+.card .chd{padding:11px 14px;border-bottom:1px solid #eef1f6;font-size:12.5px;
+  font-weight:700;color:#1c2433;display:flex;align-items:center;gap:8px}
+.card .chd .right{margin-left:auto;font-weight:400;font-size:11px;color:#8b94a7}
+.card .cbd{padding:12px 14px}
+
+.pill{font-size:10.5px;font-weight:700;border-radius:5px;padding:2.5px 7px}
+.pill.red{background:#fee2e2;color:#b91c1c}
+.pill.green{background:#dcfce7;color:#166534}
+.pill.amber{background:#fef3c7;color:#92400e}
+.pill.blue{background:#dbeafe;color:#1e40af}
+.pill.grey{background:#eef1f6;color:#5b6472}
+
+.kv{display:flex;justify-content:space-between;font-size:11.5px;
+  padding:3.5px 0;color:#42506b;gap:14px}
+.kv b{color:#1c2433;font-weight:600;text-align:right}
+.act{list-style:none;font-size:11.5px}
+.act li{display:flex;gap:8px;padding:5px 0;color:#42506b;line-height:1.35}
+.act li .t{color:#9aa3b5;flex:none;width:52px;font-variant-numeric:tabular-nums}
+.act li:before{content:"";width:7px;height:7px;border-radius:50%;
+  background:#c9d2e2;margin-top:4px;flex:none}
+.act li.hot:before{background:#2f6fed}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  border-radius:8px;font-weight:600;font-size:12.5px;padding:8px 14px;
+  border:1px solid #cfd6e4;background:#fff;color:#334155}
+.btn.pri{background:#2f6fed;border-color:#2f6fed;color:#fff}
+.btn.pri.off{background:#e4e8f0;border-color:#e4e8f0;color:#9aa3b5}
+.btn.pressed{background:#e9eefb;border-color:#b9c9ec;color:#1d4ed8}
+.btn.pri.pressed{background:#1f56c9;border-color:#1f56c9;color:#fff}
+.btn.danger-ghost{color:#b91c1c;border-color:#f3c6c6}
+.hint{font-size:11px;color:#8b94a7;margin-top:7px}
+
+/* forms */
+.frow{margin-bottom:13px}
+.frow label{display:block;font-size:11.5px;font-weight:600;color:#42506b;
+  margin-bottom:5px}
+.input{width:100%;height:36px;border:1px solid #d6dbe6;border-radius:8px;
+  padding:0 11px;font-size:13px;display:flex;align-items:center;color:#1c2433;
+  background:#fff}
+.input .ph{color:#9aa3b5}
+.input.focus{border-color:#2f6fed;box-shadow:0 0 0 3px #2f6fed26}
+.input.err{border-color:#dc2626;box-shadow:0 0 0 3px #dc262622}
+.ferr{font-size:11px;color:#b91c1c;margin-top:5px;display:flex;
+  align-items:center;gap:5px}
+.ferr .bic{width:12px;height:12px;flex:none}
+.seg{display:inline-flex;background:#eef1f6;border-radius:9px;padding:3px;gap:2px}
+.seg .sopt{padding:6px 13px;font-size:12px;font-weight:600;color:#5b6472;
+  border-radius:7px}
+.seg .sopt.on{background:#fff;color:#1c2433;box-shadow:0 1px 3px #1c24331f}
+
+/* alerts + banners */
+.banner{border-radius:9px;padding:10px 13px;font-size:12px;line-height:1.45;
+  display:flex;gap:9px;margin-bottom:13px}
+.banner.warn{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
+.banner.bad{background:#fef2f2;border:1px solid #fecaca;color:#991b1b}
+.banner.good{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}
+.banner.info{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af}
+.banner .bic{flex:none;width:15px;height:15px;margin-top:1px}
+
+/* tables */
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.tbl th{text-align:left;font-size:10.5px;text-transform:uppercase;
+  letter-spacing:.05em;color:#8b94a7;font-weight:700;padding:8px 12px;
+  border-bottom:1px solid #eef1f6;white-space:nowrap}
+.tbl td{padding:10px 12px;border-bottom:1px solid #f1f3f8;vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tr.dim td{color:#9aa3b5}
+.tbl tr.sel td{background:#f3f7ff}
+.tbl .sub{font-size:11px;color:#8b94a7;margin-top:1px}
+.radio{width:15px;height:15px;border:1.5px solid #b3bac9;border-radius:50%;
+  display:inline-block;vertical-align:-3px}
+.radio.on{border:4.5px solid #2f6fed}
+
+/* meters */
+.meter{height:9px;border-radius:5px;background:#eef1f6;overflow:hidden;
+  display:flex;margin:6px 0 4px}
+.meter i{display:block;height:100%}
+.meter .used{background:#dc2626}
+.meter .used.ok{background:#2f6fed}
+.meter .extra{background:#16a34a}
+.mlbl{display:flex;justify-content:space-between;font-size:11px;color:#69738a}
+
+/* checklist */
+.steps{list-style:none}
+.steps li{display:flex;gap:11px;padding:11px 0;border-bottom:1px solid #f1f3f8}
+.steps li:last-child{border-bottom:0}
+.steps .dot{width:22px;height:22px;border-radius:50%;flex:none;display:flex;
+  align-items:center;justify-content:center;font-size:11px;font-weight:700;
+  border:1.5px solid #c9d2e2;color:#8b94a7;background:#fff}
+.steps li.done .dot{background:#16a34a;border-color:#16a34a;color:#fff}
+.steps li.cur .dot{border-color:#2f6fed;color:#2f6fed;background:#eef3fe}
+.steps li.todo{opacity:.55}
+.steps .st{flex:1}
+.steps .st .t1{font-weight:600;font-size:12.5px}
+.steps .st .t2{font-size:11.5px;color:#69738a;margin-top:2px;line-height:1.4}
+.steps .st .src{font-size:10.5px;color:#8b94a7;margin-top:3px}
+
+/* skeleton */
+.skel{border-radius:6px;background:linear-gradient(90deg,#eef1f6,#f6f8fb,#eef1f6);
+  height:12px;margin:9px 0}
+
+/* overlay modal + scrim */
+.scrim{position:fixed;inset:0;background:#10162566;z-index:50}
+.overlay-scrim{position:fixed;inset:0;background:#10162566;z-index:50}
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+  background:#fff;border-radius:13px;box-shadow:0 24px 64px #10162559;z-index:60}
+.modal .mh{padding:15px 18px 0;font-size:14.5px;font-weight:700}
+.modal .mb{padding:9px 18px 16px;font-size:12.5px;color:#42506b;line-height:1.5}
+.modal .mf{padding:12px 18px;border-top:1px solid #eef1f6;display:flex;
+  justify-content:flex-end;gap:9px}
+
+/* article overlay */
+.kb{position:fixed;left:50%;top:54px;transform:translateX(-50%);width:720px;
+  height:660px;background:#fff;border-radius:13px;z-index:60;
+  box-shadow:0 24px 64px #10162559;display:flex;flex-direction:column;
+  overflow:hidden}
+.kb .kbh{padding:13px 20px;border-bottom:1px solid #eef1f6;display:flex;
+  align-items:center;gap:10px}
+.kb .kbh .crumbs{font-size:11.5px;color:#8b94a7}
+.kb .kbh .x{margin-left:auto;width:26px;height:26px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;color:#69738a;
+  border:1px solid #e2e6ee;font-size:13px}
+.kb .kbody{flex:1;overflow:hidden;position:relative}
+.kb .kscroll{position:absolute;right:3px;top:4px;width:6px;border-radius:3px;
+  background:#c9d2e2}
+
+/* article body (also rendered standalone tall) */
+.article{padding:22px 26px;width:720px;background:#fff}
+.article h1{font-size:21px;margin-bottom:6px}
+.article .ameta{font-size:11.5px;color:#8b94a7;margin-bottom:16px}
+.article h2{font-size:15px;margin:18px 0 7px}
+.article p,.article li{font-size:13px;line-height:1.65;color:#334155;
+  margin-bottom:10px}
+.article ol{padding-left:20px}
+.article .note{background:#f6f8fb;border:1px solid #e2e6ee;border-radius:9px;
+  padding:11px 14px;font-size:12px;color:#42506b;margin:12px 0}
+
+/* toast */
+.toast{position:fixed;right:22px;bottom:22px;background:#1c2433;color:#f1f3f8;
+  font-size:12.5px;border-radius:10px;padding:12px 16px;z-index:70;
+  box-shadow:0 10px 30px #10162559;display:flex;align-items:center;gap:9px}
+.toast .tic{width:15px;height:15px;color:#4ade80}
+
+/* popover */
+.pop{position:fixed;background:#fff;border:1px solid #d6dbe6;border-radius:11px;
+  box-shadow:0 14px 40px #1016253d;z-index:55;width:300px}
+.pop .ph2{padding:12px 15px 0;font-weight:700;font-size:13px}
+.pop .pb{padding:7px 15px 13px;font-size:12px;color:#42506b;line-height:1.5}
+.pop .pf{padding:10px 15px;border-top:1px solid #eef1f6;display:flex;
+  justify-content:flex-end;gap:8px}
+.pop:after{content:"";position:fixed;width:10px;height:10px;background:#fff;
+  border-left:1px solid #d6dbe6;border-top:1px solid #d6dbe6;
+  transform:rotate(45deg)}
+
+/* inline spinner slot: compositor draws the arc */
+.spin{width:26px;height:26px;border-radius:50%;border:3px solid #e4e8f0;
+  margin:0 auto}
+.loadbox{padding:34px 0 10px;text-align:center}
+.loadbox .lt{font-size:12px;color:#8b94a7;margin-top:10px}
+
+.two{display:flex;gap:12px}
+.two>*{flex:1}
+.footer-note{font-size:10.5px;color:#9aa3b5;padding:9px 2px}
+</style></head><body><nav class="rail"><div class="mark">N</div><div class="ric"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l3-7h12l3 7v7H3v-7zm3.5 1a3.5 3.5 0 0 0 11 0H21M3 12h5a4 4 0 0 0 8 0h5"/></svg></div><div class="ric"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.9M15.5 3.3a4 4 0 0 1 0 7.4"/></svg></div><div class="ric"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7V3zm3 9h5m-5 3h5m-5-6h2"/></svg></div><div class="ric"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V9m5.5 11V4M15 20v-7m5.5 7V7"/></svg></div><div class="ric on"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V4h9l8.6 8.6a2 2 0 0 1 0 .8zM7.5 7.5v.01"/></svg></div><div class="ric"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5zm4 3h7M8 11h7"/></svg></div><div class="ric"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.2 2.2M16.9 16.9l2.2 2.2M19.1 4.9l-2.2 2.2M7.1 16.9l-2.2 2.2"/></svg></div><div class="spacer"></div><div class="me">MC<i></i></div></nav><div class="app"><header class="top"><div class="crumb">Care Console <span>/ Conversation · Jordan Lee</span></div><div class="search" data-cue="topsearch"><svg class="sic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 17a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zM20 20l-4.5-4.5"/></svg><input placeholder="Search customers, lines, or help center"></div><div class="grow"></div><div class="env">PROD · US-WEST</div><div class="bell"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 1 1 12 0c0 5 2 6 2 6H4s2-1 2-6zm4.5 9a1.5 1.5 0 0 0 3 0"/></svg><i></i></div></header><div class="body"><aside class="chat"><div class="chead"><div class="who"><div class="cav">JL<i></i></div><div><div class="cname">Jordan Lee</div><div class="csub">Live chat · Northline app</div></div><span class="sess">NL-48533</span></div></div><div class="msgs"><div class="msys">Chat started · 2:11 PM · Northline app</div><div class="msys">Identity verified · C-804219 · 2:11 PM</div><div class="msg cust">I keep hitting my data limit. What would the next plans up cost on this line?</div><div class="mtime left">Jordan Lee · 2:12 PM</div><div class="msg agent">Let me pull up what&#8217;s available for your line ••4418.</div><div class="mtime right">2:12 PM</div><div class="mcard"><div class="mchead">Plans available — line ••4418</div><div class="mcrow"><b>Flex 10 GB — $64.00/mo</b><div class="sub">10 GB data · hotspot included</div></div><div class="mcrow"><b>Unlimited Plus — $72.00/mo</b><div class="sub">Unlimited data · 25 GB hotspot</div></div><div class="mcrow"><div class="sub">Current: Everyday 5 GB — $55.00/mo · 5 GB data</div></div></div><div class="mtime right">2:14 PM</div><div class="msg cust">Unlimited Plus, please.</div><div class="mtime left">2:15 PM</div><div class="mcard"><div class="mchead">Confirm plan change</div><div class="mcrow"><b>Unlimited Plus — $72.00/mo</b><div class="sub">Replaces Everyday 5 GB ($55.00/mo) on line ••4418</div></div><div class="mcbtns"><span class="mcbtn pri">Confirm</span><span class="mcbtn">Not now</span></div></div><div class="mtime right">2:16 PM</div><div class="msg cust">Hold on — let me think about it.</div><div class="mtime left">2:16 PM</div><div class="msg cust">Okay, yes — go ahead with Unlimited Plus at $72.</div><div class="mtime left">2:18 PM</div></div><div class="quick"><span class="qr" data-cue="qr:Send plan comparison">Send plan comparison</span><span class="qr" data-cue="qr:Send invoice note">Send invoice note</span></div><div class="cfoot"><div class="composer" data-cue="composer">Write a reply…<svg class="send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></div></div></aside><main class="work"><div class="cust-head"><div class="bigav known">JL</div><div><div class="nm">Jordan Lee</div><div class="meta">C-804219 · Customer since 2021 · Autopay on</div></div><div class="chips"><span class="chip green">Verified · C-804219</span><span class="chip blue">Line ••4418 · Pixel 9</span><span class="chip grey">Plan: Everyday 5 GB</span></div></div><div class="tabs"><div class="tab" data-cue="tab:Overview">Overview</div><div class="tab" data-cue="tab:Troubleshoot">Troubleshoot</div><div class="tab" data-cue="tab:Usage">Usage</div><div class="tab on" data-cue="tab:Plans">Plans</div><div class="tab" data-cue="tab:Billing">Billing</div><div class="tab" data-cue="tab:Notes">Notes</div></div><div class="cols"><div class="main"><div class="banner warn"><svg class="bic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2L12 3zm0 7v4m0 3v.01"/></svg><div>Customer deferred. The quote stays open; the line was not changed.</div></div><div class="card"><div class="chd">Quote Q-80412 — Unlimited Plus<span style="margin-left:auto"><span class="pill amber">Not confirmed — no change made</span></span></div><div class="cbd" style="padding-top:8px"><div class="kv"><span>New monthly price</span><b>$72.00</b></div><div class="kv"><span>Current plan</span><b>Everyday 5 GB — $55.00</b></div><div class="kv"><span>Difference</span><b>+$17.00/mo</b></div><div class="kv"><span>Includes</span><b>Unlimited data · 25 GB hotspot</b></div><div class="kv"><span>Effective</span><b>Immediately · next invoice reflects change</b></div><div style="margin-top:12px"><span class="btn pressed" data-cue="recconf">Record confirmation</span><span class="btn pri off" style="margin-left:9px">Apply plan change</span><div class="hint">The line keeps Everyday 5 GB until the customer confirms.</div></div></div></div></div><div class="side"><div class="card"><div class="chd">Account record<span style="margin-left:auto"><span class="pill green">Open</span></span></div><div class="cbd" style="padding-top:9px"><div class="hint" style="margin:0">Opened 2:12 PM — plan discovery for line ••4418.</div></div></div><div class="card"><div class="chd">Session</div><div class="cbd" style="padding-top:8px"><div class="kv"><span>Session</span><b>NL-48533</b></div><div class="kv"><span>Channel</span><b>Live chat</b></div><div class="kv"><span>Queue</span><b>Plans &amp; billing</b></div><div class="kv"><span>Started</span><b>2:11 PM</b></div></div></div><div class="card"><div class="chd">Activity</div><div class="cbd" style="padding-top:6px"><ul class="act"><li class=hot><span class="t">2:16 PM</span><span>Confirmation requested — customer deferred</span></li><li><span class="t">2:15 PM</span><span>Quote Q-80412 created (Unlimited Plus)</span></li><li><span class="t">2:14 PM</span><span>Plan options presented in chat</span></li><li><span class="t">2:12 PM</span><span>Plans opened for line ••4418</span></li><li><span class="t">2:11 PM</span><span>Customer verified (C-804219)</span></li><li><span class="t">2:11 PM</span><span>Chat started (Northline app)</span></li></ul></div></div></div></div></main></div></div></body></html>

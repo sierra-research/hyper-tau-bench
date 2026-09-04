@@ -1,0 +1,188 @@
+{
+  "id": "023_banking_knowledge_construction_kb_performance_hard",
+  "source_domain": "banking_knowledge",
+  "task_type": "construction",
+  "task_description": "Build the Banking Knowledge customer service agent against the client-owned REST API, using the operational SOP and the raw knowledge-base documents. Scores against the supported Banking Knowledge task set.",
+  "sop_document_path": "tau2/hyper/sops/banking_sop.md",
+  "knowledge_base_path": "tau2/domains/banking_knowledge/documents",
+  "client_api_mode": "rest",
+  "test_task_ids": [
+    "task_001",
+    "task_002",
+    "task_003",
+    "task_004",
+    "task_005",
+    "task_006",
+    "task_007",
+    "task_008",
+    "task_010",
+    "task_012",
+    "task_014",
+    "task_015",
+    "task_016",
+    "task_017",
+    "task_018",
+    "task_019",
+    "task_020",
+    "task_021",
+    "task_022",
+    "task_023",
+    "task_024",
+    "task_025",
+    "task_026",
+    "task_027",
+    "task_028",
+    "task_029",
+    "task_031",
+    "task_034",
+    "task_036",
+    "task_037",
+    "task_038",
+    "task_039",
+    "task_040",
+    "task_041",
+    "task_043",
+    "task_044",
+    "task_045",
+    "task_046",
+    "task_047",
+    "task_048",
+    "task_049",
+    "task_050",
+    "task_051",
+    "task_052",
+    "task_053",
+    "task_054",
+    "task_055",
+    "task_056",
+    "task_057",
+    "task_058",
+    "task_059",
+    "task_060",
+    "task_061",
+    "task_062",
+    "task_063",
+    "task_064",
+    "task_065",
+    "task_066",
+    "task_067",
+    "task_068",
+    "task_069",
+    "task_070",
+    "task_071",
+    "task_072",
+    "task_073",
+    "task_074",
+    "task_075",
+    "task_076",
+    "task_077",
+    "task_078",
+    "task_079",
+    "task_080",
+    "task_081",
+    "task_082",
+    "task_084",
+    "task_085",
+    "task_086",
+    "task_087",
+    "task_088",
+    "task_089",
+    "task_090",
+    "task_091",
+    "task_092",
+    "task_093",
+    "task_094",
+    "task_095",
+    "task_096",
+    "task_097",
+    "task_098",
+    "task_099",
+    "task_100",
+    "task_101",
+    "task_102"
+  ],
+  "test_task_ids_note": "Relative to the 97-task banking core set, task_032/033/035/083 are omitted: their ACTION-basis golden actions name the unlock/call_discoverable_agent_tool wrappers, which client_api_mode=rest removes.",
+  "interaction_mode": "sandbox",
+  "sandbox_config": {
+    "max_time_seconds": 28800,
+    "command_timeout": 120,
+    "docker_image": "tau2-construction-runtime:contract-v7",
+    "docker_memory": "4g",
+    "docker_cpus": "2"
+  },
+  "performance_profile": {
+    "hard": {
+      "budget": 0.46,
+      "models": [
+        {
+          "model": "gpt-5.6-luna",
+          "constraints": {
+            "reasoning_effort": "none"
+          }
+        },
+        {
+          "model": "anthropic/claude-haiku-4-5",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          },
+          "credit_rates": {
+            "input_per_million": 0.25,
+            "output_per_million": 1.6,
+            "rate_card_date": "2026-08-23",
+            "pricing_basis": "capability_bucket_median_list_price"
+          }
+        },
+        {
+          "model": "google/gemini-3-flash-preview",
+          "constraints": {
+            "reasoning_effort": "minimal"
+          }
+        },
+        {
+          "model": "moonshotai/kimi-k2.6",
+          "constraints": {
+            "extra_body": {
+              "thinking": {
+                "type": "disabled"
+              }
+            }
+          }
+        },
+        {
+          "model": "gpt-5.4-nano",
+          "constraints": {
+            "reasoning_effort": "none"
+          }
+        },
+        {
+          "model": "google/gemini-3.1-flash-lite",
+          "constraints": {
+            "reasoning_effort": "minimal"
+          }
+        },
+        {
+          "model": "qwen/qwen3.6-27b",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          }
+        },
+        {
+          "model": "stepfun/step-3.7-flash",
+          "constraints": {
+            "reasoning_effort": "medium"
+          }
+        }
+      ]
+    }
+  },
+  "user_llm": "gpt-5.5",
+  "user_reasoning_effort": "none"
+}

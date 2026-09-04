@@ -1,0 +1,78 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+*{box-sizing:border-box}html,body{margin:0;width:430px;height:932px;overflow:hidden}
+body{position:relative;color:#1a2430;background:#f4f6f9;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+.status{height:48px;padding:15px 26px 8px;font-size:15px;font-weight:700;display:flex;align-items:center}
+.sicons{margin-left:auto;display:flex;align-items:flex-end;gap:7px}
+.bars{display:flex;align-items:flex-end;gap:2px}
+.bars i{display:block;width:3px;background:#1a2430;border-radius:1px}
+.bars i:nth-child(1){height:4px}.bars i:nth-child(2){height:6px}.bars i:nth-child(3){height:8px}.bars i:nth-child(4){height:10px}
+.wifi{position:relative;width:16px;height:11px}
+.wifi u{position:absolute;left:50%;bottom:0;transform:translateX(-50%);border:2px solid #1a2430;border-bottom:0;border-left:0;border-right:0;border-radius:50% 50% 0 0}
+.wifi u:nth-child(1){width:16px;height:8px}
+.wifi u:nth-child(2){width:10px;height:5px}
+.wifi u:nth-child(3){width:4px;height:4px;border:0;background:#1a2430;border-radius:50%;bottom:-1px}
+.batt{width:24px;height:11px;border:1px solid #1a2430;border-radius:3px;position:relative}
+.batt i{position:absolute;left:1px;top:1px;bottom:1px;width:14px;background:#1a2430;border-radius:1px}
+.batt u{position:absolute;right:-4px;top:3px;width:2px;height:4px;background:#1a2430;border-radius:0 1px 1px 0}
+.nav{min-height:60px;padding:8px 18px 10px;display:grid;grid-template-columns:56px 1fr 56px;align-items:center}
+.back{width:12px;height:12px;border-left:3px solid #0b2a52;border-bottom:3px solid #0b2a52;transform:rotate(45deg);margin-left:4px}
+.nav h1{font-size:18px;text-align:center;margin:0;font-weight:650}
+.navsub{grid-column:2;text-align:center;font-size:12px;color:#5c6a7a;margin-top:1px}
+.content{padding:2px 16px 150px}
+.pagesub{font-size:14px;color:#5c6a7a;margin:8px 2px 16px;line-height:1.4}
+.create{background:#0b2a52;color:#fff;border-radius:12px;text-align:center;padding:16px;font-size:16px;font-weight:650;margin-bottom:18px}
+.seclabel{font-size:12.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:#5c6a7a;margin:2px 2px 8px}
+.vcard{background:#fff;border-radius:14px;padding:15px;margin-bottom:12px;box-shadow:0 1px 2px rgba(20,32,48,.06)}
+.vtop{display:flex;align-items:center;gap:13px}
+.thumb{width:56px;height:38px;border-radius:6px;flex:none;position:relative;overflow:hidden;background:linear-gradient(135deg,#4c7a34,#2c4a1d)}
+.thumb i{position:absolute;left:8px;bottom:6px;width:14px;height:9px;border-radius:2px;background:rgba(255,255,255,.55)}
+.vinfo{flex:1;min-width:0}
+.vname{font-size:16px;font-weight:650}
+.vnum{font-size:12.5px;color:#5c6a7a;margin-top:3px;display:flex;align-items:center}
+.dots{display:inline-flex;gap:3px;margin-right:5px}
+.dots i{width:4px;height:4px;border-radius:50%;background:#5c6a7a;display:block}
+.vbtns{display:flex;gap:10px;margin-top:13px;padding-top:13px;border-top:1px solid #eef1f5}
+.vbtn{flex:1;text-align:center;border:1.5px solid #c9d8ea;border-radius:10px;padding:11px;font-size:14px;font-weight:650;color:#0b5ac2;display:flex;align-items:center;justify-content:center;gap:7px}
+.vbtn.warn{border-color:#e4c9c9;color:#a33636}
+.lockic{width:11px;height:9px;border:2px solid #0b5ac2;border-radius:2px;position:relative;margin-top:3px}
+.lockic i{position:absolute;left:1px;top:-6px;width:5px;height:5px;border:2px solid #0b5ac2;border-bottom:0;border-radius:4px 4px 0 0}
+.binic{width:10px;height:11px;border:2px solid #a33636;border-top:0;border-radius:0 0 3px 3px;position:relative;margin-top:2px}
+.binic i{position:absolute;left:-3px;top:-4px;width:12px;height:2px;background:#a33636}
+.finenote{font-size:12.5px;color:#7b8794;line-height:1.45;margin:14px 2px 0}
+.tabbar{position:absolute;left:0;right:0;bottom:0;height:84px;background:#fff;border-top:1px solid #e3e7ed;display:flex;padding:9px 8px 26px}
+.tab{flex:1;text-align:center;color:#7b8794;font-size:10.5px;font-weight:600}
+.tab .ic{width:22px;height:22px;margin:0 auto 3px;border:2.5px solid #7b8794;border-radius:6px}
+.tab .ic.round{border-radius:50%;position:relative}
+.tab .ic.round s{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-decoration:none;font-size:13px;font-weight:800;color:#7b8794}
+.tab .ic.cardic{height:16px;margin-top:3px;margin-bottom:6px;border-radius:4px;position:relative}
+.tab .ic.cardic s{position:absolute;left:2px;right:2px;top:3px;height:3px;background:#7b8794;display:block}
+.tab.on{color:#0b2a52}
+.tab.on .ic{border-color:#0b2a52}
+.tab.on .ic.cardic s{background:#0b2a52}
+.tab.on .ic.round s{color:#0b2a52}
+.home{position:absolute;bottom:9px;left:146px;width:138px;height:5px;border-radius:4px;background:#222;z-index:2}
+</style></head><body>
+<div class="status">11:26<span class="sicons"><span class="bars"><i></i><i></i><i></i><i></i></span><span class="wifi"><u></u><u></u><u></u></span><span class="batt"><i></i><u></u></span></span></div>
+<div class="nav"><span class="back"></span><h1>Virtual cards</h1><span></span><div class="navsub">EcoCard</div></div>
+<main class="content">
+<p class="pagesub">Merchant-specific numbers that keep your real card out of online checkouts.</p>
+<div class="create">Create virtual card</div>
+<div class="seclabel">Your virtual cards</div>
+<div class="vcard">
+<div class="vtop"><span class="thumb"><i></i></span><span class="vinfo"><span class="vname">Streamly</span><div class="vnum"><span class="dots"><i></i><i></i><i></i><i></i></span>5512</div></span></div>
+<div class="vbtns"><span class="vbtn"><span class="lockic"><i></i></span>Lock</span><span class="vbtn warn"><span class="binic"><i></i></span>Delete</span></div>
+</div>
+<div class="vcard">
+<div class="vtop"><span class="thumb"><i></i></span><span class="vinfo"><span class="vname">Marlowe's Market</span><div class="vnum"><span class="dots"><i></i><i></i><i></i><i></i></span>8093</div></span></div>
+<div class="vbtns"><span class="vbtn"><span class="lockic"><i></i></span>Lock</span><span class="vbtn warn"><span class="binic"><i></i></span>Delete</span></div>
+</div>
+<p class="finenote">Locking a virtual card pauses it. Deleting one is permanent.</p>
+</main>
+<div class="tabbar">
+<div class="tab"><div class="ic"></div>Home</div>
+<div class="tab on"><div class="ic cardic"><s></s></div>Cards</div>
+<div class="tab"><div class="ic round"><s>+</s></div>Apply</div>
+<div class="tab"><div class="ic round"><s>?</s></div>Support</div>
+</div>
+<div class="home"></div>
+</body></html>

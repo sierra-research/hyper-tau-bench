@@ -1,0 +1,336 @@
+{
+  "id": "telecom_customer_identity_policy_fact_schema_001",
+  "domain": "telecom",
+  "display_name": "Customer identity and line access",
+  "global_rules_path": "tau2/hyper/sops/telecom/global_rules.json",
+  "section_id": "customer_identity",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/telecom_sop.md",
+    "heading": "## Customer Identity And Line Access"
+  },
+  "domain_hierarchy": {
+    "role": "global_prerequisite",
+    "requires": []
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "customer_identity_and_line_access",
+        "label": "Identify the customer and affected line",
+        "kind": "procedure",
+        "fact_ids": []
+      },
+      {
+        "id": "account_lookup",
+        "label": "Identify the customer with a supported lookup",
+        "kind": "lookup",
+        "parent_id": "customer_identity_and_line_access",
+        "order": 1,
+        "fact_ids": [
+          "identify_customer_before_technical_support",
+          "lookup_account_or_line_by_phone_number",
+          "phone_lookup_covers_contact_and_line_numbers",
+          "lookup_account_by_customer_id",
+          "lookup_account_by_name_requires_dob",
+          "dob_required_for_verification"
+        ]
+      },
+      {
+        "id": "phone_side_entry",
+        "label": "Troubleshoot phone-side after identity but before account access",
+        "kind": "entry_conditions",
+        "parent_id": "customer_identity_and_line_access",
+        "order": 2,
+        "fact_ids": [
+          "phone_side_troubleshooting_can_begin_first",
+          "phone_side_checks_available_before_account",
+          "device_side_uses_symptom_and_phone_checks"
+        ]
+      },
+      {
+        "id": "account_record_gate",
+        "label": "Open the account record only for carrier-side work",
+        "kind": "blocking_gate",
+        "parent_id": "customer_identity_and_line_access",
+        "order": 3,
+        "fact_ids": [
+          "open_account_for_carrier_side_information",
+          "open_account_for_carrier_side_change",
+          "carrier_side_workflow_examples"
+        ]
+      },
+      {
+        "id": "account_change_gate",
+        "label": "Gate account-side changes",
+        "kind": "confirmation_gate",
+        "parent_id": "customer_identity_and_line_access",
+        "order": 4,
+        "fact_ids": [
+          "account_change_requires_identity_line_and_confirmation"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "phone_side_entry",
+        "type": "requires",
+        "target_id": "account_lookup"
+      },
+      {
+        "source_id": "account_record_gate",
+        "type": "requires",
+        "target_id": "account_lookup"
+      },
+      {
+        "source_id": "account_change_gate",
+        "type": "requires",
+        "target_id": "account_record_gate"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "identify_customer_before_technical_support",
+      "category": "identity_gate",
+      "statement": "The agent identifies the customer before beginning technical support."
+    },
+    {
+      "id": "phone_side_troubleshooting_can_begin_first",
+      "category": "phone_side_scope",
+      "statement": "After the customer is identified, phone-side troubleshooting may begin before the account record is opened."
+    },
+    {
+      "id": "phone_side_checks_available_before_account",
+      "category": "phone_side_scope",
+      "statement": "After the customer is identified and before the account record is opened, phone-side troubleshooting may include the status bar, SIM, network settings, data settings, VPN, app permissions, APN settings, and MMS behavior."
+    },
+    {
+      "id": "device_side_uses_symptom_and_phone_checks",
+      "category": "phone_side_scope",
+      "statement": "After identifying the customer, device-side troubleshooting uses the customer's symptom and phone checks."
+    },
+    {
+      "id": "open_account_for_carrier_side_information",
+      "category": "account_access_gate",
+      "statement": "The account record is opened when the workflow needs carrier-side information."
+    },
+    {
+      "id": "open_account_for_carrier_side_change",
+      "category": "account_access_gate",
+      "statement": "The account record is opened when the workflow needs a carrier-side change."
+    },
+    {
+      "id": "carrier_side_workflow_examples",
+      "category": "account_access_gate",
+      "statement": "Workflows that require opening the account record include line status, bills, data usage, account roaming, payment requests, line resumption, and data refueling."
+    },
+    {
+      "id": "lookup_account_or_line_by_phone_number",
+      "category": "account_lookup",
+      "statement": "To find an account or the affected line by phone, use a phone number."
+    },
+    {
+      "id": "phone_lookup_covers_contact_and_line_numbers",
+      "category": "account_lookup",
+      "statement": "Phone-number lookup covers both the customer's primary contact number and the phone numbers assigned to their lines."
+    },
+    {
+      "id": "lookup_account_by_customer_id",
+      "category": "account_lookup",
+      "statement": "To find an account by customer ID, use the customer ID."
+    },
+    {
+      "id": "lookup_account_by_name_requires_dob",
+      "category": "account_lookup",
+      "statement": "To find an account by name, use the full name and date of birth."
+    },
+    {
+      "id": "dob_required_for_verification",
+      "category": "account_lookup",
+      "statement": "Date of birth is required for name-based lookup for verification purposes."
+    },
+    {
+      "id": "account_change_requires_identity_line_and_confirmation",
+      "category": "account_change_gate",
+      "statement": "An account-side change uses the identified customer and affected line, plus the customer's explicit confirmation."
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/telecom/hard_bundle_001/customer_identity_transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/telecom/client_overlay_001/customer_identity_client_transformation_pack.json"
+    }
+  ],
+  "transformations": [
+    {
+      "id": "telecom_customer_identity_explicit_rules",
+      "representation": "explicit_rules"
+    },
+    {
+      "id": "telecom_customer_identity_care_console_recording",
+      "representation": "interactive_screen_recording",
+      "stub_path": "tau2/hyper/sops/telecom/sections/customer_identity/bundles/recording_communications_automation/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/customer_identity/interactive_screen_recording_001_care_console/identity_and_account_scope.mp4",
+          "kit_filename": "care_console_walkthrough.mp4",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/customer_identity/interactive_screen_recording_001_care_console/timeline.md",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/customer_identity/interactive_screen_recording_001_care_console/eval_manifest.json",
+          "duration_seconds": 56,
+          "included_fact_ids": [
+            "identify_customer_before_technical_support",
+            "phone_side_troubleshooting_can_begin_first",
+            "device_side_uses_symptom_and_phone_checks",
+            "open_account_for_carrier_side_information"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "telecom_customer_identity_email_archive",
+      "representation": "email_thread_archive",
+      "stub_path": "tau2/hyper/sops/telecom/sections/customer_identity/bundles/recording_communications_automation/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/telecom/sections/customer_identity/email_thread_archive_001/eval_manifest.json",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/customer_identity/email_thread_archive_001/thread_01.eml",
+          "kit_filename": "identity_decisions_01.eml",
+          "included_fact_ids": [
+            "lookup_account_by_name_requires_dob",
+            "dob_required_for_verification"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/customer_identity/email_thread_archive_001/thread_02.eml",
+          "kit_filename": "identity_decisions_02.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/customer_identity/email_thread_archive_001/thread_03.eml",
+          "kit_filename": "identity_decisions_03.eml",
+          "included_fact_ids": []
+        }
+      ]
+    },
+    {
+      "id": "telecom_customer_identity_support_transcripts",
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/telecom/sections/customer_identity/bundles/recording_communications_automation/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/customer_identity/support_transcripts_001/case_001.md",
+          "included_fact_ids": [
+            "lookup_account_or_line_by_phone_number",
+            "phone_lookup_covers_contact_and_line_numbers"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/customer_identity/support_transcripts_001/case_002.md",
+          "included_fact_ids": [
+            "lookup_account_by_customer_id"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/customer_identity/support_transcripts_001/case_003.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/customer_identity/support_transcripts_001/case_004.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/customer_identity/support_transcripts_001/case_005.md",
+          "included_fact_ids": []
+        }
+      ]
+    },
+    {
+      "id": "telecom_customer_identity_helpdesk_export",
+      "representation": "helpdesk_automation_export",
+      "stub_path": "tau2/hyper/sops/telecom/sections/customer_identity/bundles/recording_communications_automation/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/telecom/sections/customer_identity/helpdesk_automation_export_001/eval_manifest.json",
+      "fact_map_path": "tau2/hyper/sops/telecom/sections/customer_identity/helpdesk_automation_export_001/fact_map.json",
+      "object_adjudication_path": "tau2/hyper/sops/telecom/sections/customer_identity/helpdesk_automation_export_001/object_adjudication.csv",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/customer_identity/helpdesk_automation_export_001/authored_export.json",
+          "kit_filename": "northline_customer_identity_admin_export_2026-08-08.zip",
+          "display_name": "northline_customer_identity_admin_export_2026-08-08.zip",
+          "included_fact_ids": [
+            "phone_side_checks_available_before_account",
+            "open_account_for_carrier_side_change",
+            "carrier_side_workflow_examples",
+            "account_change_requires_identity_line_and_confirmation"
+          ]
+        }
+      ]
+    }
+  ],
+  "transformation_bundles": [
+    {
+      "id": "customer_identity_recording_communications_automation",
+      "description": "A Care Console recording owns the temporal identity and account-access sequence; a current decision email owns name-plus-DOB lookup while adjacent threads preserve realistic noise; approved support records own phone-number and customer-ID lookup; and the complete production helpdesk export owns exact phone-side scope and carrier-side access and mutation gates among neutral and retired configuration.",
+      "stub_path": "tau2/hyper/sops/telecom/sections/customer_identity/bundles/recording_communications_automation/stub.md",
+      "fact_ids": [
+        "identify_customer_before_technical_support",
+        "phone_side_troubleshooting_can_begin_first",
+        "phone_side_checks_available_before_account",
+        "device_side_uses_symptom_and_phone_checks",
+        "open_account_for_carrier_side_information",
+        "open_account_for_carrier_side_change",
+        "carrier_side_workflow_examples",
+        "lookup_account_or_line_by_phone_number",
+        "phone_lookup_covers_contact_and_line_numbers",
+        "lookup_account_by_customer_id",
+        "lookup_account_by_name_requires_dob",
+        "dob_required_for_verification",
+        "account_change_requires_identity_line_and_confirmation"
+      ],
+      "members": [
+        {
+          "transformation_id": "telecom_customer_identity_care_console_recording",
+          "primary": true,
+          "authoritative_fact_ids": [
+            "identify_customer_before_technical_support",
+            "phone_side_troubleshooting_can_begin_first",
+            "device_side_uses_symptom_and_phone_checks",
+            "open_account_for_carrier_side_information"
+          ]
+        },
+        {
+          "transformation_id": "telecom_customer_identity_email_archive",
+          "authoritative_fact_ids": [
+            "lookup_account_by_name_requires_dob",
+            "dob_required_for_verification"
+          ]
+        },
+        {
+          "transformation_id": "telecom_customer_identity_support_transcripts",
+          "authoritative_fact_ids": [
+            "lookup_account_or_line_by_phone_number",
+            "phone_lookup_covers_contact_and_line_numbers",
+            "lookup_account_by_customer_id"
+          ],
+          "depends_on_fact_ids": [
+            "identify_customer_before_technical_support",
+            "phone_side_troubleshooting_can_begin_first",
+            "device_side_uses_symptom_and_phone_checks",
+            "lookup_account_by_name_requires_dob",
+            "dob_required_for_verification"
+          ]
+        },
+        {
+          "transformation_id": "telecom_customer_identity_helpdesk_export",
+          "authoritative_fact_ids": [
+            "phone_side_checks_available_before_account",
+            "open_account_for_carrier_side_change",
+            "carrier_side_workflow_examples",
+            "account_change_requires_identity_line_and_confirmation"
+          ]
+        }
+      ]
+    }
+  ]
+}

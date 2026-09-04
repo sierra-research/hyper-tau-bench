@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CLI-DB-301 — Credit-limit increase decisioning (v0.9 DRAFT)</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 1180px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #5a6b7d; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #d5dde5; }
+  .lane { position: absolute; border: 1px dashed #b9c4cf; border-radius: 8px; }
+  .lanelabel { position: absolute; font-size: 12px; font-weight: 600; color: #6b7885; letter-spacing: .6px; text-transform: uppercase; }
+  .node { position: absolute; box-sizing: border-box; background: #fff; border: 2px solid #35506e; border-radius: 8px; padding: 10px 12px; font-size: 13.5px; color: #1d2833; line-height: 1.35; }
+  .start { border-color: #2e7d54; background: #f2faf5; }
+  .decision { border-color: #a2662a; background: #fdf7ee; }
+  .step { border-color: #35506e; }
+  .good { border-color: #2e7d54; background: #f2faf5; }
+  .bad { border-color: #9c3a3a; background: #fdf1f1; }
+  .note { position: absolute; box-sizing: border-box; background: #fffbe8; border: 1px solid #d9c98a; border-radius: 6px; padding: 9px 11px; font-size: 12.5px; color: #4c4630; line-height: 1.35; }
+  .draftmark { position: absolute; box-sizing: border-box; border: 1px solid #b9c4cf; background: #f2f5f8; border-radius: 6px; padding: 8px 11px; font-size: 12px; color: #5a6b7d; }
+  .watermark { position: absolute; left: 420px; top: 480px; font-size: 120px; font-weight: 800; color: rgba(154, 166, 178, 0.18); transform: rotate(-24deg); letter-spacing: 18px; }
+  .edge { position: absolute; background: #55677a; }
+  .h { height: 2px; } .v { width: 2px; }
+  .lbl { position: absolute; font-size: 11.5px; color: #55677a; background: #fbfcfd; padding: 0 4px; }
+  .foot { position: absolute; left: 24px; bottom: 12px; font-size: 11.5px; color: #7b8794; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>CLI-DB-301 &mdash; Credit-limit increase decisioning (v0.9 DRAFT)</h1>
+    <div class="meta">CLI Desk &middot; draft exported to the working folder 2025-10-29 &middot; unpublished &mdash; finalization tracked as CLIT-1204 &middot; workflow per J. Moreau 10/27 cutover note</div>
+  </div>
+
+  <div class="watermark">DRAFT</div>
+
+  <div class="draftmark" style="left:24px; top:80px; width:620px;">v0.9 working copy. Open items for v1.0, logged 10/29: reconcile the lane order with the 10/27 cutover note; add the past-due lane to the screen column; refresh the citation strip after the retro.</div>
+
+  <div class="lane" style="left:24px; top:150px; width:460px; height:940px;"></div>
+  <div class="lanelabel" style="left:40px; top:158px;">Intake</div>
+
+  <div class="node start" style="left:56px; top:200px; width:300px;">Customer asks for a higher limit on a card</div>
+  <div class="node step" style="left:56px; top:292px; width:300px;">Verify identity; confirm the requester may act on the account</div>
+  <div class="node step" style="left:56px; top:392px; width:300px;">Amount conversation &mdash; requested figure vs the tier's per-request maximum (workbook tab)</div>
+  <div class="node decision" style="left:56px; top:504px; width:300px;">Amount within the tier maximum?</div>
+  <div class="node step" style="left:56px; top:612px; width:300px;">If over: name the maximum, offer to proceed at it</div>
+
+  <div class="edge v" style="left:206px; top:256px; height:36px;"></div>
+  <div class="edge v" style="left:206px; top:356px; height:36px;"></div>
+  <div class="edge v" style="left:206px; top:468px; height:36px;"></div>
+  <div class="edge v" style="left:206px; top:576px; height:36px;"></div>
+
+  <div class="lane" style="left:520px; top:150px; width:480px; height:940px;"></div>
+  <div class="lanelabel" style="left:536px; top:158px;">Eligibility screen</div>
+
+  <div class="node step" style="left:552px; top:200px; width:330px;">Account age vs tier minimum (workbook tab)</div>
+  <div class="node step" style="left:552px; top:288px; width:330px;">Request history &mdash; cooldown window (console macro; interpretation: pinned ruling)</div>
+  <div class="node step" style="left:552px; top:396px; width:330px;">Active disputes on the account?</div>
+  <div class="node step" style="left:552px; top:484px; width:330px;">Outstanding replacement card orders?</div>
+  <div class="node step" style="left:552px; top:572px; width:330px;">Utilization vs tier threshold (workbook tab)</div>
+  <div class="node step" style="left:552px; top:660px; width:330px;">Payment-history months vs tier requirement (history tool)</div>
+
+  <div class="edge v" style="left:717px; top:252px; height:36px;"></div>
+  <div class="edge v" style="left:717px; top:360px; height:36px;"></div>
+  <div class="edge v" style="left:717px; top:448px; height:36px;"></div>
+  <div class="edge v" style="left:717px; top:536px; height:36px;"></div>
+  <div class="edge v" style="left:717px; top:624px; height:36px;"></div>
+
+  <div class="note" style="left:552px; top:780px; width:400px;">Sketch note (pre-cutover): screen first, then create the request only for screens that pass &mdash; carried over from the back-office runbook. Flagged 10/29 against the cutover note's ordering; unresolved in this revision.</div>
+
+  <div class="lane" style="left:1036px; top:150px; width:500px; height:940px;"></div>
+  <div class="lanelabel" style="left:1052px; top:158px;">Request &amp; decision</div>
+
+  <div class="node step" style="left:1068px; top:200px; width:350px;">Create the request record (submit macro; reference confirmation to the customer)</div>
+  <div class="node decision" style="left:1068px; top:312px; width:350px;">All screen results recorded?</div>
+  <div class="node good" style="left:1068px; top:412px; width:350px;">Approve path &mdash; decision macro applies the new limit</div>
+  <div class="node bad" style="left:1068px; top:512px; width:350px;">Deny path &mdash; decision macro records the dropdown reason</div>
+  <div class="node step" style="left:1068px; top:616px; width:350px;">Communicate the outcome (kept-call conduct; email notification follows)</div>
+
+  <div class="edge v" style="left:1243px; top:276px; height:36px;"></div>
+  <div class="edge v" style="left:1243px; top:376px; height:36px;"></div>
+  <div class="edge v" style="left:1243px; top:476px; height:36px;"></div>
+  <div class="edge v" style="left:1243px; top:580px; height:36px;"></div>
+
+  <div class="note" style="left:1068px; top:740px; width:420px;">Draft note: numbers deliberately absent from this canvas &mdash; tier tables live in the workbook, tool contracts in the console workspace, interpretation rulings in the channel pins. The drawing is a map, not a source.</div>
+
+  <div class="foot">CLI-DB-301 v0.9 DRAFT &middot; working folder copy &middot; internal &mdash; not customer-facing &middot; finalization: CLIT-1204</div>
+</div>
+</body>
+</html>

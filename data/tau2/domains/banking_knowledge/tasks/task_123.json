@@ -1,0 +1,144 @@
+{
+  "id": "task_123",
+  "description": {
+    "purpose": "Task: task_123",
+    "relevant_policies": null,
+    "notes": "TWO REFERRALS - FORMER-CUSTOMER 12-MONTH EXCLUSION BLOCKS ONE. Customer wants to refer two friends: (1) Marcus Okafor, who CLOSED his Rho-Bank checking account in March 2025 (8 months ago) - the referred person must be a new customer with no existing or closed accounts within the past 12 months, so Marcus CANNOT be referred until March 2026, for any account type; (2) Elena Petrova, 34, never a Rho-Bank customer, depositing about $1,200. For Elena, the deposit-gated optimum among personal programs is the Purple Account at $45 (requires $1,000 within 60 days): Bluest pays $75 but requires $2,000; Gold Years pays $50 but the referred person must be 62+; Dark Green pays $40. Referrer gates all pass: tenure since 06/2023 (> 45 days), 3 referrals this year with the last on 10/20 (outside the 9-day rolling window), Purple annual cap 6 with 0 used. Golden: exactly ONE submit_referral (Purple Account) for Elena and none for Marcus. An agent that recommends accounts for both leads the user to submit two referrals and fails the DB comparison."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Tobias Brennan, a 41-year-old construction project manager in Denver. Friendly, straightforward, wants the best deal for himself.\n\n**Verification info:**\n- Name: Tobias Brennan | Phone: 720-555-0918 | Email: tobias.brennan@gmail.com\n- DOB: 10/02/1984 | Address: 955 South Gaylord Street, Denver, CO 80209\n\n**Tool usage:** You have access to `submit_referral`. Use it AFTER the agent recommends which account(s) to use. Call it with your user_id (tb74j8c2s6) and the exact account_type the agent recommends. IMPORTANT: The account_type must exactly match one of these personal checking values (always include the word \"Account\"): Blue Account, Bluest Account, Purple Account, Dark Green Account, Light Blue Account, Light Green Account, Green Account, Green Fee-Free Account, Gold Years Account, Evergreen Account.\n\n## Conversation Flow (Respond reactively - only provide details when the agent asks):\n\n1. **Opening:** \"Hey, I want to refer two friends before the holidays and I'd like whichever accounts pay ME the biggest referral bonus for each of them. First is my coworker Marcus - he's got about $3,000 he'd bring over. Second is my climbing partner Elena - she'd start with around $1,200.\"\n\n2. **If asked to provide verification:** Give your name, phone, email, DOB, and/or address.\n\n3. **If asked about Marcus:** \"Marcus Okafor. Actually, he used to bank with you - he had a Rho-Bank checking account but closed it back in March this year when he moved apartments. He regrets it and wants back in now.\"\n\n4. **If asked about Elena:** \"Elena Petrova. She's 34, never banked with Rho-Bank, and she'd deposit about $1,200 to start.\"\n\n5. **If asked about addresses:** \"Neither of them lives with me, no. Separate places across town.\"\n\n6. **If asked about your referral history:** \"I've done three this year, I think. The last one was around October 20th.\"\n\n7. **If agent explains Marcus cannot be referred because he closed an account within the past 12 months:** \"Ah, that's a bummer. So he has to wait until next March? Okay, forget Marcus for now - what's the best you can do for Elena?\"\n\n8. **If agent recommends an account for Elena:** \"Perfect, let me submit that.\" Use submit_referral with user_id=\"tb74j8c2s6\" and the exact account_type the agent recommended. Submit ONLY Elena's referral if the agent said Marcus is blocked.\n\n9. **If agent recommends accounts for BOTH friends without flagging any problem with Marcus:** \"Great, I'll submit both.\" Then submit TWO referrals with the account_types the agent recommended.\n\n10. **After submitting:** \"Thanks for the help - I'll pass the word along.\" ###STOP###\n\nOnly provide additional details about your situation when the agent asks. Never respond as a customer service representative/assistant."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "users": {
+          "data": {
+            "tb74j8c2s6": {
+              "name": "Tobias Brennan",
+              "user_id": "tb74j8c2s6",
+              "address": "955 South Gaylord Street, Denver, CO 80209",
+              "email": "tobias.brennan@gmail.com",
+              "phone_number": "720-555-0918",
+              "date_of_birth": "10/02/1984"
+            }
+          }
+        },
+        "accounts": {
+          "data": {
+            "chk_tb74j8c2s6_blue": {
+              "account_id": "chk_tb74j8c2s6_blue",
+              "user_id": "tb74j8c2s6",
+              "class": "checking",
+              "level": "Blue Account",
+              "date_opened": "06/10/2023",
+              "status": "OPEN",
+              "current_holdings": "6200.00"
+            }
+          }
+        },
+        "referrals": {
+          "data": {
+            "ref_tb123_blue_001": {
+              "referral_id": "ref_tb123_blue_001",
+              "referrer_id": "tb74j8c2s6",
+              "referred_account_type": "Blue Account",
+              "referral_status": "COMPLETE",
+              "date": "03/12/2025"
+            },
+            "ref_tb123_lightblue_001": {
+              "referral_id": "ref_tb123_lightblue_001",
+              "referrer_id": "tb74j8c2s6",
+              "referred_account_type": "Light Blue Account",
+              "referral_status": "COMPLETE",
+              "date": "07/04/2025"
+            },
+            "ref_tb123_blue_002": {
+              "referral_id": "ref_tb123_blue_002",
+              "referrer_id": "tb74j8c2s6",
+              "referred_account_type": "Blue Account",
+              "referral_status": "COMPLETE",
+              "date": "10/20/2025"
+            }
+          }
+        }
+      }
+    }
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Tobias Brennan",
+          "user_id": "tb74j8c2s6",
+          "address": "955 South Gaylord Street, Denver, CO 80209",
+          "email": "tobias.brennan@gmail.com",
+          "phone_number": "720-555-0918",
+          "date_of_birth": "10/02/1984",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "123_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "123_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"tb74j8c2s6\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "123_2"
+      },
+      {
+        "name": "get_referrals_by_user",
+        "arguments": {
+          "user_id": "tb74j8c2s6"
+        },
+        "requestor": "assistant",
+        "action_id": "123_3"
+      },
+      {
+        "name": "submit_referral",
+        "arguments": {
+          "user_id": "tb74j8c2s6",
+          "account_type": "Purple Account"
+        },
+        "requestor": "user",
+        "action_id": "123_4"
+      }
+    ],
+    "nl_assertions": [
+      "The agent declines to submit a referral for Marcus, explaining that a former customer must be at least 12 months past their last account closure before they can be referred."
+    ],
+    "reward_basis": [
+      "DB",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [
+    "call_discoverable_user_tool",
+    "submit_referral"
+  ],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_047",
+    "doc_bank_accounts_bank_accounts_(general)_048",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_checking_accounts_purple_account_011",
+    "doc_checking_accounts_bluest_account_003",
+    "doc_checking_accounts_dark_green_account_010",
+    "doc_checking_accounts_gold_years_account_010",
+    "doc_checking_accounts_blue_account_010",
+    "doc_checking_accounts_light_blue_account_007",
+    "doc_checking_accounts_green_fee-free_account_007"
+  ]
+}

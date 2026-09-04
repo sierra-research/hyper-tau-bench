@@ -1,0 +1,78 @@
+{
+  "id": "airline_cancelling_reservation_business_eligibility_screenshot_001",
+  "representation": "website_screenshot",
+  "context": "pre_cancellation_trip_fare_details",
+  "agent_facing_artifact": "business_cancellation_eligibility.png",
+  "author_source_artifact": "business_cancellation_eligibility.html",
+  "canonical_fact_ids": [
+    "business_cabin_allows_cancellation"
+  ],
+  "target_facts": [
+    {
+      "id": "business_cabin_allows_cancellation",
+      "statement": "If no flight in the reservation is flying or landed, cancellation is allowed if the reservation is in business cabin class."
+    }
+  ],
+  "static_image_contract": {
+    "coverage": "domain_facts_only",
+    "workflow_fact_ids_covered": [],
+    "workflow_handling": "Required questions, sequencing, confirmations, and action or tool procedures remain in explicit rules or transcripts."
+  },
+  "case_specific_evidence": {
+    "source_path": "data/tau2/domains/airline_plus/db.json",
+    "reservation_id": "A8BR8R",
+    "why_this_case_is_isolated": [
+      "The reservation is in business cabin.",
+      "It was created on May 2, more than 24 hours before the May 15 current time.",
+      "It does not have travel insurance.",
+      "Neither flight is airline-cancelled, flying, or landed.",
+      "Business cabin is therefore the sole positive cancellation-eligibility condition."
+    ],
+    "visible_values": [
+      "DFW to LAX round trip",
+      "May 22 to May 26",
+      "MER711 and MER210",
+      "Wei Everett, Arjun Winslow, and Amina Beaumont",
+      "3 travelers",
+      "2 flight segments",
+      "Business cabin",
+      "Confirmation code A8BR8R"
+    ]
+  },
+  "interpretation": {
+    "scope": "A single low-contrast metadata line at the bottom of Fare details gives the reservation-specific eligibility result and identifies Business cabin as the qualifying condition.",
+    "aggregation_requirement": "The separate explicit fallback rule that any flying or landed segment blocks cancellation remains required. The screenshot does not replace that rule.",
+    "terminology": "Fare details is a UI panel title; Business cabin is the canonical domain value.",
+    "visual_salience": "The target fact has no card, icon, color highlight, heading, or dedicated callout."
+  },
+  "policy_neutral_distractors": [
+    "American-airline-inspired utility and primary navigation",
+    "Account badge and breadcrumb trail",
+    "Round-trip route artwork",
+    "Two detailed flight timeline cards",
+    "Three traveler cards",
+    "Trip contact, passenger detail, and notification links",
+    "Corporate footer"
+  ],
+  "excluded_claims": [
+    "That Business reservations can be cancelled after a flight is flying or landed",
+    "That Business reservations can be cancelled at any time",
+    "That the fare is refundable or receives a full refund",
+    "Any cancellation fee or fee waiver",
+    "Any travel-credit entitlement",
+    "Any refund amount, destination, or processing time",
+    "Any baggage allowance or Business cabin benefit other than cancellation eligibility",
+    "That customers can cancel through self-service",
+    "Any other cancellation eligibility pathway",
+    "Any cancellation confirmation or customer-consent requirement"
+  ],
+  "distribution": {
+    "expose_to_developer_agent": [
+      "business_cancellation_eligibility.png"
+    ],
+    "keep_author_side": [
+      "business_cancellation_eligibility.html",
+      "eval_manifest.json"
+    ]
+  }
+}

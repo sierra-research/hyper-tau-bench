@@ -1,0 +1,126 @@
+From: Theo Beaumont <theo.beaumont@meridianairlines.com>
+To: Maya Wei <maya.wei@harborpointcx.com>
+Date: Wed, 08 May 2024 09:41:31 +0000
+Subject: DR test window - heads up
+Message-ID: <af75917ce15d.ba5df8a1@mail.meridianairlines.com>
+In-Reply-To: <1dd1837de052.54815c48@mail.harborpointcx.com>
+References: <72542355fee0.bfd754e5@mail.meridianairlines.com>
+ <056b621052df.897d9467@mail.harborpointcx.com>
+ <aae922b7a224.b063915d@mail.meridianairlines.com>
+ <bda3c3538a65.3f6e032b@mail.harborpointcx.com>
+ <9c8476b187bc.b01200c0@mail.harborpointcx.com>
+ <7792a0c14e10.7820c88e@mail.meridianairlines.com>
+ <1dd1837de052.54815c48@mail.harborpointcx.com>
+Thread-Topic: DR test window - heads up
+Thread-Index: ASz201j8GI/rXwHOo5ouB48f4DMoJg==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+DR report is filed with the replication change logged as the single finding. =
+Next year's test inherits a tighter gap and a wiser runbook. Thanks for surfa=
+cing the one thing the graphs couldn't see.
+
+-----Original Message-----
+From: Maya Wei <maya.wei@harborpointcx.com>
+Sent: Tuesday, May 7, 2024 10:38 AM UTC
+To: theo.beaumont@meridianairlines.com
+Subject: DR test window - heads up
+Message-ID: <1dd1837de052.54815c48@mail.harborpointcx.com>
+In-Reply-To: <7792a0c14e10.7820c88e@mail.meridianairlines.com>
+References: <72542355fee0.bfd754e5@mail.meridianairlines.com> <056b621052df.8=
+97d9467@mail.harborpointcx.com> <aae922b7a224.b063915d@mail.meridianairlines.=
+com> <bda3c3538a65.3f6e032b@mail.harborpointcx.com> <9c8476b187bc.b01200c0@ma=
+il.harborpointcx.com> <7792a0c14e10.7820c88e@mail.meridianairlines.com>
+
+Ten-minute replication confirmed in today's platform notes. Adding a line to =
+the launch-week runbook: after any failover, agents check saved views first a=
+nd rebuild from the shared template if needed - two minutes of instruction ag=
+ainst an hour of confusion.
+
+-----Original Message-----
+From: Theo Beaumont <theo.beaumont@meridianairlines.com>
+Sent: Monday, May 6, 2024 1:15 PM UTC
+To: maya.wei@harborpointcx.com
+Subject: DR test window - heads up
+Message-ID: <7792a0c14e10.7820c88e@mail.meridianairlines.com>
+In-Reply-To: <9c8476b187bc.b01200c0@mail.harborpointcx.com>
+References: <72542355fee0.bfd754e5@mail.meridianairlines.com> <056b621052df.8=
+97d9467@mail.harborpointcx.com> <aae922b7a224.b063915d@mail.meridianairlines.=
+com> <bda3c3538a65.3f6e032b@mail.harborpointcx.com> <9c8476b187bc.b01200c0@ma=
+il.harborpointcx.com>
+
+Good catch: saved views replicate hourly, and her last edit fell inside the r=
+eplication gap when the failover snapshotted - not data loss, just unlucky ti=
+ming, though I appreciate that the distinction is philosophical when your scr=
+een is empty at seven in the morning. I'm tightening the replication to every=
+ ten minutes, which shrinks the gap to noise, and the change costs us nothing=
+ measurable on the storage side. The DR report will log it as the test's sing=
+le finding, which as findings go is the kind you want: small, explainable, an=
+d fixed before the report is filed.
+
+-----Original Message-----
+From: Maya Wei <maya.wei@harborpointcx.com>
+Sent: Monday, May 6, 2024 9:26 AM UTC
+To: theo.beaumont@meridianairlines.com
+Subject: DR test window - heads up
+Message-ID: <9c8476b187bc.b01200c0@mail.harborpointcx.com>
+In-Reply-To: <bda3c3538a65.3f6e032b@mail.harborpointcx.com>
+References: <72542355fee0.bfd754e5@mail.meridianairlines.com> <056b621052df.8=
+97d9467@mail.harborpointcx.com> <aae922b7a224.b063915d@mail.meridianairlines.=
+com> <bda3c3538a65.3f6e032b@mail.harborpointcx.com>
+
+One aftershock from the DR window: an agent's saved console views vanished af=
+ter the failback - she rebuilt them in ten minutes, but if profiles don't sur=
+vive failover, launch week should know that before it learns it live.
+
+-----Original Message-----
+From: Maya Wei <maya.wei@harborpointcx.com>
+Sent: Sunday, May 5, 2024 11:16 AM UTC
+To: theo.beaumont@meridianairlines.com
+Subject: DR test window - heads up
+Message-ID: <bda3c3538a65.3f6e032b@mail.harborpointcx.com>
+In-Reply-To: <aae922b7a224.b063915d@mail.meridianairlines.com>
+References: <72542355fee0.bfd754e5@mail.meridianairlines.com> <056b621052df.8=
+97d9467@mail.harborpointcx.com> <aae922b7a224.b063915d@mail.meridianairlines.=
+com>
+
+Medal awarded in the form of a coffee voucher. Weekend crew reports the drill=
+ was, in their words, aggressively uneventful.
+
+-----Original Message-----
+From: Theo Beaumont <theo.beaumont@meridianairlines.com>
+Sent: Sunday, May 5, 2024 9:30 AM UTC
+To: maya.wei@harborpointcx.com
+Subject: DR test window - heads up
+Message-ID: <aae922b7a224.b063915d@mail.meridianairlines.com>
+In-Reply-To: <056b621052df.897d9467@mail.harborpointcx.com>
+References: <72542355fee0.bfd754e5@mail.meridianairlines.com> <056b621052df.8=
+97d9467@mail.harborpointcx.com>
+
+DR test wrapped on schedule - both forced logouts fired as predicted and the =
+platform came back clean. One agent saved work at 05:58 and deserves a medal =
+for calendar literacy.
+
+-----Original Message-----
+From: Maya Wei <maya.wei@harborpointcx.com>
+Sent: Tuesday, April 30, 2024 4:36 PM UTC
+To: theo.beaumont@meridianairlines.com
+Subject: DR test window - heads up
+Message-ID: <056b621052df.897d9467@mail.harborpointcx.com>
+In-Reply-To: <72542355fee0.bfd754e5@mail.meridianairlines.com>
+References: <72542355fee0.bfd754e5@mail.meridianairlines.com>
+
+Weekend roster notified with your exact phrasing, since drill not omen is the=
+ ideal amount of reassurance. Thanks for the early notice.
+
+-----Original Message-----
+From: Theo Beaumont <theo.beaumont@meridianairlines.com>
+Sent: Tuesday, April 30, 2024 3:10 PM UTC
+To: maya.wei@harborpointcx.com
+Subject: DR test window - heads up
+Message-ID: <72542355fee0.bfd754e5@mail.meridianairlines.com>
+
+Annual disaster recovery test hits the console platform Saturday 06:00 to 08:=
+00 - expect one forced logout at each end of the window. Weekend staff should=
+ save work before 06:00 and know it's a drill, not an omen.

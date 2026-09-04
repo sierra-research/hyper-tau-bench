@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hyper-Tau Construction</title>
+  <style>
+    :root {
+      --bg: #f6faf7;
+      --panel: #ffffff;
+      --panel-soft: #eef7f0;
+      --line: #d8e5dc;
+      --line-strong: #b7cfbf;
+      --ink: #14231a;
+      --muted: #607568;
+      --faint: #81968a;
+      --green: #167744;
+      --green-dark: #0e5c33;
+      --green-soft: #dff1e6;
+      --yellow: #8a6500;
+      --yellow-soft: #fff5cf;
+      --red: #b42318;
+      --red-soft: #ffebe8;
+      --blue: #1f5f99;
+      --blue-soft: #e8f3ff;
+      --code: #102317;
+      --shadow: 0 16px 40px rgba(20, 35, 26, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      overflow-x: hidden;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      overflow-x: hidden;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      min-height: 36px;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      background: var(--panel);
+      color: var(--ink);
+      cursor: pointer;
+      transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+    }
+
+    button:hover:not(:disabled) {
+      background: var(--panel-soft);
+      border-color: var(--green);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.52;
+    }
+
+    .button-primary {
+      background: var(--green);
+      border-color: var(--green);
+      color: #ffffff;
+      font-weight: 650;
+    }
+
+    .button-primary:hover:not(:disabled) {
+      background: var(--green-dark);
+      border-color: var(--green-dark);
+    }
+
+    .button-secondary {
+      background: var(--green-soft);
+      border-color: var(--line-strong);
+      color: var(--green-dark);
+      font-weight: 620;
+    }
+
+    .button-danger {
+      background: var(--red-soft);
+      border-color: #ffc7c0;
+      color: var(--red);
+      font-weight: 620;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+    }
+
+    .app > * {
+      min-width: 0;
+    }
+
+    aside {
+      min-height: 100vh;
+      min-width: 0;
+      background: var(--panel);
+      border-right: 1px solid var(--line);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      overflow: auto;
+    }
+
+    main {
+      height: 100vh;
+      min-width: 0;
+      overflow: hidden;
+      padding: 22px;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 38px;
+    }
+
+    .brand-mark {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: inset 0 0 0 6px var(--green-soft);
+      flex: none;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 760;
+    }
+
+    h2 {
+      font-size: 15px;
+      line-height: 1.3;
+      font-weight: 720;
+    }
+
+    h3 {
+      font-size: 12px;
+      line-height: 1.2;
+      font-weight: 720;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .muted { color: var(--muted); }
+    .faint { color: var(--faint); }
+    .small { font-size: 12px; line-height: 1.45; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel-flat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .panel-pad {
+      padding: 16px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 620;
+    }
+
+    select,
+    input {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      min-height: 36px;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      padding: 7px 10px;
+      outline: none;
+    }
+
+    select:focus,
+    input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(22, 119, 68, 0.14);
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .command-bar {
+      display: grid;
+      grid-template-columns: minmax(360px, 520px) minmax(0, 1fr);
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+      padding-bottom: 4px;
+    }
+
+    .session-meta {
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      overflow-wrap: anywhere;
+    }
+
+    .task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      max-width: 100%;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--panel-soft);
+      color: var(--muted);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .pill-green {
+      color: var(--green-dark);
+      background: var(--green-soft);
+      border-color: var(--line-strong);
+    }
+
+    .status-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .step {
+      min-height: 86px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 12px;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+    }
+
+    .step-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--panel-soft);
+      border: 1px solid var(--line-strong);
+      color: var(--green-dark);
+      display: grid;
+      place-items: center;
+      font-weight: 760;
+      flex: none;
+    }
+
+    .step.active {
+      border-color: var(--green);
+      background: #fbfffc;
+    }
+
+    .step.active .step-number {
+      background: var(--green);
+      color: #ffffff;
+      border-color: var(--green);
+    }
+
+    .step.done .step-number {
+      background: var(--green-soft);
+      color: var(--green-dark);
+      border-color: var(--green);
+    }
+
+    .workspace {
+      min-height: 0;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(380px, 0.9fr) minmax(0, 1.1fr);
+      gap: 16px;
+    }
+
+    .console-panel {
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+
+    .files {
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+
+    .file-browser {
+      display: grid;
+      grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
+      gap: 0;
+      min-height: 0;
+      min-width: 0;
+    }
+
+    .file-tree {
+      min-height: 0;
+      overflow: auto;
+      border-top: 1px solid var(--line);
+      padding: 8px;
+      background: #fbfdfb;
+    }
+
+    .tree-row {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 18px minmax(0, 1fr);
+      align-items: center;
+      gap: 4px;
+      min-height: 30px;
+      text-align: left;
+      border: 0;
+      border-radius: 6px;
+      padding: 5px 8px 5px calc(8px + (var(--depth) * 15px));
+      background: transparent;
+      color: var(--ink);
+    }
+
+    .tree-row-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .tree-row-file {
+      color: var(--ink);
+    }
+
+    .tree-row-folder {
+      color: var(--green-dark);
+      font-weight: 650;
+    }
+
+    .tree-row.active {
+      background: var(--green-soft);
+      color: var(--green-dark);
+      font-weight: 650;
+    }
+
+    .viewer {
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+
+    .viewer-head {
+      min-height: 47px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 14px;
+      min-width: 0;
+    }
+
+    pre {
+      margin: 0;
+      min-height: 0;
+      overflow: auto;
+      background: #fbfdfb;
+      color: var(--code);
+      padding: 14px;
+      font-size: 12px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .log {
+      min-height: 0;
+      height: auto;
+      overflow: auto;
+      background: #102317;
+      color: #dff1e6;
+      border-top: 1px solid #0a3f23;
+      padding: 12px;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .log-line {
+      padding: 2px 0;
+      border-bottom: 1px solid rgba(223, 241, 230, 0.08);
+      overflow-wrap: anywhere;
+    }
+
+    .log-error { color: #ffd1cc; }
+    .log-muted { color: #9cc5ac; }
+
+    .log-block {
+      border: 1px solid rgba(223, 241, 230, 0.16);
+      border-radius: 8px;
+      margin: 0 0 10px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .log-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-height: 34px;
+      padding: 8px 10px;
+      background: rgba(223, 241, 230, 0.08);
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .log-body {
+      padding: 8px 10px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .log-label {
+      color: #9cc5ac;
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+
+    .log-pre {
+      margin: 0;
+      max-height: 220px;
+      overflow: auto;
+      border: 1px solid rgba(223, 241, 230, 0.12);
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.2);
+      color: #dff1e6;
+      padding: 8px;
+      font-size: 11px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfffc;
+      padding: 12px;
+      min-height: 74px;
+    }
+
+    .metric-value {
+      font-size: 22px;
+      line-height: 1.1;
+      font-weight: 760;
+      color: var(--green-dark);
+      margin-top: 6px;
+    }
+
+    .details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      max-height: 116px;
+      overflow: auto;
+      padding-top: 2px;
+    }
+
+    .result-chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      min-height: 26px;
+      padding: 4px 8px;
+      font-size: 12px;
+      background: var(--panel-soft);
+      color: var(--muted);
+    }
+
+    .result-pass {
+      background: var(--green-soft);
+      color: var(--green-dark);
+      border-color: var(--line-strong);
+    }
+
+    .result-fail {
+      background: var(--red-soft);
+      color: var(--red);
+      border-color: #ffc7c0;
+    }
+
+    @media (max-width: 1100px) {
+      .workspace {
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(260px, 0.8fr) minmax(0, 1.2fr);
+      }
+
+      .command-bar,
+      .summary {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .app,
+      .file-browser {
+        grid-template-columns: 1fr;
+      }
+
+      aside,
+      main {
+        height: auto;
+        min-height: 0;
+        overflow: visible;
+      }
+
+      aside {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      main {
+        padding: 14px;
+      }
+
+      .actions {
+        grid-template-columns: 1fr;
+      }
+
+      .workspace {
+        grid-template-rows: auto auto;
+        overflow: visible;
+      }
+
+      .file-tree {
+        max-height: 260px;
+      }
+
+      pre {
+        max-height: 480px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div>
+          <h1>Hyper-Tau</h1>
+          <p class="small muted">Construction workbench</p>
+        </div>
+      </div>
+
+      <section class="stack">
+        <h3>Task</h3>
+        <div class="field">
+          <label for="taskSelect">Construction Task</label>
+          <select id="taskSelect"></select>
+        </div>
+        <div id="taskInfo" class="panel-flat panel-pad stack">
+          <p class="small muted">Loading tasks...</p>
+        </div>
+      </section>
+
+      <section class="stack">
+        <h3>Models</h3>
+        <div class="field">
+          <label for="developerLlm">Builder Model</label>
+          <input id="developerLlm" value="gpt-5.5">
+        </div>
+        <div class="field">
+          <label for="developerReasoning">Builder Reasoning</label>
+          <select id="developerReasoning">
+            <option value="high" selected>high</option>
+            <option value="medium">medium</option>
+            <option value="low">low</option>
+            <option value="none">none</option>
+          </select>
+        </div>
+        <div class="grid-two">
+          <div class="field">
+            <label for="agentLlm">Agent Model</label>
+            <input id="agentLlm" value="gpt-5.5">
+          </div>
+          <div class="field">
+            <label for="userLlm">User Model</label>
+            <input id="userLlm" value="gpt-5.5">
+          </div>
+        </div>
+        <div class="grid-two">
+          <div class="field">
+            <label for="agentReasoning">Agent Reasoning</label>
+            <select id="agentReasoning">
+              <option value="none" selected>none</option>
+              <option value="low">low</option>
+              <option value="medium">medium</option>
+              <option value="high">high</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="userReasoning">User Reasoning</label>
+            <select id="userReasoning">
+              <option value="none" selected>none</option>
+              <option value="low">low</option>
+              <option value="medium">medium</option>
+              <option value="high">high</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid-two">
+          <div class="field">
+            <label for="builderSteps">Builder Steps (0 = unlimited)</label>
+            <input id="builderSteps" type="number" min="0" max="2000" value="0">
+          </div>
+          <div class="field">
+            <label for="validationLimit">Validation Limit</label>
+            <input id="validationLimit" type="number" min="0" value="0">
+          </div>
+        </div>
+      </section>
+
+      <section class="stack">
+        <h3>Live Runs</h3>
+        <p class="small muted">Builder runs discovered on this machine — including ones launched outside this workbench.</p>
+        <div id="liveRuns" class="stack">
+          <p class="small muted">None found.</p>
+        </div>
+        <button id="refreshRunsBtn">Refresh Runs</button>
+      </section>
+    </aside>
+
+    <main>
+      <section class="command-bar">
+        <div class="actions">
+          <button id="assembleBtn" class="button-primary">Assemble Kit</button>
+          <button id="constructBtn" class="button-secondary" disabled>Run Construction</button>
+          <button id="validateBtn" disabled>Run Validation</button>
+          <button id="stopBtn" class="button-danger" disabled>Stop</button>
+        </div>
+        <div id="sessionMeta" class="session-meta small muted mono">No kit assembled.</div>
+      </section>
+
+      <section class="workspace">
+        <section class="panel console-panel">
+          <div class="viewer-head">
+            <div>
+              <h2>Event Log</h2>
+              <p class="small muted">Live builder model calls, tool calls, tool results, and validation output.</p>
+            </div>
+          </div>
+          <div id="log" class="log mono">
+            <div class="log-line log-muted">Ready.</div>
+          </div>
+        </section>
+
+        <section class="panel files">
+          <div class="viewer-head">
+            <div>
+              <h2>Kit Files</h2>
+              <p id="fileCount" class="small muted">No files loaded.</p>
+            </div>
+            <button id="refreshFilesBtn" disabled>Refresh</button>
+          </div>
+          <div class="file-browser">
+            <div class="file-tree" id="fileList"></div>
+            <div class="viewer">
+              <div class="viewer-head">
+                <div id="fileTitle" class="small muted mono">Select a file</div>
+              </div>
+              <pre id="fileContent">No file selected.</pre>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const state = {
+      tasks: [],
+      selectedTask: null,
+      session: null,
+      eventSource: null,
+      selectedFile: null,
+      files: [],
+      expandedDirs: new Set(),
+      evalStarted: 0,
+      evalCompleted: 0
+    };
+
+    const el = (id) => document.getElementById(id);
+    const LOG_FOLLOW_THRESHOLD_PX = 48;
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    function appendLogEntry(node) {
+      const log = el('log');
+      const shouldFollow = (
+        log.scrollHeight - log.scrollTop - log.clientHeight
+        <= LOG_FOLLOW_THRESHOLD_PX
+      );
+      log.appendChild(node);
+      if (shouldFollow) log.scrollTop = log.scrollHeight;
+    }
+
+    function logLine(message, cls = '') {
+      const row = document.createElement('div');
+      row.className = `log-line ${cls}`;
+      row.textContent = message;
+      appendLogEntry(row);
+    }
+
+    function appendLogNode(node) {
+      appendLogEntry(node);
+    }
+
+    function truncate(value, maxLength = 2400) {
+      const text = String(value ?? '');
+      if (text.length <= maxLength) return text;
+      return `${text.slice(0, maxLength)}\n\n[truncated ${text.length - maxLength} chars]`;
+    }
+
+    function formatValue(value, maxLength = 2400) {
+      if (value === null || value === undefined || value === '') return '(empty)';
+      if (typeof value === 'string') return truncate(value, maxLength);
+      try {
+        return truncate(JSON.stringify(value, null, 2), maxLength);
+      } catch {
+        return truncate(String(value), maxLength);
+      }
+    }
+
+    function appendLabeledPre(parent, label, value, maxLength = 2400) {
+      const section = document.createElement('div');
+      const labelNode = document.createElement('div');
+      labelNode.className = 'log-label';
+      labelNode.textContent = label;
+      const pre = document.createElement('pre');
+      pre.className = 'log-pre';
+      pre.textContent = formatValue(value, maxLength);
+      section.append(labelNode, pre);
+      parent.appendChild(section);
+    }
+
+    function logBuilderStep(event) {
+      const block = document.createElement('div');
+      block.className = 'log-block';
+
+      const title = document.createElement('div');
+      title.className = 'log-title';
+      const toolCount = (event.tool_calls || []).length;
+      const resultCount = (event.tool_results || []).length;
+      title.innerHTML = `
+        <span>Builder step ${event.step}/${event.max_steps}</span>
+        <span class="log-muted">${toolCount} call(s), ${resultCount} result(s)</span>
+      `;
+
+      const body = document.createElement('div');
+      body.className = 'log-body';
+      if (event.reasoning_summary) {
+        appendLabeledPre(body, 'Reasoning summary', event.reasoning_summary, 3000);
+      }
+      if (event.thinking) {
+        appendLabeledPre(body, 'Builder message', event.thinking, 1800);
+      }
+      for (const [index, call] of (event.tool_calls || []).entries()) {
+        appendLabeledPre(
+          body,
+          `Tool call ${index + 1}: ${call.name || '(unknown)'}`,
+          call.arguments,
+          1800
+        );
+      }
+      for (const [index, result] of (event.tool_results || []).entries()) {
+        appendLabeledPre(
+          body,
+          `Tool result ${index + 1}: ${result.name || '(unknown)'}`,
+          result.result,
+          3000
+        );
+      }
+      if (!event.reasoning_summary && !event.thinking && toolCount === 0 && resultCount === 0) {
+        appendLabeledPre(body, 'Step output', 'No text or tool calls were emitted.');
+      }
+
+      block.append(title, body);
+      appendLogNode(block);
+    }
+
+    function logValidationResult(result) {
+      const score = Number(result.avg_reward || 0).toFixed(3);
+      logLine(
+        `validation done: score ${score}; ${result.passed ?? 0}/${result.total ?? 0} passed; ${result.failed ?? 0} failed`
+      );
+      const failed = (result.details || []).filter((item) => !item.passed);
+      if (failed.length) {
+        logLine(
+          `failed tasks: ${failed.map((item) => `${item.task_id} (${Number(item.reward || 0).toFixed(2)})`).join(', ')}`,
+          'log-error'
+        );
+      }
+    }
+
+    async function fetchJson(url, options = {}) {
+      const response = await fetch(url, options);
+      const body = await response.text();
+      let payload;
+      try {
+        payload = body ? JSON.parse(body) : {};
+      } catch (error) {
+        if (!response.ok) {
+          throw new Error(body.trim() || response.statusText);
+        }
+        throw new Error(`Server returned invalid JSON: ${error.message}`);
+      }
+      if (!response.ok || payload.error) {
+        throw new Error(payload.error || payload.detail || response.statusText);
+      }
+      return payload;
+    }
+
+    function selectedValue(id) {
+      return el(id).value.trim();
+    }
+
+    function reasoningValue(id) {
+      const value = selectedValue(id);
+      return value === 'none' ? 'none' : value;
+    }
+
+    function updateTaskInfo() {
+      const task = state.selectedTask;
+      if (!task) {
+        el('taskInfo').innerHTML = '<p class="small muted">No task selected.</p>';
+        return;
+      }
+      el('taskInfo').innerHTML = `
+        <div class="stack">
+          <p class="small mono">${escapeHtml(task.id)}</p>
+          <p>${escapeHtml(task.task_description || '')}</p>
+          <div class="task-meta">
+            <span class="pill pill-green">${escapeHtml(task.source_domain)}</span>
+            <span class="pill">${task.num_test_tasks} validation tasks</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function updateButtons() {
+      const hasTask = Boolean(state.selectedTask);
+      const hasSession = Boolean(state.session);
+      const status = state.session?.status || '';
+      const running = status.endsWith('_running');
+      const cancelling = status.endsWith('_cancelling');
+      const active = running || cancelling;
+      el('assembleBtn').disabled = !hasTask || active;
+      el('constructBtn').disabled = !hasSession || active;
+      el('validateBtn').disabled = !hasSession || active;
+      el('stopBtn').disabled = !running || !state.session?.last_job_id;
+      el('stopBtn').textContent = cancelling ? 'Stopping…' : 'Stop';
+      el('refreshFilesBtn').disabled = !hasSession;
+    }
+
+    function renderSession() {
+      if (!state.session) {
+        el('sessionMeta').textContent = 'No kit assembled.';
+        updateButtons();
+        return;
+      }
+      const session = state.session;
+      const validation = session.validation_result
+        ? ` | validation ${session.validation_result.passed}/${session.validation_result.total}`
+        : '';
+      el('sessionMeta').textContent = `${session.id} | ${session.status}${validation} | ${session.kit_path}`;
+      updateButtons();
+    }
+
+    async function loadTasks() {
+      const params = new URLSearchParams(window.location.search);
+      const queryTask = params.get('task');
+      const tasks = await fetchJson('/api/tasks');
+      state.tasks = tasks;
+      state.tasks.sort((a, b) => a.id.localeCompare(b.id));
+
+      el('taskSelect').innerHTML = state.tasks.map((task) => (
+        `<option value="${escapeHtml(task.id)}">${escapeHtml(task.id)}</option>`
+      )).join('');
+
+      const preferred = state.tasks.find((task) => task.id === queryTask) || state.tasks[0];
+      if (preferred) {
+        el('taskSelect').value = preferred.id;
+        state.selectedTask = preferred;
+      }
+      updateTaskInfo();
+      updateButtons();
+      await restoreRecentSession();
+    }
+
+    async function restoreRecentSession() {
+      if (!state.selectedTask) return;
+      const sessions = await fetchJson('/api/construction/sessions');
+      const match = sessions.find((session) => session.task_id === state.selectedTask.id);
+      if (!match) return;
+      state.session = match;
+      state.selectedFile = null;
+      renderSession();
+      await loadFiles();
+    }
+
+    async function assembleKit() {
+      const taskId = selectedValue('taskSelect');
+      if (!taskId) return;
+      el('log').innerHTML = '';
+      logLine(`Assembling kit for ${taskId}...`);
+      updateButtons();
+      try {
+        const session = await fetchJson('/api/construction/sessions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            task_id: taskId,
+            agent_llm: selectedValue('agentLlm'),
+            user_llm: selectedValue('userLlm')
+          })
+        });
+        state.session = session;
+        state.selectedFile = null;
+        state.files = [];
+        state.expandedDirs = new Set();
+        logLine(`Kit ready: ${session.kit_path}`);
+        renderSession();
+        await loadFiles();
+      } catch (error) {
+        logLine(error.message, 'log-error');
+      } finally {
+        updateButtons();
+      }
+    }
+
+    async function runConstruction() {
+      if (!state.session) return;
+      const previousStatus = state.session.status;
+      const previousJobId = state.session.last_job_id;
+      logLine('Starting construction step...');
+      state.session.status = 'construction_running';
+      state.session.last_job_id = null;
+      renderSession();
+      const payload = {
+        developer_llm: selectedValue('developerLlm'),
+        developer_reasoning_effort: reasoningValue('developerReasoning'),
+        agent_llm: selectedValue('agentLlm'),
+        user_llm: selectedValue('userLlm'),
+        agent_reasoning_effort: reasoningValue('agentReasoning'),
+        user_reasoning_effort: reasoningValue('userReasoning'),
+        sandbox_steps: Number(selectedValue('builderSteps') || 0)
+      };
+      try {
+        const job = await fetchJson(`/api/construction/sessions/${state.session.id}/construct`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        state.session.last_job_id = job.job_id;
+        updateButtons();
+        streamJob(job.job_id);
+      } catch (error) {
+        state.session.status = previousStatus;
+        state.session.last_job_id = previousJobId;
+        renderSession();
+        logLine(error.message, 'log-error');
+      }
+    }
+
+    async function runValidation() {
+      if (!state.session) return;
+      const previousStatus = state.session.status;
+      const previousJobId = state.session.last_job_id;
+      state.evalStarted = 0;
+      state.evalCompleted = 0;
+      logLine('Starting validation step...');
+      state.session.status = 'validation_running';
+      state.session.last_job_id = null;
+      renderSession();
+      const limit = Number(selectedValue('validationLimit') || 0);
+      const payload = {
+        agent_llm: selectedValue('agentLlm'),
+        user_llm: selectedValue('userLlm'),
+        agent_reasoning_effort: reasoningValue('agentReasoning'),
+        user_reasoning_effort: reasoningValue('userReasoning'),
+        max_tasks: limit > 0 ? limit : null
+      };
+      try {
+        const job = await fetchJson(`/api/construction/sessions/${state.session.id}/validate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        state.session.last_job_id = job.job_id;
+        updateButtons();
+        streamJob(job.job_id);
+      } catch (error) {
+        state.session.status = previousStatus;
+        state.session.last_job_id = previousJobId;
+        renderSession();
+        logLine(error.message, 'log-error');
+      }
+    }
+
+    async function stopCurrentJob() {
+      const jobId = state.session?.last_job_id;
+      const status = state.session?.status || '';
+      if (!jobId || !status.endsWith('_running')) return;
+
+      state.session.status = status.replace(/_running$/, '_cancelling');
+      renderSession();
+      logLine('Requesting stop…', 'log-muted');
+      try {
+        const result = await fetchJson(
+          `/api/construction/jobs/${jobId}/stop`,
+          { method: 'POST' }
+        );
+        if (result.status !== 'stop_requested') await refreshSession();
+      } catch (error) {
+        logLine(error.message, 'log-error');
+        await refreshSession();
+      }
+    }
+
+    function streamJob(jobId) {
+      if (state.eventSource) state.eventSource.close();
+      state.eventSource = new EventSource(`/api/construction/jobs/${jobId}/events`);
+      state.eventSource.onmessage = (event) => {
+        const payload = JSON.parse(event.data);
+        handleJobEvent(payload);
+      };
+      state.eventSource.onerror = () => {
+        logLine('Event stream closed.', 'log-muted');
+        state.eventSource.close();
+      };
+    }
+
+    async function refreshSession() {
+      if (!state.session) return;
+      state.session = await fetchJson(`/api/construction/sessions/${state.session.id}`);
+      renderSession();
+      await loadFiles();
+    }
+
+    function handleJobEvent(event) {
+      if (event.type === 'job_started') {
+        logLine(`${event.kind} job started.`);
+      } else if (event.type === 'sandbox_phase') {
+        logLine(`${event.phase}: ${event.detail || ''}`.trim());
+      } else if (event.type === 'sandbox_step') {
+        logBuilderStep(event);
+      } else if (event.type === 'sandbox_done') {
+        logLine(`builder done: ${event.reason}; ${event.steps} step(s), ${event.tool_calls} tool call(s)`);
+      } else if (event.type === 'final_eval_start') {
+        logLine('validation tasks running...');
+      } else if (event.type === 'eval_task_start') {
+        state.evalStarted += 1;
+        logLine(`task ${event.idx + 1}/${event.total}: ${event.task_id}`, 'log-muted');
+      } else if (event.type === 'eval_task_complete') {
+        state.evalCompleted += 1;
+        logLine(`${event.passed ? 'pass' : 'fail'}: ${event.task_id} (${Number(event.reward || 0).toFixed(2)})`);
+      } else if (event.type === 'construction_result') {
+        logLine(`construction done: ${event.result.done_reason}, ${event.result.total_steps} step(s)`);
+      } else if (event.type === 'validation_result') {
+        logValidationResult(event.result);
+      } else if (event.type === 'stop_requested') {
+        logLine(`Stopping ${event.kind} after the active operation…`, 'log-muted');
+      } else if (event.type === 'cancelled') {
+        logLine(`${event.kind} stopped.`, 'log-muted');
+      } else if (event.type === 'error') {
+        logLine(event.message, 'log-error');
+      } else if (event.type === 'done') {
+        if (state.eventSource) state.eventSource.close();
+        refreshSession();
+      }
+    }
+
+    function describeLiveRun(run) {
+      const started = run.started_at
+        ? new Date(run.started_at * 1000).toLocaleTimeString()
+        : 'unknown';
+      const liveness = run.status === 'running' && run.alive ? 'live' : run.status;
+      return `${liveness} | step ${run.steps}/${run.max_steps} | ${run.llm} | started ${started}`;
+    }
+
+    async function loadLiveRuns() {
+      try {
+        const runs = await fetchJson('/api/live-runs');
+        const container = el('liveRuns');
+        if (!runs.length) {
+          container.innerHTML = '<p class="small muted">None found.</p>';
+          return;
+        }
+        container.innerHTML = runs.slice(0, 12).map((run) => `
+          <div class="panel-flat panel-pad stack">
+            <p class="small mono">${escapeHtml(run.run_id)}</p>
+            <p class="small muted">${escapeHtml(describeLiveRun(run))}</p>
+            <button class="watch-run" data-run="${escapeHtml(run.run_id)}">Watch</button>
+          </div>
+        `).join('');
+        for (const button of container.querySelectorAll('.watch-run')) {
+          button.addEventListener('click', () => watchLiveRun(button.dataset.run));
+        }
+      } catch (error) {
+        logLine(`live runs: ${error.message}`, 'log-error');
+      }
+    }
+
+    function watchLiveRun(runId) {
+      if (state.eventSource) state.eventSource.close();
+      el('log').innerHTML = '';
+      logLine(`Watching run ${runId} — replaying history, then following live.`);
+      const source = new EventSource(`/api/live-runs/${encodeURIComponent(runId)}/events`);
+      state.eventSource = source;
+      source.onmessage = (message) => {
+        const event = JSON.parse(message.data);
+        if (event.type === 'run_manifest') {
+          logLine(
+            `run ${event.status}${event.done_reason ? `: ${event.done_reason}` : ''}`
+            + ` | kit ${event.kit_path}`,
+            'log-muted'
+          );
+          // Only the closing manifest ends the stream — the opening one
+          // already reports a terminal status for finished runs being replayed.
+          if (event.final) source.close();
+        } else {
+          handleJobEvent(event);
+        }
+      };
+      source.onerror = () => {
+        logLine('live stream closed', 'log-muted');
+        source.close();
+      };
+    }
+
+    async function loadFiles() {
+      if (!state.session) return;
+      const payload = await fetchJson(`/api/construction/sessions/${state.session.id}/files`);
+      const files = payload.files || [];
+      state.files = files;
+      expandAllDirectories(files);
+      el('fileCount').textContent = `${files.length} files`;
+      renderFileTree();
+      if (!state.selectedFile && files.length) {
+        await loadFile(files.find((file) => file.path === 'README.md')?.path || files[0].path);
+      }
+    }
+
+    function expandAllDirectories(files) {
+      for (const file of files) {
+        const parts = file.path.split('/');
+        let current = '';
+        for (let index = 0; index < parts.length - 1; index += 1) {
+          current = current ? `${current}/${parts[index]}` : parts[index];
+          state.expandedDirs.add(current);
+        }
+      }
+    }
+
+    function buildFileTree(files) {
+      const root = { name: '', path: '', type: 'dir', children: new Map() };
+      for (const file of files) {
+        const parts = file.path.split('/');
+        let node = root;
+        let currentPath = '';
+        for (const [index, part] of parts.entries()) {
+          currentPath = currentPath ? `${currentPath}/${part}` : part;
+          const isFile = index === parts.length - 1;
+          if (!node.children.has(part)) {
+            node.children.set(part, {
+              name: part,
+              path: currentPath,
+              type: isFile ? 'file' : 'dir',
+              children: new Map()
+            });
+          }
+          node = node.children.get(part);
+        }
+      }
+      return root;
+    }
+
+    function renderFileTree() {
+      const root = buildFileTree(state.files);
+      el('fileList').innerHTML = renderTreeChildren(root, 0);
+      document.querySelectorAll('.tree-row-file').forEach((button) => {
+        button.classList.toggle('active', button.dataset.path === state.selectedFile);
+      });
+    }
+
+    function renderTreeChildren(node, depth) {
+      return [...node.children.values()]
+        .sort((a, b) => {
+          if (a.type !== b.type) return a.type === 'dir' ? -1 : 1;
+          return a.name.localeCompare(b.name);
+        })
+        .map((child) => renderTreeNode(child, depth))
+        .join('');
+    }
+
+    function renderTreeNode(node, depth) {
+      const isDir = node.type === 'dir';
+      const expanded = state.expandedDirs.has(node.path);
+      const marker = isDir ? (expanded ? '-' : '+') : '';
+      const row = `
+        <button
+          class="tree-row ${isDir ? 'tree-row-folder' : 'tree-row-file'}"
+          style="--depth: ${depth}"
+          ${isDir ? `data-dir="${escapeHtml(node.path)}"` : `data-path="${escapeHtml(node.path)}"`}
+          title="${escapeHtml(node.path)}"
+        >
+          <span>${marker}</span>
+          <span class="tree-row-name">${escapeHtml(node.name)}</span>
+        </button>
+      `;
+      if (!isDir || !expanded) return row;
+      return row + renderTreeChildren(node, depth + 1);
+    }
+
+    async function loadFile(path) {
+      if (!state.session || !path) return;
+      state.selectedFile = path;
+      document.querySelectorAll('.tree-row-file').forEach((button) => {
+        button.classList.toggle('active', button.dataset.path === path);
+      });
+      el('fileTitle').textContent = path;
+      const response = await fetch(
+        `/api/construction/sessions/${state.session.id}/file?path=${encodeURIComponent(path)}`
+      );
+      el('fileContent').textContent = await response.text();
+    }
+
+    el('taskSelect').addEventListener('change', () => {
+      state.selectedTask = state.tasks.find((task) => task.id === selectedValue('taskSelect'));
+      state.session = null;
+      state.selectedFile = null;
+      state.files = [];
+      state.expandedDirs = new Set();
+      el('fileList').innerHTML = '';
+      el('fileCount').textContent = 'No files loaded.';
+      el('fileTitle').textContent = 'Select a file';
+      el('fileContent').textContent = 'No file selected.';
+      updateTaskInfo();
+      renderSession();
+      updateButtons();
+      restoreRecentSession().catch((error) => logLine(error.message, 'log-error'));
+    });
+
+    el('assembleBtn').addEventListener('click', assembleKit);
+    el('constructBtn').addEventListener('click', runConstruction);
+    el('validateBtn').addEventListener('click', runValidation);
+    el('stopBtn').addEventListener('click', stopCurrentJob);
+    el('refreshFilesBtn').addEventListener('click', loadFiles);
+    el('refreshRunsBtn').addEventListener('click', loadLiveRuns);
+    el('fileList').addEventListener('click', (event) => {
+      const folderButton = event.target.closest('button[data-dir]');
+      if (folderButton) {
+        const path = folderButton.dataset.dir;
+        if (state.expandedDirs.has(path)) state.expandedDirs.delete(path);
+        else state.expandedDirs.add(path);
+        renderFileTree();
+        return;
+      }
+      const button = event.target.closest('button[data-path]');
+      if (button) loadFile(button.dataset.path);
+    });
+
+    loadTasks().catch((error) => {
+      el('taskInfo').innerHTML = `<p class="small" style="color: var(--red)">${escapeHtml(error.message)}</p>`;
+      logLine(error.message, 'log-error');
+    });
+    loadLiveRuns();
+  </script>
+</body>
+</html>

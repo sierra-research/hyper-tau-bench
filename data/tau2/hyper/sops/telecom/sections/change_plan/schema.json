@@ -1,0 +1,304 @@
+{
+  "id": "telecom_change_plan_policy_fact_schema_001",
+  "domain": "telecom",
+  "display_name": "Change a line's plan",
+  "global_rules_path": "tau2/hyper/sops/telecom/global_rules.json",
+  "section_id": "change_plan",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/telecom_sop.md",
+    "heading": "## Changing Plans"
+  },
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": [
+      {
+        "section_id": "customer_identity",
+        "fact_ids": [
+          "identify_customer_before_technical_support",
+          "open_account_for_carrier_side_information",
+          "open_account_for_carrier_side_change",
+          "lookup_account_or_line_by_phone_number",
+          "phone_lookup_covers_contact_and_line_numbers",
+          "lookup_account_by_customer_id",
+          "lookup_account_by_name_requires_dob",
+          "dob_required_for_verification",
+          "account_change_requires_identity_line_and_confirmation"
+        ],
+        "relationship": "global_prerequisite",
+        "description": "Plan lookup and plan changes are carrier-side work that starts only after the customer and affected line are identified."
+      },
+      {
+        "section_id": "service_foundations",
+        "fact_ids": [
+          "can_look_up_account_and_records",
+          "can_show_available_plans_and_change_selected_plan",
+          "customer_records_contents",
+          "records_are_source_of_truth_for_account_decisions",
+          "ground_responses_in_customer_reports_records_and_phone_checks",
+          "responses_concise_accurate_no_speculation",
+          "one_customer_care_action_at_a_time",
+          "wait_for_result_before_next_step",
+          "carrier_side_change_requires_exact_explanation_and_confirmation"
+        ],
+        "relationship": "shared_reference",
+        "description": "Plan changes use the shared record model, channel scope, pacing controls, and carrier-side confirmation gate."
+      }
+    ]
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "change_plan",
+        "label": "Change a line's plan",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "present_available_plans",
+        "label": "Gather and present available plans",
+        "kind": "step",
+        "parent_id": "change_plan",
+        "order": 1,
+        "fact_ids": [
+          "gather_and_present_available_plans"
+        ]
+      },
+      {
+        "id": "select_plan",
+        "label": "Ask the customer to select a plan",
+        "kind": "decision",
+        "parent_id": "change_plan",
+        "order": 2,
+        "fact_ids": [
+          "ask_customer_to_select_plan"
+        ]
+      },
+      {
+        "id": "explain_plan_price",
+        "label": "Calculate and explain the new monthly price",
+        "kind": "step",
+        "parent_id": "change_plan",
+        "order": 3,
+        "fact_ids": [
+          "calculate_and_explain_new_monthly_price"
+        ]
+      },
+      {
+        "id": "confirm_plan_change",
+        "label": "Confirm the selected plan and price",
+        "kind": "confirmation_gate",
+        "parent_id": "change_plan",
+        "order": 4,
+        "fact_ids": [
+          "confirm_selected_plan_and_price"
+        ]
+      },
+      {
+        "id": "apply_plan_change",
+        "label": "Apply the selected plan",
+        "kind": "record_mutation",
+        "parent_id": "change_plan",
+        "order": 5,
+        "fact_ids": [
+          "apply_selected_plan_after_confirmation"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "select_plan",
+        "type": "uses_input_from",
+        "target_id": "present_available_plans"
+      },
+      {
+        "source_id": "explain_plan_price",
+        "type": "uses_input_from",
+        "target_id": "select_plan"
+      },
+      {
+        "source_id": "confirm_plan_change",
+        "type": "requires",
+        "target_id": "explain_plan_price"
+      },
+      {
+        "source_id": "apply_plan_change",
+        "type": "requires",
+        "target_id": "confirm_plan_change"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "gather_and_present_available_plans",
+      "category": "plan_selection",
+      "statement": "After the customer and affected line are identified, gather the available plans and present their relevant details."
+    },
+    {
+      "id": "ask_customer_to_select_plan",
+      "category": "plan_selection",
+      "statement": "After presenting the available plans, ask the customer to select a plan."
+    },
+    {
+      "id": "calculate_and_explain_new_monthly_price",
+      "category": "plan_pricing",
+      "statement": "Calculate and explain the selected plan's new monthly price."
+    },
+    {
+      "id": "confirm_selected_plan_and_price",
+      "category": "plan_confirmation",
+      "statement": "Before changing the line, confirm the selected plan and its new monthly price with the customer."
+    },
+    {
+      "id": "apply_selected_plan_after_confirmation",
+      "category": "plan_change",
+      "statement": "Apply the customer-selected plan to the affected line only after the selected plan and price are confirmed."
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/telecom/hard_bundle_001/change_plan_transformation_pack.json"
+    }
+  ],
+  "transformations": [
+    {
+      "id": "telecom_change_plan_explicit_rules",
+      "representation": "explicit_rules"
+    },
+    {
+      "id": "telecom_change_plan_care_console_recording",
+      "representation": "interactive_screen_recording",
+      "stub_path": "tau2/hyper/sops/telecom/sections/change_plan/bundles/recording_communications_automation/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/change_plan/interactive_screen_recording_001_plan_change/assisted_plan_change.mp4",
+          "kit_filename": "care_console_walkthrough.mp4",
+          "text_source_path": "tau2/hyper/sops/telecom/sections/change_plan/interactive_screen_recording_001_plan_change/timeline.md",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/change_plan/interactive_screen_recording_001_plan_change/eval_manifest.json",
+          "duration_seconds": 58,
+          "included_fact_ids": [
+            "gather_and_present_available_plans"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "telecom_change_plan_email_archive",
+      "representation": "email_thread_archive",
+      "stub_path": "tau2/hyper/sops/telecom/sections/change_plan/bundles/recording_communications_automation/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/telecom/sections/change_plan/email_thread_archive_001/eval_manifest.json",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/change_plan/email_thread_archive_001/thread_01.eml",
+          "kit_filename": "plan_change_decisions_01.eml",
+          "included_fact_ids": [
+            "confirm_selected_plan_and_price"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/change_plan/email_thread_archive_001/thread_02.eml",
+          "kit_filename": "plan_change_decisions_02.eml",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/change_plan/email_thread_archive_001/thread_03.eml",
+          "kit_filename": "plan_change_decisions_03.eml",
+          "included_fact_ids": []
+        }
+      ]
+    },
+    {
+      "id": "telecom_change_plan_support_transcripts",
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/telecom/sections/change_plan/bundles/recording_communications_automation/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/change_plan/support_transcripts_001/case_001.md",
+          "included_fact_ids": [
+            "ask_customer_to_select_plan",
+            "calculate_and_explain_new_monthly_price"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/change_plan/support_transcripts_001/case_002.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/change_plan/support_transcripts_001/case_003.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/change_plan/support_transcripts_001/case_004.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/change_plan/support_transcripts_001/case_005.md",
+          "included_fact_ids": []
+        }
+      ]
+    },
+    {
+      "id": "telecom_change_plan_helpdesk_export",
+      "representation": "helpdesk_automation_export",
+      "stub_path": "tau2/hyper/sops/telecom/sections/change_plan/bundles/recording_communications_automation/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/telecom/sections/change_plan/helpdesk_automation_export_001/eval_manifest.json",
+      "fact_map_path": "tau2/hyper/sops/telecom/sections/change_plan/helpdesk_automation_export_001/fact_map.json",
+      "object_adjudication_path": "tau2/hyper/sops/telecom/sections/change_plan/helpdesk_automation_export_001/object_adjudication.csv",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/change_plan/helpdesk_automation_export_001/authored_export.json",
+          "kit_filename": "northline_change_plan_admin_export_2026-08-08.zip",
+          "display_name": "northline_change_plan_admin_export_2026-08-08.zip",
+          "included_fact_ids": [
+            "apply_selected_plan_after_confirmation"
+          ]
+        }
+      ]
+    }
+  ],
+  "transformation_bundles": [
+    {
+      "id": "change_plan_recording_communications_automation",
+      "description": "A Care Console recording owns plan discovery and presents rejected expired and unconfirmed paths; a decision email owns the final plan-and-price readback; a realistic support record owns selection and calculated-price explanation; and the helpdesk export owns the confirmation-gated plan mutation among operational and retired configuration.",
+      "stub_path": "tau2/hyper/sops/telecom/sections/change_plan/bundles/recording_communications_automation/stub.md",
+      "fact_ids": [
+        "gather_and_present_available_plans",
+        "ask_customer_to_select_plan",
+        "calculate_and_explain_new_monthly_price",
+        "confirm_selected_plan_and_price",
+        "apply_selected_plan_after_confirmation"
+      ],
+      "members": [
+        {
+          "transformation_id": "telecom_change_plan_care_console_recording",
+          "primary": true,
+          "authoritative_fact_ids": [
+            "gather_and_present_available_plans"
+          ]
+        },
+        {
+          "transformation_id": "telecom_change_plan_email_archive",
+          "authoritative_fact_ids": [
+            "confirm_selected_plan_and_price"
+          ]
+        },
+        {
+          "transformation_id": "telecom_change_plan_support_transcripts",
+          "authoritative_fact_ids": [
+            "ask_customer_to_select_plan",
+            "calculate_and_explain_new_monthly_price"
+          ],
+          "depends_on_fact_ids": [
+            "confirm_selected_plan_and_price",
+            "apply_selected_plan_after_confirmation"
+          ]
+        },
+        {
+          "transformation_id": "telecom_change_plan_helpdesk_export",
+          "authoritative_fact_ids": [
+            "apply_selected_plan_after_confirmation"
+          ]
+        }
+      ]
+    }
+  ]
+}

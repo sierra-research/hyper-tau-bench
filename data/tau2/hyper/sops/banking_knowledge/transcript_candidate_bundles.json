@@ -1,0 +1,722 @@
+{
+  "id": "banking_knowledge_transcript_candidate_bundles_001",
+  "domain": "banking_knowledge",
+  "description": "Curated banking KB document bundles that are good first candidates for transcript induction. The full banking KB is too large to transform wholesale, so these bundles prioritize workflows exercised by current Banking Knowledge tasks and procedures with concrete eligibility gates, tool/action ordering, tables, thresholds, statuses, or customer-facing decision points.",
+  "shared_context_paths": [
+    "tau2/hyper/sops/banking_sop.md"
+  ],
+  "document_root": "tau2/domains/banking_knowledge/documents",
+  "selection_notes": [
+    "Use each candidate as a source bundle for one transcript-induction section.",
+    "Keep the banking handbook as shared context for identity verification, explicit confirmation before account-modifying actions, discoverable-tool wrapper rules, schema constraints, and transfer wording.",
+    "Do not try to transform the entire KB. These candidates cover high-leverage task clusters while leaving broad product catalog reference material in retrieval.",
+    "Everyone Pay and BNPL docs are transcript-friendly, but no current Banking Knowledge construction task requires them, so they are left for a later expansion set."
+  ],
+  "candidates": [
+    {
+      "id": "transfer_and_account_recovery_boundaries",
+      "title": "Human transfer and account-recovery boundary cases",
+      "priority": 1,
+      "source_document_ids": [
+        "doc_bank_accounts_bank_accounts_(general)_042",
+        "doc_customer_support_special_support_codes_001"
+      ],
+      "related_task_ids": [
+        "task_004",
+        "task_005",
+        "task_008",
+        "task_012",
+        "task_014",
+        "task_088",
+        "task_090",
+        "task_091",
+        "task_092"
+      ],
+      "transcript_focus": "Unsupported changes, documented transfer reason codes, special support code limits, and exact transfer behavior.",
+      "losslessness_risks": [
+        "Do not collapse transfer reason codes into a generic transfer rule.",
+        "Preserve exact transfer trigger conditions and any special-code limitations.",
+        "Preserve the banking handbook's exact transfer message from shared context."
+      ],
+      "recommended_case_count": 4
+    },
+    {
+      "id": "personal_credit_card_application_recommendation",
+      "title": "Personal credit-card recommendation and application eligibility",
+      "priority": 1,
+      "source_document_ids": [
+        "doc_credit_cards_bronze_rewards_card_001",
+        "doc_credit_cards_silver_rewards_card_001",
+        "doc_credit_cards_gold_rewards_card_001",
+        "doc_credit_cards_platinum_rewards_card_001",
+        "doc_credit_cards_ecocard_001"
+      ],
+      "related_task_ids": [
+        "task_001",
+        "task_002",
+        "task_003",
+        "task_006",
+        "task_007",
+        "task_008"
+      ],
+      "transcript_focus": "Matching customer income, fee sensitivity, subscriptions, environmental or travel preferences, and card eligibility to the right card.",
+      "losslessness_risks": [
+        "Preserve each card's eligibility requirements and annual-fee facts.",
+        "Preserve card-specific reward/benefit distinctions needed to choose between cards.",
+        "Do not merge all personal card recommendations into a single vague best-card rule."
+      ],
+      "recommended_case_count": 5
+    },
+    {
+      "id": "personal_credit_card_rewards_and_promos",
+      "title": "Personal credit-card rewards, promos, and reward-type representation",
+      "priority": 1,
+      "source_document_ids": [
+        "doc_credit_cards_credit_cards_(general)_006",
+        "doc_credit_cards_credit_cards_(general)_007",
+        "doc_credit_cards_silver_rewards_card_002",
+        "doc_credit_cards_platinum_rewards_card_002",
+        "doc_credit_cards_platinum_rewards_card_007",
+        "doc_credit_cards_ecocard_002",
+        "doc_credit_cards_ecocard_009",
+        "doc_credit_cards_crypto-cash_back_001",
+        "doc_credit_cards_crypto-cash_back_002"
+      ],
+      "related_task_ids": [
+        "task_002",
+        "task_003",
+        "task_006",
+        "task_007",
+        "task_017",
+        "task_018",
+        "task_019",
+        "task_022",
+        "task_023"
+      ],
+      "transcript_focus": "Explaining reward rates, promo eligibility, points-vs-cash-back representation, rounding, and product-specific reward mechanics.",
+      "losslessness_risks": [
+        "Preserve reward rates, promo conditions, and rounding policy exactly.",
+        "Keep cash back, sustainability points, and crypto rewards distinct.",
+        "Do not make promo eligibility broader than the source docs."
+      ],
+      "recommended_case_count": 5
+    },
+    {
+      "id": "business_credit_card_selection_promos",
+      "title": "Business credit-card selection, rewards, exclusions, and promos",
+      "priority": 1,
+      "source_document_ids": [
+        "doc_business_credit_cards_business_bronze_rewards_card_001",
+        "doc_business_credit_cards_business_bronze_rewards_card_002",
+        "doc_business_credit_cards_business_bronze_rewards_card_006",
+        "doc_business_credit_cards_business_bronze_rewards_card_010",
+        "doc_business_credit_cards_business_silver_rewards_card_001",
+        "doc_business_credit_cards_business_silver_rewards_card_002",
+        "doc_business_credit_cards_business_silver_rewards_card_005",
+        "doc_business_credit_cards_business_silver_rewards_card_012",
+        "doc_business_credit_cards_business_platinum_rewards_card_001",
+        "doc_business_credit_cards_business_platinum_rewards_card_002",
+        "doc_business_credit_cards_business_platinum_rewards_card_008",
+        "doc_business_credit_cards_business_platinum_rewards_card_011"
+      ],
+      "related_task_ids": [
+        "task_020",
+        "task_021",
+        "task_024",
+        "task_025",
+        "task_026",
+        "task_027",
+        "task_045",
+        "task_047"
+      ],
+      "transcript_focus": "Business-card recommendation, spend-pattern fit, reward exclusions, annual-fee/waiver handling, and promo eligibility.",
+      "losslessness_risks": [
+        "Preserve business vs personal card distinctions.",
+        "Preserve exclusions and first-year fee-waiver conditions.",
+        "Do not generalize business rewards across Bronze, Silver, and Platinum tiers."
+      ],
+      "recommended_case_count": 5
+    },
+    {
+      "id": "credit_card_referrals",
+      "title": "Credit-card referral status, restrictions, and link generation",
+      "priority": 1,
+      "source_document_ids": [
+        "doc_credit_cards_credit_cards_(general)_001",
+        "doc_credit_cards_credit_cards_(general)_002",
+        "doc_credit_cards_credit_cards_(general)_009",
+        "doc_credit_cards_credit_cards_(general)_020",
+        "doc_credit_cards_silver_rewards_card_011",
+        "doc_credit_cards_platinum_rewards_card_008",
+        "doc_credit_cards_ecocard_011",
+        "doc_business_credit_cards_business_gold_rewards_card_010",
+        "doc_business_credit_cards_silver_zoom_card_011"
+      ],
+      "related_task_ids": [
+        "task_010",
+        "task_014",
+        "task_015",
+        "task_016"
+      ],
+      "transcript_focus": "Checking referral statuses, applying referral restrictions, generating links, and distinguishing personal from business referral programs.",
+      "losslessness_risks": [
+        "Preserve every referral status and its customer-facing implication.",
+        "Preserve product-specific restrictions and reward timing.",
+        "Do not imply a referral reward is guaranteed before status criteria are met."
+      ],
+      "recommended_case_count": 5
+    },
+    {
+      "id": "cash_back_disputes_and_corrections",
+      "title": "Cash-back dispute submission and resolved-dispute correction",
+      "priority": 1,
+      "source_document_ids": [
+        "doc_credit_cards_credit_cards_(general)_003",
+        "doc_credit_cards_credit_cards_(general)_004",
+        "doc_credit_cards_credit_cards_(general)_006",
+        "doc_credit_cards_credit_cards_(general)_007",
+        "doc_business_credit_cards_business_silver_rewards_card_002",
+        "doc_business_credit_cards_business_silver_rewards_card_005",
+        "doc_business_credit_cards_business_silver_rewards_card_012",
+        "doc_credit_cards_silver_rewards_card_002",
+        "doc_credit_cards_ecocard_002",
+        "doc_credit_cards_crypto-cash_back_001",
+        "doc_credit_cards_crypto-cash_back_002"
+      ],
+      "related_task_ids": [
+        "task_017",
+        "task_018",
+        "task_019",
+        "task_020",
+        "task_021",
+        "task_022",
+        "task_026",
+        "task_027",
+        "task_028",
+        "task_029"
+      ],
+      "transcript_focus": "Filing cash-back disputes, applying resolved corrections, and comparing expected rewards to source product rules.",
+      "losslessness_risks": [
+        "Preserve which tool/action files the dispute versus the correction.",
+        "Preserve reward-unit distinctions and rounding.",
+        "Preserve product-specific exclusions that can make a dispute invalid."
+      ],
+      "recommended_case_count": 6
+    },
+    {
+      "id": "credit_card_transaction_disputes",
+      "title": "Credit-card transaction disputes, provisional credit, and dispute history",
+      "priority": 1,
+      "source_document_ids": [
+        "doc_credit_cards_credit_cards_(general)_013",
+        "doc_credit_cards_credit_cards_(general)_014",
+        "doc_credit_cards_credit_cards_(general)_015",
+        "doc_credit_cards_credit_cards_(general)_016",
+        "doc_credit_cards_credit_card_replacements_001"
+      ],
+      "related_task_ids": [
+        "task_031",
+        "task_037",
+        "task_038",
+        "task_039",
+        "task_040",
+        "task_041",
+        "task_053",
+        "task_054"
+      ],
+      "transcript_focus": "Finding card numbers, filing transaction disputes, deciding provisional-credit eligibility, checking dispute history, and deciding when replacement is needed.",
+      "losslessness_risks": [
+        "Preserve provisional-credit eligibility cases and exclusions.",
+        "Preserve dispute-history lookup requirements.",
+        "Do not let card-number retrieval replace identity verification from shared context."
+      ],
+      "recommended_case_count": 5
+    },
+    {
+      "id": "credit_card_replacements",
+      "title": "Credit-card replacement ordering, shipping, rejection, and pending-order checks",
+      "priority": 1,
+      "source_document_ids": [
+        "doc_credit_cards_credit_card_replacements_001",
+        "doc_credit_cards_credit_card_replacements_002",
+        "doc_credit_cards_credit_card_replacements_003",
+        "doc_credit_cards_credit_card_replacements_004",
+        "doc_credit_cards_credit_card_replacements_005"
+      ],
+      "related_task_ids": [
+        "task_036",
+        "task_037",
+        "task_038",
+        "task_039",
+        "task_043",
+        "task_044",
+        "task_045",
+        "task_047",
+        "task_048",
+        "task_049",
+        "task_053",
+        "task_054"
+      ],
+      "transcript_focus": "Replacement-card eligibility, shipping options and fees, consequences of replacement, rejected requests, and pending replacement order checks.",
+      "losslessness_risks": [
+        "Preserve shipping fees, timing, and option-specific restrictions.",
+        "Preserve pending-order blockers.",
+        "Preserve rejection reasons separately from transfer or dispute handling."
+      ],
+      "recommended_case_count": 5
+    },
+    {
+      "id": "credit_card_closure_retention_downgrade_payoff",
+      "title": "Credit-card closure, retention, downgrade, payoff, and statement-credit handling",
+      "priority": 1,
+      "source_document_ids": [
+        "doc_credit_cards_credit_card_account_logistics_002",
+        "doc_credit_cards_credit_card_account_logistics_003",
+        "doc_credit_cards_credit_card_account_logistics_008",
+        "doc_credit_cards_credit_card_account_logistics_009",
+        "doc_credit_cards_credit_card_replacements_005",
+        "doc_credit_cards_credit_cards_(general)_016",
+        "doc_credit_cards_credit_cards_(general)_017",
+        "doc_credit_cards_platinum_rewards_card_001",
+        "doc_credit_cards_platinum_rewards_card_002",
+        "doc_business_credit_cards_business_platinum_rewards_card_008",
+        "doc_business_credit_cards_business_platinum_rewards_card_011"
+      ],
+      "related_task_ids": [
+        "task_043",
+        "task_044",
+        "task_045",
+        "task_046",
+        "task_047",
+        "task_048",
+        "task_049"
+      ],
+      "transcript_focus": "Closure blockers, retention offers, downgrade eligibility, payoff from checking, statement-credit use, and annual-fee waiver/benefit constraints.",
+      "losslessness_risks": [
+        "Preserve pre-closure blocker ordering.",
+        "Preserve payoff and statement-credit tools as distinct actions.",
+        "Preserve downgrade and retention eligibility without making offers universal."
+      ],
+      "recommended_case_count": 6
+    },
+    {
+      "id": "credit_limit_increases",
+      "title": "Credit-limit increase request, eligibility, approval, and denial",
+      "priority": 1,
+      "source_document_ids": [
+        "doc_credit_cards_credit_card_account_logistics_004",
+        "doc_credit_cards_credit_card_account_logistics_005",
+        "doc_credit_cards_credit_card_account_logistics_006",
+        "doc_credit_cards_credit_card_account_logistics_007",
+        "doc_credit_cards_credit_card_account_logistics_009",
+        "doc_credit_cards_credit_cards_(general)_015",
+        "doc_credit_cards_credit_cards_(general)_016"
+      ],
+      "related_task_ids": [
+        "task_050",
+        "task_051",
+        "task_052",
+        "task_053",
+        "task_054"
+      ],
+      "transcript_focus": "Customer CLI requests, tier-specific eligibility, payment-history checks, approval/denial processing, and related blockers.",
+      "losslessness_risks": [
+        "Preserve tier-specific CLI thresholds.",
+        "Preserve waiting periods and recent-request blockers.",
+        "Do not claim an increase is approved before the internal approval action succeeds."
+      ],
+      "recommended_case_count": 5
+    },
+    {
+      "id": "credit_card_declines_and_backend_incidents",
+      "title": "Credit-card purchase declines and documented backend incidents",
+      "priority": 2,
+      "source_document_ids": [
+        "doc_credit_cards_credit_cards_(general)_010",
+        "doc_credit_cards_credit_cards_(general)_011",
+        "doc_credit_cards_credit_cards_(general)_012"
+      ],
+      "related_task_ids": [
+        "task_032",
+        "task_033",
+        "task_035",
+        "task_049"
+      ],
+      "transcript_focus": "Diagnosing purchase declines and communicating documented backend incidents without inventing unsupported fixes.",
+      "losslessness_risks": [
+        "Preserve exact incident dates, affected behavior, and customer-facing explanation limits.",
+        "Preserve diagnostic decision order.",
+        "Do not turn incident acknowledgement into a generic system-error script."
+      ],
+      "recommended_case_count": 4
+    },
+    {
+      "id": "personal_checking_opening_recommendation",
+      "title": "Personal checking opening and product recommendation",
+      "priority": 1,
+      "source_document_ids": [
+        "doc_bank_accounts_bank_accounts_(general)_001",
+        "doc_bank_accounts_bank_accounts_(general)_009",
+        "doc_checking_accounts_blue_account_001",
+        "doc_checking_accounts_green_account_(checking)_001",
+        "doc_checking_accounts_green_fee-free_account_001",
+        "doc_checking_accounts_purple_account_001",
+        "doc_checking_accounts_light_blue_account_001",
+        "doc_checking_accounts_light_green_account_001",
+        "doc_checking_accounts_dark_green_account_001",
+        "doc_checking_accounts_gold_years_account_001",
+        "doc_checking_accounts_bluest_account_001",
+        "doc_checking_accounts_evergreen_account_001"
+      ],
+      "related_task_ids": [
+        "task_055",
+        "task_057",
+        "task_065",
+        "task_067",
+        "task_068",
+        "task_069",
+        "task_075",
+        "task_076"
+      ],
+      "transcript_focus": "Choosing and opening a personal checking account from customer needs, existing profile data, age/travel/fee preferences, and product differences.",
+      "losslessness_risks": [
+        "Preserve product-specific eligibility and fee/benefit differences.",
+        "Preserve when the agent opens an account versus recommends one.",
+        "Do not collapse the checking product catalog into generic tier advice."
+      ],
+      "recommended_case_count": 6
+    },
+    {
+      "id": "personal_savings_opening_recommendation",
+      "title": "Personal savings opening and product recommendation",
+      "priority": 1,
+      "source_document_ids": [
+        "doc_bank_accounts_bank_accounts_(general)_002",
+        "doc_bank_accounts_bank_accounts_(general)_009",
+        "doc_savings_accounts_bronze_account_001",
+        "doc_savings_accounts_silver_account_001",
+        "doc_savings_accounts_silver_plus_account_001",
+        "doc_savings_accounts_green_account_(savings)_001",
+        "doc_savings_accounts_gold_account_001",
+        "doc_savings_accounts_gold_plus_account_001",
+        "doc_savings_accounts_platinum_account_001",
+        "doc_savings_accounts_platinum_plus_account_001",
+        "doc_savings_accounts_diamond_elite_account_001"
+      ],
+      "related_task_ids": [
+        "task_055",
+        "task_058",
+        "task_059",
+        "task_060",
+        "task_061",
+        "task_063",
+        "task_064",
+        "task_065",
+        "task_066",
+        "task_067",
+        "task_068",
+        "task_069",
+        "task_093",
+        "task_094",
+        "task_095",
+        "task_096",
+        "task_097"
+      ],
+      "transcript_focus": "Choosing and opening a savings account from balance, existing accounts, product tiers, fee preferences, and desired APY/benefits.",
+      "losslessness_risks": [
+        "Preserve APY, minimums, and account-tier differences from each product doc.",
+        "Preserve customer profile/account lookup before personalized recommendations.",
+        "Do not combine Plus, Platinum, and Diamond Elite eligibility into a vague premium-tier rule."
+      ],
+      "recommended_case_count": 6
+    },
+    {
+      "id": "savings_apy_boosts_interest_discrepancies",
+      "title": "Savings APY boosts, bonus selection, credits, and interest discrepancy reports",
+      "priority": 1,
+      "source_document_ids": [
+        "doc_bank_accounts_bank_accounts_(general)_012",
+        "doc_bank_accounts_bank_accounts_(general)_043",
+        "doc_bank_accounts_bank_accounts_(general)_044",
+        "doc_bank_accounts_bank_accounts_(general)_045",
+        "doc_bank_accounts_bank_accounts_(general)_046",
+        "doc_savings_accounts_silver_account_002",
+        "doc_savings_accounts_silver_account_003",
+        "doc_savings_accounts_silver_account_006",
+        "doc_savings_accounts_green_account_(savings)_003",
+        "doc_savings_accounts_green_account_(savings)_005",
+        "doc_savings_accounts_gold_account_013",
+        "doc_savings_accounts_gold_account_014",
+        "doc_savings_accounts_silver_plus_account_009",
+        "doc_savings_accounts_gold_plus_account_009",
+        "doc_savings_accounts_platinum_account_010",
+        "doc_savings_accounts_diamond_elite_account_011"
+      ],
+      "related_task_ids": [
+        "task_063",
+        "task_064",
+        "task_065",
+        "task_066",
+        "task_067",
+        "task_068",
+        "task_069",
+        "task_093",
+        "task_094",
+        "task_095",
+        "task_096",
+        "task_097"
+      ],
+      "transcript_focus": "Resolving suspected savings-interest errors, applying credits, deciding linked-checking APY boosts, and applying credit-card APY bonus stacking/selection rules.",
+      "losslessness_risks": [
+        "Preserve APY boost stacking and selection order.",
+        "Preserve when to apply a credit versus submit an interest discrepancy report.",
+        "Preserve account-specific interest calculation and payout timing."
+      ],
+      "recommended_case_count": 6
+    },
+    {
+      "id": "business_checking_opening_promotions",
+      "title": "Business checking opening, product selection, and promotions",
+      "priority": 1,
+      "source_document_ids": [
+        "doc_bank_accounts_bank_accounts_(general)_003",
+        "doc_bank_accounts_bank_accounts_(general)_009",
+        "doc_bank_accounts_bank_accounts_(general)_013",
+        "doc_bank_accounts_bank_accounts_(general)_014",
+        "doc_business_checking_accounts_sky_blue_001",
+        "doc_business_checking_accounts_sky_blue_007",
+        "doc_business_checking_accounts_sky_blue_010",
+        "doc_business_checking_accounts_lime_green_001",
+        "doc_business_checking_accounts_lime_green_007",
+        "doc_business_checking_accounts_hunter_green_001",
+        "doc_business_checking_accounts_hunter_green_010",
+        "doc_business_checking_accounts_navy_blue_001",
+        "doc_business_checking_accounts_true_blue_001",
+        "doc_business_checking_accounts_world_blue_001",
+        "doc_business_checking_accounts_beige_001",
+        "doc_business_checking_accounts_cobalt_blue_001"
+      ],
+      "related_task_ids": [
+        "task_056",
+        "task_070",
+        "task_071",
+        "task_099",
+        "task_100",
+        "task_101",
+        "task_102"
+      ],
+      "transcript_focus": "Opening and recommending business checking accounts, including current promotions and product-specific ATM/fee features.",
+      "losslessness_risks": [
+        "Preserve October vs November promotion eligibility separately.",
+        "Preserve business product eligibility and feature differences.",
+        "Do not merge personal and business checking opening procedures."
+      ],
+      "recommended_case_count": 6
+    },
+    {
+      "id": "business_savings_opening_promotions",
+      "title": "Business savings opening, product selection, and promotions",
+      "priority": 1,
+      "source_document_ids": [
+        "doc_bank_accounts_bank_accounts_(general)_004",
+        "doc_bank_accounts_bank_accounts_(general)_009",
+        "doc_bank_accounts_bank_accounts_(general)_015",
+        "doc_bank_accounts_bank_accounts_(general)_016",
+        "doc_business_savings_accounts_bronze_saver_account_001",
+        "doc_business_savings_accounts_silver_saver_account_001",
+        "doc_business_savings_accounts_silver_plus_saver_001",
+        "doc_business_savings_accounts_silver_plus_saver_006",
+        "doc_business_savings_accounts_gold_saver_account_001",
+        "doc_business_savings_accounts_gold_saver_account_006",
+        "doc_business_savings_accounts_gold_plus_saver_001",
+        "doc_business_savings_accounts_gold_plus_saver_006",
+        "doc_business_savings_accounts_platinum_reserve_account_001",
+        "doc_business_savings_accounts_emerald_saver_001",
+        "doc_business_savings_accounts_diamond_vault_001"
+      ],
+      "related_task_ids": [
+        "task_056",
+        "task_071"
+      ],
+      "transcript_focus": "Opening and recommending business savings accounts, promotion eligibility, ACH/wire transfer features, and APY-oriented product selection.",
+      "losslessness_risks": [
+        "Preserve product-specific APY/transfer features.",
+        "Preserve business savings promotion month and eligibility conditions.",
+        "Do not blur business checking and business savings procedures."
+      ],
+      "recommended_case_count": 5
+    },
+    {
+      "id": "checking_atm_fee_rebates_and_credits",
+      "title": "Checking-account ATM fees, rebates, and fee credits",
+      "priority": 2,
+      "source_document_ids": [
+        "doc_bank_accounts_bank_accounts_(general)_009",
+        "doc_bank_accounts_bank_accounts_(general)_017",
+        "doc_checking_accounts_blue_account_012",
+        "doc_checking_accounts_green_account_(checking)_012",
+        "doc_checking_accounts_bluest_account_007",
+        "doc_checking_accounts_bluest_account_010",
+        "doc_checking_accounts_purple_account_004",
+        "doc_checking_accounts_purple_account_010",
+        "doc_checking_accounts_purple_account_012",
+        "doc_checking_accounts_light_blue_account_006",
+        "doc_checking_accounts_light_green_account_013",
+        "doc_checking_accounts_evergreen_account_008"
+      ],
+      "related_task_ids": [
+        "task_072",
+        "task_073",
+        "task_074",
+        "task_089"
+      ],
+      "transcript_focus": "Investigating ATM-fee complaints, checking product-specific fee/rebate rules, and applying credits or explaining ineligibility.",
+      "losslessness_risks": [
+        "Preserve product-specific domestic, international, foreign, and out-of-network fee rules.",
+        "Preserve when a fee credit is allowed versus when the customer is ineligible.",
+        "Do not collapse all ATM-fee handling into a generic refund policy."
+      ],
+      "recommended_case_count": 5
+    },
+    {
+      "id": "personal_account_closure_and_debit_cleanup",
+      "title": "Personal account closure with transaction/debit-card cleanup",
+      "priority": 1,
+      "source_document_ids": [
+        "doc_bank_accounts_bank_accounts_(general)_005",
+        "doc_bank_accounts_bank_accounts_(general)_006",
+        "doc_bank_accounts_bank_accounts_(general)_018",
+        "doc_bank_accounts_bank_accounts_(general)_020",
+        "doc_bank_accounts_bank_accounts_(general)_023",
+        "doc_bank_accounts_bank_accounts_(general)_025",
+        "doc_bank_accounts_bank_accounts_(general)_028",
+        "doc_bank_accounts_bank_accounts_(general)_029",
+        "doc_bank_accounts_bank_accounts_(general)_030"
+      ],
+      "related_task_ids": [
+        "task_060",
+        "task_061",
+        "task_065",
+        "task_066",
+        "task_067",
+        "task_068",
+        "task_069",
+        "task_077",
+        "task_078",
+        "task_079",
+        "task_080",
+        "task_081",
+        "task_086",
+        "task_088",
+        "task_090",
+        "task_091",
+        "task_092"
+      ],
+      "transcript_focus": "Closing checking or savings accounts only after required transaction and debit-card checks, including lost/stolen cross-product handling.",
+      "losslessness_risks": [
+        "Preserve closure blockers and required pre-closure checks.",
+        "Preserve debit-card cancellation/replacement consequences.",
+        "Do not let account closure skip explicit confirmation from shared context."
+      ],
+      "recommended_case_count": 6
+    },
+    {
+      "id": "debit_card_lost_stolen_freeze_replace",
+      "title": "Debit-card lost/stolen, freeze/unfreeze, replacement, and security alerts",
+      "priority": 1,
+      "source_document_ids": [
+        "doc_bank_accounts_bank_accounts_(general)_023",
+        "doc_bank_accounts_bank_accounts_(general)_024",
+        "doc_bank_accounts_bank_accounts_(general)_025",
+        "doc_bank_accounts_bank_accounts_(general)_026",
+        "doc_bank_accounts_bank_accounts_(general)_028",
+        "doc_bank_accounts_bank_accounts_(general)_029",
+        "doc_bank_accounts_bank_accounts_(general)_030",
+        "doc_bank_accounts_bank_accounts_(general)_039",
+        "doc_checking_accounts_purple_account_007"
+      ],
+      "related_task_ids": [
+        "task_077",
+        "task_078",
+        "task_079",
+        "task_080",
+        "task_081",
+        "task_086",
+        "task_087",
+        "task_088",
+        "task_090",
+        "task_091",
+        "task_092"
+      ],
+      "transcript_focus": "Handling lost or stolen debit cards, freezes/unfreezes, replacements by account tier, travel/emergency replacement, and security alert blocks.",
+      "losslessness_risks": [
+        "Preserve freeze/unfreeze, cancel, and replacement as separate actions.",
+        "Preserve account-tier replacement options and fees.",
+        "Preserve cross-product lost/stolen protocol ordering."
+      ],
+      "recommended_case_count": 6
+    },
+    {
+      "id": "debit_card_disputes_declines_pin_limits",
+      "title": "Debit-card disputes, declines, PIN locks, temporary limits, and Regulation E",
+      "priority": 1,
+      "source_document_ids": [
+        "doc_bank_accounts_bank_accounts_(general)_018",
+        "doc_bank_accounts_bank_accounts_(general)_027",
+        "doc_bank_accounts_bank_accounts_(general)_028",
+        "doc_bank_accounts_bank_accounts_(general)_031",
+        "doc_bank_accounts_bank_accounts_(general)_032",
+        "doc_bank_accounts_bank_accounts_(general)_033",
+        "doc_bank_accounts_bank_accounts_(general)_034",
+        "doc_bank_accounts_bank_accounts_(general)_035",
+        "doc_bank_accounts_bank_accounts_(general)_036",
+        "doc_bank_accounts_bank_accounts_(general)_037",
+        "doc_bank_accounts_bank_accounts_(general)_039",
+        "doc_bank_accounts_bank_accounts_(general)_040",
+        "doc_bank_accounts_bank_accounts_(general)_041",
+        "doc_checking_accounts_checking_accounts_(general)_003",
+        "doc_checking_accounts_checking_accounts_(general)_004",
+        "doc_checking_accounts_checking_accounts_(general)_006",
+        "doc_checking_accounts_green_account_(checking)_007",
+        "doc_checking_accounts_green_account_(checking)_008",
+        "doc_checking_accounts_light_green_account_002",
+        "doc_checking_accounts_light_green_account_005",
+        "doc_checking_accounts_light_blue_account_002"
+      ],
+      "related_task_ids": [
+        "task_082",
+        "task_083",
+        "task_084",
+        "task_085",
+        "task_086",
+        "task_087",
+        "task_088",
+        "task_089",
+        "task_090",
+        "task_091",
+        "task_092"
+      ],
+      "transcript_focus": "Filing and checking debit disputes, provisional credit, ATM and recurring-payment special cases, decline diagnostics, PIN-lock fraud-risk scoring, and temporary limit requests.",
+      "losslessness_risks": [
+        "Preserve dispute subtype distinctions and Regulation E timing/eligibility.",
+        "Preserve PIN-lock scoring thresholds and transfer triggers.",
+        "Preserve temporary limit conditions and minor-account limits."
+      ],
+      "recommended_case_count": 7
+    }
+  ],
+  "alternates_for_later_expansion": [
+    {
+      "id": "everyone_pay_payments_blocks_and_limits",
+      "reason": "Transcript-friendly payment workflow, but no current Banking Knowledge task requires Everyone Pay docs."
+    },
+    {
+      "id": "buy_now_pay_later_applications_limits_and_dashboard",
+      "reason": "Transcript-friendly BNPL workflow with limits and eligibility, but no current Banking Knowledge task requires BNPL docs."
+    },
+    {
+      "id": "personal_subscription_rho_bank_plus",
+      "reason": "Small set of subscription docs that may matter for credit-card recommendation context, but current tasks only mention it as customer context."
+    }
+  ]
+}

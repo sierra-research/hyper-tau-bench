@@ -1,0 +1,305 @@
+WEBVTT
+
+00:00:02.400 --> 00:00:20.344
+<v Dan Kowalski>Okay, recording is on, transcript is on, and I see... fourteen in the room, which is everybody except Priya, who warned me she'd be ten minutes late and said, quote, start without me, the math doesn't need me. Which is true and also hurtful.
+
+00:00:22.898 --> 00:00:28.033
+<v Grace Liu>She'll be here for the arguing. She has a sense for it.
+
+00:00:28.324 --> 00:00:59.597
+<v Dan Kowalski>She does. So — welcome to the Q4 calibration, the rewards math edition. For the folks joining from the floor: most of you will be in the chat more than on mic today, and that's by design. The idea of this session is very simple. Same case, same numbers, same answer, no matter which of us picks it up. Today we get aligned on the arithmetic; the wording for customers falls out of that at the end.
+
+00:00:59.749 --> 00:01:24.252
+<v Dan Kowalski>Housekeeping in one breath: attendance list goes in the meeting notes — an actual list, Bea's keeping it, thank you Bea — and if you're watching this as a recording because you couldn't make it, you owe me a one-line confirmation in writing by Friday next. That's a compliance thing, not a me thing.
+
+00:01:25.059 --> 00:01:26.731
+<v Alicia Fuentes>And a you thing.
+
+00:01:29.848 --> 00:02:02.631
+<v Dan Kowalski>And a little bit a me thing. Okay. No slides yet. First thing we do is a pulse check, because I want to know where the room actually is before I tell you anything. Everyone — floor folks especially — type your answer in the chat and do not send until I say go. No talking, no peeking at your neighbor's math.
+
+00:02:03.351 --> 00:02:08.044
+<v Marcus Webb>Do we get to peek at our own math?
+
+00:02:08.312 --> 00:02:23.340
+<v Dan Kowalski>Encouraged. Here's the question. A customer spends one hundred twenty-six dollars and seventy-seven cents on a card that earns one percent cash back. How many points land on the transaction? Type it. Don't send.
+
+00:02:44.455 --> 00:02:45.448
+<v Dan Kowalski>Go.
+
+00:02:57.928 --> 00:03:18.998
+<v Dan Kowalski>Okay, chat's rolling in... and there it is. There's the split. I'm reading: a bunch of one twenty-sixes, a healthy crowd of one twenty-sevens, two people wrote one twenty-six point seven seven, and someone wrote, quote, "depends," which — Omar, "depends" is a personality, not a number.
+
+00:03:19.260 --> 00:03:25.038
+<v Grace Liu>In his defense, "depends" is the most honest wrong answer on the board.
+
+00:03:25.579 --> 00:03:49.378
+<v Dan Kowalski>It's honestly wrong in the most useful way, yes. So look at the spread, everyone. Fourteen people who all work these cases, three different answers. Nobody's dumb, the room just never got aligned. That's the disease. This session is the cure. So let me give you the rule first, then we'll work it until it's boring.
+
+00:03:54.767 --> 00:04:16.880
+<v Dan Kowalski>The rule: all credit card rewards points round down to the nearest whole number. Down. Every time. Not to the nearest — down. If the arithmetic gives you a fraction, the customer gets the whole number below it, and that is true on every card we issue.
+
+00:04:17.791 --> 00:04:20.342
+<v Grace Liu>So the one twenty-sixes have it.
+
+00:04:21.559 --> 00:04:48.317
+<v Dan Kowalski>The one twenty-sixes have it, and hold that thought, because we'll do the full worked example on a slide in a minute. And everyone who typed one twenty-seven — you're the reason this session exists, in the best way. You did math. You did reasonable math. The bank does different math, and until today nobody put the two in one room.
+
+00:04:48.718 --> 00:05:05.815
+<v Grace Liu>That's also the empathy script for the calls, basically verbatim. "Your math is reasonable, here's ours, here's why they differ." Half the heat in these calls is customers braced to be told they can't multiply.
+
+00:05:06.845 --> 00:05:28.094
+<v Dan Kowalski>And they can multiply! Their multiplication is usually flawless. It's the last step that diverges. Okay. Before the slide — the system side, because "the rule says" lands better when you know the machine agrees. Marcus — your five minutes. Plain words, minimal hedging, as negotiated.
+
+00:05:29.737 --> 00:06:01.898
+<v Dan Kowalski>Actually, let me set it up properly, one sentence, because this matters for how you explain it on a call: the reason the rule is down and not nearest isn't anyone's generosity policy in either direction — it's what the platform actually does. The system truncates fractional points. It floors them. There is no rounding-to-nearest step anywhere in the pipeline. Marcus has now read every line of the thing, so, confirm or deny.
+
+00:06:02.255 --> 00:06:55.111
+<v Marcus Webb>Confirm, and here's the shape of it, minus the code tour. The nightly accrual computes each transaction's points as a decimal, full precision, and then the write step keeps the whole-number part and drops the remainder. That's it. That's the whole mechanism. I traced all five card-program branches — finished the last one Monday, for anyone tracking my personal saga — and it's the same behavior in all five. Nothing rounds up, nothing rounds to nearest, and there is no remainder bucket. The fraction isn't stored somewhere waiting for you; it simply never becomes a point.
+
+00:06:56.893 --> 00:07:03.834
+<v Grace Liu>Which retires the carry theory from August. The half points are not accumulating in a vault.
+
+00:07:04.061 --> 00:07:19.565
+<v Marcus Webb>There is no vault. I looked. The most popular customer theory of the year, and the answer is: the decimal exists for one instant in the middle of a computation and is never written anywhere.
+
+00:07:20.037 --> 00:07:31.059
+<v Dan Kowalski>Chat question already — Bea asks: "does the same thing happen at redemption? Do people lose fractions cashing out too?" Marcus, yours.
+
+00:07:32.364 --> 00:08:00.645
+<v Marcus Webb>Good instinct, and no, and here's why redemption can't have this problem: by the time you redeem, the balance is already whole points — the flooring happened at earn time, transaction by transaction. Whole points at a cent apiece is exact money, no fractions anywhere to lose. The only place a decimal ever exists is inside the earn computation, for that one instant.
+
+00:08:01.891 --> 00:08:45.015
+<v Dan Kowalski>Which is a nice property, because it means this entire session is about one moment in the pipeline. Master that moment, you've mastered the whole topic. Hugo follows up: "why down, though? Who chose down?" — and I want to be careful with this one, because the honest answer is: it predates everyone on this call, and I'm not going to invent a founding myth. What I can tell you is what matters operationally: down is what the platform does, uniformly, and uniform is the part with value. The worst possible world is the generous-sometimes world, because sometimes is unexplainable on a call.
+
+00:08:45.171 --> 00:09:00.524
+<v Grace Liu>And "who chose it" never has to be answered for a customer anyway. What they're owed is the what and the arithmetic, and the arithmetic is checkable. Origin stories are for engineers at retros.
+
+00:09:00.936 --> 00:09:02.815
+<v Marcus Webb>We do love them.
+
+00:09:03.830 --> 00:09:18.212
+<v Dan Kowalski>Perfect. That's the machine. Now the slide, because I promised worked examples with real numbers — these amounts are from actual queue cases with the customers scrubbed out. Sharing.
+
+00:09:18.710 --> 00:09:22.071
+[Dan shares the calibration deck and moves to the first worked example slide.]
+
+00:10:11.509 --> 00:10:41.129
+<v Dan Kowalski>Worked example one. Same numbers as the pulse check, not a coincidence. And I'm going to say it the way the training material says it, which I know reads a little sideways, so listen to the shape of it: one twenty-six seventy-seven times point-oh-one is one point two six seven seven points, which rounds down to one point per dollar, so, one twenty-six.
+
+00:10:42.611 --> 00:11:13.948
+<v Grace Liu>The slide has it as written text too — let me read it into the record since half the floor will screenshot this slide anyway: 126.77 times 0.01 equals 1.2677 points, rounds down to 1 point per dollar, giving 126 points. That "point per dollar" phrasing is a little scrambled, but the answer is not ambiguous. 126. Not 127.
+
+00:11:14.652 --> 00:11:51.845
+<v Dan Kowalski>Right — the phrasing is inherited, the arithmetic is the point. A $126.77 purchase at 1% earns 126 points. Not 127. The one twenty-sevens in the chat, this is your case: the customer will show you one twenty-seven, they got there with schoolbook rounding, point five and up goes up. Reasonable instinct. Wrong here. Our answer is one twenty-six, and now everyone knows why, and it's the same why on every card.
+
+00:11:52.810 --> 00:12:22.048
+<v Alicia Fuentes>And can I put the nail in the display idea while we're on this slide? That was mine, from August — show the customer a rounded-up number so they feel better. It's dead. It deserved to die. If the ledger writes one twenty-six, then every screen, every letter, every agent says one twenty-six. The moment any surface shows a different number than the ledger, we're manufacturing the next dispute.
+
+00:12:22.403 --> 00:12:28.506
+<v Dan Kowalski>Thank you for burying your own proposal, that saves me a slide.
+
+00:12:33.046 --> 00:12:34.570
+<v Alicia Fuentes>Full service product management.
+
+00:12:37.173 --> 00:13:10.967
+<v Dan Kowalski>Chat check — Katya asks: "does the customer ever get the fraction if it's, like, point nine nine?" No. Great question, brutal answer. Point nine nine rounds down. There is no threshold where down becomes up. If it helps your empathy on the call: the customer with point nine nine is the unluckiest person in the system and is allowed to feel that way for one sentence, and then the math is still the math.
+
+00:13:11.352 --> 00:13:30.598
+<v Grace Liu>We had exactly that case in September — a point eight that the customer described as "basically a whole point." The answer didn't change. That case closes cleanly under today's wording, by the way; it was one of the eleven that were waiting.
+
+00:13:31.024 --> 00:13:47.838
+<v Dan Kowalski>And all eleven — twelve, as of Tuesday — close next week with the wording we agree at the end of this session. Okay. Worked example two, because one example is an anecdote and two is a pattern. Next slide.
+
+00:14:04.793 --> 00:14:23.545
+<v Dan Kowalski>New numbers. Ninety-nine dollars and ninety-nine cents on a card earning two and a half percent. Pulse check round two, chat only, and floor folks, I want everyone this time, even the depends caucus. Type. Don't send.
+
+00:14:44.629 --> 00:14:46.132
+<v Dan Kowalski>Go.
+
+00:14:59.459 --> 00:15:18.088
+<v Dan Kowalski>Reading... much better. Overwhelmingly two forty-nine. One two-fifty, one two forty-nine point nine seven five written out to all the decimals, which I respect enormously and is also not a thing we can post to a ledger.
+
+00:15:18.628 --> 00:15:36.909
+<v Dan Kowalski>So let me read this slide's line verbatim, because it's the one that'll get screenshotted: 99.99 at 2.5% calculates to 249.975 points, and the award is 249. That's the whole example. The multiplication is honest, the decimals are real, and the ledger writes two forty-nine.
+
+00:15:37.307 --> 00:16:01.759
+<v Marcus Webb>And the point nine seven five evaporates exactly the way the point two six seven seven did — same instant, same mechanism, no vault. Two slides, one behavior. That's the consistency I signed off on Monday, in writing, with my name on it, which for me is practically a love letter.
+
+00:16:01.960 --> 00:16:53.423
+<v Dan Kowalski>And the two-fifty answer in the chat — totally understandable, it's ninety-seven and a half hundredths of a point away, it feels cruel. It is, mildly. It is also the rule, and the customer wording at the end of the session has a sentence specifically for making that feel less like a robbery. For the record while we're here: the two-and-a-half rate itself is the same one the KB uses in its little conversion example — the 250 points equals $2.50 equals 2.5% on a hundred-dollar purchase line. Handy anchor: a clean hundred gives you the clean two-fifty; ninety-nine ninety-nine gives you two forty-nine and a lesson about floors.
+
+00:16:53.676 --> 00:17:08.487
+<v Grace Liu>And that anchor is worth memorizing because customers find it intuitive right up until the decimals bite, and then you can walk them from the version they agree with to the version they're living.
+
+00:17:10.824 --> 00:17:25.913
+<v Dan Kowalski>Exactly the move. Quick drill round to seal it, then we move on. Three amounts, rapid fire, chat only, no discussion between. First: forty dollars even at one percent. Type.
+
+00:17:41.167 --> 00:17:53.107
+<v Dan Kowalski>Everyone says forty. Correct, and notice why it's restful — no fraction, nothing to floor, the rule is invisible. Second: nineteen ninety-nine at two percent. Type.
+
+00:18:09.877 --> 00:18:30.058
+<v Dan Kowalski>Mostly thirty-nine, two forty-hopefuls. It's thirty-nine — the math gives thirty-nine point nine eight, and point nine eight goes the same direction as every other fraction today. Down. This is the cruelest one in the deck on purpose. Third: ten dollars even at two and a half. Type.
+
+00:18:46.479 --> 00:19:28.750
+<v Dan Kowalski>Everyone says twenty-five, everyone is right, and now you've felt the pattern: the rule only ever shows up when there's a fraction, and when it shows up, it always does the same thing. That's the whole skill. Okay, we're solid on the arithmetic. Now the case walk, because arithmetic without process is trivia. I'm going to take one real case end to end — intake to closed — and I want interruptions, that's what calibration is for. Grace, it's your case pick.
+
+00:19:29.012 --> 00:19:39.738
+<v Grace Liu>It's CB-2509-0341. September case, resolved and corrected, all the sharp edges in one story. Silver Rewards customer — the personal card, so the travel-and-software one.
+
+00:19:39.922 --> 00:19:43.195
+[Dan pulls up the anonymized case timeline next to the deck.]
+
+00:20:23.938 --> 00:20:54.635
+<v Dan Kowalski>Setup, and stop me when you have opinions. Customer — call her Nora — pays for an annual design-software subscription. Three hundred seventeen dollars and forty cents. But she pays through a third-party checkout the vendor uses, and the charge processes under that processor's merchant category, which is not a software category. So her statement shows the standard rate instead of the four percent, and Nora, who reads her statements, notices.
+
+00:20:55.473 --> 00:21:21.846
+<v Grace Liu>And to anchor the rate before anyone asks: the published Silver Rewards page — I have it open — says 4.0% cash back on eligible travel and software when you pay with the card, and the category that governs is the one the merchant submits with the charge. Both of those sentences are on the page. The second one is the whole case, basically.
+
+00:21:23.141 --> 00:21:57.306
+<v Dan Kowalski>Right. So she calls. And this call is a genuinely good example of the intake side, so let me read the beats from the transcript. Agent was Lena. First thing Lena does — before anything else — is pull up the charge with Nora and confirm the exact transaction. Amount, merchant string, date, and the transaction id, read back and confirmed. Not "a recent charge at approximately." The specific one.
+
+00:21:59.441 --> 00:22:16.519
+<v Marcus Webb>Emphasis earned, because on the systems side the id is the only handle that means anything. Merchant names collide constantly — the same processor shows up wearing forty different storefronts. The id is unambiguous or nothing is.
+
+00:22:16.916 --> 00:22:44.410
+<v Dan Kowalski>Then the part I want everyone to notice. Lena does not file anything for her. She tells Nora — reading the line: "You'll submit this one yourself from your account, and I'll give you exactly what to use. The tool is submit_cash_back_dispute_0589 — I know, catchy — it takes your user id and the transaction id we just confirmed, and that's the whole submission."
+
+00:22:44.860 --> 00:22:58.205
+<v Alicia Fuentes>Reading the underscores aloud and everything. The floor genuinely does say the tool names now, I've heard it on call recordings. It sounded weird for a week and now it sounds normal.
+
+00:22:58.386 --> 00:23:26.892
+<v Dan Kowalski>It works because it's unambiguous, same logic as Marcus's ids. Two more beats from the call. Nora starts reading out her card number to, quote, verify herself, and Lena stops her — the line is: "I don't need any card details for this, and please don't read them out; the dispute runs on your account identifiers, not your card." Which is exactly right and gets its own coaching star.
+
+00:23:27.176 --> 00:23:39.091
+<v Grace Liu>It also preempts the customer's next fear. If nobody asks for the card, nothing sensitive changed hands on a call about money. Small trust deposit, costs one sentence.
+
+00:23:39.348 --> 00:24:03.217
+<v Dan Kowalski>And beat three: expectations. Lena says the review may come back asking for supporting context — what the purchase was, what category she expected, the receipt if it's a category argument — so keep the receipt handy, but don't send anything yet, they'll ask for what they need. Which they did, later, and she had it. Textbook.
+
+00:24:03.799 --> 00:24:16.245
+<v Dan Kowalski>Divya's in the chat: "why not just collect the receipt on the call and attach it, save the round trip?" Grace, you want this one? It's your review queue.
+
+00:24:16.636 --> 00:24:51.717
+<v Grace Liu>Gladly, because the round trip is the feature. If the agent hoovers up documents at intake, two bad things happen: half of what's collected is never needed, which is friction and clutter, and the review inherits a pile instead of a question. The review decides what it needs case by case — sometimes the category history settles it with no documents at all. Intake's job is a clean submission and a customer who knows what might be asked. That's it.
+
+00:24:51.937 --> 00:25:05.146
+<v Dan Kowalski>And on this case that's exactly how it played — the review came back with one specific ask, she sent one document, done in a day. Two clean touches beat one messy one.
+
+00:25:05.266 --> 00:25:38.376
+<v Dan Kowalski>Chat — Hugo asks: "does it matter that it's a subscription? Do recurring charges dispute differently?" No — a charge is a charge for this flow; the submission is the same tool with the same two identifiers whatever the merchant sells. What recurring changes is the future, not the dispute: fix the category story once and the next cycle's charge inherits the fight, so note it in the case. Good question, floor's awake.
+
+00:25:38.634 --> 00:26:25.170
+<v Dan Kowalski>So: dispute submitted by Nora herself, reviewed, and the review lands her way — the receipt shows the vendor bills as software when you go direct, the processor category misrepresents the purchase, dispute approved. Which brings us to our side of the fence: the correction. And here I get to point at the brand-new thing. As of Priya's note on Tuesday — rev B is out, rev C is approved, effective this coming Tuesday the twenty-first, when it goes up on the board as the current diagram. What I'm walking now is the rev C path, so consider this your preview; next week it's just "the board."
+
+00:26:25.844 --> 00:26:46.191
+<v Marcus Webb>With the one caveat that until Tuesday the board still shows the old memo flow, so if anyone corrects something tomorrow, the case note should say which path they followed. Transition hygiene. It matters for about four days.
+
+00:26:46.413 --> 00:27:06.819
+<v Dan Kowalski>Noted and agreed. Okay, rev C in five moves, using Nora's numbers. Move one: the trigger is her resolved dispute — you find it in the disputes database, resolved and approved, carrying the transaction id that needs fixing. Not an email, not a sticky note. The record.
+
+00:27:07.329 --> 00:27:24.971
+<v Dan Kowalski>Move two: unlock. The update tool is locked by default; you go through the unlock step to open update_transaction_rewards_3847 for your session, and the unlock is logged with your name on it. Deliberate act, paper trail, exactly like the fee tools.
+
+00:27:25.262 --> 00:28:16.982
+<v Dan Kowalski>Move three, the one with teeth: you compute the correct value fresh. Card type, the category the charge actually should earn under given what the review established, and any promotion live at purchase time. And you do not — this is rev C's whole personality — you do not take the number from the record's expected field. Nora's expected field, for the record, said, quote, "about 12 dollars back." Charming. Not a ledger value. Even when the customer's estimate is reasonable, it's their estimate, not the computation. The recompute is the answer; their number is context for the reply.
+
+00:28:19.330 --> 00:28:43.990
+<v Grace Liu>And the promo half of move three got easier this week: the case view now has the rates-and-terms links in the sidebar — current pages plus the promo terms deck, one click, purchase-date reminder next to it. Alicia's crew shipped it Monday. Use it, because "which terms were live on the purchase date" is where correction mistakes are born.
+
+00:28:44.484 --> 00:28:48.979
+<v Alicia Fuentes>Shipped it and I'm watching the click numbers, so use it twice.
+
+00:28:49.109 --> 00:29:42.277
+<v Dan Kowalski>The sidebar gets a slide in the November refresher, promise. Chat check — Wes: "what if the review approved the dispute but the right recompute equals what the customer already got?" Great edge, it happens — the review can validate the complaint's premise and the math can still come out unchanged, usually when a promo the customer forgot was already applied. Then there's nothing to post: the correction step is a no-op, and the reply explains why the current value is already right, with the arithmetic. What you never do is nudge the number to make the approval feel meaningful. The math is not a mood.
+
+00:29:42.850 --> 00:29:58.540
+<v Grace Liu>And for everyone doing this after Tuesday: the case note carries the arithmetic, written out. Amount, rate, result. That's rev C's box too, not just my personal religion anymore, which is a career highlight, honestly.
+
+00:29:59.615 --> 00:30:15.061
+<v Dan Kowalski>So the arithmetic, on the slide, and notice it ties this whole session together: 317.40 at 4.0% gives 12.696 dollars' worth — 1269.6 points. And what happens to the point six?
+
+00:30:15.481 --> 00:30:31.501
+<v Marcus Webb>Floor. It's 1269. Same rule as the first hour, no exceptions for corrections — the recompute obeys the same rounding as the original accrual, or we'd be manufacturing half-point disputes with our own tool.
+
+00:30:31.784 --> 00:30:56.682
+<v Dan Kowalski>1269. So move four: you post it — the update tool takes the transaction id, exact, and the new value as text in the points format. On the slide it's literally the string: 1269 points. Whole number, space, the word points. The tool wants it written out like that, so, humor it.
+
+00:30:58.889 --> 00:31:10.949
+<v Grace Liu>The number of typos that format has caught, by the way. If you find yourself typing a decimal into it, the machine has just saved you a conversation with me.
+
+00:31:11.658 --> 00:31:55.436
+<v Dan Kowalski>Move five: confirm and close the loop. You check the transaction history shows the new value — actually look, don't assume the tool call worked — and the calculation note goes in the internal case record, so the next human who opens this case eighteen months from now finds the whole story: the recompute, the rate source, the rounding, done. Then the reply to Nora quotes the published rate, shows the arithmetic, explains the delta from her estimate, and closes warm. Hers went out in September and she wrote back "thank you for showing the math," which is the entire thesis of this session from the customer's side.
+
+00:31:56.057 --> 00:32:23.035
+<v Alicia Fuentes>Okay, I have to drop — product review at the hour, I timed my exit for maximum drama. Before I go: my assent, formally, for the recording: down, every card, every screen, every letter, no display exceptions, and I'll have the page FAQ mirror whatever sentence you all land on in the last section. Send it to me.
+
+00:32:23.789 --> 00:32:27.843
+<v Dan Kowalski>You'll have it by end of day. Go be dramatic.
+
+00:32:43.172 --> 00:33:27.350
+<v Dan Kowalski>Okay, last stretch. Let me say the scope statement cleanly for the recording, because this is the sentence everything else hangs off, and then we do wording. The rounding-down rule applies across the board — every credit card we issue, every reward category on every one of them. Base rates, bonus categories, promo doubling, travel, software, green, crypto, all of it: compute the points, round down to the whole number, post. There are no special cards and no special categories. If you're doing rewards math at this bank, the fraction floors.
+
+00:33:27.966 --> 00:33:51.843
+<v Dan Kowalski>Omar in the chat, redeeming himself from "depends": "even the EcoCard? It's actually points." Even the EcoCard. Its sustainability points floor exactly the same way at earn time — being genuinely points-denominated doesn't buy it a different arithmetic, it just means nobody has to translate to cents afterward. Every card. That's what every means.
+
+00:33:52.143 --> 00:34:15.160
+<v Grace Liu>Agreed, and it's worth one more beat on why that uniformity is the feature: the moment there's one card that rounds differently, every agent has to remember which one, and every customer with two cards gets two behaviors and files the difference. Uniform means boring. Boring is right.
+
+00:34:15.576 --> 00:34:30.679
+<v Marcus Webb>Agreed from the systems side. One mechanism, five branches, same floor. I'd fight any product ask that tried to make one card round differently, and I'd win, because the ask would be insane.
+
+00:34:30.942 --> 00:35:03.024
+<v Priya Raman>And I'll add the management sign-off since I've been lurking since the second slide — sorry, the exec thing ran over, I watched the pulse checks from my phone like a sports feed. For the record: this is calibrated. Down, everywhere, every card, every category. The graders grade to it, the letters get written to it, and nobody relitigates it in a hallway in November. If someone wants to argue with the arithmetic, the recording exists.
+
+00:35:04.115 --> 00:35:44.321
+<v Dan Kowalski>Welcome back, and thank you — that's the sentence I needed on tape. Okay, wording workshop, ten minutes, then everyone's free. The customer-facing sentence. My starting candidate, from the deck: "Rewards points are always rounded down to the nearest whole point — so a calculation of 1.2677 points earns 1 point... " no, see, it breaks immediately, because per-transaction it's the whole amount that floors, not per dollar. The inherited phrasing strikes again. Grace, your floor-tested version.
+
+00:35:44.729 --> 00:36:06.218
+<v Grace Liu>What I've been drafting: "Points on each purchase are calculated from your rate and rounded down to the nearest whole point. For example, $126.77 at 1% works out to 126.77, which posts as 126 points." Concrete, one example, no per-dollar language anywhere.
+
+00:36:06.419 --> 00:36:16.349
+<v Marcus Webb>Small amendment — say "the fraction isn't held or carried forward" somewhere, or every third reply generates the vault question as a follow-up.
+
+00:36:17.647 --> 00:36:25.938
+<v Grace Liu>Taking it. "The fractional part isn't held or carried to future purchases." One sentence, kills the theory in advance.
+
+00:36:26.397 --> 00:36:40.800
+<v Dan Kowalski>Let me pressure-test it against the hardest audience we have — the app-review gentleman, the half-point-knows-what-it-did guy, whose case is in next week's closing batch. Read him the paragraph. Does he accept it?
+
+00:36:41.806 --> 00:37:04.216
+<v Grace Liu>He doesn't love it, but he can't argue with it, which for him is acceptance. His whole complaint was that nobody would state the behavior plainly. This states it plainly, shows his own numbers, and tells him the fraction isn't sitting in a drawer. I'd bet he writes back something withering and satisfied.
+
+00:37:05.439 --> 00:37:20.209
+<v Dan Kowalski>A withering five stars. I'll take it. Give me a minute to get the final text typed while it's fresh — then everyone reads it once before we close.
+
+00:37:21.756 --> 00:37:24.256
+[Dan types the agreed paragraph into the shared notes; the room waits.]
+
+00:38:32.651 --> 00:38:43.929
+<v Dan Kowalski>Posted in the chat and the notes. Final read-through, everyone, thirty seconds — this exact text goes to the FAQ, the twelve letters, and the library.
+
+00:39:14.079 --> 00:39:16.146
+<v Grace Liu>Good on my read.
+
+00:39:17.009 --> 00:39:20.425
+<v Marcus Webb>Good here. The no-carry sentence earns its keep.
+
+00:39:21.497 --> 00:39:22.572
+<v Priya Raman>Approved as read.
+
+00:39:22.950 --> 00:39:57.304
+<v Dan Kowalski>Sold. That's the paragraph, then: rule, worked example, no-carry sentence. I'll circulate the final text today — Alicia gets it for the FAQ, the twelve pending cases close with it next week, and it goes in the training library next to the deck. Floor folks: this deck plus the recording is the reference for rewards math questions starting now; if a case feels like it argues with the deck, it comes to Grace or me rather than getting creative.
+
+00:39:57.446 --> 00:40:31.270
+<v Dan Kowalski>Last logistics and we're out early, which I'm told builds loyalty. The deck and recording post to the training library tonight, same folder as the September materials, and the link goes in the floor channel. The November refresher — short one, thirty minutes — will cover the correction board once rev C has been live for a few weeks and we've collected real questions, plus the promo wind-down stuff, which is its own circus and deliberately not today's.
+
+00:40:31.668 --> 00:40:37.060
+<v Grace Liu>Strongly endorse not today. This session had one job and it did it.
+
+00:40:39.285 --> 00:40:59.243
+<v Priya Raman>And that's a wrap on the mandatory part. For the attendance list: watching the recording counts, confirmation to Dan in writing, Friday next. Dan — good session. The pulse check spread at the start is going in my quarterly summary as exhibit A for why we do these.
+
+00:40:59.711 --> 00:41:20.462
+<v Dan Kowalski>Exhibit A was fourteen professionals and three answers to one arithmetic problem. No shame in the room — that's exactly the point of calibrating. Same case, same numbers, same answer, all of us, starting today. Thanks, everyone. Recording stops... now.
+

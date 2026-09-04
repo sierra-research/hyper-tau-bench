@@ -1,0 +1,214 @@
+/* Hyper-τ (τ^τ-bench) leaderboard.
+   The page is a structural clone of the main Leaderboard (same shared classes
+   from Leaderboard.css: leaderboard-title/subtitle, reliability-table, rank
+   badges, retrieval-badge chips, passk-header toggle, score bars, and the
+   expandable domain breakdown). This file only carries the deltas: column
+   widths for the 7-column table, the reference-ceiling row treatment, the
+   build-stats strip, and the sections below the table. */
+
+/* Title superscript: keep the wordmark's raised τ readable at title size. */
+.leaderboard-title sup {
+  font-size: 0.55em;
+  vertical-align: 0.65em;
+}
+
+/* Column widths — the base .reliability-table nth-child widths are tuned for
+   the main board's 8-column layout; this table has 7 columns. Kept tight so
+   the whole table (expander column included) fits without horizontal scroll
+   at laptop widths. */
+.reliability-table.ht-table th,
+.reliability-table.ht-table td {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.reliability-table.ht-table th:nth-child(1) {
+  width: 48px;
+  padding: 20px 6px;
+}
+
+.reliability-table.ht-table th:nth-child(2) {
+  width: 180px;
+}
+
+.reliability-table.ht-table th:nth-child(3) {
+  width: 92px;
+}
+
+.reliability-table.ht-table th:nth-child(4) {
+  width: 118px;
+  text-align: center;
+}
+
+.reliability-table.ht-table th:nth-child(5) {
+  width: 82px;
+}
+
+.reliability-table.ht-table th:nth-child(6) {
+  min-width: 300px;
+}
+
+/* The base sheet gives th:nth-child(7) min-width 320px (the main board's
+   score column); here the 7th column is the expander — undo it. */
+.reliability-table.ht-table th:nth-child(7) {
+  width: 32px;
+  min-width: 0;
+  padding: 20px 4px;
+}
+
+/* Five scope buttons (vs the main board's four Pass^k) — trim the pill
+   padding so the toggle stays on one line without widening the column. */
+.ht-table .passk-header-btn {
+  padding: 6px 6px;
+}
+
+.ht-table .score-cell {
+  min-width: 200px;
+  padding: 16px 10px !important;
+}
+
+.ht-table .reasoning-info,
+.ht-table .release-date-cell,
+.ht-table .user-sim-info {
+  text-align: center;
+}
+
+/* NEW chip on a freshly added row */
+.ht-new-chip {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-radius: 5px;
+  padding: 2px 6px;
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+/* Reference (human-authored ceiling) row: tinted, un-ranked, slate bar. */
+.ht-reference-row td {
+  background: #f8fafc;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.ht-reference-row .model-name {
+  color: #475569;
+}
+
+.rank-number.ht-reference-rank {
+  color: #94a3b8;
+}
+
+/* The 👤 Human chip doubles as an easter egg: click (or hover) pops the
+   dark tooltip explaining exactly which human this is. Tooltip mechanics
+   mirror the main board's voice-pipeline-info pattern. */
+.ht-human-chip {
+  appearance: none;
+  cursor: help;
+  position: relative;
+  font-family: inherit;
+}
+
+.ht-human-chip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.4;
+  padding: 8px 12px;
+  border-radius: 6px;
+  text-align: left;
+  text-transform: none;
+  white-space: pre-line;
+  width: max-content;
+  max-width: min(280px, 70vw);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 20;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.ht-human-chip.open::after,
+.ht-human-chip:hover::after,
+.ht-human-chip:focus-visible::after {
+  opacity: 1;
+}
+
+.score-bar-fill.ht-reference-fill {
+  background: #64748b;
+}
+
+/* Domain count inside the breakdown card labels */
+.ht-domain-count {
+  color: #94a3b8;
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+/* Build-stats strip inside the expanded breakdown row */
+.ht-build-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.ht-build-stat {
+  flex: 1 1 160px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ht-build-stat-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+}
+
+.ht-build-stat-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1e293b;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Small inline links into the repository (subtitle, build-stat strip,
+   trajectories summary). */
+.ht-repo-link {
+  color: #059669;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.ht-repo-link:hover {
+  color: #047857;
+  text-decoration: underline;
+}
+
+.ht-links {
+  font-size: 0.9rem;
+}
+
+.ht-loading {
+  text-align: center;
+  color: #94a3b8;
+  padding: 60px 0;
+}
+

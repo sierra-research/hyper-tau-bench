@@ -1,0 +1,133 @@
+{
+  "id": "task_104",
+  "description": {
+    "purpose": "Task: task_104",
+    "relevant_policies": null,
+    "notes": null
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Priya Sharma, a 35-year-old orthodontist from Chicago, IL. You own a practice called \"Sharma Orthodontics\" with 6 staff. You keep your practice's operating money in a Cobalt Blue business checking account at Rho-Bank (around $41,000 right now) and you have an old personal Green Account checking too. You're organized and numbers-minded: you come in with a specific yield target, but you don't know anything about Rho-Bank's savings account lineup.\n\n**Your goal:** Open ONE business savings account that pays at least 4% interest on the roughly $35,000 you're going to park in it, then move the $35,000 over from your Cobalt Blue business checking today.\n\n**Verification info:**\n- Name: Priya Sharma | Phone: 312-555-0481 | Email: sparkle_queen_99@yahoo.com\n- DOB: 11/03/1990 | Address: 562 Riverside Drive, Chicago, IL 60611\n\n## Conversation Flow:\n\n1. **Opening:** \"Hi! I run an orthodontics practice and I've got too much cash sitting in my business checking earning basically nothing. I want to open a business savings account and move about $35,000 into it. Which one should I get? I don't want a list of options - just tell me the right one.\"\n\n2. **Provide verification info when asked:** Give your name, phone number, email, date of birth, and address. (Yes, the email is sparkle_queen_99@yahoo.com - it's from college, don't comment on it unless asked.)\n\n3. **Reveal your requirements organically when asked:**\n   - **Yield (your key requirement):** \"The whole point is the interest. I want at least 4% on that money - I've seen what rates are like elsewhere, so anything under 4% on a $35,000 balance is a non-starter for me.\"\n   - **Balance:** \"I'll keep it right around $35,000. It's my tax-and-equipment cushion, so it mostly just sits there.\"\n   - **Access:** \"I don't need to touch it often - maybe a transfer back to checking every month or two. Nothing fancy.\"\n\n4. **If the agent gives you multiple options:** Push back. \"I'd really rather you just tell me the ONE account that fits what I said. You know the lineup, I don't.\"\n\n5. **When the agent recommends one account that pays at least 4% on your balance:** \"Great, that works for me. Let's open it.\"\n\n6. **If the agent recommends an account that pays LESS than 4% on a $35,000 balance:** Push back: \"Hold on - that doesn't get me to 4% on my thirty-five grand, does it? That's the one thing I asked for.\" Do not accept an account that doesn't meet your 4% requirement.\n\n7. **After the account is opened, fund it:** \"Please move $35,000 from my Cobalt Blue business checking into it now. The $6,000 or so left over is plenty for payroll this cycle.\"\n\n8. **After the transfer is done:** \"Perfect. Thanks for making that quick!\" ###STOP###\n\n**IMPORTANT BEHAVIORS:**\n- Do NOT suggest account names yourself - you don't know them.\n- You never quote bank policies or promotions - you only know your own numbers.\n- Accept the agent's single recommendation as long as it meets your 4% requirement.\n\nYou are currently on the line with a customer support agent. Only provide additional details about your situation when the agent asks for them. Don't dump all your information at once. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "accounts": {
+          "data": {
+            "chk_af0581dcbf": {
+              "account_id": "chk_af0581dcbf",
+              "user_id": "af0581dcbf",
+              "class": "checking",
+              "level": "Green Account",
+              "date_opened": "03/12/2023",
+              "status": "OPEN",
+              "current_holdings": "4200.00"
+            },
+            "biz_chk_af0581dcbf": {
+              "account_id": "biz_chk_af0581dcbf",
+              "user_id": "af0581dcbf",
+              "class": "business_checking",
+              "level": "Cobalt Blue",
+              "date_opened": "06/10/2025",
+              "status": "OPEN",
+              "current_holdings": "41000.00"
+            }
+          }
+        }
+      },
+      "user_data": null
+    },
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Priya Sharma",
+          "user_id": "af0581dcbf",
+          "address": "562 Riverside Drive, Chicago, IL 60611",
+          "email": "sparkle_queen_99@yahoo.com",
+          "phone_number": "312-555-0481",
+          "date_of_birth": "11/03/1990",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "104_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "104_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"af0581dcbf\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "104_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "open_bank_account_4821"
+        },
+        "requestor": "assistant",
+        "action_id": "104_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "open_bank_account_4821",
+          "arguments": "{\"user_id\": \"af0581dcbf\", \"account_type\": \"business_savings\", \"account_class\": \"Silver Plus Saver Account\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "104_4"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "transfer_funds_between_bank_accounts_7291"
+        },
+        "requestor": "assistant",
+        "action_id": "104_5"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "transfer_funds_between_bank_accounts_7291",
+          "arguments": "{\"source_account_id\": \"biz_chk_af0581dcbf\", \"destination_account_id\": \"1c03a494d5b1fe8e\", \"amount\": 35000}"
+        },
+        "requestor": "assistant",
+        "action_id": "104_6"
+      }
+    ],
+    "reward_basis": [
+      "DB"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_004",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_bank_accounts_bank_accounts_(general)_010",
+    "doc_bank_accounts_bank_accounts_(general)_015",
+    "doc_bank_accounts_bank_accounts_(general)_016",
+    "doc_business_savings_accounts_bronze_saver_account_001",
+    "doc_business_savings_accounts_silver_saver_account_001",
+    "doc_business_savings_accounts_silver_plus_saver_001",
+    "doc_business_savings_accounts_silver_plus_saver_002",
+    "doc_business_savings_accounts_gold_saver_account_001",
+    "doc_business_savings_accounts_gold_plus_saver_001",
+    "doc_business_savings_accounts_emerald_saver_001",
+    "doc_business_savings_accounts_platinum_reserve_account_001",
+    "doc_business_savings_accounts_diamond_vault_001"
+  ]
+}

@@ -1,0 +1,654 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "Rho Helpdesk",
+    "account": "rho-bank-consumer-and-business",
+    "workspace": "card-support-console",
+    "environment": "production",
+    "exported_at": "2025-11-14T12:35:00-05:00",
+    "timezone": "America/New_York",
+    "export_version": "2025.46.1",
+    "requested_by": "farah.idris@rhobank.com"
+  },
+  "cover_email": "From: Helpdesk Administration <helpdesk-admin@rhobank.com>\nTo: Farah Idris <farah.idris@rhobank.com>\nDate: Fri, 14 Nov 2025 12:41:19 -0500\nSubject: card-support-console workspace export (2025.46.1)\nMessage-ID: <hd-export-2025-46-1-cardsupport@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nFarah,\n\nRefreshed production export of the card-support-console workspace, current as of 12:35 today \u2014 yesterday's 15:05 snapshot plus this morning's incident staging changes. Since you asked for the fuller cut this time: unlock grants, the queue-routing contract, the transfer-surface catalog, and the dated change log are included alongside the macros, triggers, fields, contracts, SLAs, and views. The discoverable-tool access contract is unchanged from yesterday's export.\n\nHelpdesk Administration",
+  "macros": [
+    {
+      "macro_id": "MAC-4102",
+      "name": "Decline triage \u2014 case note scaffold",
+      "description": "Inserts the decline-triage note scaffold (card status, recent authorizations, merchant/category findings, transfer-request count) into the case record.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-08-14T09:00:00-04:00",
+      "updated_at": "2025-10-24T09:40:12-04:00",
+      "usage_30d": 1184,
+      "usage_90d": 3391,
+      "superseded_by": null,
+      "steps": [
+        "Insert note template: card status / recent authorizations / merchant or category holds / transfer-request count / next step",
+        "Apply tag decline-triage"
+      ]
+    },
+    {
+      "macro_id": "MAC-4155",
+      "name": "Incident contact \u2014 log and tag",
+      "description": "Logs an incident-matched contact against the active incident record and applies the incident tag. Content-free by design: handling guidance lives with Incident Command, not in macros.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-11-13T10:20:00-05:00",
+      "updated_at": "2025-11-13T10:20:00-05:00",
+      "usage_30d": 74,
+      "usage_90d": 74,
+      "superseded_by": null,
+      "steps": [
+        "Set field incident_reference from the active incident list",
+        "Apply tag incident-contact",
+        "Insert note line: matched criteria confirmed per the incident record"
+      ]
+    },
+    {
+      "macro_id": "MAC-3720",
+      "name": "Auto-reply: card declined (retired)",
+      "description": "Legacy canned reply for tickets containing 'declined'. Retired 2025-10-02 with its trigger TRG-2602 after the September QA review found canned decline replies answering the wrong question in most sampled tickets.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "effective_at": "2024-11-06T09:00:00-05:00",
+      "updated_at": "2025-10-02T13:15:44-04:00",
+      "usage_30d": 0,
+      "usage_90d": 211,
+      "superseded_by": null,
+      "steps": [
+        "Send canned reply: general decline causes list",
+        "Set status pending"
+      ]
+    },
+    {
+      "macro_id": "MAC-4160",
+      "name": "Post-transfer wrap-up",
+      "description": "Documentation scaffold applied after any transfer: tools used in order, request count, findings so far.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-08-14T09:00:00-04:00",
+      "updated_at": "2025-08-14T09:00:00-04:00",
+      "usage_30d": 322,
+      "usage_90d": 918,
+      "superseded_by": null,
+      "steps": [
+        "Insert note template: tools used in order / request count / findings",
+        "Set status solved-pending-review"
+      ]
+    },
+    {
+      "macro_id": "MAC-4210",
+      "name": "Debit-rail misroute \u2014 warm-transfer scaffold",
+      "description": "Handoff scaffold for debit-card decline contacts that arrived through the credit-card IVR path: notes the misroute, tags for the deposit-products handoff view, no card-side triage.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-11-11T11:28:36-05:00",
+      "updated_at": "2025-11-11T11:28:36-05:00",
+      "usage_30d": 41,
+      "usage_90d": 41,
+      "superseded_by": null,
+      "steps": [
+        "Insert note line: debit-rail decline, arrived via credit-card path",
+        "Apply tag debit-handoff",
+        "Warm-transfer per the deposit-products handoff view"
+      ]
+    },
+    {
+      "macro_id": "MAC-4174",
+      "name": "Alert-delay advisory pointer (retired)",
+      "description": "Canned pointer to the alert-delay advisory banner, used 10/21-11/02 for late-notification contacts. Retired 2025-11-02 when the advisory closed; late-alert reports after that date get standard troubleshooting.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "effective_at": "2025-10-21T13:10:00-04:00",
+      "updated_at": "2025-11-02T16:55:20-05:00",
+      "usage_30d": 12,
+      "usage_90d": 388,
+      "superseded_by": null,
+      "steps": [
+        "Send canned reply: advisory banner pointer (alerts deliver late, balances current)",
+        "Set status solved"
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "TRG-2602",
+      "name": "Keyword: declined \u2192 auto-reply (retired)",
+      "description": "Fired MAC-3720 on new tickets containing 'declined'. Deactivated 2025-10-02 alongside the macro retirement.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "priority": 40,
+      "effective_at": "2024-11-06T09:00:00-05:00",
+      "updated_at": "2025-10-02T13:15:44-04:00",
+      "usage_30d": 0,
+      "conditions": [
+        "ticket.created",
+        "body contains 'declined'"
+      ],
+      "actions": [
+        "apply macro MAC-3720"
+      ]
+    },
+    {
+      "trigger_id": "TRG-2688",
+      "name": "Incident tag \u2192 incident queue",
+      "description": "Routes incident-tagged contacts to the incident review queue and stamps the active incident reference.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 10,
+      "effective_at": "2025-11-13T10:20:00-05:00",
+      "updated_at": "2025-11-13T10:20:00-05:00",
+      "usage_30d": 74,
+      "conditions": [
+        "tag added incident-contact"
+      ],
+      "actions": [
+        "move to view VIEW-901",
+        "notify group incident-command"
+      ]
+    },
+    {
+      "trigger_id": "TRG-2641",
+      "name": "P1 incident SLA stamp",
+      "description": "Applies the P1 incident SLA policy to contacts carrying an active incident reference.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 15,
+      "effective_at": "2025-06-11T09:00:00-04:00",
+      "updated_at": "2025-06-11T09:00:00-04:00",
+      "usage_30d": 74,
+      "conditions": [
+        "field incident_reference is set"
+      ],
+      "actions": [
+        "apply sla SLA-INC-P1"
+      ]
+    },
+    {
+      "trigger_id": "TRG-2705",
+      "name": "Debit BIN at intake \u2192 deposit-products handoff",
+      "description": "Tags debit-BIN decline contacts that selected the credit-card IVR path and routes them to the deposit-products handoff view (CCOPS-572).",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 12,
+      "effective_at": "2025-11-11T11:28:36-05:00",
+      "updated_at": "2025-11-11T11:28:36-05:00",
+      "usage_30d": 41,
+      "conditions": [
+        "ticket.created",
+        "card BIN in debit range"
+      ],
+      "actions": [
+        "apply macro MAC-4210",
+        "move to view VIEW-914"
+      ]
+    },
+    {
+      "trigger_id": "TRG-2710",
+      "name": "Sandbox drill tag \u2192 training-library filing",
+      "description": "Files training-sandbox session records to the QA library view with the drill tag. Sandbox sessions use synthetic profiles only \u2014 the filter keys on the sandbox environment flag, never on customer data.",
+      "active": true,
+      "environment": "training-sandbox",
+      "status": "current",
+      "priority": 60,
+      "effective_at": "2025-11-10T09:30:00-05:00",
+      "updated_at": "2025-11-10T09:30:00-05:00",
+      "usage_30d": 2,
+      "conditions": [
+        "environment is training-sandbox",
+        "tag added drill-session"
+      ],
+      "actions": [
+        "move to view VIEW-926"
+      ]
+    }
+  ],
+  "policy_contracts": [
+    {
+      "contract_id": "CON-DTOOL-7",
+      "name": "Discoverable agent tool access",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "card-support-operations",
+      "scope": "All discoverable agent tools surfaced in the card-support console, including the incident transfer tools initial_transfer_to_human_agent_1822 and initial_transfer_to_human_agent_0218, which are internal agent tools, not user tools \u2014 they are never handed to customers to run.",
+      "required_fields": [
+        "tool_name"
+      ],
+      "closed_world": true,
+      "wrapper_rule": "Each discoverable tool must be unlocked with unlock_discoverable_agent_tool before executing it with call_discoverable_agent_tool; the console rejects call attempts on tools that were not unlocked in the same interaction.",
+      "effective_at": "2025-05-20T09:00:00-04:00",
+      "updated_at": "2025-11-13T10:22:31-05:00"
+    },
+    {
+      "contract_id": "CON-CASE-3",
+      "name": "Case record completeness",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "quality",
+      "scope": "Case records for decline and incident contacts must carry the triage scaffold fields before closure; QA sampling reads these fields.",
+      "required_fields": [
+        "card_status",
+        "transfer_request_count",
+        "next_step"
+      ],
+      "closed_world": false,
+      "effective_at": "2025-08-14T09:00:00-04:00",
+      "updated_at": "2025-08-14T09:00:00-04:00"
+    },
+    {
+      "contract_id": "CON-QROUTE-2",
+      "name": "Queue routing boundaries",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "card-support-operations",
+      "scope": "Which intake shapes belong to which team's queue: debit-rail declines belong to deposit products (warm-transfer out, no card-side triage); disputes on settled charges belong to the chargebacks desk (direct route, no decline triage); confirmed-unauthorized-use reports belong to the fraud queue per its intake board; everything else card-shaped stays in card support.",
+      "required_fields": [
+        "queue"
+      ],
+      "closed_world": false,
+      "effective_at": "2025-10-08T09:00:00-04:00",
+      "updated_at": "2025-11-11T11:30:02-05:00"
+    }
+  ],
+  "field_columns": [
+    "row_id",
+    "field_key",
+    "field_name",
+    "field_type",
+    "option_value",
+    "option_description",
+    "active",
+    "status",
+    "environment",
+    "updated_at"
+  ],
+  "fields": [
+    {
+      "row_id": "FLD-701",
+      "field_key": "incident_reference",
+      "field_name": "Incident reference",
+      "field_type": "dropdown",
+      "option_value": "CARD-2291",
+      "option_description": "Payment posted, not reflected on statement balance (11/13)",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-11-13T10:20:00-05:00"
+    },
+    {
+      "row_id": "FLD-716",
+      "field_key": "incident_reference",
+      "field_name": "Incident reference",
+      "field_type": "dropdown",
+      "option_value": "none",
+      "option_description": "No active incident match",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-11-13T10:20:00-05:00"
+    },
+    {
+      "row_id": "FLD-717",
+      "field_key": "decline_category",
+      "field_name": "Decline category",
+      "field_type": "dropdown",
+      "option_value": "merchant_hold",
+      "option_description": "Merchant or category hold",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-08-14T09:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-718",
+      "field_key": "decline_category",
+      "field_name": "Decline category",
+      "field_type": "dropdown",
+      "option_value": "card_status",
+      "option_description": "Card status (expired, frozen, replaced)",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-08-14T09:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-719",
+      "field_key": "decline_category",
+      "field_name": "Decline category",
+      "field_type": "dropdown",
+      "option_value": "available_credit",
+      "option_description": "Available credit or limit",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-08-14T09:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-720",
+      "field_key": "decline_category",
+      "field_name": "Decline category",
+      "field_type": "dropdown",
+      "option_value": "unresolved",
+      "option_description": "Cause not identified in-contact",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-08-14T09:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-721",
+      "field_key": "transfer_request_count",
+      "field_name": "Transfer request count",
+      "field_type": "number",
+      "option_value": null,
+      "option_description": "Count of transfer requests in this interaction",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-08-14T09:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-731",
+      "field_key": "incident_reference",
+      "field_name": "Incident reference",
+      "field_type": "dropdown",
+      "option_value": "CARD-2304",
+      "option_description": "Erroneous delinquency reporting to credit bureaus (11/14)",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-11-14T10:40:12-05:00"
+    },
+    {
+      "row_id": "FLD-732",
+      "field_key": "decline_category",
+      "field_name": "Decline category",
+      "field_type": "dropdown",
+      "option_value": "debit_rail_misroute",
+      "option_description": "Debit-rail decline arrived via credit-card path (warm-transfer out)",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-11-11T11:28:36-05:00"
+    },
+    {
+      "row_id": "FLD-734",
+      "field_key": "advisory_reference",
+      "field_name": "Advisory reference",
+      "field_type": "dropdown",
+      "option_value": "CARD-2249",
+      "option_description": "Alert-delay advisory (closed 11/02)",
+      "active": false,
+      "status": "retired",
+      "environment": "production",
+      "updated_at": "2025-11-02T16:55:20-05:00"
+    }
+  ],
+  "sla_policies": [
+    {
+      "policy_id": "SLA-INC-P1",
+      "name": "P1 incident contact response",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "first response 15 minutes, update every 2 hours while the incident is open",
+      "applies_to": "contacts carrying an active incident_reference",
+      "updated_at": "2025-06-11T09:00:00-04:00"
+    },
+    {
+      "policy_id": "SLA-STD-CARD",
+      "name": "Standard card-support response",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "first response 4 business hours",
+      "applies_to": "all card-support contacts without an incident reference",
+      "updated_at": "2025-06-11T09:00:00-04:00"
+    }
+  ],
+  "views": [
+    {
+      "view_id": "VIEW-901",
+      "name": "Incident review queue",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "tag incident-contact",
+        "status < solved"
+      ],
+      "updated_at": "2025-11-13T10:20:00-05:00"
+    },
+    {
+      "view_id": "VIEW-877",
+      "name": "Decline triage",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "tag decline-triage",
+        "status < solved"
+      ],
+      "updated_at": "2025-08-14T09:00:00-04:00"
+    },
+    {
+      "view_id": "VIEW-820",
+      "name": "Aging card cases",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "updated > 72h",
+        "group card-support"
+      ],
+      "updated_at": "2025-06-11T09:00:00-04:00"
+    },
+    {
+      "view_id": "VIEW-914",
+      "name": "Deposit-products handoff",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "tag debit-handoff",
+        "status < solved"
+      ],
+      "updated_at": "2025-11-11T11:28:36-05:00"
+    },
+    {
+      "view_id": "VIEW-926",
+      "name": "Training library filings",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "environment training-sandbox",
+        "tag drill-session"
+      ],
+      "updated_at": "2025-11-10T09:30:00-05:00"
+    }
+  ],
+  "unlock_grants": [
+    {
+      "grant_id": "GRT-8615",
+      "tool_name": "transfer_to_human_agents",
+      "granted_to": "all card-support console roles",
+      "context": "standing",
+      "environment": "production",
+      "status": "current",
+      "granted_at": "2025-05-20T09:00:00-04:00",
+      "note": "The regular transfer tool is a base console tool \u2014 listed here for completeness; it is not a discoverable tool and needs no unlock."
+    },
+    {
+      "grant_id": "GRT-8802",
+      "tool_name": "initial_transfer_to_human_agent_1822",
+      "granted_to": "card-support console roles",
+      "context": "contacts carrying incident_reference CARD-2291",
+      "environment": "production",
+      "status": "current",
+      "granted_at": "2025-11-13T10:20:00-05:00",
+      "note": "Staged with the 11/13 incident. Wrapper mechanics per CON-DTOOL-7."
+    },
+    {
+      "grant_id": "GRT-8803",
+      "tool_name": "initial_transfer_to_human_agent_0218",
+      "granted_to": "card-support console roles",
+      "context": "contacts carrying incident_reference CARD-2291, and the purchase-decline protocol lane on CCD-OPS-114",
+      "environment": "production",
+      "status": "current",
+      "granted_at": "2025-11-13T10:20:00-05:00",
+      "note": "Also the board-lane tool outside incidents. Wrapper mechanics per CON-DTOOL-7."
+    },
+    {
+      "grant_id": "GRT-8804",
+      "tool_name": "emergency_credit_bureau_incident_transfer_1114",
+      "granted_to": "card-support console roles",
+      "context": "contacts carrying incident_reference CARD-2304",
+      "environment": "production",
+      "status": "current",
+      "granted_at": "2025-11-14T10:40:12-05:00",
+      "note": "Staged with the 11/14 incident. Wrapper mechanics per CON-DTOOL-7."
+    },
+    {
+      "grant_id": "GRT-8807",
+      "tool_name": "initial_transfer_to_human_agent_1822",
+      "granted_to": "training-sandbox runner role",
+      "context": "drill sessions, synthetic profiles only",
+      "environment": "training-sandbox",
+      "status": "current",
+      "granted_at": "2025-11-10T09:30:00-05:00",
+      "note": "Sandbox mirror of the production staging so drills exercise the real wrapper mechanics."
+    },
+    {
+      "grant_id": "GRT-8808",
+      "tool_name": "initial_transfer_to_human_agent_0218",
+      "granted_to": "training-sandbox runner role",
+      "context": "drill sessions, synthetic profiles only",
+      "environment": "training-sandbox",
+      "status": "current",
+      "granted_at": "2025-11-10T09:30:00-05:00",
+      "note": "Sandbox mirror; see GRT-8807."
+    }
+  ],
+  "transfer_surface_catalog": [
+    {
+      "entry_id": "CAT-01",
+      "queue": "card-support",
+      "surface": "regular transfer",
+      "how": "transfer_to_human_agents, per the board and any active incident directive",
+      "status": "current",
+      "updated_at": "2025-08-14T09:00:00-04:00"
+    },
+    {
+      "entry_id": "CAT-02",
+      "queue": "card-support",
+      "surface": "staged incident tools",
+      "how": "the discoverable tools staged per incident (see unlock grants); order and timing come from the incident's own directive, never from this catalog",
+      "status": "current",
+      "updated_at": "2025-11-14T10:40:12-05:00"
+    },
+    {
+      "entry_id": "CAT-03",
+      "queue": "fraud line",
+      "surface": "fraud intake",
+      "how": "freeze the card first, then transfer direct to the fraud line \u2014 no staged tools on that desk",
+      "status": "current",
+      "updated_at": "2025-06-02T09:00:00-04:00"
+    },
+    {
+      "entry_id": "CAT-04",
+      "queue": "chargebacks desk",
+      "surface": "settled-charge disputes",
+      "how": "direct route to the chargebacks queue at intake; decline triage does not run on settled charges",
+      "status": "current",
+      "updated_at": "2025-10-08T09:00:00-04:00"
+    },
+    {
+      "entry_id": "CAT-05",
+      "queue": "deposit products",
+      "surface": "debit-rail declines",
+      "how": "warm-transfer via the handoff view (VIEW-914); no card-side triage",
+      "status": "current",
+      "updated_at": "2025-11-11T11:28:36-05:00"
+    },
+    {
+      "entry_id": "CAT-06",
+      "queue": "card-support",
+      "surface": "retired keyword auto-reply",
+      "how": "MAC-3720/TRG-2602 pair, retired 2025-10-02 \u2014 kept in this export as lifecycle history",
+      "status": "retired",
+      "updated_at": "2025-10-02T13:15:44-04:00"
+    }
+  ],
+  "workspace_change_log": [
+    {
+      "change_id": "CHG-1102",
+      "changed_at": "2025-10-02T13:15:44-04:00",
+      "actor": "farah.idris@rhobank.com",
+      "summary": "Retired the declined-keyword auto-reply pair (MAC-3720, TRG-2602) after the September QA sample."
+    },
+    {
+      "change_id": "CHG-1147",
+      "changed_at": "2025-10-21T13:10:00-04:00",
+      "actor": "farah.idris@rhobank.com",
+      "summary": "Added the alert-delay advisory pointer macro (MAC-4174) for the CARD-2249 advisory window."
+    },
+    {
+      "change_id": "CHG-1191",
+      "changed_at": "2025-11-02T16:55:20-05:00",
+      "actor": "farah.idris@rhobank.com",
+      "summary": "Retired MAC-4174 and the advisory_reference option with the advisory close."
+    },
+    {
+      "change_id": "CHG-1204",
+      "changed_at": "2025-11-10T09:30:00-05:00",
+      "actor": "farah.idris@rhobank.com",
+      "summary": "Training-sandbox drill filing: TRG-2710, VIEW-926, sandbox grants GRT-8807/GRT-8808 (CCOPS-571)."
+    },
+    {
+      "change_id": "CHG-1209",
+      "changed_at": "2025-11-11T11:28:36-05:00",
+      "actor": "farah.idris@rhobank.com",
+      "summary": "Debit-rail routing correction: MAC-4210, TRG-2705, VIEW-914, decline_category option debit_rail_misroute (CCOPS-572)."
+    },
+    {
+      "change_id": "CHG-1214",
+      "changed_at": "2025-11-13T10:20:00-05:00",
+      "actor": "farah.idris@rhobank.com",
+      "summary": "Staged the 11/13 incident: MAC-4155, TRG-2688, incident_reference option CARD-2291, VIEW-901, grants GRT-8802/GRT-8803."
+    },
+    {
+      "change_id": "CHG-1215",
+      "changed_at": "2025-11-13T10:22:31-05:00",
+      "actor": "farah.idris@rhobank.com",
+      "summary": "CON-DTOOL-7 scope sentence refreshed to name the staged incident tools explicitly."
+    },
+    {
+      "change_id": "CHG-1218",
+      "changed_at": "2025-11-13T16:38:47-05:00",
+      "actor": "farah.idris@rhobank.com",
+      "summary": "Quarterly view housekeeping ahead of the November cohort: retired saved personal views left by two agents who moved desks in October. No shared views touched; the cohort's twelve seats inherit the standard view set on first sign-in."
+    },
+    {
+      "change_id": "CHG-1222",
+      "changed_at": "2025-11-14T10:40:12-05:00",
+      "actor": "farah.idris@rhobank.com",
+      "summary": "Staged the 11/14 incident: incident_reference option CARD-2304, grant GRT-8804."
+    },
+    {
+      "change_id": "CHG-1224",
+      "changed_at": "2025-11-14T11:02:33-05:00",
+      "actor": "farah.idris@rhobank.com",
+      "summary": "Transfer-surface catalog re-checked against this morning's incident staging; entries confirmed current as listed and CAT-06 retained as lifecycle history. No edits needed beyond the 10:40 staging row."
+    }
+  ]
+}

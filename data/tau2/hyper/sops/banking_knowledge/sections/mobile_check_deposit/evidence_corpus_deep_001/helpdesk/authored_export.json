@@ -1,0 +1,738 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "rho-helpdesk",
+    "account": "rho-bank-deposit-support",
+    "workspace": "deposit-desk-console",
+    "environment": "production",
+    "exported_at": "2025-11-14T08:05:12-05:00",
+    "timezone": "America/New_York",
+    "export_version": "2025.46r2",
+    "requested_by": "moses.okafor"
+  },
+  "cover_email": "From: Moses Okafor <moses.okafor@rhobank.com>\nTo: Deposit Servicing <deposit-servicing@rhobank.com>\nDate: Fri, 14 Nov 2025 08:12:44 -0500\nSubject: deposit-desk console export, 2025.46r2\nMessage-ID: <7d20c4e91ab3f6@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nTeam,\n\nOne-day refresh of yesterday's cut. Two reasons it exists. First, the workspace change log rides along in this export — QA asked to see when things moved, not just where they landed, and the November log answers most of the questions I got this week. Second, the item-record note on the status-lookup macro: if you reconciled anything against Wednesday's extract, read the note before you trust your own spreadsheet. The item record was right all along; the extract column wasn't.\n\nThe wave quick-reply macro is live for chat volume. Before anyone gets comfortable: the reference-field audit flagged it on Wednesday, and until the field lands with the next macro batch, the full path is the triage macro. A quick reply that names no revision is a quick reply, not a reference.\n\nMoses\nDeposit Operations\n",
+  "macros": [
+    {
+      "macro_id": "MCR-4410",
+      "name": "Grant mobile deposit tool access",
+      "description": "The set-up macro for mobile check deposit: to help a customer initiate a mobile check deposit, give the customer access to deposit_check_3847 and stay available while they run the app flow. The grant attaches to the customer profile, not the session.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-09-08T09:00:00-04:00",
+      "updated_at": "2025-11-05T10:40:00-05:00",
+      "usage_30d": 318,
+      "usage_90d": 627,
+      "superseded_by": null,
+      "steps": [
+        "Verify identity per the handbook before touching the profile",
+        "Confirm the destination the customer has in mind is a checking or savings account on their profile",
+        "Issue the mobile-deposit grant (tool: deposit_check_3847) from the profile's tools panel",
+        "Tell the customer the deposit entry point now shows in their app, and offer to stay on while they work through the flow — the flow itself runs on their device",
+        "Note the grant in the case; the console traces the grant event automatically"
+      ]
+    },
+    {
+      "macro_id": "MCR-4412",
+      "name": "Deposit status lookup",
+      "description": "Answer a where-is-my-deposit contact from the item record, never from a general schedule. Reference: Doc DEP-AVAIL rev C (console reference field, set 2025-11-03).",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-11-03T08:00:00-05:00",
+      "updated_at": "2025-11-13T17:40:00-05:00",
+      "usage_30d": 463,
+      "usage_90d": 921,
+      "superseded_by": null,
+      "steps": [
+        "Pull the deposit by its DEP reference from the item record",
+        "Read the item's own status and expected availability; the app shows the customer the same two things",
+        "If the item is in review, the reason code (DEP-HOLD-KEY) explains why — the availability answer still comes from the item, not the code",
+        "Availability class questions resolve against Doc DEP-AVAIL at the rev this macro's reference field names"
+      ],
+      "notes": "2025-11-13: a field-mapping defect in the daily servicing extract (DEP-4194) surfaced one item whose extract row named the wrong deposit-to account. The item record was correct throughout. When a customer's numbers and your export disagree, the item record is the account of record; the extract is a read replica."
+    },
+    {
+      "macro_id": "MCR-4415",
+      "name": "Deposit error coaching — reopen at the failing step",
+      "description": "Returned-deposit coaching for the four 422-family codes. The app reopens the flow at the step that failed; coach from the matching Help Center page rather than re-explaining the whole flow.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-09-08T09:00:00-04:00",
+      "updated_at": "2025-11-10T09:10:00-05:00",
+      "usage_30d": 531,
+      "usage_90d": 771,
+      "superseded_by": null,
+      "steps": [
+        "Read the item's response code off the returned deposit (deposit_error_type field mirrors it)",
+        "image_unreadable → HC-7224: the app reopens at Front capture; lighting first, flash off",
+        "endorsement_missing → HC-7225: sign plus the restrictive line, reopen at Back capture",
+        "amount_mismatch → HC-7226: reopen at the Amount step and match the check exactly; images are retained",
+        "item_ineligible → HC-7228: no in-channel retry — the remedy is an eligible item",
+        "Two legibility failures on the same item → offer the branch/ATM path (HC-7233)"
+      ]
+    },
+    {
+      "macro_id": "MCR-4418",
+      "name": "Duplicate warning intake",
+      "description": "Intake for customers reporting a duplicate warning they believe is wrong. Support can see the matched pair; the customer cannot.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-09-22T09:00:00-04:00",
+      "updated_at": "2025-11-08T16:20:00-05:00",
+      "usage_30d": 66,
+      "usage_90d": 79,
+      "superseded_by": null,
+      "steps": [
+        "Confirm the customer has not resubmitted the item — the warning sheet's own guidance is to stop and contact support",
+        "Pull the matched pair (this item + the prior presentment it matched) from the duplicate-presentment queue; H12 marks the held item",
+        "Check the DEP project for an open detector ticket covering the match pattern before promising anything about the warning being wrong",
+        "First-presentment pair with no covering ticket → open a DEP detector ticket with both item references and the check number",
+        "Route the pair to the review desk; the review desk, not servicing, releases held items"
+      ]
+    },
+    {
+      "macro_id": "MCR-3961",
+      "name": "Submit mobile deposit on customer's behalf (pilot)",
+      "description": "2025 spring pilot: agent-side submission of an imaged check emailed by the customer. Grant-and-coach (MCR-4410) is the servicing path.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "effective_at": "2025-02-03T09:00:00-05:00",
+      "updated_at": "2025-03-18T11:05:00-04:00",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": null,
+      "steps": [
+        "Retired step text withheld from active view; see workspace version history"
+      ]
+    },
+    {
+      "macro_id": "MCR-4406",
+      "name": "Hold explanation — reason code to customer words",
+      "description": "Translate a DEP-HOLD-KEY reason code into a customer-safe explanation without promising a date the item record doesn't show.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-09-08T09:00:00-04:00",
+      "updated_at": "2025-09-08T09:00:00-04:00",
+      "usage_30d": 133,
+      "usage_90d": 306,
+      "superseded_by": null,
+      "steps": [
+        "Read the code off the held item (H01–H21, per DEP-HOLD-KEY)",
+        "Explain the reason in plain words; codes name why, never when",
+        "The when answer is the item's expected availability date, same as the customer's status screen"
+      ]
+    },
+    {
+      "macro_id": "MCR-4421",
+      "name": "Availability quick answer (wave)",
+      "description": "Answer availability questions from the availability matrix and give the customer a concrete date. Wave quick reply for chat volume; the full triage path is MCR-4412.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-11-10T09:00:00-05:00",
+      "updated_at": "2025-11-10T09:00:00-05:00",
+      "usage_30d": 41,
+      "usage_90d": 41,
+      "superseded_by": null,
+      "steps": [
+        "Confirm the item is accepted and not in review",
+        "Give the window from the availability matrix and pair it with the date on the item",
+        "In review → switch to MCR-4412"
+      ]
+    },
+    {
+      "macro_id": "MCR-4424",
+      "name": "Duplicate pair — case note",
+      "description": "Case note for confirmed duplicate pairs. Cite the matched prior item from the detector record.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-11-11T14:00:00-05:00",
+      "updated_at": "2025-11-11T14:00:00-05:00",
+      "usage_30d": 12,
+      "usage_90d": 12,
+      "superseded_by": null,
+      "steps": [
+        "Open the matched pair from the queue task",
+        "Record both item references and the check number in the case",
+        "Link the covering detector ticket if one exists"
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "TRG-6212",
+      "name": "Route returned deposits to the coaching queue",
+      "description": "New contacts referencing a returned mobile deposit get the error-coaching macro attached and land in deposit-coaching.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 3,
+      "effective_at": "2025-09-08T09:00:00-04:00",
+      "updated_at": "2025-09-08T09:00:00-04:00",
+      "usage_30d": 524,
+      "conditions": [
+        "contact.topic == 'mobile_deposit_returned'"
+      ],
+      "actions": [
+        "assign_queue deposit-coaching",
+        "attach_macro MCR-4415"
+      ]
+    },
+    {
+      "trigger_id": "TRG-6207",
+      "name": "Duplicate-queue routing on H12",
+      "description": "Items stamped H12 open a linked task in the duplicate-presentment queue with the matched pair attached.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 2,
+      "effective_at": "2025-09-22T09:00:00-04:00",
+      "updated_at": "2025-11-08T16:20:00-05:00",
+      "usage_30d": 62,
+      "conditions": [
+        "item.hold_reason == 'H12'"
+      ],
+      "actions": [
+        "assign_queue duplicate-presentment",
+        "attach_macro MCR-4418"
+      ]
+    },
+    {
+      "trigger_id": "TRG-6219",
+      "name": "Wave quick-answer attach on status contacts",
+      "description": "Chat contacts on deposit status get the wave quick-reply macro attached during the November wave.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 4,
+      "effective_at": "2025-11-10T09:00:00-05:00",
+      "updated_at": "2025-11-10T09:00:00-05:00",
+      "usage_30d": 38,
+      "conditions": [
+        "contact.topic == 'deposit_status'",
+        "contact.channel == 'chat'"
+      ],
+      "actions": [
+        "attach_macro MCR-4421"
+      ]
+    }
+  ],
+  "policy_contracts": [
+    {
+      "contract_id": "CON-CTOOL-3",
+      "name": "Customer-invoked tools",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "deposit-operations",
+      "scope": "Tools granted to customers and invoked from the customer's own signed-in session, including deposit_check_3847. Servicing issues and revokes the grant; the invocation always originates from the customer device. There is no agent-side invocation surface for tools in this class.",
+      "required_fields": [
+        "tool_name",
+        "grant_event_ref"
+      ],
+      "closed_world": true,
+      "wrapper_rule": "Grant events are traced automatically; agents never hand-write grant lines into the case.",
+      "effective_at": "2025-09-08T09:00:00-04:00",
+      "updated_at": "2025-09-08T09:00:00-04:00"
+    },
+    {
+      "contract_id": "CON-DEPREF-1",
+      "name": "Reference-field discipline for deposit docs",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "deposit-operations",
+      "scope": "Every triage macro that answers from a versioned Deposit Operations document carries a reference field naming the doc and rev it answers from. Desks answer at the named rev; a macro citing a rev you don't hold means pull the doc, not improvise.",
+      "required_fields": [
+        "reference_doc",
+        "reference_rev"
+      ],
+      "closed_world": false,
+      "wrapper_rule": "Reference fields are set by Deposit Operations at doc effective dates; servicing does not edit them.",
+      "effective_at": "2025-09-02T08:00:00-04:00",
+      "updated_at": "2025-11-03T08:00:00-05:00"
+    }
+  ],
+  "field_columns": [
+    "row_id",
+    "field_key",
+    "field_name",
+    "field_type",
+    "option_value",
+    "option_description",
+    "active",
+    "status",
+    "environment",
+    "updated_at"
+  ],
+  "fields": [
+    {
+      "row_id": "FLD-702",
+      "field_key": "deposit.reference",
+      "field_name": "Deposit reference",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Customer-visible reference, DEP-YYMMDD-NNNNN.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-09-08T09:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-703",
+      "field_key": "deposit.error_type",
+      "field_name": "Returned-deposit code",
+      "field_type": "dropdown",
+      "option_value": "image_unreadable",
+      "option_description": "Mirrors the service response code on the returned item.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-09-08T09:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-704",
+      "field_key": "deposit.error_type",
+      "field_name": "Returned-deposit code",
+      "field_type": "dropdown",
+      "option_value": "endorsement_missing",
+      "option_description": "Mirrors the service response code on the returned item.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-09-08T09:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-705",
+      "field_key": "deposit.error_type",
+      "field_name": "Returned-deposit code",
+      "field_type": "dropdown",
+      "option_value": "amount_mismatch",
+      "option_description": "Mirrors the service response code on the returned item.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-09-08T09:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-706",
+      "field_key": "deposit.error_type",
+      "field_name": "Returned-deposit code",
+      "field_type": "dropdown",
+      "option_value": "item_ineligible",
+      "option_description": "Mirrors the service response code on the returned item.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-09-08T09:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-707",
+      "field_key": "deposit.error_type",
+      "field_name": "Returned-deposit code",
+      "field_type": "dropdown",
+      "option_value": "DUPLICATE_SUSPECT",
+      "option_description": "Server-side duplicate backstop (409); casing follows the service response.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-09-22T09:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-708",
+      "field_key": "deposit.hold_reason",
+      "field_name": "Hold reason code",
+      "field_type": "dropdown",
+      "option_value": "H12",
+      "option_description": "Suspected duplicate presentment (DEP-HOLD-KEY).",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-09-22T09:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-709",
+      "field_key": "deposit.status",
+      "field_name": "Item status",
+      "field_type": "dropdown",
+      "option_value": "processing",
+      "option_description": "Initial status on every accepted submission.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-09-08T09:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-710",
+      "field_key": "deposit.status",
+      "field_name": "Item status",
+      "field_type": "dropdown",
+      "option_value": "in_review",
+      "option_description": "Extended review; expected availability shows on the item.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-09-08T09:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-711",
+      "field_key": "deposit.status",
+      "field_name": "Item status",
+      "field_type": "dropdown",
+      "option_value": "posted",
+      "option_description": "Posted to the destination account.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-09-08T09:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-712",
+      "field_key": "deposit.status",
+      "field_name": "Item status",
+      "field_type": "dropdown",
+      "option_value": "available",
+      "option_description": "Funds available to the customer.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-09-08T09:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-713",
+      "field_key": "grant.tool_name",
+      "field_name": "Grant: tool name",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Customer-tool grants record the tool, e.g. deposit_check_3847 (CON-CTOOL-3).",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-09-08T09:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-714",
+      "field_key": "triage.reference_doc",
+      "field_name": "Reference: document",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Doc a triage macro answers from (CON-DEPREF-1), e.g. DEP-AVAIL.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-09-02T08:00:00-04:00"
+    },
+    {
+      "row_id": "FLD-715",
+      "field_key": "triage.reference_rev",
+      "field_name": "Reference: revision",
+      "field_type": "text",
+      "option_value": null,
+      "option_description": "Rev letter the reference field names; set by Deposit Operations at effective dates.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-11-03T08:00:00-05:00"
+    },
+    {
+      "row_id": "FLD-716",
+      "field_key": "deposit.status",
+      "field_name": "Item status",
+      "field_type": "dropdown",
+      "option_value": "returned",
+      "option_description": "Returned at processing; the return code names why.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-11-12T11:30:00-05:00"
+    },
+    {
+      "row_id": "FLD-717",
+      "field_key": "deposit.status",
+      "field_name": "Item status",
+      "field_type": "dropdown",
+      "option_value": "submitted",
+      "option_description": "Received; images not yet accepted.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-11-12T11:30:00-05:00"
+    }
+  ],
+  "sla_policies": [
+    {
+      "policy_id": "SLA-DEP-1",
+      "name": "Returned-deposit first response",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "first_response < 4 business hours",
+      "applies_to": "queue:deposit-coaching",
+      "updated_at": "2025-09-08T09:00:00-04:00"
+    },
+    {
+      "policy_id": "SLA-DEP-2",
+      "name": "Duplicate-pair review handoff",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "handoff_to_review < 1 business day",
+      "applies_to": "queue:duplicate-presentment",
+      "updated_at": "2025-09-22T09:00:00-04:00"
+    }
+  ],
+  "views": [
+    {
+      "view_id": "VIEW-3301",
+      "name": "Deposits — returned items, open",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "queue == deposit-coaching",
+        "state == open"
+      ],
+      "updated_at": "2025-09-08T09:00:00-04:00"
+    },
+    {
+      "view_id": "VIEW-3304",
+      "name": "Duplicate presentment — awaiting review desk",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "queue == duplicate-presentment",
+        "state != closed"
+      ],
+      "updated_at": "2025-11-13T17:55:00-05:00"
+    },
+    {
+      "view_id": "VIEW-3307",
+      "name": "November wave — deposit contacts by day",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "topic in (mobile_deposit_returned, deposit_status)",
+        "created >= 2025-11-03"
+      ],
+      "updated_at": "2025-11-07T09:00:00-05:00"
+    },
+    {
+      "view_id": "VIEW-3310",
+      "name": "Estate & fiduciary deposits — documentation pending",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "item.hold_reason == H21",
+        "state != closed"
+      ],
+      "updated_at": "2025-11-11T15:10:00-05:00"
+    }
+  ],
+  "change_log_columns": [
+    "change_id",
+    "changed_at",
+    "actor",
+    "object_ref",
+    "action",
+    "note"
+  ],
+  "change_log": [
+    {
+      "change_id": "CHG-9101",
+      "changed_at": "2025-11-01T06:10:00-04:00",
+      "actor": "dep-ops-admin",
+      "object_ref": "usage counters",
+      "action": "updated",
+      "note": "Monthly 30/90-day counter rebase."
+    },
+    {
+      "change_id": "CHG-9104",
+      "changed_at": "2025-11-03T07:55:00-05:00",
+      "actor": "moses.okafor",
+      "object_ref": "FLD-715",
+      "action": "updated",
+      "note": "Reference revision set at the DEP-AVAIL effective date, per CON-DEPREF-1."
+    },
+    {
+      "change_id": "CHG-9105",
+      "changed_at": "2025-11-03T08:00:00-05:00",
+      "actor": "moses.okafor",
+      "object_ref": "MCR-4412",
+      "action": "created",
+      "note": "Deposit status lookup, effective with the reference change."
+    },
+    {
+      "change_id": "CHG-9106",
+      "changed_at": "2025-11-03T08:05:00-05:00",
+      "actor": "moses.okafor",
+      "object_ref": "MCR-4412",
+      "action": "updated",
+      "note": "Reference field named: Doc DEP-AVAIL rev C."
+    },
+    {
+      "change_id": "CHG-9109",
+      "changed_at": "2025-11-04T10:20:00-05:00",
+      "actor": "dep-ops-admin",
+      "object_ref": "VIEW-3301",
+      "action": "updated",
+      "note": "Filter tidy; no scope change."
+    },
+    {
+      "change_id": "CHG-9112",
+      "changed_at": "2025-11-05T10:40:00-05:00",
+      "actor": "moses.okafor",
+      "object_ref": "MCR-4410",
+      "action": "updated",
+      "note": "Step wording: destination-account confirmation moved ahead of the grant."
+    },
+    {
+      "change_id": "CHG-9115",
+      "changed_at": "2025-11-06T09:05:00-05:00",
+      "actor": "r.salcedo",
+      "object_ref": "workspace",
+      "action": "noted",
+      "note": "Wave volume running ahead of October; coaching queue watched daily."
+    },
+    {
+      "change_id": "CHG-9118",
+      "changed_at": "2025-11-07T09:00:00-05:00",
+      "actor": "moses.okafor",
+      "object_ref": "VIEW-3307",
+      "action": "created",
+      "note": "November wave — deposit contacts by day."
+    },
+    {
+      "change_id": "CHG-9121",
+      "changed_at": "2025-11-08T16:20:00-05:00",
+      "actor": "r.salcedo",
+      "object_ref": "TRG-6207",
+      "action": "updated",
+      "note": "Priority raised for the rebate-season duplicate queue."
+    },
+    {
+      "change_id": "CHG-9122",
+      "changed_at": "2025-11-08T16:20:00-05:00",
+      "actor": "r.salcedo",
+      "object_ref": "MCR-4418",
+      "action": "updated",
+      "note": "Intake step 3: check the DEP project before promising anything."
+    },
+    {
+      "change_id": "CHG-9125",
+      "changed_at": "2025-11-10T09:00:00-05:00",
+      "actor": "moses.okafor",
+      "object_ref": "MCR-4421",
+      "action": "created",
+      "note": "Wave quick reply for chat volume."
+    },
+    {
+      "change_id": "CHG-9126",
+      "changed_at": "2025-11-10T09:00:00-05:00",
+      "actor": "moses.okafor",
+      "object_ref": "TRG-6219",
+      "action": "created",
+      "note": "Attach the wave quick reply on chat status contacts."
+    },
+    {
+      "change_id": "CHG-9127",
+      "changed_at": "2025-11-10T09:10:00-05:00",
+      "actor": "moses.okafor",
+      "object_ref": "MCR-4415",
+      "action": "updated",
+      "note": "Coaching step: two legibility failures route to the branch/ATM path."
+    },
+    {
+      "change_id": "CHG-9130",
+      "changed_at": "2025-11-11T14:00:00-05:00",
+      "actor": "r.salcedo",
+      "object_ref": "MCR-4424",
+      "action": "created",
+      "note": "Duplicate pair case note."
+    },
+    {
+      "change_id": "CHG-9131",
+      "changed_at": "2025-11-11T15:10:00-05:00",
+      "actor": "r.salcedo",
+      "object_ref": "VIEW-3310",
+      "action": "created",
+      "note": "Documentation-pending fiduciary items, for the review-desk handoff."
+    },
+    {
+      "change_id": "CHG-9134",
+      "changed_at": "2025-11-12T09:30:00-05:00",
+      "actor": "dep-ops-admin",
+      "object_ref": "MCR-4421",
+      "action": "flagged",
+      "note": "Reference-field audit: answers from a versioned doc but names no doc rev (CON-DEPREF-1). Field lands with the next macro batch; until then the triage macro is the reference path."
+    },
+    {
+      "change_id": "CHG-9135",
+      "changed_at": "2025-11-12T11:30:00-05:00",
+      "actor": "dep-ops-admin",
+      "object_ref": "FLD-716",
+      "action": "created",
+      "note": "Item-status option: returned."
+    },
+    {
+      "change_id": "CHG-9136",
+      "changed_at": "2025-11-12T11:30:00-05:00",
+      "actor": "dep-ops-admin",
+      "object_ref": "FLD-717",
+      "action": "created",
+      "note": "Item-status option: submitted."
+    },
+    {
+      "change_id": "CHG-9139",
+      "changed_at": "2025-11-13T08:15:00-05:00",
+      "actor": "moses.okafor",
+      "object_ref": "export 2025.46",
+      "action": "exported",
+      "note": "Cut for QA and the new-hire cohort."
+    },
+    {
+      "change_id": "CHG-9142",
+      "changed_at": "2025-11-13T17:40:00-05:00",
+      "actor": "moses.okafor",
+      "object_ref": "MCR-4412",
+      "action": "updated",
+      "note": "Item-record note added after the extract field-mapping correction (DEP-4194)."
+    },
+    {
+      "change_id": "CHG-9143",
+      "changed_at": "2025-11-13T17:55:00-05:00",
+      "actor": "r.salcedo",
+      "object_ref": "VIEW-3304",
+      "action": "updated",
+      "note": "Refresh after the review desk cleared the week's pairs."
+    },
+    {
+      "change_id": "CHG-9146",
+      "changed_at": "2025-11-14T07:20:00-05:00",
+      "actor": "dep-ops-admin",
+      "object_ref": "usage counters",
+      "action": "updated",
+      "note": "Counters refreshed for the r2 cut."
+    },
+    {
+      "change_id": "CHG-9147",
+      "changed_at": "2025-11-14T07:58:00-05:00",
+      "actor": "dep-ops-admin",
+      "object_ref": "TRG-6219",
+      "action": "noted",
+      "note": "Fire count verified against the quick-reply macro's attach count."
+    },
+    {
+      "change_id": "CHG-9150",
+      "changed_at": "2025-11-14T08:05:00-05:00",
+      "actor": "moses.okafor",
+      "object_ref": "export 2025.46r2",
+      "action": "exported",
+      "note": "This cut; change log included."
+    }
+  ]
+}

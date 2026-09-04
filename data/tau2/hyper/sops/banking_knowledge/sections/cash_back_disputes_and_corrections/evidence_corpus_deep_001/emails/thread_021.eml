@@ -1,0 +1,83 @@
+From: Marcus Webb <marcus.webb@rho-bank.com>
+To: Grace Liu <grace.liu@rho-bank.com>
+Cc: Omar Haddad <omar.haddad@rho-bank.com>
+Date: Wed, 22 Oct 2025 10:14:38 -0400
+Subject: RE: Rewards tile freshness stamp - dashboard rollout
+Message-ID: <37e0288c499ed1a62f5f@rho-bank.com>
+In-Reply-To: <ba3c8d2ca1479c3353ba@rho-bank.com>
+References: <2a704b4f322b3ffb8c46@rho-bank.com>
+ <141de0b46fcfef2a7b33@rho-bank.com>
+ <20f87ef4a7c14bec8b77@rho-bank.com>
+ <ba3c8d2ca1479c3353ba@rho-bank.com>
+Thread-Topic: Rewards tile freshness stamp - dashboard rollout
+Thread-Index: c258b3de4f219b3e9a02baeb55947dcf
+Accept-Language: en-US
+X-Auto-Response-Suppress: All
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+On-call note for now, please - teaching the stamp about maintenance
+windows is on the list, below three things that matter more. The amber
+morning cost us one Slack message; the machinery to prevent it costs a
+sprint. It stays a note until that math changes.
+
+M.
+
+-----Original Message-----
+From: Grace Liu <grace.liu@rho-bank.com>
+Sent: Wed, 22 Oct 2025 08:57:03 -0400
+To: Marcus Webb <marcus.webb@rho-bank.com>
+Cc: Omar Haddad <omar.haddad@rho-bank.com>
+Subject: RE: Rewards tile freshness stamp - dashboard rollout
+
+One rollout wrinkle from this morning: the correction-tail tile went
+amber overnight, but the data wasn't late - the migration backfill
+re-touched a batch of resolved rows and the tile's source extract took
+longer than its window. So the stamp did its job, technically, on a
+non-event. If the backfill runs again we'll get another amber morning and
+someone will escalate it. Can the stamp know about planned backfills, or
+should I just put a line in the on-call notes?
+
+-----Original Message-----
+From: Marcus Webb <marcus.webb@rho-bank.com>
+Sent: Mon, 20 Oct 2025 11:41:29 -0400
+To: Omar Haddad <omar.haddad@rho-bank.com>
+Cc: Grace Liu <grace.liu@rho-bank.com>
+Subject: RE: Rewards tile freshness stamp - dashboard rollout
+
+Stale-but-labeled. The number stays, the stamp says how old it is, and
+the tile border goes amber. Blanking data because it's late is how you
+teach people to screenshot dashboards, and I will not be party to that.
+
+-----Original Message-----
+From: Omar Haddad <omar.haddad@rho-bank.com>
+Sent: Mon, 20 Oct 2025 11:08:47 -0400
+To: Marcus Webb <marcus.webb@rho-bank.com>
+Cc: Grace Liu <grace.liu@rho-bank.com>
+Subject: RE: Rewards tile freshness stamp - dashboard rollout
+
+Hourly on the dispute-queue tile matches how I read it for the morning
+note. Question - when the stamp goes amber, does the tile keep showing
+the stale number under it, or blank out? For the three-line note I'd
+rather have a stale number labeled stale than a hole.
+
+-----Original Message-----
+From: Marcus Webb <marcus.webb@rho-bank.com>
+Sent: Mon, 20 Oct 2025 09:33:16 -0400
+To: Grace Liu <grace.liu@rho-bank.com>, Omar Haddad <omar.haddad@rho-bank.c=
+om>
+Subject: Rewards tile freshness stamp - dashboard rollout
+
+The freshness stamp on the rewards tile goes from soft-launch to standard
+this week. What it does: every tile shows the timestamp of its source
+extract, and if the tile's data is older than its refresh promise, the
+stamp goes amber and the tile says so instead of silently showing stale
+numbers.
+
+Refresh promises as configured: rewards tile nightly, dispute-queue tile
+hourly during business hours, correction-tail tile nightly. If a promise
+is wrong for how you actually use a tile, say so this week while it's
+cheap to change.
+
+M.

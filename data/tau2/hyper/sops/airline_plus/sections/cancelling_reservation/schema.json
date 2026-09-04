@@ -1,0 +1,395 @@
+{
+  "id": "airline_plus_cancelling_reservation_policy_fact_schema_001",
+  "domain": "airline_plus",
+  "studio_hidden": true,
+  "global_rules_path": "tau2/hyper/sops/airline_plus/global_rules.json",
+  "section_id": "cancelling_reservation",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/airline_plus_sop.md",
+    "heading": "## 9. Cancelling a Reservation"
+  },
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": [
+      {
+        "section_id": "customer_identity",
+        "fact_ids": [
+          "customer_provided_user_id_required_for_reservation_actions"
+        ],
+        "relationship": "shared_reference",
+        "description": "Cancellation starts only after the customer has provided the user ID required for reservation actions."
+      }
+    ]
+  },
+  "rendered_section_path": "tau2/hyper/sops/airline_plus/sections/cancelling_reservation/transcript_induction_001.md",
+  "transformations": [
+    {
+      "id": "cancellation_operations_presentation",
+      "representation": "process_presentation",
+      "stub_path": "tau2/hyper/sops/airline_plus/sections/cancelling_reservation/process_presentation_001/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/airline_plus/sections/cancelling_reservation/process_presentation_001/cancellation_operations_workbook.pdf",
+          "kit_filename": "cancellation_operations_workbook.pdf",
+          "text_source_path": "tau2/hyper/sops/airline_plus/sections/cancelling_reservation/process_presentation_001/cancellation_operations_workbook.txt",
+          "author_source_path": "tau2/hyper/sops/airline_plus/sections/cancelling_reservation/process_presentation_001/cancellation_operations_workbook.pptx",
+          "eval_manifest_path": "tau2/hyper/sops/airline_plus/sections/cancelling_reservation/process_presentation_001/eval_manifest.json",
+          "page_fact_ids": [
+            {
+              "page": 2,
+              "fact_ids": [
+                "cancel_identify_reservation",
+                "cancel_reason_required"
+              ]
+            },
+            {
+              "page": 3,
+              "fact_ids": [
+                "cancel_reason_options"
+              ]
+            },
+            {
+              "page": 4,
+              "fact_ids": [
+                "departed_flight_blocks_cancellation"
+              ]
+            },
+            {
+              "page": 5,
+              "fact_ids": [
+                "within_24_hours_allows_cancellation",
+                "airline_cancelled_flight_allows_cancellation",
+                "business_cabin_allows_cancellation"
+              ]
+            },
+            {
+              "page": 6,
+              "fact_ids": [
+                "insurance_health_weather_allows_cancellation",
+                "otherwise_cancellation_not_allowed"
+              ]
+            },
+            {
+              "page": 7,
+              "fact_ids": [
+                "cancellation_not_system_enforced",
+                "refund_original_payment_methods",
+                "refund_arrival_window"
+              ]
+            }
+          ],
+          "included_fact_ids": [
+            "cancel_identify_reservation",
+            "cancel_reason_required",
+            "cancel_reason_options",
+            "departed_flight_blocks_cancellation",
+            "within_24_hours_allows_cancellation",
+            "airline_cancelled_flight_allows_cancellation",
+            "business_cabin_allows_cancellation",
+            "insurance_health_weather_allows_cancellation",
+            "otherwise_cancellation_not_allowed",
+            "cancellation_not_system_enforced",
+            "refund_original_payment_methods",
+            "refund_arrival_window"
+          ]
+        }
+      ]
+    }
+  ],
+  "response_phrasing_context": {
+    "selected_rule_ids": [
+      "never_say_unfortunately",
+      "max_one_apology_per_conversation",
+      "no_premature_outcome_language",
+      "identifier_minimization",
+      "avoid_repeated_openings",
+      "no_generic_service_invitations",
+      "customer_visible_failure_language",
+      "no_long_menu_dumps",
+      "match_warmth_to_outcome",
+      "no_internal_tool_or_source_language"
+    ],
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Internal non-enforcement facts should be represented as Support console notes or agent behavior."
+    ],
+    "rules_path": "tau2/hyper/response_phrasing/airline_plus_response_phrasing.yaml"
+  },
+  "style_exemplar": {
+    "id": "customer_support_chat",
+    "path": "tau2/hyper/sops/airline_plus/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "support chat transcript with short turns",
+      "eligibility checks before action",
+      "explicit customer confirmation before cancellation"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/airline_plus_sop.md"
+    ],
+    "allowed_values": {
+      "flight_statuses": [
+        "available",
+        "on time",
+        "delayed",
+        "flying",
+        "landed",
+        "cancelled"
+      ],
+      "cabin_classes": [
+        "basic economy",
+        "economy",
+        "business"
+      ]
+    },
+    "forbidden_terms": [
+      {
+        "term": "manual override flag",
+        "reason": "The cancellation process has no override flag."
+      },
+      {
+        "term": "waiver code",
+        "reason": "The SOP does not include waiver-code cancellation handling."
+      }
+    ]
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "cancellation_workflow",
+        "label": "Cancelling a reservation",
+        "kind": "procedure",
+        "fact_ids": []
+      },
+      {
+        "id": "identify_cancellation_reservation",
+        "label": "Identify the reservation",
+        "kind": "step",
+        "parent_id": "cancellation_workflow",
+        "order": 1,
+        "fact_ids": [
+          "cancel_identify_reservation"
+        ]
+      },
+      {
+        "id": "determine_cancellation_reason",
+        "label": "Determine the cancellation reason",
+        "kind": "step",
+        "parent_id": "cancellation_workflow",
+        "order": 2,
+        "fact_ids": [
+          "cancel_reason_required",
+          "cancel_reason_options"
+        ]
+      },
+      {
+        "id": "cancellation_eligibility",
+        "label": "Check cancellation eligibility",
+        "kind": "decision",
+        "parent_id": "cancellation_workflow",
+        "order": 3,
+        "fact_ids": []
+      },
+      {
+        "id": "departed_flight_cancellation_gate",
+        "label": "Block departed reservations",
+        "kind": "blocking_gate",
+        "parent_id": "cancellation_eligibility",
+        "order": 1,
+        "fact_ids": [
+          "departed_flight_blocks_cancellation"
+        ]
+      },
+      {
+        "id": "allowed_cancellation_conditions",
+        "label": "Alternative allowed conditions",
+        "kind": "eligibility_set",
+        "parent_id": "cancellation_eligibility",
+        "order": 2,
+        "description": "Any one condition is sufficient after the departed-flight gate passes.",
+        "fact_ids": [
+          "within_24_hours_allows_cancellation",
+          "airline_cancelled_flight_allows_cancellation",
+          "business_cabin_allows_cancellation",
+          "insurance_health_weather_allows_cancellation"
+        ]
+      },
+      {
+        "id": "cancellation_default_denial",
+        "label": "Deny when no allowed condition applies",
+        "kind": "default_outcome",
+        "parent_id": "cancellation_eligibility",
+        "order": 3,
+        "fact_ids": [
+          "otherwise_cancellation_not_allowed"
+        ]
+      },
+      {
+        "id": "manual_cancellation_enforcement",
+        "label": "Manually enforce eligibility",
+        "kind": "tooling_constraint",
+        "parent_id": "cancellation_eligibility",
+        "order": 4,
+        "fact_ids": [
+          "cancellation_not_system_enforced"
+        ]
+      },
+      {
+        "id": "cancellation_refund",
+        "label": "Process and explain the refund",
+        "kind": "step",
+        "parent_id": "cancellation_workflow",
+        "order": 4,
+        "fact_ids": [
+          "refund_original_payment_methods",
+          "refund_arrival_window"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "cancellation_eligibility",
+        "type": "uses_input_from",
+        "target_id": "determine_cancellation_reason"
+      },
+      {
+        "source_id": "allowed_cancellation_conditions",
+        "type": "evaluated_after",
+        "target_id": "departed_flight_cancellation_gate"
+      },
+      {
+        "source_id": "cancellation_default_denial",
+        "type": "otherwise_after",
+        "target_id": "allowed_cancellation_conditions"
+      },
+      {
+        "source_id": "cancellation_eligibility",
+        "type": "manually_enforced_by",
+        "target_id": "manual_cancellation_enforcement"
+      },
+      {
+        "source_id": "cancellation_refund",
+        "type": "requires",
+        "target_id": "cancellation_eligibility"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "cancel_identify_reservation",
+      "category": "identification",
+      "statement": "Cancellation starts by getting the reservation identifier; if the customer does not know it, look up their profile and help them find the right reservation."
+    },
+    {
+      "id": "cancel_reason_required",
+      "category": "reason",
+      "statement": "The agent asks why the customer wants to cancel."
+    },
+    {
+      "id": "cancel_reason_options",
+      "category": "reason",
+      "statement": "Cancellation reasons are change of plans, airline cancelled the flight, health or weather reasons covered by insurance, or other reasons."
+    },
+    {
+      "id": "departed_flight_blocks_cancellation",
+      "category": "eligibility",
+      "statement": "If any flight in the reservation is flying or landed, the agent cannot process cancellation and transfers to a human supervisor."
+    },
+    {
+      "id": "within_24_hours_allows_cancellation",
+      "category": "eligibility",
+      "statement": "If no flight in the reservation is flying or landed, cancellation is allowed if the reservation was made within the last 24 hours, compared with current system time."
+    },
+    {
+      "id": "airline_cancelled_flight_allows_cancellation",
+      "category": "eligibility",
+      "statement": "If no flight in the reservation is flying or landed, cancellation is allowed if the airline cancelled one of the reservation's flights."
+    },
+    {
+      "id": "business_cabin_allows_cancellation",
+      "category": "eligibility",
+      "statement": "If no flight in the reservation is flying or landed, cancellation is allowed if the reservation is in business cabin class."
+    },
+    {
+      "id": "insurance_health_weather_allows_cancellation",
+      "category": "eligibility",
+      "statement": "If no flight in the reservation is flying or landed, cancellation is allowed if the reservation has travel insurance and the reason is health or weather."
+    },
+    {
+      "id": "otherwise_cancellation_not_allowed",
+      "category": "eligibility",
+      "statement": "If no flight in the reservation is flying or landed and no allowed condition is met, the reservation cannot be cancelled."
+    },
+    {
+      "id": "cancellation_not_system_enforced",
+      "category": "tooling",
+      "statement": "The cancellation system does not enforce these rules, so the agent must verify eligibility before processing."
+    },
+    {
+      "id": "refund_original_payment_methods",
+      "category": "refund",
+      "statement": "Cancellation refunds go back to the original payment methods."
+    },
+    {
+      "id": "refund_arrival_window",
+      "category": "refund",
+      "statement": "Tell the customer the refund will arrive within 12 business days."
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "reason collection and 24-hour cancellation",
+      "start_turn": 5,
+      "included_fact_ids": [
+        "cancel_identify_reservation",
+        "cancel_reason_required",
+        "cancel_reason_options",
+        "within_24_hours_allows_cancellation",
+        "cancellation_not_system_enforced",
+        "refund_original_payment_methods",
+        "refund_arrival_window"
+      ]
+    },
+    {
+      "id": "B",
+      "title": "departed flight blocks cancellation and transfers",
+      "start_turn": 5,
+      "included_fact_ids": [
+        "departed_flight_blocks_cancellation"
+      ]
+    },
+    {
+      "id": "C",
+      "title": "airline-cancelled flight eligibility",
+      "start_turn": 5,
+      "included_fact_ids": [
+        "airline_cancelled_flight_allows_cancellation",
+        "refund_original_payment_methods",
+        "refund_arrival_window"
+      ]
+    },
+    {
+      "id": "D",
+      "title": "insurance-covered reason versus ineligible reason",
+      "start_turn": 5,
+      "included_fact_ids": [
+        "insurance_health_weather_allows_cancellation",
+        "otherwise_cancellation_not_allowed",
+        "refund_original_payment_methods",
+        "refund_arrival_window"
+      ]
+    },
+    {
+      "id": "E",
+      "title": "business cabin eligibility without other cancellation conditions",
+      "start_turn": 5,
+      "included_fact_ids": [
+        "business_cabin_allows_cancellation",
+        "refund_original_payment_methods",
+        "refund_arrival_window"
+      ]
+    }
+  ]
+}

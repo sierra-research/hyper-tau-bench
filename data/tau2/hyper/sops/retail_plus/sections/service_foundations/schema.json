@@ -1,0 +1,1218 @@
+{
+  "id": "retail_plus_service_foundations_policy_fact_schema_001",
+  "domain": "retail_plus",
+  "display_name": "Service and record foundations",
+  "global_rules_path": "tau2/hyper/sops/retail_plus/global_rules.json",
+  "section_id": "service_foundations",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/retail_plus_sop.md",
+    "heading": "## Service and Record Foundations",
+    "component_headings": [
+      "## How the operation works",
+      "### Working within the documented schema",
+      "## What you can do for customers",
+      "## When a customer is wrong about what they're entitled to",
+      "## Transferring to a person",
+      "## A few last notes"
+    ]
+  },
+  "domain_hierarchy": {
+    "role": "shared_reference",
+    "requires": []
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "service_foundations",
+        "label": "Service and record foundations",
+        "kind": "shared_reference",
+        "fact_ids": []
+      },
+      {
+        "id": "customer_record_model",
+        "label": "Customer profiles",
+        "kind": "record_model",
+        "parent_id": "service_foundations",
+        "order": 1,
+        "fact_ids": [
+          "customer_profile_fields",
+          "saved_payment_method_types",
+          "gift_cards_have_balance",
+          "customers_can_save_any_number_of_payment_methods"
+        ]
+      },
+      {
+        "id": "currency_storage",
+        "label": "Currency storage",
+        "kind": "data_invariant",
+        "parent_id": "service_foundations",
+        "order": 2,
+        "fact_ids": [
+          "stored_money_uses_cent_precision",
+          "round_money_arithmetic_before_storage",
+          "stored_money_rejects_float_precision_artifacts"
+        ]
+      },
+      {
+        "id": "catalog_model",
+        "label": "Products and variant items",
+        "kind": "record_model",
+        "parent_id": "service_foundations",
+        "order": 3,
+        "fact_ids": [
+          "catalog_has_fifty_product_types",
+          "products_have_variant_items",
+          "variant_item_fields",
+          "product_id_and_item_id_are_distinct"
+        ]
+      },
+      {
+        "id": "order_record_model",
+        "label": "Order records",
+        "kind": "record_model",
+        "parent_id": "service_foundations",
+        "order": 4,
+        "fact_ids": [
+          "order_identifier_prefix",
+          "order_records_owner",
+          "order_shipping_address_is_order_specific",
+          "order_records_items",
+          "order_records_status",
+          "order_records_fulfillment",
+          "order_records_payment_history"
+        ]
+      },
+      {
+        "id": "status_taxonomy",
+        "label": "Exact order statuses",
+        "kind": "closed_set",
+        "parent_id": "order_record_model",
+        "order": 1,
+        "fact_ids": [
+          "order_status_values_are_closed_and_exact",
+          "pending_status_meaning",
+          "processed_status_meaning",
+          "delivered_status_meaning",
+          "cancelled_status_meaning",
+          "pending_items_modified_status_meaning",
+          "return_requested_status_meaning",
+          "exchange_requested_status_meaning"
+        ]
+      },
+      {
+        "id": "cancellation_reason_taxonomy",
+        "label": "Exact cancellation reasons",
+        "kind": "closed_set",
+        "parent_id": "order_record_model",
+        "order": 2,
+        "fact_ids": [
+          "cancellation_reason_values_are_closed_and_exact"
+        ]
+      },
+      {
+        "id": "optional_order_fields",
+        "label": "Optional order fields",
+        "kind": "closed_set",
+        "parent_id": "order_record_model",
+        "order": 3,
+        "fact_ids": [
+          "cancelled_order_optional_field",
+          "return_optional_fields",
+          "exchange_optional_fields",
+          "optional_order_fields_are_closed"
+        ]
+      },
+      {
+        "id": "item_modification_storage",
+        "label": "Pending-item modification storage",
+        "kind": "record_mutation",
+        "parent_id": "order_record_model",
+        "order": 4,
+        "fact_ids": [
+          "pending_item_modification_replaces_items_in_place",
+          "pending_item_modification_sets_exact_status",
+          "pending_item_modification_appends_payment_history",
+          "pending_item_modification_adds_no_fields"
+        ]
+      },
+      {
+        "id": "schema_boundaries",
+        "label": "Documented schema boundaries",
+        "kind": "system_constraint",
+        "parent_id": "service_foundations",
+        "order": 5,
+        "fact_ids": [
+          "documented_schema_is_complete",
+          "out_of_schema_requests_are_unsupported",
+          "operators_must_not_extend_schema",
+          "read_and_write_documented_fields_only"
+        ]
+      },
+      {
+        "id": "channel_scope",
+        "label": "Customer-care channel scope",
+        "kind": "authorization",
+        "parent_id": "service_foundations",
+        "order": 6,
+        "fact_ids": [
+          "customer_information_lookup_allowed",
+          "pending_order_allowed_actions",
+          "delivered_order_allowed_actions",
+          "profile_default_address_allowed_action",
+          "processed_orders_wait_until_delivered",
+          "cancelled_orders_have_no_further_action",
+          "authorized_actions_are_closed_scope"
+        ]
+      },
+      {
+        "id": "prohibited_channel_actions",
+        "label": "Unsupported channel actions",
+        "kind": "prohibition_set",
+        "parent_id": "channel_scope",
+        "fact_ids": [
+          "cannot_add_new_payment_method",
+          "cannot_change_profile_email",
+          "cannot_change_order_quantity",
+          "cannot_split_shipments",
+          "cannot_modify_or_cancel_shipped_order"
+        ]
+      },
+      {
+        "id": "global_action_controls",
+        "label": "Controls for customer-record changes",
+        "kind": "control_set",
+        "parent_id": "service_foundations",
+        "order": 7,
+        "fact_ids": [
+          "record_changes_require_complete_recap_and_confirmation",
+          "ambiguous_confirmation_is_insufficient",
+          "responses_must_be_grounded_without_invention",
+          "one_shot_changes_require_complete_item_list",
+          "clarify_before_irreversible_action",
+          "nontrivial_money_math_uses_calculator"
+        ]
+      },
+      {
+        "id": "transfer_controls",
+        "label": "Transfer conditions and notice",
+        "kind": "escalation",
+        "parent_id": "service_foundations",
+        "order": 8,
+        "fact_ids": [
+          "transfer_when_customer_requests_person",
+          "transfer_when_unsupported_request_is_escalated",
+          "transfer_when_handling_is_genuinely_unclear",
+          "transfer_conditions_are_closed",
+          "transfer_uses_exact_notice"
+        ]
+      },
+      {
+        "id": "verification_failure_conduct",
+        "kind": "control_set",
+        "label": "Failed-verification conduct",
+        "order": 9,
+        "parent_id": "service_foundations",
+        "fact_ids": [
+          "failed_verification_handling"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "currency_storage",
+        "type": "implemented_with",
+        "target_id": "global_action_controls",
+        "description": "Nontrivial monetary arithmetic uses the calculator before two-decimal storage."
+      },
+      {
+        "source_id": "item_modification_storage",
+        "type": "constrained_by",
+        "target_id": "optional_order_fields"
+      },
+      {
+        "source_id": "schema_boundaries",
+        "type": "escalates_through",
+        "target_id": "transfer_controls"
+      },
+      {
+        "source_id": "channel_scope",
+        "type": "constrained_by",
+        "target_id": "prohibited_channel_actions"
+      },
+      {
+        "source_id": "channel_scope",
+        "type": "governed_by",
+        "target_id": "global_action_controls"
+      },
+      {
+        "source_id": "prohibited_channel_actions",
+        "type": "escalates_through",
+        "target_id": "transfer_controls"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "customer_profile_fields",
+      "category": "customer_records",
+      "statement": "A customer profile stores the customer's name, email, default shipping address, and saved payment methods."
+    },
+    {
+      "id": "saved_payment_method_types",
+      "category": "customer_records",
+      "statement": "The only saved payment-method types are gift cards, PayPal accounts, and credit cards."
+    },
+    {
+      "id": "gift_cards_have_balance",
+      "category": "customer_records",
+      "statement": "Each saved gift card has a dollar balance."
+    },
+    {
+      "id": "customers_can_save_any_number_of_payment_methods",
+      "category": "customer_records",
+      "statement": "A customer may have any number of saved gift cards, PayPal accounts, and credit cards."
+    },
+    {
+      "id": "stored_money_uses_cent_precision",
+      "category": "currency",
+      "statement": "All monetary values stored in NorthStar records use cent precision: they have no more than two fractional decimal digits, although JSON numbers need not preserve trailing zeroes."
+    },
+    {
+      "id": "round_money_arithmetic_before_storage",
+      "category": "currency",
+      "statement": "Any arithmetic result for a price, gift-card balance, payment, refund, exchange difference, or modification difference is rounded to two decimal places before it is stored."
+    },
+    {
+      "id": "stored_money_rejects_float_precision_artifacts",
+      "category": "currency",
+      "statement": "Stored monetary values must not contain floating-point precision artifacts."
+    },
+    {
+      "id": "catalog_has_fifty_product_types",
+      "category": "catalog",
+      "statement": "The NorthStar catalog contains 50 product types."
+    },
+    {
+      "id": "products_have_variant_items",
+      "category": "catalog",
+      "statement": "Each product type has variant items representing specific option combinations such as size, color, or material."
+    },
+    {
+      "id": "variant_item_fields",
+      "category": "catalog",
+      "statement": "Each variant item has its own item identifier, options, availability, and price."
+    },
+    {
+      "id": "product_id_and_item_id_are_distinct",
+      "category": "catalog",
+      "statement": "A product identifier names a product type, while an item identifier names one specific variant; the two identifiers are not interchangeable."
+    },
+    {
+      "id": "order_identifier_prefix",
+      "category": "order_records",
+      "statement": "Every order identifier starts with #W."
+    },
+    {
+      "id": "order_records_owner",
+      "category": "order_records",
+      "statement": "An order records the customer profile it belongs to."
+    },
+    {
+      "id": "order_shipping_address_is_order_specific",
+      "category": "order_records",
+      "statement": "An order stores its own shipping address; it may use a different shipping destination and does not have to match the customer's default shipping address."
+    },
+    {
+      "id": "order_records_items",
+      "category": "order_records",
+      "statement": "An order records the ordered items with their variant identifiers, options, and purchase prices."
+    },
+    {
+      "id": "order_records_status",
+      "category": "order_records",
+      "statement": "An order records its current status."
+    },
+    {
+      "id": "order_records_fulfillment",
+      "category": "order_records",
+      "statement": "An order records fulfillment information, including tracking identifiers and which items are in each package."
+    },
+    {
+      "id": "order_records_payment_history",
+      "category": "order_records",
+      "statement": "An order records a payment history whose entries identify a payment or refund, its amount, and the payment method used."
+    },
+    {
+      "id": "order_status_values_are_closed_and_exact",
+      "category": "status_taxonomy",
+      "statement": "Order status must be exactly one of pending, processed, delivered, cancelled, pending (items modified), return requested, or exchange requested, with spelling, case, punctuation, and parentheses preserved exactly."
+    },
+    {
+      "id": "pending_status_meaning",
+      "category": "status_taxonomy",
+      "statement": "Status pending means the order was placed and has not yet shipped."
+    },
+    {
+      "id": "processed_status_meaning",
+      "category": "status_taxonomy",
+      "statement": "Status processed means the order is being prepared or has shipped but has not been delivered."
+    },
+    {
+      "id": "delivered_status_meaning",
+      "category": "status_taxonomy",
+      "statement": "Status delivered means the customer has the package."
+    },
+    {
+      "id": "cancelled_status_meaning",
+      "category": "status_taxonomy",
+      "statement": "Status cancelled means the order was cancelled."
+    },
+    {
+      "id": "pending_items_modified_status_meaning",
+      "category": "status_taxonomy",
+      "statement": "Status pending (items modified) means items on the pending order have been swapped and no further changes are allowed."
+    },
+    {
+      "id": "return_requested_status_meaning",
+      "category": "status_taxonomy",
+      "statement": "Status return requested means a return has been initiated on a delivered order."
+    },
+    {
+      "id": "exchange_requested_status_meaning",
+      "category": "status_taxonomy",
+      "statement": "Status exchange requested means an exchange has been initiated on a delivered order."
+    },
+    {
+      "id": "cancellation_reason_values_are_closed_and_exact",
+      "category": "cancellation_reasons",
+      "statement": "The only stored cancellation reasons are the exact case- and word-sensitive strings no longer needed and ordered by mistake."
+    },
+    {
+      "id": "cancelled_order_optional_field",
+      "category": "optional_order_fields",
+      "statement": "Field cancel_reason is populated when an order is cancelled."
+    },
+    {
+      "id": "return_optional_fields",
+      "category": "optional_order_fields",
+      "statement": "Fields return_items and return_payment_method_id are populated when a return is initiated."
+    },
+    {
+      "id": "exchange_optional_fields",
+      "category": "optional_order_fields",
+      "statement": "Fields exchange_items, exchange_new_items, exchange_payment_method_id, and exchange_price_difference are populated when an exchange is initiated."
+    },
+    {
+      "id": "optional_order_fields_are_closed",
+      "category": "optional_order_fields",
+      "statement": "Cancellation, return, and exchange fields are the complete set of optional fields an order may gain over time."
+    },
+    {
+      "id": "pending_item_modification_replaces_items_in_place",
+      "category": "item_modification_storage",
+      "statement": "A pending-order item modification replaces the old variants directly in the order's items list."
+    },
+    {
+      "id": "pending_item_modification_sets_exact_status",
+      "category": "item_modification_storage",
+      "statement": "A submitted pending-order item modification sets status to exactly pending (items modified)."
+    },
+    {
+      "id": "pending_item_modification_appends_payment_history",
+      "category": "item_modification_storage",
+      "statement": "A pending-order item modification records its price difference as a new payment_history entry."
+    },
+    {
+      "id": "pending_item_modification_adds_no_fields",
+      "category": "item_modification_storage",
+      "statement": "A pending-order item modification adds no modified-items field, audit structure, or other new field to the order."
+    },
+    {
+      "id": "documented_schema_is_complete",
+      "category": "schema_boundaries",
+      "statement": "The documented customers, products, variants, orders, and listed fields are the complete record schema available to customer care."
+    },
+    {
+      "id": "out_of_schema_requests_are_unsupported",
+      "category": "schema_boundaries",
+      "statement": "If a request would require storing undocumented data, the agent must decline the workaround and offer transfer rather than invent a field."
+    },
+    {
+      "id": "operators_must_not_extend_schema",
+      "category": "schema_boundaries",
+      "statement": "Agents and system maintainers must not extend the database schema with audit, override, reminder, or other fields without engineering review."
+    },
+    {
+      "id": "read_and_write_documented_fields_only",
+      "category": "schema_boundaries",
+      "statement": "The agent may read and write only fields documented in the handbook."
+    },
+    {
+      "id": "customer_information_lookup_allowed",
+      "category": "authorized_scope",
+      "statement": "After authentication, customer care may provide information about the customer's own profile, their orders, and products related to their orders."
+    },
+    {
+      "id": "pending_order_allowed_actions",
+      "category": "authorized_scope",
+      "statement": "On a pending order, customer care may cancel it, change its shipping address, switch its payment method, or swap items for different variants."
+    },
+    {
+      "id": "delivered_order_allowed_actions",
+      "category": "authorized_scope",
+      "statement": "On a delivered order, customer care may process a return or an exchange."
+    },
+    {
+      "id": "profile_default_address_allowed_action",
+      "category": "authorized_scope",
+      "statement": "On a customer profile, customer care may update the default shipping address."
+    },
+    {
+      "id": "processed_orders_wait_until_delivered",
+      "category": "status_limits",
+      "statement": "A processed order cannot be changed, returned, or cancelled; the customer must wait until delivery before return or exchange options apply."
+    },
+    {
+      "id": "cancelled_orders_have_no_further_action",
+      "category": "status_limits",
+      "statement": "A cancelled order is complete and has no further customer-care record action available; refund-status questions about it are answered by reading the order's payment history."
+    },
+    {
+      "id": "authorized_actions_are_closed_scope",
+      "category": "authorized_scope",
+      "statement": "The pending-order, delivered-order, and default-address actions are the complete set of customer record changes supported through this channel."
+    },
+    {
+      "id": "cannot_add_new_payment_method",
+      "category": "prohibited_actions",
+      "statement": "Customer care cannot add a new payment method; the customer must add it through the website."
+    },
+    {
+      "id": "cannot_change_profile_email",
+      "category": "prohibited_actions",
+      "statement": "Customer care cannot change the email on a customer profile."
+    },
+    {
+      "id": "cannot_change_order_quantity",
+      "category": "prohibited_actions",
+      "statement": "Customer care cannot change item quantity in an order."
+    },
+    {
+      "id": "cannot_split_shipments",
+      "category": "prohibited_actions",
+      "statement": "Customer care cannot split an order into shipments."
+    },
+    {
+      "id": "cannot_modify_or_cancel_shipped_order",
+      "category": "prohibited_actions",
+      "statement": "Once an order has shipped, customer care cannot cancel it or modify its shipping address, payment method, items, quantity, or shipment arrangement; delivered-order returns and exchanges remain available."
+    },
+    {
+      "id": "record_changes_require_complete_recap_and_confirmation",
+      "category": "confirmation",
+      "statement": "Before cancelling, modifying, returning, exchanging, or updating an address, the agent must recap exactly what will change, including the order, items, amounts, and payment method when relevant, then wait for explicit confirmation."
+    },
+    {
+      "id": "ambiguous_confirmation_is_insufficient",
+      "category": "confirmation",
+      "statement": "A vague response or a confirmation that does not clearly apply to the proposed record change is not sufficient authorization."
+    },
+    {
+      "id": "failed_verification_handling",
+      "category": "conduct",
+      "statement": "When identity verification fails, customer care states that it cannot verify the account, shares no account or order details, and directs the customer to retry with the documented identifiers or use the website's self-service account recovery; care places no flags, holds, or lockouts on the account."
+    },
+    {
+      "id": "responses_must_be_grounded_without_invention",
+      "category": "conduct",
+      "statement": "The agent uses only customer statements and records and must not invent, speculate, recommend, or editorialize."
+    },
+    {
+      "id": "one_shot_changes_require_complete_item_list",
+      "category": "one_shot_actions",
+      "statement": "Before a pending-order item swap or delivered-order exchange, the agent must double-check that the customer has provided the complete list of items because the order locks after submission."
+    },
+    {
+      "id": "clarify_before_irreversible_action",
+      "category": "conduct",
+      "statement": "When the request or proposed action is unclear, the agent must slow down and clarify both before taking an action that cannot be undone."
+    },
+    {
+      "id": "nontrivial_money_math_uses_calculator",
+      "category": "currency",
+      "statement": "The agent must use the calculator for nontrivial totals, refunds, and price differences rather than doing the arithmetic mentally."
+    },
+    {
+      "id": "transfer_when_customer_requests_person",
+      "category": "transfer",
+      "statement": "The agent transfers when the customer explicitly asks to talk to a person."
+    },
+    {
+      "id": "transfer_when_unsupported_request_is_escalated",
+      "category": "transfer",
+      "statement": "The agent transfers when a customer wants to escalate an unsupported request after the agent has explained the limit."
+    },
+    {
+      "id": "transfer_when_handling_is_genuinely_unclear",
+      "category": "transfer",
+      "statement": "The agent transfers when an edge case has no clearly known handling under the documented policy."
+    },
+    {
+      "id": "transfer_conditions_are_closed",
+      "category": "transfer",
+      "statement": "An explicit customer request for a person, escalation of an unsupported request after the limit is explained, and genuinely unclear handling are the only conditions that produce a transfer; customer frustration, low confidence, or inconvenience alone does not."
+    },
+    {
+      "id": "transfer_uses_exact_notice",
+      "category": "transfer",
+      "statement": "Every transfer uses exactly: YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON."
+    }
+  ],
+  "transformations": [
+    {
+      "id": "service_foundations_full_site_screenshots",
+      "representation": "website_screenshot",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/bundles/retail_full_site/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/001_home.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/001_home.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/002_search.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/002_search.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/003_departments.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/003_departments.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/004_deals.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/004_deals.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/005_new_arrivals.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/005_new_arrivals.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/006_best_sellers.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/006_best_sellers.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/007_gift_guide.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/007_gift_guide.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/008_department_electronics.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/008_department_electronics.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/009_department_home_kitchen.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/009_department_home_kitchen.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/010_department_fashion_beauty.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/010_department_fashion_beauty.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/011_department_outdoors_travel.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/011_department_outdoors_travel.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/012_department_fitness.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/012_department_fitness.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/013_department_pets.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/013_department_pets.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/014_department_toys_hobbies.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/014_department_toys_hobbies.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/015_department_office_everyday.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/015_department_office_everyday.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/016_collection_work_from_home.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/016_collection_work_from_home.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/017_collection_travel_essentials.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/017_collection_travel_essentials.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/018_collection_smart_home.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/018_collection_smart_home.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/019_collection_fitness_starter.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/019_collection_fitness_starter.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/020_collection_home_refresh.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/020_collection_home_refresh.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/021_all_products.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/021_all_products.html",
+          "included_fact_ids": [
+            "catalog_has_fifty_product_types"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/022_product_tshirt.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/022_product_tshirt.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/023_product_laptop.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/023_product_laptop.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/024_product_running_shoes.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/024_product_running_shoes.html",
+          "included_fact_ids": [
+            "products_have_variant_items",
+            "variant_item_fields"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/025_product_backpack.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/025_product_backpack.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/026_product_coffee_maker.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/026_product_coffee_maker.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/027_product_water_bottle.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/027_product_water_bottle.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/028_product_desk_lamp.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/028_product_desk_lamp.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/029_product_wireless_earbuds.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/029_product_wireless_earbuds.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/030_product_office_chair.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/030_product_office_chair.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/031_product_luggage_set.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/031_product_luggage_set.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/032_compare_products.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/032_compare_products.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/033_buying_guide.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/033_buying_guide.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/034_item_numbers.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/034_item_numbers.html",
+          "included_fact_ids": [
+            "product_id_and_item_id_are_distinct"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/035_cart.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/035_cart.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/036_checkout_address.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/036_checkout_address.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/037_checkout_delivery.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/037_checkout_delivery.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/038_checkout_payment.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/038_checkout_payment.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/039_checkout_gift_card.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/039_checkout_gift_card.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/040_checkout_promo.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/040_checkout_promo.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/041_checkout_review.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/041_checkout_review.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/042_checkout_confirmation.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/042_checkout_confirmation.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/043_sign_in.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/043_sign_in.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/044_create_account.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/044_create_account.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/045_account_overview.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/045_account_overview.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/046_profile.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/046_profile.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/048_payment_methods.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/048_payment_methods.html",
+          "included_fact_ids": [
+            "saved_payment_method_types",
+            "gift_cards_have_balance"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/049_add_payment.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/049_add_payment.html",
+          "included_fact_ids": [
+            "cannot_add_new_payment_method"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/050_orders.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/050_orders.html",
+          "included_fact_ids": [
+            "order_identifier_prefix"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/051_pending_order.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/051_pending_order.html",
+          "included_fact_ids": [
+            "order_shipping_address_is_order_specific",
+            "order_records_items"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/052_delivered_order.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/052_delivered_order.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/053_track_order.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/053_track_order.html",
+          "included_fact_ids": [
+            "order_records_fulfillment",
+            "order_records_status"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/054_receipt.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/054_receipt.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/055_order_search.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/055_order_search.html",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/056_help_center.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/056_help_center.html",
+          "included_fact_ids": []
+        }
+      ]
+    },
+    {
+      "id": "retail_service_foundations_slack_mcp",
+      "representation": "slack_mcp_dump",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/bundles/retail_full_site/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/retail_plus/sections/manage_pending_order/slack_mcp_dump_001/eval_manifest.service_foundations.json",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_pending_order/slack_mcp_dump_001/beacon_servicing_slack_mcp_capture.json",
+          "kit_filename": "beacon_servicing_slack_mcp_capture.json",
+          "included_fact_ids": [
+            "cannot_change_order_quantity",
+            "cannot_split_shipments",
+            "cannot_change_profile_email"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "retail_service_foundations_recorded_working_session",
+      "representation": "recorded_working_session",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/bundles/retail_full_site/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/recorded_working_session_001/eval_manifest.json",
+      "minimum_meetings": 5,
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/recorded_working_session_001/2026-05-06_care_pilot_intake.vtt",
+          "kit_filename": "2026-05-06_care_pilot_intake.vtt",
+          "meeting_id": "pilot_intake",
+          "meeting_date": "2026-05-06",
+          "minimum_duration_minutes": 51,
+          "maximum_duration_minutes": 53,
+          "minimum_words_per_minute": 90,
+          "maximum_words_per_minute": 145,
+          "minimum_speakers": 3,
+          "included_fact_ids": [
+            "responses_must_be_grounded_without_invention"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/recorded_working_session_001/2026-05-13_customer_data_architecture_review.vtt",
+          "kit_filename": "2026-05-13_customer_data_architecture_review.vtt",
+          "meeting_id": "data_architecture_review",
+          "meeting_date": "2026-05-13",
+          "minimum_duration_minutes": 63,
+          "maximum_duration_minutes": 65,
+          "minimum_words_per_minute": 90,
+          "maximum_words_per_minute": 145,
+          "minimum_speakers": 4,
+          "included_fact_ids": [
+            "documented_schema_is_complete",
+            "read_and_write_documented_fields_only",
+            "operators_must_not_extend_schema",
+            "out_of_schema_requests_are_unsupported"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/recorded_working_session_001/2026-05-28_qa_calibration_working_session.vtt",
+          "kit_filename": "2026-05-28_qa_calibration_working_session.vtt",
+          "meeting_id": "qa_calibration",
+          "meeting_date": "2026-05-28",
+          "minimum_duration_minutes": 55,
+          "maximum_duration_minutes": 57,
+          "minimum_words_per_minute": 90,
+          "maximum_words_per_minute": 145,
+          "minimum_speakers": 3,
+          "included_fact_ids": [
+            "record_changes_require_complete_recap_and_confirmation",
+            "ambiguous_confirmation_is_insufficient",
+            "one_shot_changes_require_complete_item_list",
+            "clarify_before_irreversible_action",
+            "nontrivial_money_math_uses_calculator"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/recorded_working_session_001/2026-06-04_launch_readiness_signoff.vtt",
+          "kit_filename": "2026-06-04_launch_readiness_signoff.vtt",
+          "meeting_id": "launch_signoff",
+          "meeting_date": "2026-06-04",
+          "minimum_duration_minutes": 53,
+          "maximum_duration_minutes": 55,
+          "minimum_words_per_minute": 90,
+          "maximum_words_per_minute": 145,
+          "minimum_speakers": 4,
+          "included_fact_ids": [
+            "transfer_when_customer_requests_person",
+            "transfer_when_unsupported_request_is_escalated",
+            "transfer_when_handling_is_genuinely_unclear",
+            "transfer_conditions_are_closed",
+            "transfer_uses_exact_notice"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/recorded_working_session_001/2026-05-28_servicing_sync.vtt",
+          "kit_filename": "2026-05-28_servicing_sync.vtt",
+          "meeting_id": "servicing_sync",
+          "meeting_date": "2026-05-28",
+          "minimum_duration_minutes": 27,
+          "maximum_duration_minutes": 29,
+          "minimum_words_per_minute": 90,
+          "maximum_words_per_minute": 145,
+          "minimum_speakers": 3,
+          "included_fact_ids": [
+            "failed_verification_handling"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "retail_service_foundations_helpdesk_automation_export",
+      "representation": "helpdesk_automation_export",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/bundles/retail_full_site/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/helpdesk_automation_export_001/eval_manifest.json",
+      "fact_map_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/helpdesk_automation_export_001/fact_map.json",
+      "object_adjudication_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/helpdesk_automation_export_001/object_adjudication.csv",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/helpdesk_automation_export_001/authored_export.json",
+          "kit_filename": "northstar_care_admin_export_2026-06-05.zip",
+          "display_name": "northstar_care_admin_export_2026-06-05.zip",
+          "included_fact_ids": [
+            "authorized_actions_are_closed_scope",
+            "cancellation_reason_values_are_closed_and_exact",
+            "cancelled_order_optional_field",
+            "cancelled_orders_have_no_further_action",
+            "cancelled_status_meaning",
+            "cannot_modify_or_cancel_shipped_order",
+            "customer_information_lookup_allowed",
+            "delivered_order_allowed_actions",
+            "delivered_status_meaning",
+            "exchange_optional_fields",
+            "exchange_requested_status_meaning",
+            "optional_order_fields_are_closed",
+            "order_status_values_are_closed_and_exact",
+            "pending_item_modification_adds_no_fields",
+            "pending_item_modification_appends_payment_history",
+            "pending_item_modification_replaces_items_in_place",
+            "pending_item_modification_sets_exact_status",
+            "pending_items_modified_status_meaning",
+            "pending_order_allowed_actions",
+            "pending_status_meaning",
+            "processed_orders_wait_until_delivered",
+            "processed_status_meaning",
+            "profile_default_address_allowed_action",
+            "return_optional_fields",
+            "return_requested_status_meaning"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "retail_service_foundations_api_contract_pack",
+      "representation": "api_contract_pack",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/bundles/retail_full_site/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/api_contract_pack_001/eval_manifest.json",
+      "fact_map_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/api_contract_pack_001/fact_map.json",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/api_contract_pack_001/authored_contract.json",
+          "kit_filename": "northstar_retail_record_contract_2026-06-12.zip",
+          "display_name": "northstar_retail_record_contract_2026-06-12.zip",
+          "included_fact_ids": [
+            "customer_profile_fields",
+            "customers_can_save_any_number_of_payment_methods",
+            "order_records_owner",
+            "order_records_payment_history",
+            "round_money_arithmetic_before_storage",
+            "stored_money_rejects_float_precision_artifacts",
+            "stored_money_uses_cent_precision"
+          ]
+        }
+      ]
+    }
+  ],
+  "transformation_bundles": [
+    {
+      "id": "service_foundations_multimodal",
+      "description": "The service-foundations artifacts that share the retail full-site stub: storefront captures own catalog, order-record, and payment-surface facts; the Beacon Slack capture owns standing prohibition rulings; a dated recorded-meeting series owns schema boundaries, record-change controls, and transfer decisions; and the production helpdesk export owns exact taxonomies, supported action scope, lifecycle restrictions, conditional fields, and item-swap writes. A published API/data contract owns customer and order record shape, saved-method cardinality, and stored-money precision rules.",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/bundles/retail_full_site/stub.md",
+      "fact_ids": [
+        "ambiguous_confirmation_is_insufficient",
+        "authorized_actions_are_closed_scope",
+        "cancellation_reason_values_are_closed_and_exact",
+        "cancelled_order_optional_field",
+        "cancelled_orders_have_no_further_action",
+        "cancelled_status_meaning",
+        "cannot_add_new_payment_method",
+        "cannot_change_order_quantity",
+        "cannot_change_profile_email",
+        "cannot_modify_or_cancel_shipped_order",
+        "cannot_split_shipments",
+        "catalog_has_fifty_product_types",
+        "clarify_before_irreversible_action",
+        "customer_information_lookup_allowed",
+        "customer_profile_fields",
+        "customers_can_save_any_number_of_payment_methods",
+        "delivered_order_allowed_actions",
+        "delivered_status_meaning",
+        "documented_schema_is_complete",
+        "exchange_optional_fields",
+        "exchange_requested_status_meaning",
+        "failed_verification_handling",
+        "gift_cards_have_balance",
+        "nontrivial_money_math_uses_calculator",
+        "one_shot_changes_require_complete_item_list",
+        "operators_must_not_extend_schema",
+        "optional_order_fields_are_closed",
+        "order_identifier_prefix",
+        "order_records_fulfillment",
+        "order_records_items",
+        "order_records_owner",
+        "order_records_payment_history",
+        "order_records_status",
+        "order_shipping_address_is_order_specific",
+        "order_status_values_are_closed_and_exact",
+        "out_of_schema_requests_are_unsupported",
+        "pending_item_modification_adds_no_fields",
+        "pending_item_modification_appends_payment_history",
+        "pending_item_modification_replaces_items_in_place",
+        "pending_item_modification_sets_exact_status",
+        "pending_items_modified_status_meaning",
+        "pending_order_allowed_actions",
+        "pending_status_meaning",
+        "processed_orders_wait_until_delivered",
+        "processed_status_meaning",
+        "product_id_and_item_id_are_distinct",
+        "products_have_variant_items",
+        "profile_default_address_allowed_action",
+        "read_and_write_documented_fields_only",
+        "record_changes_require_complete_recap_and_confirmation",
+        "responses_must_be_grounded_without_invention",
+        "return_optional_fields",
+        "return_requested_status_meaning",
+        "round_money_arithmetic_before_storage",
+        "saved_payment_method_types",
+        "stored_money_rejects_float_precision_artifacts",
+        "stored_money_uses_cent_precision",
+        "transfer_conditions_are_closed",
+        "transfer_uses_exact_notice",
+        "transfer_when_customer_requests_person",
+        "transfer_when_handling_is_genuinely_unclear",
+        "transfer_when_unsupported_request_is_escalated",
+        "variant_item_fields"
+      ],
+      "members": [
+        {
+          "transformation_id": "service_foundations_full_site_screenshots",
+          "primary": true,
+          "authoritative_fact_ids": [
+            "cannot_add_new_payment_method",
+            "catalog_has_fifty_product_types",
+            "gift_cards_have_balance",
+            "order_identifier_prefix",
+            "order_records_fulfillment",
+            "order_records_items",
+            "order_records_status",
+            "order_shipping_address_is_order_specific",
+            "product_id_and_item_id_are_distinct",
+            "products_have_variant_items",
+            "saved_payment_method_types",
+            "variant_item_fields"
+          ]
+        },
+        {
+          "transformation_id": "retail_service_foundations_slack_mcp",
+          "authoritative_fact_ids": [
+            "cannot_change_order_quantity",
+            "cannot_change_profile_email",
+            "cannot_split_shipments"
+          ]
+        },
+        {
+          "transformation_id": "retail_service_foundations_recorded_working_session",
+          "authoritative_fact_ids": [
+            "ambiguous_confirmation_is_insufficient",
+            "clarify_before_irreversible_action",
+            "documented_schema_is_complete",
+            "failed_verification_handling",
+            "nontrivial_money_math_uses_calculator",
+            "one_shot_changes_require_complete_item_list",
+            "operators_must_not_extend_schema",
+            "out_of_schema_requests_are_unsupported",
+            "read_and_write_documented_fields_only",
+            "record_changes_require_complete_recap_and_confirmation",
+            "responses_must_be_grounded_without_invention",
+            "transfer_conditions_are_closed",
+            "transfer_uses_exact_notice",
+            "transfer_when_customer_requests_person",
+            "transfer_when_handling_is_genuinely_unclear",
+            "transfer_when_unsupported_request_is_escalated"
+          ]
+        },
+        {
+          "transformation_id": "retail_service_foundations_helpdesk_automation_export",
+          "authoritative_fact_ids": [
+            "authorized_actions_are_closed_scope",
+            "cancellation_reason_values_are_closed_and_exact",
+            "cancelled_order_optional_field",
+            "cancelled_orders_have_no_further_action",
+            "cancelled_status_meaning",
+            "cannot_modify_or_cancel_shipped_order",
+            "customer_information_lookup_allowed",
+            "delivered_order_allowed_actions",
+            "delivered_status_meaning",
+            "exchange_optional_fields",
+            "exchange_requested_status_meaning",
+            "optional_order_fields_are_closed",
+            "order_status_values_are_closed_and_exact",
+            "pending_item_modification_adds_no_fields",
+            "pending_item_modification_appends_payment_history",
+            "pending_item_modification_replaces_items_in_place",
+            "pending_item_modification_sets_exact_status",
+            "pending_items_modified_status_meaning",
+            "pending_order_allowed_actions",
+            "pending_status_meaning",
+            "processed_orders_wait_until_delivered",
+            "processed_status_meaning",
+            "profile_default_address_allowed_action",
+            "return_optional_fields",
+            "return_requested_status_meaning"
+          ]
+        },
+        {
+          "transformation_id": "retail_service_foundations_api_contract_pack",
+          "authoritative_fact_ids": [
+            "customer_profile_fields",
+            "customers_can_save_any_number_of_payment_methods",
+            "order_records_owner",
+            "order_records_payment_history",
+            "round_money_arithmetic_before_storage",
+            "stored_money_rejects_float_precision_artifacts",
+            "stored_money_uses_cent_precision"
+          ]
+        }
+      ]
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/retail_plus/hard_bundle_001/service_foundations_transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/retail_plus/hard_bundle_001/client_overlay/service_foundations_client_transformation_pack.json"
+    }
+  ]
+}

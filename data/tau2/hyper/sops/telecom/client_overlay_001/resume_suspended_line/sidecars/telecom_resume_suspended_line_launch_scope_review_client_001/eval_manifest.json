@@ -1,0 +1,145 @@
+{
+  "id": "telecom_resume_suspended_line_scope_review_series_eval_001",
+  "representation": "recorded_working_session",
+  "series": {
+    "title": "Suspended line launch decision series",
+    "purpose": "Resolve billing-request concurrency, ended-contract handling, transfer sequencing, and the closed-line boundary before the raw knowledge archive is published.",
+    "date_range": [
+      "2026-08-05",
+      "2026-08-07"
+    ]
+  },
+  "meetings": [
+    {
+      "meeting_id": "billing_request_state_review",
+      "filename": "2026-08-05_billing_request_state_review.vtt",
+      "date": "2026-08-05",
+      "title": "Billing request-state review",
+      "scheduled_duration_minutes": 25.5,
+      "participants": [
+        "Maya Chen",
+        "Jonah Brooks",
+        "Elena Ruiz",
+        "Priya Shah",
+        "Nadia Ford"
+      ],
+      "authoritative_fact_ids": [
+        "only_one_awaiting_payment_request_at_a_time"
+      ],
+      "historical_fact_ids": [
+        "only_one_awaiting_payment_request_at_a_time"
+      ]
+    },
+    {
+      "meeting_id": "contract_lifecycle_calibration",
+      "filename": "2026-08-06_contract_lifecycle_calibration.vtt",
+      "date": "2026-08-06",
+      "title": "Contract lifecycle and handoff calibration",
+      "scheduled_duration_minutes": 26,
+      "participants": [
+        "Maya Chen",
+        "Jonah Brooks",
+        "Elena Ruiz",
+        "Priya Shah",
+        "Tessa Ward"
+      ],
+      "authoritative_fact_ids": [],
+      "historical_fact_ids": [
+        "closed_lines_not_resumed"
+      ]
+    },
+    {
+      "meeting_id": "launch_readiness_signoff",
+      "filename": "2026-08-07_launch_readiness_signoff.vtt",
+      "date": "2026-08-07",
+      "title": "Suspended line launch-readiness signoff",
+      "scheduled_duration_minutes": 27,
+      "participants": [
+        "Maya Chen",
+        "Jonah Brooks",
+        "Elena Ruiz",
+        "Priya Shah"
+      ],
+      "authoritative_fact_ids": [
+        "closed_lines_not_resumed"
+      ],
+      "historical_fact_ids": [
+        "closed_lines_not_resumed"
+      ]
+    }
+  ],
+  "authoritative_fact_ids": [
+    "only_one_awaiting_payment_request_at_a_time",
+    "closed_lines_not_resumed"
+  ],
+  "decisions": [
+    {
+      "fact_id": "only_one_awaiting_payment_request_at_a_time",
+      "status": "proposal",
+      "summary": "Allow a second request for a different invoice after explanation and confirmation.",
+      "meeting_id": "billing_request_state_review",
+      "timestamp": "00:09:55.601",
+      "speaker": "Maya Chen"
+    },
+    {
+      "fact_id": "only_one_awaiting_payment_request_at_a_time",
+      "status": "rejected",
+      "summary": "Reject parallel requests because Awaiting Payment is an account-scoped lock.",
+      "meeting_id": "billing_request_state_review",
+      "timestamp": "00:13:16.271",
+      "speaker": "Jonah Brooks"
+    },
+    {
+      "fact_id": "only_one_awaiting_payment_request_at_a_time",
+      "status": "final_current",
+      "meeting_id": "billing_request_state_review",
+      "timestamp": "00:18:10.829",
+      "speaker": "Maya Chen",
+      "evidence_spans": [
+        {
+          "meeting_id": "billing_request_state_review",
+          "start": "00:17:39.514",
+          "end": "00:19:08.986"
+        }
+      ]
+    },
+    {
+      "fact_id": "closed_lines_not_resumed",
+      "status": "proposal",
+      "summary": "Carry a test-environment twenty-four-hour reopening proposal into launch signoff.",
+      "meeting_id": "contract_lifecycle_calibration",
+      "timestamp": "00:24:58.062",
+      "speaker": "Elena Ruiz"
+    },
+    {
+      "fact_id": "closed_lines_not_resumed",
+      "status": "proposal",
+      "summary": "Allow Care to resume a recently closed line when its identifier remains.",
+      "meeting_id": "launch_readiness_signoff",
+      "timestamp": "00:05:48.062",
+      "speaker": "Jonah Brooks"
+    },
+    {
+      "fact_id": "closed_lines_not_resumed",
+      "status": "rejected",
+      "summary": "Reject the staging-derived twenty-four-hour reopening proposal.",
+      "meeting_id": "launch_readiness_signoff",
+      "timestamp": "00:07:22.797",
+      "speaker": "Priya Shah"
+    },
+    {
+      "fact_id": "closed_lines_not_resumed",
+      "status": "final_current",
+      "meeting_id": "launch_readiness_signoff",
+      "timestamp": "00:08:59.427",
+      "speaker": "Maya Chen",
+      "evidence_spans": [
+        {
+          "meeting_id": "launch_readiness_signoff",
+          "start": "00:08:23.544",
+          "end": "00:10:06.066"
+        }
+      ]
+    }
+  ]
+}

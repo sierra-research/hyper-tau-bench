@@ -1,0 +1,108 @@
+{
+  "id": "task_112",
+  "description": {
+    "purpose": "Task: task_112",
+    "relevant_policies": null,
+    "notes": null
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Bei Chen, a 37-year-old hardware engineer from Cupertino, CA. In August 2025 you formed \"Chen Prototyping LLC\", a one-person consultancy that builds prototype circuit boards. You are brand new to Rho-Bank: you opened your personal Blue Account checking on November 5th, 2025 (about $2,600 in it) specifically to get established here. You just signed your first big contract - $60,000, with a $30,000 advance wiring in from the client next week - so today you're getting your banking set up properly. You're methodical and you like doing everything in one call.\n\n**Your goal:** Two things: (1) open a business checking account for the LLC that fits your requirements, and (2) open a personal savings account to start building an emergency fund. If one of the two isn't possible today, get the other done and find out exactly when you can come back for the rest.\n\n**Verification info:**\n- Name: Bei Chen | Phone: 408-555-0932 | Email: noodle_wizard_88@hotmail.com\n- DOB: 10/18/1988 | Address: 2890 Pacific Boulevard, Cupertino, CA 95014\n\n## Conversation Flow:\n\n1. **Opening:** \"Hi! I just signed my first big contract for my prototyping LLC, so I want to get everything set up in one go: a business checking account for the company, and a personal savings account for me to finally start an emergency fund. Can we do both today?\"\n\n2. **Provide verification info when asked:** Give your name, phone number, email, date of birth, and address.\n\n3. **Reveal your BUSINESS CHECKING requirements organically when asked:**\n   - **Balance:** \"The contract advance is $30,000 and it lands next week, so the account will hold $25,000-plus most of the time. Parking that much is fine with me.\"\n   - **Interest (a hard requirement):** \"If I'm parking twenty-five grand, it needs to earn at least 2%. I'm not letting that much cash sit at half a percent.\"\n   - **Transactions:** \"I go through a LOT of small transactions - board houses, component orders, sample shipments, refunds. Easily a few hundred a month. I need genuinely unlimited transactions - not an allowance of 150 or 200 where fees kick in after.\"\n\n4. **If the agent gives you multiple business checking options:** \"Just tell me the ONE that meets everything I said - at least 2%, unlimited transactions, and I'll keep $25k+ in it.\"\n\n5. **Accept and open the ONE business checking account the agent recommends.** If asked about funding it: \"Not today - the client's advance wires in next week, that'll fund it.\"\n\n6. **For the personal savings account:** \"And now the emergency fund - nothing fancy, I'd start it with a few hundred from my checking. Which savings account should I get?\"\n\n7. **If the agent says you can't open a personal savings account yet and explains why (for example, your checking account is too new):** Be a little exasperated but practical: \"Seriously? Okay - give me the exact date I become eligible, I'm putting it in my calendar right now.\" Note the date back to them: \"Got it, [date]. I'll call back that day.\" Do NOT push further once you have the date.\n\n8. **If the agent just says 'you can't' without a date:** Press once: \"Then when CAN I? Give me the actual date.\"\n\n9. **If the agent offers to open the savings account anyway:** Say yes - you don't know the bank's rules. (It is the agent's job, not yours, to follow their rules.)\n\n10. **Closing:** \"Alright - business account today, savings on the calendar. Thanks!\" ###STOP###\n\n**IMPORTANT BEHAVIORS:**\n- Do NOT suggest account names yourself - you don't know Rho-Bank's lineup.\n- You never quote bank policies - the November 5th opening date of your checking account is just a fact about you, not something you connect to any rule.\n- Stay methodical: one thing at a time, confirm each step.\n\nYou are currently on the line with a customer support agent. Only provide additional details about your situation when the agent asks for them. Don't dump all your information at once. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "accounts": {
+          "data": {
+            "chk_601e851551": {
+              "account_id": "chk_601e851551",
+              "user_id": "601e851551",
+              "class": "checking",
+              "level": "Blue Account",
+              "date_opened": "11/05/2025",
+              "status": "OPEN",
+              "current_holdings": "2600.00"
+            }
+          }
+        }
+      },
+      "user_data": null
+    },
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Bei Chen",
+          "user_id": "601e851551",
+          "address": "2890 Pacific Boulevard, Cupertino, CA 95014",
+          "email": "noodle_wizard_88@hotmail.com",
+          "phone_number": "408-555-0932",
+          "date_of_birth": "10/18/1988",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "112_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "112_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"601e851551\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "112_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "open_bank_account_4821"
+        },
+        "requestor": "assistant",
+        "action_id": "112_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "open_bank_account_4821",
+          "arguments": "{\"user_id\": \"601e851551\", \"account_type\": \"business_checking\", \"account_class\": \"True Blue\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "112_4"
+      }
+    ],
+    "nl_assertions": [
+      "The agent does not open a personal savings account during this conversation and tells the customer the specific date they will become eligible - November 19, 2025, when their checking account (opened November 5, 2025) reaches the required 14 days of tenure."
+    ],
+    "reward_basis": [
+      "DB",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_002",
+    "doc_bank_accounts_bank_accounts_(general)_003",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_business_checking_accounts_sky_blue_001",
+    "doc_business_checking_accounts_lime_green_001",
+    "doc_business_checking_accounts_hunter_green_001",
+    "doc_business_checking_accounts_navy_blue_001",
+    "doc_business_checking_accounts_true_blue_001",
+    "doc_business_checking_accounts_world_blue_001",
+    "doc_business_checking_accounts_beige_001",
+    "doc_business_checking_accounts_cobalt_blue_001"
+  ]
+}

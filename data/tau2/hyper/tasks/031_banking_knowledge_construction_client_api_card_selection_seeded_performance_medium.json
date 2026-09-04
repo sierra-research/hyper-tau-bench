@@ -1,0 +1,191 @@
+{
+  "id": "031_banking_knowledge_construction_client_api_card_selection_seeded_performance_medium",
+  "source_domain": "banking_knowledge",
+  "task_type": "construction",
+  "task_description": "Build a Banking Knowledge customer service agent scoped to the card-selection journey (personal credit card application recommendations, rewards and promotions, cash-back disputes and corrections, and credit card referrals) against a client-owned REST API. The initial OpenAPI document exposes baseline operations; retrieved procedures and evidence document additional directly callable operations.",
+  "sop_variant_manifest_path": "tau2/hyper/sops/banking_knowledge/variants/core_evidence_bundle_001.json",
+  "knowledge_base_path": "tau2/domains/banking_knowledge/documents",
+  "knowledge_base_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_042.json",
+    "doc_business_credit_cards_business_bronze_rewards_card_001.json",
+    "doc_business_credit_cards_business_bronze_rewards_card_002.json",
+    "doc_business_credit_cards_business_bronze_rewards_card_003.json",
+    "doc_business_credit_cards_business_gold_rewards_card_010.json",
+    "doc_business_credit_cards_business_platinum_rewards_card_001.json",
+    "doc_business_credit_cards_business_platinum_rewards_card_002.json",
+    "doc_business_credit_cards_business_silver_rewards_card_001.json",
+    "doc_business_credit_cards_business_silver_rewards_card_002.json",
+    "doc_business_credit_cards_business_silver_rewards_card_005.json",
+    "doc_business_credit_cards_business_silver_rewards_card_012.json",
+    "doc_business_credit_cards_silver_zoom_card_011.json",
+    "doc_credit_cards_bronze_rewards_card_001.json",
+    "doc_credit_cards_credit_cards_(general)_001.json",
+    "doc_credit_cards_credit_cards_(general)_002.json",
+    "doc_credit_cards_credit_cards_(general)_003.json",
+    "doc_credit_cards_credit_cards_(general)_004.json",
+    "doc_credit_cards_credit_cards_(general)_006.json",
+    "doc_credit_cards_credit_cards_(general)_007.json",
+    "doc_credit_cards_credit_cards_(general)_009.json",
+    "doc_credit_cards_credit_cards_(general)_020.json",
+    "doc_credit_cards_crypto-cash_back_001.json",
+    "doc_credit_cards_crypto-cash_back_002.json",
+    "doc_credit_cards_diamond_elite_card_001.json",
+    "doc_credit_cards_diamond_elite_card_002.json",
+    "doc_credit_cards_diamond_elite_card_003.json",
+    "doc_credit_cards_ecocard_001.json",
+    "doc_credit_cards_ecocard_002.json",
+    "doc_credit_cards_ecocard_004.json",
+    "doc_credit_cards_ecocard_008.json",
+    "doc_credit_cards_ecocard_009.json",
+    "doc_credit_cards_ecocard_011.json",
+    "doc_credit_cards_gold_rewards_card_001.json",
+    "doc_credit_cards_gold_rewards_card_002.json",
+    "doc_credit_cards_platinum_rewards_card_001.json",
+    "doc_credit_cards_platinum_rewards_card_002.json",
+    "doc_credit_cards_platinum_rewards_card_007.json",
+    "doc_credit_cards_platinum_rewards_card_008.json",
+    "doc_credit_cards_platinum_rewards_card_010.json",
+    "doc_credit_cards_silver_rewards_card_001.json",
+    "doc_credit_cards_silver_rewards_card_002.json",
+    "doc_credit_cards_silver_rewards_card_011.json"
+  ],
+  "composition_pipeline": [
+    {
+      "stage": "information_distribution",
+      "variant_manifest_path": "tau2/hyper/sops/banking_knowledge/variants/core_evidence_bundle_001.json",
+      "transformed_sections": [
+        "personal_credit_card_application_recommendation",
+        "personal_credit_card_rewards_and_promos",
+        "cash_back_disputes_and_corrections",
+        "credit_card_referrals"
+      ]
+    }
+  ],
+  "test_task_ids": [
+    "task_001",
+    "task_002",
+    "task_003",
+    "task_006",
+    "task_007",
+    "task_008",
+    "task_010",
+    "task_014",
+    "task_015",
+    "task_016",
+    "task_017",
+    "task_018",
+    "task_019",
+    "task_020",
+    "task_021",
+    "task_022",
+    "task_023",
+    "task_026",
+    "task_027",
+    "task_028",
+    "task_029",
+    "task_137",
+    "task_138",
+    "task_139",
+    "task_140",
+    "task_141"
+  ],
+  "interaction_mode": "sandbox",
+  "client_api_mode": "rest",
+  "sandbox_config": {
+    "max_time_seconds": 28800,
+    "command_timeout": 120,
+    "docker_image": "tau2-construction-runtime:contract-v7",
+    "docker_memory": "4g",
+    "docker_cpus": "2"
+  },
+  "performance_profile": {
+    "medium": {
+      "budget": 0.18,
+      "models": [
+        {
+          "model": "gpt-5.6-terra",
+          "constraints": {
+            "reasoning_effort": "none"
+          }
+        },
+        {
+          "model": "anthropic/claude-sonnet-5",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          },
+          "credit_rates": {
+            "input_per_million": 0.5,
+            "output_per_million": 3.2,
+            "rate_card_date": "2026-08-23",
+            "pricing_basis": "capability_bucket_median_list_price"
+          }
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "constraints": {
+            "reasoning_effort": "none"
+          }
+        },
+        {
+          "model": "anthropic/claude-haiku-4-5",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          },
+          "credit_rates": {
+            "input_per_million": 0.25,
+            "output_per_million": 1.6,
+            "rate_card_date": "2026-08-23",
+            "pricing_basis": "capability_bucket_median_list_price"
+          }
+        },
+        {
+          "model": "google/gemini-3-flash-preview",
+          "constraints": {
+            "reasoning_effort": "minimal"
+          }
+        },
+        {
+          "model": "moonshotai/kimi-k2.6",
+          "constraints": {
+            "extra_body": {
+              "thinking": {
+                "type": "disabled"
+              }
+            }
+          }
+        },
+        {
+          "model": "qwen/qwen3.8-27b",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "enabled": false
+              }
+            }
+          }
+        },
+        {
+          "model": "google/gemma-4-31b-it",
+          "constraints": {
+            "extra_body": {
+              "reasoning": {
+                "effort": "low"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "user_llm": "gpt-5.5",
+  "user_reasoning_effort": "none",
+  "starting_workspace_path": "tau2/hyper/workspaces/banking_knowledge/gen_sonnet5_stateless_csel_medium_001"
+}

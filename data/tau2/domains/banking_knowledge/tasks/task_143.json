@@ -1,0 +1,246 @@
+{
+  "id": "task_143",
+  "description": {
+    "purpose": "Task: task_143",
+    "relevant_policies": null,
+    "notes": "MID-TIER DELIVERY MATRIX + FEE-BEFORE-ORDER MANDATE. Customer Omar Haddad's wallet was just stolen (confirmed - he watched it happen) with his Green Account (MID tier) debit card inside. He asks for the fastest possible shipping ('overnight it') and the metallic silver design. Levers: (1) MID tier has NO RUSH option - the tier-specific replacement doc lists only STANDARD ($0) and EXPEDITED ($15) for MID, so the correct fastest option is EXPEDITED with delivery_fee 15 (an agent applying the generic ordering doc's RUSH $35 fails the DB check); (2) PREMIUM metallic design costs $10 on MID tier (free only on PREMIUM/ELITE tiers) - design_fee must be 10; (3) COMMUNICATE mandate: 'Always inform the customer that the fee will be deducted from their checking account balance before placing the order' - scored via communicate_info ['$15','$10'] plus an nl_assertion on the deducted-from-checking disclosure; (4) confirmed stolen means CLOSE (not freeze) - the user rebuffs a freeze offer; (5) cross-product security check - agent checks for credit cards (none on file). Card: dbc_oh52c9d7e3_green (6027). Account: chk_oh52c9d7e3_green (Green Account, MID). Final state: card CLOSED (stolen), replacement ordered EXPEDITED/15/PREMIUM/10."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Omar Haddad, a 41-year-old restaurant floor manager living in Houston, Texas. You're rattled but decisive - your wallet was just stolen and you want it handled fast.\n\n**Your situation:** About twenty minutes ago at a gas station on Bissonnet Street, someone grabbed your wallet off the counter while you were paying and ran. You saw it happen - there is zero doubt the wallet is stolen. Your Green Account debit card was in it, along with some cash. Your credit cards are all with a different bank and you've already called them. You checked the Rho-Bank app from your car and don't see any new charges yet. You use this debit card constantly, so you want a replacement as fast as physically possible, and you've been meaning to switch to the metallic silver card design anyway.\n\n**Verification info:**\n- Name: Omar Haddad | Phone: 713-555-0242 | Email: omar.haddad78@yahoo.com\n- DOB: 08/03/1984 | Address: 8830 Braeswood Court, Houston, TX 77074\n\n## Conversation Flow (Only follow the below flows if the agent brings up any of the points, otherwise, just follow the agent's guidance to the best of your ability):\n\n1. **Opening:** \"Hi - my wallet was just stolen at a gas station, maybe twenty minutes ago. I watched the guy grab it and run. My Green Account debit card was in it. I need that card cancelled right now, please.\"\n\n2. **Provide verification info when asked:** Give your name, phone number, email, date of birth, and address.\n\n3. **If the agent offers to freeze the card instead:** \"No, don't just freeze it - it's not misplaced, it's stolen. I watched him take it. Cancel it completely, please.\"\n\n4. **If the agent asks about recent or unauthorized transactions:** \"I checked the app from my car - nothing new yet, thank god. The last thing I bought was groceries yesterday.\"\n\n5. **If the agent asks whether any Rho-Bank credit cards were in the wallet:** \"No, thankfully my credit cards are with a different bank - I already called them. It was just this one debit card and some cash.\"\n\n6. **After the card is cancelled, ask for a replacement:** \"Okay, now what's the absolute fastest you can get me a new card? Overnight it if you can - I use that card for everything.\"\n\n7. **If the agent says overnight/rush shipping isn't available for your account and offers the fastest available option with a fee:** \"Seriously, no overnight option? Fine - do the fastest one you've got then, I'll pay the fee.\"\n\n8. **If the agent asks about card design:** \"Actually, yes - can I get the metallic silver one this time? I've been meaning to switch.\"\n\n9. **If the agent tells you the design has a fee:** \"That's fine, worth it.\"\n\n10. **If the agent asks where to ship the card:** \"My address on file is fine.\"\n\n11. **After the replacement order is placed:** \"Okay. Thanks for moving fast on this.\" ###STOP###\n\nOnly provide additional details about your situation when the agent asks for them. Don't dump all your information at once. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "users": {
+          "data": {
+            "oh52c9d7e3": {
+              "name": "Omar Haddad",
+              "user_id": "oh52c9d7e3",
+              "address": "8830 Braeswood Court, Houston, TX 77074",
+              "email": "omar.haddad78@yahoo.com",
+              "phone_number": "713-555-0242",
+              "date_of_birth": "08/03/1984"
+            }
+          }
+        },
+        "accounts": {
+          "data": {
+            "chk_oh52c9d7e3_green": {
+              "account_id": "chk_oh52c9d7e3_green",
+              "user_id": "oh52c9d7e3",
+              "class": "checking",
+              "level": "Green Account",
+              "date_opened": "05/17/2021",
+              "status": "OPEN",
+              "current_holdings": "4310.00"
+            }
+          }
+        },
+        "debit_cards": {
+          "data": {
+            "dbc_oh52c9d7e3_green": {
+              "card_id": "dbc_oh52c9d7e3_green",
+              "account_id": "chk_oh52c9d7e3_green",
+              "user_id": "oh52c9d7e3",
+              "cardholder_name": "OMAR HADDAD",
+              "last_4_digits": "6027",
+              "cvv": "884",
+              "status": "ACTIVE",
+              "issue_date": "06/10/2023",
+              "expiration_date": "06/30/2027",
+              "issue_reason": "new_account"
+            }
+          }
+        },
+        "bank_account_transaction_history": {
+          "data": {
+            "btxn_c34f9a1e7d02": {
+              "transaction_id": "btxn_c34f9a1e7d02",
+              "account_id": "chk_oh52c9d7e3_green",
+              "date": "11/01/2025",
+              "description": "DIRECT DEPOSIT - BAYOU BISTRO GROUP LLC",
+              "amount": 2185.0,
+              "type": "direct_deposit",
+              "status": "posted"
+            },
+            "btxn_82d6b05c3f91": {
+              "transaction_id": "btxn_82d6b05c3f91",
+              "account_id": "chk_oh52c9d7e3_green",
+              "date": "11/04/2025",
+              "description": "CENTERPOINT ENERGY BILL PAY",
+              "amount": -118.52,
+              "type": "bill_pay",
+              "status": "posted"
+            },
+            "btxn_5a17ce48d0b6": {
+              "transaction_id": "btxn_5a17ce48d0b6",
+              "account_id": "chk_oh52c9d7e3_green",
+              "date": "11/07/2025",
+              "description": "SHELL OIL 3392 HOUSTON TX",
+              "amount": -54.8,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            },
+            "btxn_d90e42fb8a75": {
+              "transaction_id": "btxn_d90e42fb8a75",
+              "account_id": "chk_oh52c9d7e3_green",
+              "date": "11/10/2025",
+              "description": "ATM WITHDRAWAL - RHO-BANK #514 HOUSTON",
+              "amount": -100.0,
+              "type": "atm_withdrawal",
+              "status": "posted"
+            },
+            "btxn_36b8fd05c1e9": {
+              "transaction_id": "btxn_36b8fd05c1e9",
+              "account_id": "chk_oh52c9d7e3_green",
+              "date": "11/13/2025",
+              "description": "HEB GROCERY #612 HOUSTON TX",
+              "amount": -93.27,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            }
+          }
+        }
+      },
+      "user_data": null
+    },
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Omar Haddad",
+          "user_id": "oh52c9d7e3",
+          "address": "8830 Braeswood Court, Houston, TX 77074",
+          "email": "omar.haddad78@yahoo.com",
+          "phone_number": "713-555-0242",
+          "date_of_birth": "08/03/1984",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "143_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "143_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"oh52c9d7e3\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "143_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_debit_cards_by_account_id_7823"
+        },
+        "requestor": "assistant",
+        "action_id": "143_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_debit_cards_by_account_id_7823",
+          "arguments": "{\"account_id\": \"chk_oh52c9d7e3_green\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "143_4"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_bank_account_transactions_9173"
+        },
+        "requestor": "assistant",
+        "action_id": "143_5"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_bank_account_transactions_9173",
+          "arguments": "{\"account_id\": \"chk_oh52c9d7e3_green\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "143_6"
+      },
+      {
+        "name": "get_credit_card_accounts_by_user",
+        "arguments": {
+          "user_id": "oh52c9d7e3"
+        },
+        "requestor": "assistant",
+        "action_id": "143_7"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "close_debit_card_4721"
+        },
+        "requestor": "assistant",
+        "action_id": "143_8"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "close_debit_card_4721",
+          "arguments": "{\"card_id\": \"dbc_oh52c9d7e3_green\", \"reason\": \"stolen\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "143_9"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "order_debit_card_5739"
+        },
+        "requestor": "assistant",
+        "action_id": "143_10"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "order_debit_card_5739",
+          "arguments": "{\"account_id\": \"chk_oh52c9d7e3_green\", \"user_id\": \"oh52c9d7e3\", \"delivery_option\": \"EXPEDITED\", \"delivery_fee\": 15, \"card_design\": \"PREMIUM\", \"design_fee\": 10, \"shipping_address\": \"8830 Braeswood Court, Houston, TX 77074\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "143_11"
+      }
+    ],
+    "communicate_info": [
+      "$15",
+      "$10"
+    ],
+    "nl_assertions": [
+      "Before placing the replacement card order, the agent informs the customer that the delivery and design fees will be deducted from their checking account balance."
+    ],
+    "reward_basis": [
+      "DB",
+      "COMMUNICATE",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_005",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_bank_accounts_bank_accounts_(general)_025",
+    "doc_bank_accounts_bank_accounts_(general)_026",
+    "doc_bank_accounts_bank_accounts_(general)_028",
+    "doc_bank_accounts_bank_accounts_(general)_029",
+    "doc_bank_accounts_bank_accounts_(general)_030",
+    "doc_checking_accounts_green_account_(checking)_001"
+  ]
+}

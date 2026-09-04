@@ -1,0 +1,704 @@
+{
+  "id": "retail_plus_manage_delivered_order_policy_fact_schema_001",
+  "domain": "retail_plus",
+  "display_name": "Manage a delivered order",
+  "global_rules_path": "tau2/hyper/sops/retail_plus/global_rules.json",
+  "section_id": "manage_delivered_order",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/retail_plus_sop.md",
+    "heading": "## Manage a Delivered Order",
+    "component_headings": [
+      "## What you can do for customers",
+      "## Returning a delivered order",
+      "## Exchanging a delivered order",
+      "## When a customer is wrong about what they're entitled to"
+    ]
+  },
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": [
+      {
+        "section_id": "customer_identity",
+        "fact_ids": [
+          "one_customer_per_conversation_own_profile_only",
+          "multiple_requests_same_customer_allowed",
+          "identify_customer_first_every_time",
+          "lookup_by_account_id_email_or_name_zip",
+          "account_id_requires_email_or_name_zip_verification",
+          "pull_full_profile_after_verification"
+        ],
+        "relationship": "global_prerequisite",
+        "description": "Delivered-order work starts only after the customer and account ownership are verified."
+      },
+      {
+        "section_id": "service_foundations",
+        "fact_ids": [
+          "customer_profile_fields",
+          "saved_payment_method_types",
+          "gift_cards_have_balance",
+          "stored_money_uses_cent_precision",
+          "round_money_arithmetic_before_storage",
+          "stored_money_rejects_float_precision_artifacts",
+          "catalog_has_fifty_product_types",
+          "products_have_variant_items",
+          "variant_item_fields",
+          "product_id_and_item_id_are_distinct",
+          "order_identifier_prefix",
+          "order_records_owner",
+          "order_records_items",
+          "order_records_status",
+          "order_records_payment_history",
+          "order_status_values_are_closed_and_exact",
+          "processed_status_meaning",
+          "delivered_status_meaning",
+          "return_requested_status_meaning",
+          "exchange_requested_status_meaning",
+          "return_optional_fields",
+          "exchange_optional_fields",
+          "optional_order_fields_are_closed",
+          "documented_schema_is_complete",
+          "out_of_schema_requests_are_unsupported",
+          "read_and_write_documented_fields_only",
+          "delivered_order_allowed_actions",
+          "processed_orders_wait_until_delivered",
+          "authorized_actions_are_closed_scope",
+          "cannot_add_new_payment_method",
+          "cannot_change_order_quantity",
+          "cannot_split_shipments",
+          "cannot_modify_or_cancel_shipped_order",
+          "record_changes_require_complete_recap_and_confirmation",
+          "ambiguous_confirmation_is_insufficient",
+          "responses_must_be_grounded_without_invention",
+          "one_shot_changes_require_complete_item_list",
+          "clarify_before_irreversible_action",
+          "nontrivial_money_math_uses_calculator",
+          "transfer_when_unsupported_request_is_escalated",
+          "transfer_when_handling_is_genuinely_unclear",
+          "transfer_uses_exact_notice"
+        ],
+        "relationship": "shared_reference",
+        "description": "Return and exchange procedures use the shared catalog, record model, exact statuses, channel boundaries, and action controls."
+      }
+    ]
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "manage_delivered_order",
+        "label": "Manage a delivered order",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "delivered_order_entry",
+        "label": "Route delivered-order requests",
+        "kind": "entry_conditions",
+        "parent_id": "manage_delivered_order",
+        "order": 1,
+        "fact_ids": [
+          "delivered_order_cannot_be_cancelled_use_return"
+        ]
+      },
+      {
+        "id": "return_delivered_order",
+        "label": "Return delivered items",
+        "kind": "procedure",
+        "parent_id": "manage_delivered_order",
+        "order": 2,
+        "fact_ids": []
+      },
+      {
+        "id": "return_eligibility_and_items",
+        "label": "Check eligibility and collect items",
+        "kind": "step",
+        "parent_id": "return_delivered_order",
+        "order": 1,
+        "fact_ids": [
+          "return_requires_delivered_order",
+          "return_can_include_some_or_all_items",
+          "return_requires_order_id_and_item_list"
+        ]
+      },
+      {
+        "id": "return_refund_destination",
+        "label": "Choose an allowed refund destination",
+        "kind": "decision",
+        "parent_id": "return_delivered_order",
+        "order": 2,
+        "fact_ids": [
+          "return_refund_destination_original_or_existing_gift_card",
+          "return_refund_destination_disallowed_options"
+        ]
+      },
+      {
+        "id": "confirm_return",
+        "label": "Recap and confirm the return",
+        "kind": "confirmation_gate",
+        "parent_id": "return_delivered_order",
+        "order": 3,
+        "fact_ids": [
+          "return_requires_recap_confirmation_submit"
+        ]
+      },
+      {
+        "id": "submit_return",
+        "label": "Submit the return request",
+        "kind": "record_mutation",
+        "parent_id": "return_delivered_order",
+        "order": 4,
+        "fact_ids": [
+          "return_submission_sets_status_and_sends_email"
+        ]
+      },
+      {
+        "id": "exchange_delivered_order",
+        "label": "Exchange delivered items",
+        "kind": "procedure",
+        "parent_id": "manage_delivered_order",
+        "order": 3,
+        "fact_ids": []
+      },
+      {
+        "id": "exchange_eligibility",
+        "label": "Require a delivered order",
+        "kind": "blocking_gate",
+        "parent_id": "exchange_delivered_order",
+        "order": 1,
+        "fact_ids": [
+          "exchange_requires_delivered_order"
+        ]
+      },
+      {
+        "id": "exchange_items",
+        "label": "Validate replacement variants",
+        "kind": "step",
+        "parent_id": "exchange_delivered_order",
+        "order": 2,
+        "fact_ids": [
+          "exchange_same_product_different_variant_only",
+          "exchange_new_variant_available"
+        ]
+      },
+      {
+        "id": "exchange_payment",
+        "label": "Settle the price difference",
+        "kind": "decision",
+        "parent_id": "exchange_delivered_order",
+        "order": 3,
+        "fact_ids": [
+          "exchange_single_price_difference_method",
+          "exchange_gift_card_covers_price_increase",
+          "exchange_refund_destination_any_saved_payment_method"
+        ]
+      },
+      {
+        "id": "exchange_completeness_gate",
+        "label": "Confirm the complete exchange list",
+        "kind": "confirmation_gate",
+        "parent_id": "exchange_delivered_order",
+        "order": 4,
+        "fact_ids": [
+          "exchange_one_shot_complete_list_before_submit"
+        ]
+      },
+      {
+        "id": "submit_exchange",
+        "label": "Submit the exchange request",
+        "kind": "record_mutation",
+        "parent_id": "exchange_delivered_order",
+        "order": 5,
+        "fact_ids": [
+          "exchange_submission_sets_status_and_email",
+          "exchange_no_new_order_needed",
+          "exchange_after_submission_no_second_pass"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "return_refund_destination",
+        "type": "requires",
+        "target_id": "return_eligibility_and_items"
+      },
+      {
+        "source_id": "confirm_return",
+        "type": "requires",
+        "target_id": "return_refund_destination"
+      },
+      {
+        "source_id": "submit_return",
+        "type": "requires",
+        "target_id": "confirm_return"
+      },
+      {
+        "source_id": "exchange_items",
+        "type": "evaluated_after",
+        "target_id": "exchange_eligibility"
+      },
+      {
+        "source_id": "exchange_payment",
+        "type": "uses_input_from",
+        "target_id": "exchange_items"
+      },
+      {
+        "source_id": "exchange_completeness_gate",
+        "type": "requires",
+        "target_id": "exchange_payment"
+      },
+      {
+        "source_id": "submit_exchange",
+        "type": "requires",
+        "target_id": "exchange_completeness_gate"
+      },
+      {
+        "source_id": "delivered_order_entry",
+        "type": "routes_to",
+        "target_id": "return_delivered_order"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "delivered_order_cannot_be_cancelled_use_return",
+      "category": "delivered_order_scope",
+      "statement": "A delivered order cannot be cancelled; when the customer wants to send it back, the supported path is a return."
+    },
+    {
+      "id": "return_requires_delivered_order",
+      "category": "return_gate",
+      "statement": "Before starting a return, the agent must check the order's current status; only an order whose current status is delivered may enter the return flow."
+    },
+    {
+      "id": "return_can_include_some_or_all_items",
+      "category": "return_items",
+      "statement": "For a delivered order, the customer can return some or all items in a single return request per order; once the return request is opened, items cannot be added to it."
+    },
+    {
+      "id": "return_requires_order_id_and_item_list",
+      "category": "return_items",
+      "statement": "To start a return, the customer must confirm the order identifier and the exact list of items they want to send back."
+    },
+    {
+      "id": "return_refund_destination_original_or_existing_gift_card",
+      "category": "refund_destination",
+      "statement": "A return refund can go only to the original payment method or to an existing gift card on the customer's profile; existing means the gift card was on the profile before the return request was opened, so a card added mid-conversation does not qualify."
+    },
+    {
+      "id": "return_refund_destination_disallowed_options",
+      "category": "refund_destination",
+      "statement": "A return refund cannot go to a brand-new gift card, a different credit card, a PayPal account that was not used originally, or any other destination outside original payment method or existing gift card."
+    },
+    {
+      "id": "return_requires_recap_confirmation_submit",
+      "category": "confirmation",
+      "statement": "Before submitting a return, the agent must recap the return and get confirmation."
+    },
+    {
+      "id": "return_submission_sets_status_and_sends_email",
+      "category": "return_submission",
+      "statement": "Submitting a return changes the order status to return requested, and the customer receives an email with return shipping instructions; the agent does not handle the return shipping instructions and only kicks off the return process."
+    },
+    {
+      "id": "exchange_requires_delivered_order",
+      "category": "exchange_gate",
+      "statement": "Before starting an exchange, the agent must check the order's current status; only an order whose current status is delivered may enter the exchange flow."
+    },
+    {
+      "id": "exchange_same_product_different_variant_only",
+      "category": "exchange_items",
+      "statement": "For an exchange, each replacement must be a different variant of the same product type as the original item; cross-type swaps are not allowed."
+    },
+    {
+      "id": "exchange_new_variant_available",
+      "category": "exchange_items",
+      "statement": "The new variant in an exchange must currently be available."
+    },
+    {
+      "id": "exchange_single_price_difference_method",
+      "category": "exchange_payment",
+      "statement": "The customer pays or is refunded the exchange price difference through a single payment method."
+    },
+    {
+      "id": "exchange_gift_card_covers_price_increase",
+      "category": "exchange_payment",
+      "statement": "If an exchange price goes up and the customer uses a gift card, the gift card must have enough balance to cover the price difference."
+    },
+    {
+      "id": "exchange_refund_destination_any_saved_payment_method",
+      "category": "exchange_payment",
+      "statement": "When an exchange produces a refund of the price difference, the customer chooses the payment method that receives it from the methods saved on their profile; it does not have to be the original payment method \u2014 the two-destination limit applies only to return refunds. The chosen method is recorded on the exchange at submission and cannot be changed afterward."
+    },
+    {
+      "id": "exchange_one_shot_complete_list_before_submit",
+      "category": "exchange_one_shot",
+      "statement": "An exchange is one-shot for the order, so the agent must confirm the customer has provided the complete list of items to exchange before submission."
+    },
+    {
+      "id": "exchange_submission_sets_status_and_email",
+      "category": "exchange_submission",
+      "statement": "After an exchange is submitted, the order status becomes exchange requested and the customer receives an email about how to send back the original items."
+    },
+    {
+      "id": "exchange_no_new_order_needed",
+      "category": "exchange_submission",
+      "statement": "A customer does not need to place a new order for an exchange because the exchange handles the replacement."
+    },
+    {
+      "id": "exchange_after_submission_no_second_pass",
+      "category": "exchange_one_shot",
+      "statement": "After an exchange is submitted, there is no second exchange pass for that order."
+    }
+  ],
+  "transformations": [
+    {
+      "id": "manage_delivered_order_full_site_screenshots",
+      "representation": "website_screenshot",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/bundles/retail_full_site/stub.md",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/059_returns.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/059_returns.html",
+          "included_fact_ids": [
+            "return_can_include_some_or_all_items"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/screenshots/060_exchanges.png",
+          "text_source_path": "tau2/hyper/sops/retail_plus/sections/service_foundations/website_screenshot_001_full_site/pages/060_exchanges.html",
+          "included_fact_ids": [
+            "exchange_new_variant_available"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "retail_manage_delivered_order_slack_mcp",
+      "representation": "slack_mcp_dump",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/bundles/retail_full_site/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/retail_plus/sections/manage_pending_order/slack_mcp_dump_001/eval_manifest.manage_delivered_order.json",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_pending_order/slack_mcp_dump_001/beacon_servicing_slack_mcp_capture.json",
+          "kit_filename": "beacon_servicing_slack_mcp_capture.json",
+          "included_fact_ids": [
+            "return_refund_destination_original_or_existing_gift_card",
+            "return_refund_destination_disallowed_options",
+            "exchange_refund_destination_any_saved_payment_method"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "retail_manage_delivered_order_support_transcripts",
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/bundles/retail_full_site/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/eval_manifest.json",
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_001.md",
+          "kit_filename": "case_001.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_002.md",
+          "kit_filename": "case_002.md",
+          "included_fact_ids": [
+            "delivered_order_cannot_be_cancelled_use_return"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_003.md",
+          "kit_filename": "case_003.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_004.md",
+          "kit_filename": "case_004.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_005.md",
+          "kit_filename": "case_005.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_006.md",
+          "kit_filename": "case_006.md",
+          "included_fact_ids": [
+            "return_requires_delivered_order"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_007.md",
+          "kit_filename": "case_007.md",
+          "included_fact_ids": [
+            "return_requires_order_id_and_item_list"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_008.md",
+          "kit_filename": "case_008.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_009.md",
+          "kit_filename": "case_009.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_010.md",
+          "kit_filename": "case_010.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_011.md",
+          "kit_filename": "case_011.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_012.md",
+          "kit_filename": "case_012.md",
+          "included_fact_ids": [
+            "return_requires_recap_confirmation_submit"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_013.md",
+          "kit_filename": "case_013.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_014.md",
+          "kit_filename": "case_014.md",
+          "included_fact_ids": [
+            "return_submission_sets_status_and_sends_email"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_015.md",
+          "kit_filename": "case_015.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_016.md",
+          "kit_filename": "case_016.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_017.md",
+          "kit_filename": "case_017.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_018.md",
+          "kit_filename": "case_018.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_019.md",
+          "kit_filename": "case_019.md",
+          "included_fact_ids": [
+            "exchange_requires_delivered_order"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_020.md",
+          "kit_filename": "case_020.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_021.md",
+          "kit_filename": "case_021.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_022.md",
+          "kit_filename": "case_022.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_023.md",
+          "kit_filename": "case_023.md",
+          "included_fact_ids": [
+            "exchange_same_product_different_variant_only"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_024.md",
+          "kit_filename": "case_024.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_025.md",
+          "kit_filename": "case_025.md",
+          "included_fact_ids": [
+            "exchange_single_price_difference_method"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_026.md",
+          "kit_filename": "case_026.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_027.md",
+          "kit_filename": "case_027.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_028.md",
+          "kit_filename": "case_028.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_029.md",
+          "kit_filename": "case_029.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_030.md",
+          "kit_filename": "case_030.md",
+          "included_fact_ids": [
+            "exchange_gift_card_covers_price_increase"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_031.md",
+          "kit_filename": "case_031.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_032.md",
+          "kit_filename": "case_032.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_033.md",
+          "kit_filename": "case_033.md",
+          "included_fact_ids": [
+            "exchange_one_shot_complete_list_before_submit"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_034.md",
+          "kit_filename": "case_034.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_035.md",
+          "kit_filename": "case_035.md",
+          "included_fact_ids": [
+            "exchange_submission_sets_status_and_email"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_036.md",
+          "kit_filename": "case_036.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_037.md",
+          "kit_filename": "case_037.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_038.md",
+          "kit_filename": "case_038.md",
+          "included_fact_ids": [
+            "exchange_no_new_order_needed"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_039.md",
+          "kit_filename": "case_039.md",
+          "included_fact_ids": []
+        },
+        {
+          "path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/support_transcripts_001/case_040.md",
+          "kit_filename": "case_040.md",
+          "included_fact_ids": [
+            "exchange_after_submission_no_second_pass"
+          ]
+        }
+      ]
+    }
+  ],
+  "transformation_bundles": [
+    {
+      "id": "manage_delivered_order_multimodal",
+      "description": "One delivered-order journey told across three artifact sets: the NorthStar storefront captures own the exchange-variant and partial-return facts, the Beacon Slack capture owns the refund-destination rulings, and forty QA-approved support case records carry the remaining return and exchange gates, inputs, confirmations, payment handling, one-shot behavior, and submission consequences. Every section fact is owned by exactly one member; depicted cross-artifact behavior is a declared dependency.",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/manage_delivered_order/bundles/retail_full_site/stub.md",
+      "fact_ids": [
+        "delivered_order_cannot_be_cancelled_use_return",
+        "exchange_after_submission_no_second_pass",
+        "exchange_gift_card_covers_price_increase",
+        "exchange_new_variant_available",
+        "exchange_no_new_order_needed",
+        "exchange_one_shot_complete_list_before_submit",
+        "exchange_refund_destination_any_saved_payment_method",
+        "exchange_requires_delivered_order",
+        "exchange_same_product_different_variant_only",
+        "exchange_single_price_difference_method",
+        "exchange_submission_sets_status_and_email",
+        "return_can_include_some_or_all_items",
+        "return_refund_destination_disallowed_options",
+        "return_refund_destination_original_or_existing_gift_card",
+        "return_requires_delivered_order",
+        "return_requires_order_id_and_item_list",
+        "return_requires_recap_confirmation_submit",
+        "return_submission_sets_status_and_sends_email"
+      ],
+      "members": [
+        {
+          "transformation_id": "manage_delivered_order_full_site_screenshots",
+          "primary": true,
+          "authoritative_fact_ids": [
+            "exchange_new_variant_available",
+            "return_can_include_some_or_all_items"
+          ]
+        },
+        {
+          "transformation_id": "retail_manage_delivered_order_slack_mcp",
+          "authoritative_fact_ids": [
+            "exchange_refund_destination_any_saved_payment_method",
+            "return_refund_destination_disallowed_options",
+            "return_refund_destination_original_or_existing_gift_card"
+          ]
+        },
+        {
+          "transformation_id": "retail_manage_delivered_order_support_transcripts",
+          "authoritative_fact_ids": [
+            "delivered_order_cannot_be_cancelled_use_return",
+            "exchange_after_submission_no_second_pass",
+            "exchange_gift_card_covers_price_increase",
+            "exchange_no_new_order_needed",
+            "exchange_one_shot_complete_list_before_submit",
+            "exchange_requires_delivered_order",
+            "exchange_same_product_different_variant_only",
+            "exchange_single_price_difference_method",
+            "exchange_submission_sets_status_and_email",
+            "return_requires_delivered_order",
+            "return_requires_order_id_and_item_list",
+            "return_requires_recap_confirmation_submit",
+            "return_submission_sets_status_and_sends_email"
+          ],
+          "depends_on_fact_ids": [
+            "exchange_new_variant_available",
+            "exchange_refund_destination_any_saved_payment_method",
+            "return_can_include_some_or_all_items",
+            "return_refund_destination_disallowed_options",
+            "return_refund_destination_original_or_existing_gift_card"
+          ]
+        }
+      ]
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/retail_plus/hard_bundle_001/manage_delivered_order_transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/retail_plus/hard_bundle_001/client_overlay/manage_delivered_order_client_transformation_pack.json"
+    }
+  ]
+}

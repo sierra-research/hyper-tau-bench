@@ -1,0 +1,523 @@
+{
+  "id": "telecom_resume_suspended_line_policy_fact_schema_001",
+  "domain": "telecom",
+  "display_name": "Resume a suspended line",
+  "global_rules_path": "tau2/hyper/sops/telecom/global_rules.json",
+  "section_id": "resume_suspended_line",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/telecom_sop.md",
+    "heading": "## Overdue Bills And Suspended Lines"
+  },
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": [
+      {
+        "section_id": "customer_identity",
+        "fact_ids": [
+          "identify_customer_before_technical_support",
+          "open_account_for_carrier_side_information",
+          "open_account_for_carrier_side_change",
+          "carrier_side_workflow_examples",
+          "lookup_account_or_line_by_phone_number",
+          "phone_lookup_covers_contact_and_line_numbers",
+          "lookup_account_by_customer_id",
+          "lookup_account_by_name_requires_dob",
+          "dob_required_for_verification",
+          "account_change_requires_identity_line_and_confirmation"
+        ],
+        "relationship": "global_prerequisite",
+        "description": "Bill review, payment requests, and line resumption are carrier-side work that starts only after the customer and affected line are identified."
+      },
+      {
+        "section_id": "service_foundations",
+        "fact_ids": [
+          "can_send_payment_request_and_help_pay",
+          "can_resume_suspended_line_when_policy_allows",
+          "cannot_renew_ended_contract",
+          "cannot_reopen_closed_line",
+          "cannot_complete_work_sent_to_human",
+          "ground_responses_in_customer_reports_records_and_phone_checks",
+          "responses_concise_accurate_no_speculation",
+          "one_customer_care_action_at_a_time",
+          "wait_for_result_before_next_step",
+          "carrier_side_change_requires_exact_explanation_and_confirmation",
+          "close_case_only_after_final_check_shows_resolved",
+          "transfer_triggers_out_of_scope_or_policy_step",
+          "handoff_recorded_via_console_control",
+          "transfer_notice_exact_text",
+          "transfer_action_exact_name_for_every_handoff",
+          "work_relevant_steps_before_technical_transfer",
+          "customer_records_contents",
+          "records_are_source_of_truth_for_account_decisions",
+          "bill_statuses_closed_set",
+          "payment_request_moves_overdue_bill_to_awaiting_payment",
+          "paid_request_makes_bill_paid_and_eligible_for_resumption",
+          "sent_payment_request_visible_on_phone",
+          "active_line_can_regain_service_suspended_cannot",
+          "reboot_applies_pending_changes_and_reruns_search"
+        ],
+        "relationship": "shared_reference",
+        "description": "Resumption uses the shared billing lifecycle, payment-request visibility, line-status reflection, confirmation controls, and transfer protocol."
+      }
+    ]
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "resume_suspended_line",
+        "label": "Resume a suspended line",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "suspension_diagnosis",
+        "label": "Determine why the line is suspended",
+        "kind": "decision",
+        "parent_id": "resume_suspended_line",
+        "order": 1,
+        "fact_ids": [
+          "suspension_cause_overdue_bill",
+          "suspension_cause_contract_ended"
+        ]
+      },
+      {
+        "id": "overdue_bill_resumption",
+        "label": "Clear the overdue bill and resume",
+        "kind": "procedure",
+        "parent_id": "resume_suspended_line",
+        "order": 2,
+        "fact_ids": []
+      },
+      {
+        "id": "review_recent_bills",
+        "label": "Check bill eligibility and pending requests",
+        "kind": "blocking_gate",
+        "parent_id": "overdue_bill_resumption",
+        "order": 1,
+        "fact_ids": [
+          "check_recent_bills_for_overdue",
+          "verify_selected_bill_overdue_before_request",
+          "only_one_awaiting_payment_request_at_a_time"
+        ]
+      },
+      {
+        "id": "explain_amount_due",
+        "label": "Explain the amount due",
+        "kind": "step",
+        "parent_id": "overdue_bill_resumption",
+        "order": 2,
+        "fact_ids": [
+          "explain_amount_due_before_payment_request"
+        ]
+      },
+      {
+        "id": "payment_request_confirmation",
+        "label": "Confirm before sending the payment request",
+        "kind": "confirmation_gate",
+        "parent_id": "overdue_bill_resumption",
+        "order": 3,
+        "fact_ids": [
+          "confirm_before_sending_payment_request"
+        ]
+      },
+      {
+        "id": "send_payment_request",
+        "label": "Send the verified payment request",
+        "kind": "record_mutation",
+        "parent_id": "overdue_bill_resumption",
+        "order": 4,
+        "fact_ids": [
+          "send_verified_request_after_confirmation"
+        ]
+      },
+      {
+        "id": "phone_side_payment",
+        "label": "Customer checks and pays the request",
+        "kind": "step",
+        "parent_id": "overdue_bill_resumption",
+        "order": 5,
+        "fact_ids": [
+          "customer_checks_payment_request_on_phone",
+          "customer_pays_accepted_request_from_phone"
+        ]
+      },
+      {
+        "id": "verify_bill_paid",
+        "label": "Confirm the bill is paid",
+        "kind": "verification_gate",
+        "parent_id": "overdue_bill_resumption",
+        "order": 6,
+        "fact_ids": [
+          "confirm_bill_paid_after_payment",
+          "all_overdue_bills_paid_before_resume"
+        ]
+      },
+      {
+        "id": "resume_confirmation",
+        "label": "Confirm before resuming the line",
+        "kind": "confirmation_gate",
+        "parent_id": "overdue_bill_resumption",
+        "order": 7,
+        "fact_ids": [
+          "confirm_before_resuming_line"
+        ]
+      },
+      {
+        "id": "resume_line",
+        "label": "Resume the affected line",
+        "kind": "record_mutation",
+        "parent_id": "overdue_bill_resumption",
+        "order": 8,
+        "fact_ids": [
+          "resume_line_after_confirmation"
+        ]
+      },
+      {
+        "id": "post_resume_verification",
+        "label": "Reboot and check the status bar",
+        "kind": "verification_gate",
+        "parent_id": "overdue_bill_resumption",
+        "order": 9,
+        "fact_ids": [
+          "post_resume_reboot_and_status_bar_check"
+        ]
+      },
+      {
+        "id": "ended_contract_handling",
+        "label": "Hand off ended-contract suspensions",
+        "kind": "escalation",
+        "parent_id": "resume_suspended_line",
+        "order": 3,
+        "fact_ids": [
+          "ended_contract_requires_renewal_or_exception",
+          "ended_contract_not_resumed_via_troubleshooting",
+          "ended_contract_suspension_is_transferred"
+        ]
+      },
+      {
+        "id": "closed_line_boundary",
+        "label": "Closed lines stay closed",
+        "kind": "scope_boundary",
+        "parent_id": "resume_suspended_line",
+        "order": 4,
+        "fact_ids": [
+          "closed_lines_not_resumed"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "overdue_bill_resumption",
+        "type": "requires",
+        "target_id": "suspension_diagnosis"
+      },
+      {
+        "source_id": "ended_contract_handling",
+        "type": "requires",
+        "target_id": "suspension_diagnosis"
+      },
+      {
+        "source_id": "send_payment_request",
+        "type": "requires",
+        "target_id": "payment_request_confirmation"
+      },
+      {
+        "source_id": "phone_side_payment",
+        "type": "requires",
+        "target_id": "send_payment_request"
+      },
+      {
+        "source_id": "verify_bill_paid",
+        "type": "uses_result_from",
+        "target_id": "phone_side_payment"
+      },
+      {
+        "source_id": "resume_confirmation",
+        "type": "requires",
+        "target_id": "verify_bill_paid"
+      },
+      {
+        "source_id": "resume_line",
+        "type": "requires",
+        "target_id": "resume_confirmation"
+      },
+      {
+        "source_id": "post_resume_verification",
+        "type": "requires",
+        "target_id": "resume_line"
+      },
+      {
+        "source_id": "closed_line_boundary",
+        "type": "constrains",
+        "target_id": "overdue_bill_resumption"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "suspension_cause_overdue_bill",
+      "category": "suspension_causes",
+      "statement": "A line may be suspended because of an overdue bill."
+    },
+    {
+      "id": "suspension_cause_contract_ended",
+      "category": "suspension_causes",
+      "statement": "A line may be suspended because the line's contract ended."
+    },
+    {
+      "id": "check_recent_bills_for_overdue",
+      "category": "overdue_resumption",
+      "statement": "For an overdue-bill suspension, check the customer's recent bills after the customer and affected line are identified."
+    },
+    {
+      "id": "verify_selected_bill_overdue_before_request",
+      "category": "overdue_resumption",
+      "statement": "Before sending a payment request, independently verify that the selected bill is Overdue because the payment-request action does not perform that eligibility check."
+    },
+    {
+      "id": "only_one_awaiting_payment_request_at_a_time",
+      "category": "overdue_resumption",
+      "statement": "A customer may have only one bill in Awaiting Payment at a time, so do not send a second payment request while another bill is awaiting payment."
+    },
+    {
+      "id": "explain_amount_due_before_payment_request",
+      "category": "overdue_resumption",
+      "statement": "If an overdue bill exists, explain the amount due to the customer."
+    },
+    {
+      "id": "confirm_before_sending_payment_request",
+      "category": "overdue_resumption",
+      "statement": "After explaining the amount due for the verified overdue bill, ask for the customer's confirmation before sending its payment request."
+    },
+    {
+      "id": "send_verified_request_after_confirmation",
+      "category": "overdue_resumption",
+      "statement": "After the customer confirms, send the payment request for the verified overdue bill before asking the customer to check it on their phone."
+    },
+    {
+      "id": "customer_checks_payment_request_on_phone",
+      "category": "overdue_resumption",
+      "statement": "After the payment request is sent, ask the customer to check the payment request on their phone."
+    },
+    {
+      "id": "customer_pays_accepted_request_from_phone",
+      "category": "overdue_resumption",
+      "statement": "If the customer accepts the payment request, have the customer make the payment from their phone."
+    },
+    {
+      "id": "confirm_bill_paid_after_payment",
+      "category": "overdue_resumption",
+      "statement": "After the customer makes the payment from the phone, confirm that the bill is paid."
+    },
+    {
+      "id": "all_overdue_bills_paid_before_resume",
+      "category": "overdue_resumption",
+      "statement": "Confirm that all of the customer's overdue bills are paid, and do not resume the line while any overdue bill remains."
+    },
+    {
+      "id": "confirm_before_resuming_line",
+      "category": "overdue_resumption",
+      "statement": "Ask for the customer's confirmation before resuming the affected line."
+    },
+    {
+      "id": "resume_line_after_confirmation",
+      "category": "overdue_resumption",
+      "statement": "After the customer confirms and all overdue bills are paid, resume the affected line."
+    },
+    {
+      "id": "post_resume_reboot_and_status_bar_check",
+      "category": "overdue_resumption",
+      "statement": "After the line is resumed, ask the customer to reboot the phone and check the status bar."
+    },
+    {
+      "id": "ended_contract_requires_renewal_or_exception",
+      "category": "ended_contract",
+      "statement": "For a suspension caused by an ended contract, explain that the line requires contract renewal or exception handling."
+    },
+    {
+      "id": "ended_contract_not_resumed_via_troubleshooting",
+      "category": "ended_contract",
+      "statement": "A line suspended because the contract ended is not resumed through the standard troubleshooting flow."
+    },
+    {
+      "id": "ended_contract_suspension_is_transferred",
+      "category": "ended_contract",
+      "statement": "For a suspension caused by an ended contract, record the handoff with the transfer or escalation control, then give the customer the required transfer message."
+    },
+    {
+      "id": "closed_lines_not_resumed",
+      "category": "closed_lines",
+      "statement": "Closed lines are not resumed through customer care."
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/telecom/hard_bundle_001/resume_suspended_line_transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/telecom/client_overlay_001/resume_suspended_line_client_transformation_pack.json"
+    }
+  ],
+  "transformations": [
+    {
+      "id": "telecom_resume_suspended_line_explicit_rules",
+      "representation": "explicit_rules"
+    },
+    {
+      "id": "telecom_resume_suspended_line_html_knowledge_archive",
+      "representation": "knowledge_base_html_export",
+      "stub_path": "tau2/hyper/sops/telecom/sections/resume_suspended_line/bundles/resume_suspended_line_html_zoom_archive/stub.md",
+      "minimum_articles": 38,
+      "minimum_context_articles": 34,
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/resume_suspended_line/knowledge_base_html_export_001/northline_care_knowledge_archive.html",
+          "kit_filename": "knowledge_archive.html",
+          "eval_manifest_path": "tau2/hyper/sops/telecom/sections/resume_suspended_line/knowledge_base_html_export_001/eval_manifest.json",
+          "included_fact_ids": [
+            "suspension_cause_overdue_bill",
+            "suspension_cause_contract_ended",
+            "check_recent_bills_for_overdue",
+            "verify_selected_bill_overdue_before_request",
+            "explain_amount_due_before_payment_request",
+            "confirm_before_sending_payment_request",
+            "send_verified_request_after_confirmation",
+            "customer_checks_payment_request_on_phone",
+            "customer_pays_accepted_request_from_phone",
+            "confirm_bill_paid_after_payment",
+            "all_overdue_bills_paid_before_resume",
+            "confirm_before_resuming_line",
+            "resume_line_after_confirmation",
+            "post_resume_reboot_and_status_bar_check"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "telecom_resume_suspended_line_launch_scope_review",
+      "representation": "recorded_working_session",
+      "stub_path": "tau2/hyper/sops/telecom/sections/resume_suspended_line/bundles/resume_suspended_line_html_zoom_archive/stub.md",
+      "eval_manifest_path": "tau2/hyper/sops/telecom/sections/resume_suspended_line/recorded_working_session_001/eval_manifest.json",
+      "minimum_meetings": 3,
+      "minimum_duration_minutes": 25,
+      "maximum_duration_minutes": 28,
+      "minimum_speakers": 4,
+      "minimum_words_per_minute": 90,
+      "maximum_words_per_minute": 145,
+      "artifacts": [
+        {
+          "path": "tau2/hyper/sops/telecom/sections/resume_suspended_line/recorded_working_session_001/2026-08-05_billing_request_state_review.vtt",
+          "kit_filename": "2026-08-05_billing_request_state_review.vtt",
+          "meeting_id": "billing_request_state_review",
+          "meeting_date": "2026-08-05",
+          "included_fact_ids": [
+            "only_one_awaiting_payment_request_at_a_time"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/resume_suspended_line/recorded_working_session_001/2026-08-06_contract_lifecycle_calibration.vtt",
+          "kit_filename": "2026-08-06_contract_lifecycle_calibration.vtt",
+          "meeting_id": "contract_lifecycle_calibration",
+          "meeting_date": "2026-08-06",
+          "included_fact_ids": [
+            "ended_contract_requires_renewal_or_exception",
+            "ended_contract_not_resumed_via_troubleshooting",
+            "ended_contract_suspension_is_transferred"
+          ]
+        },
+        {
+          "path": "tau2/hyper/sops/telecom/sections/resume_suspended_line/recorded_working_session_001/2026-08-07_launch_readiness_signoff.vtt",
+          "kit_filename": "2026-08-07_launch_readiness_signoff.vtt",
+          "meeting_id": "launch_readiness_signoff",
+          "meeting_date": "2026-08-07",
+          "included_fact_ids": [
+            "closed_lines_not_resumed"
+          ]
+        }
+      ]
+    }
+  ],
+  "transformation_bundles": [
+    {
+      "id": "resume_suspended_line_html_zoom_archive",
+      "description": "A complete Resume Suspended Line replacement pairing a raw, self-contained 38-article Northline Care HTML archive with a three-meeting, four-speaker Zoom-style decision series. Four published articles own fourteen billing and resumption facts; the dated meetings own five request-state and lifecycle boundaries through cross-meeting proposal, rejection, and final-decision history.",
+      "stub_path": "tau2/hyper/sops/telecom/sections/resume_suspended_line/bundles/resume_suspended_line_html_zoom_archive/stub.md",
+      "fact_ids": [
+        "suspension_cause_overdue_bill",
+        "suspension_cause_contract_ended",
+        "check_recent_bills_for_overdue",
+        "verify_selected_bill_overdue_before_request",
+        "only_one_awaiting_payment_request_at_a_time",
+        "explain_amount_due_before_payment_request",
+        "confirm_before_sending_payment_request",
+        "send_verified_request_after_confirmation",
+        "customer_checks_payment_request_on_phone",
+        "customer_pays_accepted_request_from_phone",
+        "confirm_bill_paid_after_payment",
+        "all_overdue_bills_paid_before_resume",
+        "confirm_before_resuming_line",
+        "resume_line_after_confirmation",
+        "post_resume_reboot_and_status_bar_check",
+        "ended_contract_requires_renewal_or_exception",
+        "ended_contract_not_resumed_via_troubleshooting",
+        "ended_contract_suspension_is_transferred",
+        "closed_lines_not_resumed"
+      ],
+      "members": [
+        {
+          "transformation_id": "telecom_resume_suspended_line_html_knowledge_archive",
+          "authoritative_fact_ids": [
+            "suspension_cause_overdue_bill",
+            "suspension_cause_contract_ended",
+            "check_recent_bills_for_overdue",
+            "verify_selected_bill_overdue_before_request",
+            "explain_amount_due_before_payment_request",
+            "confirm_before_sending_payment_request",
+            "send_verified_request_after_confirmation",
+            "customer_checks_payment_request_on_phone",
+            "customer_pays_accepted_request_from_phone",
+            "confirm_bill_paid_after_payment",
+            "all_overdue_bills_paid_before_resume",
+            "confirm_before_resuming_line",
+            "resume_line_after_confirmation",
+            "post_resume_reboot_and_status_bar_check"
+          ],
+          "primary": true,
+          "depends_on_fact_ids": [
+            "only_one_awaiting_payment_request_at_a_time",
+            "ended_contract_requires_renewal_or_exception",
+            "ended_contract_not_resumed_via_troubleshooting",
+            "ended_contract_suspension_is_transferred",
+            "closed_lines_not_resumed"
+          ]
+        },
+        {
+          "transformation_id": "telecom_resume_suspended_line_launch_scope_review",
+          "authoritative_fact_ids": [
+            "only_one_awaiting_payment_request_at_a_time",
+            "ended_contract_requires_renewal_or_exception",
+            "ended_contract_not_resumed_via_troubleshooting",
+            "ended_contract_suspension_is_transferred",
+            "closed_lines_not_resumed"
+          ],
+          "depends_on_fact_ids": [
+            "suspension_cause_overdue_bill",
+            "suspension_cause_contract_ended",
+            "check_recent_bills_for_overdue",
+            "verify_selected_bill_overdue_before_request",
+            "explain_amount_due_before_payment_request",
+            "confirm_before_sending_payment_request",
+            "send_verified_request_after_confirmation",
+            "customer_checks_payment_request_on_phone",
+            "customer_pays_accepted_request_from_phone",
+            "confirm_bill_paid_after_payment",
+            "all_overdue_bills_paid_before_resume",
+            "confirm_before_resuming_line",
+            "resume_line_after_confirmation",
+            "post_resume_reboot_and_status_bar_check"
+          ]
+        }
+      ]
+    }
+  ]
+}

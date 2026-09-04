@@ -1,0 +1,1416 @@
+{
+  "id": "banking_personal_checking_opening_recommendation_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "personal_checking_opening_recommendation",
+  "display_name": "Personal checking opening and product recommendation",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/personal_checking_opening_recommendation/source.md",
+    "heading": "## Personal checking opening and product recommendation"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/personal_checking_opening_recommendation/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/personal_checking_opening_recommendation/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook requirements from shared context: verify identity before account-specific information, get explicit confirmation before account-modifying actions, and use the exact transfer message when a transfer is performed.",
+      "Support console turns may mention document ids, internal tool results, and eligibility checks; Agent turns should give the customer the customer-visible next step or outcome.",
+      "Do not transform concrete KB tables, thresholds, statuses, fees, amounts, or condition-specific outcomes into vague dependency statements."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "identity verification before account-specific details",
+      "explicit customer confirmation before account-modifying actions",
+      "plain-language customer-facing outcomes",
+      "support-console notes for internal KB/tool evidence"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_009.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_blue_account_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_green_account_(checking)_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_green_fee-free_account_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_green_fee-free_account_003.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_purple_account_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_light_blue_account_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_light_green_account_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_dark_green_account_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_gold_years_account_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_bluest_account_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_checking_accounts_evergreen_account_001.json"
+    ],
+    "summary": "Choosing and opening a personal checking account from customer needs, existing profile data, age/travel/fee preferences, and product differences.",
+    "rules": [
+      "Preserve all values, tables, thresholds, statuses, fees, amounts, eligibility gates, tool/action names, and condition-to-outcome mappings from the source bundle.",
+      "Use the shared banking handbook for identity verification, explicit confirmation before account-modifying actions, discoverable-tool wrapper behavior, schema limits, and transfer wording.",
+      "Do not invent unsupported account fields, undocumented override mechanisms, undocumented tool names, or customer entitlements not present in the source bundle.",
+      "When a source document is internal, represent its internal checks in Support console turns or agent behavior rather than as exposed policy narration."
+    ],
+    "candidate": {
+      "id": "personal_checking_opening_recommendation",
+      "title": "Personal checking opening and product recommendation",
+      "priority": 1,
+      "related_task_ids": [
+        "task_055",
+        "task_057",
+        "task_065",
+        "task_067",
+        "task_068",
+        "task_069",
+        "task_075",
+        "task_076"
+      ],
+      "recommended_case_count": 6,
+      "losslessness_risks": [
+        "Preserve product-specific eligibility and fee/benefit differences.",
+        "Preserve when the agent opens an account versus recommends one.",
+        "Do not collapse the checking product catalog into generic tier advice."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "personal_checking_opening_recommendation_journey",
+        "label": "Personal checking opening and product recommendation",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "personal_checking_opening_recommendation_shared_rules",
+        "label": "Shared workflow rules",
+        "kind": "shared_reference",
+        "parent_id": "personal_checking_opening_recommendation_journey",
+        "order": 1,
+        "description": "Rules, prerequisites, and reference values used by more than one customer pathway in this journey.",
+        "fact_ids": [
+          "F002",
+          "F003",
+          "F004",
+          "F005",
+          "F006",
+          "F007",
+          "F008",
+          "F009",
+          "F010",
+          "F011",
+          "F012",
+          "F013",
+          "F014",
+          "F015",
+          "F016",
+          "F017",
+          "F018",
+          "F019",
+          "F020",
+          "F021",
+          "F022",
+          "F023"
+        ]
+      },
+      {
+        "id": "personal_checking_opening_recommendation_path_a",
+        "label": "Eligible customer compares Blue Account and Green Account (checking) and opens a selected checking account",
+        "kind": "scenario_branch",
+        "parent_id": "personal_checking_opening_recommendation_journey",
+        "order": 2,
+        "description": "Policy path represented by case A.",
+        "fact_ids": [
+          "F024",
+          "F025",
+          "F026",
+          "F027",
+          "F028",
+          "F029",
+          "F030",
+          "F031",
+          "F032",
+          "F033",
+          "F034",
+          "F035",
+          "F036",
+          "F037",
+          "F038",
+          "F039",
+          "F040",
+          "F041",
+          "F042",
+          "F043",
+          "F044",
+          "F045",
+          "F046",
+          "F047",
+          "F048",
+          "F049",
+          "F050",
+          "F051",
+          "F052",
+          "F053",
+          "F054",
+          "F055",
+          "F056"
+        ]
+      },
+      {
+        "id": "personal_checking_opening_recommendation_path_b",
+        "label": "Customer compares Light Blue Account, Light Green Account, and Dark Green Account for low-cost or youth/student needs",
+        "kind": "scenario_branch",
+        "parent_id": "personal_checking_opening_recommendation_journey",
+        "order": 3,
+        "description": "Policy path represented by case B.",
+        "fact_ids": [
+          "F092",
+          "F093",
+          "F094",
+          "F095",
+          "F096",
+          "F097",
+          "F098",
+          "F099",
+          "F100",
+          "F101",
+          "F102",
+          "F103",
+          "F104",
+          "F105",
+          "F106",
+          "F107",
+          "F108",
+          "F109",
+          "F110",
+          "F111",
+          "F112",
+          "F113",
+          "F114",
+          "F115",
+          "F116",
+          "F117",
+          "F118",
+          "F119",
+          "F120",
+          "F121",
+          "F122",
+          "F123",
+          "F124",
+          "F125",
+          "F126",
+          "F127",
+          "F128",
+          "F129",
+          "F130"
+        ]
+      },
+      {
+        "id": "personal_checking_opening_recommendation_path_c",
+        "label": "Customer compares Purple Account and Evergreen Account for travel, foreign ATM, and eco-focused needs",
+        "kind": "scenario_branch",
+        "parent_id": "personal_checking_opening_recommendation_journey",
+        "order": 4,
+        "description": "Policy path represented by case C.",
+        "fact_ids": [
+          "F079",
+          "F080",
+          "F081",
+          "F082",
+          "F083",
+          "F084",
+          "F085",
+          "F086",
+          "F087",
+          "F088",
+          "F089",
+          "F090",
+          "F091",
+          "F160",
+          "F161",
+          "F162",
+          "F163",
+          "F164",
+          "F165",
+          "F166",
+          "F167",
+          "F168",
+          "F169",
+          "F170",
+          "F171",
+          "F172",
+          "F173"
+        ]
+      },
+      {
+        "id": "personal_checking_opening_recommendation_path_d",
+        "label": "Customer aged 62 or older asks about Gold Years Account and may open it",
+        "kind": "scenario_branch",
+        "parent_id": "personal_checking_opening_recommendation_journey",
+        "order": 5,
+        "description": "Policy path represented by case D.",
+        "fact_ids": [
+          "F131",
+          "F132",
+          "F133",
+          "F134",
+          "F135",
+          "F136",
+          "F137",
+          "F138",
+          "F139",
+          "F140",
+          "F141",
+          "F142",
+          "F143"
+        ]
+      },
+      {
+        "id": "personal_checking_opening_recommendation_path_e",
+        "label": "High-balance customer asks about Bluest Account and may open it",
+        "kind": "scenario_branch",
+        "parent_id": "personal_checking_opening_recommendation_journey",
+        "order": 6,
+        "description": "Policy path represented by case E.",
+        "fact_ids": [
+          "F144",
+          "F145",
+          "F146",
+          "F147",
+          "F148",
+          "F149",
+          "F150",
+          "F151",
+          "F152",
+          "F153",
+          "F154",
+          "F155",
+          "F156",
+          "F157",
+          "F158",
+          "F159"
+        ]
+      },
+      {
+        "id": "personal_checking_opening_recommendation_path_f",
+        "label": "Customer asks about Green Fee-Free Account fees, deposits, wire, and EveryonePay scenarios",
+        "kind": "scenario_branch",
+        "parent_id": "personal_checking_opening_recommendation_journey",
+        "order": 7,
+        "description": "Policy path represented by case F.",
+        "fact_ids": [
+          "F057",
+          "F058",
+          "F059",
+          "F060",
+          "F061",
+          "F062",
+          "F063",
+          "F064",
+          "F065",
+          "F066",
+          "F067",
+          "F068",
+          "F069",
+          "F070",
+          "F071",
+          "F072",
+          "F073",
+          "F074",
+          "F075",
+          "F076",
+          "F077",
+          "F078",
+          "F174",
+          "F175",
+          "F176",
+          "F177",
+          "F178"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "personal_checking_opening_recommendation_path_a",
+        "type": "uses_shared_rules",
+        "target_id": "personal_checking_opening_recommendation_shared_rules"
+      },
+      {
+        "source_id": "personal_checking_opening_recommendation_path_b",
+        "type": "uses_shared_rules",
+        "target_id": "personal_checking_opening_recommendation_shared_rules"
+      },
+      {
+        "source_id": "personal_checking_opening_recommendation_path_c",
+        "type": "uses_shared_rules",
+        "target_id": "personal_checking_opening_recommendation_shared_rules"
+      },
+      {
+        "source_id": "personal_checking_opening_recommendation_path_d",
+        "type": "uses_shared_rules",
+        "target_id": "personal_checking_opening_recommendation_shared_rules"
+      },
+      {
+        "source_id": "personal_checking_opening_recommendation_path_e",
+        "type": "uses_shared_rules",
+        "target_id": "personal_checking_opening_recommendation_shared_rules"
+      },
+      {
+        "source_id": "personal_checking_opening_recommendation_path_f",
+        "type": "uses_shared_rules",
+        "target_id": "personal_checking_opening_recommendation_shared_rules"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "F002",
+      "statement": "To open a personal checking account, all listed eligibility requirements must be true."
+    },
+    {
+      "id": "F003",
+      "statement": "A customer must be verified to open a personal checking account."
+    },
+    {
+      "id": "F004",
+      "statement": "A customer must be at least 18 years old to open a personal checking account."
+    },
+    {
+      "id": "F005",
+      "statement": "A customer must not exceed 4 personal checking accounts to open a personal checking account."
+    },
+    {
+      "id": "F006",
+      "statement": "A customer must have no checking accounts closed for cause in the past 6 months to open a personal checking account."
+    },
+    {
+      "id": "F007",
+      "statement": "The first step in the personal checking account opening procedure is to verify customer identity."
+    },
+    {
+      "id": "F008",
+      "statement": "The second step in the personal checking account opening procedure is to check the eligibility requirements after identity verification."
+    },
+    {
+      "id": "F009",
+      "statement": "The third step in the personal checking account opening procedure is to confirm the customer's desired account_class selection after eligibility is checked."
+    },
+    {
+      "id": "F010",
+      "statement": "Personal checking account_class options must use the full official name ending with 'Account', with examples including 'Blue Account' and 'Green Account (checking)'."
+    },
+    {
+      "id": "F011",
+      "statement": "The fourth step in the personal checking account opening procedure is to use open_bank_account_4821 to open the account after the customer's desired account_class selection is confirmed."
+    },
+    {
+      "id": "F012",
+      "statement": "Use get_all_user_accounts_by_user_id_3847 to retrieve the bank accounts, including checkings and savings, for a customer."
+    },
+    {
+      "id": "F013",
+      "statement": "get_all_user_accounts_by_user_id_3847 is essential for checking eligibility requirements for opening new accounts, including existing account status, balances, account tenure, and number of accounts."
+    },
+    {
+      "id": "F014",
+      "statement": "get_all_user_accounts_by_user_id_3847 is essential for verifying pre-closure requirements when closing accounts."
+    },
+    {
+      "id": "F015",
+      "statement": "get_all_user_accounts_by_user_id_3847 is essential for looking up account details for customer service inquiries."
+    },
+    {
+      "id": "F016",
+      "statement": "get_all_user_accounts_by_user_id_3847 requires the customer's user_id."
+    },
+    {
+      "id": "F017",
+      "statement": "get_all_user_accounts_by_user_id_3847 returns account_id."
+    },
+    {
+      "id": "F018",
+      "statement": "get_all_user_accounts_by_user_id_3847 returns account_type."
+    },
+    {
+      "id": "F019",
+      "statement": "get_all_user_accounts_by_user_id_3847 returns account_class."
+    },
+    {
+      "id": "F020",
+      "statement": "get_all_user_accounts_by_user_id_3847 returns status."
+    },
+    {
+      "id": "F021",
+      "statement": "get_all_user_accounts_by_user_id_3847 returns balance."
+    },
+    {
+      "id": "F022",
+      "statement": "get_all_user_accounts_by_user_id_3847 returns date_opened."
+    },
+    {
+      "id": "F023",
+      "statement": "The personal checking account product names are Blue Account, Green Account (checking), Green Fee-Free Account, Purple Account, Light Blue Account, Light Green Account, Dark Green Account, Gold Years Account, Bluest Account, and Evergreen Account."
+    },
+    {
+      "id": "F024",
+      "statement": "Blue Account has a $20.00 monthly maintenance fee."
+    },
+    {
+      "id": "F025",
+      "statement": "Blue Account waives the monthly maintenance fee when the customer maintains a minimum daily balance of $625."
+    },
+    {
+      "id": "F026",
+      "statement": "Blue Account charges 1% of the withdrawal amount for an out-of-network ATM withdrawal, with a maximum fee of $3.00."
+    },
+    {
+      "id": "F027",
+      "statement": "Blue Account earns 0.01% interest on balances."
+    },
+    {
+      "id": "F028",
+      "statement": "Blue Account has a $2,500 daily mobile check deposit limit."
+    },
+    {
+      "id": "F029",
+      "statement": "Blue Account provides early direct deposit 1 day before payday."
+    },
+    {
+      "id": "F030",
+      "statement": "Blue Account has no overdraft fees."
+    },
+    {
+      "id": "F031",
+      "statement": "For Blue Account, alerts can help keep the daily balance at or above $625 if the customer wants the monthly fee waived."
+    },
+    {
+      "id": "F032",
+      "statement": "For Blue Account, using in-network ATMs avoids the 1% out-of-network fee."
+    },
+    {
+      "id": "F033",
+      "statement": "For Blue Account, larger check deposits should be planned ahead if they exceed the $2,500 daily mobile deposit limit."
+    },
+    {
+      "id": "F034",
+      "statement": "For Blue Account, early direct deposit can allow a paycheck to arrive 1 day early."
+    },
+    {
+      "id": "F035",
+      "statement": "Green Account (checking) has no overdraft fees and no overdraft coverage; transactions that exceed the available balance are declined."
+    },
+    {
+      "id": "F036",
+      "statement": "Green Account (checking) earns 0.11% APY on the checking balance."
+    },
+    {
+      "id": "F037",
+      "statement": "Green Account (checking) provides direct deposits up to 1 day early."
+    },
+    {
+      "id": "F038",
+      "statement": "Green Account (checking) allows mobile check deposits up to $3,000 per day."
+    },
+    {
+      "id": "F039",
+      "statement": "Green Account (checking) can boost a linked savings account's APY by +0.75% for Gold or +0.25% for Silver."
+    },
+    {
+      "id": "F040",
+      "statement": "Green Account (checking) has a $22.50 monthly maintenance fee."
+    },
+    {
+      "id": "F041",
+      "statement": "Green Account (checking) has a $1,350 minimum daily balance requirement to waive the monthly maintenance fee."
+    },
+    {
+      "id": "F042",
+      "statement": "Green Account (checking) has a $2.50 monthly paper statement fee."
+    },
+    {
+      "id": "F043",
+      "statement": "Green Account (checking) has a $3.00 out-of-network ATM withdrawal fee, and the ATM owner may charge additional fees."
+    },
+    {
+      "id": "F044",
+      "statement": "Green Account (checking) has a $17.50 returned deposit fee."
+    },
+    {
+      "id": "F045",
+      "statement": "Green Account (checking) has a $15.00 incoming domestic wire receive fee."
+    },
+    {
+      "id": "F046",
+      "statement": "In the Green Account (checking) referral program, the referrer earns $20 per successful referral."
+    },
+    {
+      "id": "F047",
+      "statement": "In the Green Account (checking) referral program, the referred friend or family member receives a $30 welcome bonus."
+    },
+    {
+      "id": "F048",
+      "statement": "The Green Account (checking) referral program allows a maximum of 5 referrals per year."
+    },
+    {
+      "id": "F049",
+      "statement": "The Green Account (checking) referral program requires a $500 qualifying deposit within 60 days."
+    },
+    {
+      "id": "F050",
+      "statement": "The Green Account (checking) referral program has an account tenure requirement of 30 days since becoming a Rho-Bank checking customer."
+    },
+    {
+      "id": "F051",
+      "statement": "To avoid the Green Account (checking) monthly maintenance fee, the customer must maintain a minimum daily balance of $1,350 each statement cycle."
+    },
+    {
+      "id": "F052",
+      "statement": "For Green Account (checking), a $2.50 monthly fee applies if the customer opts for paper statements."
+    },
+    {
+      "id": "F053",
+      "statement": "For Green Account (checking), deposited checks returned unpaid result in a $17.50 fee."
+    },
+    {
+      "id": "F054",
+      "statement": "For Green Account (checking), receiving a domestic wire transfer costs $15.00."
+    },
+    {
+      "id": "F055",
+      "statement": "For Green Account (checking), early direct deposit availability depends on when the payer submits the deposit, and funds can post up to 1 day early."
+    },
+    {
+      "id": "F056",
+      "statement": "For Green Account (checking), savings APY boosts apply when an eligible Gold or Silver Savings Account is linked: +0.75% for Gold or +0.25% for Silver."
+    },
+    {
+      "id": "F057",
+      "statement": "The Green Fee-Free Account guide includes sections for Key Figures, Receiving Domestic Wires, Returned Deposits, EveryonePay Daily Limit, and Common Scenarios and Tips."
+    },
+    {
+      "id": "F058",
+      "statement": "Green Fee-Free Account has a returned deposit fee of $15.00 per returned item."
+    },
+    {
+      "id": "F059",
+      "statement": "Green Fee-Free Account has an incoming domestic wire fee of $12.50 per incoming wire."
+    },
+    {
+      "id": "F060",
+      "statement": "Green Fee-Free Account has an EveryonePay daily send limit of $2,000 per day."
+    },
+    {
+      "id": "F061",
+      "statement": "For Green Fee-Free Account, the incoming domestic wire fee is assessed when the wire posts to the account."
+    },
+    {
+      "id": "F062",
+      "statement": "For Green Fee-Free Account incoming domestic wires, the sender's bank may also charge the sender, and that charge is separate from the amount received."
+    },
+    {
+      "id": "F063",
+      "statement": "For smooth domestic wire delivery to a Green Fee-Free Account, provide the full account name exactly as it appears on the account."
+    },
+    {
+      "id": "F064",
+      "statement": "For Green Fee-Free Account domestic wire delivery, account and routing details should be shared only through trusted, secure channels."
+    },
+    {
+      "id": "F065",
+      "statement": "For Green Fee-Free Account domestic wire delivery, the sender should be asked to include the recipient's name in the wire memo to help identify funds."
+    },
+    {
+      "id": "F066",
+      "statement": "For Green Fee-Free Account, the returned deposit fee applies when a deposited check is returned unpaid by the issuing bank."
+    },
+    {
+      "id": "F067",
+      "statement": "For Green Fee-Free Account, a deposited check can be returned unpaid because of insufficient funds or a stop payment placed by the issuer."
+    },
+    {
+      "id": "F068",
+      "statement": "For Green Fee-Free Account, a deposited check can be returned unpaid because it is altered, stale-dated, or otherwise invalid."
+    },
+    {
+      "id": "F069",
+      "statement": "For Green Fee-Free Account, accepting checks only from trusted parties can reduce returned deposit risk."
+    },
+    {
+      "id": "F070",
+      "statement": "For Green Fee-Free Account, verifying funds with the issuer before depositing when possible can reduce returned deposit risk."
+    },
+    {
+      "id": "F071",
+      "statement": "For Green Fee-Free Account, keeping deposit receipts and correspondence with the issuer can reduce returned deposit risk."
+    },
+    {
+      "id": "F072",
+      "statement": "For Green Fee-Free Account EveryonePay, all successful send transactions created within the same day count against the daily send cap."
+    },
+    {
+      "id": "F073",
+      "statement": "For Green Fee-Free Account EveryonePay, canceled or failed sends generally do not reduce the available daily amount once reversed."
+    },
+    {
+      "id": "F074",
+      "statement": "For Green Fee-Free Account EveryonePay, larger transfers can be planned ahead and split across multiple days if needed."
+    },
+    {
+      "id": "F075",
+      "statement": "For Green Fee-Free Account EveryonePay, if the customer reaches the cap, sending can resume when the daily limit refreshes."
+    },
+    {
+      "id": "F076",
+      "statement": "For Green Fee-Free Account, combining a wire receipt and a returned check on the same day can result in both the $12.50 incoming domestic wire fee and the $15.00 returned deposit fee applying if each event occurs."
+    },
+    {
+      "id": "F077",
+      "statement": "For Green Fee-Free Account, if the customer plans to send via EveryonePay and also expects an incoming wire the same day, the customer should account for the $12.50 incoming wire fee and the $2,000 EveryonePay daily send limit to avoid interruptions."
+    },
+    {
+      "id": "F078",
+      "statement": "For Green Fee-Free Account, if a deposited check is returned and the $15.00 fee is incurred, the customer may request an alternative payment method such as a wire or EveryonePay within the $2,000 daily send limit."
+    },
+    {
+      "id": "F079",
+      "statement": "Purple Account has a 0% foreign transaction fee."
+    },
+    {
+      "id": "F080",
+      "statement": "Purple Account has a $0.00 foreign ATM withdrawal fee, though third-party ATM operator fees may still apply."
+    },
+    {
+      "id": "F081",
+      "statement": "Purple Account provides global ATM fee rebates up to $30 per month worldwide."
+    },
+    {
+      "id": "F082",
+      "statement": "Purple Account has real-time currency conversion with a 0.5% markup above the interbank rate."
+    },
+    {
+      "id": "F083",
+      "statement": "Purple Account has a multi-currency wallet with up to 30 supported foreign currencies."
+    },
+    {
+      "id": "F084",
+      "statement": "Purple Account includes 6 complimentary airport lounge visits per year."
+    },
+    {
+      "id": "F085",
+      "statement": "Purple Account includes travel insurance benefits."
+    },
+    {
+      "id": "F086",
+      "statement": "Purple Account has a $0.00 incoming domestic wire fee."
+    },
+    {
+      "id": "F087",
+      "statement": "Purple Account has a $5,000 daily mobile check deposit limit."
+    },
+    {
+      "id": "F088",
+      "statement": "Purple Account key numbers list early direct deposit as 2 days early."
+    },
+    {
+      "id": "F089",
+      "statement": "Purple Account eligible direct deposits can be paid up to 2 days early."
+    },
+    {
+      "id": "F090",
+      "statement": "Purple Account provides a +0.3% APY boost when linked with Platinum Plus Savings."
+    },
+    {
+      "id": "F091",
+      "statement": "Purple Account provides a +0.1% APY boost when linked with Gold Savings."
+    },
+    {
+      "id": "F092",
+      "statement": "Light Blue Account has a $0.00 monthly maintenance fee."
+    },
+    {
+      "id": "F093",
+      "statement": "Light Blue Account has a $0.00 overdraft fee."
+    },
+    {
+      "id": "F094",
+      "statement": "Light Blue Account charges $10 per cashier's check."
+    },
+    {
+      "id": "F095",
+      "statement": "With Light Blue Account, the customer will not incur an overdraft fee when the balance goes negative because the overdraft fee is $0.00."
+    },
+    {
+      "id": "F096",
+      "statement": "With Light Blue Account, the customer pays $0.00 in monthly maintenance fees, so the balance is not reduced by a recurring service charge."
+    },
+    {
+      "id": "F097",
+      "statement": "With Light Blue Account, each cashier's check for certified funds is issued for $10."
+    },
+    {
+      "id": "F098",
+      "statement": "For Light Blue Account, electronic statements and alerts can help the customer avoid going negative even though the overdraft fee is $0.00."
+    },
+    {
+      "id": "F099",
+      "statement": "For Light Blue Account, requesting a cashier's check only when necessary keeps total cashier's check costs to $10 per check."
+    },
+    {
+      "id": "F100",
+      "statement": "Light Green Account has a $0.00 monthly maintenance fee."
+    },
+    {
+      "id": "F101",
+      "statement": "Light Green Account earns 0.05% APY on balances."
+    },
+    {
+      "id": "F102",
+      "statement": "Light Green Account has a $300 daily spending limit."
+    },
+    {
+      "id": "F103",
+      "statement": "Light Green Account has a $150 daily ATM withdrawal limit."
+    },
+    {
+      "id": "F104",
+      "statement": "Light Green Account provides 4 free out-of-network ATM withdrawals per month."
+    },
+    {
+      "id": "F105",
+      "statement": "Light Green Account charges a $1.50 out-of-network ATM withdrawal fee after the free monthly withdrawals are used."
+    },
+    {
+      "id": "F106",
+      "statement": "Light Green Account has a $500 daily mobile check deposit limit."
+    },
+    {
+      "id": "F107",
+      "statement": "Light Green Account provides early direct deposit 0 day(s) before payday."
+    },
+    {
+      "id": "F108",
+      "statement": "Light Green Account has no overdraft fees."
+    },
+    {
+      "id": "F109",
+      "statement": "For Light Green Account, purchases should be planned to stay within the $300 daily cap."
+    },
+    {
+      "id": "F110",
+      "statement": "For Light Green Account, cash withdrawals can be up to $150 per day, and the customer gets 4 free out-of-network ATM withdrawals per month before the $1.50 fee applies."
+    },
+    {
+      "id": "F111",
+      "statement": "For Light Green Account, mobile check deposit can be used for up to $500 each day."
+    },
+    {
+      "id": "F112",
+      "statement": "Light Green Account keeps funds growing with an APY of 0.05%."
+    },
+    {
+      "id": "F113",
+      "statement": "For Light Green Account, direct deposits arrive 0 day(s) before the scheduled payday."
+    },
+    {
+      "id": "F114",
+      "statement": "In the Light Green Account referral program, the referrer earns $15 for each successful referral."
+    },
+    {
+      "id": "F115",
+      "statement": "In the Light Green Account referral program, the referred friend receives $25 as a welcome bonus."
+    },
+    {
+      "id": "F116",
+      "statement": "The Light Green Account referral program allows a maximum of 3 referrals per calendar year."
+    },
+    {
+      "id": "F117",
+      "statement": "Dark Green Account has a minimum primary holder age of 17."
+    },
+    {
+      "id": "F118",
+      "statement": "Dark Green Account has a maximum primary holder age of 26."
+    },
+    {
+      "id": "F119",
+      "statement": "Dark Green Account has a $10.00 monthly maintenance fee."
+    },
+    {
+      "id": "F120",
+      "statement": "Dark Green Account has an overdraft protection transfer fee of 0."
+    },
+    {
+      "id": "F121",
+      "statement": "Dark Green Account has an out-of-network ATM withdrawal fee of 1% with a minimum of $1.50."
+    },
+    {
+      "id": "F122",
+      "statement": "Dark Green Account earns 1.5% APY."
+    },
+    {
+      "id": "F123",
+      "statement": "Dark Green Account provides 1.25% student loan payment cashback."
+    },
+    {
+      "id": "F124",
+      "statement": "Dark Green Account provides a $62.50 annual academic standing bonus."
+    },
+    {
+      "id": "F125",
+      "statement": "Dark Green Account provides a 10.0% partner textbook retailer discount."
+    },
+    {
+      "id": "F126",
+      "statement": "Dark Green Account provides a $100.00 graduation transition bonus."
+    },
+    {
+      "id": "F127",
+      "statement": "Dark Green Account has a $1,500 mobile check deposit daily limit."
+    },
+    {
+      "id": "F128",
+      "statement": "Dark Green Account provides early direct deposit 1 day(s) before payday."
+    },
+    {
+      "id": "F129",
+      "statement": "For Dark Green Account, rewards and limits apply when eligibility conditions are met and verification is provided where required."
+    },
+    {
+      "id": "F130",
+      "statement": "For Dark Green Account, fees and rates may change with required notice."
+    },
+    {
+      "id": "F131",
+      "statement": "Gold Years Account is designed for customers aged 62 and older."
+    },
+    {
+      "id": "F132",
+      "statement": "Gold Years Account has a $0.00 monthly maintenance fee."
+    },
+    {
+      "id": "F133",
+      "statement": "Gold Years Account earns 1.0% APY on the checking balance."
+    },
+    {
+      "id": "F134",
+      "statement": "Gold Years Account provides 3 complimentary personal check orders per year."
+    },
+    {
+      "id": "F135",
+      "statement": "Gold Years Account has a $0.00 per month paper statement fee."
+    },
+    {
+      "id": "F136",
+      "statement": "Gold Years Account has a $0.00 out-of-network ATM withdrawal fee."
+    },
+    {
+      "id": "F137",
+      "statement": "Gold Years Account provides early direct deposit up to 2 days early."
+    },
+    {
+      "id": "F138",
+      "statement": "Gold Years Account has a $5,000 per day mobile check deposit limit."
+    },
+    {
+      "id": "F139",
+      "statement": "Gold Years Account provides 12.5% prescription savings at partner pharmacies when the customer pays with the debit card."
+    },
+    {
+      "id": "F140",
+      "statement": "Gold Years Account includes access to a dedicated senior support line."
+    },
+    {
+      "id": "F141",
+      "statement": "Gold Years Account provides a one-time $50.00 Social Security direct deposit bonus."
+    },
+    {
+      "id": "F142",
+      "statement": "Gold Years Account provides a 17.5% estate planning consultation discount through partner firms."
+    },
+    {
+      "id": "F143",
+      "statement": "Gold Years Account provides linked savings APY boosts of +0.5% for Gold Plus and +0.6% for Silver."
+    },
+    {
+      "id": "F144",
+      "statement": "Bluest Account has a $75,000 minimum opening deposit."
+    },
+    {
+      "id": "F145",
+      "statement": "Bluest Account has a $112,500 minimum daily balance to maintain benefits."
+    },
+    {
+      "id": "F146",
+      "statement": "Bluest Account earns 2.25% APY."
+    },
+    {
+      "id": "F147",
+      "statement": "Bluest Account provides 10 complimentary domestic wire transfers per month."
+    },
+    {
+      "id": "F148",
+      "statement": "Bluest Account has a $12.50 outbound international wire fee per transfer."
+    },
+    {
+      "id": "F149",
+      "statement": "Bluest Account provides 3 complimentary personal check orders per year."
+    },
+    {
+      "id": "F150",
+      "statement": "Bluest Account has an ATM fee rebates cap of up to $50 per month."
+    },
+    {
+      "id": "F151",
+      "statement": "Bluest Account provides a 75.0% safe deposit box rental discount."
+    },
+    {
+      "id": "F152",
+      "statement": "Bluest Account has a $0.00 incoming domestic wire fee."
+    },
+    {
+      "id": "F153",
+      "statement": "Bluest Account has a $10,000 daily mobile check deposit limit."
+    },
+    {
+      "id": "F154",
+      "statement": "Bluest Account provides early direct deposit 2 day(s) before payday."
+    },
+    {
+      "id": "F155",
+      "statement": "For Bluest Account, APY and balance details can be used to plan how the customer keeps funds in the account."
+    },
+    {
+      "id": "F156",
+      "statement": "For Bluest Account, monthly caps for ATM rebates and complimentary wires should be tracked to maximize value."
+    },
+    {
+      "id": "F157",
+      "statement": "For Bluest Account, incoming domestic wires are credited without an incoming fee."
+    },
+    {
+      "id": "F158",
+      "statement": "For Bluest Account, customers needing higher-volume check usage should note the complimentary personal check orders per year."
+    },
+    {
+      "id": "F159",
+      "statement": "For Bluest Account, direct deposit can provide payment 2 day(s) early."
+    },
+    {
+      "id": "F160",
+      "statement": "Evergreen Account plants one tree for every $750 the customer spends with the debit card."
+    },
+    {
+      "id": "F161",
+      "statement": "Evergreen Account provides automatic carbon offset on purchases at $1.25 g CO2 per $1 spent."
+    },
+    {
+      "id": "F162",
+      "statement": "Evergreen Account earns 0.05% APY on the checking balance."
+    },
+    {
+      "id": "F163",
+      "statement": "Evergreen Account provides +1.75% cashback extra rewards at partner eco-friendly brands."
+    },
+    {
+      "id": "F164",
+      "statement": "Evergreen Account provides early direct deposit up to 2 days early."
+    },
+    {
+      "id": "F165",
+      "statement": "Evergreen Account has a $3,500 daily mobile check deposit limit."
+    },
+    {
+      "id": "F166",
+      "statement": "Evergreen Account provides a +0.55% APY boost when linked to a Green Account (savings)."
+    },
+    {
+      "id": "F167",
+      "statement": "Evergreen Account provides a +0.15% APY boost when linked to a Diamond Elite Savings Account."
+    },
+    {
+      "id": "F168",
+      "statement": "For Evergreen Account tree planting, spending $750 results in 1 tree planted, and spending 5 times that amount results in 5 trees planted."
+    },
+    {
+      "id": "F169",
+      "statement": "Evergreen Account has a foreign ATM withdrawal fee of 2% of the withdrawal amount, with a minimum of $3.00 per transaction."
+    },
+    {
+      "id": "F170",
+      "statement": "For Evergreen Account foreign ATM withdrawals, third-party ATM operator fees may also apply."
+    },
+    {
+      "id": "F171",
+      "statement": "In the Evergreen Account referral program, the referrer earns $35 per successful referral."
+    },
+    {
+      "id": "F172",
+      "statement": "In the Evergreen Account referral program, new members receive $25 as a welcome bonus."
+    },
+    {
+      "id": "F173",
+      "statement": "The Evergreen Account referral program allows the customer to earn up to 6 referral bonuses per calendar year."
+    },
+    {
+      "id": "F174",
+      "statement": "Green Fee-Free Account has a $0.00 overdraft fee."
+    },
+    {
+      "id": "F175",
+      "statement": "Green Fee-Free Account has a $0.00 Rho-Bank out-of-network ATM fee, although the ATM owner may impose a separate surcharge."
+    },
+    {
+      "id": "F176",
+      "statement": "Green Fee-Free Account balances earn 0% APY, so no interest is paid."
+    },
+    {
+      "id": "F177",
+      "statement": "Green Fee-Free Account has a $2,500 daily mobile check deposit limit."
+    },
+    {
+      "id": "F178",
+      "statement": "Green Fee-Free Account provides early direct deposit 0 day(s) before payday."
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "type": "transcript_spec",
+      "title": "Eligible customer compares Blue Account and Green Account (checking) and opens a selected checking account",
+      "case_requirements": [
+        "Customer requests help choosing between Blue Account and Green Account (checking), then asks to open one of them.",
+        "Support console/internal notes show identity verification, use of get_all_user_accounts_by_user_id_3847 with user_id, eligibility checks, and account information fields returned.",
+        "Case demonstrates that all opening eligibility requirements are checked before account opening.",
+        "Agent confirms the exact desired account_class before opening and uses open_bank_account_4821 only after the required prior steps.",
+        "Case preserves customer-visible product differences for Blue Account and Green Account (checking), including fees, limits, overdraft treatment, APY, direct deposit timing, linked savings boosts, and referral requirements."
+      ],
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F017",
+        "F018",
+        "F019",
+        "F020",
+        "F021",
+        "F022",
+        "F023",
+        "F024",
+        "F025",
+        "F026",
+        "F027",
+        "F028",
+        "F029",
+        "F030",
+        "F031",
+        "F032",
+        "F033",
+        "F034",
+        "F035",
+        "F036",
+        "F037",
+        "F038",
+        "F039",
+        "F040",
+        "F041",
+        "F042",
+        "F043",
+        "F044",
+        "F045",
+        "F046",
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056"
+      ]
+    },
+    {
+      "id": "B",
+      "type": "transcript_spec",
+      "title": "Customer compares Light Blue Account, Light Green Account, and Dark Green Account for low-cost or youth/student needs",
+      "case_requirements": [
+        "Customer asks for a low-fee, basic, or age/student-oriented personal checking recommendation.",
+        "Case preserves the difference between no-monthly-fee options and Dark Green Account's age range, rewards, fees, rates, and verification-qualified rewards.",
+        "If an account is opened in the case, support console/internal notes must show the general identity, eligibility, account retrieval, account_class confirmation, and opening-tool sequence."
+      ],
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F017",
+        "F018",
+        "F019",
+        "F020",
+        "F021",
+        "F022",
+        "F023",
+        "F092",
+        "F093",
+        "F094",
+        "F095",
+        "F096",
+        "F097",
+        "F098",
+        "F099",
+        "F100",
+        "F101",
+        "F102",
+        "F103",
+        "F104",
+        "F105",
+        "F106",
+        "F107",
+        "F108",
+        "F109",
+        "F110",
+        "F111",
+        "F112",
+        "F113",
+        "F114",
+        "F115",
+        "F116",
+        "F117",
+        "F118",
+        "F119",
+        "F120",
+        "F121",
+        "F122",
+        "F123",
+        "F124",
+        "F125",
+        "F126",
+        "F127",
+        "F128",
+        "F129",
+        "F130"
+      ]
+    },
+    {
+      "id": "C",
+      "type": "transcript_spec",
+      "title": "Customer compares Purple Account and Evergreen Account for travel, foreign ATM, and eco-focused needs",
+      "case_requirements": [
+        "Customer asks for a travel-friendly and/or eco-focused checking recommendation.",
+        "Case preserves Purple Account foreign transaction, foreign ATM, ATM rebate, currency, wallet, lounge, travel insurance, wire, mobile deposit, early deposit, and savings boost details.",
+        "Case preserves Evergreen Account tree planting, carbon offset, APY, eco-brand cashback, early deposit, mobile deposit, linked savings boosts, foreign ATM fees, third-party ATM exception, and referral limits."
+      ],
+      "included_fact_ids": [
+        "F079",
+        "F080",
+        "F081",
+        "F082",
+        "F083",
+        "F084",
+        "F085",
+        "F086",
+        "F087",
+        "F088",
+        "F089",
+        "F090",
+        "F091",
+        "F160",
+        "F161",
+        "F162",
+        "F163",
+        "F164",
+        "F165",
+        "F166",
+        "F167",
+        "F168",
+        "F169",
+        "F170",
+        "F171",
+        "F172",
+        "F173"
+      ]
+    },
+    {
+      "id": "D",
+      "type": "transcript_spec",
+      "title": "Customer aged 62 or older asks about Gold Years Account and may open it",
+      "case_requirements": [
+        "Customer asks for a senior-oriented checking account or benefits for customers aged 62 and older.",
+        "Case preserves Gold Years Account design age, fees, APY, check orders, paper statements, ATM fee, early direct deposit, mobile deposit, prescription savings condition, dedicated senior support line, Social Security bonus, estate planning discount, and linked savings boosts.",
+        "If opening occurs, case demonstrates identity verification, eligibility checks, exact account_class confirmation, and use of open_bank_account_4821 in order."
+      ],
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F017",
+        "F018",
+        "F019",
+        "F020",
+        "F021",
+        "F022",
+        "F023",
+        "F131",
+        "F132",
+        "F133",
+        "F134",
+        "F135",
+        "F136",
+        "F137",
+        "F138",
+        "F139",
+        "F140",
+        "F141",
+        "F142",
+        "F143"
+      ]
+    },
+    {
+      "id": "E",
+      "type": "transcript_spec",
+      "title": "High-balance customer asks about Bluest Account and may open it",
+      "case_requirements": [
+        "Customer asks for a premium or high-balance checking option and can discuss opening deposit and balance expectations.",
+        "Case preserves Bluest Account minimum opening deposit, minimum daily balance to maintain benefits, APY, complimentary wires, international wire fee, check orders, ATM rebate cap, safe deposit box discount, incoming wire fee, mobile deposit limit, and early direct deposit.",
+        "If opening occurs, case demonstrates identity verification, eligibility checks, exact account_class confirmation, and use of open_bank_account_4821 in order."
+      ],
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F017",
+        "F018",
+        "F019",
+        "F020",
+        "F021",
+        "F022",
+        "F023",
+        "F144",
+        "F145",
+        "F146",
+        "F147",
+        "F148",
+        "F149",
+        "F150",
+        "F151",
+        "F152",
+        "F153",
+        "F154",
+        "F155",
+        "F156",
+        "F157",
+        "F158",
+        "F159"
+      ]
+    },
+    {
+      "id": "F",
+      "type": "transcript_spec",
+      "title": "Customer asks about Green Fee-Free Account fees, deposits, wire, and EveryonePay scenarios",
+      "case_requirements": [
+        "Customer asks about Green Fee-Free Account domestic wire receipt fees, returned deposit fees, EveryonePay limits, or same-day combined scenarios.",
+        "Case preserves the Green Fee-Free Account guide sections, key figures, $0.00 overdraft and Rho-Bank out-of-network ATM fees, ATM-owner surcharge caveat, 0% APY, $2,500 mobile-deposit limit, source-exact 0 day(s) early-deposit value, when fees are assessed, sender-bank-fee exception, wire delivery tips, returned-check causes and risk-reduction tips, EveryonePay cap counting rules, canceled/failed-send exception, and same-day combined fee/limit planning."
+      ],
+      "included_fact_ids": [
+        "F057",
+        "F058",
+        "F059",
+        "F060",
+        "F061",
+        "F062",
+        "F063",
+        "F064",
+        "F065",
+        "F066",
+        "F067",
+        "F068",
+        "F069",
+        "F070",
+        "F071",
+        "F072",
+        "F073",
+        "F074",
+        "F075",
+        "F076",
+        "F077",
+        "F078",
+        "F174",
+        "F175",
+        "F176",
+        "F177",
+        "F178"
+      ]
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/personal_checking_opening_recommendation/evidence_corpus_hard_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/personal_checking_opening_recommendation/client_overlay_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/personal_checking_opening_recommendation/client_overlay_deposit_opening_001/transformation_pack.json"
+    }
+  ]
+}

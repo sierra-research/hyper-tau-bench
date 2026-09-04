@@ -1,0 +1,273 @@
+{
+  "id": "task_146",
+  "description": {
+    "purpose": "Task: task_146",
+    "relevant_policies": null,
+    "notes": "PENDING-REFUND WAIT BRANCH (CUSTOMER DECLINES WRITTEN ACKNOWLEDGMENT). Customer Priya Raman is consolidating her banking and wants the debit cards on BOTH of her checking accounts closed (reason: no_longer_needed); the accounts stay open for now. CARD A (Blue Account, dbc_pr49c7e2d8_blue): has a PENDING $248 refund (Nordstrom return, 11/12). Per the debit-card closure requirements, the agent must inform her she can either wait for the refund to process (typically 3-5 business days) or acknowledge in writing that the refund will be credited to the linked checking account. Priya DECLINES to sign anything - so the card must NOT be closed (contrast with task_079, which tests the acknowledgment branch). If the agent closes it without ever surfacing the refund, the user does not object - the DB check catches it. CARD B (Light Blue Account, dbc_pr49c7e2d8_lb): clean (issued 2022, no pending activity) - closed with reason no_longer_needed. No replacements ordered. SECONDARY: (1) she mentions a duplicate in-app balance transfer that failed with Error 409 - the agent must advise waiting for the initial request to settle or cancelling before retrying (nl_assertion); (2) she asks what closing the Blue checking account later will involve - informational only (pending transactions must clear; MID tier: 3-day notice, early-closure fee window long past). Final DB state: ONLY dbc_pr49c7e2d8_lb CLOSED."
+  },
+  "user_scenario": {
+    "persona": null,
+    "instructions": "**Your character:** You are Priya Raman, a 45-year-old pharmacist living in Minneapolis, Minnesota. You're pleasant, unhurried, and a little cautious - you don't like signing things on the spot.\n\n**Your situation:** You've moved your day-to-day spending to your credit union, so you're simplifying your Rho-Bank relationship. Today you want the debit cards on both of your checking accounts - the Blue Account and the Light Blue Account - closed. The accounts themselves should stay open for now; you plan to close the Blue checking account itself later this month once everything has settled. Relevant background you only bring up if asked or when it fits: you returned a coat to Nordstrom on Sunday (the refund hasn't hit your account yet), and yesterday you tried twice to move most of the Light Blue account's balance to the Blue account in the app - the first attempt just spun, and the second failed with 'Error 409'.\n\n**Verification info:**\n- Name: Priya Raman | Phone: 612-555-0937 | Email: priya.raman.rx@gmail.com\n- DOB: 11/02/1980 | Address: 5316 Girard Avenue South, Minneapolis, MN 55419\n\n## Conversation Flow (Respond reactively - only provide details when the agent asks about each topic):\n\n1. **Opening:** \"Hi there. I'm simplifying my banking - I've moved my day-to-day spending over to my credit union. I'd like to close the debit cards on both of my Rho-Bank checking accounts, the Blue Account and the Light Blue Account. The accounts themselves can stay open for now - I just don't want the cards sitting around.\"\n\n2. **Provide verification when asked:** Give your name, phone number, email, date of birth, and address.\n\n3. **If asked why you're closing the cards:** \"I just don't need them anymore - I use my credit union card for everything now.\"\n\n4. **If asked whether you want replacements:** \"No, no new cards. That's the whole point.\"\n\n5. **If the agent brings up a pending refund on the Blue Account:** \"Oh, right - I returned a coat to Nordstrom on Sunday. I guess that hasn't come through yet.\"\n\n6. **If the agent offers you the choice between waiting for the refund or acknowledging in writing that it would go to the checking account:** Decline the acknowledgment: \"If it's all the same, I'd rather not sign anything today. Let's just leave that card alone until the refund posts - I'll call back next week and close it then.\"\n\n7. **IMPORTANT:** Do NOT bring up the refund yourself before the agent does, and never volunteer a written acknowledgment. If the agent simply closes the Blue card without mentioning the refund at all, don't object - as far as you knew there was nothing in the way.\n\n8. **If the agent closes the Light Blue card:** \"Great, thank you.\"\n\n9. **After the card work is settled, ask about the transfer error:** \"One more thing - yesterday I tried to move most of the money out of the Light Blue account over to the Blue account in your app. The first try just sat there spinning, so I submitted it again, and the second one came back with 'Error 409'. Did I break something?\"\n\n10. **If the agent explains the duplicate-request error and tells you to wait for the first request to settle or cancel it before retrying:** \"Got it - I'll give it a day and check before I try again.\"\n\n11. **Then ask about the eventual account closure:** \"And when I do come back to close the Blue checking account itself, what should I expect? Anything I need to line up first?\"\n\n12. **Accept the explanation:** \"Perfect, that's all I needed today. Thanks so much!\" ###STOP###\n\nOnly provide additional details about your situation when the agent asks for them. Don't dump all your information at once. Never respond as a customer service representative/assistant. You are playing the role of the customer."
+  },
+  "initial_state": {
+    "initialization_data": {
+      "agent_data": {
+        "users": {
+          "data": {
+            "pr49c7e2d8": {
+              "name": "Priya Raman",
+              "user_id": "pr49c7e2d8",
+              "address": "5316 Girard Avenue South, Minneapolis, MN 55419",
+              "email": "priya.raman.rx@gmail.com",
+              "phone_number": "612-555-0937",
+              "date_of_birth": "11/02/1980"
+            }
+          }
+        },
+        "accounts": {
+          "data": {
+            "chk_pr49c7e2d8_blue": {
+              "account_id": "chk_pr49c7e2d8_blue",
+              "user_id": "pr49c7e2d8",
+              "class": "checking",
+              "level": "Blue Account",
+              "date_opened": "06/09/2023",
+              "status": "OPEN",
+              "current_holdings": "3760.00"
+            },
+            "chk_pr49c7e2d8_lb": {
+              "account_id": "chk_pr49c7e2d8_lb",
+              "user_id": "pr49c7e2d8",
+              "class": "checking",
+              "level": "Light Blue Account",
+              "date_opened": "09/18/2022",
+              "status": "OPEN",
+              "current_holdings": "615.00"
+            }
+          }
+        },
+        "debit_cards": {
+          "data": {
+            "dbc_pr49c7e2d8_blue": {
+              "card_id": "dbc_pr49c7e2d8_blue",
+              "account_id": "chk_pr49c7e2d8_blue",
+              "user_id": "pr49c7e2d8",
+              "cardholder_name": "PRIYA RAMAN",
+              "last_4_digits": "2276",
+              "cvv": "609",
+              "status": "ACTIVE",
+              "issue_date": "06/14/2023",
+              "expiration_date": "06/30/2027",
+              "issue_reason": "new_account"
+            },
+            "dbc_pr49c7e2d8_lb": {
+              "card_id": "dbc_pr49c7e2d8_lb",
+              "account_id": "chk_pr49c7e2d8_lb",
+              "user_id": "pr49c7e2d8",
+              "cardholder_name": "PRIYA RAMAN",
+              "last_4_digits": "8873",
+              "cvv": "184",
+              "status": "ACTIVE",
+              "issue_date": "09/23/2022",
+              "expiration_date": "09/30/2026",
+              "issue_reason": "new_account"
+            }
+          }
+        },
+        "bank_account_transaction_history": {
+          "data": {
+            "btxn_5f0c82d7a941": {
+              "transaction_id": "btxn_5f0c82d7a941",
+              "account_id": "chk_pr49c7e2d8_blue",
+              "date": "11/03/2025",
+              "description": "DIRECT DEPOSIT - FAIRVIEW PHARMACY SERVICES",
+              "amount": 2650.0,
+              "type": "direct_deposit",
+              "status": "posted"
+            },
+            "btxn_c17b3e94d502": {
+              "transaction_id": "btxn_c17b3e94d502",
+              "account_id": "chk_pr49c7e2d8_blue",
+              "date": "11/06/2025",
+              "description": "LUNDS & BYERLYS MINNEAPOLIS MN",
+              "amount": -94.61,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            },
+            "btxn_8a94f5c1e623": {
+              "transaction_id": "btxn_8a94f5c1e623",
+              "account_id": "chk_pr49c7e2d8_blue",
+              "date": "11/09/2025",
+              "description": "XCEL ENERGY BILL PAY",
+              "amount": -132.4,
+              "type": "bill_pay",
+              "status": "posted"
+            },
+            "btxn_d2e6a08b71f4": {
+              "transaction_id": "btxn_d2e6a08b71f4",
+              "account_id": "chk_pr49c7e2d8_blue",
+              "date": "11/12/2025",
+              "description": "REFUND - NORDSTROM RETURN",
+              "amount": 248.0,
+              "type": "refund",
+              "status": "pending"
+            },
+            "btxn_39b7c4f8e015": {
+              "transaction_id": "btxn_39b7c4f8e015",
+              "account_id": "chk_pr49c7e2d8_blue",
+              "date": "11/13/2025",
+              "description": "COSTCO WHOLESALE #377 MN",
+              "amount": -187.22,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            },
+            "btxn_e94d15a0c7b2": {
+              "transaction_id": "btxn_e94d15a0c7b2",
+              "account_id": "chk_pr49c7e2d8_lb",
+              "date": "10/21/2025",
+              "description": "CUB FOODS #1604 MINNEAPOLIS MN",
+              "amount": -46.75,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            },
+            "btxn_16c0d8f3a9e5": {
+              "transaction_id": "btxn_16c0d8f3a9e5",
+              "account_id": "chk_pr49c7e2d8_lb",
+              "date": "11/04/2025",
+              "description": "TARGET STORE #24 MINNEAPOLIS MN",
+              "amount": -28.19,
+              "type": "debit_card_purchase",
+              "status": "posted"
+            }
+          }
+        }
+      },
+      "user_data": null
+    },
+    "initialization_actions": null,
+    "message_history": null
+  },
+  "evaluation_criteria": {
+    "actions": [
+      {
+        "name": "log_verification",
+        "arguments": {
+          "name": "Priya Raman",
+          "user_id": "pr49c7e2d8",
+          "address": "5316 Girard Avenue South, Minneapolis, MN 55419",
+          "email": "priya.raman.rx@gmail.com",
+          "phone_number": "612-555-0937",
+          "date_of_birth": "11/02/1980",
+          "time_verified": "2025-11-14 03:40:00 EST"
+        },
+        "requestor": "assistant",
+        "action_id": "146_0"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847"
+        },
+        "requestor": "assistant",
+        "action_id": "146_1"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_all_user_accounts_by_user_id_3847",
+          "arguments": "{\"user_id\": \"pr49c7e2d8\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "146_2"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_debit_cards_by_account_id_7823"
+        },
+        "requestor": "assistant",
+        "action_id": "146_3"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_debit_cards_by_account_id_7823",
+          "arguments": "{\"account_id\": \"chk_pr49c7e2d8_blue\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "146_4"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_debit_cards_by_account_id_7823",
+          "arguments": "{\"account_id\": \"chk_pr49c7e2d8_lb\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "146_5"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_bank_account_transactions_9173"
+        },
+        "requestor": "assistant",
+        "action_id": "146_6"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_bank_account_transactions_9173",
+          "arguments": "{\"account_id\": \"chk_pr49c7e2d8_blue\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "146_7"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "get_bank_account_transactions_9173",
+          "arguments": "{\"account_id\": \"chk_pr49c7e2d8_lb\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "146_8"
+      },
+      {
+        "name": "unlock_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "close_debit_card_4721"
+        },
+        "requestor": "assistant",
+        "action_id": "146_9"
+      },
+      {
+        "name": "call_discoverable_agent_tool",
+        "arguments": {
+          "agent_tool_name": "close_debit_card_4721",
+          "arguments": "{\"card_id\": \"dbc_pr49c7e2d8_lb\", \"reason\": \"no_longer_needed\"}"
+        },
+        "requestor": "assistant",
+        "action_id": "146_10"
+      }
+    ],
+    "nl_assertions": [
+      "The agent informs the customer that the Blue Account debit card cannot be closed while the refund is pending unless she either waits for the refund to process or acknowledges in writing that the refund will be credited to the linked checking account, and after she declines to provide the acknowledgment the agent does not close that card.",
+      "When the customer mentions the Error 409 from her duplicate transfer attempt, the agent advises her to wait for the initial request to settle or cancel it before attempting the transfer again."
+    ],
+    "reward_basis": [
+      "DB",
+      "NL_ASSERTION"
+    ]
+  },
+  "annotations": null,
+  "user_tools": [],
+  "required_documents": [
+    "doc_bank_accounts_bank_accounts_(general)_005",
+    "doc_bank_accounts_bank_accounts_(general)_009",
+    "doc_bank_accounts_bank_accounts_(general)_018",
+    "doc_bank_accounts_bank_accounts_(general)_020",
+    "doc_bank_accounts_bank_accounts_(general)_025",
+    "doc_bank_accounts_bank_accounts_(general)_028",
+    "doc_checking_accounts_checking_accounts_(general)_003"
+  ]
+}

@@ -1,0 +1,1040 @@
+{
+  "id": "banking_transfer_and_account_recovery_boundaries_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "transfer_and_account_recovery_boundaries",
+  "display_name": "Human transfer and account-recovery boundary cases",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/transfer_and_account_recovery_boundaries/source.md",
+    "heading": "## Human transfer and account-recovery boundary cases"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/transfer_and_account_recovery_boundaries/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/transfer_and_account_recovery_boundaries/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook requirements from shared context: verify identity before account-specific information, get explicit confirmation before account-modifying actions, and use the exact transfer message when a transfer is performed.",
+      "Support console turns may mention document ids, internal tool results, and eligibility checks; Agent turns should give the customer the customer-visible next step or outcome.",
+      "Do not transform concrete KB tables, thresholds, statuses, fees, amounts, or condition-specific outcomes into vague dependency statements."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "identity verification before account-specific details",
+      "explicit customer confirmation before account-modifying actions",
+      "plain-language customer-facing outcomes",
+      "support-console notes for internal KB/tool evidence"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_042.json",
+      "tau2/domains/banking_knowledge/documents/doc_customer_support_special_support_codes_001.json"
+    ],
+    "summary": "Unsupported changes, documented transfer reason codes, special support code limits, and exact transfer behavior.",
+    "rules": [
+      "Preserve all values, tables, thresholds, statuses, fees, amounts, eligibility gates, tool/action names, and condition-to-outcome mappings from the source bundle.",
+      "Use the shared banking handbook for identity verification, explicit confirmation before account-modifying actions, discoverable-tool wrapper behavior, schema limits, and transfer wording.",
+      "Do not invent unsupported account fields, undocumented override mechanisms, undocumented tool names, or customer entitlements not present in the source bundle.",
+      "When a source document is internal, represent its internal checks in Support console turns or agent behavior rather than as exposed policy narration."
+    ],
+    "candidate": {
+      "id": "transfer_and_account_recovery_boundaries",
+      "title": "Human transfer and account-recovery boundary cases",
+      "priority": 1,
+      "related_task_ids": [
+        "task_004",
+        "task_005",
+        "task_008",
+        "task_012",
+        "task_014",
+        "task_088",
+        "task_090",
+        "task_091",
+        "task_092"
+      ],
+      "recommended_case_count": 4,
+      "losslessness_risks": [
+        "Do not collapse transfer reason codes into a generic transfer rule.",
+        "Preserve exact transfer trigger conditions and any special-code limitations.",
+        "Preserve the banking handbook's exact transfer message from shared context."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "transfer_and_account_recovery_boundaries_journey",
+        "label": "Human transfer and account-recovery boundary cases",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_shared_rules",
+        "label": "Shared workflow rules",
+        "kind": "shared_reference",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 1,
+        "description": "Rules, prerequisites, and reference values used by more than one customer pathway in this journey.",
+        "fact_ids": [
+          "F007",
+          "F008",
+          "F009",
+          "F010",
+          "F011",
+          "F012",
+          "F033",
+          "F034",
+          "F035",
+          "F049",
+          "F051",
+          "F052",
+          "F058",
+          "F059",
+          "F062"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_a",
+        "label": "Tier 1 transfer reason: fraud_or_security_concern",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 2,
+        "description": "Policy path represented by case A.",
+        "fact_ids": [
+          "F014"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_b",
+        "label": "Tier 1 transfer reason: account_closure_request",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 3,
+        "description": "Policy path represented by case B.",
+        "fact_ids": [
+          "F015"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_c",
+        "label": "Tier 1 transfer reason: deceased_account_holder",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 4,
+        "description": "Policy path represented by case C.",
+        "fact_ids": [
+          "F016"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_d",
+        "label": "Tier 1 transfer reason: legal_or_regulatory_matter",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 5,
+        "description": "Policy path represented by case D.",
+        "fact_ids": [
+          "F017"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_e",
+        "label": "Tier 1 transfer reason: account_ownership_dispute",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 6,
+        "description": "Policy path represented by case E.",
+        "fact_ids": [
+          "F018"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_f",
+        "label": "Tier 1 transfer reason: complex_billing_dispute",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 7,
+        "description": "Policy path represented by case F.",
+        "fact_ids": [
+          "F019"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_g",
+        "label": "Tier 1 transfer reason: abusive_customer_behavior",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 8,
+        "description": "Policy path represented by case G.",
+        "fact_ids": [
+          "F020"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_h",
+        "label": "Tier 1 transfer reason: third_party_inquiry",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 9,
+        "description": "Policy path represented by case H.",
+        "fact_ids": [
+          "F021"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_i",
+        "label": "Tier 1 transfer reason: technical_system_error",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 10,
+        "description": "Policy path represented by case I.",
+        "fact_ids": [
+          "F022"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_j",
+        "label": "Tier 1 transfer reason: customer_demands_after_unavailable_offer_refusal",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 11,
+        "description": "Policy path represented by case J.",
+        "fact_ids": [
+          "F023"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_k",
+        "label": "Tier 2 transfer reason: unconfirmed_external_communication",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 12,
+        "description": "Policy path represented by case K.",
+        "fact_ids": [
+          "F024"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_l",
+        "label": "Tier 2 transfer reason: kb_search_unsuccessful_customer_requests_transfer",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 13,
+        "description": "Policy path represented by case L.",
+        "fact_ids": [
+          "F025"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_m",
+        "label": "Tier 2 transfer reason: specialized_department_required",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 14,
+        "description": "Policy path represented by case M.",
+        "fact_ids": [
+          "F026"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_n",
+        "label": "Tier 2 transfer reason: accessibility_or_special_needs",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 15,
+        "description": "Policy path represented by case N.",
+        "fact_ids": [
+          "F027"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_o",
+        "label": "Tier 3 transfer reason: customer_frustrated_demands_human",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 16,
+        "description": "Policy path represented by case O.",
+        "fact_ids": [
+          "F028"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_p",
+        "label": "Tier 3 transfer reason: supervisor_request_service_complaint",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 17,
+        "description": "Policy path represented by case P.",
+        "fact_ids": [
+          "F029"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_q",
+        "label": "Tier 3 transfer reason: customer_requests_human_no_specific_reason",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 18,
+        "description": "Policy path represented by case Q.",
+        "fact_ids": [
+          "F030"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_r",
+        "label": "Tier 3 transfer reason: request_completed_customer_wants_human_followup",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 19,
+        "description": "Policy path represented by case R.",
+        "fact_ids": [
+          "F031"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_s",
+        "label": "Tier 4 transfer reason: other",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 20,
+        "description": "Policy path represented by case S.",
+        "fact_ids": [
+          "F013",
+          "F032"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_t",
+        "label": "Successful matching Account Recovery Bypass Code flow",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 21,
+        "description": "Policy path represented by case T.",
+        "fact_ids": [
+          "F037",
+          "F038",
+          "F039",
+          "F040",
+          "F041",
+          "F042",
+          "F043",
+          "F044",
+          "F045",
+          "F046",
+          "F047",
+          "F048",
+          "F050",
+          "F053",
+          "F054",
+          "F055",
+          "F056",
+          "F060",
+          "F061"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_u",
+        "label": "Nonmatching Account Recovery Bypass Code boundary",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 22,
+        "description": "Policy path represented by case U.",
+        "fact_ids": [
+          "F036"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_v",
+        "label": "Suspected exposed or misused Account Recovery Bypass Code",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 23,
+        "description": "Policy path represented by case V.",
+        "fact_ids": [
+          "F057"
+        ]
+      },
+      {
+        "id": "transfer_and_account_recovery_boundaries_path_w",
+        "label": "Account Recovery Bypass Code read-aloud and unsecured-channel limits",
+        "kind": "scenario_branch",
+        "parent_id": "transfer_and_account_recovery_boundaries_journey",
+        "order": 24,
+        "description": "Policy path represented by case W.",
+        "fact_ids": []
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_a",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_b",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_c",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_d",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_e",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_f",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_g",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_h",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_i",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_j",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_k",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_l",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_m",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_n",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_o",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_p",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_q",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_r",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_s",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_t",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_u",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_v",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      },
+      {
+        "source_id": "transfer_and_account_recovery_boundaries_path_w",
+        "type": "uses_shared_rules",
+        "target_id": "transfer_and_account_recovery_boundaries_shared_rules"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "F007",
+      "statement": "When using the transfer_to_human_agents tool, select the most accurate reason code from the tiered transfer reason-code list."
+    },
+    {
+      "id": "F008",
+      "statement": "Human-agent transfer reason codes are organized into 4 priority tiers."
+    },
+    {
+      "id": "F009",
+      "statement": "When multiple human-agent transfer reason tiers apply, always select a reason code from the highest priority tier that applies."
+    },
+    {
+      "id": "F010",
+      "statement": "Tier 1 is the highest priority tier and contains specific functional or operational reasons to use when a specific operational scenario applies."
+    },
+    {
+      "id": "F011",
+      "statement": "Tier 2 contains knowledge or capability gap reasons to use when the transfer is due to the agent's inability to find or verify information."
+    },
+    {
+      "id": "F012",
+      "statement": "Tier 3 is a lower priority tier containing customer disposition reasons that describe customer state rather than specific operational scenarios."
+    },
+    {
+      "id": "F013",
+      "statement": "Tier 4 is the lowest priority catch-all tier."
+    },
+    {
+      "id": "F014",
+      "statement": "Use the Tier 1 reason code fraud_or_security_concern for fraud, identity theft, unauthorized transactions, or security concerns requiring specialist handling."
+    },
+    {
+      "id": "F015",
+      "statement": "Use the Tier 1 reason code account_closure_request when the customer is explicitly requesting to close their account."
+    },
+    {
+      "id": "F016",
+      "statement": "Use the Tier 1 reason code deceased_account_holder when the customer needs to report a deceased account holder or handle estate matters."
+    },
+    {
+      "id": "F017",
+      "statement": "Use the Tier 1 reason code legal_or_regulatory_matter for a subpoena, court order, garnishment, or compliance-related inquiry."
+    },
+    {
+      "id": "F018",
+      "statement": "Use the Tier 1 reason code account_ownership_dispute for ownership disputes, joint account issues, or identity verification failures requiring specialist."
+    },
+    {
+      "id": "F019",
+      "statement": "Use the Tier 1 reason code complex_billing_dispute for billing disputes requiring specialist review, including recurring charges, statement errors, or fee reversals."
+    },
+    {
+      "id": "F020",
+      "statement": "Use the Tier 1 reason code abusive_customer_behavior when the customer is being abusive, threatening, or using inappropriate language."
+    },
+    {
+      "id": "F021",
+      "statement": "Use the Tier 1 reason code third_party_inquiry for an attorney, power of attorney, or authorized representative inquiry requiring verification."
+    },
+    {
+      "id": "F022",
+      "statement": "Use the Tier 1 reason code technical_system_error for a system error or outage preventing completion of the customer's request."
+    },
+    {
+      "id": "F023",
+      "statement": "Use the Tier 1 reason code customer_demands_after_unavailable_offer_refusal when the customer asked about offers or promotions that do not exist in the system, the agent informed them the offers are not available, the customer persisted multiple times, and the customer now demands a human."
+    },
+    {
+      "id": "F024",
+      "statement": "Use the Tier 2 reason code unconfirmed_external_communication when the customer claims a specific promotion, program, or offer exists because they have a letter, email, or flyer, but the agent cannot verify or find it in the KB after searching."
+    },
+    {
+      "id": "F025",
+      "statement": "Use the Tier 2 reason code kb_search_unsuccessful_customer_requests_transfer when the customer asked for information or instructions, the agent searched the KB but could not find them, the agent informed the customer, and the customer then requests transfer."
+    },
+    {
+      "id": "F026",
+      "statement": "Use the Tier 2 reason code specialized_department_required when the request requires a specialized department outside the agent's scope of knowledge or tools, including mortgage, investments, or business banking."
+    },
+    {
+      "id": "F027",
+      "statement": "Use the Tier 2 reason code accessibility_or_special_needs when the customer needs accessibility accommodations or has special needs requiring human intervention."
+    },
+    {
+      "id": "F028",
+      "statement": "Use the Tier 3 reason code customer_frustrated_demands_human when the customer is frustrated and demands a human, and the frustration is general."
+    },
+    {
+      "id": "F029",
+      "statement": "Use the Tier 3 reason code supervisor_request_service_complaint when the customer wants a supervisor due to dissatisfaction with service quality, including that the agent was rude, slow, or unhelpful in manner."
+    },
+    {
+      "id": "F030",
+      "statement": "Use the Tier 3 reason code customer_requests_human_no_specific_reason when the customer requests a human without a clear reason, is not frustrated, and just prefers human interaction."
+    },
+    {
+      "id": "F031",
+      "statement": "Use the Tier 3 reason code request_completed_customer_wants_human_followup when the agent completed the request successfully, but the customer wants a human for additional questions or confirmation."
+    },
+    {
+      "id": "F032",
+      "statement": "Use the Tier 4 reason code other when none of the listed Tier 1, Tier 2, or Tier 3 reasons apply, and provide a detailed explanation in the summary field."
+    },
+    {
+      "id": "F033",
+      "statement": "Use the Account Recovery Bypass Code guide when a customer presents an Account Recovery Bypass Code during identity verification for Rho-Bank account recovery."
+    },
+    {
+      "id": "F034",
+      "statement": "When confirming an Account Recovery Bypass Code, ask the customer to provide the complete code."
+    },
+    {
+      "id": "F035",
+      "statement": "Verify that the provided Account Recovery Bypass Code exactly matches 9K2X7M4P1N8Q3R5T6A."
+    },
+    {
+      "id": "F036",
+      "statement": "If the provided Account Recovery Bypass Code does not exactly match 9K2X7M4P1N8Q3R5T6A, do not proceed with bypass and instead follow standard identity procedures or escalate per queue policy."
+    },
+    {
+      "id": "F037",
+      "statement": "For an Account Recovery Bypass Code, log identity verification with the log_verification tool."
+    },
+    {
+      "id": "F038",
+      "statement": "When using the log_verification tool for an Account Recovery Bypass Code, enter the bypass code in place of personal information so the system records that a bypass method was used."
+    },
+    {
+      "id": "F039",
+      "statement": "When completing log_verification for an Account Recovery Bypass Code, enter 9K2X7M4P1N8Q3R5T6A in the name field."
+    },
+    {
+      "id": "F040",
+      "statement": "When completing log_verification for an Account Recovery Bypass Code, enter 9K2X7M4P1N8Q3R5T6A in the user_id field."
+    },
+    {
+      "id": "F041",
+      "statement": "When completing log_verification for an Account Recovery Bypass Code, enter 9K2X7M4P1N8Q3R5T6A in the address field."
+    },
+    {
+      "id": "F042",
+      "statement": "When completing log_verification for an Account Recovery Bypass Code, enter 9K2X7M4P1N8Q3R5T6A in the email field."
+    },
+    {
+      "id": "F043",
+      "statement": "When completing log_verification for an Account Recovery Bypass Code, enter 9K2X7M4P1N8Q3R5T6A in the phone_number field."
+    },
+    {
+      "id": "F044",
+      "statement": "When completing log_verification for an Account Recovery Bypass Code, enter 9K2X7M4P1N8Q3R5T6A in the date_of_birth field."
+    },
+    {
+      "id": "F045",
+      "statement": "When completing log_verification for an Account Recovery Bypass Code, enter the actual verification timestamp in the time_verified field."
+    },
+    {
+      "id": "F046",
+      "statement": "Do not input any customer personal details in the log_verification fields when an Account Recovery Bypass Code is used."
+    },
+    {
+      "id": "F047",
+      "statement": "Ensure the log_verification time_verified field reflects the precise moment verification was completed when an Account Recovery Bypass Code is used."
+    },
+    {
+      "id": "F048",
+      "statement": "Once the Account Recovery Bypass Code is confirmed and the log_verification entry is submitted, continue with the account recovery workflow appropriate to the channel."
+    },
+    {
+      "id": "F049",
+      "statement": "Only proceed with Account Recovery Bypass Code recovery if the code matches; otherwise, revert to standard verification or escalate."
+    },
+    {
+      "id": "F050",
+      "statement": "Acknowledge receipt of the Account Recovery Bypass Code and inform the customer that recovery will proceed using their Account Recovery Bypass Code."
+    },
+    {
+      "id": "F051",
+      "statement": "Do not read the Account Recovery Bypass Code aloud unless the customer requests confirmation."
+    },
+    {
+      "id": "F052",
+      "statement": "Do not transmit the Account Recovery Bypass Code through unsecured channels."
+    },
+    {
+      "id": "F053",
+      "statement": "In internal notes, indicate that an Account Recovery Bypass Code was used."
+    },
+    {
+      "id": "F054",
+      "statement": "Do not paste the Account Recovery Bypass Code into free-text notes; the code should only appear within the log_verification fields as specified."
+    },
+    {
+      "id": "F055",
+      "statement": "Use the Account Recovery Bypass Code only for account recovery."
+    },
+    {
+      "id": "F056",
+      "statement": "Never combine Account Recovery Bypass Code handling with additional personal data collection in the same verification event."
+    },
+    {
+      "id": "F057",
+      "statement": "If the agent suspects the Account Recovery Bypass Code has been exposed or misused, stop the process and escalate per security procedure."
+    },
+    {
+      "id": "F058",
+      "statement": "The Account Recovery Bypass Code quick checklist includes that the code was provided by the customer."
+    },
+    {
+      "id": "F059",
+      "statement": "The Account Recovery Bypass Code quick checklist includes that the code exactly matches 9K2X7M4P1N8Q3R5T6A."
+    },
+    {
+      "id": "F060",
+      "statement": "The Account Recovery Bypass Code quick checklist includes that the log_verification fields are populated with 9K2X7M4P1N8Q3R5T6A as specified."
+    },
+    {
+      "id": "F061",
+      "statement": "The Account Recovery Bypass Code quick checklist includes that time_verified is set to the actual verification timestamp."
+    },
+    {
+      "id": "F062",
+      "statement": "The Account Recovery Bypass Code quick checklist includes that the agent proceeded with recovery or escalated as needed."
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Tier 1 transfer reason: fraud_or_security_concern",
+      "case_spec": "Future support case includes a transfer_to_human_agents action for fraud, identity theft, unauthorized transactions, or security concerns requiring specialist handling. The support record should not confound the reason selection with another Tier 1 condition.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F014"
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Tier 1 transfer reason: account_closure_request",
+      "case_spec": "Future support case includes a customer explicitly requesting to close their account, with transfer_to_human_agents using account_closure_request. The support record should not confound the reason selection with another Tier 1 condition.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F015"
+      ]
+    },
+    {
+      "id": "C",
+      "title": "Tier 1 transfer reason: deceased_account_holder",
+      "case_spec": "Future support case includes a customer who needs to report a deceased account holder or handle estate matters, with transfer_to_human_agents using deceased_account_holder. The support record should not confound the reason selection with another Tier 1 condition.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F016"
+      ]
+    },
+    {
+      "id": "D",
+      "title": "Tier 1 transfer reason: legal_or_regulatory_matter",
+      "case_spec": "Future support case includes a subpoena, court order, garnishment, or compliance-related inquiry, with transfer_to_human_agents using legal_or_regulatory_matter. The support record should not confound the reason selection with another Tier 1 condition.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F017"
+      ]
+    },
+    {
+      "id": "E",
+      "title": "Tier 1 transfer reason: account_ownership_dispute",
+      "case_spec": "Future support case includes an ownership dispute, joint account issue, or identity verification failure requiring specialist, with transfer_to_human_agents using account_ownership_dispute. The support record should not confound the reason selection with another Tier 1 condition.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F018"
+      ]
+    },
+    {
+      "id": "F",
+      "title": "Tier 1 transfer reason: complex_billing_dispute",
+      "case_spec": "Future support case includes a billing dispute requiring specialist review, such as recurring charges, statement errors, or fee reversals, with transfer_to_human_agents using complex_billing_dispute. The support record should not confound the reason selection with another Tier 1 condition.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F019"
+      ]
+    },
+    {
+      "id": "G",
+      "title": "Tier 1 transfer reason: abusive_customer_behavior",
+      "case_spec": "Future support case includes a customer being abusive, threatening, or using inappropriate language, with transfer_to_human_agents using abusive_customer_behavior. The support record should not confound the reason selection with another Tier 1 condition.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F020"
+      ]
+    },
+    {
+      "id": "H",
+      "title": "Tier 1 transfer reason: third_party_inquiry",
+      "case_spec": "Future support case includes an attorney, power of attorney, or authorized representative inquiry requiring verification, with transfer_to_human_agents using third_party_inquiry. The support record should not confound the reason selection with another Tier 1 condition.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F021"
+      ]
+    },
+    {
+      "id": "I",
+      "title": "Tier 1 transfer reason: technical_system_error",
+      "case_spec": "Future support case includes a system error or outage preventing completion of the customer's request, with transfer_to_human_agents using technical_system_error. The support record should not confound the reason selection with another Tier 1 condition.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F022"
+      ]
+    },
+    {
+      "id": "J",
+      "title": "Tier 1 transfer reason: customer_demands_after_unavailable_offer_refusal",
+      "case_spec": "Future support case includes the ordered condition where the customer asked about offers or promotions that do not exist in the system, the agent informed the customer that the offers are not available, the customer persisted multiple times, and the customer now demands a human. The transfer_to_human_agents action uses customer_demands_after_unavailable_offer_refusal rather than a lower-tier disposition reason.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F023"
+      ]
+    },
+    {
+      "id": "K",
+      "title": "Tier 2 transfer reason: unconfirmed_external_communication",
+      "case_spec": "Future support case includes a customer who claims a specific promotion, program, or offer exists because they have a letter, email, or flyer, but the agent cannot verify or find it in the KB after searching. No Tier 1 reason applies, and transfer_to_human_agents uses unconfirmed_external_communication.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F011",
+        "F024"
+      ]
+    },
+    {
+      "id": "L",
+      "title": "Tier 2 transfer reason: kb_search_unsuccessful_customer_requests_transfer",
+      "case_spec": "Future support case includes the ordered condition where the customer asks for information or instructions, the agent searches the KB but cannot find them, the agent informs the customer, and the customer then requests transfer. No Tier 1 reason applies, and transfer_to_human_agents uses kb_search_unsuccessful_customer_requests_transfer.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F011",
+        "F025"
+      ]
+    },
+    {
+      "id": "M",
+      "title": "Tier 2 transfer reason: specialized_department_required",
+      "case_spec": "Future support case includes a request requiring a specialized department outside the agent's scope of knowledge or tools, such as mortgage, investments, or business banking. No Tier 1 reason applies, and transfer_to_human_agents uses specialized_department_required.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F011",
+        "F026"
+      ]
+    },
+    {
+      "id": "N",
+      "title": "Tier 2 transfer reason: accessibility_or_special_needs",
+      "case_spec": "Future support case includes a customer who needs accessibility accommodations or has special needs requiring human intervention. No Tier 1 reason applies, and transfer_to_human_agents uses accessibility_or_special_needs.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F011",
+        "F027"
+      ]
+    },
+    {
+      "id": "O",
+      "title": "Tier 3 transfer reason: customer_frustrated_demands_human",
+      "case_spec": "Future support case includes a customer who is frustrated and demands a human, with the frustration being general. No Tier 1 or Tier 2 reason applies, and transfer_to_human_agents uses customer_frustrated_demands_human.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F012",
+        "F028"
+      ]
+    },
+    {
+      "id": "P",
+      "title": "Tier 3 transfer reason: supervisor_request_service_complaint",
+      "case_spec": "Future support case includes a customer who wants a supervisor due to dissatisfaction with service quality, such as the agent being rude, slow, or unhelpful in manner. No Tier 1 or Tier 2 reason applies, and transfer_to_human_agents uses supervisor_request_service_complaint.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F012",
+        "F029"
+      ]
+    },
+    {
+      "id": "Q",
+      "title": "Tier 3 transfer reason: customer_requests_human_no_specific_reason",
+      "case_spec": "Future support case includes a customer who requests a human without a clear reason, is not frustrated, and just prefers human interaction. No Tier 1 or Tier 2 reason applies, and transfer_to_human_agents uses customer_requests_human_no_specific_reason.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F012",
+        "F030"
+      ]
+    },
+    {
+      "id": "R",
+      "title": "Tier 3 transfer reason: request_completed_customer_wants_human_followup",
+      "case_spec": "Future support case includes an agent successfully completing the request, followed by the customer wanting a human for additional questions or confirmation. No Tier 1 or Tier 2 reason applies, and transfer_to_human_agents uses request_completed_customer_wants_human_followup.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F012",
+        "F031"
+      ]
+    },
+    {
+      "id": "S",
+      "title": "Tier 4 transfer reason: other",
+      "case_spec": "Future support case includes a transfer_to_human_agents action where no Tier 1, Tier 2, or Tier 3 reason applies. The support record uses other and provides a detailed explanation in the summary field.",
+      "included_fact_ids": [
+        "F007",
+        "F008",
+        "F009",
+        "F013",
+        "F032"
+      ]
+    },
+    {
+      "id": "T",
+      "title": "Successful matching Account Recovery Bypass Code flow",
+      "case_spec": "Future support case includes a customer presenting an Account Recovery Bypass Code during identity verification for Rho-Bank account recovery, the complete code exactly matching 9K2X7M4P1N8Q3R5T6A, log_verification populated with the specified bypass-code field values and actual verification timestamp, no additional personal data collection in the same verification event, internal notes indicating bypass-code use without pasting the code into free-text notes, communication guidance followed, and recovery continuing only after confirmation and logging.",
+      "included_fact_ids": [
+        "F033",
+        "F034",
+        "F035",
+        "F037",
+        "F038",
+        "F039",
+        "F040",
+        "F041",
+        "F042",
+        "F043",
+        "F044",
+        "F045",
+        "F046",
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F058",
+        "F059",
+        "F060",
+        "F061",
+        "F062"
+      ]
+    },
+    {
+      "id": "U",
+      "title": "Nonmatching Account Recovery Bypass Code boundary",
+      "case_spec": "Future support case includes a customer presenting a complete Account Recovery Bypass Code during identity verification for Rho-Bank account recovery, but the provided code does not exactly match 9K2X7M4P1N8Q3R5T6A. The support record should show that bypass does not proceed and the agent follows standard identity procedures or escalates per queue policy.",
+      "included_fact_ids": [
+        "F033",
+        "F034",
+        "F035",
+        "F036",
+        "F049",
+        "F058",
+        "F059",
+        "F062"
+      ]
+    },
+    {
+      "id": "V",
+      "title": "Suspected exposed or misused Account Recovery Bypass Code",
+      "case_spec": "Future support case includes suspicion that an Account Recovery Bypass Code has been exposed or misused. The support record should show the process stopping and escalation per security procedure rather than continuing recovery.",
+      "included_fact_ids": [
+        "F033",
+        "F057",
+        "F062"
+      ]
+    },
+    {
+      "id": "W",
+      "title": "Account Recovery Bypass Code read-aloud and unsecured-channel limits",
+      "case_spec": "Future support case isolates communication boundaries for an Account Recovery Bypass Code, including the exception that the code is not read aloud unless the customer requests confirmation and the prohibition on transmitting the code through unsecured channels.",
+      "included_fact_ids": [
+        "F033",
+        "F051",
+        "F052"
+      ]
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/transfer_and_account_recovery_boundaries/evidence_corpus_hard_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/transfer_and_account_recovery_boundaries/evidence_corpus_deep_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/transfer_and_account_recovery_boundaries/client_overlay_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/transfer_and_account_recovery_boundaries/client_overlay_debit_security_001/transformation_pack.json"
+    }
+  ]
+}

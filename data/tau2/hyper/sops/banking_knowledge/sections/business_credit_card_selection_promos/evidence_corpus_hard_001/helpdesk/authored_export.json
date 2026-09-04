@@ -1,0 +1,2170 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "Rho Support Admin",
+    "account": "rho-business-banking",
+    "workspace": "Business Cards Support",
+    "environment": "production",
+    "exported_at": "2025-11-14T20:00:00Z",
+    "timezone": "America/Los_Angeles",
+    "export_version": "2025.11.14-rc3",
+    "requested_by": "renee.alvarez@rho-bank.com"
+  },
+  "cover_email": "From: Colin Mercer <colin.mercer@rho-bank.com>\nTo: Renee Alvarez <renee.alvarez@rho-bank.com>\nCc: Marcus Adeyemi <marcus.adeyemi@rho-bank.com>, Sam Osei <sam.osei@rho-bank.com>\nDate: Fri, 14 Nov 2025 12:04:17 -0800\nSubject: Cards desk export ahead of tonight's promo close\nMessage-ID: <20251114120417.5514.helpdesk-admin@rho-bank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\n\nRenee — here is the production export you asked for, pulled at noon. It covers\nthe card-desk macros, routing rules, ticket fields, policy contracts, SLAs, and\nthe saved views visible to the admin account. The version stamp in each file\nshould read 2025.11.14-rc3.\n\nThree things worth knowing before you run your QA pass. First, the Silver\ndouble-cash-back final-day reply switches off at end of day tonight when the\nopening window closes — Sam confirmed he owns the takedown along with the web\nbanner, so if you re-pull tomorrow morning, expect it gone and don't treat that\nas drift. Second, the old Platinum fee reply near the bottom stays disabled; we\nturned it off back in August when the fee changed, and it keeps its pointer to\nthe current fee-and-waiver answer so the migration review can follow the chain.\nSame story for the travel-pilot reply and the old all-promos summary. Third,\nthe business-credit-score explainer is still a draft — Priyanka hasn't signed\noff on the wording, so agents can't see it and its routing rule is parked in\ndraft with it.\n\nWhen you test promo routing, use the promo-code field rather than adding tags.\nThe two tag-based rules at the bottom of the trigger file are the retired ones\nand nothing should land on them. If you change any object during the pass, send\nme the ID and I'll pull a clean post-change export so we don't end up with two\nfiles carrying the same name.\n\nColin\nSupport Platform Administration\n",
+  "macros": [
+    {
+      "macro_id": "m_cc_application_status",
+      "name": "CC · application status intake",
+      "description": "Collects the application reference before an underwriting handoff.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-10-06T14:00:00Z",
+      "updated_at": "2025-11-12T22:41:07Z",
+      "usage_30d": 684,
+      "usage_90d": 2059,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_issue_family",
+          "value": "application_status"
+        },
+        {
+          "type": "set_field",
+          "field_key": "cc_ops_route",
+          "value": "underwriting_support"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Use the application reference number. Financial documents go through the secure upload, never as ticket attachments."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_compare_tiers",
+      "name": "CC · card comparison follow-up",
+      "description": "Neutral follow-up for businesses still comparing the three card tiers.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 486,
+      "usage_90d": 1465,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_issue_family",
+          "value": "card_comparison"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "Happy to help you compare the business card options — the right tier usually comes down to where your spending actually goes. We can walk through it here, or the card support team can talk it through with you at 1-888-555-0192."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_silver_exclusions",
+      "name": "CC · Silver exclusion check",
+      "description": "Answers a bonus-rate question by checking the published exclusion list.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-11T18:22:40Z",
+      "usage_30d": 305,
+      "usage_90d": 922,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_issue_family",
+          "value": "exclusion_check"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "A short list of merchants always earns the standard 1% on the Silver card even when the purchase looks like travel or software — corporate expense platforms plus a few hardware, gaming, and online-learning names. The up-to-date list is on the Business Silver exclusions page, and I can check a specific merchant against it for you."
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Check the merchant on the published exclusions page before confirming a rate either way."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_callback_confirm",
+      "name": "CC · callback details confirmed",
+      "description": "Records an agreed callback channel for an operations-owned follow-up.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 273,
+      "usage_90d": 826,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_callback_confirmed",
+          "value": "yes"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Do not copy authentication details into this note."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_platinum_fee_waiver",
+      "name": "CC · Platinum annual fee and first-year waiver",
+      "description": "Current answer for Platinum fee questions during the waiver window.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-10-31T22:00:00Z",
+      "updated_at": "2025-11-12T20:15:33Z",
+      "usage_30d": 244,
+      "usage_90d": 739,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_card_product",
+          "value": "platinum"
+        },
+        {
+          "type": "set_field",
+          "field_key": "cc_issue_family",
+          "value": "annual_fee"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "The annual fee on the Business Platinum Rewards Card is currently $450. If you open a new account between November 1, 2025 and February 28, 2026, you pay no annual fee for your first year — the standard fee starts with year two, and the account needs to stay open and in good standing to keep the first-year waiver."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_credit_review_neutral",
+      "name": "CC · application in review (neutral)",
+      "description": "Acknowledges an unresolved credit review without inventing a reason.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T16:48:12Z",
+      "usage_30d": 214,
+      "usage_90d": 649,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_issue_family",
+          "value": "application_status"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "Your application is still in review. I don’t have a confirmed outcome to share yet, but I can make sure it is with the correct team and note the best way to reach you."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_bronze_promo_tracking",
+      "name": "CC · Bronze new-customer credit progress",
+      "description": "Answers a spend-progress question on the Bronze new-customer offer.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-10-01T13:00:00Z",
+      "updated_at": "2025-11-09T19:55:20Z",
+      "usage_30d": 172,
+      "usage_90d": 523,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_card_product",
+          "value": "bronze"
+        },
+        {
+          "type": "set_field",
+          "field_key": "cc_promo_code",
+          "value": "bronze_new_customer_credit"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "Progress toward the Bronze new-customer offer counts net purchases, so a return or credit lowers your qualifying total. Once your net spend reaches $10,000 inside your first two months, qualification is confirmed and the $500 credit shows up on one of your following statements rather than the current one."
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Point the customer at the tracker in their dashboard. Don’t commit to a posting date for the credit."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_digital_wallet_setup",
+      "name": "CC · activation and wallet setup",
+      "description": "Walks a new cardholder through activation and wallet setup.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 156,
+      "usage_90d": 475,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_issue_family",
+          "value": "card_setup"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "Once your card arrives you can activate it right in the app, then add it to your digital wallet from the card settings screen. Card controls and spending alerts live in the same place if you want them switched on from day one."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_promo_window_check",
+      "name": "CC · promotion window check",
+      "description": "Requests campaign-date verification without promising qualification.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-12T17:30:09Z",
+      "usage_30d": 137,
+      "usage_90d": 418,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_issue_family",
+          "value": "promo_window"
+        },
+        {
+          "type": "set_field",
+          "field_key": "cc_promo_check",
+          "value": "needed"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Record the offer name and the date the customer saw it. Confirm the window with campaign ops before saying anything about eligibility."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_application_reentry",
+      "name": "CC · unfinished application re-entry",
+      "description": "Routes questions about returning to an unfinished card application.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 129,
+      "usage_90d": 394,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_issue_family",
+          "value": "application_reentry"
+        },
+        {
+          "type": "set_field",
+          "field_key": "cc_ops_route",
+          "value": "underwriting_support"
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_underwriting_docs",
+      "name": "CC · financial document request",
+      "description": "Handles a customer asked to supply financials during underwriting.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 118,
+      "usage_90d": 361,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_issue_family",
+          "value": "underwriting_docs"
+        },
+        {
+          "type": "set_field",
+          "field_key": "cc_ops_route",
+          "value": "underwriting_support"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "List which documents were requested and the request date. The secure-upload link comes from the underwriting queue, not from support."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_benefits_perks_route",
+      "name": "CC · Platinum benefits routing",
+      "description": "Routes lounge, insurance, and purchase-protection questions.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 76,
+      "usage_90d": 235,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_issue_family",
+          "value": "benefits_perks"
+        },
+        {
+          "type": "set_field",
+          "field_key": "cc_ops_route",
+          "value": "benefits_desk"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Note which perk the question is about — lounge, travel insurance, purchase protection, or travel credit — and the trip or claim date if there is one."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_travel_credit_question",
+      "name": "CC · travel credit usage question",
+      "description": "Answers how the yearly Platinum travel credit gets used.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-07T21:02:44Z",
+      "usage_30d": 66,
+      "usage_90d": 205,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_issue_family",
+          "value": "benefits_perks"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "The travel credit on your Platinum account renews each membership year, and unused credit doesn’t carry into the next one — so it’s worth putting eligible bookings on the card early in the year. The benefits desk can confirm whether a specific booking drew it down."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_statement_copy",
+      "name": "CC · statement copy request",
+      "description": "Handles a request for a past card statement.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 64,
+      "usage_90d": 199,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_issue_family",
+          "value": "statement_request"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "Past statements are available under Documents in your account dashboard going back seven years. If you need one certified or mailed, I can put that request in for you here."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_promo_not_showing",
+      "name": "CC · promo not showing on account",
+      "description": "Captures an expected-but-missing promo before the campaign-ops handoff.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 58,
+      "usage_90d": 181,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_promo_check",
+          "value": "not_showing"
+        },
+        {
+          "type": "set_field",
+          "field_key": "cc_ops_route",
+          "value": "campaign_ops"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Capture which promo the customer expected and the account opening date. Campaign ops confirms enrollment state."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_rate_category_review",
+      "name": "CC · merchant category review",
+      "description": "Intake for a purchase that earned a different rate than expected.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T15:12:58Z",
+      "usage_30d": 52,
+      "usage_90d": 163,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_issue_family",
+          "value": "rewards_rate"
+        },
+        {
+          "type": "set_field",
+          "field_key": "cc_ops_route",
+          "value": "rewards_review"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Ask for the receipt or invoice showing the merchant name. Category coding comes from the merchant’s processor; the review team confirms how the charge was coded."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_double_cb_final_day",
+      "name": "CC · Silver double cash back — final day",
+      "description": "Final-day answer for the Silver double cash back opening window.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-10-31T22:00:00Z",
+      "updated_at": "2025-11-14T14:05:11Z",
+      "usage_30d": 47,
+      "usage_90d": 148,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_promo_code",
+          "value": "silver_double_cash_back"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "Today, November 14, is the last day to open a Business Silver account and qualify for double cash back. Accounts opened on or before today earn the doubled rate for their first six months, counted from the opening date — and the published merchant exclusions still earn at the standard rate during the promo."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": "Scheduled to deactivate 2025-11-14 end of day when the opening window closes; Sam Osei confirmed the takedown alongside the web banner pull."
+    },
+    {
+      "macro_id": "m_cc_fee_dispute_route",
+      "name": "CC · annual fee billing dispute",
+      "description": "Routes a billed-fee disagreement to rate and fee operations.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-11T20:33:26Z",
+      "usage_30d": 41,
+      "usage_90d": 130,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_issue_family",
+          "value": "annual_fee"
+        },
+        {
+          "type": "set_field",
+          "field_key": "cc_ops_route",
+          "value": "rate_fee_ops"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Include the statement date and the billed amount exactly as shown on the statement."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_lounge_access_issue",
+      "name": "CC · lounge access failure",
+      "description": "Acknowledges a lounge entry problem and hands it to the benefits desk.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 39,
+      "usage_90d": 124,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_issue_family",
+          "value": "benefits_perks"
+        },
+        {
+          "type": "set_field",
+          "field_key": "cc_ops_route",
+          "value": "benefits_desk"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "Sorry the lounge turned you away — that shouldn’t happen on your card. I’ve sent this to our benefits team with the location and time; they reconcile access with the lounge program directly and will follow up with you."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_expired_offer",
+      "name": "CC · expired offer acknowledgment",
+      "description": "Customer reply used after the campaign owner confirms the offer ended.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 33,
+      "usage_90d": 106,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_promo_check",
+          "value": "expired_confirmed"
+        },
+        {
+          "type": "set_public_reply",
+          "value": "The offer you found is outside its published availability window, so it can’t be applied to a new account now. I can still walk you through what’s currently running on the business cards."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_historical_capture",
+      "name": "CC · customer supplied historical capture",
+      "description": "Keeps an old screenshot with the ticket while the dated check runs.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-10T19:30:00Z",
+      "usage_30d": 27,
+      "usage_90d": 88,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_source_check",
+          "value": "historical_capture"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Keep the customer’s screenshot with the ticket and check what was live on the date they saw it before answering."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_source_conflict",
+      "name": "CC · page and materials conflict",
+      "description": "Captures a same-day disagreement between card materials for product review.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T23:10:41Z",
+      "usage_30d": 18,
+      "usage_90d": 61,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_field",
+          "field_key": "cc_issue_family",
+          "value": "source_conflict"
+        },
+        {
+          "type": "set_field",
+          "field_key": "cc_source_check",
+          "value": "conflict"
+        },
+        {
+          "type": "set_field",
+          "field_key": "cc_ops_route",
+          "value": "card_products"
+        },
+        {
+          "type": "add_internal_comment",
+          "value": "Include the card, the URL or material, the observed date and time, and what disagreed with it."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": ""
+    },
+    {
+      "macro_id": "m_cc_paydex_explainer",
+      "name": "CC · business credit score explainer",
+      "description": "Draft answer for customers asking what a business credit score is.",
+      "active": false,
+      "environment": "production",
+      "status": "draft",
+      "effective_at": "",
+      "updated_at": "2025-11-12T18:26:37Z",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "",
+      "steps": [
+        {
+          "type": "set_public_reply",
+          "value": "A PAYDEX score is a business credit score from Dun & Bradstreet, built from how promptly your business pays its vendors. Newer businesses often don’t have one yet, and that by itself doesn’t stop a card application — it just changes which information underwriting looks at."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": "Wording with Priyanka Rao for sign-off; hidden from agents."
+    },
+    {
+      "macro_id": "m_cc_platinum_fee_395",
+      "name": "LEGACY · Platinum annual fee reply",
+      "description": "Former Platinum fee answer retained in the admin export only.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "effective_at": "2025-02-10T15:00:00Z",
+      "updated_at": "2025-08-15T16:12:00Z",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "m_cc_platinum_fee_waiver",
+      "steps": [
+        {
+          "type": "set_public_reply",
+          "value": "The annual fee for the Business Platinum Rewards Card is $395, billed on your account anniversary."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": "Disabled 2025-08-15 — the Platinum fee moved to $450 that morning and Tomas Rivera swapped the pricing schedule; the current fee-and-waiver reply replaced this one."
+    },
+    {
+      "macro_id": "m_cc_silver_travel_pilot",
+      "name": "LEGACY · Silver travel pilot rate",
+      "description": "Former pilot-cohort travel rate reply, no longer in use.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "effective_at": "2025-05-19T14:00:00Z",
+      "updated_at": "2025-09-22T17:45:00Z",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "m_cc_rate_category_review",
+      "steps": [
+        {
+          "type": "set_public_reply",
+          "value": "As part of the pilot, travel purchases on your card earn 12% back through the end of the quarter."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": "Pilot cohort wound down 2025-09-22; the published 10% travel and software answers replaced this."
+    },
+    {
+      "macro_id": "m_cc_old_promo_bundle",
+      "name": "LEGACY · combined promo summary reply",
+      "description": "Old single reply that summarized every running card promo at once.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "effective_at": "2025-03-24T14:00:00Z",
+      "updated_at": "2025-10-06T19:20:00Z",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "m_cc_promo_window_check",
+      "steps": [
+        {
+          "type": "set_public_reply",
+          "value": "Here is a summary of every promotion currently running on our business cards."
+        }
+      ],
+      "tags": [
+        "business-cards",
+        "card-support"
+      ],
+      "internal_notes": "Disabled 2025-10-06 when promo answers moved to per-campaign checks under campaign operations; the summary kept drifting out of date between edits."
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "t_cc_source_conflict",
+      "name": "Business card source conflict",
+      "description": "Production routing rule for business card source conflict.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 10,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 18,
+      "conditions": [
+        {
+          "field_key": "cc_source_check",
+          "operator": "is",
+          "value": "conflict"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_cc_source_conflict"
+        },
+        {
+          "type": "assign_group",
+          "group": "Card Products"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_cc_exclusion_check",
+      "name": "Silver exclusion check",
+      "description": "Production routing rule for silver exclusion check.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 20,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 305,
+      "conditions": [
+        {
+          "field_key": "cc_issue_family",
+          "operator": "is",
+          "value": "exclusion_check"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_cc_silver_exclusions"
+        },
+        {
+          "type": "assign_group",
+          "group": "Card Rewards Desk"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_cc_double_cb_final",
+      "name": "Silver double cash back final-day routing",
+      "description": "Production routing rule for silver double cash back final-day routing.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 25,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 47,
+      "conditions": [
+        {
+          "field_key": "cc_promo_code",
+          "operator": "is",
+          "value": "silver_double_cash_back"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_cc_double_cb_final_day"
+        },
+        {
+          "type": "assign_group",
+          "group": "Campaign Operations"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_cc_promo_window",
+      "name": "Promotion window review",
+      "description": "Production routing rule for promotion window review.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 30,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 137,
+      "conditions": [
+        {
+          "field_key": "cc_promo_check",
+          "operator": "is",
+          "value": "needed"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_cc_promo_window_check"
+        },
+        {
+          "type": "assign_group",
+          "group": "Campaign Operations"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_cc_promo_not_showing",
+      "name": "Promo missing from account",
+      "description": "Production routing rule for promo missing from account.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 35,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 58,
+      "conditions": [
+        {
+          "field_key": "cc_promo_check",
+          "operator": "is",
+          "value": "not_showing"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_cc_promo_not_showing"
+        },
+        {
+          "type": "assign_group",
+          "group": "Campaign Operations"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_cc_application_status",
+      "name": "Application status handoff",
+      "description": "Production routing rule for application status handoff.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 40,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 684,
+      "conditions": [
+        {
+          "field_key": "cc_issue_family",
+          "operator": "is",
+          "value": "application_status"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_cc_application_status"
+        },
+        {
+          "type": "assign_group",
+          "group": "Underwriting Support"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_cc_underwriting_docs",
+      "name": "Financial document request",
+      "description": "Production routing rule for financial document request.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 45,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 118,
+      "conditions": [
+        {
+          "field_key": "cc_issue_family",
+          "operator": "is",
+          "value": "underwriting_docs"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_cc_underwriting_docs"
+        },
+        {
+          "type": "assign_group",
+          "group": "Underwriting Support"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_cc_fee_dispute",
+      "name": "Annual fee billing dispute",
+      "description": "Production routing rule for annual fee billing dispute.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 50,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 41,
+      "conditions": [
+        {
+          "field_key": "cc_issue_family",
+          "operator": "is",
+          "value": "annual_fee"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_cc_fee_dispute_route"
+        },
+        {
+          "type": "assign_group",
+          "group": "Rate & Fee Operations"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_cc_benefits",
+      "name": "Platinum benefits question",
+      "description": "Production routing rule for platinum benefits question.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 55,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 76,
+      "conditions": [
+        {
+          "field_key": "cc_issue_family",
+          "operator": "is",
+          "value": "benefits_perks"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_cc_benefits_perks_route"
+        },
+        {
+          "type": "assign_group",
+          "group": "Benefits Desk"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_cc_rate_review",
+      "name": "Rewards rate category review",
+      "description": "Production routing rule for rewards rate category review.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 60,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 52,
+      "conditions": [
+        {
+          "field_key": "cc_issue_family",
+          "operator": "is",
+          "value": "rewards_rate"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_cc_rate_category_review"
+        },
+        {
+          "type": "assign_group",
+          "group": "Rewards Review"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_cc_historical",
+      "name": "Historical material check",
+      "description": "Production routing rule for historical material check.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 70,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 27,
+      "conditions": [
+        {
+          "field_key": "cc_source_check",
+          "operator": "is",
+          "value": "historical_capture"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_cc_historical_capture"
+        },
+        {
+          "type": "assign_group",
+          "group": "Knowledge Administration"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_cc_branch_application",
+      "name": "Branch-assisted card application",
+      "description": "Production routing rule for branch-assisted card application.",
+      "active": true,
+      "environment": "production",
+      "status": "published",
+      "priority": 75,
+      "effective_at": "2025-11-03T15:00:00Z",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 36,
+      "conditions": [
+        {
+          "field_key": "cc_channel",
+          "operator": "is",
+          "value": "branch"
+        },
+        {
+          "field_key": "cc_issue_family",
+          "operator": "is",
+          "value": "application_status"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_cc_application_status"
+        },
+        {
+          "type": "assign_group",
+          "group": "Underwriting Support"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_cc_paydex_draft",
+      "name": "Business credit score explainer",
+      "description": "Production routing rule for business credit score explainer.",
+      "active": false,
+      "environment": "production",
+      "status": "draft",
+      "priority": 65,
+      "effective_at": "",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 0,
+      "conditions": [
+        {
+          "field_key": "cc_issue_family",
+          "operator": "is",
+          "value": "business_credit_score"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_cc_paydex_explainer"
+        }
+      ],
+      "superseded_by": ""
+    },
+    {
+      "trigger_id": "t_cc_legacy_fee",
+      "name": "LEGACY Platinum fee tag",
+      "description": "Production routing rule for legacy platinum fee tag.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "priority": 200,
+      "effective_at": "",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 0,
+      "conditions": [
+        {
+          "system_field": "tags",
+          "operator": "includes",
+          "value": "platinum-fee-question"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_cc_platinum_fee_395"
+        }
+      ],
+      "superseded_by": "t_cc_fee_dispute"
+    },
+    {
+      "trigger_id": "t_cc_legacy_pilot",
+      "name": "LEGACY travel pilot route",
+      "description": "Production routing rule for legacy travel pilot route.",
+      "active": false,
+      "environment": "production",
+      "status": "retired",
+      "priority": 210,
+      "effective_at": "",
+      "updated_at": "2025-11-13T21:20:00Z",
+      "usage_30d": 0,
+      "conditions": [
+        {
+          "system_field": "tags",
+          "operator": "includes",
+          "value": "travel-pilot-cohort"
+        }
+      ],
+      "actions": [
+        {
+          "type": "apply_macro",
+          "macro_id": "m_cc_silver_travel_pilot"
+        }
+      ],
+      "superseded_by": "t_cc_rate_review"
+    }
+  ],
+  "policy_contracts": [
+    {
+      "contract_id": "pc_cc_exclusions",
+      "name": "Silver exclusion answers",
+      "status": "published",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Card Rewards Desk",
+      "scope": [
+        "exclusion_check",
+        "rewards_rate"
+      ],
+      "required_fields": [
+        "cc_card_product",
+        "cc_exclusion_check"
+      ],
+      "closed_world": true,
+      "effective_at": "2025-10-13T14:00:00Z",
+      "updated_at": "2025-11-11T18:22:40Z"
+    },
+    {
+      "contract_id": "pc_cc_promotions",
+      "name": "Card promotion boundary",
+      "status": "published",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Campaign Operations",
+      "scope": [
+        "promo_window",
+        "promo_tracking"
+      ],
+      "required_fields": [
+        "cc_promo_code",
+        "cc_promo_check"
+      ],
+      "closed_world": true,
+      "effective_at": "2025-10-01T13:00:00Z",
+      "updated_at": "2025-11-14T14:05:11Z"
+    },
+    {
+      "contract_id": "pc_cc_underwriting",
+      "name": "Application and document handoff",
+      "status": "published",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Underwriting Support",
+      "scope": [
+        "application_status",
+        "application_reentry",
+        "underwriting_docs"
+      ],
+      "required_fields": [
+        "cc_issue_family",
+        "cc_ops_route"
+      ],
+      "closed_world": true,
+      "effective_at": "2025-10-06T14:00:00Z",
+      "updated_at": "2025-11-12T22:41:07Z"
+    },
+    {
+      "contract_id": "pc_cc_fees",
+      "name": "Annual fee billing disputes",
+      "status": "published",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Rate & Fee Operations",
+      "scope": [
+        "annual_fee"
+      ],
+      "required_fields": [
+        "cc_card_product",
+        "cc_issue_family"
+      ],
+      "closed_world": true,
+      "effective_at": "2025-08-15T16:30:00Z",
+      "updated_at": "2025-11-11T20:33:26Z"
+    },
+    {
+      "contract_id": "pc_cc_benefits",
+      "name": "Platinum benefits routing",
+      "status": "published",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Benefits Desk",
+      "scope": [
+        "benefits_perks"
+      ],
+      "required_fields": [
+        "cc_issue_family",
+        "cc_ops_route"
+      ],
+      "closed_world": true,
+      "effective_at": "2025-11-01T13:00:00Z",
+      "updated_at": "2025-11-10T16:40:05Z"
+    }
+  ],
+  "field_columns": [
+    "row_id",
+    "field_key",
+    "field_name",
+    "field_type",
+    "option_value",
+    "active",
+    "status",
+    "environment",
+    "updated_at"
+  ],
+  "fields": [
+    {
+      "row_id": "fd_001",
+      "field_key": "cc_card_product",
+      "field_name": "Card product",
+      "field_type": "dropdown",
+      "option_value": "bronze",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_002",
+      "field_key": "cc_card_product",
+      "field_name": "Card product",
+      "field_type": "dropdown",
+      "option_value": "silver",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_003",
+      "field_key": "cc_card_product",
+      "field_name": "Card product",
+      "field_type": "dropdown",
+      "option_value": "platinum",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_004",
+      "field_key": "cc_issue_family",
+      "field_name": "Business card issue",
+      "field_type": "dropdown",
+      "option_value": "annual_fee",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_005",
+      "field_key": "cc_issue_family",
+      "field_name": "Business card issue",
+      "field_type": "dropdown",
+      "option_value": "rewards_rate",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_006",
+      "field_key": "cc_issue_family",
+      "field_name": "Business card issue",
+      "field_type": "dropdown",
+      "option_value": "exclusion_check",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_007",
+      "field_key": "cc_issue_family",
+      "field_name": "Business card issue",
+      "field_type": "dropdown",
+      "option_value": "promo_tracking",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_008",
+      "field_key": "cc_issue_family",
+      "field_name": "Business card issue",
+      "field_type": "dropdown",
+      "option_value": "promo_window",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_009",
+      "field_key": "cc_issue_family",
+      "field_name": "Business card issue",
+      "field_type": "dropdown",
+      "option_value": "application_status",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_010",
+      "field_key": "cc_issue_family",
+      "field_name": "Business card issue",
+      "field_type": "dropdown",
+      "option_value": "application_reentry",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_011",
+      "field_key": "cc_issue_family",
+      "field_name": "Business card issue",
+      "field_type": "dropdown",
+      "option_value": "underwriting_docs",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_012",
+      "field_key": "cc_issue_family",
+      "field_name": "Business card issue",
+      "field_type": "dropdown",
+      "option_value": "business_credit_score",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_013",
+      "field_key": "cc_issue_family",
+      "field_name": "Business card issue",
+      "field_type": "dropdown",
+      "option_value": "benefits_perks",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_014",
+      "field_key": "cc_issue_family",
+      "field_name": "Business card issue",
+      "field_type": "dropdown",
+      "option_value": "card_comparison",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_015",
+      "field_key": "cc_issue_family",
+      "field_name": "Business card issue",
+      "field_type": "dropdown",
+      "option_value": "card_setup",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_016",
+      "field_key": "cc_issue_family",
+      "field_name": "Business card issue",
+      "field_type": "dropdown",
+      "option_value": "statement_request",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_017",
+      "field_key": "cc_issue_family",
+      "field_name": "Business card issue",
+      "field_type": "dropdown",
+      "option_value": "source_conflict",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_018",
+      "field_key": "cc_promo_code",
+      "field_name": "Promo code",
+      "field_type": "dropdown",
+      "option_value": "bronze_new_customer_credit",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_019",
+      "field_key": "cc_promo_code",
+      "field_name": "Promo code",
+      "field_type": "dropdown",
+      "option_value": "silver_double_cash_back",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_020",
+      "field_key": "cc_promo_code",
+      "field_name": "Promo code",
+      "field_type": "dropdown",
+      "option_value": "platinum_first_year_waiver",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_021",
+      "field_key": "cc_promo_code",
+      "field_name": "Promo code",
+      "field_type": "dropdown",
+      "option_value": "none_stated",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_022",
+      "field_key": "cc_promo_check",
+      "field_name": "Promo check state",
+      "field_type": "dropdown",
+      "option_value": "needed",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_023",
+      "field_key": "cc_promo_check",
+      "field_name": "Promo check state",
+      "field_type": "dropdown",
+      "option_value": "window_confirmed",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_024",
+      "field_key": "cc_promo_check",
+      "field_name": "Promo check state",
+      "field_type": "dropdown",
+      "option_value": "expired_confirmed",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_025",
+      "field_key": "cc_promo_check",
+      "field_name": "Promo check state",
+      "field_type": "dropdown",
+      "option_value": "not_showing",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_026",
+      "field_key": "cc_exclusion_check",
+      "field_name": "Exclusion check state",
+      "field_type": "dropdown",
+      "option_value": "needed",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_027",
+      "field_key": "cc_exclusion_check",
+      "field_name": "Exclusion check state",
+      "field_type": "dropdown",
+      "option_value": "confirmed_excluded",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_028",
+      "field_key": "cc_exclusion_check",
+      "field_name": "Exclusion check state",
+      "field_type": "dropdown",
+      "option_value": "confirmed_standard_rate",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_029",
+      "field_key": "cc_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "card_products",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_030",
+      "field_key": "cc_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "rate_fee_ops",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_031",
+      "field_key": "cc_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "campaign_ops",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_032",
+      "field_key": "cc_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "underwriting_support",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_033",
+      "field_key": "cc_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "benefits_desk",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_034",
+      "field_key": "cc_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "rewards_review",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_035",
+      "field_key": "cc_ops_route",
+      "field_name": "Operations route",
+      "field_type": "dropdown",
+      "option_value": "knowledge_admin",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_036",
+      "field_key": "cc_source_check",
+      "field_name": "Source check state",
+      "field_type": "dropdown",
+      "option_value": "required",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_037",
+      "field_key": "cc_source_check",
+      "field_name": "Source check state",
+      "field_type": "dropdown",
+      "option_value": "conflict",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_038",
+      "field_key": "cc_source_check",
+      "field_name": "Source check state",
+      "field_type": "dropdown",
+      "option_value": "historical_capture",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_039",
+      "field_key": "cc_source_check",
+      "field_name": "Source check state",
+      "field_type": "dropdown",
+      "option_value": "resolved",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_040",
+      "field_key": "cc_channel",
+      "field_name": "Customer channel",
+      "field_type": "dropdown",
+      "option_value": "digital",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_041",
+      "field_key": "cc_channel",
+      "field_name": "Customer channel",
+      "field_type": "dropdown",
+      "option_value": "phone",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_042",
+      "field_key": "cc_channel",
+      "field_name": "Customer channel",
+      "field_type": "dropdown",
+      "option_value": "branch",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    },
+    {
+      "row_id": "fd_043",
+      "field_key": "cc_callback_confirmed",
+      "field_name": "Callback confirmed",
+      "field_type": "checkbox",
+      "option_value": "yes",
+      "active": "true",
+      "status": "published",
+      "environment": "production",
+      "updated_at": "2025-11-12T21:00:00Z"
+    }
+  ],
+  "sla_policies": [
+    {
+      "policy_id": "sla_cc_source_conflict",
+      "name": "Card source conflict",
+      "status": "active",
+      "environment": "production",
+      "priority": "high",
+      "calendar": "Card Products Ops",
+      "first_reply_minutes": 30,
+      "resolution_minutes": 240,
+      "conditions": [
+        {
+          "field_key": "cc_source_check",
+          "operator": "is",
+          "value": "conflict"
+        }
+      ]
+    },
+    {
+      "policy_id": "sla_cc_application",
+      "name": "Application status handoff",
+      "status": "active",
+      "environment": "production",
+      "priority": "normal",
+      "calendar": "Underwriting Support",
+      "first_reply_minutes": 60,
+      "resolution_minutes": 480,
+      "conditions": [
+        {
+          "field_key": "cc_issue_family",
+          "operator": "is",
+          "value": "application_status"
+        }
+      ]
+    },
+    {
+      "policy_id": "sla_cc_promo_window",
+      "name": "Promotion window check",
+      "status": "active",
+      "environment": "production",
+      "priority": "normal",
+      "calendar": "Campaign Operations",
+      "first_reply_minutes": 120,
+      "resolution_minutes": 480,
+      "conditions": [
+        {
+          "field_key": "cc_promo_check",
+          "operator": "is",
+          "value": "needed"
+        }
+      ]
+    },
+    {
+      "policy_id": "sla_cc_final_day",
+      "name": "Double cash back sunset coverage",
+      "status": "active",
+      "environment": "production",
+      "priority": "urgent",
+      "calendar": "Campaign Operations",
+      "first_reply_minutes": 15,
+      "resolution_minutes": 120,
+      "conditions": [
+        {
+          "field_key": "cc_promo_code",
+          "operator": "is",
+          "value": "silver_double_cash_back"
+        }
+      ]
+    },
+    {
+      "policy_id": "sla_cc_fee_dispute",
+      "name": "Annual fee dispute",
+      "status": "active",
+      "environment": "production",
+      "priority": "high",
+      "calendar": "Rate & Fee Operations",
+      "first_reply_minutes": 60,
+      "resolution_minutes": 240,
+      "conditions": [
+        {
+          "field_key": "cc_issue_family",
+          "operator": "is",
+          "value": "annual_fee"
+        }
+      ]
+    },
+    {
+      "policy_id": "sla_cc_benefits",
+      "name": "Benefits desk handoff",
+      "status": "active",
+      "environment": "production",
+      "priority": "normal",
+      "calendar": "Benefits Desk",
+      "first_reply_minutes": 240,
+      "resolution_minutes": 1440,
+      "conditions": [
+        {
+          "field_key": "cc_issue_family",
+          "operator": "is",
+          "value": "benefits_perks"
+        }
+      ]
+    },
+    {
+      "policy_id": "sla_cc_legacy_fee",
+      "name": "LEGACY Platinum fee escalation",
+      "status": "retired",
+      "environment": "production",
+      "priority": "normal",
+      "calendar": "Card Products Ops",
+      "first_reply_minutes": 60,
+      "resolution_minutes": 240,
+      "conditions": [
+        {
+          "system_field": "tags",
+          "operator": "includes",
+          "value": "platinum-fee-question"
+        }
+      ],
+      "superseded_by": "sla_cc_fee_dispute"
+    }
+  ],
+  "views": [
+    {
+      "view_id": "v_cc_final_day_watch",
+      "name": "Double cash back — final day",
+      "status": "active",
+      "environment": "production",
+      "group": "Campaign Operations",
+      "order": 10,
+      "conditions": [
+        {
+          "field_key": "cc_promo_code",
+          "operator": "is",
+          "value": "silver_double_cash_back"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "cc_promo_check",
+        "created_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_cc_promo_checks",
+      "name": "Promotion checks awaiting owner",
+      "status": "active",
+      "environment": "production",
+      "group": "Campaign Operations",
+      "order": 20,
+      "conditions": [
+        {
+          "field_key": "cc_promo_check",
+          "operator": "is",
+          "value": "needed"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "cc_promo_code",
+        "created_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_cc_exclusion_queue",
+      "name": "Exclusion checks",
+      "status": "active",
+      "environment": "production",
+      "group": "Card Rewards Desk",
+      "order": 30,
+      "conditions": [
+        {
+          "field_key": "cc_issue_family",
+          "operator": "is",
+          "value": "exclusion_check"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "cc_card_product",
+        "cc_exclusion_check",
+        "updated_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_cc_application_reviews",
+      "name": "Applications in review",
+      "status": "active",
+      "environment": "production",
+      "group": "Underwriting Support",
+      "order": 40,
+      "conditions": [
+        {
+          "field_key": "cc_issue_family",
+          "operator": "is",
+          "value": "application_status"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "organization",
+        "created_at",
+        "updated_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_cc_doc_requests",
+      "name": "Document requests open",
+      "status": "active",
+      "environment": "production",
+      "group": "Underwriting Support",
+      "order": 50,
+      "conditions": [
+        {
+          "field_key": "cc_issue_family",
+          "operator": "is",
+          "value": "underwriting_docs"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "cc_card_product",
+        "created_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_cc_fee_disputes",
+      "name": "Annual fee disputes",
+      "status": "active",
+      "environment": "production",
+      "group": "Rate & Fee Operations",
+      "order": 60,
+      "conditions": [
+        {
+          "field_key": "cc_issue_family",
+          "operator": "is",
+          "value": "annual_fee"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "cc_card_product",
+        "updated_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_cc_benefits",
+      "name": "Benefits desk queue",
+      "status": "active",
+      "environment": "production",
+      "group": "Benefits Desk",
+      "order": 70,
+      "conditions": [
+        {
+          "field_key": "cc_issue_family",
+          "operator": "is",
+          "value": "benefits_perks"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "organization",
+        "updated_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_cc_source_conflicts",
+      "name": "Card source conflicts",
+      "status": "active",
+      "environment": "production",
+      "group": "Card Products",
+      "order": 80,
+      "conditions": [
+        {
+          "field_key": "cc_source_check",
+          "operator": "is",
+          "value": "conflict"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "cc_issue_family",
+        "updated_at",
+        "assignee"
+      ]
+    },
+    {
+      "view_id": "v_cc_legacy_fee",
+      "name": "LEGACY Platinum fee queue",
+      "status": "retired",
+      "environment": "production",
+      "group": "Card Products",
+      "order": 900,
+      "conditions": [
+        {
+          "system_field": "tags",
+          "operator": "includes",
+          "value": "platinum-fee-question"
+        }
+      ],
+      "columns": [
+        "id",
+        "subject",
+        "created_at",
+        "assignee"
+      ],
+      "superseded_by": "v_cc_fee_disputes"
+    }
+  ]
+}

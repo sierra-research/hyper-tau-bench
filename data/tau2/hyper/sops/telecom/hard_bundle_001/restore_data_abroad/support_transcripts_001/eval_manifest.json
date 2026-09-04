@@ -1,0 +1,218 @@
+{
+  "id": "telecom_restore_data_abroad_support_transcripts_hard_001",
+  "case_count": 6,
+  "description": "Hard-bundle case archive for the abroad-data workflow. Every case is context-only: no case owns a fact. Case B preserves an unconfirmed allowance change refuted by its QA annotation via the July compliance replay; case C self-corrects the retired Traveler Pack add-on quote against the July retirement; case D corrects a near-transfer against the decision map's slow-data routing row; case E scopes the allowance change to an active line. Authority for every referenced fact stays with the frozen core carriers (Roaming Recovery Decision Map v3 and the travel-care jira decision snapshot).",
+  "cases": [
+    {
+      "filename": "case_001.md",
+      "channel": "Phone",
+      "qa_status": "Approved",
+      "turn_count": 22,
+      "customer_turn_count": 9,
+      "agent_turn_count": 10,
+      "console_event_count": 3,
+      "word_count": 470,
+      "spoken_word_count": 356,
+      "handle_time_seconds": 304,
+      "spoken_words_per_minute": 70.3,
+      "authoritative_fact_ids": [],
+      "arc": {
+        "pattern": "F",
+        "echoes_fact_ids": [
+          "roaming_has_phone_and_carrier_layers",
+          "check_phone_side_roaming_first",
+          "phone_roaming_off_enable_and_rerun",
+          "identify_line_before_carrier_roaming_check",
+          "explain_carrier_roaming_needed_when_off",
+          "confirm_before_enabling_carrier_roaming",
+          "enable_carrier_roaming_after_confirmation",
+          "rerun_speed_test_after_carrier_step",
+          "close_when_both_layers_on_and_excellent"
+        ]
+      },
+      "depends_on_fact_ids": [
+        "identify_line_before_carrier_roaming_check",
+        "confirm_before_enabling_carrier_roaming",
+        "enable_carrier_roaming_after_confirmation"
+      ],
+      "realism_markers": [
+        "two_line_household",
+        "console_audit_events",
+        "no_cost_scope_kept_narrow",
+        "humor"
+      ]
+    },
+    {
+      "filename": "case_002.md",
+      "channel": "Live chat",
+      "qa_status": "Flagged for coaching",
+      "turn_count": 9,
+      "customer_turn_count": 3,
+      "agent_turn_count": 4,
+      "console_event_count": 2,
+      "word_count": 285,
+      "spoken_word_count": 131,
+      "chat_span_seconds": 101,
+      "active_handle_time_seconds": 220,
+      "authoritative_fact_ids": [],
+      "arc": {
+        "pattern": "B",
+        "misreads_fact_id": "confirm_before_enabling_carrier_roaming",
+        "misreading": "travel notice on file treated as authorization; allowance changed without explanation or confirmation",
+        "corrected_by": "QA annotation in-file citing the July compliance replay on the confirmation story (prior travel preference not approved as consent)",
+        "composes_with": "service_foundations.carrier_side_change_requires_exact_explanation_and_confirmation"
+      },
+      "depends_on_fact_ids": [
+        "confirm_before_enabling_carrier_roaming",
+        "explain_carrier_roaming_needed_when_off"
+      ],
+      "realism_markers": [
+        "qa_annotation",
+        "wrong_process_right_outcome",
+        "typo_style"
+      ]
+    },
+    {
+      "filename": "case_003.md",
+      "channel": "Phone",
+      "qa_status": "Coached",
+      "turn_count": 17,
+      "customer_turn_count": 7,
+      "agent_turn_count": 7,
+      "console_event_count": 3,
+      "word_count": 501,
+      "spoken_word_count": 347,
+      "handle_time_seconds": 288,
+      "spoken_words_per_minute": 72.3,
+      "authoritative_fact_ids": [],
+      "arc": {
+        "pattern": "A",
+        "misreads_fact_id": "explain_carrier_roaming_needed_when_off",
+        "misreading": "retired $10 Traveler Pack add-on gate quoted as a current requirement",
+        "corrected_by": "in-call self-correction naming the July console-release retirement; QA annotation credits the check and flags the team-wide muscle memory",
+        "supersession": "Traveler Pack add-on gate (retired July 2026 console release) -> enabling the allowance is free"
+      },
+      "depends_on_fact_ids": [
+        "explain_carrier_roaming_needed_when_off",
+        "confirm_before_enabling_carrier_roaming",
+        "enable_carrier_roaming_after_confirmation"
+      ],
+      "realism_markers": [
+        "self_correction",
+        "lookup_pause",
+        "pre_travel_call",
+        "customer_relayed_correct_value"
+      ]
+    },
+    {
+      "filename": "case_004.md",
+      "channel": "Live chat",
+      "qa_status": "Approved",
+      "turn_count": 16,
+      "customer_turn_count": 7,
+      "agent_turn_count": 8,
+      "console_event_count": 1,
+      "word_count": 336,
+      "spoken_word_count": 253,
+      "chat_span_seconds": 184,
+      "active_handle_time_seconds": 381,
+      "authoritative_fact_ids": [],
+      "arc": {
+        "pattern": "B",
+        "misreads_fact_id": "working_but_slow_returns_to_slow_data_steps",
+        "misreading": "agent almost transfers a working-but-slow abroad case to a travel desk",
+        "corrected_by": "agent checks the decision map mid-chat and quotes its routing: below-excellent working data returns to the slow-data steps",
+        "echoes_fact_ids": [
+          "close_when_both_layers_on_and_excellent"
+        ]
+      },
+      "depends_on_fact_ids": [
+        "working_but_slow_returns_to_slow_data_steps",
+        "close_when_both_layers_on_and_excellent"
+      ],
+      "realism_markers": [
+        "self_correction",
+        "map_lookup_on_screen",
+        "nephew_settings"
+      ]
+    },
+    {
+      "filename": "case_005.md",
+      "channel": "Phone",
+      "qa_status": "Approved",
+      "turn_count": 19,
+      "customer_turn_count": 8,
+      "agent_turn_count": 9,
+      "console_event_count": 2,
+      "word_count": 522,
+      "spoken_word_count": 424,
+      "handle_time_seconds": 336,
+      "spoken_words_per_minute": 75.7,
+      "authoritative_fact_ids": [],
+      "arc": {
+        "pattern": "C",
+        "near_miss_for_fact_id": "enable_carrier_roaming_after_confirmation",
+        "scope_qualifier": "the roaming allowance is switched for an active line; a suspended line has no roaming step until the suspension flow restores it",
+        "composes_with": "service_foundations.can_enable_or_disable_carrier_roaming_on_active_line",
+        "echoes_fact_ids": [
+          "phone_roaming_off_enable_and_rerun"
+        ]
+      },
+      "depends_on_fact_ids": [
+        "enable_carrier_roaming_after_confirmation",
+        "phone_roaming_off_enable_and_rerun"
+      ],
+      "realism_markers": [
+        "list_customer",
+        "two_issue_call",
+        "scope_disambiguation",
+        "humor"
+      ]
+    },
+    {
+      "filename": "case_006.md",
+      "channel": "Live chat",
+      "qa_status": "Approved",
+      "turn_count": 20,
+      "customer_turn_count": 10,
+      "agent_turn_count": 9,
+      "console_event_count": 1,
+      "word_count": 492,
+      "spoken_word_count": 396,
+      "chat_span_seconds": 358,
+      "active_handle_time_seconds": 587,
+      "authoritative_fact_ids": [],
+      "arc": {
+        "pattern": "filler",
+        "topic": "airline_wifi_redirect_then_mobile_data_toggle",
+        "echoes_fact_ids": [
+          "applies_to_abroad_customer_with_bad_data",
+          "unavailable_with_both_layers_on_returns_to_mobile_data_settings"
+        ]
+      },
+      "depends_on_fact_ids": [],
+      "realism_markers": [
+        "resumed_chat_session",
+        "scope_redirect",
+        "customer_side_fix",
+        "humor"
+      ]
+    }
+  ],
+  "distribution": {
+    "misreading_cases": 3,
+    "approved_echo_cases": 2,
+    "filler_cases": 1,
+    "expose_to_developer_agent": [
+      "case_001.md",
+      "case_002.md",
+      "case_003.md",
+      "case_004.md",
+      "case_005.md",
+      "case_006.md"
+    ],
+    "keep_author_side": [
+      "eval_manifest.json"
+    ]
+  }
+}

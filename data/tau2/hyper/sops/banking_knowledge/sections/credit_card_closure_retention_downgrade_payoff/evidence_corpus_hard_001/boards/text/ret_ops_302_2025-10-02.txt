@@ -1,0 +1,33 @@
+RET-OPS-302 - rev B
+Retention Operations
+Owner: Silas Brandt
+2025-10-02
+DOWNGRADE - same-category card downgrade
+Legend: rounded box = process step / diamond = decision / green = start or finish / red = stop / dashed box = reference note
+
+# Nodes
+Entry - retention protocol: offer a downgrade only after closure eligibility is confirmed, no closure reason records exist within the past year, the reason is annual fee concerns, and the customer has been a customer under 2 years
+Entry - direct request: customer asks to downgrade to avoid annual fees
+Rule: personal to personal / business to business only
+Requested target card in the same category?
+Different category requested: do not process - explain the same-category rule
+1. verify the customer's identity
+2. confirm the customer wants to proceed and understands the benefit changes
+3. inform: history and credit line preserved, rewards rates and benefits change to the new tier
+4. process the downgrade with downgrade_credit_card_3847
+no-annual-fee targets per Retention Offer Card ROC-3
+Done - note the outcome in the case
+Path summary: verify identity -> confirm the customer wants to proceed and understands the benefit changes -> inform: history and credit line preserved, rewards rates and benefits change to the new tier -> downgrade_credit_card_3847
+
+# Edges
+Entry - retention protocol... -> Rule: personal to personal / business to business only
+Entry - direct request... -> Rule: personal to personal / business to business only
+Rule: personal to personal / business to business only -> Requested target card in the same category? [target requested]
+Requested target card in the same category? -> Different category requested: do not process - explain the same-category rule [no]
+Requested target card in the same category? -> 1. verify the customer's identity [yes - proceed]
+1. verify the customer's identity -> 2. confirm the customer wants to proceed and understands the benefit changes [then]
+2. confirm the customer wants to proceed and understands the benefit changes -> 3. inform: history and credit line preserved, rewards rates and benefits change to the new tier [then]
+3. inform: history and credit line preserved, rewards rates and benefits change to the new tier -> 4. process the downgrade with downgrade_credit_card_3847 [then]
+4. process the downgrade with downgrade_credit_card_3847 -> Done - note the outcome in the case
+
+RET-OPS-302 rev B - Retention Operations - 1 of 1

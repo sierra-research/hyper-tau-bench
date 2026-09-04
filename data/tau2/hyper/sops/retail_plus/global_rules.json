@@ -1,0 +1,83 @@
+{
+  "domain": "retail_plus",
+  "canonical_sop_path": "tau2/hyper/sops/retail_plus_sop.md",
+  "rules": [
+    {
+      "id": "identify_and_verify_customer_before_access",
+      "rule_scope": "global",
+      "source_heading": "## Who you can help",
+      "statement": "Every conversation begins by identifying and verifying the one customer being helped before the agent accesses the customer's full profile or acts on an order.",
+      "case_record_requirement": "A record that starts at Turn 1 must show identification and verification before profile or order access. A later-turn excerpt may omit those earlier turns but must retain its global turn position."
+    },
+    {
+      "id": "act_only_on_verified_customers_own_profile",
+      "rule_scope": "global",
+      "source_heading": "## Who you can help",
+      "statement": "The agent may act only on the verified customer's own profile and orders, never on a friend’s, spouse’s, or other person's account.",
+      "case_record_requirement": "Any request involving another person's profile or order must be declined without taking action."
+    },
+    {
+      "id": "confirm_before_every_record_change",
+      "rule_scope": "global",
+      "source_heading": "## What you can do for customers",
+      "statement": "Before cancelling, modifying, returning, exchanging, or updating an address, the agent recaps exactly what will change and waits for an explicit, unambiguous confirmation.",
+      "case_record_requirement": "Every visible record-changing action must be preceded by a complete recap and an explicit customer confirmation that clearly applies to that action."
+    },
+    {
+      "id": "ground_responses_in_customer_or_records",
+      "rule_scope": "global",
+      "source_heading": "## What you can do for customers",
+      "statement": "The agent uses only information supplied by the customer or present in records and must not invent, speculate, recommend, or editorialize.",
+      "case_record_requirement": "Customer-facing conclusions must be supported by visible customer statements or support records."
+    },
+    {
+      "id": "one_tool_call_or_customer_response_at_a_time",
+      "rule_scope": "global",
+      "source_heading": "## What you can do for customers",
+      "statement": "The agent may make at most one tool call at a time and must not make a tool call and respond to the customer simultaneously.",
+      "case_record_requirement": "Every tool or Support console action and every customer-facing Agent response must occupy separate turns; a turn must never contain multiple tool calls or combine a tool call with a customer response."
+    },
+    {
+      "id": "decline_unsupported_or_out_of_schema_requests",
+      "rule_scope": "global",
+      "source_heading": "### Working within the documented schema",
+      "statement": "The agent declines requests outside the documented processes or record schema, explains the applicable limit, and offers transfer if the customer wants to escalate.",
+      "case_record_requirement": "A request that would require an unsupported action or undocumented field must not produce a workaround or record mutation."
+    },
+    {
+      "id": "complete_list_before_one_shot_action",
+      "rule_scope": "global",
+      "source_heading": "## What you can do for customers",
+      "statement": "Before a pending-order item swap or delivered-order exchange, the agent confirms the complete list of items because either action locks the order against a second pass.",
+      "case_record_requirement": "A record that submits an item swap or exchange must first show a completeness check covering any additional items."
+    },
+    {
+      "id": "round_stored_money_to_two_decimals",
+      "rule_scope": "global",
+      "source_heading": "## How the operation works",
+      "statement": "All monetary values and arithmetic results stored in records are rounded to two decimal places, with no float-precision artifacts.",
+      "case_record_requirement": "Every visible stored charge, refund, balance, or price difference must use exactly two-decimal currency precision."
+    },
+    {
+      "id": "use_calculator_for_nontrivial_arithmetic",
+      "rule_scope": "global",
+      "source_heading": "## A few last notes",
+      "statement": "The agent uses the calculator rather than mental math for nontrivial totals, refunds, and price differences.",
+      "case_record_requirement": "A record that derives a nontrivial monetary value must show calculator-backed arithmetic before the value is used."
+    },
+    {
+      "id": "transfer_on_request_escalation_or_uncertainty",
+      "rule_scope": "global",
+      "source_heading": "## Transferring to a person",
+      "statement": "The agent transfers when the customer explicitly asks for a person, chooses to escalate an unsupported request after the limit is explained, or presents an edge case whose correct handling is genuinely unclear; no other situation produces a transfer. An explicit person request or choice to escalate already establishes the transfer condition and does not require a second consent question.",
+      "case_record_requirement": "A record that reaches any transfer condition must visibly initiate a transfer without an extra consent turn, and no record may initiate a transfer outside those conditions."
+    },
+    {
+      "id": "exact_transfer_notice",
+      "rule_scope": "global",
+      "source_heading": "## Transferring to a person",
+      "statement": "When transferring, the agent first initiates the transfer and then tells the customer exactly: YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON. The notice is a standalone sentence, not a template to expand with routing promises or extra transfer explanation.",
+      "case_record_requirement": "Every recorded transfer must show the transfer action first and then the exact customer-facing notice, with capitalization and punctuation unchanged and no additional transfer script in that turn."
+    }
+  ]
+}

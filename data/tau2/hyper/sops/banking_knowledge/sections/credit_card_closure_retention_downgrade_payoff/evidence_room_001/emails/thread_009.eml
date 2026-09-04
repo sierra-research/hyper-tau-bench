@@ -1,0 +1,63 @@
+From: Yuki Tanaka <yuki.tanaka@rho-bank.com>
+To: Owen Brooks <owen.brooks@rho-bank.com>,
+ Marcus Chen <marcus.chen@rho-bank.com>
+Cc: Eli Navarro <eli.navarro@rho-bank.com>
+Date: Thu, 30 Oct 2025 10:52:08 -0700
+Subject: RE: Queue health tiles frozen since Tuesday's data job
+Message-ID: <da20dce8d6028118@rho-bank.com>
+In-Reply-To: <39972bac17591ba8@rho-bank.com>
+References: <9952b88422b4e054@rho-bank.com> <c75a28f4947181db@rho-bank.com>
+ <d4bb9b77f310f029@rho-bank.com> <39972bac17591ba8@rho-bank.com>
+Thread-Topic: Queue health tiles frozen since Tuesday's data job
+Thread-Index: Adecf976538bbf27e899c6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Patch deployed 09:40 and the tiles are moving again. Backfill for the two mis=
+sing days runs tonight; gaps in the trend line until tomorrow are expected.
+
+-----Original Message-----
+From: Eli Navarro <eli.navarro@rho-bank.com>
+Sent: Wednesday, October 29, 2025 3:37 PM
+To: Marcus Chen
+Cc: Owen Brooks; Yuki Tanaka
+Subject: RE: Queue health tiles frozen since Tuesday's data job
+
+For anyone downstream: the staffing forecast reads the raw extract directly, =
+so the Wednesday planning note is built on live numbers either way. The froze=
+n tiles are cosmetic as far as scheduling goes.
+
+-----Original Message-----
+From: Marcus Chen <marcus.chen@rho-bank.com>
+Sent: Tuesday, October 28, 2025 11:14 AM
+To: Yuki Tanaka
+Cc: Owen Brooks; Eli Navarro
+Subject: RE: Queue health tiles frozen since Tuesday's data job
+
+Need the WBR export Thursday morning. Does the patch land before that or do I=
+ pull numbers by hand?
+
+-----Original Message-----
+From: Yuki Tanaka <yuki.tanaka@rho-bank.com>
+Sent: Tuesday, October 28, 2025 10:29 AM
+To: Owen Brooks
+Cc: Marcus Chen; Eli Navarro
+Subject: RE: Queue health tiles frozen since Tuesday's data job
+
+Feed is ours since the reshuffle. The 06:00 aggregation job died on an upstre=
+am schema change =E2=80=94 `queue_snapshot_v2` grew a column and the loader t=
+reats surprises as a personal insult. Patch is written and needs the Thursday=
+ maintenance window. Runbook and status live on CARD-1187.
+
+-----Original Message-----
+From: Owen Brooks <owen.brooks@rho-bank.com>
+Sent: Tuesday, October 28, 2025 9:41 AM
+To: Yuki Tanaka
+Cc: Marcus Chen; Eli Navarro
+Subject: RE: Queue health tiles frozen since Tuesday's data job
+
+Queue-health board froze at 07:12 =E2=80=94 every tile is stuck on the 06:00 =
+snapshot and the refreshed-at stamp is blank. Reproduced on three machines an=
+d one personal act of faith (cleared cache), so it isn't my browser being dra=
+matic. Who owns the feed since the September reshuffle?

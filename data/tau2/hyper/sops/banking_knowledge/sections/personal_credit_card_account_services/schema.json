@@ -1,0 +1,309 @@
+{
+  "id": "banking_personal_credit_card_account_services_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "personal_credit_card_account_services",
+  "display_name": "Personal credit-card account management and concierge services",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/personal_credit_card_account_services/source.md",
+    "heading": "## Personal credit-card account management and concierge services"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/personal_credit_card_account_services/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/personal_credit_card_account_services/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook verification and explicit-confirmation requirements.",
+      "Keep EcoCard payment-management facts separate from Gold Rewards concierge-service facts.",
+      "Do not imply that concierge availability guarantees third-party reservations, tickets, or services."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "identity verification before account-specific details",
+      "one customer-visible action or decision per agent turn",
+      "support-console notes for internal KB evidence"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_ecocard_008.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_gold_rewards_card_002.json"
+    ],
+    "summary": "EcoCard payment and virtual-card management plus Gold Rewards concierge scope, authorization, costs, and availability.",
+    "rules": [
+      "Preserve every percentage, fee, credit-limit bound, payment option, concierge category, authorization gate, and service limitation.",
+      "Do not combine EcoCard and Gold Rewards product terms.",
+      "Concierge purchases require explicit approval and payment authorization."
+    ],
+    "candidate": {
+      "id": "personal_credit_card_account_services",
+      "title": "Personal credit-card account management and concierge services",
+      "priority": 1,
+      "related_task_ids": [
+        "task_006",
+        "task_019"
+      ],
+      "recommended_case_count": 2,
+      "losslessness_risks": [
+        "Keep minimum-payment components and payment choices explicit.",
+        "Preserve each concierge service category and the two-hour acknowledgment constraint.",
+        "Do not turn third-party costs or availability limits into a service guarantee."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "personal_credit_card_account_services_journey",
+        "label": "Personal credit-card account management and concierge services",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "personal_credit_card_account_services_path_a",
+        "label": "EcoCard payment, fee, and virtual-card management",
+        "kind": "scenario_branch",
+        "parent_id": "personal_credit_card_account_services_journey",
+        "order": 1,
+        "description": "Policy path represented by case A.",
+        "fact_ids": [
+          "F002",
+          "F003",
+          "F004",
+          "F005",
+          "F006",
+          "F007",
+          "F008",
+          "F009",
+          "F010",
+          "F011",
+          "F012",
+          "F013",
+          "F014",
+          "F015",
+          "F016",
+          "F017"
+        ]
+      },
+      {
+        "id": "personal_credit_card_account_services_path_b",
+        "label": "Gold Rewards concierge scope, authorization, costs, and limitations",
+        "kind": "scenario_branch",
+        "parent_id": "personal_credit_card_account_services_journey",
+        "order": 2,
+        "description": "Policy path represented by case B.",
+        "fact_ids": [
+          "F018",
+          "F019",
+          "F020",
+          "F021",
+          "F022",
+          "F023",
+          "F024",
+          "F025",
+          "F026",
+          "F027",
+          "F028",
+          "F029",
+          "F030",
+          "F031"
+        ]
+      }
+    ],
+    "relations": []
+  },
+  "facts": [
+    {
+      "id": "F002",
+      "statement": "The EcoCard minimum monthly payment is 1.0% of the outstanding balance plus any applicable past-due amounts and fees."
+    },
+    {
+      "id": "F003",
+      "statement": "The EcoCard late payment fee is $32.50 when payment is not made by the due date."
+    },
+    {
+      "id": "F004",
+      "statement": "The EcoCard standard APR on carried balances is 19.99%."
+    },
+    {
+      "id": "F005",
+      "statement": "The EcoCard annual fee is $50.00."
+    },
+    {
+      "id": "F006",
+      "statement": "The EcoCard foreign transaction fee on international purchases is 1.0%."
+    },
+    {
+      "id": "F007",
+      "statement": "An EcoCard credit line is set at approval and typically ranges from $5,000 to $50,000."
+    },
+    {
+      "id": "F008",
+      "statement": "EcoCard payment setup begins by adding a funding account."
+    },
+    {
+      "id": "F009",
+      "statement": "EcoCard autopay can be configured for the statement balance, the minimum due, or a fixed monthly amount."
+    },
+    {
+      "id": "F010",
+      "statement": "EcoCard supports scheduling one-time payments."
+    },
+    {
+      "id": "F011",
+      "statement": "After an EcoCard payment, confirm that it posted so the balance and available credit update."
+    },
+    {
+      "id": "F012",
+      "statement": "EcoCard customers can enable payment reminders a few days before the due date."
+    },
+    {
+      "id": "F013",
+      "statement": "Paying more than the EcoCard minimum can reduce interest accrual at 19.99%."
+    },
+    {
+      "id": "F014",
+      "statement": "EcoCard virtual-card management is available."
+    },
+    {
+      "id": "F015",
+      "statement": "EcoCard customers can create, lock, or delete virtual card numbers to control subscriptions and online purchases."
+    },
+    {
+      "id": "F016",
+      "statement": "EcoCard customers should review statements monthly for accuracy."
+    },
+    {
+      "id": "F017",
+      "statement": "EcoCard customers should keep contact details current to receive timely alerts and confirmations."
+    },
+    {
+      "id": "F018",
+      "statement": "Gold Rewards Card concierge access is available 24 hours a day, 7 days a week."
+    },
+    {
+      "id": "F019",
+      "statement": "A new Gold Rewards Card concierge request receives an initial response within 2 hours."
+    },
+    {
+      "id": "F020",
+      "statement": "Gold Rewards concierge travel assistance includes itinerary planning, flight and hotel research, and last-minute booking coordination."
+    },
+    {
+      "id": "F021",
+      "statement": "Gold Rewards concierge dining and entertainment assistance includes reservations, wait-list monitoring, and event-ticket research."
+    },
+    {
+      "id": "F022",
+      "statement": "Gold Rewards concierge personal-logistics assistance includes gift sourcing, courier coordination, and appointment scheduling."
+    },
+    {
+      "id": "F023",
+      "statement": "Gold Rewards concierge trip-disruption assistance includes rebooking guidance and vendor coordination when plans change."
+    },
+    {
+      "id": "F024",
+      "statement": "Gold Rewards concierge research and recommendations can provide vetted shortlists tailored to the customer's preferences."
+    },
+    {
+      "id": "F025",
+      "statement": "The Gold Rewards concierge confirms request scope, timing, and budget constraints."
+    },
+    {
+      "id": "F026",
+      "statement": "The Gold Rewards concierge provides curated options with pricing and availability details."
+    },
+    {
+      "id": "F027",
+      "statement": "After the customer approves an option, the Gold Rewards concierge proceeds with booking or introductions as appropriate."
+    },
+    {
+      "id": "F028",
+      "statement": "Gold Rewards concierge service is included, but the customer is responsible for third-party costs such as tickets, bookings, and deliveries."
+    },
+    {
+      "id": "F029",
+      "statement": "The Gold Rewards concierge must not finalize a purchase without the customer's explicit approval and payment authorization."
+    },
+    {
+      "id": "F030",
+      "statement": "Gold Rewards concierge reservations, tickets, and vendor services are not guaranteed and may vary by region and season."
+    },
+    {
+      "id": "F031",
+      "statement": "Vendor hours may affect Gold Rewards concierge response times, but initial acknowledgment still occurs within 2 hours."
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "EcoCard payment, fee, and virtual-card management",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F017"
+      ],
+      "case_spec": "A verified EcoCard customer asks about minimum payments, fees, limits, payment setup, reminders, virtual cards, and account hygiene. Keep each payment option and fee distinct."
+    },
+    {
+      "id": "B",
+      "title": "Gold Rewards concierge scope, authorization, costs, and limitations",
+      "included_fact_ids": [
+        "F018",
+        "F019",
+        "F020",
+        "F021",
+        "F022",
+        "F023",
+        "F024",
+        "F025",
+        "F026",
+        "F027",
+        "F028",
+        "F029",
+        "F030",
+        "F031"
+      ],
+      "case_spec": "A verified Gold Rewards customer asks what concierge can handle and how requests proceed. Preserve all five service categories, the two-hour acknowledgment, approval and payment gate, third-party cost responsibility, and non-guarantee."
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/personal_credit_card_account_services/evidence_corpus_hard_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/personal_credit_card_account_services/client_overlay_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/personal_credit_card_account_services/client_overlay_card_servicing_001/transformation_pack.json"
+    }
+  ]
+}

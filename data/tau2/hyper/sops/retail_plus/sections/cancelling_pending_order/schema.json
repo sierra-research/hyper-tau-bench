@@ -1,0 +1,229 @@
+{
+  "id": "retail_plus_cancelling_pending_order_policy_fact_schema_001",
+  "domain": "retail_plus",
+  "studio_hidden": true,
+  "section_id": "cancelling_pending_order",
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/retail_plus_sop.md",
+    "heading": "## Cancelling a pending order"
+  },
+  "rendered_section_path": "tau2/hyper/sops/retail_plus/sections/cancelling_pending_order/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/retail_plus/sections/cancelling_pending_order/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "response_phrasing_context": {
+    "selected_rule_ids": [
+      "never_say_unfortunately",
+      "max_one_apology_per_conversation",
+      "no_premature_outcome_language",
+      "identifier_minimization",
+      "avoid_repeated_openings",
+      "no_generic_service_invitations",
+      "no_support_deflection",
+      "customer_visible_failure_language",
+      "no_long_menu_dumps",
+      "match_warmth_to_outcome",
+      "no_first_person_cant",
+      "no_internal_tool_mentions",
+      "no_policy_jargon"
+    ],
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "The no_generic_service_invitations rule must still allow current-request procedural completeness checks required by one-shot item changes and exchanges.",
+      "Transfer language must use the exact SOP-mandated message even when other phrasing rules are active."
+    ],
+    "rules_path": "tau2/hyper/response_phrasing/retail_plus_response_phrasing.yaml"
+  },
+  "style_exemplar": {
+    "id": "customer_support_chat",
+    "path": "tau2/hyper/sops/retail_plus/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "status and reason gating",
+      "refund timing in customer-facing language",
+      "separate refunds for separate charges"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/retail_plus_sop.md",
+      "src/tau2/domains/retail_plus/tools.py"
+    ],
+    "summary": "Cancellation eligibility depends on exact order status and exact accepted reason strings.",
+    "allowed_values": {
+      "accepted_cancel_reasons": [
+        "no longer needed",
+        "ordered by mistake"
+      ]
+    }
+  },
+  "facts": [
+    {
+      "id": "cancel_requires_order_identifier_and_status_check",
+      "category": "cancellation_gate",
+      "statement": "For cancellation, the agent must confirm the order identifier and check the order status before proceeding.",
+      "canonical_source": "Cancelling a pending order"
+    },
+    {
+      "id": "only_pending_orders_can_be_cancelled",
+      "category": "cancellation_gate",
+      "statement": "Only orders with status pending can be cancelled through this flow.",
+      "canonical_source": "Cancelling a pending order"
+    },
+    {
+      "id": "non_pending_cancel_denials_by_status",
+      "category": "cancellation_gate",
+      "statement": "Processed, delivered, and already-cancelled orders cannot be cancelled through this flow, and the agent must explain that to the customer; delivered orders must be redirected to returns, and processed orders must be transferred if the customer is stuck on the processed order and really wants it stopped.",
+      "canonical_source": "Cancelling a pending order"
+    },
+    {
+      "id": "ask_cancel_reason_before_processing",
+      "category": "cancellation_reason",
+      "statement": "For a pending cancellation, the agent must ask why the customer wants to cancel before processing.",
+      "canonical_source": "Cancelling a pending order"
+    },
+    {
+      "id": "accepted_cancel_reason_no_longer_needed",
+      "category": "cancellation_reason",
+      "statement": "The cancellation reason no longer needed is accepted, including similar customer phrasing such as not wanting the item anymore.",
+      "canonical_source": "Cancelling a pending order"
+    },
+    {
+      "id": "accepted_cancel_reason_ordered_by_mistake",
+      "category": "cancellation_reason",
+      "statement": "The cancellation reason ordered by mistake is accepted.",
+      "canonical_source": "Cancelling a pending order"
+    },
+    {
+      "id": "unaccepted_cancel_reasons_decline_and_offer_transfer",
+      "category": "cancellation_reason",
+      "statement": "Any cancellation reason other than no longer needed or ordered by mistake, including finding the item cheaper somewhere else or delivery taking too long, is not accepted; the agent does not process the cancellation, must tell the customer politely, and must offer to transfer them if they want to escalate.",
+      "canonical_source": "Cancelling a pending order"
+    },
+    {
+      "id": "cancel_requires_recap_and_explicit_confirmation",
+      "category": "confirmation",
+      "statement": "Before processing a cancellation, the agent must recap the order, total, and refund destination, then get explicit confirmation.",
+      "canonical_source": "Cancelling a pending order"
+    },
+    {
+      "id": "cancel_sets_status_cancelled_and_refunds_full_amount",
+      "category": "refunds",
+      "statement": "When cancellation is processed, the order status becomes cancelled and the full amount is refunded to the payment method that paid for it.",
+      "canonical_source": "Cancelling a pending order"
+    },
+    {
+      "id": "gift_card_cancel_refund_immediate",
+      "category": "refunds",
+      "statement": "If the original payment was a gift card, the cancelled-order refund is credited back to that gift card immediately.",
+      "canonical_source": "Cancelling a pending order"
+    },
+    {
+      "id": "card_or_paypal_cancel_refund_timeline",
+      "category": "refunds",
+      "statement": "If the original payment was a credit card or PayPal, the cancelled-order refund clears within 3 to 6 business days, and the agent must let the customer know that timeline.",
+      "canonical_source": "Cancelling a pending order"
+    },
+    {
+      "id": "multiple_charges_refunded_separately",
+      "category": "refunds",
+      "statement": "If the payment history has more than one charge, such as an initial payment plus a top-up from an earlier item modification, each charge is refunded separately in the same amount to the method that made that charge; multiple refunds are recorded as separate payment-history lines and are not collapsed into one net refund, even when more than one charge used the same payment method.",
+      "canonical_source": "Cancelling a pending order"
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Pending credit-card or PayPal order cancelled for no longer needed",
+      "included_fact_ids": [
+        "cancel_requires_order_identifier_and_status_check",
+        "only_pending_orders_can_be_cancelled",
+        "ask_cancel_reason_before_processing",
+        "accepted_cancel_reason_no_longer_needed",
+        "cancel_requires_recap_and_explicit_confirmation",
+        "cancel_sets_status_cancelled_and_refunds_full_amount",
+        "card_or_paypal_cancel_refund_timeline"
+      ],
+      "style_notes": [
+        "customer phrasing such as not wanting the item anymore is treated as the accepted no longer needed reason",
+        "credit card or PayPal refund timing is communicated to the customer"
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Delivered order cannot be cancelled and is redirected to returns",
+      "included_fact_ids": [
+        "cancel_requires_order_identifier_and_status_check",
+        "only_pending_orders_can_be_cancelled",
+        "non_pending_cancel_denials_by_status"
+      ],
+      "style_notes": [
+        "order status is delivered",
+        "agent explains that cancellation is not available through this flow and redirects to returns"
+      ]
+    },
+    {
+      "id": "C",
+      "title": "Multiple same-method payment-history charges refunded separately",
+      "included_fact_ids": [
+        "cancel_requires_order_identifier_and_status_check",
+        "only_pending_orders_can_be_cancelled",
+        "ask_cancel_reason_before_processing",
+        "accepted_cancel_reason_ordered_by_mistake",
+        "cancel_requires_recap_and_explicit_confirmation",
+        "cancel_sets_status_cancelled_and_refunds_full_amount",
+        "gift_card_cancel_refund_immediate",
+        "multiple_charges_refunded_separately"
+      ],
+      "style_notes": [
+        "pending order has more than one payment-history charge to the same saved method, such as an initial payment plus a top-up from an earlier item modification",
+        "each refund is handled as its own line for the same amount back to the method that made that charge, with no same-method netting"
+      ]
+    },
+    {
+      "id": "D",
+      "title": "Pending order declined for an unaccepted cancellation reason",
+      "included_fact_ids": [
+        "cancel_requires_order_identifier_and_status_check",
+        "only_pending_orders_can_be_cancelled",
+        "ask_cancel_reason_before_processing",
+        "unaccepted_cancel_reasons_decline_and_offer_transfer"
+      ],
+      "style_notes": [
+        "order status is pending before the reason gate is applied",
+        "customer gives a reason such as finding it cheaper elsewhere or delivery taking too long",
+        "agent politely declines cancellation processing and offers transfer if the customer wants to escalate"
+      ]
+    },
+    {
+      "id": "E",
+      "title": "Processed order customer really wants stopped and is transferred",
+      "included_fact_ids": [
+        "cancel_requires_order_identifier_and_status_check",
+        "only_pending_orders_can_be_cancelled",
+        "non_pending_cancel_denials_by_status"
+      ],
+      "style_notes": [
+        "order status is processed",
+        "customer is stuck on the processed order and really wants it stopped",
+        "agent explains that cancellation is not available through this flow and transfers"
+      ]
+    },
+    {
+      "id": "F",
+      "title": "Already-cancelled order cannot be cancelled through this flow",
+      "included_fact_ids": [
+        "cancel_requires_order_identifier_and_status_check",
+        "only_pending_orders_can_be_cancelled",
+        "non_pending_cancel_denials_by_status"
+      ],
+      "style_notes": [
+        "order status is already cancelled",
+        "agent explains that cancellation is not available through this flow"
+      ]
+    }
+  ]
+}

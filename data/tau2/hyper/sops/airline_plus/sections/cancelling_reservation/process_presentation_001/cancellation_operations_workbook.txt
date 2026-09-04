@@ -1,0 +1,64 @@
+Cancellation Operations — current-state workflow and operator reference
+
+Page 1 — Cover
+Working process workbook. Prepared for workflow review. Sample / unbranded.
+
+Page 2 — Cancellation: high-level process
+The customer asks to cancel a reservation. Get the reservation identifier. If
+the identifier is unavailable, open the customer profile and locate the
+reservation. Ask why the customer wants to cancel. Then review every segment
+status and continue through the eligibility and action flow.
+
+Page 3 — Reason capture: operator reference
+Capture one reason before evaluating eligibility. Supported cancellation
+reasons are:
+- Change of plans.
+- Airline cancelled the flight.
+- Health or weather covered by insurance.
+- Other.
+
+Page 4 — Eligibility gate 1: segment status
+Review the current status of every flight segment. If any segment is flying or
+landed, do not process cancellation and transfer to a human supervisor.
+Otherwise continue to the allowed-condition review.
+
+Page 5 — Eligibility gate 2: alternative allowed conditions
+Run this sequence only after confirming that no segment is flying or landed.
+Cancellation is allowed when any one of these conditions applies:
+- The reservation was created within the last 24 hours, compared with current
+  system time.
+- The airline cancelled one of the reservation's flights.
+- The reservation is in business cabin.
+If none matches, continue to the insurance and default branch.
+
+Page 6 — Eligibility gate 3: insurance and default outcome
+Cancellation is allowed when the reservation has travel insurance and the
+customer's reason is health or weather. If none of the alternative allowed
+conditions applies, the reservation cannot be cancelled through this workflow.
+
+Page 7 — Control point and refund handling
+The cancellation system does not enforce eligibility. The operator must verify
+the complete eligibility sequence before using the cancellation action.
+After an eligible cancellation, return funds to the original payment methods
+and tell the customer the refund will arrive within 12 business days.
+
+Page 8 — Operating screen: reservation lookup
+Illustrative screen with masked data. Use the reservation identifier. If the
+customer does not have it, use the customer profile to locate the trip. Verify
+the itinerary context before continuing to reason capture.
+
+Page 9 — Operating screen: segment status review
+Illustrative screen with masked data. Read status across all itinerary rows.
+Do not infer the whole trip from a selected row. A flying or landed segment
+stops this cancellation path and requires supervisor transfer.
+
+Page 10 — Operating screen: payment and refund workbench
+Illustrative screen with masked data. Review original-payment rows, validate
+the refund allocation, and submit only after the cancellation eligibility
+review is complete. After submission, explain the 12-business-day refund
+expectation.
+
+Page 11 — Implementation notes and open items
+Keep the departed-flight gate first. Treat allowed conditions as alternatives.
+Do not rely on the tool to block ineligible actions. Screen and data mapping
+notes are implementation context, not additional cancellation rules.

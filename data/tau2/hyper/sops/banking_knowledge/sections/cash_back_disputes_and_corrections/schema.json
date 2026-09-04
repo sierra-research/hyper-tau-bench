@@ -1,0 +1,1054 @@
+{
+  "id": "banking_cash_back_disputes_and_corrections_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "cash_back_disputes_and_corrections",
+  "display_name": "Cash-back dispute submission and resolved-dispute correction",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/cash_back_disputes_and_corrections/source.md",
+    "heading": "## Cash-back dispute submission and resolved-dispute correction"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/cash_back_disputes_and_corrections/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/cash_back_disputes_and_corrections/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook requirements from shared context: verify identity before account-specific information, get explicit confirmation before account-modifying actions, and use the exact transfer message when a transfer is performed.",
+      "Support console turns may mention document ids, internal tool results, and eligibility checks; Agent turns should give the customer the customer-visible next step or outcome.",
+      "Do not transform concrete KB tables, thresholds, statuses, fees, amounts, or condition-specific outcomes into vague dependency statements."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "identity verification before account-specific details",
+      "explicit customer confirmation before account-modifying actions",
+      "plain-language customer-facing outcomes",
+      "support-console notes for internal KB/tool evidence"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_003.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_004.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_006.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_credit_cards_(general)_007.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_credit_cards_business_silver_rewards_card_002.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_credit_cards_business_silver_rewards_card_005.json",
+      "tau2/domains/banking_knowledge/documents/doc_business_credit_cards_business_silver_rewards_card_012.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_silver_rewards_card_002.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_ecocard_002.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_crypto-cash_back_001.json",
+      "tau2/domains/banking_knowledge/documents/doc_credit_cards_crypto-cash_back_002.json"
+    ],
+    "summary": "Filing cash-back disputes, applying resolved corrections, and comparing expected rewards to source product rules.",
+    "rules": [
+      "Preserve all values, tables, thresholds, statuses, fees, amounts, eligibility gates, tool/action names, and condition-to-outcome mappings from the source bundle.",
+      "Use the shared banking handbook for identity verification, explicit confirmation before account-modifying actions, discoverable-tool wrapper behavior, schema limits, and transfer wording.",
+      "Do not invent unsupported account fields, undocumented override mechanisms, undocumented tool names, or customer entitlements not present in the source bundle.",
+      "When a source document is internal, represent its internal checks in Support console turns or agent behavior rather than as exposed policy narration."
+    ],
+    "candidate": {
+      "id": "cash_back_disputes_and_corrections",
+      "title": "Cash-back dispute submission and resolved-dispute correction",
+      "priority": 1,
+      "related_task_ids": [
+        "task_017",
+        "task_018",
+        "task_019",
+        "task_020",
+        "task_021",
+        "task_022",
+        "task_026",
+        "task_027",
+        "task_028",
+        "task_029"
+      ],
+      "recommended_case_count": 6,
+      "losslessness_risks": [
+        "Preserve which tool/action files the dispute versus the correction.",
+        "Preserve reward-unit distinctions and rounding.",
+        "Preserve product-specific exclusions that can make a dispute invalid."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "cash_back_disputes_and_corrections_journey",
+        "label": "Cash-back dispute submission and resolved-dispute correction",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "cash_back_disputes_and_corrections_shared_rules",
+        "label": "Shared workflow rules",
+        "kind": "shared_reference",
+        "parent_id": "cash_back_disputes_and_corrections_journey",
+        "order": 1,
+        "description": "Rules, prerequisites, and reference values used by more than one customer pathway in this journey.",
+        "fact_ids": [
+          "F002",
+          "F003",
+          "F004",
+          "F005",
+          "F006",
+          "F007",
+          "F008",
+          "F009",
+          "F010",
+          "F023",
+          "F024",
+          "F025",
+          "F031",
+          "F032",
+          "F035",
+          "F036",
+          "F037",
+          "F038",
+          "F039",
+          "F040",
+          "F041",
+          "F049",
+          "F050",
+          "F051",
+          "F052",
+          "F053",
+          "F054",
+          "F055",
+          "F056",
+          "F057",
+          "F076",
+          "F078",
+          "F079",
+          "F080",
+          "F081",
+          "F082",
+          "F083",
+          "F084",
+          "F085",
+          "F088",
+          "F090",
+          "F092"
+        ]
+      },
+      {
+        "id": "cash_back_disputes_and_corrections_path_a",
+        "label": "Cash-back dispute submission for a Silver Rewards Card travel or software reward discrepancy",
+        "kind": "scenario_branch",
+        "parent_id": "cash_back_disputes_and_corrections_journey",
+        "order": 2,
+        "description": "Policy path represented by case A.",
+        "fact_ids": [
+          "F058",
+          "F059",
+          "F060",
+          "F061",
+          "F062",
+          "F063",
+          "F064",
+          "F065",
+          "F066"
+        ]
+      },
+      {
+        "id": "cash_back_disputes_and_corrections_path_b",
+        "label": "Resolved and approved Business Silver Rewards Card correction with eligible travel or software purchase and double-cash-back promo",
+        "kind": "scenario_branch",
+        "parent_id": "cash_back_disputes_and_corrections_journey",
+        "order": 3,
+        "description": "Policy path represented by case B.",
+        "fact_ids": [
+          "F011",
+          "F012",
+          "F013",
+          "F014",
+          "F015",
+          "F016",
+          "F017",
+          "F018",
+          "F019",
+          "F020",
+          "F021",
+          "F022",
+          "F026",
+          "F027",
+          "F033",
+          "F034",
+          "F042",
+          "F043",
+          "F044"
+        ]
+      },
+      {
+        "id": "cash_back_disputes_and_corrections_path_c",
+        "label": "Business Silver Rewards Card excluded merchants independently earning standard 1.0% despite travel or software context",
+        "kind": "scenario_branch",
+        "parent_id": "cash_back_disputes_and_corrections_journey",
+        "order": 4,
+        "description": "Policy path represented by case C.",
+        "fact_ids": [
+          "F045",
+          "F046",
+          "F047",
+          "F048"
+        ]
+      },
+      {
+        "id": "cash_back_disputes_and_corrections_path_d",
+        "label": "EcoCard sustainability-points dispute comparing green, non-green, mixed-cart, and refunded transactions",
+        "kind": "scenario_branch",
+        "parent_id": "cash_back_disputes_and_corrections_journey",
+        "order": 5,
+        "description": "Policy path represented by case D.",
+        "fact_ids": [
+          "F028",
+          "F029",
+          "F030",
+          "F067",
+          "F068",
+          "F069",
+          "F070",
+          "F071",
+          "F072",
+          "F073",
+          "F074",
+          "F075"
+        ]
+      },
+      {
+        "id": "cash_back_disputes_and_corrections_path_e",
+        "label": "Crypto-Cash Back rewards accrual and successful crypto redemption with available direct wallet integration",
+        "kind": "scenario_branch",
+        "parent_id": "cash_back_disputes_and_corrections_journey",
+        "order": 6,
+        "description": "Policy path represented by case E.",
+        "fact_ids": [
+          "F077",
+          "F086",
+          "F087",
+          "F089",
+          "F091",
+          "F093",
+          "F094",
+          "F095",
+          "F096"
+        ]
+      },
+      {
+        "id": "cash_back_disputes_and_corrections_path_f",
+        "label": "Crypto-Cash Back redemption troubleshooting for below-threshold balance and unavailable wallet integration",
+        "kind": "scenario_branch",
+        "parent_id": "cash_back_disputes_and_corrections_journey",
+        "order": 7,
+        "description": "Policy path represented by case F.",
+        "fact_ids": [
+          "F097",
+          "F098",
+          "F099"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "cash_back_disputes_and_corrections_path_a",
+        "type": "uses_shared_rules",
+        "target_id": "cash_back_disputes_and_corrections_shared_rules"
+      },
+      {
+        "source_id": "cash_back_disputes_and_corrections_path_b",
+        "type": "uses_shared_rules",
+        "target_id": "cash_back_disputes_and_corrections_shared_rules"
+      },
+      {
+        "source_id": "cash_back_disputes_and_corrections_path_c",
+        "type": "uses_shared_rules",
+        "target_id": "cash_back_disputes_and_corrections_shared_rules"
+      },
+      {
+        "source_id": "cash_back_disputes_and_corrections_path_d",
+        "type": "uses_shared_rules",
+        "target_id": "cash_back_disputes_and_corrections_shared_rules"
+      },
+      {
+        "source_id": "cash_back_disputes_and_corrections_path_e",
+        "type": "uses_shared_rules",
+        "target_id": "cash_back_disputes_and_corrections_shared_rules"
+      },
+      {
+        "source_id": "cash_back_disputes_and_corrections_path_f",
+        "type": "uses_shared_rules",
+        "target_id": "cash_back_disputes_and_corrections_shared_rules"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "F002",
+      "source": "doc_credit_cards_credit_cards_(general)_003",
+      "statement": "Use the cash-back dispute submission process when a customer believes there is a discrepancy between the cash back they received for a particular transaction and the cash back they should have received."
+    },
+    {
+      "id": "F003",
+      "source": "doc_credit_cards_credit_cards_(general)_003",
+      "statement": "The cash-back dispute submission process applies to all credit card transactions."
+    },
+    {
+      "id": "F004",
+      "source": "doc_credit_cards_credit_cards_(general)_003",
+      "statement": "For cash-back dispute submission, instruct the customer to use the dispute tool directly instead of providing a step-by-step workflow."
+    },
+    {
+      "id": "F005",
+      "source": "doc_credit_cards_credit_cards_(general)_003",
+      "statement": "The tool to provide to the user for cash-back dispute submission is submit_cash_back_dispute_0589(user_id: str, transaction_id: str)."
+    },
+    {
+      "id": "F006",
+      "source": "doc_credit_cards_credit_cards_(general)_003",
+      "statement": "Tell the customer to run submit_cash_back_dispute_0589 with their own user_id and the specific transaction_id for the purchase in question."
+    },
+    {
+      "id": "F007",
+      "source": "doc_credit_cards_credit_cards_(general)_003",
+      "statement": "Before the customer submits a cash-back dispute, confirm that the customer has the correct transaction_id."
+    },
+    {
+      "id": "F008",
+      "source": "doc_credit_cards_credit_cards_(general)_003",
+      "statement": "Do not collect sensitive card details for cash-back dispute submission because the dispute tool uses identifiers provided by the user."
+    },
+    {
+      "id": "F009",
+      "source": "doc_credit_cards_credit_cards_(general)_003",
+      "statement": "Advise the customer that supporting context, such as category expectations or promotion expectations, may be requested later during review."
+    },
+    {
+      "id": "F010",
+      "source": "doc_credit_cards_credit_cards_(general)_003",
+      "statement": "The cash-back dispute submission itself is initiated with submit_cash_back_dispute_0589."
+    },
+    {
+      "id": "F011",
+      "source": "doc_credit_cards_credit_cards_(general)_004",
+      "statement": "After a cash-back dispute is resolved and approved, the affected transaction or transactions must be updated with the correct rewards value."
+    },
+    {
+      "id": "F012",
+      "source": "doc_credit_cards_credit_cards_(general)_004",
+      "statement": "To identify transactions requiring correction, look up the user's resolved disputes in the cash_back_disputes database to find transaction_id values that need rewards adjustments."
+    },
+    {
+      "id": "F013",
+      "source": "doc_credit_cards_credit_cards_(general)_004",
+      "statement": "Before applying a resolved cash-back dispute correction, use unlock_discoverable_agent_tool to unlock the agent tool update_transaction_rewards_3847."
+    },
+    {
+      "id": "F014",
+      "source": "doc_credit_cards_credit_cards_(general)_004",
+      "statement": "For each transaction requiring correction, recalculate the correct rewards based on the card type, transaction category, and any applicable promotions."
+    },
+    {
+      "id": "F015",
+      "source": "doc_credit_cards_credit_cards_(general)_004",
+      "statement": "When applying a resolved cash-back dispute correction, do not rely on any expected_rewards field in the dispute record."
+    },
+    {
+      "id": "F016",
+      "source": "doc_credit_cards_credit_cards_(general)_004",
+      "statement": "When applying a resolved cash-back dispute correction, independently verify rates and eligibility."
+    },
+    {
+      "id": "F017",
+      "source": "doc_credit_cards_credit_cards_(general)_004",
+      "statement": "The correction calculation must reflect the proper base rate and any active bonus category or promotion at the time of purchase."
+    },
+    {
+      "id": "F018",
+      "source": "doc_credit_cards_credit_cards_(general)_004",
+      "statement": "To apply corrected rewards for a resolved dispute, use call_discoverable_agent_tool to invoke update_transaction_rewards_3847."
+    },
+    {
+      "id": "F019",
+      "source": "doc_credit_cards_credit_cards_(general)_004",
+      "statement": "When invoking update_transaction_rewards_3847, provide transaction_id as the exact transaction identifier."
+    },
+    {
+      "id": "F020",
+      "source": "doc_credit_cards_credit_cards_(general)_004",
+      "statement": "When invoking update_transaction_rewards_3847, provide new_rewards_earned as a string formatted as 'X points' where X is the correct whole-number point value."
+    },
+    {
+      "id": "F021",
+      "source": "doc_credit_cards_credit_cards_(general)_004",
+      "statement": "After the update_transaction_rewards_3847 tool call completes, confirm the update in credit_card_transaction_history."
+    },
+    {
+      "id": "F022",
+      "source": "doc_credit_cards_credit_cards_(general)_004",
+      "statement": "Retain calculation notes for resolved cash-back dispute corrections in the internal case record for auditability."
+    },
+    {
+      "id": "F023",
+      "source": "doc_credit_cards_credit_cards_(general)_006",
+      "statement": "Due to a legacy backend migration that has not yet been completed, all credit card rewards in the transaction database are stored as 'points' regardless of whether the card is a cash-back card or a points-based card."
+    },
+    {
+      "id": "F024",
+      "source": "doc_credit_cards_credit_cards_(general)_006",
+      "statement": "For the Bronze Rewards Card, Silver Rewards Card, Gold Rewards Card, Platinum Rewards Card, Diamond Elite Card, Crypto-Cash Back, Business Bronze Rewards Card, Business Silver Rewards Card, Green Rewards Card, Silver Zoom Card, Business Gold Rewards Card, and Business Platinum Rewards Card, stored 'points' should be interpreted as cash back."
+    },
+    {
+      "id": "F025",
+      "source": "doc_credit_cards_credit_cards_(general)_006",
+      "statement": "For cash-back cards, 1 point equals $0.01 when redeemed as a statement credit or as a credit to the user's Rho-Bank checking account."
+    },
+    {
+      "id": "F026",
+      "source": "doc_credit_cards_credit_cards_(general)_006",
+      "statement": "For cash-back card rewards representation, 250 points equals $2.50 in cash back."
+    },
+    {
+      "id": "F027",
+      "source": "doc_credit_cards_credit_cards_(general)_006",
+      "statement": "A value of 250 points equals $2.50 in cash back and matches a 2.5% cash-back rate on a $100 purchase."
+    },
+    {
+      "id": "F028",
+      "source": "doc_credit_cards_credit_cards_(general)_006",
+      "statement": "The only true points-based card is the EcoCard."
+    },
+    {
+      "id": "F029",
+      "source": "doc_credit_cards_credit_cards_(general)_006",
+      "statement": "The EcoCard earns sustainability points at 5 points per dollar on green purchases and 1 point per dollar on other purchases."
+    },
+    {
+      "id": "F030",
+      "source": "doc_credit_cards_credit_cards_(general)_006",
+      "statement": "EcoCard sustainability points redeem at $0.01 per point when redeemed as a statement credit or checking account credit."
+    },
+    {
+      "id": "F031",
+      "source": "doc_credit_cards_credit_cards_(general)_007",
+      "statement": "All credit card rewards points are rounded down to the nearest whole number."
+    },
+    {
+      "id": "F032",
+      "source": "doc_credit_cards_credit_cards_(general)_007",
+      "statement": "When calculating points earned on a purchase, the system truncates or floors fractional points rather than rounding to the nearest integer."
+    },
+    {
+      "id": "F033",
+      "source": "doc_credit_cards_credit_cards_(general)_007",
+      "statement": "A $126.77 purchase on a 1% cash-back card earns 126 points, not 127."
+    },
+    {
+      "id": "F034",
+      "source": "doc_credit_cards_credit_cards_(general)_007",
+      "statement": "For the $126.77 at 1% example, the source explains that 126.77 × 0.01 = 1.2677 points, which rounds down to 1 point per dollar, giving 126 points."
+    },
+    {
+      "id": "F035",
+      "source": "doc_credit_cards_credit_cards_(general)_007",
+      "statement": "A $99.99 purchase at 2.5% cash back calculates to 249.975 points but awards 249 points."
+    },
+    {
+      "id": "F036",
+      "source": "doc_credit_cards_credit_cards_(general)_007",
+      "statement": "The credit card rewards rounding-down policy applies consistently across all credit card types and reward categories."
+    },
+    {
+      "id": "F037",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_002",
+      "statement": "The Business Silver Rewards Card earns 10.0% cash back on eligible travel and software purchases."
+    },
+    {
+      "id": "F038",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_002",
+      "statement": "The Business Silver Rewards Card earns 1.0% cash back on all purchases other than eligible travel and software purchases."
+    },
+    {
+      "id": "F039",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_002",
+      "statement": "For a Business Silver Rewards Card purchase to qualify for the 10.0% travel or software rate, the merchant must process the transaction under a travel or software-related merchant category."
+    },
+    {
+      "id": "F040",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_002",
+      "statement": "For Business Silver Rewards Card online purchases, the purchase should be billed by the service provider itself or by an authorized platform categorized as travel or software."
+    },
+    {
+      "id": "F041",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_002",
+      "statement": "If a Business Silver Rewards Card merchant sells multiple categories of goods or services, the charge must be coded under a qualifying category to receive 10.0% cash back."
+    },
+    {
+      "id": "F042",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_002",
+      "statement": "Business Silver Rewards Card best practices include using the card for airfare, lodging, car rentals, transit, and other travel booked directly with providers or recognized travel agencies."
+    },
+    {
+      "id": "F043",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_002",
+      "statement": "Business Silver Rewards Card best practices include using the card to pay recurring SaaS subscriptions and cloud-based software billed by software providers."
+    },
+    {
+      "id": "F044",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_002",
+      "statement": "Business Silver Rewards Card customers should keep receipts and confirmations in case a merchant's category coding needs review."
+    },
+    {
+      "id": "F045",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_005",
+      "statement": "For the Business Silver Rewards Card, the corporate expense platform merchants Concur, SAP Concur, Expensify, and Navan do not earn the 10.0% travel bonus rate and instead earn the standard 1.0% rate."
+    },
+    {
+      "id": "F046",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_005",
+      "statement": "For the Business Silver Rewards Card, the hardware/electronics merchants Apple, Microsoft, and Dell do not earn the 10.0% software bonus rate and instead earn the standard 1.0% rate."
+    },
+    {
+      "id": "F047",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_005",
+      "statement": "For the Business Silver Rewards Card, the gaming subscription merchants Xbox Game Pass, PlayStation Plus, and Nintendo Switch Online do not earn the 10.0% software bonus rate and instead earn the standard 1.0% rate."
+    },
+    {
+      "id": "F048",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_005",
+      "statement": "For the Business Silver Rewards Card, the online learning platform merchants Coursera, Udemy, LinkedIn Learning, Skillshare, and Pluralsight do not earn the 10.0% software bonus rate and instead earn the standard 1.0% rate."
+    },
+    {
+      "id": "F049",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_012",
+      "statement": "New Business Silver Rewards Card customers can earn 2x cash back on all purchases for the first 6 months after opening their account."
+    },
+    {
+      "id": "F050",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_012",
+      "statement": "For a Business Silver Rewards Card transaction in the qualifying double-cash-back promotional window, travel and software purchases that normally earn 10.0% are multiplied by 2."
+    },
+    {
+      "id": "F051",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_012",
+      "statement": "For a Business Silver Rewards Card transaction in the qualifying double-cash-back promotional window, other purchases that normally earn 1.0% are multiplied by 2."
+    },
+    {
+      "id": "F052",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_012",
+      "statement": "For the Business Silver Rewards Card double-cash-back promo, the increased rewards rate is automatically applied to qualifying transactions and no separate enrollment is required."
+    },
+    {
+      "id": "F053",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_012",
+      "statement": "The Business Silver Rewards Card double-cash-back promo period has start date 2024-11-14 and end date 2025-11-14."
+    },
+    {
+      "id": "F054",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_012",
+      "statement": "For the Business Silver Rewards Card double-cash-back promo, the 6-month window begins on the account opening date, not the promotional start date."
+    },
+    {
+      "id": "F055",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_012",
+      "statement": "To qualify for the Business Silver Rewards Card double-cash-back promo, the customer must open the account during the promotional period."
+    },
+    {
+      "id": "F056",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_012",
+      "statement": "Business Silver Rewards Card merchant category exclusions continue to apply during the double-cash-back promo."
+    },
+    {
+      "id": "F057",
+      "source": "doc_business_credit_cards_business_silver_rewards_card_012",
+      "statement": "Business Silver Rewards Card cash back is credited to the account at the end of each billing cycle consistent with program rules."
+    },
+    {
+      "id": "F058",
+      "source": "doc_credit_cards_silver_rewards_card_002",
+      "statement": "The Silver Rewards Card earns 4.0% cash back on eligible travel and software transactions when the customer pays with the card."
+    },
+    {
+      "id": "F059",
+      "source": "doc_credit_cards_silver_rewards_card_002",
+      "statement": "To help ensure proper Silver Rewards Card earning, the customer should use the card directly with the merchant because third-party wallets and processors may alter merchant classification."
+    },
+    {
+      "id": "F060",
+      "source": "doc_credit_cards_silver_rewards_card_002",
+      "statement": "For Silver Rewards Card rewards, the merchant should be categorized in a travel or software/SaaS merchant category, and rewards are based on the merchant's submitted category."
+    },
+    {
+      "id": "F061",
+      "source": "doc_credit_cards_silver_rewards_card_002",
+      "statement": "Silver Rewards Card rewards are calculated after transactions post, not at authorization."
+    },
+    {
+      "id": "F062",
+      "source": "doc_credit_cards_silver_rewards_card_002",
+      "statement": "Silver Rewards Card customers should keep receipts and invoices because if a purchase is misclassified, documentation may be requested during a rewards review."
+    },
+    {
+      "id": "F063",
+      "source": "doc_credit_cards_silver_rewards_card_002",
+      "statement": "For the Silver Rewards Card, gift cards, person-to-person payments, fees, interest, and insurance premiums charged by the bank typically do not qualify for the 4.0% travel and software rate."
+    },
+    {
+      "id": "F064",
+      "source": "doc_credit_cards_silver_rewards_card_002",
+      "statement": "For the Silver Rewards Card, returned or refunded purchases typically do not qualify, and rewards are reversed when credits post."
+    },
+    {
+      "id": "F065",
+      "source": "doc_credit_cards_silver_rewards_card_002",
+      "statement": "For the Silver Rewards Card, pending earnings are visible soon after posting."
+    },
+    {
+      "id": "F066",
+      "source": "doc_credit_cards_silver_rewards_card_002",
+      "statement": "For the Silver Rewards Card, final reward amounts may adjust if the merchant updates the transaction or issues a credit."
+    },
+    {
+      "id": "F067",
+      "source": "doc_credit_cards_ecocard_002",
+      "statement": "For EcoCard earning-rate calculations, green purchases at qualifying green merchants and categories earn 5.00 sustainability points per dollar spent; the EcoCard source expresses this rate as '$5.00 sustainability points per dollar'."
+    },
+    {
+      "id": "F068",
+      "source": "doc_credit_cards_ecocard_002",
+      "statement": "For EcoCard earning-rate calculations, other purchases earn 1.00 sustainability points per dollar; the EcoCard source expresses this rate as '$1.00 sustainability points per dollar'."
+    },
+    {
+      "id": "F069",
+      "source": "doc_credit_cards_ecocard_002",
+      "statement": "To receive the EcoCard higher green earn rate, use the card at certified green partners and eco-friendly categories such as public transit, EV charging, and renewable energy subscriptions."
+    },
+    {
+      "id": "F070",
+      "source": "doc_credit_cards_ecocard_002",
+      "statement": "For EcoCard online purchases, check that the merchant is listed as a qualifying green merchant before checkout."
+    },
+    {
+      "id": "F071",
+      "source": "doc_credit_cards_ecocard_002",
+      "statement": "The EcoCard example states that a $100 purchase at a qualifying green merchant earns 100 × 5.00 points."
+    },
+    {
+      "id": "F072",
+      "source": "doc_credit_cards_ecocard_002",
+      "statement": "The EcoCard example states that a $100 purchase at a non-green merchant earns 100 × 1.00 points."
+    },
+    {
+      "id": "F073",
+      "source": "doc_credit_cards_ecocard_002",
+      "statement": "For EcoCard earning, customers should keep transactions separate because if a cart mixes green and non-green items at a non-partner merchant, the entire purchase may earn at the non-green rate."
+    },
+    {
+      "id": "F074",
+      "source": "doc_credit_cards_ecocard_002",
+      "statement": "EcoCard customers should save receipts for purchases they believe should qualify as green because receipts help resolve earn-rate disputes."
+    },
+    {
+      "id": "F075",
+      "source": "doc_credit_cards_ecocard_002",
+      "statement": "If an EcoCard transaction is returned or refunded, the corresponding points are reversed at the original earn rate."
+    },
+    {
+      "id": "F076",
+      "source": "doc_credit_cards_crypto-cash_back_001",
+      "statement": "For the Crypto-Cash Back card, crypto redemptions are available on the account: Yes."
+    },
+    {
+      "id": "F077",
+      "source": "doc_credit_cards_crypto-cash_back_001",
+      "statement": "For the Crypto-Cash Back card, purchase protection is No."
+    },
+    {
+      "id": "F078",
+      "source": "doc_credit_cards_crypto-cash_back_001",
+      "statement": "Crypto-Cash Back customers earn rewards at 2.0% on eligible purchases made with the card."
+    },
+    {
+      "id": "F079",
+      "source": "doc_credit_cards_crypto-cash_back_001",
+      "statement": "Crypto-Cash Back customers can prepare for crypto redemption once their reward balance reaches at least 30 dollars."
+    },
+    {
+      "id": "F080",
+      "source": "doc_credit_cards_crypto-cash_back_001",
+      "statement": "Crypto-Cash Back customers should track their reward balance in the app."
+    },
+    {
+      "id": "F081",
+      "source": "doc_credit_cards_crypto-cash_back_001",
+      "statement": "Crypto-Cash Back virtual card management availability is Yes."
+    },
+    {
+      "id": "F082",
+      "source": "doc_credit_cards_crypto-cash_back_001",
+      "statement": "When Crypto-Cash Back virtual cards are available, customers may use them to segregate spending for specific projects or merchants and to organize and monitor reward accrual."
+    },
+    {
+      "id": "F083",
+      "source": "doc_credit_cards_crypto-cash_back_001",
+      "statement": "Crypto-Cash Back customers should set a personal target for their first crypto redemption that meets or exceeds 30."
+    },
+    {
+      "id": "F084",
+      "source": "doc_credit_cards_crypto-cash_back_001",
+      "statement": "Crypto-Cash Back customers may plan larger purchases strategically to accelerate reaching the redemption threshold while staying within budget."
+    },
+    {
+      "id": "F085",
+      "source": "doc_credit_cards_crypto-cash_back_001",
+      "statement": "Crypto-Cash Back customers should review merchant processing categories in their statements to confirm which transactions earned rewards at the 2.0% rate."
+    },
+    {
+      "id": "F086",
+      "source": "doc_credit_cards_crypto-cash_back_001",
+      "statement": "When ready to redeem Crypto-Cash Back rewards to crypto, verify the reward balance has met the 30 requirement."
+    },
+    {
+      "id": "F087",
+      "source": "doc_credit_cards_crypto-cash_back_001",
+      "statement": "After verifying the Crypto-Cash Back 30-dollar redemption requirement, proceed to the crypto redemption flow in the app to choose a cryptocurrency and destination wallet."
+    },
+    {
+      "id": "F088",
+      "source": "doc_credit_cards_crypto-cash_back_002",
+      "statement": "Crypto-Cash Back redemption prerequisites are crypto redemption availability on the account: Yes, and minimum reward balance to redeem: 30 dollars."
+    },
+    {
+      "id": "F089",
+      "source": "doc_credit_cards_crypto-cash_back_002",
+      "statement": "Crypto-Cash Back redemption step 1 is to open Rewards in the app and choose Redeem to Crypto."
+    },
+    {
+      "id": "F090",
+      "source": "doc_credit_cards_crypto-cash_back_002",
+      "statement": "Crypto-Cash Back redemption step 2 is to confirm the current reward balance meets the 30 threshold."
+    },
+    {
+      "id": "F091",
+      "source": "doc_credit_cards_crypto-cash_back_002",
+      "statement": "Crypto-Cash Back redemption step 3 is to select a cryptocurrency from the available list of up to 12 options."
+    },
+    {
+      "id": "F092",
+      "source": "doc_credit_cards_crypto-cash_back_002",
+      "statement": "Crypto-Cash Back redemption step 4 is to choose the transfer method: if direct wallet integration is available, and its availability is Yes in the source, use direct wallet integration; otherwise, use manual wallet address entry."
+    },
+    {
+      "id": "F093",
+      "source": "doc_credit_cards_crypto-cash_back_002",
+      "statement": "Crypto-Cash Back redemption step 5 is to review the estimated conversion, and a conversion fee of 1.25% applies to the rewards converted."
+    },
+    {
+      "id": "F094",
+      "source": "doc_credit_cards_crypto-cash_back_002",
+      "statement": "Crypto-Cash Back redemption step 6 is to confirm the wallet address and submit the redemption request."
+    },
+    {
+      "id": "F095",
+      "source": "doc_credit_cards_crypto-cash_back_002",
+      "statement": "The Crypto-Cash Back conversion fee is 1.25% and is applied at the time of conversion."
+    },
+    {
+      "id": "F096",
+      "source": "doc_credit_cards_crypto-cash_back_002",
+      "statement": "The number of available cryptocurrencies for Crypto-Cash Back redemption can be up to 12."
+    },
+    {
+      "id": "F097",
+      "source": "doc_credit_cards_crypto-cash_back_002",
+      "statement": "If a Crypto-Cash Back customer cannot proceed with redemption, ensure that redemption is enabled: Yes."
+    },
+    {
+      "id": "F098",
+      "source": "doc_credit_cards_crypto-cash_back_002",
+      "statement": "If a Crypto-Cash Back customer's redemption threshold is not met, the customer must accumulate more rewards until reaching 30."
+    },
+    {
+      "id": "F099",
+      "source": "doc_credit_cards_crypto-cash_back_002",
+      "statement": "If Crypto-Cash Back direct wallet integration is unavailable, and if Yes is False, the customer should enter the wallet address manually and confirm accuracy before submitting."
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Cash-back dispute submission for a Silver Rewards Card travel or software reward discrepancy",
+      "type": "transcript_spec",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F058",
+        "F059",
+        "F060",
+        "F061",
+        "F062",
+        "F063",
+        "F064",
+        "F065",
+        "F066"
+      ],
+      "required_case_features": [
+        "Customer believes the cash back received for a specific posted Silver Rewards Card transaction differs from what should have been received.",
+        "Agent verifies identity before discussing account-specific transaction details.",
+        "Support console or internal notes evaluate Silver Rewards Card eligibility for 4.0% travel/software cash back, including direct merchant use, merchant-submitted travel/software/SaaS categorization, posting status, documentation expectations, nonqualifying transaction types, refund reversal behavior, pending visibility, and possible final reward adjustment.",
+        "Agent confirms the specific transaction_id before the customer submits the dispute.",
+        "Agent does not request sensitive card details.",
+        "Agent instructs the customer to use submit_cash_back_dispute_0589(user_id: str, transaction_id: str) directly with the customer's own user_id and the specific transaction_id.",
+        "Agent states that supporting context such as category or promotion expectations may be requested later during review.",
+        "No resolved-dispute correction or internal rewards update is performed in this case."
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Resolved and approved Business Silver Rewards Card correction with eligible travel or software purchase and double-cash-back promo",
+      "type": "transcript_spec",
+      "included_fact_ids": [
+        "F011",
+        "F012",
+        "F013",
+        "F014",
+        "F015",
+        "F016",
+        "F017",
+        "F018",
+        "F019",
+        "F020",
+        "F021",
+        "F022",
+        "F023",
+        "F024",
+        "F025",
+        "F026",
+        "F027",
+        "F031",
+        "F032",
+        "F033",
+        "F034",
+        "F035",
+        "F036",
+        "F037",
+        "F038",
+        "F039",
+        "F040",
+        "F041",
+        "F042",
+        "F043",
+        "F044",
+        "F049",
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F057"
+      ],
+      "required_case_features": [
+        "Support console identifies a cash_back_disputes database record that is resolved and approved and extracts the exact transaction_id requiring correction.",
+        "The Business Silver Rewards Card account was opened during the 2024-11-14 to 2025-11-14 promotional period, and the purchase occurred within the customer's first 6 months after account opening.",
+        "The transaction is an eligible travel or software purchase under a qualifying merchant category and is not in a merchant-category exclusion.",
+        "Support console recalculates the correct rewards from card type, transaction category, base rate, promotional multiplier, purchase-time eligibility, points representation, and floor rounding, without relying on an expected_rewards field.",
+        "Support console unlocks update_transaction_rewards_3847 using unlock_discoverable_agent_tool.",
+        "Agent obtains any required explicit confirmation before the account-modifying reward correction.",
+        "Support console invokes update_transaction_rewards_3847 through call_discoverable_agent_tool using the exact transaction_id and new_rewards_earned formatted as 'X points' with a whole-number value.",
+        "Support console confirms the completed update in credit_card_transaction_history.",
+        "Support console retains calculation notes in the internal case record.",
+        "Customer-facing Agent turns describe the outcome without exposing internal-only database or tool mechanics beyond what is permitted by response phrasing rules."
+      ]
+    },
+    {
+      "id": "C",
+      "title": "Business Silver Rewards Card excluded merchants independently earning standard 1.0% despite travel or software context",
+      "type": "transcript_spec",
+      "included_fact_ids": [
+        "F031",
+        "F032",
+        "F036",
+        "F037",
+        "F038",
+        "F039",
+        "F040",
+        "F041",
+        "F045",
+        "F046",
+        "F047",
+        "F048",
+        "F049",
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F057"
+      ],
+      "required_case_features": [
+        "Case record includes separate Business Silver Rewards Card transactions or support-console eligibility checks for each exclusion group so each group is independently sufficient for the standard-rate outcome.",
+        "Corporate expense platform exclusion is demonstrated with Concur, SAP Concur, Expensify, or Navan and shows standard 1.0% instead of the 10.0% travel bonus.",
+        "Hardware/electronics exclusion is demonstrated with Apple, Microsoft, or Dell and shows standard 1.0% instead of the 10.0% software bonus.",
+        "Gaming subscription exclusion is demonstrated with Xbox Game Pass, PlayStation Plus, or Nintendo Switch Online and shows standard 1.0% instead of the 10.0% software bonus.",
+        "Online learning platform exclusion is demonstrated with Coursera, Udemy, LinkedIn Learning, Skillshare, or Pluralsight and shows standard 1.0% instead of the 10.0% software bonus.",
+        "If the double-cash-back promo is in scope for any transaction, the case shows that merchant category exclusions continue to apply and that the promo multiplies the applicable standard 1.0% rate rather than overriding the exclusion.",
+        "Support console preserves concrete promo dates, account-opening eligibility, 6-month-window timing, automatic application, end-of-cycle crediting, and floor rounding."
+      ]
+    },
+    {
+      "id": "D",
+      "title": "EcoCard sustainability-points dispute comparing green, non-green, mixed-cart, and refunded transactions",
+      "type": "transcript_spec",
+      "included_fact_ids": [
+        "F002",
+        "F003",
+        "F004",
+        "F005",
+        "F006",
+        "F007",
+        "F008",
+        "F009",
+        "F010",
+        "F023",
+        "F028",
+        "F029",
+        "F030",
+        "F031",
+        "F032",
+        "F035",
+        "F036",
+        "F067",
+        "F068",
+        "F069",
+        "F070",
+        "F071",
+        "F072",
+        "F073",
+        "F074",
+        "F075"
+      ],
+      "required_case_features": [
+        "Customer questions EcoCard sustainability points for specific transactions.",
+        "Support console distinguishes EcoCard as the only true points-based card and preserves the $0.01 redemption value for statement credit or checking account credit.",
+        "Case includes a qualifying green merchant or category example earning 5.00 sustainability points per dollar and a non-green purchase earning 1.00 sustainability points per dollar.",
+        "Case includes or references the $100 examples for qualifying green and non-green purchases.",
+        "Case demonstrates the mixed-cart rule at a non-partner merchant: if green and non-green items are mixed, the entire purchase may earn the non-green rate.",
+        "Case demonstrates that a returned or refunded EcoCard transaction reverses corresponding points at the original earn rate.",
+        "Support console applies floor rounding to any fractional point calculations.",
+        "Agent instructs dispute submission through submit_cash_back_dispute_0589 only when the customer believes a specific transaction's received rewards differ from expected rewards, and the agent avoids collecting sensitive card details."
+      ]
+    },
+    {
+      "id": "E",
+      "title": "Crypto-Cash Back rewards accrual and successful crypto redemption with available direct wallet integration",
+      "type": "transcript_spec",
+      "included_fact_ids": [
+        "F023",
+        "F024",
+        "F025",
+        "F031",
+        "F032",
+        "F035",
+        "F036",
+        "F076",
+        "F077",
+        "F078",
+        "F079",
+        "F080",
+        "F081",
+        "F082",
+        "F083",
+        "F084",
+        "F085",
+        "F086",
+        "F087",
+        "F088",
+        "F089",
+        "F090",
+        "F091",
+        "F092",
+        "F093",
+        "F094",
+        "F095",
+        "F096"
+      ],
+      "required_case_features": [
+        "Customer has a Crypto-Cash Back card and asks about earned rewards and crypto redemption.",
+        "Support console preserves that Crypto-Cash Back is a cash-back card whose stored points represent cash back at 1 point = $0.01 when redeemed as statement credit or checking account credit.",
+        "Support console confirms crypto redemption availability is Yes and purchase protection is No.",
+        "Case demonstrates eligible purchases earning 2.0%, app balance tracking, virtual card management availability Yes, and optional virtual card use to organize reward accrual.",
+        "Customer's reward balance meets or exceeds the 30-dollar minimum.",
+        "Case follows the app redemption sequence: open Rewards, choose Redeem to Crypto, confirm the 30 threshold, select from up to 12 cryptocurrencies, use direct wallet integration when available, review the estimated conversion, apply the 1.25% conversion fee at conversion, confirm the wallet address, and submit.",
+        "Support console applies floor rounding to any purchase reward calculations."
+      ]
+    },
+    {
+      "id": "F",
+      "title": "Crypto-Cash Back redemption troubleshooting for below-threshold balance and unavailable wallet integration",
+      "type": "transcript_spec",
+      "included_fact_ids": [
+        "F076",
+        "F078",
+        "F079",
+        "F080",
+        "F081",
+        "F082",
+        "F083",
+        "F084",
+        "F085",
+        "F088",
+        "F090",
+        "F092",
+        "F097",
+        "F098",
+        "F099"
+      ],
+      "required_case_features": [
+        "Customer is attempting Crypto-Cash Back redemption but cannot proceed.",
+        "Support console verifies redemption availability is enabled: Yes.",
+        "Case separately demonstrates the below-threshold condition: if the reward balance is under 30 dollars, the customer must accumulate more rewards until reaching 30.",
+        "Case separately demonstrates the direct-wallet-integration-unavailable path: if direct wallet integration availability is not Yes, the customer uses manual wallet address entry and confirms accuracy before submitting.",
+        "Case may include customer guidance to track the app balance, set a target at or above 30, review merchant processing categories for 2.0% earning, and use available virtual cards to organize reward accrual.",
+        "No unsupported crypto redemption override, fee waiver, threshold waiver, or non-source transfer method is introduced."
+      ]
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/cash_back_disputes_and_corrections/evidence_corpus_hard_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/cash_back_disputes_and_corrections/evidence_corpus_deep_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/cash_back_disputes_and_corrections/client_overlay_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/cash_back_disputes_and_corrections/client_overlay_card_selection_001/transformation_pack.json"
+    }
+  ]
+}

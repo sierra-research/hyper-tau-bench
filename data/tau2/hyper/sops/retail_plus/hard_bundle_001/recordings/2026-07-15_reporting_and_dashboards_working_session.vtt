@@ -1,0 +1,865 @@
+WEBVTT
+
+NOTE Cloud recording transcript
+NOTE Meeting: Reporting and dashboards working session
+NOTE Date: 2026-07-15
+
+1
+00:00:04.000 --> 00:00:13.849
+<v Priya Nair>We are recording, the deck is shared, and I can see from the thumbnails
+
+2
+00:00:13.849 --> 00:00:23.698
+<v Priya Nair>that at least two of you are looking at last week's version, so refresh before you form opinions. Elena
+
+3
+00:00:23.698 --> 00:00:33.548
+<v Priya Nair>is out until the twenty-seventh and left me the chair, the agenda, and a note that says do not let this become a philosophy
+
+4
+00:00:33.548 --> 00:00:43.397
+<v Priya Nair>seminar, which I intend to honor. We also have a guest. Aisha Karim from finance data
+
+5
+00:00:43.397 --> 00:00:53.246
+<v Priya Nair>is here for the middle block, and I have promised her we will reach the middle block while she is still
+
+6
+00:00:53.246 --> 00:01:03.095
+<v Priya Nair>young.
+
+7
+00:01:03.595 --> 00:01:17.902
+<v Aisha Karim>I appreciate the ambition. For anyone I have not met over email, I sit on the finance data side and I
+
+8
+00:01:17.902 --> 00:01:32.210
+<v Aisha Karim>am the person who replies to your export questions with more questions. In person I am told I am friendlier. We will test that today.
+
+9
+00:01:32.210 --> 00:01:41.541
+<v Marcus Reed>Your emails are plenty friendly. It is the spreadsheets attached to them that frighten people.
+
+10
+00:01:44.541 --> 00:01:56.111
+<v Priya Nair>Agenda, four blocks. The dashboard tile audit, which is finally done and has findings. The month-end export mechanics with Aisha, which is
+
+11
+00:01:56.111 --> 00:02:07.681
+<v Priya Nair>why she is trapped here. The metric naming collisions, which have graduated from annoyance
+
+12
+00:02:07.681 --> 00:02:19.251
+<v Priya Nair>to actual confusion. And subscriptions cleanup, which is small but overdue. Tile audit first. Two weeks ago this group
+
+13
+00:02:19.251 --> 00:02:30.821
+<v Priya Nair>asked me to inventory every tile on the shared operations dashboard and find out which ones anybody actually uses. I did, and I want
+
+14
+00:02:30.821 --> 00:02:42.392
+<v Priya Nair>to walk the numbers slowly because they surprised me and they will surprise you.
+
+15
+00:02:42.892 --> 00:02:51.600
+<v Jon Bell>I have been waiting for this the way other people wait for playoff results.
+
+16
+00:02:50.100 --> 00:03:01.422
+<v Priya Nair>Then here is your season. The shared dashboard has forty-three tiles. Of those, the viewer logs show nineteen were opened by at least
+
+17
+00:03:01.422 --> 00:03:12.743
+<v Priya Nair>three distinct people in the past sixty days. Eleven more were opened by exactly one
+
+18
+00:03:12.743 --> 00:03:24.065
+<v Priya Nair>person each, usually the person who requested them, twice a person who has since changed teams. And thirteen tiles were
+
+19
+00:03:24.065 --> 00:03:35.386
+<v Priya Nair>not opened by a single human being in two months. Not one view. They render every morning for an audience of nobody, like a very
+
+20
+00:03:35.386 --> 00:03:46.707
+<v Priya Nair>diligent theater troupe performing to an empty room.
+
+21
+00:03:47.207 --> 00:03:56.538
+<v Talia Brooks>I want to feel bad for the tiles but I am fairly sure I requested two of
+
+22
+00:03:56.538 --> 00:04:05.869
+<v Talia Brooks>them. Which two, actually? I would rather confess now than be discovered later.
+
+23
+00:04:11.869 --> 00:04:23.273
+<v Priya Nair>You own one of the orphans, the clip review aging tile, and one single-viewer tile that you are in fact the single viewer of,
+
+24
+00:04:23.273 --> 00:04:34.678
+<v Priya Nair>so that one lives. The aging tile stopped making sense after you rebuilt the review queue
+
+25
+00:04:34.678 --> 00:04:46.082
+<v Priya Nair>in May, and I suspect you have been getting that answer from somewhere else since.
+
+26
+00:04:45.582 --> 00:04:55.846
+<v Talia Brooks>From the queue view itself, yes. The tile was a workaround for a problem the rebuild deleted. Kill
+
+27
+00:04:55.846 --> 00:05:06.110
+<v Talia Brooks>it with my blessing, and I will write the one-line eulogy for the change note.
+
+28
+00:05:09.610 --> 00:05:21.553
+<v Priya Nair>That is the spirit I want for all thirteen. Here is my proposal, and I made it gentle on purpose. The thirteen unviewed tiles get
+
+29
+00:05:21.553 --> 00:05:33.497
+<v Priya Nair>moved to an archive section, not deleted, for one full quarter. Anyone can promote one back with
+
+30
+00:05:33.497 --> 00:05:45.440
+<v Priya Nair>a single comment saying they use it. Anything still in the archive at the end of the quarter gets removed with its
+
+31
+00:05:45.440 --> 00:05:57.384
+<v Priya Nair>query saved to the graveyard doc, so resurrection stays cheap. The dashboard drops from
+
+32
+00:05:57.384 --> 00:06:09.327
+<v Priya Nair>forty-three tiles to thirty, the load time improves, and the tiles that matter stop hiding in the crowd.
+
+33
+00:06:07.827 --> 00:06:18.526
+<v Marcus Reed>Gentle received, no objection from the floor side, but one request. Two of the tiles I do use sit
+
+34
+00:06:18.526 --> 00:06:29.226
+<v Marcus Reed>in the fourth row, below the scroll line on the wall screen, and I have been meaning to raise it for a month. If
+
+35
+00:06:29.226 --> 00:06:39.925
+<v Marcus Reed>we are pruning anyway, can the survivors get re-ordered by actual viewing rather than by the
+
+36
+00:06:39.925 --> 00:06:50.624
+<v Marcus Reed>order people happened to request them in? The wall screen shows the top twelve and at least three of the top
+
+37
+00:06:50.624 --> 00:07:01.324
+<v Marcus Reed>twelve are about to be archived.
+
+38
+00:07:05.324 --> 00:07:15.069
+<v Jon Bell>That reorder is twenty minutes of work once the pruning lands, and I volunteer, because the wall screen is mine now after the countdown incident and
+
+39
+00:07:15.069 --> 00:07:24.815
+<v Jon Bell>I have opinions about what it displays. Viewing-ranked, top twelve above the fold, floor tiles first among ties.
+
+40
+00:07:24.815 --> 00:07:34.560
+<v Jon Bell>Done by Friday.
+
+41
+00:07:33.060 --> 00:07:45.709
+<v Priya Nair>Motion carries all around then. I will do the archive move Thursday morning with the change note posted before anyone's
+
+42
+00:07:45.709 --> 00:07:58.357
+<v Priya Nair>coffee, and the note will include the full list of thirteen so nobody discovers an absence by surprise. If someone shouts about a tile, that
+
+43
+00:07:58.357 --> 00:08:11.006
+<v Priya Nair>is the system working, and the shout doubles as the usage evidence the tile never had.
+
+44
+00:08:10.006 --> 00:08:20.083
+<v Aisha Karim>Can I ask an outsider question about the archive before you move on? On
+
+45
+00:08:20.083 --> 00:08:30.160
+<v Aisha Karim>our side we did a similar cull last year and the mistake we made was archiving the tiles but
+
+46
+00:08:30.160 --> 00:08:40.237
+<v Aisha Karim>not the schedules underneath them. The queries kept running every morning against a warehouse nobody was looking at, and we only noticed at budget
+
+47
+00:08:40.237 --> 00:08:50.315
+<v Aisha Karim>review when someone asked why the overnight compute had not gone down. If your tiles have
+
+48
+00:08:50.315 --> 00:09:00.392
+<v Aisha Karim>scheduled refreshes, archive the schedule with the tile.
+
+49
+00:08:58.892 --> 00:09:09.311
+<v Jon Bell>That is a better catch than I want to admit. Ours refresh on a shared morning schedule, and the archive move
+
+50
+00:09:09.311 --> 00:09:19.731
+<v Jon Bell>alone would have left all thirteen queries running exactly as you describe. I will split the schedule so archived tiles refresh weekly instead of daily. Not
+
+51
+00:09:19.731 --> 00:09:30.150
+<v Jon Bell>never, because a promoted tile should come back with recent-ish data, but not every morning for an empty
+
+52
+00:09:30.150 --> 00:09:40.570
+<v Jon Bell>room either.
+
+53
+00:09:40.070 --> 00:09:50.023
+<v Priya Nair>And that exchange is why guests get invited. Block one closed. Block two, month-end mechanics,
+
+54
+00:09:50.023 --> 00:09:59.975
+<v Priya Nair>and Aisha this is yours to open because the pain lives on your side of the fence.
+
+55
+00:09:59.475 --> 00:10:10.983
+<v Aisha Karim>Thank you, and I will keep the whining structural rather than personal. Here is month-end from where I sit. Your team's export
+
+56
+00:10:10.983 --> 00:10:22.491
+<v Aisha Karim>lands in our shared location on the first business day, usually before noon, and
+
+57
+00:10:22.491 --> 00:10:33.999
+<v Aisha Karim>the file itself is fine. Clean columns, stable names, no surprises. The pain is everything around the file. I
+
+58
+00:10:33.999 --> 00:10:45.507
+<v Aisha Karim>never know when it has landed, so I poll the folder like a nervous parent. Twice this year the file was replaced after I
+
+59
+00:10:45.507 --> 00:10:57.015
+<v Aisha Karim>had already pulled it, silently, because someone upstream fixed a row, and my numbers and your
+
+60
+00:10:57.015 --> 00:11:08.523
+<v Aisha Karim>numbers then disagreed in a meeting in front of people we were both trying to impress.
+
+61
+00:11:08.023 --> 00:11:12.378
+<v Marcus Reed>I remember that meeting. Nobody was impressed.
+
+62
+00:11:11.378 --> 00:11:22.948
+<v Aisha Karim>So my asks are three, in ascending order of effort. First, a ping when the file lands, in whatever channel you already use,
+
+63
+00:11:22.948 --> 00:11:34.518
+<v Aisha Karim>one line, no ceremony. Second, if a file must be replaced, the replacement gets a
+
+64
+00:11:34.518 --> 00:11:46.088
+<v Aisha Karim>suffix and the ping says corrected, so I know to re-pull instead of discovering it through arithmetic. Third, and this
+
+65
+00:11:46.088 --> 00:11:57.659
+<v Aisha Karim>one is a wish rather than an ask, a tiny manifest row at the top or alongside, row count and generated-at timestamp, so I can
+
+66
+00:11:57.659 --> 00:12:09.229
+<v Aisha Karim>verify I loaded what you shipped without asking anyone anything.
+
+67
+00:12:14.229 --> 00:12:24.182
+<v Jon Bell>Asks one and two are genuinely trivial, and I am embarrassed they are not already true. The
+
+68
+00:12:24.182 --> 00:12:34.135
+<v Jon Bell>export job can post to the channel when it writes the file, and I will add a rule to the job so
+
+69
+00:12:34.135 --> 00:12:44.088
+<v Jon Bell>it refuses to overwrite silently. Replacement means new suffix, full stop, enforced by the
+
+70
+00:12:44.088 --> 00:12:54.040
+<v Jon Bell>tooling rather than by memory, because memory is what failed twice.
+
+71
+00:12:54.540 --> 00:13:06.981
+<v Priya Nair>The manifest wish is also cheap if we put it in a sidecar file rather than touching the export itself. Same folder, same base
+
+72
+00:13:06.981 --> 00:13:19.423
+<v Priya Nair>name, a dot-manifest next to the data. Your loader can check it or ignore it, and
+
+73
+00:13:19.423 --> 00:13:31.864
+<v Priya Nair>nothing about the existing file changes shape, so nobody downstream of you breaks. I have wanted a generated-at stamp on our
+
+74
+00:13:31.864 --> 00:13:44.305
+<v Priya Nair>side too, for the days when the job runs late and we argue about whether the numbers are fresh.
+
+75
+00:13:46.305 --> 00:13:57.709
+<v Aisha Karim>A sidecar is exactly right, and if you stamp it I will build the check into our loader
+
+76
+00:13:57.709 --> 00:14:09.113
+<v Aisha Karim>the same week. Then the next time our numbers disagree in front of important people, it will be for an interesting reason instead
+
+77
+00:14:09.113 --> 00:14:20.518
+<v Aisha Karim>of a filing accident, which is all I have ever wanted from this relationship.
+
+78
+00:14:24.518 --> 00:14:36.648
+<v Talia Brooks>A toast to interesting disagreements. Can I add one item to this block while we have finance in the room? The quarterly quality summary I
+
+79
+00:14:36.648 --> 00:14:48.778
+<v Talia Brooks>send your direction gets rebuilt by hand every time because the source lives in three places. That
+
+80
+00:14:48.778 --> 00:15:00.908
+<v Talia Brooks>is my problem, not yours, but the fix I am planning changes the file's shape slightly, one added column, two renamed ones.
+
+81
+00:15:00.908 --> 00:15:13.038
+<v Talia Brooks>I would rather negotiate the rename with you now than surprise you in October.
+
+82
+00:15:17.038 --> 00:15:26.991
+<v Aisha Karim>Send me the proposed shape this week and I will confirm nothing on our side keys off the old
+
+83
+00:15:26.991 --> 00:15:36.944
+<v Aisha Karim>names. It almost certainly does not, but almost certainly is how the last two incidents started, so let us verify like adults. And thank
+
+84
+00:15:36.944 --> 00:15:46.897
+<v Aisha Karim>you for asking first. You would be surprised how rare that is, except you would not
+
+85
+00:15:46.897 --> 00:15:56.849
+<v Aisha Karim>be, because you work here.
+
+86
+00:15:56.349 --> 00:16:08.915
+<v Priya Nair>Block two closes with actions on Jon for the ping and the no-silent-overwrite rule, me for the sidecar manifest, Talia and Aisha for the shape negotiation.
+
+87
+00:16:08.915 --> 00:16:21.480
+<v Priya Nair>Which brings us to naming collisions, the block I have been dreading in a low-grade way all week.
+
+88
+00:16:21.480 --> 00:16:34.046
+<v Priya Nair>Here is the situation for anyone who has been lucky enough to miss it. We have two different numbers in circulation that are
+
+89
+00:16:34.046 --> 00:16:46.611
+<v Priya Nair>both called resolution rate, and they are both legitimate, and they are calculated differently, and
+
+90
+00:16:46.611 --> 00:16:59.177
+<v Priya Nair>last Tuesday they appeared next to each other in the same deck with a four-point gap and no explanation.
+
+91
+00:17:01.177 --> 00:17:12.685
+<v Marcus Reed>I built that deck. In my defense, I copied both tiles from dashboards that each claimed authority, and I only
+
+92
+00:17:12.685 --> 00:17:24.193
+<v Marcus Reed>noticed the gap in the actual meeting, live, while pointing at it. It was a growth experience.
+
+93
+00:17:22.693 --> 00:17:33.517
+<v Priya Nair>It was also nobody's fault, which is what makes it structural. One of the
+
+94
+00:17:33.517 --> 00:17:44.341
+<v Priya Nair>two comes from the daily operational view and counts within the day. The other comes from the weekly rollup
+
+95
+00:17:44.341 --> 00:17:55.164
+<v Priya Nair>and counts within the week, which smooths over things that cross midnight. Neither is wrong. They are answering different questions wearing the same name
+
+96
+00:17:55.164 --> 00:18:05.988
+<v Priya Nair>tag. And renaming either one in the source system is a bigger project than it sounds,
+
+97
+00:18:05.988 --> 00:18:16.812
+<v Priya Nair>because saved views and bookmarks and two quarters of decks reference the current labels.
+
+98
+00:18:21.812 --> 00:18:34.253
+<v Jon Bell>So we do what you do when renaming is expensive. We keep the names and change the labels. Every tile and
+
+99
+00:18:34.253 --> 00:18:46.694
+<v Jon Bell>every export template gets a suffix in the display label only, daily basis or weekly basis, while the underlying field names stay put. Bookmarks keep working,
+
+100
+00:18:46.694 --> 00:18:59.135
+<v Jon Bell>old decks stay old, and any human looking at a number can see which question it answers without
+
+101
+00:18:59.135 --> 00:19:11.576
+<v Jon Bell>archaeology. I can do the display-label pass in an afternoon because labels are not references.
+
+102
+00:19:15.576 --> 00:19:25.996
+<v Talia Brooks>Add one thing to the pass. A short note in the glossary doc, three sentences,
+
+103
+00:19:25.996 --> 00:19:36.415
+<v Talia Brooks>saying the two exist, why both are legitimate, and which one to reach for by default in decks. Half the
+
+104
+00:19:36.415 --> 00:19:46.834
+<v Talia Brooks>confusion is people not knowing there are two. The other half is people knowing and picking whichever is more flattering, which the glossary cannot fix,
+
+105
+00:19:46.834 --> 00:19:57.254
+<v Talia Brooks>but at least the choice becomes visible.
+
+106
+00:20:02.254 --> 00:20:12.518
+<v Aisha Karim>For what it is worth, finance hit this exact class of problem with margin definitions two years ago, and the labeling-plus-glossary approach
+
+107
+00:20:12.518 --> 00:20:22.782
+<v Aisha Karim>held up. The one addition that mattered was putting the basis suffix into the
+
+108
+00:20:22.782 --> 00:20:33.045
+<v Aisha Karim>export column headers as well, because files escape into email and lose their glossary. A column that says what
+
+109
+00:20:33.045 --> 00:20:43.309
+<v Aisha Karim>it is survives forwarding. A column that assumes context does not.
+
+110
+00:20:44.809 --> 00:20:56.006
+<v Priya Nair>Then the export headers get the suffix too, and I will take the compatibility check on
+
+111
+00:20:56.006 --> 00:21:07.203
+<v Priya Nair>the two loaders that read those files, one of which is Aisha's and now self-updating, apparently, and one of which is
+
+112
+00:21:07.203 --> 00:21:18.400
+<v Priya Nair>the wall screen, which is Jon's, so the whole dependency graph is in this room. This is the most contained cross-team change I have ever proposed
+
+113
+00:21:18.400 --> 00:21:29.597
+<v Priya Nair>and I am suspicious of how easy it feels.
+
+114
+00:21:35.597 --> 00:21:44.928
+<v Marcus Reed>Enjoy it. Next quarter something will be horrible again and we will remember this fondly.
+
+115
+00:21:47.928 --> 00:21:58.399
+<v Priya Nair>Last block, subscriptions. The report subscription list has ninety-one entries and I sampled it before this meeting.
+
+116
+00:21:58.399 --> 00:22:08.871
+<v Priya Nair>Eleven go to people who left the company, which is just untidy. Seven go to a distribution list that was retired in
+
+117
+00:22:08.871 --> 00:22:19.342
+<v Priya Nair>the spring and silently delivers to nowhere, which is worse than untidy because three
+
+118
+00:22:19.342 --> 00:22:29.813
+<v Priya Nair>of those seven are reports someone presumably still wants. And at least one subscription sends the same report to
+
+119
+00:22:29.813 --> 00:22:40.284
+<v Priya Nair>the same person twice a day because they subscribed once themselves and were subscribed once by a manager, and they told me they read
+
+120
+00:22:40.284 --> 00:22:50.756
+<v Priya Nair>neither copy out of protest.
+
+121
+00:22:51.756 --> 00:22:57.354
+<v Talia Brooks>A protest with a paper trail. I respect it.
+
+122
+00:23:00.854 --> 00:23:12.922
+<v Priya Nair>The cleanup itself is mechanical and I will just do it. Departed people removed, the dead list replaced
+
+123
+00:23:12.922 --> 00:23:24.990
+<v Priya Nair>with the live equivalent after I confirm with the three report owners, duplicates collapsed. What I want from this group is agreement on
+
+124
+00:23:24.990 --> 00:23:37.058
+<v Priya Nair>one rule going forward, because the mess regrows without a rule. Every subscription gets an
+
+125
+00:23:37.058 --> 00:23:49.126
+<v Priya Nair>owner who is a person, not a list, and once a year the owner gets one automated message asking if
+
+126
+00:23:49.126 --> 00:24:01.193
+<v Priya Nair>they still want it, with silence meaning unsubscribe. Not silence meaning keep, silence meaning unsubscribe. That polarity is the entire rule.
+
+127
+00:24:07.193 --> 00:24:18.805
+<v Jon Bell>The polarity is right. Every system where silence means keep grows barnacles forever, because clicking keep is work and doing nothing is free. Make doing
+
+128
+00:24:18.805 --> 00:24:30.417
+<v Jon Bell>nothing the cleanup and the list maintains itself. I will wire the annual message when I do
+
+129
+00:24:30.417 --> 00:24:42.028
+<v Jon Bell>the label pass, since I will be in that corner of the tooling anyway.
+
+130
+00:24:44.028 --> 00:24:55.847
+<v Marcus Reed>One protection, though. Some reports go to roles rather than people for good reason, like whoever holds the early-shift
+
+131
+00:24:55.847 --> 00:25:07.667
+<v Marcus Reed>lead badge in a given month. If the rule forces those onto one named person, the subscription breaks every time the badge rotates. Can
+
+132
+00:25:07.667 --> 00:25:19.486
+<v Marcus Reed>a role own a subscription if the role has a current holder on record?
+
+133
+00:25:24.486 --> 00:25:34.438
+<v Priya Nair>Yes, with the annual confirmation going to the current holder at confirmation time. That keeps the rule intact and the rotation painless. Good catch, and it
+
+134
+00:25:34.438 --> 00:25:44.391
+<v Priya Nair>goes in the rule's one paragraph of documentation, which I will write today so the rule exists somewhere
+
+135
+00:25:44.391 --> 00:25:54.344
+<v Priya Nair>other than this recording.
+
+136
+00:25:54.844 --> 00:26:06.352
+<v Priya Nair>Elena also left one item on the sheet that is not strictly mine but lands in this room, the morning
+
+137
+00:26:06.352 --> 00:26:17.860
+<v Priya Nair>digest. Her note says, and I quote, the digest has become a casserole, please intervene. For context, the digest started in the spring as five
+
+138
+00:26:17.860 --> 00:26:29.368
+<v Priya Nair>lines posted before the early shift. Headline numbers, anything broken, anything changing today. It now runs to
+
+139
+00:26:29.368 --> 00:26:40.876
+<v Priya Nair>thirty-plus lines on a bad day because every team that ever wanted visibility appended a section and nobody has ever removed one.
+
+140
+00:26:40.876 --> 00:26:52.384
+<v Priya Nair>I pulled the read receipts, and readership peaked in April and has slid every
+
+141
+00:26:52.384 --> 00:27:03.892
+<v Priya Nair>week since, which is what happens when a five-line thing becomes a scroll.
+
+142
+00:27:05.392 --> 00:27:17.004
+<v Marcus Reed>Confirming from the receiving end. The early shift reads the first screen at the
+
+143
+00:27:17.004 --> 00:27:28.616
+<v Marcus Reed>lockers, and whatever does not fit on one phone screen may as well not exist. The queue counts and
+
+144
+00:27:28.616 --> 00:27:40.227
+<v Marcus Reed>the broken-today section survive because they come first. Everything below the fold is being sent into the void with great ceremony every morning.
+
+145
+00:27:39.727 --> 00:27:51.235
+<v Talia Brooks>The irony being that some of the below-the-fold sections matter more than the above-the-fold ones on the days they fire. The
+
+146
+00:27:51.235 --> 00:28:02.743
+<v Talia Brooks>training section is mine, it is empty most mornings, and on the mornings it is not empty it is genuinely urgent. Position in a static layout
+
+147
+00:28:02.743 --> 00:28:14.251
+<v Talia Brooks>cannot express that. An empty section holding a good spot is a squatter. A full section buried at
+
+148
+00:28:14.251 --> 00:28:25.759
+<v Talia Brooks>the bottom is a siren in a soundproof room.
+
+149
+00:28:25.259 --> 00:28:34.963
+<v Jon Bell>Then the layout should not be static. The digest is assembled by a job, and
+
+150
+00:28:34.963 --> 00:28:44.667
+<v Jon Bell>the job can sort sections by has-content-today before it sorts by anything else. Empty sections drop out entirely instead of
+
+151
+00:28:44.667 --> 00:28:54.371
+<v Jon Bell>printing their little headers over nothing. Full sections rise. The five-line ideal comes back automatically on quiet days because quiet days genuinely have five lines
+
+152
+00:28:54.371 --> 00:29:04.076
+<v Jon Bell>to say, and on loud days the loudness is at the top where the lockers can see
+
+153
+00:29:04.076 --> 00:29:13.780
+<v Jon Bell>it.
+
+154
+00:29:15.780 --> 00:29:27.080
+<v Priya Nair>That is half of Elena's intervention done with a sort key, which is very satisfying. The other half is retiring sections nobody
+
+155
+00:29:27.080 --> 00:29:38.381
+<v Priya Nair>reads even when they do fire, and for that I will do the same
+
+156
+00:29:38.381 --> 00:29:49.682
+<v Priya Nair>thing I did to the tiles. Each section gets an owner ping this week, one question, does this still
+
+157
+00:29:49.682 --> 00:30:00.982
+<v Priya Nair>earn its lines. Sections whose owners do not defend them fold into a monthly summary instead of the daily. I expect the casserole comes
+
+158
+00:30:00.982 --> 00:30:12.283
+<v Priya Nair>out of the oven at around twelve lines on a loud day, and I will report
+
+159
+00:30:12.283 --> 00:30:23.584
+<v Priya Nair>the read-receipt curve at Elena's return review so we know whether the intervention took.
+
+160
+00:30:23.584 --> 00:30:34.936
+<v Marcus Reed>One request from the lockers while you are in there. Whatever survives the cull, keep the
+
+161
+00:30:34.936 --> 00:30:46.289
+<v Marcus Reed>queue counts as the first line, always, even on mornings when some other section is louder. The early shift builds its
+
+162
+00:30:46.289 --> 00:30:57.641
+<v Marcus Reed>first hour around those numbers, and if they start moving around the screen, people will stop trusting the layout and go back to asking each other,
+
+163
+00:30:57.641 --> 00:31:08.994
+<v Marcus Reed>which is the thing the digest was invented to stop.
+
+164
+00:31:08.994 --> 00:31:20.315
+<v Priya Nair>Anchored first line, guaranteed, and I will write it into the job's config as a fixed slot rather than as a custom, so
+
+165
+00:31:20.315 --> 00:31:31.636
+<v Priya Nair>the guarantee survives me. Casserole block closed. One more housekeeping block while I have all
+
+166
+00:31:31.636 --> 00:31:42.958
+<v Priya Nair>of you, and then Aisha can escape. Viewer access on the reporting workspace. When I pulled the tile logs for
+
+167
+00:31:42.958 --> 00:31:54.279
+<v Priya Nair>the audit, I also got the member list as a side effect, and it has drifted. Fifty-eight people have edit rights. I can name maybe
+
+168
+00:31:54.279 --> 00:32:05.600
+<v Priya Nair>fourteen who have edited anything in six months.
+
+169
+00:32:06.100 --> 00:32:16.053
+<v Jon Bell>Let me guess the history. Every onboarding for two years granted edit because view-only felt stingy on
+
+170
+00:32:16.053 --> 00:32:26.006
+<v Jon Bell>someone's first day, and no offboarding ever revisited it, because access removal is nobody's dopamine.
+
+171
+00:32:26.006 --> 00:32:36.996
+<v Priya Nair>That is the exact archaeology. Nothing bad has happened, I want to say that clearly for the recording, no mystery edits, no vandalism, the
+
+172
+00:32:36.996 --> 00:32:47.985
+<v Priya Nair>audit trail is clean. But fifty-eight editors on a workspace with fourteen actual editors is not
+
+173
+00:32:47.985 --> 00:32:58.975
+<v Priya Nair>a posture, it is an accident with good luck, and the clean audit trail is the luck talking. My proposal is
+
+174
+00:32:58.975 --> 00:33:09.965
+<v Priya Nair>boring and proven. Editors who have edited in the last six months keep edit. Everyone else moves to viewer with a note saying one click gets
+
+175
+00:33:09.965 --> 00:33:20.954
+<v Priya Nair>edit back, no questions, same day. Nobody loses sight of anything. They lose a pencil they were not
+
+176
+00:33:20.954 --> 00:33:31.944
+<v Priya Nair>holding.
+
+177
+00:33:34.444 --> 00:33:45.019
+<v Talia Brooks>Do it, and time it for the same Thursday as the tile archive so there is one change
+
+178
+00:33:45.019 --> 00:33:55.594
+<v Talia Brooks>note instead of two. People absorb one lump of housekeeping fine. Two in a week and they start believing in a purge, and
+
+179
+00:33:55.594 --> 00:34:06.169
+<v Talia Brooks>then the hoarding instincts kick in and someone bulk-downloads the whole workspace as a precaution,
+
+180
+00:34:06.169 --> 00:34:16.744
+<v Talia Brooks>which I have seen, and which I would rather not see again.
+
+181
+00:34:23.744 --> 00:34:33.697
+<v Aisha Karim>Before I forget my one useful contribution to this block, when we did the same downgrade on the finance workspace, the single thing that prevented
+
+182
+00:34:33.697 --> 00:34:43.649
+<v Aisha Karim>grumbling was putting the restore link directly in the notification, not a link to a page that
+
+183
+00:34:43.649 --> 00:34:53.602
+<v Aisha Karim>explains how to find the form that requests the restoration. One click in the message itself. The distance between one click and
+
+184
+00:34:53.602 --> 00:35:03.555
+<v Aisha Karim>three clicks is the entire difference between a smooth change and a month of
+
+185
+00:35:03.555 --> 00:35:13.508
+<v Aisha Karim>hallway complaints.
+
+186
+00:35:17.508 --> 00:35:27.046
+<v Jon Bell>Seconded from painful personal experience, and the workspace tooling supports the direct link, so there is no excuse. I
+
+187
+00:35:27.046 --> 00:35:36.584
+<v Jon Bell>will wire it when I do the label pass, since apparently I am spending Thursday in that corner of the system anyway. My Thursday
+
+188
+00:35:36.584 --> 00:35:46.123
+<v Jon Bell>is becoming legendary.
+
+189
+00:35:53.123 --> 00:36:07.015
+<v Aisha Karim>I have to drop at the hour, so before I go, thank you for actually reaching my block in the first half. My asks are in
+
+190
+00:36:07.015 --> 00:36:20.908
+<v Aisha Karim>your recap, my calendar has a hold for the shape negotiation with Talia, and I am leaving this
+
+191
+00:36:20.908 --> 00:36:34.800
+<v Aisha Karim>meeting with fewer problems than I brought, which has literally never happened to me in this building before. I will be telling people.
+
+192
+00:36:37.300 --> 00:36:49.897
+<v Priya Nair>Tell the skeptics first. Thanks, Aisha. Remaining agenda is ours, and it is really just confirmations and the recap, so
+
+193
+00:36:49.897 --> 00:37:02.493
+<v Priya Nair>let me do the recap while everyone still has the context loaded. Thursday morning I archive the thirteen tiles with the change note and the
+
+194
+00:37:02.493 --> 00:37:15.090
+<v Priya Nair>full list, Jon splits the refresh schedule so the archive stops burning morning compute, thank you again
+
+195
+00:37:15.090 --> 00:37:27.687
+<v Priya Nair>for that catch, and the reorder puts the top twelve by viewing above the wall screen's fold by Friday.
+
+196
+00:37:27.187 --> 00:37:36.891
+<v Priya Nair>Month-end gets the landing ping and the no-silent-overwrite rule from Jon, the sidecar manifest
+
+197
+00:37:36.891 --> 00:37:46.595
+<v Priya Nair>from me, and the Talia and Aisha column negotiation happens this week while October is still comfortably far away.
+
+198
+00:37:46.595 --> 00:37:56.299
+<v Priya Nair>The two resolution rates keep their names and gain basis labels everywhere a human might read them, including export headers, plus three glossary sentences
+
+199
+00:37:56.299 --> 00:38:06.003
+<v Priya Nair>from Talia. And subscriptions get the mechanical cleanup plus the silence-means-unsubscribe rule, roles allowed as owners
+
+200
+00:38:06.003 --> 00:38:15.707
+<v Priya Nair>while a current holder exists.
+
+201
+00:38:17.707 --> 00:38:25.483
+<v Marcus Reed>You recapped a fifty-minute meeting in ninety seconds and nothing was missing. Elena's chair is in danger and I am saying
+
+202
+00:38:25.483 --> 00:38:33.258
+<v Marcus Reed>so on the recording.
+
+203
+00:38:36.258 --> 00:38:46.958
+<v Priya Nair>Elena left me a checklist and I am flattering myself by following it. Two small
+
+204
+00:38:46.958 --> 00:38:57.657
+<v Priya Nair>things before we close, both mine. First, the July numbers review moved to the Monday after Elena is back, her
+
+205
+00:38:57.657 --> 00:39:08.356
+<v Priya Nair>request, so nobody prepare anything this weekend. Second, whoever keeps renaming the shared folder views with exclamation points to make them sort first, I see
+
+206
+00:39:08.356 --> 00:39:19.056
+<v Priya Nair>you, I understand you, and I have replaced the exclamation points with a pinned index, so the
+
+207
+00:39:19.056 --> 00:39:29.755
+<v Priya Nair>arms race can end with dignity for all parties.
+
+208
+00:39:28.755 --> 00:39:40.418
+<v Talia Brooks>It was not me, but I admire that you built amnesty into the solution. On the actual close, one reminder for the
+
+209
+00:39:40.418 --> 00:39:52.082
+<v Talia Brooks>recording since this series gets reviewed later. Session recordings live in the shared library,
+
+210
+00:39:52.082 --> 00:40:03.746
+<v Talia Brooks>the library is the citable source, and the index doc got its July update this morning, so the links
+
+211
+00:40:03.746 --> 00:40:15.409
+<v Talia Brooks>are current as of today. Future listener, if a link is dead, the index is where you fix your bearings.
+
+212
+00:40:21.409 --> 00:40:30.533
+<v Priya Nair>A public service announcement for the archive, very on-brand for this meeting. That is everything on
+
+213
+00:40:30.533 --> 00:40:39.656
+<v Priya Nair>my sheet. Thanks all, recap goes out before lunch, and next week Talia has the chair for the calibration follow-up, so
+
+214
+00:40:39.656 --> 00:40:48.779
+<v Priya Nair>bring your disagreements pre-sharpened. We are done.
+
+215
+00:40:53.779 --> 00:41:00.000
+<v Jon Bell>Pre-sharpened disagreements. Finally, an agenda item I can prepare for.

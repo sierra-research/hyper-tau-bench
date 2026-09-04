@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ATM-OPS-201 rev B — ATM fee complaint intake &amp; account lookup</title>
+<style>
+  body { margin: 0; background: #eef1f4; font-family: "Segoe UI", Arial, sans-serif; }
+  .board { position: relative; width: 1560px; height: 1560px; background: #fbfcfd; }
+  .titlebar { position: absolute; left: 0; top: 0; width: 1560px; height: 64px; background: #274b63; color: #fff; box-sizing: border-box; padding: 10px 24px; }
+  .titlebar h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  .titlebar .meta { font-size: 12px; color: #c3d4e2; }
+  .node { position: absolute; width: 300px; box-sizing: border-box; border: 2px solid #4a5b6d; border-radius: 6px; background: #fff; padding: 10px 12px; font-size: 13px; line-height: 1.35; color: #1d2733; }
+  .node .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding: 1px 6px; border-radius: 3px; margin-bottom: 6px; }
+  .entry { border-color: #1d6a44; } .entry .tag { background: #d9efe3; color: #17573a; }
+  .read { border-color: #2b5f8f; } .read .tag { background: #dcebf7; color: #234d73; }
+  .work { border-color: #4a5b6d; } .work .tag { background: #e6ebf0; color: #3a4a5a; }
+  .toolcall { border-color: #7a4a94; } .toolcall .tag { background: #efe3f6; color: #5f3675; }
+  .handoff { border-color: #8f7326; } .handoff .tag { background: #f6eecf; color: #6e5a1d; }
+  .queue { border-color: #8a2f3c; } .queue .tag { background: #f6dde1; color: #6e2530; }
+  .terminal { border-color: #1d6a44; background: #f2faf5; } .terminal .tag { background: #d9efe3; color: #17573a; }
+  .decision { position: absolute; width: 300px; box-sizing: border-box; }
+  .decision .diamond { width: 280px; height: 128px; margin: 0 auto; background: #fff8e8; border: 2px solid #b08a1f; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 8px 14px; box-sizing: border-box; font-size: 13px; text-align: center; color: #4b3d10; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+  svg.edges { position: absolute; left: 0; top: 0; width: 1560px; height: 1560px; pointer-events: none; }
+  svg.edges path { stroke: #51606f; stroke-width: 2; fill: none; marker-end: url(#arrow201b); }
+  svg.edges path.loop { stroke-dasharray: 6 4; }
+  .edge-label { position: absolute; font-size: 11px; font-weight: 600; color: #38424d; background: #fbfcfdcc; padding: 0 4px; border-radius: 2px; }
+  .sticky { position: absolute; width: 250px; box-sizing: border-box; padding: 10px 12px; font-size: 12px; line-height: 1.35; box-shadow: 2px 3px 6px rgba(0,0,0,0.12); }
+  .sticky.yellow { background: #fdf3c0; } .sticky.pink { background: #fbdce4; }
+  .control-definitions { position: absolute; left: 24px; top: 1240px; width: 1512px; box-sizing: border-box; border: 2px solid #274b63; background: #f4f8fc; border-radius: 6px; padding: 14px 18px; }
+  .control-definitions h2 { margin: 0 0 8px; font-size: 14px; letter-spacing: 0.4px; color: #274b63; }
+  .control-definitions dl { margin: 0; font-size: 12.5px; line-height: 1.45; color: #1d2733; }
+  .control-definitions dt { font-weight: 700; font-family: "Consolas", monospace; margin-top: 7px; }
+  .control-definitions dd { margin: 1px 0 0 14px; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="titlebar">
+    <h1>ATM fee complaint intake &amp; account lookup — with rebate-denial branch</h1>
+    <div class="meta">ATM-OPS-201 rev B &nbsp;·&nbsp; Owner: D. Reeves, Support Floor Operations &nbsp;·&nbsp; Updated 2025-09-30 &nbsp;·&nbsp; Applies to: ATM fee, rebate, and credit contacts on consumer checking products</div>
+  </div>
+
+  <svg class="edges" viewBox="0 0 1560 1560">
+    <defs><marker id="arrow201b" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#51606f"></path></marker></defs>
+    <!-- entry -> identify -->
+    <path d="M 190 208 L 190 258"></path>
+    <!-- identify -> confirmed? -->
+    <path d="M 190 392 L 190 448"></path>
+    <!-- confirmed? no -> secure verification queue -->
+    <path d="M 190 580 L 190 640"></path>
+    <!-- confirmed? yes -> account lookup -->
+    <path d="M 340 512 L 640 512 L 640 208 L 660 208"></path>
+    <!-- lookup -> review returned records -->
+    <path d="M 810 236 L 810 290"></path>
+    <!-- review -> open checking? -->
+    <path d="M 810 404 L 810 458"></path>
+    <!-- open checking? no -> explained/redirected -->
+    <path d="M 810 590 L 810 650"></path>
+    <!-- open checking? yes -> what is reported? -->
+    <path d="M 960 522 L 1160 522 L 1160 172 L 1180 172"></path>
+    <!-- report? fee mischarge / missing rebate -> credit path handoff -->
+    <path d="M 1330 236 L 1330 300"></path>
+    <!-- report? purple rebate denial -> enrollment flag check -->
+    <path d="M 1480 172 L 1520 172 L 1520 486 L 1484 486"></path>
+    <!-- enrollment check -> re-code and resubmit -->
+    <path d="M 1330 574 L 1330 630"></path>
+    <!-- re-code -> denial cleared? -->
+    <path d="M 1330 764 L 1330 818"></path>
+    <!-- cleared? yes -> terminal -->
+    <path d="M 1330 950 L 1330 1010"></path>
+    <!-- cleared? no -> escalate to Program Operations -->
+    <path d="M 1180 882 L 1080 882 L 1080 1040 L 1180 1040"></path>
+    <!-- re-code retry loop: one resubmission only -->
+    <path class="loop" d="M 1480 882 L 1520 882 L 1520 700 L 1484 700"></path>
+  </svg>
+
+  <span class="edge-label" style="left:146px;top:604px">cannot confirm</span>
+  <span class="edge-label" style="left:396px;top:502px">confirmed — proceed to lookup</span>
+  <span class="edge-label" style="left:846px;top:614px">no open checking match</span>
+  <span class="edge-label" style="left:1000px;top:502px">yes — classify the contact</span>
+  <span class="edge-label" style="left:1338px;top:258px">fee mischarge / missing rebate</span>
+  <span class="edge-label" style="left:1462px;top:322px">Purple rebate denial</span>
+  <span class="edge-label" style="left:1352px;top:974px">cleared — close out</span>
+  <span class="edge-label" style="left:1082px;top:856px">still denied after resubmission</span>
+  <span class="edge-label" style="left:1490px;top:788px">first denial — resubmit once</span>
+
+  <article class="node entry" style="left:40px;top:100px"><span class="tag">ENTRY</span>
+    Customer contacts support about an <b>ATM fee</b>, a <b>missing or denied rebate</b>, or a <b>fee credit</b>. Contact lands in the Deposit Servicing intake queue.
+  </article>
+
+  <article class="node work" style="left:40px;top:266px"><span class="tag">IDENTIFY</span>
+    Locate the customer profile and confirm the caller. Collect the customer's <b>user_id</b> for the account lookup.
+  </article>
+
+  <div class="decision" style="left:40px;top:452px"><div class="diamond">Profile located and caller confirmed?</div></div>
+
+  <article class="node queue" style="left:40px;top:648px"><span class="tag">QUEUE — HANDOFF</span>
+    Caller cannot be confirmed: route to <b>Secure Verification</b> before any account read.
+  </article>
+
+  <article class="node toolcall" style="left:660px;top:100px"><span class="tag">READ — ACCOUNT LOOKUP</span>
+    Call <b>get_all_user_accounts_by_user_id_3847</b> with the <b>user_id</b> to pull the customer's accounts, checking and savings both.
+  </article>
+
+  <article class="node read" style="left:660px;top:298px"><span class="tag">REVIEW — RETURNED RECORDS</span>
+    Work from the returned set — <b>account_id</b>, <b>account_type</b>, <b>status</b>, <b>balance</b> — and match the complaint to one account.
+  </article>
+
+  <div class="decision" style="left:660px;top:462px"><div class="diamond">Complaint tied to an open checking account?</div></div>
+
+  <article class="node terminal" style="left:660px;top:658px"><span class="tag">TERMINAL — EXPLAINED / REDIRECTED</span>
+    No open checking account matches. Explain the lookup result and close or redirect.
+  </article>
+
+  <div class="decision" style="left:1180px;top:112px"><div class="diamond">What is the customer reporting?</div></div>
+
+  <article class="node handoff" style="left:1180px;top:308px"><span class="tag">CROSS-BOARD — CREDIT PATH</span>
+    Fee mischarge or missing rebate: hand off to the checking credit board with the <b>user_id</b>, <b>account_id</b>, and complaint summary.
+  </article>
+
+  <article class="node read" style="left:1180px;top:494px"><span class="tag">TRIAGE STEP 1 — ENROLLMENT FLAG</span>
+    Purple rebate denial: check the customer's enrollment flag on the <b>program roster export</b> (weekly file). Missing flag explains most denials.
+  </article>
+
+  <article class="node work" style="left:1180px;top:638px"><span class="tag">TRIAGE STEP 2 — RE-CODE &amp; RESUBMIT</span>
+    Re-code the operator fee on the withdrawal record and <b>resubmit the rebate job</b> for the statement cycle. Note the job id on the case.
+  </article>
+
+  <div class="decision" style="left:1180px;top:822px"><div class="diamond">Denial cleared after resubmission?</div></div>
+
+  <article class="node terminal" style="left:1180px;top:1018px; width:300px"><span class="tag">TERMINAL / QUEUE</span>
+    Cleared: close out with the job id on the case. Still denied after one resubmission: escalate to <b>Program Operations</b> with the roster line and job id.
+  </article>
+
+  <aside class="sticky yellow" style="left:60px;top:880px">
+    Scope note: folds the Purple denial handling into intake so the floor stops improvising. Steps 1–2 lifted from the September case notes.
+  </aside>
+  <aside class="sticky pink" style="left:340px;top:880px">
+    Open question (K. Mabry, 10/02): does re-coding double-post if the original rebate job completes late? Nobody has reproduced it either way.
+  </aside>
+
+  <section class="control-definitions">
+    <h2>CONTROL DEFINITIONS</h2>
+    <dl>
+      <dt>get_all_user_accounts_by_user_id_3847</dt>
+      <dd>Account lookup used at intake; takes the customer's user_id and returns the account set for matching.</dd>
+      <dt>Program roster export</dt>
+      <dd>Weekly enrollment file for the Purple program; the flag drives triage step 1. Refresh cadence unconfirmed with Program Operations.</dd>
+      <dt>Rebate job resubmission</dt>
+      <dd>Statement-cycle job rerun after a re-code; one resubmission per denial before escalation.</dd>
+    </dl>
+  </section>
+</div>
+</body>
+</html>

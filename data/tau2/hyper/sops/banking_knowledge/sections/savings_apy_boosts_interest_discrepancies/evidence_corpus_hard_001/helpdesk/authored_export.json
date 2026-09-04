@@ -1,0 +1,497 @@
+{
+  "format": "helpdesk_automation_export_v2",
+  "snapshot": {
+    "source_system": "Rho Helpdesk",
+    "account": "rho-bank-consumer-and-business",
+    "workspace": "deposit-console",
+    "environment": "production",
+    "exported_at": "2025-11-13T16:40:00-05:00",
+    "timezone": "America/New_York",
+    "export_version": "2025.46",
+    "requested_by": "devon.park@rhobank.com"
+  },
+  "cover_email": "From: Helpdesk Administration <helpdesk-admin@rhobank.com>\nTo: Devon Park <devon.park@rhobank.com>\nDate: Thu, 13 Nov 2025 16:52:18 -0500\nSubject: deposit-console workspace export (2025.46)\nMessage-ID: <hd-export-2025-46-depositconsole@rhobank.com>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=\"utf-8\"\n\nDevon,\n\nAttached is the full production export of the deposit-console workspace for the end-of-cycle review — macros, triggers, tool contracts, field definitions, SLAs, and views as of this afternoon. Drafts and disabled objects ship with their status flags rather than being filtered, so the old under-ten auto-credit macro is still in the file; it has been off since February and nothing fires it.\n\nOne heads-up for whoever reads this after the October run: the goodwill packet macro is mid-edit (marked draft), so don't circulate its copy as final.\n\nHelpdesk Administration",
+  "macros": [
+    {
+      "macro_id": "MAC-5228",
+      "name": "Apply savings credit — guided",
+      "description": "Guided run of the savings credit tool for an agent who has completed the credit checklist on the current rate-operations board.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-02-18",
+      "updated_at": "2025-10-09",
+      "usage_30d": 312,
+      "usage_90d": 655,
+      "superseded_by": null,
+      "steps": [
+        "Confirm checklist complete (identity, account type, eligible circumstance, amount arithmetic in case notes)",
+        "Run apply_savings_account_credit_6831 with account_id, amount, credit_type per contract CON-0738",
+        "Insert credit-confirmation reply (applied amount and new balance placeholders)",
+        "Set ticket type = savings_credit",
+        "Set status = solved-pending-close"
+      ]
+    },
+    {
+      "macro_id": "MAC-5224",
+      "name": "Interest discrepancy — investigate and file",
+      "description": "Walks the discrepancy investigation and filing sequence for interest-calculation complaints; mirrors the current rate-operations board.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2025-10-09",
+      "updated_at": "2025-11-05",
+      "usage_30d": 148,
+      "usage_90d": 203,
+      "superseded_by": null,
+      "steps": [
+        "Pull profile via get_all_user_accounts_by_user_id_3847 and transactions via get_bank_account_transactions_9173",
+        "Attach component arithmetic to the case (base, tier, boost, card bonus, relationship bonus)",
+        "Apply correction credit via apply_savings_account_credit_6831 (contract CON-0738)",
+        "File report via submit_interest_discrepancy_report_7294 (contract CON-0739)",
+        "Set ticket type = interest_discrepancy",
+        "Set status = solved-pending-close"
+      ]
+    },
+    {
+      "macro_id": "MAC-5107",
+      "name": "Auto-credit under $10 (legacy)",
+      "description": "Launch-era shortcut that applied savings credits under $10 without an authorization category.",
+      "active": false,
+      "environment": "production",
+      "status": "disabled_legacy",
+      "effective_at": "2024-06-24",
+      "disabled_at": "2025-02-18",
+      "updated_at": "2025-02-18",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": "MAC-5228",
+      "steps": [
+        "Apply credit (no category recorded)",
+        "Insert generic apology reply",
+        "Set status = solved-pending-close"
+      ]
+    },
+    {
+      "macro_id": "MAC-5233",
+      "name": "Rate question — point to documentation",
+      "description": "Reply for rate and bonus questions; links the schedule and the product's disclosure sheet rather than restating values.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "effective_at": "2024-11-11",
+      "updated_at": "2025-11-04",
+      "usage_30d": 421,
+      "usage_90d": 1187,
+      "superseded_by": null,
+      "steps": [
+        "Insert documentation-pointer reply (schedule and sheet link placeholders)",
+        "Set ticket type = rate_question",
+        "Set status = solved-pending-close"
+      ]
+    },
+    {
+      "macro_id": "MAC-5241",
+      "name": "Goodwill credit — supervisor packet (draft)",
+      "description": "Draft packet assembling the supervisor-approval record for goodwill credits; copy under review with the desk leads.",
+      "active": false,
+      "environment": "production",
+      "status": "draft",
+      "effective_at": null,
+      "updated_at": "2025-11-11",
+      "usage_30d": 0,
+      "usage_90d": 0,
+      "superseded_by": null,
+      "steps": [
+        "Insert approval-request note (amount and approver placeholders)",
+        "Set tag = goodwill-approval"
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "trigger_id": "TRG-4310",
+      "name": "Route interest-complaint keywords to Deposit Desk Tier 1",
+      "description": "Keyword routing for inbound interest and rate complaints.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 4,
+      "effective_at": "2024-11-11",
+      "updated_at": "2025-10-09",
+      "usage_30d": 693,
+      "conditions": [
+        "channel is email OR webform OR chat",
+        "subject/body contains any: interest, APY, rate wrong, missing bonus, boost"
+      ],
+      "actions": [
+        "set group = Deposit Desk Tier 1",
+        "set ticket type = interest_discrepancy"
+      ]
+    },
+    {
+      "trigger_id": "TRG-4106",
+      "name": "Auto-credit small interest complaints (launch period)",
+      "description": "Fired the under-ten auto-credit macro on small-amount interest complaints.",
+      "active": false,
+      "environment": "production",
+      "status": "disabled_legacy",
+      "priority": 5,
+      "effective_at": "2024-06-24",
+      "disabled_at": "2025-02-18",
+      "updated_at": "2025-02-18",
+      "usage_30d": 0,
+      "conditions": [
+        "ticket type = interest_discrepancy",
+        "estimated amount < $10"
+      ],
+      "actions": [
+        "apply macro MAC-5107"
+      ]
+    },
+    {
+      "trigger_id": "TRG-4335",
+      "name": "Escalate aged interest tickets",
+      "description": "Escalates interest tickets breaching 24 business hours without agent touch during a correction cycle.",
+      "active": true,
+      "environment": "production",
+      "status": "current",
+      "priority": 6,
+      "effective_at": "2025-10-31",
+      "updated_at": "2025-11-04",
+      "usage_30d": 57,
+      "conditions": [
+        "ticket type = interest_discrepancy",
+        "hours since last agent update > 24 (business)"
+      ],
+      "actions": [
+        "set priority = high",
+        "notify group lead (deposit desk)"
+      ]
+    }
+  ],
+  "policy_contracts": [
+    {
+      "contract_id": "CON-0734",
+      "name": "deposit-console workspace scope",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Helpdesk Administration",
+      "scope": "Ticket routing, macros, tool contracts, and console field handling for the deposit-console workspace at this snapshot. Console configuration only; rate values, boost and bonus tables, and pairing rules are owned by the Personal Deposit Rate & Fee Schedule and the product disclosure sheets, and desk procedure is owned by the rate-operations boards.",
+      "required_fields": [
+        "ticket_type",
+        "group",
+        "status"
+      ],
+      "closed_world": false,
+      "effective_at": "2024-11-11",
+      "updated_at": "2025-10-09"
+    },
+    {
+      "contract_id": "CON-0738",
+      "name": "apply_savings_account_credit_6831 — production tool contract",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Deposit Console Engineering / Helpdesk Administration",
+      "scope": "Parameter contract for the savings credit tool as enforced by console validation at this snapshot. The three listed parameters are the complete production set; calls carrying an unlisted parameter or an unlisted credit_type value are rejected by validation.",
+      "source_of_truth": "deposit console production tool registry",
+      "complete": true,
+      "unlisted_value_behavior": "reject",
+      "required_fields": [
+        "account_id",
+        "amount",
+        "credit_type"
+      ],
+      "closed_world": true,
+      "effective_at": "2025-02-18",
+      "updated_at": "2025-10-09"
+    },
+    {
+      "contract_id": "CON-0739",
+      "name": "submit_interest_discrepancy_report_7294 — production tool contract",
+      "status": "current",
+      "active": true,
+      "environment": "production",
+      "owner_group": "Deposit Console Engineering / Helpdesk Administration",
+      "scope": "Parameter contract for the interest discrepancy report tool as enforced by console validation at this snapshot. The five listed parameters are the complete production set.",
+      "source_of_truth": "deposit console production tool registry",
+      "complete": true,
+      "unlisted_value_behavior": "reject",
+      "required_fields": [
+        "account_id",
+        "user_id",
+        "expected_apy",
+        "actual_apy",
+        "amount_difference"
+      ],
+      "closed_world": true,
+      "effective_at": "2025-10-09",
+      "updated_at": "2025-11-05"
+    }
+  ],
+  "field_columns": [
+    "row_id",
+    "field_key",
+    "field_name",
+    "field_type",
+    "option_value",
+    "option_description",
+    "active",
+    "status",
+    "environment",
+    "updated_at"
+  ],
+  "fields": [
+    {
+      "row_id": "T-201",
+      "field_key": "apply_savings_account_credit_6831.account_id",
+      "field_name": "Credit tool — account_id",
+      "field_type": "tool_parameter (string, required)",
+      "option_value": null,
+      "option_description": "The savings account ID to credit.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-02-18"
+    },
+    {
+      "row_id": "T-202",
+      "field_key": "apply_savings_account_credit_6831.amount",
+      "field_name": "Credit tool — amount",
+      "field_type": "tool_parameter (number, required)",
+      "option_value": null,
+      "option_description": "A positive dollar amount greater than 0.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-02-18"
+    },
+    {
+      "row_id": "T-203",
+      "field_key": "apply_savings_account_credit_6831.credit_type",
+      "field_name": "Credit tool — credit_type",
+      "field_type": "tool_parameter (string picklist, required)",
+      "option_value": "interest_correction",
+      "option_description": "The customer's interest payment was calculated incorrectly; correction credit.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-02-18"
+    },
+    {
+      "row_id": "T-204",
+      "field_key": "apply_savings_account_credit_6831.credit_type",
+      "field_name": "Credit tool — credit_type",
+      "field_type": "tool_parameter (string picklist, required)",
+      "option_value": "fee_refund",
+      "option_description": "A fee was incorrectly charged to the savings account; refund credit.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-02-18"
+    },
+    {
+      "row_id": "T-205",
+      "field_key": "apply_savings_account_credit_6831.credit_type",
+      "field_name": "Credit tool — credit_type",
+      "field_type": "tool_parameter (string picklist, required)",
+      "option_value": "goodwill_credit",
+      "option_description": "Exceptional-circumstances goodwill credit per the desk board's approval gates.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-02-18"
+    },
+    {
+      "row_id": "T-211",
+      "field_key": "submit_interest_discrepancy_report_7294.account_id",
+      "field_name": "Report tool — account_id",
+      "field_type": "tool_parameter (string, required)",
+      "option_value": null,
+      "option_description": "The savings account ID with the discrepancy.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-09"
+    },
+    {
+      "row_id": "T-212",
+      "field_key": "submit_interest_discrepancy_report_7294.user_id",
+      "field_name": "Report tool — user_id",
+      "field_type": "tool_parameter (string, required)",
+      "option_value": null,
+      "option_description": "The customer's unique identifier.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-09"
+    },
+    {
+      "row_id": "T-213",
+      "field_key": "submit_interest_discrepancy_report_7294.expected_apy",
+      "field_name": "Report tool — expected_apy",
+      "field_type": "tool_parameter (number, required)",
+      "option_value": null,
+      "option_description": "The APY percentage the customer should have received, such as 2.775 for 2.775%.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-09"
+    },
+    {
+      "row_id": "T-214",
+      "field_key": "submit_interest_discrepancy_report_7294.actual_apy",
+      "field_name": "Report tool — actual_apy",
+      "field_type": "tool_parameter (number, required)",
+      "option_value": null,
+      "option_description": "The APY percentage that was actually applied, such as 2.5 for 2.5%.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-09"
+    },
+    {
+      "row_id": "T-215",
+      "field_key": "submit_interest_discrepancy_report_7294.amount_difference",
+      "field_name": "Report tool — amount_difference",
+      "field_type": "tool_parameter (number, required)",
+      "option_value": null,
+      "option_description": "The dollar amount difference between expected interest credited and actual interest credited.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-10-09"
+    },
+    {
+      "row_id": "F-220",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "interest_discrepancy",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-11"
+    },
+    {
+      "row_id": "F-221",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "savings_credit",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-02-18"
+    },
+    {
+      "row_id": "F-222",
+      "field_key": "ticket_type",
+      "field_name": "Ticket type",
+      "field_type": "picklist",
+      "option_value": "rate_question",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-11"
+    },
+    {
+      "row_id": "F-230",
+      "field_key": "group",
+      "field_name": "Assignment group",
+      "field_type": "picklist",
+      "option_value": "Deposit Desk Tier 1",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-11"
+    },
+    {
+      "row_id": "F-231",
+      "field_key": "group",
+      "field_name": "Assignment group",
+      "field_type": "picklist",
+      "option_value": "Rate Operations",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2024-11-11"
+    },
+    {
+      "row_id": "F-240",
+      "field_key": "tag",
+      "field_name": "Tag",
+      "field_type": "tag",
+      "option_value": "goodwill-approval",
+      "option_description": null,
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-11-11"
+    },
+    {
+      "row_id": "F-241",
+      "field_key": "tag",
+      "field_name": "Tag",
+      "field_type": "tag",
+      "option_value": "october-run",
+      "option_description": "Applied to tickets opened for October interest-run corrections so the cycle view catches them.",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "updated_at": "2025-11-03"
+    }
+  ],
+  "sla_policies": [
+    {
+      "name": "Deposit desk — interest complaints first response",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "8 business hours first response",
+      "applies_to": "group = Deposit Desk Tier 1",
+      "updated_at": "2025-10-31",
+      "policy_id": "SLA-418"
+    },
+    {
+      "name": "Correction-cycle touch cadence",
+      "active": true,
+      "status": "current",
+      "environment": "production",
+      "target": "24 business hours between agent touches on open interest tickets",
+      "applies_to": "ticket type = interest_discrepancy",
+      "updated_at": "2025-11-04",
+      "policy_id": "SLA-414"
+    }
+  ],
+  "views": [
+    {
+      "view_id": "VW-71",
+      "name": "Deposit desk — open interest complaints",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "ticket type = interest_discrepancy",
+        "status != solved-pending-close"
+      ],
+      "updated_at": "2025-10-31"
+    },
+    {
+      "view_id": "VW-74",
+      "name": "October run — corrections this cycle",
+      "active": true,
+      "status": "current",
+      "filters": [
+        "tag = october-run"
+      ],
+      "updated_at": "2025-11-03"
+    }
+  ]
+}

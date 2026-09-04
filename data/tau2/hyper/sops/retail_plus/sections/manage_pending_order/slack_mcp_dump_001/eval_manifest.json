@@ -1,0 +1,1723 @@
+{
+  "id": "retail_beacon_slack_mcp_dump_001",
+  "representation": "slack_mcp_dump",
+  "artifacts": [
+    {
+      "filename": "beacon_servicing_slack_mcp_capture.json",
+      "authoritative_fact_ids": [
+        "accepted_cancel_reason_no_longer_needed",
+        "accepted_cancel_reason_ordered_by_mistake",
+        "cannot_change_order_quantity",
+        "cannot_change_profile_email",
+        "cannot_split_shipments",
+        "exchange_refund_destination_any_saved_payment_method",
+        "return_refund_destination_disallowed_options",
+        "return_refund_destination_original_or_existing_gift_card",
+        "unaccepted_cancel_reasons_decline_and_offer_transfer"
+      ]
+    }
+  ],
+  "fact_sections": {
+    "accepted_cancel_reason_no_longer_needed": "manage_pending_order",
+    "accepted_cancel_reason_ordered_by_mistake": "manage_pending_order",
+    "unaccepted_cancel_reasons_decline_and_offer_transfer": "manage_pending_order",
+    "return_refund_destination_original_or_existing_gift_card": "manage_delivered_order",
+    "return_refund_destination_disallowed_options": "manage_delivered_order",
+    "exchange_refund_destination_any_saved_payment_method": "manage_delivered_order",
+    "cannot_change_order_quantity": "service_foundations",
+    "cannot_split_shipments": "service_foundations",
+    "cannot_change_profile_email": "service_foundations"
+  },
+  "tool_call_count": 76,
+  "thread_count": 67,
+  "fetched_thread_count": 64,
+  "message_count": 460,
+  "unthreaded_channel_message_count": 24,
+  "current_evidence_phrases": {
+    "accepted_cancel_reason_no_longer_needed": "no longer needed still counts when the customer words it their own way",
+    "accepted_cancel_reason_ordered_by_mistake": "ordered by mistake is the second accepted reason",
+    "unaccepted_cancel_reasons_decline_and_offer_transfer": "anything outside those two, the agent explains we cannot take that reason and offers to bring in a person",
+    "return_refund_destination_original_or_existing_gift_card": "lands on the original payment method or a gift card already saved on the profile \u2014 already saved meaning the card was on the profile before the return request was opened; a card added mid-conversation does not qualify",
+    "return_refund_destination_disallowed_options": "no new gift cards, no different card, and no PayPal that was not on the order",
+    "exchange_refund_destination_any_saved_payment_method": "can land on any payment method already saved on the profile, original or not, and the method picked is recorded on the exchange at submission; it does not change after that",
+    "cannot_change_order_quantity": "does not change item quantities on an order",
+    "cannot_split_shipments": "does not split an order into separate shipments",
+    "cannot_change_profile_email": "the email address on a profile cannot be changed by customer care"
+  },
+  "current_claim_occurrences": {
+    "accepted_cancel_reason_no_longer_needed": 3,
+    "accepted_cancel_reason_ordered_by_mistake": 3,
+    "unaccepted_cancel_reasons_decline_and_offer_transfer": 3,
+    "return_refund_destination_original_or_existing_gift_card": 3,
+    "return_refund_destination_disallowed_options": 3,
+    "exchange_refund_destination_any_saved_payment_method": 3,
+    "cannot_change_order_quantity": 3,
+    "cannot_split_shipments": 3,
+    "cannot_change_profile_email": 3
+  },
+  "historical_claim_occurrences": {
+    "the reason stays a free-text note": 3,
+    "send the refund wherever the customer points": 3,
+    "five standardized reasons": 3,
+    "split the delayed item into its own shipment": 3,
+    "a price-match counteroffer before the cancellation goes through": 3,
+    "a verified email correction is fine after the identity check": 3,
+    "refunds go back to the original payment method, full stop": 3,
+    "splits only when everything ships from one warehouse": 3,
+    "cheaper-elsewhere cancellations are paused": 3,
+    "email corrections are on hold": 3,
+    "a mailed check when the original card is dead": 3,
+    "list comes down to three reasons": 3,
+    "quantity edits are off the table": 3,
+    "read the two reasons exactly as written": 3,
+    "original method only while we work the fallback": 3,
+    "anything in the neighborhood of either reason counts": 3
+  },
+  "decision_history": [
+    {
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR1",
+      "thread_key": "decision_cr1_freetext",
+      "thread_ts": "1770394020.920839",
+      "channel_id": "C09BCORD01",
+      "channel_name": "beacon-order-servicing",
+      "decision_timestamp": "2026-02-06T16:07:00Z",
+      "status": "superseded",
+      "summary": "Assisted cancellations record the reason as free text for the pilot month.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1770394020.920839"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1770395931.447444"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1770397502.064134"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1770400774.417488"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1770402843.360169"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "the reason stays a free-text note",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_cr1_reporting",
+        "thread_ts": "1770990960.646376",
+        "timestamp": "2026-02-13T13:56:00Z",
+        "trigger_summary": "Two weeks of free-text notes produced 900+ distinct reason strings and made the weekly mix report impossible."
+      }
+    },
+    {
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR2",
+      "thread_key": "decision_cr2_picklist",
+      "thread_ts": "1771362660.438143",
+      "channel_id": "C09BCORD01",
+      "channel_name": "beacon-order-servicing",
+      "decision_timestamp": "2026-02-17T21:11:00Z",
+      "status": "superseded",
+      "summary": "Cancellation reasons move to a five-option pick list with a note only on other.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1771362660.438143"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1771366526.077844"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1771368001.699011"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1771370758.080546"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1771373126.328336"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "five standardized reasons",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_cr2_cheaper_volume",
+        "thread_ts": "1771942620.903712",
+        "timestamp": "2026-02-24T14:17:00Z",
+        "trigger_summary": "Cheaper-elsewhere hit 31% of week-three cancels and agents had no counter move."
+      }
+    },
+    {
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR3",
+      "thread_key": "decision_cr3_pricematch",
+      "thread_ts": "1772138580.453237",
+      "channel_id": "C09BCORD01",
+      "channel_name": "beacon-order-servicing",
+      "decision_timestamp": "2026-02-26T20:43:00Z",
+      "status": "superseded",
+      "summary": "Cheaper-elsewhere cancellations get a one-per-order price-match counteroffer.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1772138580.453237"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1772143050.962421"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1772145470.741509"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1772140853.459970"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1772147981.808333"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "a price-match counteroffer before the cancellation goes through",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_cr3_margin",
+        "thread_ts": "1773320880.358260",
+        "timestamp": "2026-03-12T13:08:00Z",
+        "trigger_summary": "Match data showed concentration, sub-target margin, and forged competitor screenshots."
+      }
+    },
+    {
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR4",
+      "thread_key": "decision_cr4_pause_cheaper",
+      "thread_ts": "1773682560.691948",
+      "channel_id": "C09BCORD01",
+      "channel_name": "beacon-order-servicing",
+      "decision_timestamp": "2026-03-16T17:36:00Z",
+      "status": "superseded",
+      "summary": "Counteroffer removed; cheaper-elsewhere cancels pause to an escalation queue pending the abuse review.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1773682560.691948"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1773686262.034146"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1773688491.715914"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1773684050.307137"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1773691103.435386"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "cheaper-elsewhere cancellations are paused",
+      "reopened_by": {
+        "mode": "inline_successor_root",
+        "trigger_summary": "The commissioned risk abuse review returned and settled the paused category."
+      }
+    },
+    {
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR5",
+      "thread_key": "decision_cr5_trim_three",
+      "thread_ts": "1774884660.984052",
+      "channel_id": "C09BCORD01",
+      "channel_name": "beacon-order-servicing",
+      "decision_timestamp": "2026-03-30T15:31:00Z",
+      "status": "superseded",
+      "summary": "Reason list trimmed to three; cheaper-elsewhere and other removed after the risk review.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1774884660.984052"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1774889253.397898"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1774891778.008411"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1774887040.264532"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1774894430.147092"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "list comes down to three reasons",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_cr5_slow_shipping",
+        "thread_ts": "1775486340.165275",
+        "timestamp": "2026-04-06T14:39:00Z",
+        "trigger_summary": "60% of slow-shipping cancels had packages arriving within 48 hours and callbacks spiked."
+      }
+    },
+    {
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR6",
+      "thread_key": "decision_cr6_reroute_slow",
+      "thread_ts": "1775674620.611910",
+      "channel_id": "C09BCORD01",
+      "channel_name": "beacon-order-servicing",
+      "decision_timestamp": "2026-04-08T18:57:00Z",
+      "status": "superseded",
+      "summary": "Shipping-too-slow moves to the carrier escalation flow; agents match the two remaining reasons verbatim.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1775674620.611910"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1775676452.148350"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1775678807.614966"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1775681240.090615"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1775683638.930778"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "read the two reasons exactly as written",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_cr6_verbatim",
+        "thread_ts": "1776347220.334129",
+        "timestamp": "2026-04-16T13:47:00Z",
+        "trigger_summary": "Transcript review showed verbatim re-prompting frustrating customers into hand-off requests."
+      }
+    },
+    {
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR7",
+      "thread_key": "decision_cr7_paraphrase",
+      "thread_ts": "1776704880.475377",
+      "channel_id": "C09BCORD01",
+      "channel_name": "beacon-order-servicing",
+      "decision_timestamp": "2026-04-20T17:08:00Z",
+      "status": "superseded",
+      "summary": "Verbatim matching dropped; agents map customer wording to the nearest of the two reasons.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1776704880.475377"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1776707046.817372"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1776708860.504817"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1776711353.733193"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1776713770.932688"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "anything in the neighborhood of either reason counts",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_cr7_drift",
+        "thread_ts": "1776948660.626382",
+        "timestamp": "2026-04-23T12:51:00Z",
+        "trigger_summary": "Audit found price complaints being coded into no-longer-needed via the neighborhood mapping."
+      }
+    },
+    {
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR8",
+      "thread_key": "decision_cr8_final",
+      "thread_ts": "1777488060.813739",
+      "channel_id": "C09BCORD01",
+      "channel_name": "beacon-order-servicing",
+      "decision_timestamp": "2026-04-29T18:41:00Z",
+      "status": "final_current",
+      "summary": "Two accepted reasons \u2014 no longer needed (customer phrasing counts) and ordered by mistake; anything else is declined with an offer to bring in a person.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1777488060.813739"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1777492004.842895"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1777494142.935846"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1777489937.070764"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1777496521.456799"
+        }
+      ],
+      "authoritative_fact_ids": [
+        "accepted_cancel_reason_no_longer_needed",
+        "accepted_cancel_reason_ordered_by_mistake",
+        "unaccepted_cancel_reasons_decline_and_offer_transfer"
+      ],
+      "evidence_phrases": {
+        "accepted_cancel_reason_no_longer_needed": "no longer needed still counts when the customer words it their own way",
+        "accepted_cancel_reason_ordered_by_mistake": "ordered by mistake is the second accepted reason",
+        "unaccepted_cancel_reasons_decline_and_offer_transfer": "anything outside those two, the agent explains we cannot take that reason and offers to bring in a person"
+      }
+    },
+    {
+      "arc_id": "refund_destinations",
+      "decision_id": "RD1",
+      "thread_key": "decision_rd1_discretion",
+      "thread_ts": "1770926520.850802",
+      "channel_id": "C09BCPAY02",
+      "channel_name": "beacon-payments-risk",
+      "decision_timestamp": "2026-02-12T20:02:00Z",
+      "status": "superseded",
+      "summary": "Pilot month: refunds may go to any saved instrument the customer picks, with weekly risk review.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1770928142.378940"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1770930361.223343"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1770932775.621022"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1770926520.850802"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1770935516.278036"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "send the refund wherever the customer points",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_rd1_rerouting",
+        "thread_ts": "1772548380.263460",
+        "timestamp": "2026-03-03T14:33:00Z",
+        "trigger_summary": "Tuesday reviews surfaced six refunds redirected to instruments that never touched the order."
+      }
+    },
+    {
+      "arc_id": "refund_destinations",
+      "decision_id": "RD2",
+      "thread_key": "decision_rd2_original_only",
+      "thread_ts": "1772742420.375571",
+      "channel_id": "C09BCPAY02",
+      "channel_name": "beacon-payments-risk",
+      "decision_timestamp": "2026-03-05T20:27:00Z",
+      "status": "superseded",
+      "summary": "Refunds restricted to the original payment method only.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1772744313.328530"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1772746897.160191"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1772748360.598990"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1772742420.375571"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1772753191.804195"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "refunds go back to the original payment method, full stop",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_rd2_dead_cards",
+        "thread_ts": "1774274280.464787",
+        "timestamp": "2026-03-23T13:58:00Z",
+        "trigger_summary": "Dead-instrument refunds bounced with no agent fallback, 23 cases in one week."
+      }
+    },
+    {
+      "arc_id": "refund_destinations",
+      "decision_id": "RD3",
+      "thread_key": "decision_rd3_checks",
+      "thread_ts": "1774552740.673208",
+      "channel_id": "C09BCPAY02",
+      "channel_name": "beacon-payments-risk",
+      "decision_timestamp": "2026-03-26T19:19:00Z",
+      "status": "superseded",
+      "summary": "Dead-card refunds switch to mailed checks from a weekly finance batch.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1774554818.657963"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1774557300.404101"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1774559666.199976"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1774552740.673208"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1774563780.725869"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "a mailed check when the original card is dead",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_rd3_check_fraud",
+        "thread_ts": "1776086040.996516",
+        "timestamp": "2026-04-13T13:14:00Z",
+        "trigger_summary": "Two check washes, one undeliverable, 14x unit cost, and month-end batch collisions."
+      }
+    },
+    {
+      "arc_id": "refund_destinations",
+      "decision_id": "RD4",
+      "thread_key": "decision_rd4_interim",
+      "thread_ts": "1776367980.009606",
+      "channel_id": "C09BCPAY02",
+      "channel_name": "beacon-payments-risk",
+      "decision_timestamp": "2026-04-16T19:33:00Z",
+      "status": "superseded",
+      "summary": "Checks withdrawn; original method only while a store-side fallback is designed, dead-card refunds hold in a queue.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1776369726.059225"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1776372168.401787"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1776374611.142829"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1776367980.009606"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1776377836.284010"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "original method only while we work the fallback",
+      "reopened_by": {
+        "mode": "inline_successor_root",
+        "trigger_summary": "The two-week store-side fallback review returned with controls that passed."
+      }
+    },
+    {
+      "arc_id": "refund_destinations",
+      "decision_id": "RD5",
+      "thread_key": "decision_rd5_final",
+      "thread_ts": "1777903980.242466",
+      "channel_id": "C09BCPAY02",
+      "channel_name": "beacon-payments-risk",
+      "decision_timestamp": "2026-05-04T14:13:00Z",
+      "status": "final_current",
+      "summary": "Return refunds land on the original payment method or a gift card already saved on the profile; no new gift cards, different cards, or off-order PayPal; exchange cash-outs are exempt \u2014 any saved payment method the customer picks.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1777906094.847367"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1777908509.644179"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1777910850.266287"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1777903980.242466"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1777914663.715379"
+        }
+      ],
+      "authoritative_fact_ids": [
+        "return_refund_destination_original_or_existing_gift_card",
+        "return_refund_destination_disallowed_options",
+        "exchange_refund_destination_any_saved_payment_method"
+      ],
+      "evidence_phrases": {
+        "return_refund_destination_original_or_existing_gift_card": "lands on the original payment method or a gift card already saved on the profile \u2014 already saved meaning the card was on the profile before the return request was opened; a card added mid-conversation does not qualify",
+        "return_refund_destination_disallowed_options": "no new gift cards, no different card, and no PayPal that was not on the order",
+        "exchange_refund_destination_any_saved_payment_method": "can land on any payment method already saved on the profile, original or not, and the method picked is recorded on the exchange at submission; it does not change after that"
+      }
+    },
+    {
+      "arc_id": "quantity_and_splits",
+      "decision_id": "QS1",
+      "thread_key": "decision_qs1_split_pilot",
+      "thread_ts": "1771604760.201060",
+      "channel_id": "C09BCFUL03",
+      "channel_name": "beacon-fulfillment-scope",
+      "decision_timestamp": "2026-02-20T16:26:00Z",
+      "status": "superseded",
+      "summary": "Six-week pilot: agents may split a delayed line into its own shipment.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1771606615.302456"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1771604760.201060"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1771608687.007014"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1771611242.619621"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1771613721.249747"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "split the delayed item into its own shipment",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_qs1_fanout",
+        "thread_ts": "1773065760.525976",
+        "timestamp": "2026-03-09T14:16:00Z",
+        "trigger_summary": "Split orders drove 18% more where-is-my-order contacts and broke billing reconciliation on multi-warehouse cases."
+      }
+    },
+    {
+      "arc_id": "quantity_and_splits",
+      "decision_id": "QS2",
+      "thread_key": "decision_qs2_single_warehouse",
+      "thread_ts": "1773255120.450718",
+      "channel_id": "C09BCFUL03",
+      "channel_name": "beacon-fulfillment-scope",
+      "decision_timestamp": "2026-03-11T18:52:00Z",
+      "status": "superseded",
+      "summary": "Split pilot narrowed to single-warehouse, same-day-dispatch orders; quantity-trim prototype commissioned.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1773257022.042011"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1773255120.450718"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1773259535.823961"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1773262158.638765"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1773264681.415437"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "splits only when everything ships from one warehouse",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_qs2_carrier_sla",
+        "thread_ts": "1775049720.668339",
+        "timestamp": "2026-04-01T13:22:00Z",
+        "trigger_summary": "Carrier minimums erased SLA credits on 40% of gated splits and the trim prototype showed money-history rewrites."
+      }
+    },
+    {
+      "arc_id": "quantity_and_splits",
+      "decision_id": "QS3",
+      "thread_key": "decision_qs3_no_quantity",
+      "thread_ts": "1775144640.679789",
+      "channel_id": "C09BCFUL03",
+      "channel_name": "beacon-fulfillment-scope",
+      "decision_timestamp": "2026-04-02T15:44:00Z",
+      "status": "superseded",
+      "summary": "Quantity edits ruled out after the prototype readout; gated split pilot runs one final cycle.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1775146383.015481"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1775144640.679789"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1775148806.319003"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1775151329.749146"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1775153574.611199"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "quantity edits are off the table",
+      "reopened_by": {
+        "mode": "inline_successor_root",
+        "trigger_summary": "The steering readout received the final gated-cycle economics."
+      }
+    },
+    {
+      "arc_id": "quantity_and_splits",
+      "decision_id": "QS4",
+      "thread_key": "decision_qs4_final",
+      "thread_ts": "1777303140.739126",
+      "channel_id": "C09BCFUL03",
+      "channel_name": "beacon-fulfillment-scope",
+      "decision_timestamp": "2026-04-27T15:19:00Z",
+      "status": "final_current",
+      "summary": "Customer care neither changes item quantities nor splits orders into separate shipments; quantity asks become cancel-and-reorder, delay asks go to the carrier flow.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1777305227.481669"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1777303140.739126"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1777307591.758692"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1777310050.387010"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1777312486.164799"
+        }
+      ],
+      "authoritative_fact_ids": [
+        "cannot_change_order_quantity",
+        "cannot_split_shipments"
+      ],
+      "evidence_phrases": {
+        "cannot_change_order_quantity": "does not change item quantities on an order",
+        "cannot_split_shipments": "does not split an order into separate shipments"
+      }
+    },
+    {
+      "arc_id": "profile_email",
+      "decision_id": "EM1",
+      "thread_key": "decision_em1_workshop",
+      "thread_ts": "1772207520.181792",
+      "channel_id": "C09BCIDN04",
+      "channel_name": "beacon-identity-profile",
+      "decision_timestamp": "2026-02-27T15:52:00Z",
+      "status": "superseded",
+      "summary": "Verified typo-grade email corrections allowed in the assisted flow after the identity check.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1772209258.280401"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1772211790.239053"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1772213413.229787"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1772207520.181792"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1772215826.945488"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "a verified email correction is fine after the identity check",
+      "reopened_by": {
+        "mode": "dedicated_thread",
+        "thread_key": "reopen_em1_takeover",
+        "thread_ts": "1773836820.386321",
+        "timestamp": "2026-03-18T12:27:00Z",
+        "trigger_summary": "Log review caught an attempted account takeover routed through the verified email-correction path."
+      }
+    },
+    {
+      "arc_id": "profile_email",
+      "decision_id": "EM2",
+      "thread_key": "decision_em2_pause",
+      "thread_ts": "1774029780.898687",
+      "channel_id": "C09BCIDN04",
+      "channel_name": "beacon-identity-profile",
+      "decision_timestamp": "2026-03-20T18:03:00Z",
+      "status": "superseded",
+      "summary": "Email corrections on hold; requests queue to the specialist desk during the account-security review.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1774031413.966998"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1774033687.572655"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1774035902.677053"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1774029780.898687"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1774038229.363752"
+        }
+      ],
+      "authoritative_fact_ids": [],
+      "historical_evidence_phrase": "email corrections are on hold",
+      "reopened_by": {
+        "mode": "inline_successor_root",
+        "trigger_summary": "The pulled-forward account-security review closed with its finding."
+      }
+    },
+    {
+      "arc_id": "profile_email",
+      "decision_id": "EM3",
+      "thread_key": "decision_em3_final",
+      "thread_ts": "1775831160.969354",
+      "channel_id": "C09BCIDN04",
+      "channel_name": "beacon-identity-profile",
+      "decision_timestamp": "2026-04-10T14:26:00Z",
+      "status": "final_current",
+      "summary": "Profile email cannot be changed by customer care.",
+      "consensus_confirmed_by": [
+        {
+          "user_id": "U09DANAW",
+          "display_name": "Dana Whitfield",
+          "message_ts": "1775833140.835893"
+        },
+        {
+          "user_id": "U09ROBC",
+          "display_name": "Rob Calderon",
+          "message_ts": "1775835593.998766"
+        },
+        {
+          "user_id": "U09LENAO",
+          "display_name": "Lena Ortiz",
+          "message_ts": "1775838031.065654"
+        },
+        {
+          "user_id": "U09SANJR",
+          "display_name": "Sanjay Rao",
+          "message_ts": "1775831160.969354"
+        },
+        {
+          "user_id": "U09MIAT",
+          "display_name": "Mia Tran",
+          "message_ts": "1775840395.508139"
+        }
+      ],
+      "authoritative_fact_ids": [
+        "cannot_change_profile_email"
+      ],
+      "evidence_phrases": {
+        "cannot_change_profile_email": "the email address on a profile cannot be changed by customer care"
+      }
+    }
+  ],
+  "thread_plan": [
+    {
+      "ordinal": 1,
+      "thread_key": "kickoff_owner_map",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 2,
+      "thread_key": "cancel_reason_prelim",
+      "classification": "deliberation",
+      "arc_id": "cancellation_reasons",
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 3,
+      "thread_key": "decision_cr1_freetext",
+      "classification": "decision",
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR1",
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 4,
+      "thread_key": "uat_seed_orders",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 5,
+      "thread_key": "refund_dest_prelim",
+      "classification": "deliberation",
+      "arc_id": "refund_destinations",
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 6,
+      "thread_key": "decision_rd1_discretion",
+      "classification": "decision",
+      "arc_id": "refund_destinations",
+      "decision_id": "RD1",
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 7,
+      "thread_key": "reopen_cr1_reporting",
+      "classification": "reopening",
+      "arc_id": "cancellation_reasons",
+      "decision_id": null,
+      "reopens_decision_key": "decision_cr1_freetext",
+      "fetched": true
+    },
+    {
+      "ordinal": 8,
+      "thread_key": "decision_cr2_picklist",
+      "classification": "decision",
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR2",
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 9,
+      "thread_key": "office_plants",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 10,
+      "thread_key": "split_pilot_prelim",
+      "classification": "deliberation",
+      "arc_id": "quantity_and_splits",
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 11,
+      "thread_key": "decision_qs1_split_pilot",
+      "classification": "decision",
+      "arc_id": "quantity_and_splits",
+      "decision_id": "QS1",
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 12,
+      "thread_key": "reopen_cr2_cheaper_volume",
+      "classification": "reopening",
+      "arc_id": "cancellation_reasons",
+      "decision_id": null,
+      "reopens_decision_key": "decision_cr2_picklist",
+      "fetched": true
+    },
+    {
+      "ordinal": 13,
+      "thread_key": "staging_down",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 14,
+      "thread_key": "decision_cr3_pricematch",
+      "classification": "decision",
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR3",
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 15,
+      "thread_key": "decision_em1_workshop",
+      "classification": "decision",
+      "arc_id": "profile_email",
+      "decision_id": "EM1",
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 16,
+      "thread_key": "dashboard_palette",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 17,
+      "thread_key": "reopen_rd1_rerouting",
+      "classification": "reopening",
+      "arc_id": "refund_destinations",
+      "decision_id": null,
+      "reopens_decision_key": "decision_rd1_discretion",
+      "fetched": true
+    },
+    {
+      "ordinal": 18,
+      "thread_key": "csv_export_question",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 19,
+      "thread_key": "decision_rd2_original_only",
+      "classification": "decision",
+      "arc_id": "refund_destinations",
+      "decision_id": "RD2",
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 20,
+      "thread_key": "uat_access_sync",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 21,
+      "thread_key": "reopen_qs1_fanout",
+      "classification": "reopening",
+      "arc_id": "quantity_and_splits",
+      "decision_id": null,
+      "reopens_decision_key": "decision_qs1_split_pilot",
+      "fetched": true
+    },
+    {
+      "ordinal": 22,
+      "thread_key": "wholesale_pilot_scope",
+      "classification": "near_miss",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 23,
+      "thread_key": "decision_qs2_single_warehouse",
+      "classification": "decision",
+      "arc_id": "quantity_and_splits",
+      "decision_id": "QS2",
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 24,
+      "thread_key": "reopen_cr3_margin",
+      "classification": "reopening",
+      "arc_id": "cancellation_reasons",
+      "decision_id": null,
+      "reopens_decision_key": "decision_cr3_pricematch",
+      "fetched": true
+    },
+    {
+      "ordinal": 25,
+      "thread_key": "pto_handoff",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 26,
+      "thread_key": "decision_cr4_pause_cheaper",
+      "classification": "decision",
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR4",
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 27,
+      "thread_key": "glossary_terms",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 28,
+      "thread_key": "reopen_em1_takeover",
+      "classification": "reopening",
+      "arc_id": "profile_email",
+      "decision_id": null,
+      "reopens_decision_key": "decision_em1_workshop",
+      "fetched": true
+    },
+    {
+      "ordinal": 29,
+      "thread_key": "promo_split_exception",
+      "classification": "near_miss",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 30,
+      "thread_key": "decision_em2_pause",
+      "classification": "decision",
+      "arc_id": "profile_email",
+      "decision_id": "EM2",
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 31,
+      "thread_key": "reopen_rd2_dead_cards",
+      "classification": "reopening",
+      "arc_id": "refund_destinations",
+      "decision_id": null,
+      "reopens_decision_key": "decision_rd2_original_only",
+      "fetched": true
+    },
+    {
+      "ordinal": 32,
+      "thread_key": "campaign_loadtest",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 33,
+      "thread_key": "ledger_archive_question",
+      "classification": "near_miss",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 34,
+      "thread_key": "decision_rd3_checks",
+      "classification": "decision",
+      "arc_id": "refund_destinations",
+      "decision_id": "RD3",
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 35,
+      "thread_key": "printer_toner",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 36,
+      "thread_key": "decision_cr5_trim_three",
+      "classification": "decision",
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR5",
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 37,
+      "thread_key": "parking_repaving",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": false
+    },
+    {
+      "ordinal": 38,
+      "thread_key": "reopen_qs2_carrier_sla",
+      "classification": "reopening",
+      "arc_id": "quantity_and_splits",
+      "decision_id": null,
+      "reopens_decision_key": "decision_qs2_single_warehouse",
+      "fetched": true
+    },
+    {
+      "ordinal": 39,
+      "thread_key": "decision_qs3_no_quantity",
+      "classification": "decision",
+      "arc_id": "quantity_and_splits",
+      "decision_id": "QS3",
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 40,
+      "thread_key": "retro_scheduling",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 41,
+      "thread_key": "reopen_cr5_slow_shipping",
+      "classification": "reopening",
+      "arc_id": "cancellation_reasons",
+      "decision_id": null,
+      "reopens_decision_key": "decision_cr5_trim_three",
+      "fetched": true
+    },
+    {
+      "ordinal": 42,
+      "thread_key": "vip_quantity_proposal",
+      "classification": "dead_proposal",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 43,
+      "thread_key": "decision_cr6_reroute_slow",
+      "classification": "decision",
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR6",
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 44,
+      "thread_key": "snack_budget",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 45,
+      "thread_key": "decision_em3_final",
+      "classification": "decision",
+      "arc_id": "profile_email",
+      "decision_id": "EM3",
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 46,
+      "thread_key": "reopen_rd3_check_fraud",
+      "classification": "reopening",
+      "arc_id": "refund_destinations",
+      "decision_id": null,
+      "reopens_decision_key": "decision_rd3_checks",
+      "fetched": true
+    },
+    {
+      "ordinal": 47,
+      "thread_key": "wholesale_cancel_handling",
+      "classification": "near_miss",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 48,
+      "thread_key": "dashboard_timeout",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 49,
+      "thread_key": "reopen_cr6_verbatim",
+      "classification": "reopening",
+      "arc_id": "cancellation_reasons",
+      "decision_id": null,
+      "reopens_decision_key": "decision_cr6_reroute_slow",
+      "fetched": true
+    },
+    {
+      "ordinal": 50,
+      "thread_key": "decision_rd4_interim",
+      "classification": "decision",
+      "arc_id": "refund_destinations",
+      "decision_id": "RD4",
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 51,
+      "thread_key": "wellness_week",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": false
+    },
+    {
+      "ordinal": 52,
+      "thread_key": "goodwill_giftcard_proposal",
+      "classification": "dead_proposal",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 53,
+      "thread_key": "decision_cr7_paraphrase",
+      "classification": "decision",
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR7",
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 54,
+      "thread_key": "training_screenshots",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 55,
+      "thread_key": "wholesale_credit_memo",
+      "classification": "near_miss",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 56,
+      "thread_key": "reopen_cr7_drift",
+      "classification": "reopening",
+      "arc_id": "cancellation_reasons",
+      "decision_id": null,
+      "reopens_decision_key": "decision_cr7_paraphrase",
+      "fetched": true
+    },
+    {
+      "ordinal": 57,
+      "thread_key": "badge_reader",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 58,
+      "thread_key": "decision_qs4_final",
+      "classification": "decision",
+      "arc_id": "quantity_and_splits",
+      "decision_id": "QS4",
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 59,
+      "thread_key": "decision_cr8_final",
+      "classification": "decision",
+      "arc_id": "cancellation_reasons",
+      "decision_id": "CR8",
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 60,
+      "thread_key": "carrier_webinar",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 61,
+      "thread_key": "decision_rd5_final",
+      "classification": "decision",
+      "arc_id": "refund_destinations",
+      "decision_id": "RD5",
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 62,
+      "thread_key": "tshirt_sizes",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": false
+    },
+    {
+      "ordinal": 63,
+      "thread_key": "survey_routing",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 64,
+      "thread_key": "offsite_poll",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 65,
+      "thread_key": "launch_day_warroom",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 66,
+      "thread_key": "launch_readout",
+      "classification": "distractor",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    },
+    {
+      "ordinal": 67,
+      "thread_key": "identity_mismatch_question",
+      "classification": "deliberation",
+      "arc_id": null,
+      "decision_id": null,
+      "reopens_decision_key": null,
+      "fetched": true
+    }
+  ],
+  "distribution": {
+    "current_decision_threads": 4,
+    "superseded_decision_threads": 16,
+    "reopening_threads": 12,
+    "deliberation_threads": 4,
+    "distractor_only_threads": 24,
+    "near_miss_threads": 5,
+    "dead_proposal_threads": 2,
+    "unfetched_threads": 3,
+    "delivered_artifacts": [
+      "uploaded_materials/ (generic pooled workspace_export*.json name)"
+    ],
+    "author_only_files": [
+      "generate.py",
+      "authored_threads.json",
+      "authored_channel_messages.json",
+      "eval_manifest.json",
+      "eval_manifest.manage_pending_order.json",
+      "eval_manifest.manage_delivered_order.json",
+      "eval_manifest.service_foundations.json",
+      "README.md",
+      "realism_review_prompt.md"
+    ]
+  },
+  "noise_model": {
+    "near_miss_threads": [
+      {
+        "thread_key": "wholesale_pilot_scope",
+        "channel_name": "beacon-wholesale-pilot",
+        "scope_tokens": [
+          "wholesale accounts only",
+          "separate track"
+        ]
+      },
+      {
+        "thread_key": "promo_split_exception",
+        "channel_name": "beacon-fulfillment-scope",
+        "scope_tokens": [
+          "anniversary sale weekend",
+          "expires on its own",
+          "monday 9am"
+        ]
+      },
+      {
+        "thread_key": "ledger_archive_question",
+        "channel_name": "beacon-order-servicing",
+        "scope_tokens": [
+          "archived",
+          "store-credit migration"
+        ]
+      },
+      {
+        "thread_key": "wholesale_cancel_handling",
+        "channel_name": "beacon-wholesale-pilot",
+        "scope_tokens": [
+          "wholesale accounts only",
+          "do not apply here"
+        ]
+      },
+      {
+        "thread_key": "wholesale_credit_memo",
+        "channel_name": "beacon-wholesale-pilot",
+        "scope_tokens": [
+          "wholesale only",
+          "changes nothing there"
+        ]
+      }
+    ],
+    "near_miss_note": "Near-miss threads state policy for an explicitly different scope (the wholesale pilot book, a self-expiring promo weekend, the archived predecessor program). Every policy-stating message carries its scope qualifier; none of it applies to the consumer assisted flow the facts describe.",
+    "dead_proposal_threads": [
+      {
+        "thread_key": "vip_quantity_proposal",
+        "channel_name": "beacon-fulfillment-scope",
+        "resolution": "Floated a top-spender exception to the standing quantity ruling; explicitly parked pending a one-pager that never arrived. No decision was made and the QS4 ruling stands."
+      },
+      {
+        "thread_key": "goodwill_giftcard_proposal",
+        "channel_name": "beacon-payments-risk",
+        "resolution": "Floated issuing new gift cards as goodwill credits; parked pending a finance review that never returned, and RD5's no-new-gift-cards boundary forecloses it."
+      }
+    ],
+    "unfetched_thread_keys": [
+      "parking_repaving",
+      "wellness_week",
+      "tshirt_sizes"
+    ],
+    "failed_calls": [
+      {
+        "channel": "ledger-archive",
+        "error": "channel_not_found",
+        "reason": "archived predecessor-program channel"
+      },
+      {
+        "channel": "C09BCLDS10",
+        "error": "not_in_channel",
+        "reason": "private leads channel mentioned in the launch-day thread; its contents are intentionally unknowable"
+      }
+    ],
+    "unthreaded_channel_message_counts": {
+      "C09BCORD01": 7,
+      "C09BCPAY02": 6,
+      "C09BCFUL03": 6,
+      "C09BCIDN04": 5
+    }
+  },
+  "notes": [
+    "Search and history calls naturally repeat channel-surface messages; exact occurrence counts are audited.",
+    "Four decision arcs run concurrently in different channels; only each arc's final decision carries authoritative_fact_ids.",
+    "Every decision was explicitly approved by Product, Operations, Engineering, Risk & Compliance, and QA.",
+    "Each obsolete decision was later reopened with new evidence, either by a dedicated thread or inline in its replacement's root.",
+    "Near-miss threads carry explicitly scoped non-consumer policy; dead proposals were parked, never decided.",
+    "Three root-only threads were never opened by the research session, and two follow-up history calls dead-ended by design.",
+    "The delivered artifact does not expose author-side decision status or fact mappings."
+  ]
+}

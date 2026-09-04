@@ -1,0 +1,2285 @@
+{
+  "id": "banking_savings_apy_boosts_interest_discrepancies_policy_fact_schema_001",
+  "domain": "banking_knowledge",
+  "section_id": "savings_apy_boosts_interest_discrepancies",
+  "display_name": "Savings APY boosts, bonus selection, credits, and interest discrepancy reports",
+  "domain_hierarchy": {
+    "role": "journey",
+    "requires": []
+  },
+  "source_section": {
+    "canonical_sop_path": "tau2/hyper/sops/banking_knowledge/sections/savings_apy_boosts_interest_discrepancies/source.md",
+    "heading": "## Savings APY boosts, bonus selection, credits, and interest discrepancy reports"
+  },
+  "rendered_section_path": "tau2/hyper/sops/banking_knowledge/sections/savings_apy_boosts_interest_discrepancies/transcript_induction_001.md",
+  "transformations": [
+    {
+      "representation": "support_transcripts",
+      "stub_path": "tau2/hyper/sops/banking_knowledge/sections/savings_apy_boosts_interest_discrepancies/transcript_induction_001.md",
+      "artifacts": null
+    }
+  ],
+  "response_phrasing_context": {
+    "rules_path": "tau2/hyper/response_phrasing/banking_response_phrasing.yaml",
+    "scope": "Apply response phrasing rules to Agent transcript turns only. Customer turns and Support console/internal notes are not customer-facing assistant responses.",
+    "notes": [
+      "Preserve banking handbook requirements from shared context: verify identity before account-specific information, get explicit confirmation before account-modifying actions, and use the exact transfer message when a transfer is performed.",
+      "Support console turns may mention document ids, internal tool results, and eligibility checks; Agent turns should give the customer the customer-visible next step or outcome.",
+      "Do not transform concrete KB tables, thresholds, statuses, fees, amounts, or condition-specific outcomes into vague dependency statements."
+    ]
+  },
+  "style_exemplar": {
+    "id": "banking_knowledge_customer_support_chat",
+    "path": "tau2/hyper/sops/banking_knowledge/style_examples/customer_support_chat.md",
+    "style_goals": [
+      "banking customer-support training records",
+      "identity verification before account-specific details",
+      "explicit customer confirmation before account-modifying actions",
+      "plain-language customer-facing outcomes",
+      "support-console notes for internal KB/tool evidence"
+    ]
+  },
+  "domain_constraints": {
+    "source_paths": [
+      "tau2/hyper/sops/banking_sop.md",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_012.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_043.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_044.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_045.json",
+      "tau2/domains/banking_knowledge/documents/doc_bank_accounts_bank_accounts_(general)_046.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_silver_account_002.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_silver_account_003.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_silver_account_005.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_silver_account_006.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_green_account_(savings)_003.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_green_account_(savings)_005.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_gold_account_013.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_gold_account_014.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_silver_plus_account_009.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_gold_plus_account_009.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_platinum_plus_account_009.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_platinum_account_010.json",
+      "tau2/domains/banking_knowledge/documents/doc_savings_accounts_diamond_elite_account_011.json"
+    ],
+    "summary": "Resolving suspected savings-interest errors, applying credits, deciding linked-checking APY boosts, and applying credit-card APY bonus stacking/selection rules.",
+    "rules": [
+      "Preserve all values, tables, thresholds, statuses, fees, amounts, eligibility gates, tool/action names, and condition-to-outcome mappings from the source bundle.",
+      "Use the shared banking handbook for identity verification, explicit confirmation before account-modifying actions, discoverable-tool wrapper behavior, schema limits, and transfer wording.",
+      "Do not invent unsupported account fields, undocumented override mechanisms, undocumented tool names, or customer entitlements not present in the source bundle.",
+      "When a source document is internal, represent its internal checks in Support console turns or agent behavior rather than as exposed policy narration."
+    ],
+    "candidate": {
+      "id": "savings_apy_boosts_interest_discrepancies",
+      "title": "Savings APY boosts, bonus selection, credits, and interest discrepancy reports",
+      "priority": 1,
+      "related_task_ids": [
+        "task_063",
+        "task_064",
+        "task_065",
+        "task_066",
+        "task_067",
+        "task_068",
+        "task_069",
+        "task_093",
+        "task_094",
+        "task_095",
+        "task_096",
+        "task_097"
+      ],
+      "recommended_case_count": 6,
+      "losslessness_risks": [
+        "Preserve APY boost stacking and selection order.",
+        "Preserve when to apply a credit versus submit an interest discrepancy report.",
+        "Preserve account-specific interest calculation and payout timing."
+      ]
+    }
+  },
+  "policy_structure": {
+    "units": [
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_journey",
+        "label": "Savings APY boosts, bonus selection, credits, and interest discrepancy reports",
+        "kind": "journey",
+        "fact_ids": []
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_shared_rules",
+        "label": "Shared workflow rules",
+        "kind": "shared_reference",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 1,
+        "description": "Rules, prerequisites, and reference values used by more than one customer pathway in this journey.",
+        "fact_ids": [
+          "F010",
+          "F011",
+          "F017",
+          "F021",
+          "F024",
+          "F025",
+          "F029",
+          "F030",
+          "F031",
+          "F035",
+          "F050",
+          "F051",
+          "F052",
+          "F053",
+          "F054",
+          "F055",
+          "F056",
+          "F059",
+          "F060",
+          "F061",
+          "F062",
+          "F063",
+          "F064",
+          "F065",
+          "F066",
+          "F067",
+          "F068",
+          "F080",
+          "F081",
+          "F086",
+          "F087",
+          "F088",
+          "F089",
+          "F090",
+          "F091",
+          "F092",
+          "F093",
+          "F094",
+          "F095",
+          "F096",
+          "F097",
+          "F098",
+          "F099",
+          "F110",
+          "F111",
+          "F116",
+          "F121",
+          "F130",
+          "F131",
+          "F132",
+          "F133",
+          "F134",
+          "F135",
+          "F136",
+          "F182",
+          "F187",
+          "F188"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_a",
+        "label": "Linked checking APY boost qualification: Green Account checking plus Gold Account savings",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 2,
+        "description": "Policy path represented by case A.",
+        "fact_ids": []
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_b",
+        "label": "Linked checking APY boost qualification: Green Fee-Free Account checking plus Bronze Account savings",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 3,
+        "description": "Policy path represented by case B.",
+        "fact_ids": [
+          "F012"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_c",
+        "label": "Linked checking APY boost qualification: Evergreen Account checking plus Green Account savings",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 4,
+        "description": "Policy path represented by case C.",
+        "fact_ids": [
+          "F013"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_d",
+        "label": "Linked checking APY boost qualification: Blue Account checking plus Silver Plus Account savings",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 5,
+        "description": "Policy path represented by case D.",
+        "fact_ids": [
+          "F014"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_e",
+        "label": "Linked checking APY boost qualification: Light Green Account checking plus Diamond Elite Account savings",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 6,
+        "description": "Policy path represented by case E.",
+        "fact_ids": [
+          "F015"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_f",
+        "label": "Linked checking APY boost qualification: Dark Green Account checking plus Bronze Account savings",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 7,
+        "description": "Policy path represented by case F.",
+        "fact_ids": [
+          "F016"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_g",
+        "label": "Linked checking APY boost qualification: Bluest Account checking plus Silver Account savings",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 8,
+        "description": "Policy path represented by case G.",
+        "fact_ids": []
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_h",
+        "label": "Purple checking boost qualification and Platinum Plus credit card APY bonus table",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 9,
+        "description": "Policy path represented by case H.",
+        "fact_ids": [
+          "F018",
+          "F287",
+          "F288",
+          "F289",
+          "F290",
+          "F291",
+          "F292",
+          "F293",
+          "F294",
+          "F295",
+          "F296"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_i",
+        "label": "Linked checking APY boost qualification: Gold Years Account checking plus Gold Plus Account savings",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 10,
+        "description": "Policy path represented by case I.",
+        "fact_ids": [
+          "F019"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_j",
+        "label": "Linked checking APY boost qualification: Light Green Account checking plus Platinum Account savings",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 11,
+        "description": "Policy path represented by case J.",
+        "fact_ids": [
+          "F020"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_k",
+        "label": "Linked checking APY boost qualification: Green Account checking plus Silver Account savings",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 12,
+        "description": "Policy path represented by case K.",
+        "fact_ids": []
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_l",
+        "label": "Linked checking APY boost qualification: Evergreen Account checking plus Diamond Elite Account savings",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 13,
+        "description": "Policy path represented by case L.",
+        "fact_ids": [
+          "F022"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_m",
+        "label": "Linked checking APY boost qualification: Bluest Account checking plus Bronze Account savings",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 14,
+        "description": "Policy path represented by case M.",
+        "fact_ids": [
+          "F023"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_n",
+        "label": "Linked checking APY boost qualification: Purple Account checking plus Gold Account savings",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 15,
+        "description": "Policy path represented by case N.",
+        "fact_ids": []
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_o",
+        "label": "Linked checking APY boost qualification: Gold Years Account checking plus Silver Account savings",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 16,
+        "description": "Policy path represented by case O.",
+        "fact_ids": []
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_p",
+        "label": "Linked checking APY boost qualification: Blue Account checking plus Platinum Account savings",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 17,
+        "description": "Policy path represented by case P.",
+        "fact_ids": [
+          "F026"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_q",
+        "label": "Linked checking APY boost qualification: Green Fee-Free Account checking plus Gold Plus Account savings",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 18,
+        "description": "Policy path represented by case Q.",
+        "fact_ids": [
+          "F027"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_r",
+        "label": "Linked checking APY boost qualification: Dark Green Account checking plus Platinum Plus Account savings and non-listed pairing exclusion",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 19,
+        "description": "Policy path represented by case R.",
+        "fact_ids": [
+          "F028"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_s",
+        "label": "Multiple checking account APY boost selection and wrong-checking interest correction",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 20,
+        "description": "Policy path represented by case S.",
+        "fact_ids": [
+          "F032",
+          "F033",
+          "F034",
+          "F036",
+          "F037",
+          "F038",
+          "F039",
+          "F040",
+          "F041",
+          "F042",
+          "F283"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_t",
+        "label": "Interest correction and discrepancy report: missing linked checking APY boost",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 21,
+        "description": "Policy path represented by case T.",
+        "fact_ids": [
+          "F082"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_u",
+        "label": "Interest correction and discrepancy report: incorrect Silver Account tier rate",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 22,
+        "description": "Policy path represented by case U.",
+        "fact_ids": [
+          "F083"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_v",
+        "label": "Interest correction and discrepancy report: missing relationship bonus",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 23,
+        "description": "Policy path represented by case V.",
+        "fact_ids": [
+          "F084"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_w",
+        "label": "Interest correction and discrepancy report: other system calculation error",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 24,
+        "description": "Policy path represented by case W.",
+        "fact_ids": [
+          "F085"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_x",
+        "label": "Savings account credit: fee refund eligibility and procedure",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 25,
+        "description": "Policy path represented by case X.",
+        "fact_ids": [
+          "F057"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_y",
+        "label": "Savings account credit: goodwill credit eligibility and supervisor approval threshold",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 26,
+        "description": "Policy path represented by case Y.",
+        "fact_ids": [
+          "F058"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_z",
+        "label": "Credit card APY bonus stacking and highest-bonus selection",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 27,
+        "description": "Policy path represented by case Z.",
+        "fact_ids": [
+          "F112",
+          "F113",
+          "F114",
+          "F115",
+          "F282"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_aa",
+        "label": "Silver Account linking, tiers, interest timing, tips, and credit card APY bonus table",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 28,
+        "description": "Policy path represented by case AA.",
+        "fact_ids": [
+          "F120",
+          "F122",
+          "F123",
+          "F124",
+          "F125",
+          "F126",
+          "F137",
+          "F138",
+          "F140",
+          "F141",
+          "F142",
+          "F143",
+          "F144",
+          "F145",
+          "F146",
+          "F284",
+          "F285",
+          "F286"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_ab",
+        "label": "Green Account savings APY, eligibility, fees, environmental benefits, and credit card APY bonus table",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 29,
+        "description": "Policy path represented by case AB.",
+        "fact_ids": [
+          "F150",
+          "F151",
+          "F152",
+          "F153",
+          "F154",
+          "F155",
+          "F156",
+          "F157",
+          "F158",
+          "F159",
+          "F160",
+          "F161",
+          "F162",
+          "F163",
+          "F164",
+          "F165",
+          "F166",
+          "F167",
+          "F168"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_ac",
+        "label": "Gold Account benefits, relationship bonus, minimum balance override, and credit card APY bonus table",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 30,
+        "description": "Policy path represented by case AC.",
+        "fact_ids": [
+          "F180",
+          "F181",
+          "F183",
+          "F184",
+          "F185",
+          "F186",
+          "F189",
+          "F190",
+          "F191",
+          "F192",
+          "F193",
+          "F194",
+          "F195",
+          "F196",
+          "F197",
+          "F198",
+          "F199",
+          "F200",
+          "F201",
+          "F202",
+          "F203",
+          "F204"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_ad",
+        "label": "Silver Plus Account credit card APY bonus qualification and bonus table",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 31,
+        "description": "Policy path represented by case AD.",
+        "fact_ids": [
+          "F210",
+          "F211",
+          "F212",
+          "F213",
+          "F214",
+          "F215",
+          "F216",
+          "F217",
+          "F218",
+          "F219",
+          "F220",
+          "F221"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_ae",
+        "label": "Gold Plus Account credit card APY bonus qualification and bonus table",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 32,
+        "description": "Policy path represented by case AE.",
+        "fact_ids": [
+          "F230",
+          "F231",
+          "F232",
+          "F233",
+          "F234",
+          "F235",
+          "F236",
+          "F237",
+          "F238",
+          "F239",
+          "F240",
+          "F241"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_af",
+        "label": "Platinum Account credit card APY bonus qualification and bonus table",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 33,
+        "description": "Policy path represented by case AF.",
+        "fact_ids": [
+          "F250",
+          "F251",
+          "F252",
+          "F253",
+          "F254",
+          "F255",
+          "F256",
+          "F257",
+          "F258",
+          "F259",
+          "F260",
+          "F261"
+        ]
+      },
+      {
+        "id": "savings_apy_boosts_interest_discrepancies_path_ag",
+        "label": "Diamond Elite Account credit card APY bonus qualification and bonus table",
+        "kind": "scenario_branch",
+        "parent_id": "savings_apy_boosts_interest_discrepancies_journey",
+        "order": 34,
+        "description": "Policy path represented by case AG.",
+        "fact_ids": [
+          "F270",
+          "F271",
+          "F272",
+          "F273",
+          "F274",
+          "F275",
+          "F276",
+          "F277",
+          "F278",
+          "F279",
+          "F280",
+          "F281"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_a",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_b",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_c",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_d",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_e",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_f",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_g",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_h",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_i",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_j",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_k",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_l",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_m",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_n",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_o",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_p",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_q",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_r",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_s",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_t",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_u",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_v",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_w",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_x",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_y",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_z",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_aa",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_ab",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_ac",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_ad",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_ae",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_af",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      },
+      {
+        "source_id": "savings_apy_boosts_interest_discrepancies_path_ag",
+        "type": "uses_shared_rules",
+        "target_id": "savings_apy_boosts_interest_discrepancies_shared_rules"
+      }
+    ]
+  },
+  "facts": [
+    {
+      "id": "F010",
+      "statement": "When a customer holds under the same customer profile a checking account and savings account in one of the specific pairings listed in this section, a linked checking APY boost for that pairing is automatically applied to the savings account balance; if multiple active Rho-Bank checking accounts linked to the profile each provide a boost for the same savings account type, only the highest applicable checking account APY boost is applied and the other checking boosts are not added."
+    },
+    {
+      "id": "F011",
+      "statement": "The pairing Green Account checking plus Gold Account savings qualifies for a linked checking account APY boost."
+    },
+    {
+      "id": "F012",
+      "statement": "The pairing Green Fee-Free Account checking plus Bronze Account savings qualifies for a linked checking account APY boost."
+    },
+    {
+      "id": "F013",
+      "statement": "The pairing Evergreen Account checking plus Green Account savings qualifies for a linked checking account APY boost."
+    },
+    {
+      "id": "F014",
+      "statement": "The pairing Blue Account checking plus Silver Plus Account savings qualifies for a linked checking account APY boost."
+    },
+    {
+      "id": "F015",
+      "statement": "The pairing Light Green Account checking plus Diamond Elite Account savings qualifies for a linked checking account APY boost."
+    },
+    {
+      "id": "F016",
+      "statement": "The pairing Dark Green Account checking plus Bronze Account savings qualifies for a linked checking account APY boost."
+    },
+    {
+      "id": "F017",
+      "statement": "The pairing Bluest Account checking plus Silver Account savings qualifies for a linked checking account APY boost."
+    },
+    {
+      "id": "F018",
+      "statement": "The pairing Purple Account checking plus Platinum Plus Account savings qualifies for a linked checking account APY boost."
+    },
+    {
+      "id": "F019",
+      "statement": "The pairing Gold Years Account checking plus Gold Plus Account savings qualifies for a linked checking account APY boost."
+    },
+    {
+      "id": "F020",
+      "statement": "The pairing Light Green Account checking plus Platinum Account savings qualifies for a linked checking account APY boost."
+    },
+    {
+      "id": "F021",
+      "statement": "The pairing Green Account checking plus Silver Account savings qualifies for a linked checking account APY boost."
+    },
+    {
+      "id": "F022",
+      "statement": "The pairing Evergreen Account checking plus Diamond Elite Account savings qualifies for a linked checking account APY boost."
+    },
+    {
+      "id": "F023",
+      "statement": "The pairing Bluest Account checking plus Bronze Account savings qualifies for a linked checking account APY boost."
+    },
+    {
+      "id": "F024",
+      "statement": "The pairing Purple Account checking plus Gold Account savings qualifies for a linked checking account APY boost."
+    },
+    {
+      "id": "F025",
+      "statement": "The pairing Gold Years Account checking plus Silver Account savings qualifies for a linked checking account APY boost."
+    },
+    {
+      "id": "F026",
+      "statement": "The pairing Blue Account checking plus Platinum Account savings qualifies for a linked checking account APY boost."
+    },
+    {
+      "id": "F027",
+      "statement": "The pairing Green Fee-Free Account checking plus Gold Plus Account savings qualifies for a linked checking account APY boost."
+    },
+    {
+      "id": "F028",
+      "statement": "The pairing Dark Green Account checking plus Platinum Plus Account savings qualifies for a linked checking account APY boost."
+    },
+    {
+      "id": "F029",
+      "statement": "Only the specifically listed checking and savings account pairings qualify for the linked checking account APY boost; all other checking and savings account combinations do not receive any APY boost from linking."
+    },
+    {
+      "id": "F030",
+      "statement": "A linked checking account APY boost is additive to the savings account base APY and to any credit card APY bonuses the customer may already have."
+    },
+    {
+      "id": "F031",
+      "statement": "The exact APY boost percentages for qualifying linked checking pairings must be taken from the specific savings account documentation."
+    },
+    {
+      "id": "F032",
+      "statement": "When a customer holds multiple Rho-Bank checking accounts that each provide an APY boost on the savings account, the checking account APY boosts do not stack with each other."
+    },
+    {
+      "id": "F033",
+      "statement": "For multiple checking account APY boost selection, the system identifies all active Rho-Bank checking accounts linked to the customer's profile."
+    },
+    {
+      "id": "F034",
+      "statement": "For multiple checking account APY boost selection, the system determines the corresponding APY boost for the savings account type for each checking account."
+    },
+    {
+      "id": "F035",
+      "statement": "For multiple checking account APY boost selection, only the highest applicable checking account APY boost is applied to the customer's savings account."
+    },
+    {
+      "id": "F036",
+      "statement": "For multiple checking account APY boost selection, the other checking account boosts are not added on top."
+    },
+    {
+      "id": "F037",
+      "statement": "Checking account APY boosts do stack with other types of bonuses, including credit card APY bonuses, relationship bonuses for holding multiple Rho-Bank products, and account tier bonuses."
+    },
+    {
+      "id": "F038",
+      "statement": "In the multiple checking account example, a Gold Savings Account customer with a Green Account checking boost of +0.75% and a Purple Account checking boost of +0.1% receives only the Green Account boost of +0.75%, not the sum of both."
+    },
+    {
+      "id": "F039",
+      "statement": "When investigating interest discrepancies for customers with multiple checking accounts, agents must identify all checking accounts the customer holds."
+    },
+    {
+      "id": "F040",
+      "statement": "When investigating interest discrepancies for customers with multiple checking accounts, agents must determine which checking account provides the highest APY boost for the savings account type."
+    },
+    {
+      "id": "F041",
+      "statement": "When investigating interest discrepancies for customers with multiple checking accounts, agents must verify that the system is applying the highest checking account APY boost rather than a lower one."
+    },
+    {
+      "id": "F042",
+      "statement": "If the system selected the wrong checking account for an APY boost, the agent must calculate the correct APY and apply an interest correction."
+    },
+    {
+      "id": "F050",
+      "statement": "Agents use the apply_savings_account_credit_6831 tool to add a credit transaction to a savings account."
+    },
+    {
+      "id": "F051",
+      "statement": "Agents are authorized to apply credits to savings accounts only for interest corrections, fee refunds, or goodwill credits."
+    },
+    {
+      "id": "F052",
+      "statement": "An interest correction credit is authorized when the customer's interest payment was calculated incorrectly due to a system error, such as a missing APY boost from a linked checking account, an incorrect tier rate, or a missing relationship bonus."
+    },
+    {
+      "id": "F053",
+      "statement": "Before applying an interest correction credit, the agent must verify the customer's account details and APY components using get_all_user_accounts_by_user_id_3847."
+    },
+    {
+      "id": "F054",
+      "statement": "Before applying an interest correction credit, the agent must review transaction history using get_bank_account_transactions_9173 to confirm the interest amount credited."
+    },
+    {
+      "id": "F055",
+      "statement": "Before applying an interest correction credit, the agent must calculate the correct interest amount based on documented APY rates and bonuses."
+    },
+    {
+      "id": "F056",
+      "statement": "Before applying an interest correction credit, the agent must determine the difference between expected interest and actual interest."
+    },
+    {
+      "id": "F057",
+      "statement": "A fee refund credit is authorized if a fee was incorrectly charged to the savings account, such as an excess withdrawal fee charged when the customer was within limits or a monthly maintenance fee charged when the balance requirement was met."
+    },
+    {
+      "id": "F058",
+      "statement": "A goodwill credit may be applied in exceptional circumstances where the customer experienced significant inconvenience due to bank error; goodwill credits should be rare and typically require supervisor approval for amounts over $25."
+    },
+    {
+      "id": "F059",
+      "statement": "The apply_savings_account_credit_6831 tool requires an account_id string parameter for the savings account ID to credit."
+    },
+    {
+      "id": "F060",
+      "statement": "The apply_savings_account_credit_6831 tool requires an amount number parameter that is a positive dollar amount greater than 0."
+    },
+    {
+      "id": "F061",
+      "statement": "The apply_savings_account_credit_6831 tool requires a credit_type string parameter, and the value must be one of interest_correction, fee_refund, or goodwill_credit."
+    },
+    {
+      "id": "F062",
+      "statement": "Before applying a savings account credit, the agent must verify the customer's identity and account ownership."
+    },
+    {
+      "id": "F063",
+      "statement": "Before applying a savings account credit, the agent must confirm that the account is a savings account."
+    },
+    {
+      "id": "F064",
+      "statement": "Before applying a savings account credit, the agent must verify that the customer meets one of the eligible credit circumstances."
+    },
+    {
+      "id": "F065",
+      "statement": "Before applying a savings account credit, the agent must calculate the correct credit amount based on the discrepancy or fee."
+    },
+    {
+      "id": "F066",
+      "statement": "After completing the required checks for a savings account credit, the agent uses apply_savings_account_credit_6831 to apply the credit."
+    },
+    {
+      "id": "F067",
+      "statement": "After applying a savings account credit, the agent informs the customer of the applied credit and the new account balance."
+    },
+    {
+      "id": "F068",
+      "statement": "For interest corrections, after applying the credit, the agent should also submit an interest discrepancy report using submit_interest_discrepancy_report_7294 so the backend team investigates and fixes the underlying issue."
+    },
+    {
+      "id": "F080",
+      "statement": "When a customer's savings account interest calculation is incorrect, agents must submit an interest discrepancy report to the backend team for investigation."
+    },
+    {
+      "id": "F081",
+      "statement": "Agents use the submit_interest_discrepancy_report_7294 tool to create an interest discrepancy report."
+    },
+    {
+      "id": "F082",
+      "statement": "A missing APY boost report is submitted when the customer has a qualifying checking-savings account pairing but the linked checking APY boost was not applied to the interest calculation."
+    },
+    {
+      "id": "F083",
+      "statement": "An incorrect tier rate report is submitted when the customer's balance qualifies for a higher APY tier but the lower tier rate was applied."
+    },
+    {
+      "id": "F084",
+      "statement": "A missing relationship bonus report is submitted when the customer maintains multiple Rho-Bank products but the relationship bonus was not applied."
+    },
+    {
+      "id": "F085",
+      "statement": "A system calculation error report is submitted for any other discrepancy between expected interest credited and actual interest credited."
+    },
+    {
+      "id": "F086",
+      "statement": "The submit_interest_discrepancy_report_7294 tool requires an account_id string parameter for the savings account ID with the discrepancy."
+    },
+    {
+      "id": "F087",
+      "statement": "The submit_interest_discrepancy_report_7294 tool requires a user_id string parameter for the customer's unique identifier."
+    },
+    {
+      "id": "F088",
+      "statement": "The submit_interest_discrepancy_report_7294 tool requires an expected_apy number parameter for the APY percentage the customer should have received, such as 2.775 for 2.775%."
+    },
+    {
+      "id": "F089",
+      "statement": "The submit_interest_discrepancy_report_7294 tool requires an actual_apy number parameter for the APY percentage that was actually applied, such as 2.5 for 2.5%."
+    },
+    {
+      "id": "F090",
+      "statement": "The submit_interest_discrepancy_report_7294 tool requires an amount_difference number parameter for the dollar amount difference between expected interest credited and actual interest credited."
+    },
+    {
+      "id": "F091",
+      "statement": "Before submitting an interest discrepancy report, the agent must verify the customer's identity and account ownership."
+    },
+    {
+      "id": "F092",
+      "statement": "Before submitting an interest discrepancy report, the agent must look up the customer's accounts using get_all_user_accounts_by_user_id_3847."
+    },
+    {
+      "id": "F093",
+      "statement": "Before submitting an interest discrepancy report, the agent must check transaction history using get_bank_account_transactions_9173 to find the interest credit."
+    },
+    {
+      "id": "F094",
+      "statement": "Before submitting an interest discrepancy report, the agent must review documentation for the savings account type to determine all applicable APY components, including base rate, tier rate, linked checking boost, credit card bonuses, and relationship bonus."
+    },
+    {
+      "id": "F095",
+      "statement": "Before submitting an interest discrepancy report, the agent must calculate the expected APY by adding all applicable APY components."
+    },
+    {
+      "id": "F096",
+      "statement": "Before submitting an interest discrepancy report, the agent must calculate the discrepancy between expected interest and actual interest."
+    },
+    {
+      "id": "F097",
+      "statement": "If an interest discrepancy exists, the agent must first apply a credit using apply_savings_account_credit_6831 to correct the customer's account."
+    },
+    {
+      "id": "F098",
+      "statement": "After applying the credit for an interest discrepancy, the agent submits the discrepancy report using submit_interest_discrepancy_report_7294."
+    },
+    {
+      "id": "F099",
+      "statement": "The credit must always be applied to the customer's account before the interest discrepancy report is submitted, because the report is for backend investigation to fix the underlying system issue while the credit immediately resolves the customer's concern."
+    },
+    {
+      "id": "F110",
+      "statement": "When a customer holds multiple Rho-Bank credit cards that each provide an APY bonus on the savings account, the credit card APY bonuses do not stack with each other."
+    },
+    {
+      "id": "F111",
+      "statement": "Only the highest applicable credit card APY bonus is applied to the customer's savings account."
+    },
+    {
+      "id": "F112",
+      "statement": "For credit card APY bonus selection, the system identifies all active Rho-Bank credit cards linked to the customer's profile."
+    },
+    {
+      "id": "F113",
+      "statement": "For credit card APY bonus selection, the system determines the corresponding APY bonus for each credit card."
+    },
+    {
+      "id": "F114",
+      "statement": "For credit card APY bonus selection, the other credit card bonuses are not added on top."
+    },
+    {
+      "id": "F115",
+      "statement": "In the credit card APY bonus example, a customer with a Gold Rewards Card bonus of +0.025%, a Platinum Rewards Card bonus of +0.15%, and an EcoCard bonus of +0.6% receives only the EcoCard bonus of +0.6%, not the sum of all three."
+    },
+    {
+      "id": "F116",
+      "statement": "Credit card APY bonuses do stack with other types of bonuses, including checking account APY boosts, relationship bonuses for holding multiple Rho-Bank products, and account tier bonuses."
+    },
+    {
+      "id": "F120",
+      "statement": "For a Silver Account, linking to a Rho-Bank checking account gives the Silver APY an additional linked_checking_apy_bonus."
+    },
+    {
+      "id": "F121",
+      "statement": "A Silver Account customer who maintains multiple Rho-Bank products may also qualify for a relationship bonus of 0.025% that stacks on top of the base Silver APY."
+    },
+    {
+      "id": "F122",
+      "statement": "To link a Silver Account with a Rho checking account, the customer opens the Silver Account from the Rho-Bank dashboard and chooses the option to link a Rho checking account."
+    },
+    {
+      "id": "F123",
+      "statement": "To link a Silver Account with a Rho checking account, both accounts must be confirmed as under the same ownership and tax ID."
+    },
+    {
+      "id": "F124",
+      "statement": "To finalize linking a Silver Account with a Rho checking account, the customer completes the on-screen authorization; APY adjustments typically appear shortly after linking."
+    },
+    {
+      "id": "F125",
+      "statement": "For ongoing eligibility for Silver Account linking benefits, both accounts must be kept open and in good standing."
+    },
+    {
+      "id": "F126",
+      "statement": "Unlinking the checking account from a Silver Account can remove the linked_checking_apy_bonus and may affect eligibility for the 0.025% relationship bonus."
+    },
+    {
+      "id": "F130",
+      "statement": "For a Silver Account, the below-threshold balance tier is a balance of less than $10,000 and has a 2.5% APY."
+    },
+    {
+      "id": "F131",
+      "statement": "For a Silver Account, the at-or-above-threshold balance tier is a balance of at least $10,000 and has a 4.0% APY."
+    },
+    {
+      "id": "F132",
+      "statement": "For a Silver Account, each day's ending balance is compared to $10,000; if it is below $10,000 the applicable APY for that day is 2.5%, and if it is at or above $10,000 the applicable APY for that day is 4.0%."
+    },
+    {
+      "id": "F133",
+      "statement": "For a Silver Account, interest accrues on the daily balance and is compounded daily."
+    },
+    {
+      "id": "F134",
+      "statement": "For a Silver Account, Rho-Bank calculates a daily periodic rate from the APY and applies it to the balance for each day of the cycle."
+    },
+    {
+      "id": "F135",
+      "statement": "For a Silver Account, accrued interest is credited to the account monthly."
+    },
+    {
+      "id": "F136",
+      "statement": "For a Silver Account, if the balance moves between tiers during a cycle, the applicable APY for each day is based on that day's balance and interest for the cycle is the sum of each day's accrual."
+    },
+    {
+      "id": "F137",
+      "statement": "For a Silver Account, balance alerts can help the customer keep the balance at or above $10,000."
+    },
+    {
+      "id": "F138",
+      "statement": "For a Silver Account, avoiding large same-day transfers out can help avoid temporarily moving the balance below $10,000."
+    },
+    {
+      "id": "F140",
+      "statement": "For a Silver Account, the Bronze Rewards Card credit card APY bonus is +0%."
+    },
+    {
+      "id": "F141",
+      "statement": "For a Silver Account, the Silver Rewards Card credit card APY bonus is +0.1%."
+    },
+    {
+      "id": "F142",
+      "statement": "For a Silver Account, the Gold Rewards Card credit card APY bonus is +0.5%."
+    },
+    {
+      "id": "F143",
+      "statement": "For a Silver Account, the EcoCard credit card APY bonus is +2.2%."
+    },
+    {
+      "id": "F144",
+      "statement": "For a Silver Account, the Green Rewards Card credit card APY bonus is +0%."
+    },
+    {
+      "id": "F145",
+      "statement": "For a Silver Account, the Crypto-Cash Back Card credit card APY bonus is +0.5%."
+    },
+    {
+      "id": "F146",
+      "statement": "Holding certain Rho-Bank credit cards provides bonus APY on a Silver Account."
+    },
+    {
+      "id": "F150",
+      "statement": "A Green Account savings account earns 4.0% APY on the balance."
+    },
+    {
+      "id": "F151",
+      "statement": "For a Green Account savings account, an EcoCard that remains eligible, linked to the Green Account savings account, and in good standing has a corresponding credit-card APY bonus of +0.5%."
+    },
+    {
+      "id": "F152",
+      "statement": "For a Green Account savings account, while EcoCard eligibility is maintained, the APY components from the Green Account base rate and EcoCard credit-card bonus are 4.0% plus 0.5%."
+    },
+    {
+      "id": "F153",
+      "statement": "Eligible purchases at eco-certified merchants can earn an extra cashback bonus of 2.0% when using an EcoCard."
+    },
+    {
+      "id": "F154",
+      "statement": "Other Rho-Bank credit cards also provide APY bonuses on a Green Account savings account."
+    },
+    {
+      "id": "F155",
+      "statement": "For a Green Account savings account, the Bronze Rewards Card credit card APY bonus is +0%."
+    },
+    {
+      "id": "F156",
+      "statement": "For a Green Account savings account, the Silver Rewards Card credit card APY bonus is +0.45%."
+    },
+    {
+      "id": "F157",
+      "statement": "For a Green Account savings account, the Gold Rewards Card credit card APY bonus is +0%."
+    },
+    {
+      "id": "F158",
+      "statement": "For a Green Account savings account, the Platinum Rewards Card credit card APY bonus is +0.35%."
+    },
+    {
+      "id": "F159",
+      "statement": "For a Green Account savings account, the Diamond Elite Card credit card APY bonus is +0.6%."
+    },
+    {
+      "id": "F160",
+      "statement": "For a Green Account savings account, the Green Rewards Card credit card APY bonus is +0.4%."
+    },
+    {
+      "id": "F161",
+      "statement": "For a Green Account savings account, the Crypto-Cash Back Card credit card APY bonus is +0%."
+    },
+    {
+      "id": "F162",
+      "statement": "To maintain Green Account savings card-bonus eligibility, the eligible card must be kept in good standing and remain linked to the Green Account savings account."
+    },
+    {
+      "id": "F163",
+      "statement": "If the EcoCard or eligible eco card that provides the Green Account savings 0.5% APY bonus and EcoCard eco-certified-merchant 2.0% extra cashback is closed or unlinked from the Green Account savings account, that 0.5% APY bonus and that 2.0% extra cashback will not apply."
+    },
+    {
+      "id": "F164",
+      "statement": "The Green Account savings account has a minimum balance requirement of $500."
+    },
+    {
+      "id": "F165",
+      "statement": "The Green Account savings account monthly maintenance fee if the minimum balance is not met is $0.00."
+    },
+    {
+      "id": "F166",
+      "statement": "The Green Account savings FAQ states that pairing with an EcoCard or Green Rewards Card can provide a bonus of 0.5%."
+    },
+    {
+      "id": "F167",
+      "statement": "Rho-Bank matches donations to partner environmental charities at 50%."
+    },
+    {
+      "id": "F168",
+      "statement": "A Green Account savings customer can review account details in online or mobile banking to see the current APY of 4.0% and any applicable bonus of 0.5%."
+    },
+    {
+      "id": "F180",
+      "statement": "A Gold Account earns a base 5.5% APY."
+    },
+    {
+      "id": "F181",
+      "statement": "For Gold Account holders whose Gold Rewards Card is active and associated with the Gold Account, the standard minimum balance requirement is reduced from $10,000 to $5,000."
+    },
+    {
+      "id": "F182",
+      "statement": "Gold Account holders whose Gold Rewards Card remains active and associated with the Gold Account receive a 0.025% relationship bonus APY on top of the base 5.5% rate."
+    },
+    {
+      "id": "F183",
+      "statement": "Gold Rewards Card holders with a Gold Account receive up to $30 in ATM fee rebates per month."
+    },
+    {
+      "id": "F184",
+      "statement": "Gold Rewards Card holders with a Gold Account are allowed up to 20 withdrawals per month."
+    },
+    {
+      "id": "F185",
+      "statement": "If a Gold Account customer's Gold Rewards Card is active and associated with the Gold Account, the required minimum balance to maintain the Gold Account is automatically reduced to $5,000."
+    },
+    {
+      "id": "F186",
+      "statement": "The standard Gold Account minimum balance remains $10,000, but the $5,000 override applies as long as the Gold Rewards Card is active and associated with the Gold Account."
+    },
+    {
+      "id": "F187",
+      "statement": "The Gold Account relationship bonus is additive to the base rate and is not a multiplier."
+    },
+    {
+      "id": "F188",
+      "statement": "The Gold Account relationship bonus applies while the Gold Rewards Card remains active and associated with the Gold Account."
+    },
+    {
+      "id": "F189",
+      "statement": "The Gold Account relationship bonus example states: base APY 5.5%, relationship bonus APY +0.025%, and total APY with the bonus 6.0%."
+    },
+    {
+      "id": "F190",
+      "statement": "To confirm Gold Rewards Card holder benefits for a Gold Account, account details should show a $5,000 minimum balance requirement, APY of 5.5% plus a 0.025% relationship bonus, up to $30 in monthly ATM fee rebates, and up to 20 withdrawals."
+    },
+    {
+      "id": "F191",
+      "statement": "Holding certain Rho-Bank credit cards provides bonus APY on a Gold Account balance."
+    },
+    {
+      "id": "F192",
+      "statement": "Gold Account credit-card APY bonuses are automatically applied when the customer holds both the credit card and the Gold Account under the same customer profile, subject to the multiple-credit-card rule that only the highest applicable credit-card APY bonus is applied and other credit-card bonuses are not added."
+    },
+    {
+      "id": "F193",
+      "statement": "For a Gold Account, the Bronze Rewards Card credit card APY bonus is +0.15%."
+    },
+    {
+      "id": "F194",
+      "statement": "For a Gold Account, the Silver Rewards Card credit card APY bonus is +0.2%."
+    },
+    {
+      "id": "F195",
+      "statement": "For a Gold Account, the Gold Rewards Card credit card APY bonus is +0.025%."
+    },
+    {
+      "id": "F196",
+      "statement": "For a Gold Account, the Platinum Rewards Card credit card APY bonus is +0.15%."
+    },
+    {
+      "id": "F197",
+      "statement": "For a Gold Account, the Diamond Elite Card credit card APY bonus is +0.3%."
+    },
+    {
+      "id": "F198",
+      "statement": "For a Gold Account, the EcoCard credit card APY bonus is +0.6%."
+    },
+    {
+      "id": "F199",
+      "statement": "For a Gold Account, the Green Rewards Card credit card APY bonus is +0.35%."
+    },
+    {
+      "id": "F200",
+      "statement": "For a Gold Account, the Crypto-Cash Back Card credit card APY bonus is +0%."
+    },
+    {
+      "id": "F201",
+      "statement": "To qualify for a Gold Account credit card APY bonus, the customer must open or maintain a Gold Account."
+    },
+    {
+      "id": "F202",
+      "statement": "To qualify for a Gold Account credit card APY bonus, the customer must hold an eligible Rho-Bank credit card under the same customer profile."
+    },
+    {
+      "id": "F203",
+      "statement": "When a customer qualifies for one or more Gold Account credit-card APY bonuses, the applicable credit-card APY bonus is automatically applied to Gold Account earnings; if multiple eligible credit cards are held, only the highest applicable Gold Account credit-card APY bonus is applied."
+    },
+    {
+      "id": "F204",
+      "statement": "Gold Rewards Card holders receive the additional Gold Account benefit that the minimum balance requirement is reduced from $10,000 to $5,000 while the Gold Rewards Card is active and associated with the Gold Account."
+    },
+    {
+      "id": "F210",
+      "statement": "Holding certain Rho-Bank credit cards provides bonus APY on a Silver Plus Account balance."
+    },
+    {
+      "id": "F211",
+      "statement": "For a Silver Plus Account, the Bronze Rewards Card credit card APY bonus is +0.15%."
+    },
+    {
+      "id": "F212",
+      "statement": "For a Silver Plus Account, the Silver Rewards Card credit card APY bonus is +0.15%."
+    },
+    {
+      "id": "F213",
+      "statement": "For a Silver Plus Account, the Gold Rewards Card credit card APY bonus is +0.2%."
+    },
+    {
+      "id": "F214",
+      "statement": "For a Silver Plus Account, the Platinum Rewards Card credit card APY bonus is +0.15%."
+    },
+    {
+      "id": "F215",
+      "statement": "For a Silver Plus Account, the Diamond Elite Card credit card APY bonus is +0.4%."
+    },
+    {
+      "id": "F216",
+      "statement": "For a Silver Plus Account, the EcoCard credit card APY bonus is +0.45%."
+    },
+    {
+      "id": "F217",
+      "statement": "For a Silver Plus Account, the Green Rewards Card credit card APY bonus is +0.1%."
+    },
+    {
+      "id": "F218",
+      "statement": "For a Silver Plus Account, the Crypto-Cash Back Card credit card APY bonus is +0%."
+    },
+    {
+      "id": "F219",
+      "statement": "To qualify for a Silver Plus Account credit card APY bonus, the customer must open or maintain a Silver Plus Account."
+    },
+    {
+      "id": "F220",
+      "statement": "To qualify for a Silver Plus Account credit card APY bonus, the customer must hold an eligible Rho-Bank credit card under the same customer profile."
+    },
+    {
+      "id": "F221",
+      "statement": "When a customer qualifies for one or more Silver Plus Account credit-card APY bonuses, the applicable credit-card APY bonus is automatically applied to Silver Plus Account earnings; if multiple eligible credit cards are held, only the highest applicable Silver Plus Account credit-card APY bonus is applied."
+    },
+    {
+      "id": "F230",
+      "statement": "Holding certain Rho-Bank credit cards provides bonus APY on a Gold Plus Account balance."
+    },
+    {
+      "id": "F231",
+      "statement": "For a Gold Plus Account, the Bronze Rewards Card credit card APY bonus is +0.15%."
+    },
+    {
+      "id": "F232",
+      "statement": "For a Gold Plus Account, the Silver Rewards Card credit card APY bonus is +0.1%."
+    },
+    {
+      "id": "F233",
+      "statement": "For a Gold Plus Account, the Gold Rewards Card credit card APY bonus is +0.35%."
+    },
+    {
+      "id": "F234",
+      "statement": "For a Gold Plus Account, the Platinum Rewards Card credit card APY bonus is +0.2%."
+    },
+    {
+      "id": "F235",
+      "statement": "For a Gold Plus Account, the Diamond Elite Card credit card APY bonus is +0.25%."
+    },
+    {
+      "id": "F236",
+      "statement": "For a Gold Plus Account, the EcoCard credit card APY bonus is +0.1%."
+    },
+    {
+      "id": "F237",
+      "statement": "For a Gold Plus Account, the Green Rewards Card credit card APY bonus is +0.05%."
+    },
+    {
+      "id": "F238",
+      "statement": "For a Gold Plus Account, the Crypto-Cash Back Card credit card APY bonus is +0.3%."
+    },
+    {
+      "id": "F239",
+      "statement": "To qualify for a Gold Plus Account credit card APY bonus, the customer must open or maintain a Gold Plus Account."
+    },
+    {
+      "id": "F240",
+      "statement": "To qualify for a Gold Plus Account credit card APY bonus, the customer must hold an eligible Rho-Bank credit card under the same customer profile."
+    },
+    {
+      "id": "F241",
+      "statement": "When a customer qualifies for one or more Gold Plus Account credit-card APY bonuses, the applicable credit-card APY bonus is automatically applied to Gold Plus Account earnings; if multiple eligible credit cards are held, only the highest applicable Gold Plus Account credit-card APY bonus is applied."
+    },
+    {
+      "id": "F250",
+      "statement": "Holding certain Rho-Bank credit cards provides bonus APY on a Platinum Account balance."
+    },
+    {
+      "id": "F251",
+      "statement": "For a Platinum Account, the Bronze Rewards Card credit card APY bonus is +0%."
+    },
+    {
+      "id": "F252",
+      "statement": "For a Platinum Account, the Silver Rewards Card credit card APY bonus is +0%."
+    },
+    {
+      "id": "F253",
+      "statement": "For a Platinum Account, the Gold Rewards Card credit card APY bonus is +0.15%."
+    },
+    {
+      "id": "F254",
+      "statement": "For a Platinum Account, the Platinum Rewards Card credit card APY bonus is +0.25%."
+    },
+    {
+      "id": "F255",
+      "statement": "For a Platinum Account, the Diamond Elite Card credit card APY bonus is +0.35%."
+    },
+    {
+      "id": "F256",
+      "statement": "For a Platinum Account, the EcoCard credit card APY bonus is +0%."
+    },
+    {
+      "id": "F257",
+      "statement": "For a Platinum Account, the Green Rewards Card credit card APY bonus is +0%."
+    },
+    {
+      "id": "F258",
+      "statement": "For a Platinum Account, the Crypto-Cash Back Card credit card APY bonus is +0%."
+    },
+    {
+      "id": "F259",
+      "statement": "To qualify for a Platinum Account credit card APY bonus, the customer must open or maintain a Platinum Account."
+    },
+    {
+      "id": "F260",
+      "statement": "To qualify for a Platinum Account credit card APY bonus, the customer must hold an eligible Rho-Bank credit card under the same customer profile."
+    },
+    {
+      "id": "F261",
+      "statement": "When a customer qualifies for one or more Platinum Account credit-card APY bonuses, the applicable credit-card APY bonus is automatically applied to Platinum Account earnings; if multiple eligible credit cards are held, only the highest applicable Platinum Account credit-card APY bonus is applied."
+    },
+    {
+      "id": "F270",
+      "statement": "Holding certain Rho-Bank credit cards provides bonus APY on a Diamond Elite Account balance."
+    },
+    {
+      "id": "F271",
+      "statement": "For a Diamond Elite Account, the Bronze Rewards Card credit card APY bonus is +0%."
+    },
+    {
+      "id": "F272",
+      "statement": "For a Diamond Elite Account, the Silver Rewards Card credit card APY bonus is +0%."
+    },
+    {
+      "id": "F273",
+      "statement": "For a Diamond Elite Account, the Gold Rewards Card credit card APY bonus is +0%."
+    },
+    {
+      "id": "F274",
+      "statement": "For a Diamond Elite Account, the Platinum Rewards Card credit card APY bonus is +0.1%."
+    },
+    {
+      "id": "F275",
+      "statement": "For a Diamond Elite Account, the Diamond Elite Card credit card APY bonus is +0.5%."
+    },
+    {
+      "id": "F276",
+      "statement": "For a Diamond Elite Account, the EcoCard credit card APY bonus is +0%."
+    },
+    {
+      "id": "F277",
+      "statement": "For a Diamond Elite Account, the Green Rewards Card credit card APY bonus is +0%."
+    },
+    {
+      "id": "F278",
+      "statement": "For a Diamond Elite Account, the Crypto-Cash Back Card credit card APY bonus is +0.15%."
+    },
+    {
+      "id": "F279",
+      "statement": "To qualify for a Diamond Elite Account credit card APY bonus, the customer must open or maintain a Diamond Elite Account."
+    },
+    {
+      "id": "F280",
+      "statement": "To qualify for a Diamond Elite Account credit card APY bonus, the customer must hold an eligible Rho-Bank credit card under the same customer profile."
+    },
+    {
+      "id": "F281",
+      "statement": "When a customer qualifies for one or more Diamond Elite Account credit-card APY bonuses, the applicable credit-card APY bonus is automatically applied to Diamond Elite Account earnings; if multiple eligible credit cards are held, only the highest applicable Diamond Elite Account credit-card APY bonus is applied."
+    },
+    {
+      "id": "F282",
+      "statement": "The credit card APY bonus stacking policy exists to ensure that customers receive a meaningful benefit for holding premium credit cards while maintaining sustainable interest rates across the product portfolio."
+    },
+    {
+      "id": "F283",
+      "statement": "The linked checking account APY boost selection policy exists to ensure that customers receive a meaningful benefit for holding premium checking accounts while maintaining sustainable interest rates across the product portfolio."
+    },
+    {
+      "id": "F284",
+      "statement": "A Silver Account must maintain at least $1,000 during a statement cycle to avoid a $5.00 monthly maintenance fee."
+    },
+    {
+      "id": "F285",
+      "statement": "Each Silver Account withdrawal above the monthly withdrawal limit incurs a $2.00 excess withdrawal fee."
+    },
+    {
+      "id": "F286",
+      "statement": "A Silver Account can receive up to 15 ATM fee rebates each month."
+    },
+    {
+      "id": "F287",
+      "statement": "Platinum Plus Account credit card APY bonuses are automatically applied when the savings account and eligible Rho-Bank credit card are held under the same customer profile."
+    },
+    {
+      "id": "F288",
+      "statement": "For a Platinum Plus Account, the Bronze Rewards Card credit card APY bonus is +0%."
+    },
+    {
+      "id": "F289",
+      "statement": "For a Platinum Plus Account, the Silver Rewards Card credit card APY bonus is +0%."
+    },
+    {
+      "id": "F290",
+      "statement": "For a Platinum Plus Account, the Gold Rewards Card credit card APY bonus is +0.1%."
+    },
+    {
+      "id": "F291",
+      "statement": "For a Platinum Plus Account, the Platinum Rewards Card credit card APY bonus is +0.4%."
+    },
+    {
+      "id": "F292",
+      "statement": "For a Platinum Plus Account, the Diamond Elite Card credit card APY bonus is +0.6%."
+    },
+    {
+      "id": "F293",
+      "statement": "For a Platinum Plus Account, the EcoCard credit card APY bonus is +0.05%."
+    },
+    {
+      "id": "F294",
+      "statement": "For a Platinum Plus Account, the Green Rewards Card credit card APY bonus is +0%."
+    },
+    {
+      "id": "F295",
+      "statement": "For a Platinum Plus Account, the Crypto-Cash Back Card credit card APY bonus is +0.25%."
+    },
+    {
+      "id": "F296",
+      "statement": "To qualify for a Platinum Plus Account credit card APY bonus, the customer must open or maintain a Platinum Plus Account."
+    }
+  ],
+  "transcripts": [
+    {
+      "id": "A",
+      "title": "Linked checking APY boost qualification: Green Account checking plus Gold Account savings",
+      "included_fact_ids": [
+        "F010",
+        "F011",
+        "F030",
+        "F031"
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Linked checking APY boost qualification: Green Fee-Free Account checking plus Bronze Account savings",
+      "included_fact_ids": [
+        "F010",
+        "F012",
+        "F030",
+        "F031"
+      ]
+    },
+    {
+      "id": "C",
+      "title": "Linked checking APY boost qualification: Evergreen Account checking plus Green Account savings",
+      "included_fact_ids": [
+        "F010",
+        "F013",
+        "F030",
+        "F031"
+      ]
+    },
+    {
+      "id": "D",
+      "title": "Linked checking APY boost qualification: Blue Account checking plus Silver Plus Account savings",
+      "included_fact_ids": [
+        "F010",
+        "F014",
+        "F030",
+        "F031"
+      ]
+    },
+    {
+      "id": "E",
+      "title": "Linked checking APY boost qualification: Light Green Account checking plus Diamond Elite Account savings",
+      "included_fact_ids": [
+        "F010",
+        "F015",
+        "F030",
+        "F031"
+      ]
+    },
+    {
+      "id": "F",
+      "title": "Linked checking APY boost qualification: Dark Green Account checking plus Bronze Account savings",
+      "included_fact_ids": [
+        "F010",
+        "F016",
+        "F030",
+        "F031"
+      ]
+    },
+    {
+      "id": "G",
+      "title": "Linked checking APY boost qualification: Bluest Account checking plus Silver Account savings",
+      "included_fact_ids": [
+        "F010",
+        "F017",
+        "F030",
+        "F031"
+      ]
+    },
+    {
+      "id": "H",
+      "title": "Purple checking boost qualification and Platinum Plus credit card APY bonus table",
+      "included_fact_ids": [
+        "F010",
+        "F018",
+        "F030",
+        "F031",
+        "F287",
+        "F288",
+        "F289",
+        "F290",
+        "F291",
+        "F292",
+        "F293",
+        "F294",
+        "F295",
+        "F296"
+      ]
+    },
+    {
+      "id": "I",
+      "title": "Linked checking APY boost qualification: Gold Years Account checking plus Gold Plus Account savings",
+      "included_fact_ids": [
+        "F010",
+        "F019",
+        "F030",
+        "F031"
+      ]
+    },
+    {
+      "id": "J",
+      "title": "Linked checking APY boost qualification: Light Green Account checking plus Platinum Account savings",
+      "included_fact_ids": [
+        "F010",
+        "F020",
+        "F030",
+        "F031"
+      ]
+    },
+    {
+      "id": "K",
+      "title": "Linked checking APY boost qualification: Green Account checking plus Silver Account savings",
+      "included_fact_ids": [
+        "F010",
+        "F021",
+        "F030",
+        "F031"
+      ]
+    },
+    {
+      "id": "L",
+      "title": "Linked checking APY boost qualification: Evergreen Account checking plus Diamond Elite Account savings",
+      "included_fact_ids": [
+        "F010",
+        "F022",
+        "F030",
+        "F031"
+      ]
+    },
+    {
+      "id": "M",
+      "title": "Linked checking APY boost qualification: Bluest Account checking plus Bronze Account savings",
+      "included_fact_ids": [
+        "F010",
+        "F023",
+        "F030",
+        "F031"
+      ]
+    },
+    {
+      "id": "N",
+      "title": "Linked checking APY boost qualification: Purple Account checking plus Gold Account savings",
+      "included_fact_ids": [
+        "F010",
+        "F024",
+        "F030",
+        "F031"
+      ]
+    },
+    {
+      "id": "O",
+      "title": "Linked checking APY boost qualification: Gold Years Account checking plus Silver Account savings",
+      "included_fact_ids": [
+        "F010",
+        "F025",
+        "F030",
+        "F031"
+      ]
+    },
+    {
+      "id": "P",
+      "title": "Linked checking APY boost qualification: Blue Account checking plus Platinum Account savings",
+      "included_fact_ids": [
+        "F010",
+        "F026",
+        "F030",
+        "F031"
+      ]
+    },
+    {
+      "id": "Q",
+      "title": "Linked checking APY boost qualification: Green Fee-Free Account checking plus Gold Plus Account savings",
+      "included_fact_ids": [
+        "F010",
+        "F027",
+        "F030",
+        "F031"
+      ]
+    },
+    {
+      "id": "R",
+      "title": "Linked checking APY boost qualification: Dark Green Account checking plus Platinum Plus Account savings and non-listed pairing exclusion",
+      "included_fact_ids": [
+        "F010",
+        "F028",
+        "F029",
+        "F030",
+        "F031"
+      ]
+    },
+    {
+      "id": "S",
+      "title": "Multiple checking account APY boost selection and wrong-checking interest correction",
+      "included_fact_ids": [
+        "F011",
+        "F024",
+        "F032",
+        "F033",
+        "F034",
+        "F035",
+        "F036",
+        "F037",
+        "F038",
+        "F039",
+        "F040",
+        "F041",
+        "F042",
+        "F283"
+      ]
+    },
+    {
+      "id": "T",
+      "title": "Interest correction and discrepancy report: missing linked checking APY boost",
+      "included_fact_ids": [
+        "F010",
+        "F029",
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F059",
+        "F060",
+        "F061",
+        "F062",
+        "F063",
+        "F064",
+        "F065",
+        "F066",
+        "F067",
+        "F068",
+        "F080",
+        "F081",
+        "F082",
+        "F086",
+        "F087",
+        "F088",
+        "F089",
+        "F090",
+        "F091",
+        "F092",
+        "F093",
+        "F094",
+        "F095",
+        "F096",
+        "F097",
+        "F098",
+        "F099"
+      ]
+    },
+    {
+      "id": "U",
+      "title": "Interest correction and discrepancy report: incorrect Silver Account tier rate",
+      "included_fact_ids": [
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F059",
+        "F060",
+        "F061",
+        "F062",
+        "F063",
+        "F064",
+        "F065",
+        "F066",
+        "F067",
+        "F068",
+        "F080",
+        "F081",
+        "F083",
+        "F086",
+        "F087",
+        "F088",
+        "F089",
+        "F090",
+        "F091",
+        "F092",
+        "F093",
+        "F094",
+        "F095",
+        "F096",
+        "F097",
+        "F098",
+        "F099",
+        "F130",
+        "F131",
+        "F132",
+        "F133",
+        "F134",
+        "F135",
+        "F136"
+      ]
+    },
+    {
+      "id": "V",
+      "title": "Interest correction and discrepancy report: missing relationship bonus",
+      "included_fact_ids": [
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F059",
+        "F060",
+        "F061",
+        "F062",
+        "F063",
+        "F064",
+        "F065",
+        "F066",
+        "F067",
+        "F068",
+        "F080",
+        "F081",
+        "F084",
+        "F086",
+        "F087",
+        "F088",
+        "F089",
+        "F090",
+        "F091",
+        "F092",
+        "F093",
+        "F094",
+        "F095",
+        "F096",
+        "F097",
+        "F098",
+        "F099",
+        "F121",
+        "F182",
+        "F187",
+        "F188"
+      ]
+    },
+    {
+      "id": "W",
+      "title": "Interest correction and discrepancy report: other system calculation error",
+      "included_fact_ids": [
+        "F050",
+        "F051",
+        "F052",
+        "F053",
+        "F054",
+        "F055",
+        "F056",
+        "F059",
+        "F060",
+        "F061",
+        "F062",
+        "F063",
+        "F064",
+        "F065",
+        "F066",
+        "F067",
+        "F068",
+        "F080",
+        "F081",
+        "F085",
+        "F086",
+        "F087",
+        "F088",
+        "F089",
+        "F090",
+        "F091",
+        "F092",
+        "F093",
+        "F094",
+        "F095",
+        "F096",
+        "F097",
+        "F098",
+        "F099"
+      ]
+    },
+    {
+      "id": "X",
+      "title": "Savings account credit: fee refund eligibility and procedure",
+      "included_fact_ids": [
+        "F050",
+        "F051",
+        "F057",
+        "F059",
+        "F060",
+        "F061",
+        "F062",
+        "F063",
+        "F064",
+        "F065",
+        "F066",
+        "F067"
+      ]
+    },
+    {
+      "id": "Y",
+      "title": "Savings account credit: goodwill credit eligibility and supervisor approval threshold",
+      "included_fact_ids": [
+        "F050",
+        "F051",
+        "F058",
+        "F059",
+        "F060",
+        "F061",
+        "F062",
+        "F063",
+        "F064",
+        "F065",
+        "F066",
+        "F067"
+      ]
+    },
+    {
+      "id": "Z",
+      "title": "Credit card APY bonus stacking and highest-bonus selection",
+      "included_fact_ids": [
+        "F110",
+        "F111",
+        "F112",
+        "F113",
+        "F114",
+        "F115",
+        "F116",
+        "F282"
+      ]
+    },
+    {
+      "id": "AA",
+      "title": "Silver Account linking, tiers, interest timing, tips, and credit card APY bonus table",
+      "included_fact_ids": [
+        "F017",
+        "F021",
+        "F025",
+        "F035",
+        "F120",
+        "F121",
+        "F122",
+        "F123",
+        "F124",
+        "F125",
+        "F126",
+        "F130",
+        "F131",
+        "F132",
+        "F133",
+        "F134",
+        "F135",
+        "F136",
+        "F137",
+        "F138",
+        "F140",
+        "F141",
+        "F142",
+        "F143",
+        "F144",
+        "F145",
+        "F146",
+        "F284",
+        "F285",
+        "F286"
+      ]
+    },
+    {
+      "id": "AB",
+      "title": "Green Account savings APY, eligibility, fees, environmental benefits, and credit card APY bonus table",
+      "included_fact_ids": [
+        "F110",
+        "F111",
+        "F116",
+        "F150",
+        "F151",
+        "F152",
+        "F153",
+        "F154",
+        "F155",
+        "F156",
+        "F157",
+        "F158",
+        "F159",
+        "F160",
+        "F161",
+        "F162",
+        "F163",
+        "F164",
+        "F165",
+        "F166",
+        "F167",
+        "F168"
+      ]
+    },
+    {
+      "id": "AC",
+      "title": "Gold Account benefits, relationship bonus, minimum balance override, and credit card APY bonus table",
+      "included_fact_ids": [
+        "F180",
+        "F181",
+        "F182",
+        "F183",
+        "F184",
+        "F185",
+        "F186",
+        "F187",
+        "F188",
+        "F189",
+        "F190",
+        "F191",
+        "F192",
+        "F193",
+        "F194",
+        "F195",
+        "F196",
+        "F197",
+        "F198",
+        "F199",
+        "F200",
+        "F201",
+        "F202",
+        "F203",
+        "F204",
+        "F110",
+        "F111",
+        "F116"
+      ]
+    },
+    {
+      "id": "AD",
+      "title": "Silver Plus Account credit card APY bonus qualification and bonus table",
+      "included_fact_ids": [
+        "F210",
+        "F211",
+        "F212",
+        "F213",
+        "F214",
+        "F215",
+        "F216",
+        "F217",
+        "F218",
+        "F219",
+        "F220",
+        "F221",
+        "F110",
+        "F111",
+        "F116"
+      ]
+    },
+    {
+      "id": "AE",
+      "title": "Gold Plus Account credit card APY bonus qualification and bonus table",
+      "included_fact_ids": [
+        "F230",
+        "F231",
+        "F232",
+        "F233",
+        "F234",
+        "F235",
+        "F236",
+        "F237",
+        "F238",
+        "F239",
+        "F240",
+        "F241",
+        "F110",
+        "F111",
+        "F116"
+      ]
+    },
+    {
+      "id": "AF",
+      "title": "Platinum Account credit card APY bonus qualification and bonus table",
+      "included_fact_ids": [
+        "F250",
+        "F251",
+        "F252",
+        "F253",
+        "F254",
+        "F255",
+        "F256",
+        "F257",
+        "F258",
+        "F259",
+        "F260",
+        "F261",
+        "F110",
+        "F111",
+        "F116"
+      ]
+    },
+    {
+      "id": "AG",
+      "title": "Diamond Elite Account credit card APY bonus qualification and bonus table",
+      "included_fact_ids": [
+        "F270",
+        "F271",
+        "F272",
+        "F273",
+        "F274",
+        "F275",
+        "F276",
+        "F277",
+        "F278",
+        "F279",
+        "F280",
+        "F281",
+        "F110",
+        "F111",
+        "F116"
+      ]
+    }
+  ],
+  "transformation_imports": [
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/savings_apy_boosts_interest_discrepancies/evidence_corpus_hard_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/savings_apy_boosts_interest_discrepancies/client_overlay_001/transformation_pack.json"
+    },
+    {
+      "path": "tau2/hyper/sops/banking_knowledge/sections/savings_apy_boosts_interest_discrepancies/client_overlay_deposit_services_001/transformation_pack.json"
+    }
+  ]
+}
