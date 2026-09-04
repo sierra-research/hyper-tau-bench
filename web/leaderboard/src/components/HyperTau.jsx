@@ -261,9 +261,6 @@ const HyperTau = () => {
         <p className="leaderboard-subtitle ht-subtitle">
           pronounced “hyper-tau-bench”
         </p>
-        <p className="leaderboard-subtitle ht-subtitle ht-links">
-          Coding harness × builder model configurations, each scored over the 53 release tasks in the sealed runner
-        </p>
 
         {loading ? (
           <div className="ht-loading">Loading leaderboard…</div>
