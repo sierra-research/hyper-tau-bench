@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-import { getViewFromPath, PAGE_META, REPO_URL, SITE_ORIGIN, VIEW_PATHS } from './routes'
+import { getViewFromPath, PAGE_META, pageUrl, REPO_URL, SITE_URL, stripBase, VIEW_PATHS, withBase } from './routes'
 import BuildTrajectories from './components/BuildTrajectories'
 import HyperTau from './components/HyperTau'
 
@@ -15,20 +15,23 @@ const setHeadContent = (selector, attr, value) => {
 const applyPageMeta = (view) => {
   const meta = PAGE_META[view]
   if (!meta) return
-  const url = `${SITE_ORIGIN}${VIEW_PATHS[view] || '/'}`
+  const url = pageUrl(view)
+  const image = `${SITE_URL}/og-image.png`
   document.title = meta.title
   setHeadContent('meta[name="description"]', 'content', meta.description)
   setHeadContent('link[rel="canonical"]', 'href', url)
   setHeadContent('meta[property="og:url"]', 'content', url)
   setHeadContent('meta[property="og:title"]', 'content', meta.title)
   setHeadContent('meta[property="og:description"]', 'content', meta.description)
+  setHeadContent('meta[property="og:image"]', 'content', image)
   setHeadContent('meta[name="twitter:title"]', 'content', meta.title)
   setHeadContent('meta[name="twitter:description"]', 'content', meta.description)
+  setHeadContent('meta[name="twitter:image"]', 'content', image)
 }
 
 function App() {
 
-  const [currentView, setCurrentView] = useState(() => getViewFromPath(window.location.pathname))
+  const [currentView, setCurrentView] = useState(() => getViewFromPath(stripBase(window.location.pathname)))
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   // Handle navigation with URL updates
@@ -39,8 +42,9 @@ function App() {
     if (!path) return
     // Preserve existing query params when already on the target path (the
     // visualizer keeps its state in the query string).
-    if (window.location.pathname !== path) {
-      window.history.pushState(null, '', path)
+    const target = withBase(path)
+    if (window.location.pathname !== target) {
+      window.history.pushState(null, '', target)
     }
     // If the view didn't change, React won't re-render anything, so without
     // this a nav click on the current page would visibly do nothing.
@@ -61,7 +65,7 @@ function App() {
   // Listen for browser back/forward button clicks and handle mobile menu
   useEffect(() => {
     const handlePopState = () => {
-      setCurrentView(getViewFromPath(window.location.pathname))
+      setCurrentView(getViewFromPath(stripBase(window.location.pathname)))
     }
 
     // Close mobile menu when clicking outside

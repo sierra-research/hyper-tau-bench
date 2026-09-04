@@ -44,10 +44,13 @@ See **[Submitting to the leaderboard](../../README.md#submitting-to-the-leaderbo
 
 ### Routing, Prerendering & SEO
 
-The site uses **path-based routing** (`/leaderboard`, `/blog`, …) driven by
-`src/routes.js` — the single source of truth for routes and per-page meta tags.
-Legacy hash URLs (`/#leaderboard?benchmark=voice`) are rewritten to paths by a
-shim in `index.html`, so old shared links keep working.
+The site uses **path-based routing** (`/`, `/trajectories`) driven by
+`src/routes.js` — the single source of truth for routes, per-page meta tags and
+**where the site is served**: `SITE_ORIGIN` + `SITE_BASE` feed the Vite base
+path, the router, the prerender step, `sitemap.xml`/`robots.txt` and the e2e
+suite. It is currently the GitHub Pages project URL
+(`https://sierra-research.github.io/hyper-tau-bench`); moving to the
+`hyper.taubench.com` custom domain is a two-value change in that file.
 
 At deploy time, `scripts/prerender.mjs` snapshots each route into its own
 static HTML file (real content + per-page `<title>`/OG tags for crawlers and

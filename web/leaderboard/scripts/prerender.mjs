@@ -12,6 +12,8 @@
 // per-route content guards, and write it to dist/<route>/index.html. The
 // original index.html is copied to 404.html first, so unknown paths still
 // boot the SPA (GitHub Pages serves 404.html for paths with no file).
+// dist/ is served under SITE_BASE (src/routes.js), exactly as GitHub Pages
+// serves a project site, so base-path mistakes fail here rather than live.
 //
 // The guards are load-bearing: the leaderboard fetches live submission data
 // while being snapshotted, and a network flake would otherwise deploy blank
@@ -26,7 +28,7 @@ import http from 'node:http'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { PAGE_META, ROUTES } from '../src/routes.js'
+import { PAGE_META, ROUTES, SITE_BASE, SITE_URL } from '../src/routes.js'
 
 const DIST = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../dist')
 const VIRTUAL_TIME_BUDGET_MS = 20000
@@ -61,16 +63,24 @@ const resolveFile = (urlPath) => {
   return fs.existsSync(filePath) && fs.statSync(filePath).isFile() ? filePath : null
 }
 
+// Served pathname → site-relative path, or null when outside SITE_BASE
+// (GitHub Pages serves a project site only under its repo path).
+const siteRelative = (pathname) => {
+  if (!SITE_BASE) return pathname
+  if (pathname === SITE_BASE) return '/'
+  return pathname.startsWith(`${SITE_BASE}/`) ? pathname.slice(SITE_BASE.length) : null
+}
+
 // Static server. `routeFallback` controls what happens for known-route paths
 // with no file on disk yet:
 //   true  → serve index.html (needed during the prerender pass itself)
 //   false → GitHub Pages semantics: 404.html with a 404 status
 const createServer = (routeFallback) =>
   http.createServer((req, res) => {
-    const urlPath = new URL(req.url, 'http://localhost').pathname
-    let filePath = resolveFile(urlPath)
+    const urlPath = siteRelative(new URL(req.url, 'http://localhost').pathname)
+    let filePath = urlPath ? resolveFile(urlPath) : null
 
-    if (!filePath && routeFallback && ROUTES[urlPath.replace(/\/$/, '') || '/']) {
+    if (!filePath && routeFallback && urlPath && ROUTES[urlPath.replace(/\/$/, '') || '/']) {
       filePath = path.join(DIST, 'index.html')
     }
 
@@ -153,7 +163,7 @@ const prerender = async () => {
   const snapshots = {}
   try {
     for (const route of Object.keys(ROUTES)) {
-      const url = `http://127.0.0.1:${port}${route}`
+      const url = `http://127.0.0.1:${port}${SITE_BASE}${route}`
       process.stdout.write(`prerendering ${route} ... `)
       let html = await dumpDom(chrome, url)
       if (!/^<!doctype html>/i.test(html)) html = `<!DOCTYPE html>\n${html}`
@@ -184,6 +194,15 @@ const prerender = async () => {
     fs.mkdirSync(path.dirname(outFile), { recursive: true })
     fs.writeFileSync(outFile, html)
   }
+
+  // sitemap.xml / robots.txt are generated here rather than kept in public/
+  // so they follow SITE_URL and the route table.
+  const urls = Object.keys(ROUTES).map((route) => `  <url><loc>${SITE_URL}${route}</loc></url>`)
+  fs.writeFileSync(
+    path.join(DIST, 'sitemap.xml'),
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`
+  )
+  fs.writeFileSync(path.join(DIST, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`)
   console.log(`\nPrerendered ${Object.keys(snapshots).length} routes into ${DIST}`)
 }
 

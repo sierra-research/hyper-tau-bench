@@ -181,7 +181,7 @@ Submissions go in by pull request. One submission is one **coding harness +
 Developer model** configuration evaluated on all 53 release tasks under the
 sealed runner — no task filtering, no self-reported local scores, and each
 task's `performance_profile` respected as shipped. Merged submissions appear
-on the public board at [hyper.taubench.com](https://hyper.taubench.com), which
+on the [public board](https://sierra-research.github.io/hyper-tau-bench/), which
 also hosts the build-trajectory visualizer.
 
 Add a directory under `web/leaderboard/public/hyper-submissions/` named

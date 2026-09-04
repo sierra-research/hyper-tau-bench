@@ -262,14 +262,7 @@ const HyperTau = () => {
           pronounced “hyper-tau-bench”
         </p>
         <p className="leaderboard-subtitle ht-subtitle ht-links">
-          Coding harness × builder model configurations, each scored over the{' '}
-          <a className="ht-repo-link" href={repoUrl('data/tau2/hyper/tasks', 'tree')} target="_blank" rel="noopener noreferrer">
-            53 release tasks
-          </a>{' '}
-          in the sealed runner ·{' '}
-          <a className="ht-repo-link" href={REPO_URL} target="_blank" rel="noopener noreferrer">
-            code &amp; data on GitHub
-          </a>
+          Coding harness × builder model configurations, each scored over the 53 release tasks in the sealed runner
         </p>
 
         {loading ? (

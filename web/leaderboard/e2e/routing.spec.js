@@ -1,14 +1,17 @@
 // Routing + prerendering behavior tests. Run against the prerendered dist/
 // served with GitHub Pages semantics (see playwright.config.js).
 import { expect, test } from '@playwright/test'
-import { REPO_URL } from '../src/routes.js'
+import { REPO_URL, SITE_BASE, SITE_URL } from '../src/routes.js'
+
+// Every request goes through the served base path, like on GitHub Pages.
+const at = (route) => `${SITE_BASE}${route}`
 
 // ---------------------------------------------------------------------------
 // Direct loads: every route serves a real page with its own title and content.
 // ---------------------------------------------------------------------------
 
 test('direct load: homepage is the τ^τ-bench leaderboard', async ({ page }) => {
-  await page.goto('/')
+  await page.goto(at('/'))
   await expect(page).toHaveTitle(/hyper-tau-bench/)
   // Reference (human performance) row + the six baseline developer rows.
   await expect(page.locator('.ht-table tbody tr')).toHaveCount(7)
@@ -18,7 +21,7 @@ test('direct load: homepage is the τ^τ-bench leaderboard', async ({ page }) =>
 })
 
 test('direct load: build trajectories', async ({ page }) => {
-  await page.goto('/trajectories')
+  await page.goto(at('/trajectories'))
   await expect(page).toHaveTitle(/Build Trajectories — τ\^τ-bench/)
   // Manifest loads and the first task's stream renders.
   await expect(page.locator('.bt-summary')).toBeVisible()
@@ -26,7 +29,7 @@ test('direct load: build trajectories', async ({ page }) => {
 })
 
 test('trajectories: task picker switches tasks', async ({ page }) => {
-  await page.goto('/trajectories')
+  await page.goto(at('/trajectories'))
   await expect(page.locator('.bt-summary')).toBeVisible()
   await page.locator('.bt-task-select').selectOption({ index: 1 })
   await expect(page.locator('.bt-slot-badge')).toHaveText(/Task 002/)
@@ -34,7 +37,7 @@ test('trajectories: task picker switches tasks', async ({ page }) => {
 })
 
 test('trajectories: output kit tab shows the submitted workspace', async ({ page }) => {
-  await page.goto('/trajectories')
+  await page.goto(at('/trajectories'))
   await expect(page.locator('.bt-summary')).toBeVisible()
   await page.locator('.bt-tab', { hasText: 'Output kit' }).click()
   // Kit loads: file tree with an active file, and its content in the viewer.
@@ -57,7 +60,7 @@ test('trajectories: output kit tab shows the submitted workspace', async ({ page
 // ---------------------------------------------------------------------------
 
 test('nav links switch between leaderboard and trajectories', async ({ page }) => {
-  await page.goto('/')
+  await page.goto(at('/'))
   await page.getByRole('button', { name: 'Trajectories' }).click()
   await expect(page).toHaveURL(/\/trajectories/)
   await expect(page).toHaveTitle(/Build Trajectories — τ\^τ-bench/)
@@ -68,14 +71,14 @@ test('nav links switch between leaderboard and trajectories', async ({ page }) =
 })
 
 test('nav has a button back to the main τ-bench site', async ({ page }) => {
-  await page.goto('/')
+  await page.goto(at('/'))
   const backLink = page.locator('.nav-taubench-btn')
   await expect(backLink).toBeVisible()
   await expect(backLink).toHaveAttribute('href', 'https://taubench.com')
 })
 
 test('nav and submission links point at the public repository', async ({ page }) => {
-  await page.goto('/')
+  await page.goto(at('/'))
   const repoLink = page.locator('.nav-github-btn')
   await expect(repoLink).toBeVisible()
   await expect(repoLink).toHaveAttribute('href', REPO_URL)
@@ -87,7 +90,7 @@ test('nav and submission links point at the public repository', async ({ page })
 })
 
 test('human chip toggles the easter-egg tooltip', async ({ page }) => {
-  await page.goto('/')
+  await page.goto(at('/'))
   const chip = page.locator('.ht-human-chip')
   await expect(chip).not.toHaveClass(/open/)
   await chip.click()
@@ -99,24 +102,38 @@ test('human chip toggles the easter-egg tooltip', async ({ page }) => {
 // ---------------------------------------------------------------------------
 
 test('prerendered homepage HTML contains leaderboard content and meta', async ({ request }) => {
-  const res = await request.get('/')
+  const res = await request.get(at('/'))
   expect(res.status()).toBe(200)
   const html = await res.text()
   expect(html).toContain('<title>τ^τ-bench Leaderboard (hyper-tau-bench)</title>')
   expect(html).toContain('Human performance')
   expect(html).toContain('property="og:title"')
-  expect(html).toContain('https://hyper.taubench.com/')
+  expect(html).toContain(`${SITE_URL}/`)
   expect(html).not.toContain('Loading leaderboard')
 })
 
 test('prerendered trajectories HTML contains content and meta', async ({ request }) => {
-  const res = await request.get('/trajectories')
+  const res = await request.get(at('/trajectories'))
   expect(res.status()).toBe(200)
   const html = await res.text()
   expect(html).toContain('<title>Build Trajectories — τ^τ-bench</title>')
-  expect(html).toContain('https://hyper.taubench.com/trajectories')
+  expect(html).toContain(`${SITE_URL}/trajectories`)
   expect(html).toContain('bt-stream')
   expect(html).not.toContain('Loading trajectories')
+})
+
+test('prerendered pages carry absolute og:image for link unfurls', async ({ request }) => {
+  const html = await (await request.get(at('/'))).text()
+  expect(html).toContain(`property="og:image" content="${SITE_URL}/og-image.png"`)
+  expect(html).not.toContain('__SITE_URL__')
+})
+
+test('sitemap and robots follow the served site URL', async ({ request }) => {
+  const sitemap = await (await request.get(at('/sitemap.xml'))).text()
+  expect(sitemap).toContain(`<loc>${SITE_URL}/</loc>`)
+  expect(sitemap).toContain(`<loc>${SITE_URL}/trajectories</loc>`)
+  const robots = await (await request.get(at('/robots.txt'))).text()
+  expect(robots).toContain(`Sitemap: ${SITE_URL}/sitemap.xml`)
 })
 
 // ---------------------------------------------------------------------------
@@ -124,7 +141,13 @@ test('prerendered trajectories HTML contains content and meta', async ({ request
 // ---------------------------------------------------------------------------
 
 test('unknown path returns 404 status but renders the leaderboard', async ({ page }) => {
-  const response = await page.goto('/definitely-not-a-page')
+  const response = await page.goto(at('/definitely-not-a-page'))
   expect(response.status()).toBe(404)
   await expect(page.locator('.ht-reference-row')).toBeVisible()
+})
+
+test('paths outside the site base are not served', async ({ request }) => {
+  test.skip(!SITE_BASE, 'served at a domain root')
+  const res = await request.get('/')
+  expect(res.status()).toBe(404)
 })

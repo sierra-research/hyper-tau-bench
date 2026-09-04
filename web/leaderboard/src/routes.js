@@ -9,7 +9,23 @@
 // home page IS the leaderboard; the main τ-bench site lives separately at
 // https://taubench.com and the nav links back to it.
 
-export const SITE_ORIGIN = 'https://hyper.taubench.com'
+// Where the site is served. INTERIM: the GitHub Pages project URL, until the
+// hyper.taubench.com custom domain is configured. To move to the custom
+// domain, set SITE_ORIGIN = 'https://hyper.taubench.com' and SITE_BASE = ''
+// (and repoint the board links in the root README and pyproject Homepage).
+// The Vite base path, the router, the prerender step, sitemap/robots and the
+// e2e suite all derive their URLs from these two values.
+export const SITE_ORIGIN = 'https://sierra-research.github.io'
+export const SITE_BASE = '/hyper-tau-bench'
+// Absolute URL of the site root, no trailing slash.
+export const SITE_URL = `${SITE_ORIGIN}${SITE_BASE}`
+
+// Site-relative path ('/trajectories') ↔ served pathname under SITE_BASE.
+export const withBase = (path) => `${SITE_BASE}${path}`
+export const stripBase = (pathname) =>
+  SITE_BASE && (pathname === SITE_BASE || pathname.startsWith(`${SITE_BASE}/`))
+    ? pathname.slice(SITE_BASE.length) || '/'
+    : pathname
 
 // The public τ^τ-bench repository. Every "view on GitHub" link on the site
 // (nav button, submission guidelines, per-row submission files, task JSONs on
@@ -54,3 +70,6 @@ const stripTrailingSlash = (p) => (p.length > 1 && p.endsWith('/') ? p.slice(0, 
 
 // Resolve a pathname to a view; unknown paths render the leaderboard (home).
 export const getViewFromPath = (pathname) => ROUTES[stripTrailingSlash(pathname)] || 'hyper-tau'
+
+// Absolute URL of a view (canonical / og:url).
+export const pageUrl = (view) => `${SITE_URL}${VIEW_PATHS[view] || '/'}`
