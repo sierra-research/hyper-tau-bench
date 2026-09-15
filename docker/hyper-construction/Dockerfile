@@ -6,6 +6,10 @@ ARG TAU2_SOURCE_REVISION=unknown
 ARG CODEX_VERSION=0.144.6
 ARG CLAUDE_CODE_VERSION=2.1.219
 ARG OPENCODE_VERSION=1.18.23
+ARG PRIME_AGENT_VERSION=0.9.4
+# sha256 of https://app.primeintellect.ai/prime-agent/install.sh as vendored
+# on 2026-09-14. Bump alongside PRIME_AGENT_VERSION after re-reading the script.
+ARG PRIME_AGENT_INSTALLER_SHA256=2c69399203bf7a6fbcf0b3ee9a210ee30cf11a6f974137de9253119e218829e7
 
 LABEL org.opencontainers.image.revision="${TAU2_SOURCE_REVISION}"
 
@@ -65,10 +69,20 @@ RUN git config --system init.defaultBranch main \
     && git config --system user.email "developer@workspace.local" \
     && git config --system --add safe.directory /workspace
 
-# Prime Agent ships through its versioned install script (sha256-verified
-# release download). The script must leave `prime-agent` on PATH; the
-# version-check RUN at the bottom fails the build visibly if it does not.
-RUN curl -fsSL https://app.primeintellect.ai/prime-agent/install.sh | sh \
+# Prime Agent ships through its install script, which downloads a release
+# tarball from Prime's bucket and checks it against a SHA256SUMS file in the
+# same bucket. Two things are pinned here so the image is reproducible like
+# the npm-installed harnesses above: the installer script itself (verified
+# against PRIME_AGENT_INSTALLER_SHA256 before it runs) and the release it
+# installs (PRIME_AGENT_VERSION, instead of whatever the "stable" channel
+# file resolves to at build time). The script must leave `prime-agent` on
+# PATH; the version-check RUN at the bottom fails the build visibly if not.
+RUN curl -fsSL https://app.primeintellect.ai/prime-agent/install.sh \
+        -o /tmp/prime-agent-install.sh \
+    && echo "${PRIME_AGENT_INSTALLER_SHA256}  /tmp/prime-agent-install.sh" \
+        | sha256sum -c - \
+    && PRIME_AGENT_VERSION="${PRIME_AGENT_VERSION}" sh /tmp/prime-agent-install.sh \
+    && rm -f /tmp/prime-agent-install.sh \
     && { command -v prime-agent \
          || ln -s "$(find /root -maxdepth 4 -name prime-agent -type f \
                      2>/dev/null | head -1)" /usr/local/bin/prime-agent; }
