@@ -31,7 +31,7 @@ from typing import Any, Iterable, Mapping, Optional
 ROUTING_PATH_ENV = "TAU2_MODEL_ROUTING"
 ROUTING_FILENAME = "model_routing.toml"
 
-WIRE_FORMATS = ("openai", "anthropic", "google")
+WIRE_FORMATS = ("openai", "anthropic", "google", "bob")
 API_MODES = ("auto", "chat", "responses")
 
 # Providers the code knows how to reach without any manifest entry. A manifest

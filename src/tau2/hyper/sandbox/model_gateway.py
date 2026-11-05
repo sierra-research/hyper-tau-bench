@@ -48,7 +48,10 @@ _PROVIDER_WIRE = {
     "anthropic": "anthropic",
     "openrouter": "openai",
 }
-_GATEWAY_WIRES = ("openai", "anthropic")
+# ``bob`` is IBM Bob Shell's own gateway wire: ``Authorization: apikey …``, a
+# profile read and the inference surface below ``/inference/v1``; the model is
+# the harness's own choice, so nothing is model-scoped on it.
+_GATEWAY_WIRES = ("openai", "anthropic", "bob")
 
 
 def _wire_for(provider: str) -> str:
@@ -100,6 +103,13 @@ def _allowed_upstream_path(provider: str, method: str, path: str) -> bool:
     if parts[0] == "models":
         return method == "GET"
     wire = _wire_for(provider)
+    if wire == "bob":
+        if parts == ["admin", "v1", "profile"]:
+            return method == "GET"
+        return parts[:2] == ["inference", "v1"] and len(parts) > 2 and method in {
+            "GET",
+            "POST",
+        }
     if wire == "openai":
         # OpenRouter mirrors the OpenAI surface, including the Responses
         # API (which @ai-sdk/openai-based harnesses speak by default).
@@ -127,6 +137,7 @@ def _allowed_upstream_path(provider: str, method: str, path: str) -> bool:
 _MODEL_SCOPED_PATHS = {
     "openai": {"responses", "responses/compact", "chat/completions"},
     "anthropic": {"messages", "messages/count_tokens"},
+    "bob": set(),
 }
 
 
@@ -404,9 +415,11 @@ class ModelGatewayRequestHandler(BaseHTTPRequestHandler):
             return False
         authorization = self.headers.get("Authorization", "")
         bearer = authorization.removeprefix("Bearer ")
+        apikey = authorization.removeprefix("apikey ")
         api_key = self.headers.get("x-api-key", "")
         return bool(self.token) and (
             hmac.compare_digest(bearer, self.token)
+            or hmac.compare_digest(apikey, self.token)
             or hmac.compare_digest(api_key, self.token)
         )
 
@@ -470,7 +483,9 @@ class ModelGatewayRequestHandler(BaseHTTPRequestHandler):
             for key, value in self.headers.items()
             if key.lower() in _REQUEST_HEADERS or key.lower().startswith("x-stainless-")
         }
-        if self.wire == "openai":
+        if self.wire == "bob":
+            headers["Authorization"] = f"apikey {self.upstream_api_key}"
+        elif self.wire == "openai":
             headers["Authorization"] = f"Bearer {self.upstream_api_key}"
             if self.upstream_organization:
                 headers["OpenAI-Organization"] = self.upstream_organization
