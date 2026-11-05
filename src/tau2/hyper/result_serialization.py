@@ -51,3 +51,46 @@ def serialize_result_event(result: OuterLoopResult) -> dict[str, Any]:
         for step in result.steps
     ]
     return {"type": "result", "result": payload}
+
+
+def compact_run_result(
+    *,
+    task,
+    result: OuterLoopResult,
+    config: dict[str, Any],
+    recording_path,
+) -> dict[str, Any]:
+    """One run as a small record another system reads: identity, rewards, tasks.
+
+    The full event stream stays in the recording at ``recording_path``.
+    """
+    builder = (result.run_metadata or {}).get("builder") or {}
+    return {
+        "task_id": task.id,
+        "source_domain": task.source_domain,
+        "developer_harness": config.get("developer_harness"),
+        "developer_llm": config.get("developer_llm"),
+        "developer_llm_args": config.get("developer_llm_args") or {},
+        "developer_skills": list(config.get("developer_skills") or []),
+        "harness": builder.get("harness"),
+        "agent_llm": config.get("agent_llm"),
+        "user_llm": config.get("user_llm"),
+        "test_task_limit": config.get("test_task_limit", 0),
+        "final_test_reward": result.final_test_reward,
+        "final_quality_reward": result.final_quality_reward,
+        "performance_reward": result.performance_reward,
+        "performance_penalty": result.performance_penalty,
+        "build_result": (result.run_metadata or {}).get("build_result"),
+        "scoring": (result.run_metadata or {}).get("scoring"),
+        "test_details": [
+            {
+                "task_id": d.get("task_id"),
+                "reward": d.get("reward"),
+                "error": d.get("error"),
+                "agent_credit_usage": d.get("agent_credit_usage"),
+            }
+            for d in (result.test_details or [])
+        ],
+        "total_outer_steps": result.total_outer_steps,
+        "recording_path": str(recording_path),
+    }

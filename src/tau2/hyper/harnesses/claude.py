@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import re
+from pathlib import Path
 from typing import Any
 
 from tau2.hyper.sandbox.builder import BuildStep
@@ -11,6 +13,38 @@ from tau2.hyper.sandbox.native_builder import NativeSandboxBuilder
 from tau2.hyper.sandbox.native_runtime import NativeProcessEvent
 
 CLAUDE_CODE_HARNESS_VERSION = "2.1.219"
+
+# Skills a run hands the Developer ride as one plugin below the private runtime
+# home (never the kit): ``--plugin-dir`` loads it for the session, and the
+# harness's skills switch stays on for that run only.
+SKILLS_PLUGIN_NAME = "strata-skills"
+SKILLS_PLUGIN_PATH = f"/runtime-home/plugins/{SKILLS_PLUGIN_NAME}"
+_SKILL_NAME_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
+
+
+def load_skills_dir(skills_dir: str | Path) -> list[dict[str, str]]:
+    """Read ``<dir>/<name>/SKILL.md`` files: ``[{"name", "content"}]``, by name.
+
+    The directory name is the skill's name (a kebab-case slug); a child with no
+    SKILL.md is skipped. An empty directory is an error: a skills arm with no
+    skills is a misconfiguration, not the baseline.
+    """
+    root = Path(skills_dir)
+    if not root.is_dir():
+        raise FileNotFoundError(f"Skills directory not found: {root}")
+    skills: list[dict[str, str]] = []
+    for child in sorted(root.iterdir()):
+        skill_md = child / "SKILL.md"
+        if not child.is_dir() or not skill_md.is_file():
+            continue
+        if not _SKILL_NAME_RE.match(child.name):
+            raise ValueError(
+                f"Skill directory name must be a kebab-case slug: {child.name}"
+            )
+        skills.append({"name": child.name, "content": skill_md.read_text()})
+    if not skills:
+        raise ValueError(f"No <name>/SKILL.md below the skills directory: {root}")
+    return skills
 
 
 def _text_content(value: Any) -> str:
@@ -37,6 +71,7 @@ def _enabled_tools(
     include_client_tool: bool,
     include_live_experiment_tool: bool = False,
     include_sample_scenarios_tool: bool = False,
+    include_skill_tool: bool = False,
 ) -> list[str]:
     """Return the complete native tool allowlist for one task shape."""
     tools = [
@@ -56,6 +91,8 @@ def _enabled_tools(
         tools.append("mcp__hyper_tau__run_sample_scenarios")
     if include_client_tool:
         tools.append("mcp__hyper_tau__talk_to_client")
+    if include_skill_tool:
+        tools.append("Skill")
     return tools
 
 
@@ -68,11 +105,15 @@ class ClaudeCodeSandboxBuilder(NativeSandboxBuilder):
     runtime_config_path = "/runtime-home/.claude/settings.json"
     mcp_config_path = "/runtime-home/claude-mcp.json"
 
+    def __init__(self, llm: str, *, skills_dir: str | Path | None = None, **kwargs):
+        super().__init__(llm, **kwargs)
+        self.skills = load_skills_dir(skills_dir) if skills_dir is not None else []
+
     def harness_config_metadata(self) -> dict:
-        return {
+        metadata = {
             "interface": "print-stream-json",
             "permission_mode": "dontAsk-with-explicit-allowlist",
-            "bare_mode": True,
+            "bare_mode": not self.skills,
             "web_tools": "removed",
             "browser": False,
             "background_tasks": False,
@@ -85,6 +126,10 @@ class ClaudeCodeSandboxBuilder(NativeSandboxBuilder):
             "inner_bash_sandbox": "disabled/container-is-boundary",
             "mcp_servers": ["hyper_tau"],
         }
+        if self.skills:
+            metadata["skills"] = [skill["name"] for skill in self.skills]
+            metadata["skills_plugin"] = SKILLS_PLUGIN_NAME
+        return metadata
 
     def runtime_environment(self, broker) -> dict[str, str]:
         environment = super().runtime_environment(broker)
@@ -145,6 +190,7 @@ class ClaudeCodeSandboxBuilder(NativeSandboxBuilder):
             include_client_tool=include_client_tool,
             include_live_experiment_tool=include_live_experiment_tool,
             include_sample_scenarios_tool=include_sample_scenarios_tool,
+            include_skill_tool=bool(self.skills),
         )
         return json.dumps(
             {
@@ -174,7 +220,7 @@ class ClaudeCodeSandboxBuilder(NativeSandboxBuilder):
         include_live_experiment_tool: bool = False,
         include_sample_scenarios_tool: bool = False,
     ) -> dict[str, str]:
-        return {
+        files = {
             self.runtime_config_path: self.render_runtime_config(
                 include_client_tool=include_client_tool,
                 include_live_experiment_tool=include_live_experiment_tool,
@@ -210,19 +256,48 @@ class ClaudeCodeSandboxBuilder(NativeSandboxBuilder):
                 sort_keys=True,
             ),
         }
+        files.update(self.skills_plugin_files())
+        return files
+
+    def skills_plugin_files(self) -> dict[str, str]:
+        """The plugin that carries the run's skills: a manifest and one SKILL.md each."""
+        if not self.skills:
+            return {}
+        files = {
+            f"{SKILLS_PLUGIN_PATH}/.claude-plugin/plugin.json": json.dumps(
+                {
+                    "name": SKILLS_PLUGIN_NAME,
+                    "description": "Skills handed to the Developer for this run",
+                    "version": "0.0.0",
+                },
+                indent=2,
+                sort_keys=True,
+            )
+        }
+        for skill in self.skills:
+            files[f"{SKILLS_PLUGIN_PATH}/skills/{skill['name']}/SKILL.md"] = skill[
+                "content"
+            ]
+        return files
 
     def harness_command(self) -> list[str]:
         enabled_tools = _enabled_tools(
             include_client_tool=self._client_ctx is not None,
             include_live_experiment_tool=self._live_experiment_ctx is not None,
             include_sample_scenarios_tool=self._sample_scenarios_ctx is not None,
+            include_skill_tool=bool(self.skills),
         )
         enabled_tool_list = ",".join(enabled_tools)
 
+        # Claude Code 2.1.219 loads no skill under --bare, from a --plugin-dir or
+        # the home's skills directory alike (checked in the image: the model
+        # reports NONE with it and both skills without it). A skills run drops
+        # bare mode; the settings file still disables hooks, and the env keeps
+        # memory, updates and nonessential traffic off.
         command = [
             "claude",
             "--print",
-            "--bare",
+            *([] if self.skills else ["--bare"]),
             "--output-format",
             "stream-json",
             "--verbose",
@@ -251,9 +326,12 @@ class ClaudeCodeSandboxBuilder(NativeSandboxBuilder):
                 self.runtime_config_path,
                 "--no-session-persistence",
                 "--no-chrome",
-                "--disable-slash-commands",
             ]
         )
+        if self.skills:
+            command.extend(["--plugin-dir", SKILLS_PLUGIN_PATH])
+        else:
+            command.append("--disable-slash-commands")
         return command
 
     def normalize_event(self, event: NativeProcessEvent) -> list[BuildStep]:

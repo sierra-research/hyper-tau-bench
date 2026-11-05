@@ -217,3 +217,46 @@ def test_claude_stream_normalizes_text_tool_calls_and_results():
             "is_error": False,
         }
     ]
+
+
+def test_claude_skills_dir_rides_as_a_session_plugin(tmp_path):
+    skills = tmp_path / "skills"
+    (skills / "build-the-agent").mkdir(parents=True)
+    (skills / "build-the-agent" / "SKILL.md").write_text("---\nname: build-the-agent\n---\nbody\n")
+    (skills / "notes.txt").write_text("not a skill")
+
+    builder = ClaudeCodeSandboxBuilder("claude-sonnet-4-5", skills_dir=skills)
+    command = builder.harness_command()
+    files = builder.runtime_files(include_client_tool=False)
+    settings = json.loads(files[builder.runtime_config_path])
+
+    assert builder.harness_identity().config["skills"] == ["build-the-agent"]
+    assert builder.harness_identity().config["bare_mode"] is False
+    assert "--bare" not in command
+    assert "--disable-slash-commands" not in command
+    assert command[command.index("--plugin-dir") + 1] == "/runtime-home/plugins/strata-skills"
+    assert "Skill" in command[command.index("--tools") + 1].split(",")
+    assert "Skill" in settings["permissions"]["allow"]
+    manifest = json.loads(files["/runtime-home/plugins/strata-skills/.claude-plugin/plugin.json"])
+    assert manifest["name"] == "strata-skills"
+    assert files["/runtime-home/plugins/strata-skills/skills/build-the-agent/SKILL.md"].endswith("body\n")
+    # Every file stays below the private runtime home, never in the kit.
+    assert all(path.startswith("/runtime-home/") for path in files)
+
+
+def test_claude_without_skills_is_the_shipped_contract():
+    builder = ClaudeCodeSandboxBuilder("claude-sonnet-4-5")
+    command = builder.harness_command()
+
+    assert "--disable-slash-commands" in command
+    assert "--bare" in command
+    assert "--plugin-dir" not in command
+    assert "skills" not in builder.harness_identity().config
+    assert "Skill" not in command[command.index("--tools") + 1].split(",")
+
+
+def test_claude_empty_skills_dir_is_refused(tmp_path):
+    import pytest
+
+    with pytest.raises(ValueError):
+        ClaudeCodeSandboxBuilder("claude-sonnet-4-5", skills_dir=tmp_path)
