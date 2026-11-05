@@ -1134,6 +1134,58 @@ def main():
         default=False,
         help="Don't clean up the kit directory after sandbox mode finishes.",
     )
+    hyper_tau_parser.add_argument(
+        "--agent-models",
+        type=str,
+        default=None,
+        help=(
+            "Expose only these models of the task's menu to the constructed "
+            "agent (comma-separated ids, each one on the task's menu), in the "
+            "kit's manifest, local tests and the final scoring alike; the "
+            "tier's credit budget is unchanged. For a run whose keys do not "
+            "reach every provider on the menu. Not with --primary-model-only."
+        ),
+    )
+    hyper_tau_parser.add_argument(
+        "--test-tasks",
+        type=int,
+        default=0,
+        help=(
+            "Score the submission on the first N of the task's held-out test "
+            "tasks only (the task's order, so two runs under the same N score "
+            "the same conversations). Default: 0, the whole set. A limited "
+            "score is not comparable with the leaderboard."
+        ),
+    )
+    hyper_tau_parser.add_argument(
+        "--developer-skills-dir",
+        type=str,
+        default=None,
+        help=(
+            "A directory of skills (<name>/SKILL.md per child) the Developer "
+            "harness loads for this run, as a session plugin below its private "
+            "runtime home; the kit is untouched. Claude Code only."
+        ),
+    )
+    hyper_tau_parser.add_argument(
+        "--score-only",
+        action="store_true",
+        default=False,
+        help=(
+            "Score the kit at --kit-dir as it is: no kit build, no Developer. "
+            "For a re-score of a finished build (after a provider outage, say) "
+            "or a submission made elsewhere. Requires --kit-dir."
+        ),
+    )
+    hyper_tau_parser.add_argument(
+        "--result-json",
+        type=str,
+        default=None,
+        help=(
+            "Also write a compact result (task, harness, model, skills, the "
+            "rewards, each scored test task, the recording's path) to this file."
+        ),
+    )
     hyper_tau_parser.set_defaults(func=lambda args: run_hyper_tau(args))
 
     # Hyper-τ web app command
@@ -1538,6 +1590,27 @@ def _resolve_hyper_sandbox_limits(args, task) -> tuple[int, int]:
     return sandbox_steps, sandbox_timeout
 
 
+def _resolve_agent_models_override(args, task):
+    """The task's menu narrowed to the ids of ``--agent-models``, or None."""
+    raw = getattr(args, "agent_models", None)
+    if not raw:
+        return None
+    if getattr(args, "primary_model_only", False):
+        raise ValueError("--agent-models cannot be combined with --primary-model-only")
+    wanted = [item.strip() for item in raw.split(",") if item.strip()]
+    menu = list(task.allowed_agent_models or [])
+    by_id = {}
+    for config in menu:
+        by_id.setdefault(config.get("model"), []).append(config)
+    missing = [model for model in wanted if model not in by_id]
+    if missing:
+        raise ValueError(
+            f"--agent-models not on the task's menu: {missing}; the menu is "
+            f"{sorted(by_id)}"
+        )
+    return [config for model in wanted for config in by_id[model]]
+
+
 def _resolve_primary_model_override(args, task):
     """Resolve the optional primary-only model list for a sandbox run."""
     if not getattr(args, "primary_model_only", False):
@@ -1583,7 +1656,9 @@ def _run_hyper_tau_sandbox(args, task, console):
     from tau2.hyper.sandbox.orchestrator import SandboxOrchestrator
 
     try:
-        allowed_agent_models_override = _resolve_primary_model_override(args, task)
+        allowed_agent_models_override = _resolve_agent_models_override(
+            args, task
+        ) or _resolve_primary_model_override(args, task)
     except ValueError as error:
         console.print(f"[red]{error}[/red]")
         raise SystemExit(2) from error
@@ -1619,15 +1694,24 @@ def _run_hyper_tau_sandbox(args, task, console):
     )
 
     developer_harness = getattr(args, "developer_harness", DEFAULT_DEVELOPER_HARNESS)
-    builder = create_developer_builder(
-        developer_harness,
-        args.developer_llm,
-        developer_llm_args,
-        getattr(args, "developer_reasoning_effort", None),
-    )
+    try:
+        builder = create_developer_builder(
+            developer_harness,
+            args.developer_llm,
+            developer_llm_args,
+            getattr(args, "developer_reasoning_effort", None),
+            developer_skills_dir=getattr(args, "developer_skills_dir", None),
+        )
+    except (NotImplementedError, FileNotFoundError, ValueError) as error:
+        console.print(f"[red]{error}[/red]")
+        raise SystemExit(2) from error
 
     kit_dir = Path(args.kit_dir) if getattr(args, "kit_dir", None) else None
     keep_kit = getattr(args, "keep_kit", False)
+    score_only = bool(getattr(args, "score_only", False))
+    if score_only and (kit_dir is None or not (kit_dir / "workspace").is_dir()):
+        console.print("[red]--score-only needs --kit-dir pointing at a built kit (a workspace/ inside)[/red]")
+        raise SystemExit(2)
 
     # Reasoning validity depends on the model family, so build the Client's
     # args against the model the run will actually seat.
@@ -1650,6 +1734,8 @@ def _run_hyper_tau_sandbox(args, task, console):
         budget=budget,
         kit_dir=kit_dir,
         keep_kit=keep_kit,
+        test_task_limit=getattr(args, "test_tasks", 0) or 0,
+        score_only=score_only,
     )
 
     # Build display
@@ -1674,6 +1760,11 @@ def _run_hyper_tau_sandbox(args, task, console):
         "user_llm_args": orchestrator.user_llm_args,
         "legacy_sandbox_steps": sandbox_steps,
         "sandbox_wall_clock_seconds": sandbox_timeout,
+        "test_task_limit": orchestrator.test_task_limit,
+        "score_only": score_only,
+        "developer_skills": [
+            skill["name"] for skill in getattr(builder, "skills", []) or []
+        ],
     }
     recorder = RecordingDisplay(inner_display, task=task, config=run_config)
 
@@ -1684,6 +1775,24 @@ def _run_hyper_tau_sandbox(args, task, console):
     save_path = recorder.save(task=task, result=result, config=run_config)
     console.print(f"\n[dim]Saved recording to: {save_path}[/dim]")
     console.print(f"[dim]Final test reward: {result.final_test_reward:.3f}[/dim]")
+    result_json = getattr(args, "result_json", None)
+    if result_json:
+        from tau2.hyper.result_serialization import compact_run_result
+
+        out = Path(result_json)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(
+            json.dumps(
+                compact_run_result(
+                    task=task,
+                    result=result,
+                    config=run_config,
+                    recording_path=save_path,
+                ),
+                indent=2,
+            )
+        )
+        console.print(f"[dim]Wrote result to: {out}[/dim]")
 
 
 def run_hyper_tau_app(args):

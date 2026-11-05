@@ -60,35 +60,22 @@ RUN apt-get update \
         zip \
     && rm -rf /var/lib/apt/lists/*
 
+# IBM Bob Shell is not on public npm. A tarball in docker/hyper-construction/vendor/
+# (``npm pack`` of an installed bobshell; gitignored) is installed when present,
+# and the ``bob`` harness is refused at startup on an image built without one.
+COPY docker/hyper-construction/vendor/ /opt/vendor/
+RUN if ls /opt/vendor/bobshell-*.tgz >/dev/null 2>&1; then \
+        npm install --global /opt/vendor/bobshell-*.tgz && npm cache clean --force && bob --version; \
+    fi && rm -rf /opt/vendor
+
 RUN git config --system init.defaultBranch main \
     && git config --system user.name "Developer" \
     && git config --system user.email "developer@workspace.local" \
     && git config --system --add safe.directory /workspace
 
-# Prime Agent ships through its versioned install script (sha256-verified
-# release download). The script must leave `prime-agent` on PATH; the
-# version-check RUN at the bottom fails the build visibly if it does not.
-RUN curl -fsSL https://app.primeintellect.ai/prime-agent/install.sh | sh \
-    && { command -v prime-agent \
-         || ln -s "$(find /root -maxdepth 4 -name prime-agent -type f \
-                     2>/dev/null | head -1)" /usr/local/bin/prime-agent; }
-
-# Prime routes every tool (ipython, filesystem, shell, MCP) through a Python
-# kernel it normally bootstraps by downloading Python 3.11 + PyPI packages on
-# first use — impossible on the internal sandbox network. Pre-provision the
-# kernel venv here and point PRIME_AGENT_KERNEL_PYTHON at it (set by
-# PrimeAgentSandboxBuilder). Requirement list mirrors the pinned release's
-# bootstrapVenv: ipykernel + bundled prime-agent-runtime + dill (state
-# snapshots) + its default extra packages.
-RUN UV_PYTHON_INSTALL_DIR=/opt/uv-python uv python install 3.11 \
-    && UV_PYTHON_INSTALL_DIR=/opt/uv-python \
-       uv venv /opt/prime-kernel --python 3.11 --seed \
-    && uv pip install --python /opt/prime-kernel/bin/python \
-       ipykernel dill \
-       /usr/local/lib/node_modules/prime-agent/dist/prime-agent-runtime \
-       requests httpx pyyaml tomli python-dotenv pandas numpy scipy \
-       beautifulsoup4 lxml pydantic tyro \
-    && uv cache clean
+# Prime Agent is left out of this fork's image: its install script now lands in
+# ~/.local/share and no longer ships the prime-agent-runtime wheel the kernel venv
+# step installed. Codex, Claude Code and OpenCode stay.
 
 WORKDIR /opt/tau2
 
@@ -147,7 +134,6 @@ WORKDIR /workspace
 RUN codex --version \
     && claude --version \
     && opencode --version \
-    && prime-agent --version \
     && git --version \
     && rg --version \
     && tree --version \

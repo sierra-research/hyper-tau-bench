@@ -14,6 +14,7 @@ Manages the full lifecycle of a sandbox-mode evaluation:
 from __future__ import annotations
 
 import hashlib
+import time
 import os
 import shutil
 import subprocess
@@ -63,7 +64,7 @@ from tau2.hyper.runtime_contract import (
     CONSTRUCTION_RUNTIME_CONTRACT_VERSION,
     DEFAULT_CONSTRUCTION_RUNTIME_IMAGE,
 )
-from tau2.hyper.sandbox.builder import BuildBudget, SandboxBuilder
+from tau2.hyper.sandbox.builder import BuildBudget, BuildResult, SandboxBuilder
 from tau2.hyper.sandbox.kit import build_kit
 from tau2.hyper.sandbox.sealed_runner import (
     SealedCandidateEnvironment,
@@ -308,6 +309,47 @@ def _build_contamination_report(
     }
 
 
+def _with_transient_retries(call, *, what: str, attempts: int = 3, base_delay: float = 2.0):
+    """Run ``call`` again after a transient provider error (a 5xx, a rate limit, a
+    reset), as the inner loop does for its simulations: one such error before the
+    Developer has started must not end the run."""
+    from tau2.hyper._inner import _is_transient_provider_error
+
+    for attempt in range(1, attempts + 1):
+        try:
+            return call()
+        except Exception as error:  # noqa: BLE001 - classified below
+            if attempt == attempts or not _is_transient_provider_error(error):
+                raise
+            delay = base_delay * attempt
+            logger.warning(
+                f"Transient provider error on {what} (attempt {attempt} of "
+                f"{attempts}): {error}; retrying in {delay:.0f}s"
+            )
+            time.sleep(delay)
+    raise RuntimeError("unreachable")
+
+
+def _kit_baseline_commit(kit_path: Path) -> Optional[str]:
+    """The kit repository's first commit (the developer-visible baseline), if any."""
+    try:
+        out = subprocess.run(
+            ["git", "rev-list", "--max-parents=0", "HEAD"],
+            cwd=kit_path, capture_output=True, text=True, check=False,
+        )
+    except OSError:
+        return None
+    first = out.stdout.strip().splitlines()
+    return first[-1] if out.returncode == 0 and first else None
+
+
+def limit_test_task_ids(task_ids: list[str], limit: int) -> list[str]:
+    """The first ``limit`` held-out ids in the task's order; all of them for 0."""
+    if limit <= 0:
+        return list(task_ids)
+    return list(task_ids)[:limit]
+
+
 class SandboxOrchestrator:
     """Orchestrator for sandbox-mode Hyper-τ evaluations.
 
@@ -350,9 +392,15 @@ class SandboxOrchestrator:
         budget: Optional[BuildBudget] = None,
         kit_dir: Optional[Path] = None,
         keep_kit: bool = False,
+        test_task_limit: int = 0,
+        score_only: bool = False,
     ):
         self.task = task
         self.builder = builder
+        self.score_only = score_only
+        # 0 = the task's whole held-out set; N = its first N ids, in the task's
+        # order, so two runs under the same limit score the same conversations.
+        self.test_task_limit = test_task_limit
         self.client_llm = client_llm
         self.client_llm_args = client_llm_args
         self.agent_llm = agent_llm
@@ -383,6 +431,8 @@ class SandboxOrchestrator:
         budget: Optional[BuildBudget] = None,
         kit_dir: Optional[Path] = None,
         keep_kit: bool = False,
+        test_task_limit: int = 0,
+        score_only: bool = False,
     ) -> "SandboxOrchestrator":
         """Create a SandboxOrchestrator from a HyperTask.
 
@@ -492,6 +542,8 @@ class SandboxOrchestrator:
             budget=resolved_budget,
             kit_dir=kit_dir,
             keep_kit=keep_kit,
+            test_task_limit=test_task_limit,
+            score_only=score_only,
         )
 
     def _build_brief(self, client_opening: str) -> str:
@@ -648,98 +700,118 @@ class SandboxOrchestrator:
         self._deployment_snapshot = None
         self._sample_scenarios_ctx = None
 
-        # Phase 1: Build the kit
-        logger.info(f"Phase 1: Building kit at {kit_path}")
-        if display and hasattr(display, "show_task_info"):
-            display.show_task_info(
-                task=self.task,
-                domain=domain,
-                max_steps=self.budget.max_steps,
-            )
-
-        build_kit(
-            self.task,
-            kit_path,
-            allowed_agent_models=self.allowed_agent_models,
-        )
-        kit_baseline_commit = initialize_kit_repository(kit_path)
-
-        if self.task.live_experiment_task_ids:
-            self.builder.set_live_experiment_context(
-                LiveExperimentContext(
-                    lambda: self._run_live_experiment(kit_path),
-                    workspace_root=kit_path,
+        if self.score_only:
+            # The kit as it is: no kit build, no Developer. The run scores the
+            # submission in place (a re-score after a provider outage, or a
+            # submission from elsewhere).
+            logger.info(f"Score-only run: scoring the kit at {kit_path} as it is")
+            if display and hasattr(display, "show_task_info"):
+                display.show_task_info(
+                    task=self.task, domain=domain, max_steps=self.budget.max_steps
                 )
+            kit_baseline_commit = _kit_baseline_commit(kit_path)
+            build_result = BuildResult(
+                kit_path=kit_path,
+                builder_type=getattr(self.builder, "harness_name", ""),
+                submitted=True,
+                done_reason="score_only",
             )
-
-        if self.task.training_task_ids:
-            self._sample_scenarios_ctx = SampleScenariosContext(
-                lambda: self._run_sample_scenarios(kit_path)
-            )
-            self.builder.set_sample_scenarios_context(self._sample_scenarios_ctx)
-
-        if display and hasattr(display, "show_sandbox_phase"):
-            display.show_sandbox_phase(
-                "kit_build",
-                f"Kit ready at {kit_path}",
-            )
-
-        # Phase 1b: Set up Client simulator. Construction tasks run without
-        # a Client unless they opt in via client_sections (rendered Client
-        # knowledge from the section fact schemas) or hand-authored
-        # client_instructions.
-        if not self._client_enabled():
-            client_opening = ""
-            logger.info("Construction task — skipping Client initialization")
+            self._deployment_snapshot = empty_deployment_snapshot()
         else:
-            from tau2.hyper.client import (
-                ClientSimulator,
-                client_capability_control_tools,
+            # Phase 1: Build the kit
+            logger.info(f"Phase 1: Building kit at {kit_path}")
+            if display and hasattr(display, "show_task_info"):
+                display.show_task_info(
+                    task=self.task,
+                    domain=domain,
+                    max_steps=self.budget.max_steps,
+                )
+
+            build_kit(
+                self.task,
+                kit_path,
+                allowed_agent_models=self.allowed_agent_models,
             )
+            kit_baseline_commit = initialize_kit_repository(kit_path)
 
-            profile = self._client_api_defect_profile()
-            client = ClientSimulator(
-                llm=self.client_llm,
-                client_instructions=self._resolve_client_instructions(),
-                llm_args=self.client_llm_args,
-                tools=(
-                    client_capability_control_tools()
-                    if profile is not None and profile.capabilities
-                    else None
-                ),
+            if self.task.live_experiment_task_ids:
+                self.builder.set_live_experiment_context(
+                    LiveExperimentContext(
+                        lambda: self._run_live_experiment(kit_path),
+                        workspace_root=kit_path,
+                    )
+                )
+
+            if self.task.training_task_ids:
+                self._sample_scenarios_ctx = SampleScenariosContext(
+                    lambda: self._run_sample_scenarios(kit_path)
+                )
+                self.builder.set_sample_scenarios_context(self._sample_scenarios_ctx)
+
+            if display and hasattr(display, "show_sandbox_phase"):
+                display.show_sandbox_phase(
+                    "kit_build",
+                    f"Kit ready at {kit_path}",
+                )
+
+            # Phase 1b: Set up Client simulator. Construction tasks run without
+            # a Client unless they opt in via client_sections (rendered Client
+            # knowledge from the section fact schemas) or hand-authored
+            # client_instructions.
+            if not self._client_enabled():
+                client_opening = ""
+                logger.info("Construction task — skipping Client initialization")
+            else:
+                from tau2.hyper.client import (
+                    ClientSimulator,
+                    client_capability_control_tools,
+                )
+
+                profile = self._client_api_defect_profile()
+                client = ClientSimulator(
+                    llm=self.client_llm,
+                    client_instructions=self._resolve_client_instructions(),
+                    llm_args=self.client_llm_args,
+                    tools=(
+                        client_capability_control_tools()
+                        if profile is not None and profile.capabilities
+                        else None
+                    ),
+                )
+                client_brief_msg, client_state = _with_transient_retries(
+                    client.generate_initial_brief, what="the Client's opening brief"
+                )
+                client_opening = client_brief_msg.content or ""
+
+                if display and hasattr(display, "show_client_message"):
+                    display.show_client_message(client_opening)
+
+                if profile is not None and profile.capabilities:
+                    self._capability_session = CapabilityDeploymentSession(profile)
+                self._client_context = ClientContext(
+                    client=client,
+                    client_state=client_state,
+                    deployment_manifest_id=(
+                        profile.manifest_id if profile is not None else None
+                    ),
+                    deployment_manifest_sha256=(
+                        profile.manifest_sha256 if profile is not None else None
+                    ),
+                    capability_session=self._capability_session,
+                )
+                self.builder.set_client_context(self._client_context)
+
+            # Phase 2: Run the builder
+            logger.info("Phase 2: Running sandbox builder")
+            self._apply_sandbox_config_to_builder()
+
+            brief = self._build_brief(client_opening)
+            build_result = self.builder.build(kit_path, brief, self.budget, display=display)
+            self._deployment_snapshot = (
+                self._capability_session.seal()
+                if self._capability_session is not None
+                else empty_deployment_snapshot()
             )
-            client_brief_msg, client_state = client.generate_initial_brief()
-            client_opening = client_brief_msg.content or ""
-
-            if display and hasattr(display, "show_client_message"):
-                display.show_client_message(client_opening)
-
-            if profile is not None and profile.capabilities:
-                self._capability_session = CapabilityDeploymentSession(profile)
-            self._client_context = ClientContext(
-                client=client,
-                client_state=client_state,
-                deployment_manifest_id=(
-                    profile.manifest_id if profile is not None else None
-                ),
-                deployment_manifest_sha256=(
-                    profile.manifest_sha256 if profile is not None else None
-                ),
-                capability_session=self._capability_session,
-            )
-            self.builder.set_client_context(self._client_context)
-
-        # Phase 2: Run the builder
-        logger.info("Phase 2: Running sandbox builder")
-        self._apply_sandbox_config_to_builder()
-
-        brief = self._build_brief(client_opening)
-        build_result = self.builder.build(kit_path, brief, self.budget, display=display)
-        self._deployment_snapshot = (
-            self._capability_session.seal()
-            if self._capability_session is not None
-            else empty_deployment_snapshot()
-        )
 
         logger.info(
             f"Builder finished: {build_result.done_reason}, "
@@ -853,6 +925,12 @@ class SandboxOrchestrator:
                 "user_llm_args": self.user_llm_args or {},
             },
             "sandbox_config": dict(self.task.hyper.sandbox_config or {}),
+            "scoring": {
+                "score_only": self.score_only,
+                "test_task_limit": self.test_task_limit,
+                "test_task_count": len(test_tasks),
+                "task_test_task_count": len(self.task.test_task_ids),
+            },
             "build_result": {
                 "submitted": build_result.submitted,
                 "done_reason": build_result.done_reason,
@@ -1007,7 +1085,9 @@ class SandboxOrchestrator:
         inner-loop tasks file, otherwise falls back to the domain's
         standard task set.
         """
-        return self._load_inner_tasks(self.task.test_task_ids)
+        return self._load_inner_tasks(
+            limit_test_task_ids(self.task.test_task_ids, self.test_task_limit)
+        )
 
     def _load_inner_tasks(self, task_ids: list[str]) -> list[Task]:
         """Load one task partition through the task's configured source."""
