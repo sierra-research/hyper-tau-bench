@@ -82,6 +82,9 @@ _REQUEST_HEADERS = {
     "tracestate",
     "user-agent",
     "x-client-request-id",
+    # IBM Bob Shell names its subscription instance and team on every call.
+    "x-instance-id",
+    "x-team-id",
 }
 
 
@@ -149,6 +152,28 @@ def _model_in_scope(provider: str, path: str, body: bytes, model: str) -> bool:
         return json.loads(body).get("model") == model
     except (AttributeError, json.JSONDecodeError):
         return False
+
+
+def _pin_bob_profile_to_gateway(body: bytes) -> bytes:
+    """Keep Bob Shell's inference calls on the sidecar.
+
+    After ``GET /admin/v1/profile`` Bob Shell swaps the host of its gateway URL
+    for ``api.<region_domain>`` of the active instance (scheme, port and path
+    kept), which on the sandbox's internal network resolves nowhere. Without
+    the field Bob keeps the URL it was given, so the sidecar drops it from
+    every instance of the profile it relays.
+    """
+    try:
+        profile = json.loads(body)
+    except json.JSONDecodeError:
+        return body
+    instances = profile.get("instances") if isinstance(profile, dict) else None
+    if not isinstance(instances, list):
+        return body
+    for instance in instances:
+        if isinstance(instance, dict):
+            instance.pop("region_domain", None)
+    return json.dumps(profile, separators=(",", ":")).encode()
 
 
 def _drop_orphan_tool_outputs(payload: dict) -> None:
@@ -362,6 +387,7 @@ class ModelGatewaySpec:
         }.get(self.provider) or {
             "openai": ["responses", "chat/completions", "models"],
             "anthropic": ["messages", "messages/count_tokens", "models"],
+            "bob": ["admin/v1/profile", "inference/v1"],
         }[self.resolved_wire]
         return {
             "protocol_version": MODEL_GATEWAY_PROTOCOL_VERSION,
@@ -505,16 +531,35 @@ class ModelGatewayRequestHandler(BaseHTTPRequestHandler):
                 content=body,
             )
             with _streaming_response(self.client, request) as response:
+                rewrite_profile = (
+                    self.wire == "bob"
+                    and upstream_path == "admin/v1/profile"
+                    and response.status_code == 200
+                )
+                profile_body = (
+                    _pin_bob_profile_to_gateway(response.read())
+                    if rewrite_profile
+                    else None
+                )
                 self.send_response(response.status_code)
                 response_started = True
                 for key, value in response.headers.items():
-                    if key.lower() not in _HOP_BY_HOP_HEADERS:
-                        self.send_header(key, value)
+                    if key.lower() in _HOP_BY_HOP_HEADERS:
+                        continue
+                    if profile_body is not None and key.lower() == "content-encoding":
+                        continue
+                    self.send_header(key, value)
+                if profile_body is not None:
+                    self.send_header("Content-Length", str(len(profile_body)))
                 self.send_header("Connection", "close")
                 self.end_headers()
-                for chunk in response.iter_raw():
-                    self.wfile.write(chunk)
+                if profile_body is not None:
+                    self.wfile.write(profile_body)
                     self.wfile.flush()
+                else:
+                    for chunk in response.iter_raw():
+                        self.wfile.write(chunk)
+                        self.wfile.flush()
         except httpx.HTTPError as exc:
             if not response_started and not self.wfile.closed:
                 try:
