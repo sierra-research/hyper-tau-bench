@@ -72,6 +72,34 @@ npm run serve:dist     # serve dist/ with GitHub Pages semantics on :4173
 npm run test:e2e       # run the Playwright suite against it
 ```
 
+### Deep links
+
+`/trajectories?slot=<slot>&view=trajectory|kit&eval=<held-out task id>` opens one build on
+one tab with that held-out conversation highlighted in the eval strip (and named in a
+chip in the build's summary). The picker and the tabs write `slot` and `view` back, so
+the address bar is always a link to what is on screen. Strata's Evaluations page links
+each cell of a construction run here.
+
+### Serving the site with a store of builds (Strata's `hyper-tau` service)
+
+`server.mjs` serves `dist/` under `SITE_BASE` (default `/hyper-tau`) and keeps a data
+directory of builds that overlay `public/build-trajectories/`:
+`PUT <SITE_BASE>/build-trajectories/<slot>` with `{row, trajectory, kit}` — the three
+files `scripts/recording-to-trajectory.py … --no-manifest` writes for a run — stores the
+build and adds its row to the manifest, so the visualizer lists it beside the board's
+own. `Dockerfile` (built from the repository root) packages the two, with the site built
+for `SITE_BASE`; Strata's compose files and Helm chart build it at a pinned commit and its
+gateway proxies `/hyper-tau/*` to it. The site's origin and base are build-time values:
+`VITE_SITE_ORIGIN` and `VITE_SITE_BASE` (see `src/routes.js`).
+
+```bash
+npm run build                                                   # with VITE_SITE_BASE=/hyper-tau for the served path
+PORT=8001 SITE_BASE=/hyper-tau DATA_DIR=./data node server.mjs
+python3 scripts/recording-to-trajectory.py <recording.json> <result.json> <kit>/workspace ./out <slot> "<label>" --no-manifest
+curl -X PUT localhost:8001/hyper-tau/build-trajectories/<slot> -H 'content-type: application/json' \
+  --data-binary "$(jq -n --slurpfile r out/rel<slot>.row.json --slurpfile t out/rel<slot>.json --slurpfile k out/rel<slot>.kit.json '{row:$r[0],trajectory:$t[0],kit:$k[0]}')"
+```
+
 ### Project Structure
 ```
 src/

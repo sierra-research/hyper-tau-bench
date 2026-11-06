@@ -36,6 +36,17 @@ test('trajectories: task picker switches tasks', async ({ page }) => {
   await expect(page.locator('.bt-stream .bt-item').first()).toBeVisible()
 })
 
+test('trajectories: a deep link opens the build, the tab and the held-out conversation', async ({ page }) => {
+  await page.goto(at('/trajectories?slot=002&view=kit&eval=3'))
+  await expect(page.locator('.bt-slot-badge')).toHaveText(/Task 002/)
+  await expect(page.locator('.bt-tab.active')).toHaveText(/Output kit/)
+  await expect(page.locator('.bt-eval-chip')).toHaveText(/held-out conversation 3/)
+  await expect(page.locator('.bt-eval-cell.hit')).toHaveCount(1)
+  // The picker writes the slot back, so the address is always a link to what is on screen.
+  await page.locator('.bt-task-select').selectOption({ index: 2 })
+  await expect(page).toHaveURL(/slot=003/)
+})
+
 test('trajectories: output kit tab shows the submitted workspace', async ({ page }) => {
   await page.goto(at('/trajectories'))
   await expect(page.locator('.bt-summary')).toBeVisible()

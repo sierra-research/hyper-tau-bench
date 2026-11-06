@@ -15,8 +15,15 @@
 // (and repoint the board links in the root README and pyproject Homepage).
 // The Vite base path, the router, the prerender step, sitemap/robots and the
 // e2e suite all derive their URLs from these two values.
-export const SITE_ORIGIN = 'https://sierra-research.github.io'
-export const SITE_BASE = '/hyper-tau-bench'
+// A deployment that serves the site elsewhere sets both at build time: VITE_SITE_ORIGIN and
+// VITE_SITE_BASE (Strata's stack builds it with VITE_SITE_BASE=/hyper-tau, the path its
+// gateway proxies to the `hyper-tau` service; see Dockerfile and server.mjs beside this
+// directory). Read from import.meta.env in the browser and from process.env in plain Node
+// (the Vite config, the prerender step, the e2e suite), so one value reaches every reader.
+/* global process */
+const env = import.meta.env ?? process.env
+export const SITE_ORIGIN = env.VITE_SITE_ORIGIN || 'https://sierra-research.github.io'
+export const SITE_BASE = env.VITE_SITE_BASE ?? '/hyper-tau-bench'
 // Absolute URL of the site root, no trailing slash.
 export const SITE_URL = `${SITE_ORIGIN}${SITE_BASE}`
 

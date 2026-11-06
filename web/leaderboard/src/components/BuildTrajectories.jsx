@@ -256,15 +256,37 @@ function KitView({ kit, loading, error }) {
 
 const CHUNK = 250
 
+// Deep links into one build — ?slot=<slot>&view=trajectory|kit&eval=<held-out task id> —
+// so another page (Strata's Evaluations row links each of its cells here) opens the build,
+// the tab and the held-out conversation it means. The query is read once at mount, and
+// the slot and the tab are written back as the picker and the tabs change, so the
+// address bar is always a link to what is on screen.
+const readQuery = () => {
+  const q = new URLSearchParams(window.location.search)
+  return { slot: q.get('slot'), view: q.get('view') === 'kit' ? 'kit' : 'trajectory', evalId: q.get('eval') }
+}
+const writeQuery = (slot, view) => {
+  const q = new URLSearchParams(window.location.search)
+  if (slot) q.set('slot', slot)
+  else q.delete('slot')
+  if (view === 'kit') q.set('view', 'kit')
+  else q.delete('view')
+  const search = q.toString()
+  const target = `${window.location.pathname}${search ? `?${search}` : ''}`
+  if (`${window.location.pathname}${window.location.search}` !== target) window.history.replaceState(null, '', target)
+}
+
 function BuildTrajectories() {
+  const [query] = useState(readQuery)
+  const evalId = query.evalId
   const [manifest, setManifest] = useState(null)
   const [error, setError] = useState(null)
   const [domainFilter, setDomainFilter] = useState('all')
-  const [slot, setSlot] = useState(null)
+  const [slot, setSlot] = useState(query.slot)
   const [traj, setTraj] = useState(null)
   const [trajLoading, setTrajLoading] = useState(false)
   const [visible, setVisible] = useState(CHUNK)
-  const [view, setView] = useState('trajectory')
+  const [view, setView] = useState(query.view)
   const [kit, setKit] = useState(null)
   const [kitLoading, setKitLoading] = useState(false)
   const [kitError, setKitError] = useState(null)
@@ -277,7 +299,8 @@ function BuildTrajectories() {
       })
       .then((m) => {
         setManifest(m)
-        if (m.tasks?.length) setSlot(m.tasks[0].slot)
+        // A deep-linked slot the manifest has stays; anything else starts at the first build.
+        if (m.tasks?.length) setSlot((s) => (s && m.tasks.some((t) => t.slot === s) ? s : m.tasks[0].slot))
       })
       .catch((e) => setError(String(e)))
   }, [])
@@ -293,6 +316,11 @@ function BuildTrajectories() {
   useEffect(() => {
     if (tasks.length && !tasks.some((t) => t.slot === slot)) setSlot(tasks[0].slot)
   }, [tasks, slot])
+
+  // The address bar follows the build and the tab on screen.
+  useEffect(() => {
+    if (slot) writeQuery(slot, view)
+  }, [slot, view])
 
   useEffect(() => {
     if (!manifest || !slot) return
@@ -429,6 +457,11 @@ function BuildTrajectories() {
               <span className="bt-slot-badge">Task {current.slot}</span>
               <span className="retrieval-badge">{dom.icon} {dom.label}</span>
               <span className="retrieval-badge">🛠️ {current.builder_label}</span>
+              {evalId !== null && traj?.eval_tasks?.some(([id]) => id === evalId) && (
+                <span className={`retrieval-badge bt-eval-chip ${traj.eval_tasks.find(([id]) => id === evalId)[1] === 1 ? 'pass' : 'fail'}`}>
+                  held-out conversation {evalId} · {traj.eval_tasks.find(([id]) => id === evalId)[1] === 1 ? 'passed' : 'failed'}
+                </span>
+              )}
               <span className="bt-summary-links">
                 <a
                   className="ht-repo-link"
@@ -523,7 +556,7 @@ function BuildTrajectories() {
                 </button>
               </div>
             )}
-            {traj.eval_tasks?.length > 0 && visible >= items.length && (
+            {traj.eval_tasks?.length > 0 && (visible >= items.length || evalId !== null) && (
               <div className="bt-eval">
                 <div className="bt-eval-head">
                   Held-out evaluation: {traj.result.eval_passed} of {traj.result.eval_total} tasks
@@ -533,8 +566,8 @@ function BuildTrajectories() {
                   {traj.eval_tasks.map(([id, reward]) => (
                     <span
                       key={id}
-                      className={`bt-eval-cell ${reward === 1 ? 'pass' : reward > 0 ? 'partial' : 'fail'}`}
-                      title={`eval task ${id}: reward ${reward}`}
+                      className={`bt-eval-cell ${reward === 1 ? 'pass' : reward > 0 ? 'partial' : 'fail'}${id === evalId ? ' hit' : ''}`}
+                      title={`held-out conversation ${id}: reward ${reward}`}
                     />
                   ))}
                 </div>
