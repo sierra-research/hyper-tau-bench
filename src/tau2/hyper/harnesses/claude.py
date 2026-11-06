@@ -16,14 +16,39 @@ CLAUDE_CODE_HARNESS_VERSION = "2.1.219"
 
 # Skills a run hands the Developer ride as one plugin below the private runtime
 # home (never the kit): ``--plugin-dir`` loads it for the session, and the
-# harness's skills switch stays on for that run only.
+# harness's skills switch stays on for that run only. A CLAUDE.md beside it, the
+# user-level file Claude Code puts in every session's context (a `# claudeMd`
+# system reminder in the first user message, carried by every later call), tells
+# the Developer to load each skill with the Skill tool before it reads the kit: a
+# skill that is only described is never read (the first runs showed it), and a
+# skill that is never read measures nothing.
 SKILLS_PLUGIN_NAME = "strata-skills"
 SKILLS_PLUGIN_PATH = f"/runtime-home/plugins/{SKILLS_PLUGIN_NAME}"
+SKILLS_DIRECTIVE_PATH = "/runtime-home/.claude/CLAUDE.md"
 _SKILL_NAME_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
+_FRONTMATTER_RE = re.compile(r"\A---\s*\n(.*?)\n---\s*\n", re.DOTALL)
+_DESCRIPTION_RE = re.compile(r"^description:\s*(.+?)\s*$", re.MULTILINE)
+
+
+def _skill_description(content: str) -> str:
+    """The ``description:`` of a SKILL.md's frontmatter, unquoted; empty when none."""
+    front = _FRONTMATTER_RE.match(content)
+    if not front:
+        return ""
+    found = _DESCRIPTION_RE.search(front.group(1))
+    if not found:
+        return ""
+    text = found.group(1).strip()
+    if len(text) >= 2 and text[0] == text[-1] and text[0] in "\"'":
+        try:
+            return str(json.loads(text)) if text[0] == '"' else text[1:-1]
+        except json.JSONDecodeError:
+            return text[1:-1]
+    return text
 
 
 def load_skills_dir(skills_dir: str | Path) -> list[dict[str, str]]:
-    """Read ``<dir>/<name>/SKILL.md`` files: ``[{"name", "content"}]``, by name.
+    """Read ``<dir>/<name>/SKILL.md`` files: ``[{"name", "content", "description"}]``, by name.
 
     The directory name is the skill's name (a kebab-case slug); a child with no
     SKILL.md is skipped. An empty directory is an error: a skills arm with no
@@ -41,10 +66,56 @@ def load_skills_dir(skills_dir: str | Path) -> list[dict[str, str]]:
             raise ValueError(
                 f"Skill directory name must be a kebab-case slug: {child.name}"
             )
-        skills.append({"name": child.name, "content": skill_md.read_text()})
+        content = skill_md.read_text()
+        skills.append(
+            {
+                "name": child.name,
+                "content": content,
+                "description": _skill_description(content),
+            }
+        )
     if not skills:
         raise ValueError(f"No <name>/SKILL.md below the skills directory: {root}")
     return skills
+
+
+def render_skills_directive(skills: list[dict[str, str]]) -> str:
+    """The CLAUDE.md that tells the Developer to load the run's skills first."""
+    count = "One skill was" if len(skills) == 1 else f"{len(skills)} skills were"
+    lines = [
+        "# Skills for this build",
+        "",
+        f"{count} handed to you for this build, as the plugin `{SKILLS_PLUGIN_NAME}`. "
+        "Before you read the kit, load each one with the Skill tool and follow what it says:",
+        "",
+    ]
+    for skill in skills:
+        description = skill.get("description") or ""
+        lines.append(
+            f"- `{SKILLS_PLUGIN_NAME}:{skill['name']}`"
+            + (f" — {description}" if description else "")
+        )
+    lines += [
+        "",
+        "Keep working until you have called `hyper_tau.submit`: a session that ends "
+        "without it is scored as the workspace stands, and the time left in your "
+        "budget is lost.",
+        "",
+    ]
+    return "\n".join(lines)
+
+
+def skill_name_of_call(arguments: Any) -> str | None:
+    """The skill a ``Skill`` tool call names, without the plugin prefix."""
+    if not isinstance(arguments, dict):
+        return None
+    raw = arguments.get("skill") or arguments.get("command") or arguments.get("name")
+    if not isinstance(raw, str) or not raw.strip():
+        return None
+    name = raw.strip().lstrip("/")
+    if ":" in name:
+        name = name.rsplit(":", 1)[1]
+    return name.split()[0] if name else None
 
 
 def _text_content(value: Any) -> str:
@@ -108,6 +179,12 @@ class ClaudeCodeSandboxBuilder(NativeSandboxBuilder):
     def __init__(self, llm: str, *, skills_dir: str | Path | None = None, **kwargs):
         super().__init__(llm, **kwargs)
         self.skills = load_skills_dir(skills_dir) if skills_dir is not None else []
+        # One entry per Claude Code turn that ended (a `result` frame): the turn
+        # loop starts the next one until submit, the budget or the allowance.
+        self._turn_ends: list[dict] = []
+        # One per Claude Code process the loop started (an `init` frame): the
+        # last turn usually ends with the host's kill on submit and has no end.
+        self._turns_started = 0
 
     def harness_config_metadata(self) -> dict:
         metadata = {
@@ -119,7 +196,11 @@ class ClaudeCodeSandboxBuilder(NativeSandboxBuilder):
             "background_tasks": False,
             "built_in_agents": False,
             "memory": False,
-            "session_persistence": False,
+            # Sessions are kept below the private runtime home (a tmpfs that
+            # goes with the container) so that the turn loop's `--continue`
+            # finds the one it continues; nothing of them leaves the run.
+            "session_persistence": "runtime-home-only",
+            "turn_loop": True,
             "nonessential_traffic": False,
             "model_gateway": "provider-only/per-run/model-scoped",
             "gateway_token_inherited_by_shell": True,
@@ -129,7 +210,33 @@ class ClaudeCodeSandboxBuilder(NativeSandboxBuilder):
         if self.skills:
             metadata["skills"] = [skill["name"] for skill in self.skills]
             metadata["skills_plugin"] = SKILLS_PLUGIN_NAME
+            metadata["skills_directive"] = "claude-md"
         return metadata
+
+    def reset_build_state(self) -> None:
+        self._turn_ends = []
+        self._turns_started = 0
+
+    def build_turns(self) -> list[dict] | None:
+        return list(self._turn_ends)
+
+    def turns_started(self) -> int | None:
+        return self._turns_started
+
+    def skills_read(self, steps) -> list[str] | None:
+        """The run's skills the Developer loaded with the Skill tool, in order of first load."""
+        if not self.skills:
+            return None
+        wanted = {skill["name"] for skill in self.skills}
+        read: list[str] = []
+        for step in steps:
+            for call in getattr(step, "tool_calls", None) or []:
+                if not isinstance(call, dict) or call.get("name") != "Skill":
+                    continue
+                name = skill_name_of_call(call.get("arguments"))
+                if name in wanted and name not in read:
+                    read.append(name)
+        return read
 
     def runtime_environment(self, broker) -> dict[str, str]:
         environment = super().runtime_environment(broker)
@@ -260,10 +367,11 @@ class ClaudeCodeSandboxBuilder(NativeSandboxBuilder):
         return files
 
     def skills_plugin_files(self) -> dict[str, str]:
-        """The plugin that carries the run's skills: a manifest and one SKILL.md each."""
+        """The plugin that carries the run's skills (a manifest and one SKILL.md each), and the CLAUDE.md that says to load them."""
         if not self.skills:
             return {}
         files = {
+            SKILLS_DIRECTIVE_PATH: render_skills_directive(self.skills),
             f"{SKILLS_PLUGIN_PATH}/.claude-plugin/plugin.json": json.dumps(
                 {
                     "name": SKILLS_PLUGIN_NAME,
@@ -293,16 +401,29 @@ class ClaudeCodeSandboxBuilder(NativeSandboxBuilder):
         # the home's skills directory alike (checked in the image: the model
         # reports NONE with it and both skills without it). A skills run drops
         # bare mode; the settings file still disables hooks, and the env keeps
-        # memory, updates and nonessential traffic off.
+        # memory, updates and nonessential traffic off. Nor does --bare load the
+        # CLAUDE.md below the runtime home (checked the same way), which is why
+        # the skills directive needs the skills run's mode.
+        #
+        # `claude --print` exits when the turn ends, that is when a reply comes
+        # back with no tool call: a model that stops early, or a reply cut short
+        # by the gateway, ends the build with the budget unspent and no submit
+        # (both Developers of the run of 2026-11-06 ended that way at 126 s). The
+        # turn loop driver, which OpenCode already runs under, hands the prompt
+        # as the first turn and continues the session until the host ends the
+        # process (submit, the wall clock, the step budget), a non-zero exit, or
+        # its allowance; `--continue` finds the session because persistence stays
+        # on below the private runtime home.
         command = [
+            "python",
+            "-m",
+            "tau2.hyper.harnesses.turn_loop_driver",
             "claude",
             "--print",
             *([] if self.skills else ["--bare"]),
             "--output-format",
             "stream-json",
             "--verbose",
-            "--input-format",
-            "text",
             "--model",
             self.llm,
         ]
@@ -324,7 +445,6 @@ class ClaudeCodeSandboxBuilder(NativeSandboxBuilder):
                 "--strict-mcp-config",
                 "--settings",
                 self.runtime_config_path,
-                "--no-session-persistence",
                 "--no-chrome",
             ]
         )
@@ -343,11 +463,22 @@ class ClaudeCodeSandboxBuilder(NativeSandboxBuilder):
             return []
 
         frame_type = frame.get("type")
+        if frame_type == "system" and frame.get("subtype") == "init":
+            self._turns_started += 1
+            return []
         if frame_type == "assistant":
             return self._assistant_steps(frame)
         if frame_type == "user":
             return self._tool_result_steps(frame)
         if frame_type == "result":
+            self._turn_ends.append(
+                {
+                    "ended_at": event.elapsed_seconds,
+                    "subtype": frame.get("subtype"),
+                    "is_error": bool(frame.get("is_error", False)),
+                    "num_turns": frame.get("num_turns"),
+                }
+            )
             result_text = frame.get("result")
             if result_text:
                 return [

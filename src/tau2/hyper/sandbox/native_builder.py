@@ -149,6 +149,21 @@ class NativeSandboxBuilder(ABC):
     def normalize_event(self, event: NativeProcessEvent) -> list[BuildStep]:
         """Translate one native process event into benchmark trajectory steps."""
 
+    def reset_build_state(self) -> None:
+        """Called at the start of a build: a harness that keeps counters clears them."""
+
+    def build_turns(self) -> Optional[list[dict]]:
+        """The harness's turns that ended during the build (a turn loop's record); None when it does not count them."""
+        return None
+
+    def turns_started(self) -> Optional[int]:
+        """How many turns the harness started (the last one usually ends with the host's kill on submit); None when it does not count them."""
+        return None
+
+    def skills_read(self, steps: list[BuildStep]) -> Optional[list[str]]:
+        """The run's skills the Developer loaded, by name; None for a harness with no skills."""
+        return None
+
     def runtime_environment(self, broker: CallbackBroker) -> dict[str, str]:
         """Environment inherited by the harness and callback MCP server."""
         return {
@@ -208,6 +223,7 @@ class NativeSandboxBuilder(ABC):
             )
 
         started = time.monotonic()
+        self.reset_build_state()
         result = BuildResult(
             kit_path=kit_path,
             builder_type=self.harness_name,
@@ -335,6 +351,15 @@ class NativeSandboxBuilder(ABC):
                     "stderr_tail": process_result.stderr[-4000:],
                 }
                 result.metadata["callback"] = broker.metadata()
+                turns = self.build_turns()
+                if turns is not None:
+                    result.metadata["turns"] = turns
+                turns_begun = self.turns_started()
+                if turns_begun is not None:
+                    result.metadata["turns_started"] = turns_begun
+                skills_read = self.skills_read(result.steps)
+                if skills_read is not None:
+                    result.metadata["skills_read"] = skills_read
                 if result.done_reason == "harness_error":
                     # Surface the harness's own last words: normalize_event
                     # drops error frames, so without this the only record of
