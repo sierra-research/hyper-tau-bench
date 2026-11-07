@@ -1,7 +1,7 @@
 """Run a harness with an OTLP/HTTP sink beside it, in the same container.
 
 A harness that exports OpenTelemetry spans (IBM Bob, with telemetry on and
-``OTEL_EXPORTER_OTLP_ENDPOINT`` set) needs somewhere to post them. The
+an endpoint variable set) needs somewhere to post them. The
 construction container's network is internal, so the sink runs here, on the
 container's loopback, started before the harness: every export request it
 receives is appended as one JSON line to ``--out`` (the shape
@@ -11,7 +11,11 @@ developer prompt (read from stdin, as the supervised runtime delivers it)
 appended as its last argument, like ``prompt_arg_driver``, and the driver
 exits with the harness's exit code.
 
-    python -m tau2.hyper.harnesses.otlp_sink_driver --out <file> [--port 4318] -- <command>…
+    python -m tau2.hyper.harnesses.otlp_sink_driver --out <file> [--port 4318] [--endpoint-env NAME] -- <command>…
+
+``--endpoint-env`` names the variable the sink's endpoint is written to when
+the harness's environment does not set it (default
+``OTEL_EXPORTER_OTLP_ENDPOINT``; Bob's own variable is ``BOB_TELEMETRY_URL``).
 
 The driver is not told when the harness is stopped from outside (the host
 removes the container): a line is written as each request arrives, so what
@@ -119,6 +123,11 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="otlp_sink_driver", description=__doc__.split("\n\n")[0])
     parser.add_argument("--out", required=True, help="the NDJSON file the export requests are appended to")
     parser.add_argument("--port", type=int, default=DEFAULT_PORT)
+    parser.add_argument(
+        "--endpoint-env",
+        default="OTEL_EXPORTER_OTLP_ENDPOINT",
+        help="the environment variable set to the sink's endpoint when the harness's environment does not set it",
+    )
     parser.add_argument("command", nargs=argparse.REMAINDER, help="the harness command; the prompt on stdin is appended")
     args = parser.parse_args(argv)
     command = [part for part in args.command if part != "--"] if args.command[:1] == ["--"] else list(args.command)
@@ -131,7 +140,7 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     sink = start_sink(Path(args.out), port=args.port)
     environment = dict(os.environ)
-    environment.setdefault("OTEL_EXPORTER_OTLP_ENDPOINT", sink.endpoint)
+    environment.setdefault(args.endpoint_env, sink.endpoint)
     try:
         completed = subprocess.run([*command, prompt], stdin=subprocess.DEVNULL, env=environment, check=False)
     finally:

@@ -174,15 +174,20 @@ def test_bob_with_an_artifacts_dir_runs_under_the_sink_with_telemetry_on(monkeyp
     assert config["telemetry"] == "otlp-to-sink" and config["submit_grace_seconds"] == BOB_SUBMIT_GRACE_SECONDS
 
     environment = builder.runtime_environment(_Broker())
-    assert "BOB_TELEMETRY_PROVIDER" not in environment
-    assert environment["OTEL_EXPORTER_OTLP_ENDPOINT"] == "http://127.0.0.1:4318"
-    assert environment["OTEL_EXPORTER_OTLP_PROTOCOL"] == "http/json"
+    # Bob's own provider variables, not the standard OTEL one: on that one the
+    # Shell filters a span's attributes to an allowlist with no usage split.
+    assert environment["BOB_TELEMETRY_PROVIDER"] == "langfuse"
+    assert environment["BOB_TELEMETRY_URL"] == "http://127.0.0.1:4318"
+    assert environment["BOB_TELEMETRY_LF_PUBLIC_KEY"] and environment["BOB_TELEMETRY_LF_SECRET_KEY"]
+    assert environment["BOB_TELEMETRY_AGENT_OPS_ENABLED"] == "true"
+    assert not any(key.startswith("OTEL_") for key in environment)
     settings = json.loads(builder.runtime_files(include_client_tool=True)[builder.runtime_config_path])
     assert settings["telemetry"] == {"enabled": True, "excludePayload": True}
 
     command = builder.harness_command()
     assert command[:3] == ["python", "-m", "tau2.hyper.harnesses.otlp_sink_driver"]
     assert command[command.index("--out") + 1] == f"{BOB_SPANS_DIR}/spans.ndjson"
+    assert command[command.index("--endpoint-env") + 1] == "BOB_TELEMETRY_URL"
     assert command[command.index("--") + 1 :][:3] == ["bob", "run", "--format"]
 
 
@@ -258,3 +263,27 @@ def test_bob_collects_the_store_alone_when_nothing_was_exported(tmp_path):
     artifacts = BobShellSandboxBuilder("bob-default", artifacts_dir=into).collect_artifacts(runtime, into)
     assert artifacts["store_messages"] == 0 and artifacts["spans"] is None and artifacts["span_requests"] == 0
     assert "No such file" in artifacts["spans_error"]
+
+
+def test_the_result_file_carries_the_grace_and_the_artifacts(tmp_path):
+    from tau2.hyper.sandbox.builder import BuildResult
+    from tau2.hyper.sandbox.orchestrator import _build_end_record
+
+    result = BuildResult(
+        kit_path=tmp_path,
+        metadata={
+            "process": {
+                "exit_code": 0,
+                "cancelled": True,
+                "submit_grace_seconds": 120.0,
+                "exited_in_grace": True,
+                "changed_after_submit": [],
+            },
+            "artifacts": {"collected": "exit", "store": "bob-store/bob.db", "tasks": 1, "messages": 187, "span_requests": 16},
+        },
+    )
+    record = _build_end_record(result)
+    assert record["process"]["exited_in_grace"] is True
+    assert record["process"]["submit_grace_seconds"] == 120.0
+    assert record["process"]["changed_after_submit"] == []
+    assert record["artifacts"]["collected"] == "exit" and record["artifacts"]["messages"] == 187

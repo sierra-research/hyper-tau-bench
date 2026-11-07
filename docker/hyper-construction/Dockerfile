@@ -61,11 +61,13 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # IBM Bob Shell is not on public npm. A tarball in docker/hyper-construction/vendor/
-# (``npm pack`` of an installed bobshell; gitignored) is installed when present,
-# and the ``bob`` harness is refused at startup on an image built without one.
+# (``npm pack`` of an installed Bob Shell: ``ibm-bob-<version>.tgz`` for the ``@ibm/bob``
+# package of Shell 2.0.9 and later, ``bobshell-<version>.tgz`` before; gitignored) is
+# installed when present, and the ``bob`` harness is refused at startup on an image
+# built without one.
 COPY docker/hyper-construction/vendor/ /opt/vendor/
-RUN if ls /opt/vendor/bobshell-*.tgz >/dev/null 2>&1; then \
-        npm install --global /opt/vendor/bobshell-*.tgz && npm cache clean --force && bob --version; \
+RUN if ls /opt/vendor/*.tgz >/dev/null 2>&1; then \
+        npm install --global /opt/vendor/*.tgz && npm cache clean --force && bob --version; \
     fi && rm -rf /opt/vendor
 
 RUN git config --system init.defaultBranch main \

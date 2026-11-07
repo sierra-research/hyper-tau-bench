@@ -1,6 +1,6 @@
 """IBM Bob Shell integration for the Hyper-τ construction sandbox.
 
-Bob Shell (``bob``, the ``bobshell`` package) runs one task headless with
+Bob Shell (``bob``, the ``@ibm/bob`` package; ``bobshell`` before 2.0.9) runs one task headless with
 ``bob run --format stream-json``: one JSON object per line, of type
 ``message`` (a user or assistant text), ``tool_use`` (``tool_name``,
 ``tool_id``, ``parameters``), ``tool_result`` (``tool_id``, ``status``,
@@ -27,7 +27,13 @@ Bob build is Bob's own task store, ``/runtime-home/.bob/db/bob.db``, written
 turn by turn below the private runtime home (a tmpfs), plus the OpenTelemetry
 spans Bob exports when its telemetry is on. With an artifacts directory
 (``--developer-artifacts-dir``) the build keeps both: the harness runs under
-``otlp_sink_driver`` with a sink on the container's loopback, the store and
+``otlp_sink_driver`` with a sink on the container's loopback, Bob's own
+telemetry variables point at it (``BOB_TELEMETRY_PROVIDER=langfuse`` with
+``BOB_TELEMETRY_URL``, the two Langfuse keys the Shell insists on, any value,
+and ``BOB_TELEMETRY_AGENT_OPS_ENABLED`` for the generation spans; on the
+standard ``OTEL_EXPORTER_OTLP_ENDPOINT`` Shell 2.0.9 filters a span's
+attributes to an allowlist with no token counts and no first-token time,
+measured 2026-11-07), the store and
 the sink's file are copied out while the container is still there
 (``collect_artifacts``), and the submit gets a grace (``submit_grace_seconds``)
 in which Bob ends its turn on its own, so the ``submit`` row and the turn's
@@ -118,13 +124,22 @@ class BobShellSandboxBuilder(NativeSandboxBuilder):
         environment["BOB_LOG_LEVEL"] = "warn"
         if self.keeps_artifacts:
             # Telemetry on (settings.json), exported as OTLP/JSON to the sink the
-            # driver starts on the container's loopback; nothing leaves the
+            # driver starts on the container's loopback, through Bob's own
+            # provider variables: the standard OTEL variable makes the Shell
+            # filter a span to an allowlist with no usage split and no
+            # first-token time, the Langfuse provider sends the whole span
+            # (the keys are required, their value is not checked by a sink
+            # that forwards nothing), and the agent-ops switch is what exports
+            # the ``LLM Generation`` spans on that path. Nothing leaves the
             # container (its network is internal, and the sidecar serves the
             # model gateway's two families only).
             environment.update(
                 {
-                    "OTEL_EXPORTER_OTLP_ENDPOINT": f"http://127.0.0.1:{OTLP_SINK_PORT}",
-                    "OTEL_EXPORTER_OTLP_PROTOCOL": "http/json",
+                    "BOB_TELEMETRY_PROVIDER": "langfuse",
+                    "BOB_TELEMETRY_URL": f"http://127.0.0.1:{OTLP_SINK_PORT}",
+                    "BOB_TELEMETRY_LF_PUBLIC_KEY": "sink",
+                    "BOB_TELEMETRY_LF_SECRET_KEY": "sink",
+                    "BOB_TELEMETRY_AGENT_OPS_ENABLED": "true",
                 }
             )
         else:
@@ -192,7 +207,16 @@ class BobShellSandboxBuilder(NativeSandboxBuilder):
 
     def harness_command(self) -> list[str]:
         driver = (
-            ["tau2.hyper.harnesses.otlp_sink_driver", "--out", f"{BOB_SPANS_DIR}/{BOB_SPANS_FILE}", "--port", str(OTLP_SINK_PORT), "--"]
+            [
+                "tau2.hyper.harnesses.otlp_sink_driver",
+                "--out",
+                f"{BOB_SPANS_DIR}/{BOB_SPANS_FILE}",
+                "--port",
+                str(OTLP_SINK_PORT),
+                "--endpoint-env",
+                "BOB_TELEMETRY_URL",
+                "--",
+            ]
             if self.keeps_artifacts
             else ["tau2.hyper.harnesses.prompt_arg_driver"]
         )

@@ -84,7 +84,10 @@ def _build_end_record(build_result: BuildResult) -> dict:
     """The end of the harness process, the turn loop's turns and the skills read, from the build's metadata.
 
     ``process`` is how the harness process ended (its exit code, whether the wall
-    clock or a cancel ended it, the tail of its stderr); ``turns`` the turns a
+    clock or a cancel ended it, the tail of its stderr, and under a grace after
+    submit whether it ended on its own in it and the workspace files written
+    after the submit); ``artifacts`` what the builder copied out of the
+    container (when, and what the harness reports of it); ``turns`` the turns a
     turn loop ran (each with when it ended and the harness's own verdict on it)
     and their count; ``skills_read`` the run's skills the Developer loaded, when
     the run had skills. A harness that records none of these leaves them out.
@@ -99,6 +102,12 @@ def _build_end_record(build_result: BuildResult) -> dict:
             "cancelled": bool(process.get("cancelled", False)),
             "stderr_tail": str(process.get("stderr_tail") or "")[-1000:],
         }
+        for key in ("submit_grace_seconds", "exited_in_grace", "changed_after_submit"):
+            if key in process:
+                record["process"][key] = process[key]
+    artifacts = meta.get("artifacts")
+    if isinstance(artifacts, dict):
+        record["artifacts"] = dict(artifacts)
     turns = meta.get("turns")
     if isinstance(turns, list):
         # The turns started, when counted: the last one usually has no end (the

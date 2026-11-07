@@ -2,6 +2,7 @@
 
 import gzip
 import json
+import os
 import subprocess
 import sys
 import urllib.request
@@ -57,6 +58,23 @@ def test_driver_runs_the_command_with_the_prompt_and_the_endpoint_set(tmp_path):
     assert completed.returncode == 5, completed.stderr
     assert "prompt:Build the agent." in completed.stdout
     assert len(out.read_text().splitlines()) == 1
+
+
+def test_driver_writes_the_endpoint_to_the_named_variable_only(tmp_path):
+    out = tmp_path / "spans.ndjson"
+    script = "import os; print('url:' + os.environ['BOB_TELEMETRY_URL']); print('otel:' + os.environ.get('OTEL_EXPORTER_OTLP_ENDPOINT', '-'))"
+    completed = subprocess.run(
+        [sys.executable, "-m", "tau2.hyper.harnesses.otlp_sink_driver", "--out", str(out), "--port", "0", "--endpoint-env", "BOB_TELEMETRY_URL", "--", sys.executable, "-c", script],
+        input="Build the agent.\n",
+        capture_output=True,
+        text=True,
+        timeout=30,
+        check=False,
+        env={k: v for k, v in os.environ.items() if not k.startswith("OTEL_")},
+    )
+    assert completed.returncode == 0, completed.stderr
+    assert "url:http://127.0.0.1:" in completed.stdout
+    assert "otel:-" in completed.stdout
 
 
 def test_driver_refuses_no_command_and_an_empty_prompt(tmp_path, monkeypatch):
