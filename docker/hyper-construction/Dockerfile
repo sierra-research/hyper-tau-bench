@@ -114,7 +114,8 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 tau2.hyper.runtime_contract, tau2.hyper.sandbox.candidate_server, \
 tau2.hyper.sandbox.callback_mcp, tau2.hyper.sandbox.model_gateway, \
 tau2.hyper.harnesses.codex_driver, \
-tau2.hyper.harnesses.prompt_arg_driver, tau2.hyper.harnesses.turn_loop_driver"
+tau2.hyper.harnesses.prompt_arg_driver, tau2.hyper.harnesses.turn_loop_driver, \
+tau2.hyper.harnesses.otlp_sink_driver"
 
 ENV PATH="/opt/tau2/.venv/bin:${PATH}"
 ENV PYTHONPATH="/workspace:/opt/tau2/src"

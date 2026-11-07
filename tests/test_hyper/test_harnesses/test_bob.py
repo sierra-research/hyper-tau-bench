@@ -1,8 +1,18 @@
 """Contract tests for the IBM Bob Shell harness configuration."""
 
+import io
 import json
+import sqlite3
+import tarfile
+from pathlib import Path
 
-from tau2.hyper.harnesses.bob import BOB_SHELL_HARNESS_VERSION, BobShellSandboxBuilder
+from tau2.hyper.harnesses.bob import (
+    BOB_SHELL_HARNESS_VERSION,
+    BOB_SPANS_DIR,
+    BOB_STORE_DIR,
+    BOB_SUBMIT_GRACE_SECONDS,
+    BobShellSandboxBuilder,
+)
 from tau2.hyper.sandbox.builder import SandboxBuilder
 from tau2.hyper.sandbox.model_gateway import (
     _REQUEST_HEADERS,
@@ -139,3 +149,112 @@ def test_bob_stream_normalizes_text_tool_calls_and_results():
     assert steps[1].tool_calls == [{"id": "tooluse_1", "name": "execute_command", "arguments": {"command": "echo ok"}}]
     assert steps[2].tool_results[0]["result"] == "ok" and steps[2].tool_results[0]["is_error"] is False
     assert steps[3].content == "ok"
+
+
+def test_bob_keeps_nothing_and_exports_nothing_without_an_artifacts_dir(monkeypatch):
+    monkeypatch.delenv("BOB_TEAM_ID", raising=False)
+    builder = BobShellSandboxBuilder("bob-default")
+    assert builder.keeps_artifacts is False
+    assert builder.harness_identity().to_dict()["config"]["telemetry"] == "off"
+    environment = builder.runtime_environment(_Broker())
+    assert environment["BOB_TELEMETRY_PROVIDER"] == "none"
+    assert "OTEL_EXPORTER_OTLP_ENDPOINT" not in environment
+    settings = json.loads(builder.runtime_files(include_client_tool=True)[builder.runtime_config_path])
+    assert settings["telemetry"] == {"enabled": False, "excludePayload": True}
+    assert builder.harness_command()[2] == "tau2.hyper.harnesses.prompt_arg_driver"
+
+
+def test_bob_with_an_artifacts_dir_runs_under_the_sink_with_telemetry_on(monkeypatch, tmp_path):
+    monkeypatch.delenv("BOB_TEAM_ID", raising=False)
+    builder = BobShellSandboxBuilder("bob-default", artifacts_dir=tmp_path / "bob-a")
+    assert builder.keeps_artifacts is True
+    # The submit gets a grace in which Bob writes the submit row and ends its turn.
+    assert builder.submit_grace_seconds == BOB_SUBMIT_GRACE_SECONDS > 0
+    config = builder.harness_identity().to_dict()["config"]
+    assert config["telemetry"] == "otlp-to-sink" and config["submit_grace_seconds"] == BOB_SUBMIT_GRACE_SECONDS
+
+    environment = builder.runtime_environment(_Broker())
+    assert "BOB_TELEMETRY_PROVIDER" not in environment
+    assert environment["OTEL_EXPORTER_OTLP_ENDPOINT"] == "http://127.0.0.1:4318"
+    assert environment["OTEL_EXPORTER_OTLP_PROTOCOL"] == "http/json"
+    settings = json.loads(builder.runtime_files(include_client_tool=True)[builder.runtime_config_path])
+    assert settings["telemetry"] == {"enabled": True, "excludePayload": True}
+
+    command = builder.harness_command()
+    assert command[:3] == ["python", "-m", "tau2.hyper.harnesses.otlp_sink_driver"]
+    assert command[command.index("--out") + 1] == f"{BOB_SPANS_DIR}/spans.ndjson"
+    assert command[command.index("--") + 1 :][:3] == ["bob", "run", "--format"]
+
+
+def _tar_of(directory: Path) -> bytes:
+    buffer = io.BytesIO()
+    with tarfile.open(fileobj=buffer, mode="w:") as archive:
+        for path in sorted(directory.rglob("*")):
+            archive.add(path, arcname=str(path.relative_to(directory)))
+    return buffer.getvalue()
+
+
+class _Runtime:
+    """What the Bob harness reads out of the container: tar streams of two directories."""
+
+    def __init__(self, trees: dict[str, Path]):
+        self.trees = trees
+        self.read: list[str] = []
+
+    def read_runtime_tree(self, path: str, *, timeout: int = 120) -> bytes:
+        self.read.append(path)
+        if path not in self.trees:
+            raise RuntimeError(f"tar: {path}: Cannot open: No such file or directory")
+        return _tar_of(self.trees[path])
+
+
+def test_bob_collects_its_store_with_the_wal_folded_in_and_the_spans(tmp_path):
+    # A store as Bob leaves it: WAL mode, with rows still in the write-ahead log.
+    home = tmp_path / "home"
+    store_dir = home / "db"
+    store_dir.mkdir(parents=True)
+    connection = sqlite3.connect(str(store_dir / "bob.db"))
+    connection.execute("PRAGMA journal_mode=WAL")
+    connection.execute("CREATE TABLE tasks (id TEXT)")
+    connection.execute("CREATE TABLE messages (id TEXT, data TEXT)")
+    connection.execute("INSERT INTO tasks VALUES ('t1')")
+    connection.executemany("INSERT INTO messages VALUES (?, ?)", [(f"m{i}", "{}") for i in range(5)])
+    connection.commit()
+    assert (store_dir / "bob.db-wal").stat().st_size > 0, "the rows are in the WAL, not yet in bob.db"
+    spans_dir = home / "otlp"
+    spans_dir.mkdir()
+    (spans_dir / "spans.ndjson").write_text('{"body":{"resourceSpans":[]}}\n{"body":{"resourceSpans":[]}}\n')
+
+    runtime = _Runtime({BOB_STORE_DIR: store_dir, BOB_SPANS_DIR: spans_dir})
+    builder = BobShellSandboxBuilder("bob-default", artifacts_dir=tmp_path / "out")
+    into = tmp_path / "out"
+    into.mkdir()
+    artifacts = builder.collect_artifacts(runtime, into)
+    connection.close()
+
+    assert runtime.read == [BOB_STORE_DIR, BOB_SPANS_DIR]
+    assert artifacts["store"] == str(into / "bob-store" / "bob.db")
+    assert artifacts["store_tasks"] == 1 and artifacts["store_messages"] == 5
+    # whole in one file: a reader that opens bob.db alone sees every row
+    assert not (into / "bob-store" / "bob.db-wal").exists() and not (into / "bob-store" / "bob.db-shm").exists()
+    alone = sqlite3.connect(f"file:{into / 'bob-store' / 'bob.db'}?mode=ro", uri=True)
+    assert alone.execute("SELECT count(*) FROM messages").fetchone()[0] == 5
+    alone.close()
+    assert artifacts["spans"] == str(into / "spans.ndjson") and artifacts["span_requests"] == 2
+    assert not (into / ".otlp").exists()
+
+
+def test_bob_collects_the_store_alone_when_nothing_was_exported(tmp_path):
+    store_dir = tmp_path / "db"
+    store_dir.mkdir()
+    connection = sqlite3.connect(str(store_dir / "bob.db"))
+    connection.execute("CREATE TABLE tasks (id TEXT)")
+    connection.execute("CREATE TABLE messages (id TEXT)")
+    connection.commit()
+    connection.close()
+    runtime = _Runtime({BOB_STORE_DIR: store_dir})
+    into = tmp_path / "out"
+    into.mkdir()
+    artifacts = BobShellSandboxBuilder("bob-default", artifacts_dir=into).collect_artifacts(runtime, into)
+    assert artifacts["store_messages"] == 0 and artifacts["spans"] is None and artifacts["span_requests"] == 0
+    assert "No such file" in artifacts["spans_error"]

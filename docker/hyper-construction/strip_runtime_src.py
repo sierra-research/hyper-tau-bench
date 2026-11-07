@@ -46,6 +46,7 @@ KEEP_HYPER = [
     "harnesses/__init__.py",
     "harnesses/codex_driver.py",
     "harnesses/prompt_arg_driver.py",
+    "harnesses/otlp_sink_driver.py",
     "harnesses/turn_loop_driver.py",
 ]
 

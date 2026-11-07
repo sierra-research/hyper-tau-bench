@@ -6,6 +6,7 @@ import json
 import secrets
 import tempfile
 import threading
+import time
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Optional
 
@@ -59,6 +60,8 @@ class CallbackBroker:
         self.max_local_tests = max_local_tests
         self.local_tests_used = 0
         self.submitted = threading.Event()
+        # The wall-clock time of the submit, so a file the Developer changed after it can be named.
+        self.submitted_at: Optional[float] = None
         self._lock = threading.Lock()
         self._stop = threading.Event()
         self._thread: Optional[threading.Thread] = None
@@ -149,6 +152,7 @@ class CallbackBroker:
             if tool == "submit":
                 if self.submitted.is_set():
                     return "Submission already received."
+                self.submitted_at = time.time()
                 self.submitted.set()
                 return "Submission received. The current workspace will be evaluated."
 

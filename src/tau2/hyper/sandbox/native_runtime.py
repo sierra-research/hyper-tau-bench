@@ -130,6 +130,9 @@ class NativeProcessResult:
     exit_code: Optional[int] = None
     timed_out: bool = False
     cancelled: bool = False
+    # After a cancel with a grace: the process ended on its own inside it (True),
+    # or was stopped when it ran out (False); None when no cancel happened.
+    exited_in_grace: Optional[bool] = None
     elapsed_seconds: float = 0.0
 
     @property
@@ -170,10 +173,21 @@ def run_supervised_process(
     on_timeout: Optional[Callable[[], None]] = None,
     cancel_event: Optional[threading.Event] = None,
     on_cancel: Optional[Callable[[], None]] = None,
+    cancel_grace_seconds: float = 0.0,
+    before_stop: Optional[Callable[[str], None]] = None,
 ) -> NativeProcessResult:
-    """Run a process with line streaming and hard process-tree termination."""
+    """Run a process with line streaming and hard process-tree termination.
+
+    ``cancel_grace_seconds`` lets the process end on its own after the cancel
+    event is set (a harness that writes its last rows after ``submit``); when
+    it has not by then, it is stopped as without a grace. ``before_stop`` runs
+    once, with ``"cancel"`` or ``"timeout"``, before ``on_cancel`` /
+    ``on_timeout`` and the kill: what the process left behind can be read then.
+    """
     if timeout_seconds <= 0:
         raise ValueError("timeout_seconds must be positive")
+    if cancel_grace_seconds < 0:
+        raise ValueError("cancel_grace_seconds must not be negative")
 
     started = time.monotonic()
     process = subprocess.Popen(
@@ -228,27 +242,39 @@ def run_supervised_process(
 
     timed_out = False
     cancelled = False
+    exited_in_grace: Optional[bool] = None
     deadline = started + timeout_seconds
+    cancel_seen_at: Optional[float] = None
+
+    def stop(reason: str, callback: Optional[Callable[[], None]]) -> None:
+        if before_stop is not None:
+            try:
+                before_stop(reason)
+            except Exception as exc:  # noqa: BLE001 - still kill process
+                logger.warning(f"Native runtime before-stop hook failed: {exc}")
+        if callback is not None:
+            try:
+                callback()
+            except Exception as exc:  # noqa: BLE001 - still kill process
+                logger.warning(f"Native runtime {reason} callback failed: {exc}")
+        _terminate_process_group(process)
+
     while process.poll() is None:
         if cancel_event is not None and cancel_event.is_set():
             cancelled = True
-            if on_cancel is not None:
-                try:
-                    on_cancel()
-                except Exception as exc:  # noqa: BLE001 - still kill process
-                    logger.warning(f"Native runtime cancel callback failed: {exc}")
-            _terminate_process_group(process)
-            break
+            if cancel_seen_at is None:
+                cancel_seen_at = time.monotonic()
+            if time.monotonic() - cancel_seen_at >= cancel_grace_seconds:
+                exited_in_grace = False
+                stop("cancel", on_cancel)
+                break
         if time.monotonic() >= deadline:
             timed_out = True
-            if on_timeout is not None:
-                try:
-                    on_timeout()
-                except Exception as exc:  # noqa: BLE001 - still kill process
-                    logger.warning(f"Native runtime timeout callback failed: {exc}")
-            _terminate_process_group(process)
+            stop("timeout", on_timeout)
             break
         time.sleep(0.05)
+    if cancelled and exited_in_grace is None and not timed_out:
+        exited_in_grace = True
     process.wait()
 
     for reader in readers:
@@ -260,6 +286,7 @@ def run_supervised_process(
         exit_code=process.returncode,
         timed_out=timed_out,
         cancelled=cancelled,
+        exited_in_grace=exited_in_grace,
         elapsed_seconds=time.monotonic() - started,
     )
 
@@ -631,8 +658,17 @@ class NativeSandboxRuntime:
         on_event: Optional[Callable[[NativeProcessEvent], None]] = None,
         cancel_event: Optional[threading.Event] = None,
         env: Optional[dict[str, str]] = None,
+        cancel_grace_seconds: float = 0.0,
+        before_close: Optional[Callable[[str], None]] = None,
     ) -> NativeProcessResult:
-        """Run the harness and remove the full container on timeout."""
+        """Run the harness and remove the full container on timeout.
+
+        A cancel (the Developer's ``submit``) or the timeout removes the
+        container, which is what stops every process in it. ``before_close``
+        runs first, with ``"cancel"`` or ``"timeout"``, while the container is
+        still there; after ``cancel_grace_seconds``, a cancelled harness that
+        ended on its own leaves the container to the builder's close.
+        """
         if not self._started:
             self.start()
         docker_exec = [
@@ -656,6 +692,8 @@ class NativeSandboxRuntime:
             on_timeout=self.close,
             cancel_event=cancel_event,
             on_cancel=self.close,
+            cancel_grace_seconds=cancel_grace_seconds,
+            before_stop=before_close,
         )
 
     def write_runtime_file(self, path: str, contents: str) -> None:
@@ -681,6 +719,26 @@ class NativeSandboxRuntime:
         )
         if result.exit_code != 0:
             raise RuntimeError(f"Failed to write native runtime file: {result.stderr}")
+
+    def read_runtime_tree(self, path: str, *, timeout: int = 120) -> bytes:
+        """A directory below `/runtime-home`, as a tar stream (what a harness kept)."""
+        if not path.startswith("/runtime-home/") or ".." in Path(path).parts:
+            raise ValueError("Runtime trees must stay below /runtime-home")
+        try:
+            result = subprocess.run(
+                ["docker", "exec", self.container_name, "tar", "cf", "-", "-C", path, "."],
+                capture_output=True,
+                timeout=timeout,
+                check=False,
+            )
+        except FileNotFoundError as exc:
+            raise RuntimeError("Docker CLI not found for native harness") from exc
+        except subprocess.TimeoutExpired as exc:
+            raise RuntimeError(f"Timed out reading {path} out of the native sandbox") from exc
+        if result.returncode != 0:
+            detail = result.stderr.decode("utf-8", "replace").strip()
+            raise RuntimeError(f"Failed to read {path} out of the native sandbox: {detail}")
+        return result.stdout
 
     def runtime_metadata(self) -> dict:
         """Return non-secret, serializable runtime identity."""

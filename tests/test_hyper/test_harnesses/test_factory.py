@@ -37,3 +37,13 @@ def test_workbench_launch_seams_use_the_default_harness_factory():
     source = Path(app_module.__file__).read_text()
     assert "create_developer_builder" in source
     assert "DEFAULT_DEVELOPER_HARNESS" in source
+
+
+def test_an_artifacts_dir_reaches_every_harness(tmp_path):
+    from pathlib import Path
+
+    for harness in ("codex", "claude-code", "bob", "opencode"):
+        builder = create_developer_builder(harness, "m", {}, None, developer_artifacts_dir=str(tmp_path / harness))
+        assert builder.artifacts_dir == (tmp_path / harness).resolve(), harness
+    assert create_developer_builder("bob", "m", {}, None).artifacts_dir is None
+    assert isinstance(create_developer_builder("bob", "m", {}, None, developer_artifacts_dir=str(tmp_path)).artifacts_dir, Path)

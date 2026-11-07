@@ -1168,6 +1168,19 @@ def main():
         ),
     )
     hyper_tau_parser.add_argument(
+        "--developer-artifacts-dir",
+        type=str,
+        default=None,
+        help=(
+            "Copy what the Developer harness kept below its private runtime "
+            "home into this directory after the build: IBM Bob's task store "
+            "(bob-store/bob.db, its write-ahead log folded in) and the OTLP "
+            "spans Bob exported to the run's sink (spans.ndjson). A harness "
+            "that keeps nothing copies nothing. Recorded under "
+            "build_result.artifacts."
+        ),
+    )
+    hyper_tau_parser.add_argument(
         "--score-only",
         action="store_true",
         default=False,
@@ -1701,6 +1714,7 @@ def _run_hyper_tau_sandbox(args, task, console):
             developer_llm_args,
             getattr(args, "developer_reasoning_effort", None),
             developer_skills_dir=getattr(args, "developer_skills_dir", None),
+            developer_artifacts_dir=getattr(args, "developer_artifacts_dir", None),
         )
     except (NotImplementedError, FileNotFoundError, ValueError) as error:
         console.print(f"[red]{error}[/red]")

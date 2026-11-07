@@ -45,6 +45,22 @@ class _AnyEvent:
         return any(event.is_set() for event in self.events)
 
 
+def _changed_since(root: Path, since: Optional[float], limit: int = 50) -> list[str]:
+    """The files below ``root`` (the kit, mounted as the workspace) written after ``since``."""
+    if since is None:
+        return []
+    changed: list[str] = []
+    for path in sorted(root.rglob("*")):
+        try:
+            if path.is_file() and not path.is_symlink() and path.stat().st_mtime > since:
+                changed.append(str(path.relative_to(root)))
+        except OSError:
+            continue
+        if len(changed) >= limit:
+            break
+    return changed
+
+
 class NativeSandboxBuilder(ABC):
     """Common outer lifecycle while each harness retains its native loop."""
 
@@ -52,6 +68,11 @@ class NativeSandboxBuilder(ABC):
     harness_version: str
     model_gateway_provider: str
     runtime_config_path: str
+    # How long after the Developer's ``submit`` the harness may end on its own
+    # before the host stops it. 0: stopped at once (the kill on submit). A
+    # harness whose own record is written at the end of its turn (IBM Bob's
+    # task store) sets one, so the submit and the turn's end are in that record.
+    submit_grace_seconds: float = 0.0
 
     def __init__(
         self,
@@ -61,12 +82,16 @@ class NativeSandboxBuilder(ABC):
         docker_image: Optional[str] = None,
         docker_memory: Optional[str] = None,
         docker_cpus: Optional[str] = None,
+        artifacts_dir: Optional[str | Path] = None,
     ):
         self.llm = llm
         self.llm_args = dict(llm_args or {})
         self.docker_image = docker_image
         self.docker_memory = docker_memory
         self.docker_cpus = docker_cpus
+        # Where what the harness kept below its private runtime home is copied to
+        # after the build (collect_artifacts); None keeps nothing.
+        self.artifacts_dir = Path(artifacts_dir).resolve() if artifacts_dir is not None else None
         self.response_phrasing_pack = None
         # Harness-supplied candidate-runtime wiring for run_local_test
         # callbacks, including any Client API defect profile; deliberately
@@ -158,6 +183,15 @@ class NativeSandboxBuilder(ABC):
 
     def turns_started(self) -> Optional[int]:
         """How many turns the harness started (the last one usually ends with the host's kill on submit); None when it does not count them."""
+        return None
+
+    def collect_artifacts(self, runtime: NativeSandboxRuntime, into: Path) -> Optional[dict]:
+        """Copy what the harness kept below its runtime home into ``into``; None when it keeps nothing.
+
+        Called once per build while the container is still there: after the
+        harness ended, or just before the host removes the container on a
+        submit or the timeout. What it returns is the build's ``artifacts``.
+        """
         return None
 
     def skills_read(self, steps: list[BuildStep]) -> Optional[list[str]]:
@@ -325,6 +359,22 @@ class NativeSandboxBuilder(ABC):
                 cancellation_events = [broker.submitted, step_limit_reached]
                 if cancel_event is not None:
                     cancellation_events.append(cancel_event)
+                collected: dict = {}
+
+                def collect(when: str) -> None:
+                    # Once per build, while the container is still there.
+                    if collected or self.artifacts_dir is None or runtime is None:
+                        return
+                    collected["when"] = when
+                    try:
+                        self.artifacts_dir.mkdir(parents=True, exist_ok=True)
+                        artifacts = self.collect_artifacts(runtime, self.artifacts_dir)
+                    except Exception as exc:  # noqa: BLE001 - the build is scored anyway
+                        logger.warning(f"Native {self.harness_name} artifacts were not collected: {exc}")
+                        artifacts = {"error": f"{type(exc).__name__}: {exc}"}
+                    if artifacts is not None:
+                        result.metadata["artifacts"] = {"collected": when, **artifacts}
+
                 process_result = runtime.run(
                     self.harness_command(),
                     timeout_seconds=remaining,
@@ -332,7 +382,10 @@ class NativeSandboxBuilder(ABC):
                     on_event=record_event,
                     cancel_event=_AnyEvent(*cancellation_events),
                     env=self.model_gateway_environment(gateway_spec),
+                    cancel_grace_seconds=self.submit_grace_seconds,
+                    before_close=collect,
                 )
+                collect("exit")
                 explicitly_submitted = broker.submitted.is_set()
                 if cancel_event is not None and cancel_event.is_set():
                     result.done_reason = "cancelled"
@@ -350,6 +403,14 @@ class NativeSandboxBuilder(ABC):
                     "event_count": len(process_result.events),
                     "stderr_tail": process_result.stderr[-4000:],
                 }
+                if self.submit_grace_seconds > 0 and explicitly_submitted:
+                    # The grace let the harness end on its own, or ran out; and the
+                    # workspace files it touched after the submit, which the scoring sees.
+                    result.metadata["process"]["submit_grace_seconds"] = self.submit_grace_seconds
+                    result.metadata["process"]["exited_in_grace"] = process_result.exited_in_grace
+                    result.metadata["process"]["changed_after_submit"] = _changed_since(
+                        kit_path, broker.submitted_at
+                    )
                 result.metadata["callback"] = broker.metadata()
                 turns = self.build_turns()
                 if turns is not None:

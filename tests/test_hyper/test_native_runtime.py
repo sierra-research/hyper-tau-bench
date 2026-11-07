@@ -110,3 +110,54 @@ def test_terminal_reason_reports_explicit_step_limit():
         )
         == "max_steps"
     )
+
+
+def test_cancel_with_a_grace_lets_the_process_end_on_its_own():
+    # The Developer's submit sets the event; the harness writes its last rows and
+    # exits by itself inside the grace, with its own exit code, and nothing kills it.
+    submitted = threading.Event()
+    threading.Timer(0.05, submitted.set).start()
+    stops: list[str] = []
+    cancels: list[str] = []
+    result = run_supervised_process(
+        [sys.executable, "-c", "import time; time.sleep(0.4); raise SystemExit(3)"],
+        timeout_seconds=10,
+        cancel_event=submitted,
+        cancel_grace_seconds=5,
+        on_cancel=lambda: cancels.append("closed"),
+        before_stop=stops.append,
+    )
+    assert result.cancelled and result.exited_in_grace is True
+    assert result.exit_code == 3 and not result.timed_out
+    assert stops == [] and cancels == []
+    assert terminal_reason(result, explicitly_submitted=True) == "submitted"
+
+
+def test_cancel_with_a_grace_that_runs_out_stops_the_process_after_the_hook():
+    submitted = threading.Event()
+    threading.Timer(0.05, submitted.set).start()
+    order: list[str] = []
+    started = time.monotonic()
+    result = run_supervised_process(
+        [sys.executable, "-c", "import time; time.sleep(30)"],
+        timeout_seconds=10,
+        cancel_event=submitted,
+        cancel_grace_seconds=0.3,
+        on_cancel=lambda: order.append("on_cancel"),
+        before_stop=lambda why: order.append(f"before_stop:{why}"),
+    )
+    assert result.cancelled and result.exited_in_grace is False
+    assert order == ["before_stop:cancel", "on_cancel"]
+    assert 0.3 <= time.monotonic() - started < 5
+
+
+def test_timeout_runs_the_hook_before_the_timeout_callback():
+    order: list[str] = []
+    result = run_supervised_process(
+        [sys.executable, "-c", "import time; time.sleep(30)"],
+        timeout_seconds=0.1,
+        on_timeout=lambda: order.append("on_timeout"),
+        before_stop=lambda why: order.append(f"before_stop:{why}"),
+    )
+    assert result.timed_out and result.exited_in_grace is None
+    assert order == ["before_stop:timeout", "on_timeout"]
