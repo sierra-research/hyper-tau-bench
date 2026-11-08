@@ -38,6 +38,18 @@ the sink's file are copied out while the container is still there
 (``collect_artifacts``), and the submit gets a grace (``submit_grace_seconds``)
 in which Bob ends its turn on its own, so the ``submit`` row and the turn's
 end are in the store instead of being cut by the host's kill.
+
+Skills reach Bob the way they reach Claude Code, below the private runtime
+home and never in the kit: each ``<name>/SKILL.md`` of the run's skills
+directory is written to ``/runtime-home/.bob/skills/<name>/SKILL.md``, Bob's
+global skills location (Shell 2.0.9 reads ``~/.bob/skills``, lists each skill's
+name and description in its system prompt under ``available_skills`` and loads
+one with its ``use_skill`` tool when the request matches the description), and
+a global rules file ``/runtime-home/.bob/rules/strata-skills.md`` (rendered
+into every mode's prompt under ``global_rules``) tells Bob to activate each
+handed skill before it reads the kit and to keep working until ``submit``, as
+the Claude driver's CLAUDE.md does. The ``use_skill`` frames are the record of
+which skills Bob read (``build_result.skills_read``).
 """
 
 from __future__ import annotations
@@ -50,6 +62,7 @@ import tarfile
 from pathlib import Path
 from typing import Any
 
+from tau2.hyper.harnesses.claude import load_skills_dir
 from tau2.hyper.sandbox.builder import BuildStep
 from tau2.hyper.sandbox.model_gateway import ModelGatewaySpec
 from tau2.hyper.sandbox.native_builder import NativeSandboxBuilder
@@ -76,6 +89,35 @@ OTLP_SINK_PORT = 4318
 # the task; the store's last rows (the submit call, the turn's end) are written
 # then. Measured at under a minute on the second run's tail; capped here.
 BOB_SUBMIT_GRACE_SECONDS = 120.0
+# Bob's global skills and rules below the runtime home (Shell 2.0.9 reads
+# ``~/.bob/skills/<name>/SKILL.md`` and every ``~/.bob/rules/*.md``).
+BOB_SKILLS_DIR = "/runtime-home/.bob/skills"
+BOB_SKILLS_DIRECTIVE_PATH = "/runtime-home/.bob/rules/strata-skills.md"
+
+
+def render_bob_skills_directive(skills: list[dict[str, str]]) -> str:
+    """The global rule that tells Bob to activate the run's skills first."""
+    count = "One skill was" if len(skills) == 1 else f"{len(skills)} skills were"
+    lines = [
+        "# Skills for this build",
+        "",
+        f"{count} handed to you for this build. Before you read the kit, activate each "
+        "one with the use_skill tool and follow what it says:",
+        "",
+    ]
+    for skill in skills:
+        description = skill.get("description") or ""
+        lines.append(
+            f"- `{skill['name']}`" + (f" — {description}" if description else "")
+        )
+    lines += [
+        "",
+        "Keep working until you have called `hyper_tau.submit`: a session that ends "
+        "without it is scored as the workspace stands, and the time left in your "
+        "budget is lost.",
+        "",
+    ]
+    return "\n".join(lines)
 
 
 class BobShellSandboxBuilder(NativeSandboxBuilder):
@@ -90,13 +132,14 @@ class BobShellSandboxBuilder(NativeSandboxBuilder):
     mcp_config_path = "/runtime-home/.bob/settings/mcp.json"
     submit_grace_seconds = BOB_SUBMIT_GRACE_SECONDS
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, llm: str, *, skills_dir: str | Path | None = None, **kwargs):
+        super().__init__(llm, **kwargs)
+        self.skills = load_skills_dir(skills_dir) if skills_dir is not None else []
         self._mcp_server_environment: dict[str, str] = {}
         self._pending_text: list[str] = []
 
     def harness_config_metadata(self) -> dict:
-        return {
+        metadata = {
             "interface": "run-stream-json",
             "permission_mode": "headless-auto-approve",
             "license": "accepted-by-flag",
@@ -108,6 +151,11 @@ class BobShellSandboxBuilder(NativeSandboxBuilder):
             "telemetry": "otlp-to-sink" if self.keeps_artifacts else "off",
             "submit_grace_seconds": self.submit_grace_seconds,
         }
+        if self.skills:
+            metadata["skills"] = [skill["name"] for skill in self.skills]
+            metadata["skills_location"] = BOB_SKILLS_DIR
+            metadata["skills_directive"] = "global-rule"
+        return metadata
 
     @property
     def keeps_artifacts(self) -> bool:
@@ -119,7 +167,9 @@ class BobShellSandboxBuilder(NativeSandboxBuilder):
         # The builder asks for the environment before the runtime files, so
         # the MCP entry written next carries these values.
         self._mcp_server_environment = {
-            key: environment[key] for key in _MCP_SERVER_ENVIRONMENT_KEYS if key in environment
+            key: environment[key]
+            for key in _MCP_SERVER_ENVIRONMENT_KEYS
+            if key in environment
         }
         environment["BOB_LOG_LEVEL"] = "warn"
         if self.keeps_artifacts:
@@ -181,7 +231,7 @@ class BobShellSandboxBuilder(NativeSandboxBuilder):
         # Bob gives an MCP server an empty environment: the callback server
         # reads TAU2_CALLBACK_* and finds the benchmark's package through the
         # entry's own ``env``.
-        return {
+        files = {
             self.runtime_config_path: self.render_runtime_config(
                 include_client_tool=include_client_tool,
                 include_live_experiment_tool=include_live_experiment_tool,
@@ -204,6 +254,35 @@ class BobShellSandboxBuilder(NativeSandboxBuilder):
                 sort_keys=True,
             ),
         }
+        files.update(self.skills_files())
+        return files
+
+    def skills_files(self) -> dict[str, str]:
+        """The run's skills below Bob's global skills directory, and the rule that says to activate them."""
+        if not self.skills:
+            return {}
+        files = {BOB_SKILLS_DIRECTIVE_PATH: render_bob_skills_directive(self.skills)}
+        for skill in self.skills:
+            files[f"{BOB_SKILLS_DIR}/{skill['name']}/SKILL.md"] = skill["content"]
+        return files
+
+    def skills_read(self, steps) -> list[str] | None:
+        """The run's skills Bob activated with ``use_skill``, in order of first activation."""
+        if not self.skills:
+            return None
+        wanted = {skill["name"] for skill in self.skills}
+        read: list[str] = []
+        for step in steps:
+            for call in getattr(step, "tool_calls", None) or []:
+                if not isinstance(call, dict) or call.get("name") != "use_skill":
+                    continue
+                arguments = call.get("arguments")
+                name = (
+                    arguments.get("skill_name") if isinstance(arguments, dict) else None
+                )
+                if name in wanted and name not in read:
+                    read.append(name)
+        return read
 
     def harness_command(self) -> list[str]:
         driver = (
@@ -239,7 +318,9 @@ class BobShellSandboxBuilder(NativeSandboxBuilder):
             command.extend(["--team-id", team_id])
         return command
 
-    def collect_artifacts(self, runtime: NativeSandboxRuntime, into: Path) -> dict | None:
+    def collect_artifacts(
+        self, runtime: NativeSandboxRuntime, into: Path
+    ) -> dict | None:
         """Bob's task store (its write-ahead log folded in) and the sink's spans, copied out."""
         store_dir = into / "bob-store"
         store_dir.mkdir(parents=True, exist_ok=True)
@@ -337,7 +418,9 @@ def _extract(tar_bytes: bytes, into: Path) -> None:
         for member in members:
             target = (into / member.name).resolve()
             if into.resolve() not in (target, *target.parents):
-                raise RuntimeError(f"the archive names a path outside the artifacts directory: {member.name}")
+                raise RuntimeError(
+                    f"the archive names a path outside the artifacts directory: {member.name}"
+                )
         try:
             archive.extractall(into, members=members, filter="data")
         except TypeError:  # Python before 3.12: no filter argument

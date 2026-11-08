@@ -8,6 +8,8 @@ from pathlib import Path
 
 from tau2.hyper.harnesses.bob import (
     BOB_SHELL_HARNESS_VERSION,
+    BOB_SKILLS_DIR,
+    BOB_SKILLS_DIRECTIVE_PATH,
     BOB_SPANS_DIR,
     BOB_STORE_DIR,
     BOB_SUBMIT_GRACE_SECONDS,
@@ -40,14 +42,22 @@ def test_bob_command_runs_headless_with_the_prompt_as_an_argument(monkeypatch):
     builder = BobShellSandboxBuilder("bob-default")
 
     command = builder.harness_command()
-    assert command[:4] == ["python", "-m", "tau2.hyper.harnesses.prompt_arg_driver", "bob"]
+    assert command[:4] == [
+        "python",
+        "-m",
+        "tau2.hyper.harnesses.prompt_arg_driver",
+        "bob",
+    ]
     assert "run" in command and "--format" in command
     assert command[command.index("--format") + 1] == "stream-json"
     assert "--accept-license" in command and "--trust" in command
     assert "--team-id" not in command
 
     monkeypatch.setenv("BOB_TEAM_ID", "team-1")
-    assert BobShellSandboxBuilder("bob-default").harness_command()[-2:] == ["--team-id", "team-1"]
+    assert BobShellSandboxBuilder("bob-default").harness_command()[-2:] == [
+        "--team-id",
+        "team-1",
+    ]
 
 
 class _Broker:
@@ -61,7 +71,10 @@ def test_bob_runtime_files_stay_below_the_runtime_home():
 
     assert all(path.startswith("/runtime-home/") for path in files)
     mcp = json.loads(files[builder.mcp_config_path])
-    assert mcp["mcpServers"]["hyper_tau"]["args"] == ["-m", "tau2.hyper.sandbox.callback_mcp"]
+    assert mcp["mcpServers"]["hyper_tau"]["args"] == [
+        "-m",
+        "tau2.hyper.sandbox.callback_mcp",
+    ]
 
 
 def test_bob_mcp_entry_carries_the_callback_environment_by_value():
@@ -71,7 +84,9 @@ def test_bob_mcp_entry_carries_the_callback_environment_by_value():
     environment = builder.runtime_environment(_Broker())
     assert environment["BOB_TELEMETRY_PROVIDER"] == "none"
 
-    mcp = json.loads(builder.runtime_files(include_client_tool=True)[builder.mcp_config_path])
+    mcp = json.loads(
+        builder.runtime_files(include_client_tool=True)[builder.mcp_config_path]
+    )
     env = mcp["mcpServers"]["hyper_tau"]["env"]
     assert env["PYTHONPATH"] == "/workspace:/opt/tau2/src"
     assert env["TAU2_CALLBACK_DIR"] == "/run/tau2-callback"
@@ -97,7 +112,10 @@ def test_bob_model_gateway_environment_points_at_the_sidecar():
     # sidecar scopes requests below /<provider>/v1/.
     assert env["BOB_GATEWAY_URL"] == f"{spec.base_url}/v1"
     assert env["BOB_GATEWAY_URL"].endswith("/bob/v1")
-    assert spec.metadata()["allowed_api_families"] == ["admin/v1/profile", "inference/v1"]
+    assert spec.metadata()["allowed_api_families"] == [
+        "admin/v1/profile",
+        "inference/v1",
+    ]
 
 
 def test_bob_wire_relays_the_profile_without_a_region_and_with_bobs_headers():
@@ -140,14 +158,27 @@ def test_bob_stream_normalizes_text_tool_calls_and_results():
     steps = [
         step
         for line in lines
-        for step in builder.normalize_event(NativeProcessEvent(sequence=0, channel="stdout", text=line, elapsed_seconds=0.0))
+        for step in builder.normalize_event(
+            NativeProcessEvent(
+                sequence=0, channel="stdout", text=line, elapsed_seconds=0.0
+            )
+        )
     ]
     # Bob streams assistant text one delta per frame: the deltas become one
     # step at the next tool call or at the closing result.
     assert [s.role for s in steps] == ["assistant", "assistant", "tool", "assistant"]
     assert steps[0].content == "Let me run it:"
-    assert steps[1].tool_calls == [{"id": "tooluse_1", "name": "execute_command", "arguments": {"command": "echo ok"}}]
-    assert steps[2].tool_results[0]["result"] == "ok" and steps[2].tool_results[0]["is_error"] is False
+    assert steps[1].tool_calls == [
+        {
+            "id": "tooluse_1",
+            "name": "execute_command",
+            "arguments": {"command": "echo ok"},
+        }
+    ]
+    assert (
+        steps[2].tool_results[0]["result"] == "ok"
+        and steps[2].tool_results[0]["is_error"] is False
+    )
     assert steps[3].content == "ok"
 
 
@@ -159,29 +190,41 @@ def test_bob_keeps_nothing_and_exports_nothing_without_an_artifacts_dir(monkeypa
     environment = builder.runtime_environment(_Broker())
     assert environment["BOB_TELEMETRY_PROVIDER"] == "none"
     assert "OTEL_EXPORTER_OTLP_ENDPOINT" not in environment
-    settings = json.loads(builder.runtime_files(include_client_tool=True)[builder.runtime_config_path])
+    settings = json.loads(
+        builder.runtime_files(include_client_tool=True)[builder.runtime_config_path]
+    )
     assert settings["telemetry"] == {"enabled": False, "excludePayload": True}
     assert builder.harness_command()[2] == "tau2.hyper.harnesses.prompt_arg_driver"
 
 
-def test_bob_with_an_artifacts_dir_runs_under_the_sink_with_telemetry_on(monkeypatch, tmp_path):
+def test_bob_with_an_artifacts_dir_runs_under_the_sink_with_telemetry_on(
+    monkeypatch, tmp_path
+):
     monkeypatch.delenv("BOB_TEAM_ID", raising=False)
     builder = BobShellSandboxBuilder("bob-default", artifacts_dir=tmp_path / "bob-a")
     assert builder.keeps_artifacts is True
     # The submit gets a grace in which Bob writes the submit row and ends its turn.
     assert builder.submit_grace_seconds == BOB_SUBMIT_GRACE_SECONDS > 0
     config = builder.harness_identity().to_dict()["config"]
-    assert config["telemetry"] == "otlp-to-sink" and config["submit_grace_seconds"] == BOB_SUBMIT_GRACE_SECONDS
+    assert (
+        config["telemetry"] == "otlp-to-sink"
+        and config["submit_grace_seconds"] == BOB_SUBMIT_GRACE_SECONDS
+    )
 
     environment = builder.runtime_environment(_Broker())
     # Bob's own provider variables, not the standard OTEL one: on that one the
     # Shell filters a span's attributes to an allowlist with no usage split.
     assert environment["BOB_TELEMETRY_PROVIDER"] == "langfuse"
     assert environment["BOB_TELEMETRY_URL"] == "http://127.0.0.1:4318"
-    assert environment["BOB_TELEMETRY_LF_PUBLIC_KEY"] and environment["BOB_TELEMETRY_LF_SECRET_KEY"]
+    assert (
+        environment["BOB_TELEMETRY_LF_PUBLIC_KEY"]
+        and environment["BOB_TELEMETRY_LF_SECRET_KEY"]
+    )
     assert environment["BOB_TELEMETRY_AGENT_OPS_ENABLED"] == "true"
     assert not any(key.startswith("OTEL_") for key in environment)
-    settings = json.loads(builder.runtime_files(include_client_tool=True)[builder.runtime_config_path])
+    settings = json.loads(
+        builder.runtime_files(include_client_tool=True)[builder.runtime_config_path]
+    )
     assert settings["telemetry"] == {"enabled": True, "excludePayload": True}
 
     command = builder.harness_command()
@@ -223,12 +266,18 @@ def test_bob_collects_its_store_with_the_wal_folded_in_and_the_spans(tmp_path):
     connection.execute("CREATE TABLE tasks (id TEXT)")
     connection.execute("CREATE TABLE messages (id TEXT, data TEXT)")
     connection.execute("INSERT INTO tasks VALUES ('t1')")
-    connection.executemany("INSERT INTO messages VALUES (?, ?)", [(f"m{i}", "{}") for i in range(5)])
+    connection.executemany(
+        "INSERT INTO messages VALUES (?, ?)", [(f"m{i}", "{}") for i in range(5)]
+    )
     connection.commit()
-    assert (store_dir / "bob.db-wal").stat().st_size > 0, "the rows are in the WAL, not yet in bob.db"
+    assert (store_dir / "bob.db-wal").stat().st_size > 0, (
+        "the rows are in the WAL, not yet in bob.db"
+    )
     spans_dir = home / "otlp"
     spans_dir.mkdir()
-    (spans_dir / "spans.ndjson").write_text('{"body":{"resourceSpans":[]}}\n{"body":{"resourceSpans":[]}}\n')
+    (spans_dir / "spans.ndjson").write_text(
+        '{"body":{"resourceSpans":[]}}\n{"body":{"resourceSpans":[]}}\n'
+    )
 
     runtime = _Runtime({BOB_STORE_DIR: store_dir, BOB_SPANS_DIR: spans_dir})
     builder = BobShellSandboxBuilder("bob-default", artifacts_dir=tmp_path / "out")
@@ -241,11 +290,17 @@ def test_bob_collects_its_store_with_the_wal_folded_in_and_the_spans(tmp_path):
     assert artifacts["store"] == str(into / "bob-store" / "bob.db")
     assert artifacts["store_tasks"] == 1 and artifacts["store_messages"] == 5
     # whole in one file: a reader that opens bob.db alone sees every row
-    assert not (into / "bob-store" / "bob.db-wal").exists() and not (into / "bob-store" / "bob.db-shm").exists()
+    assert (
+        not (into / "bob-store" / "bob.db-wal").exists()
+        and not (into / "bob-store" / "bob.db-shm").exists()
+    )
     alone = sqlite3.connect(f"file:{into / 'bob-store' / 'bob.db'}?mode=ro", uri=True)
     assert alone.execute("SELECT count(*) FROM messages").fetchone()[0] == 5
     alone.close()
-    assert artifacts["spans"] == str(into / "spans.ndjson") and artifacts["span_requests"] == 2
+    assert (
+        artifacts["spans"] == str(into / "spans.ndjson")
+        and artifacts["span_requests"] == 2
+    )
     assert not (into / ".otlp").exists()
 
 
@@ -260,8 +315,14 @@ def test_bob_collects_the_store_alone_when_nothing_was_exported(tmp_path):
     runtime = _Runtime({BOB_STORE_DIR: store_dir})
     into = tmp_path / "out"
     into.mkdir()
-    artifacts = BobShellSandboxBuilder("bob-default", artifacts_dir=into).collect_artifacts(runtime, into)
-    assert artifacts["store_messages"] == 0 and artifacts["spans"] is None and artifacts["span_requests"] == 0
+    artifacts = BobShellSandboxBuilder(
+        "bob-default", artifacts_dir=into
+    ).collect_artifacts(runtime, into)
+    assert (
+        artifacts["store_messages"] == 0
+        and artifacts["spans"] is None
+        and artifacts["span_requests"] == 0
+    )
     assert "No such file" in artifacts["spans_error"]
 
 
@@ -279,11 +340,136 @@ def test_the_result_file_carries_the_grace_and_the_artifacts(tmp_path):
                 "exited_in_grace": True,
                 "changed_after_submit": [],
             },
-            "artifacts": {"collected": "exit", "store": "bob-store/bob.db", "tasks": 1, "messages": 187, "span_requests": 16},
+            "artifacts": {
+                "collected": "exit",
+                "store": "bob-store/bob.db",
+                "tasks": 1,
+                "messages": 187,
+                "span_requests": 16,
+            },
         },
     )
     record = _build_end_record(result)
     assert record["process"]["exited_in_grace"] is True
     assert record["process"]["submit_grace_seconds"] == 120.0
     assert record["process"]["changed_after_submit"] == []
-    assert record["artifacts"]["collected"] == "exit" and record["artifacts"]["messages"] == 187
+    assert (
+        record["artifacts"]["collected"] == "exit"
+        and record["artifacts"]["messages"] == 187
+    )
+
+
+def _skills_dir(tmp_path):
+    skills = tmp_path / "skills"
+    for name, description in (
+        ("tau-agent-construction", "Use when building the agent."),
+        ("policy-from-evidence", "Use when the policy is spread across evidence."),
+    ):
+        (skills / name).mkdir(parents=True)
+        (skills / name / "SKILL.md").write_text(
+            f"---\nname: {name}\ndescription: {description}\n---\nbody of {name}\n"
+        )
+    return skills
+
+
+def test_bob_skills_dir_rides_below_the_runtime_home_with_a_global_rule(tmp_path):
+    builder = BobShellSandboxBuilder("bob-default", skills_dir=_skills_dir(tmp_path))
+
+    config = builder.harness_identity().config
+    assert config["skills"] == ["policy-from-evidence", "tau-agent-construction"]
+    assert config["skills_location"] == BOB_SKILLS_DIR
+    assert config["skills_directive"] == "global-rule"
+
+    files = builder.runtime_files(include_client_tool=False)
+    assert all(path.startswith("/runtime-home/") for path in files), (
+        "nothing in the kit"
+    )
+    assert files[f"{BOB_SKILLS_DIR}/tau-agent-construction/SKILL.md"].endswith(
+        "body of tau-agent-construction\n"
+    )
+    assert files[f"{BOB_SKILLS_DIR}/policy-from-evidence/SKILL.md"].endswith(
+        "body of policy-from-evidence\n"
+    )
+    rule = files[BOB_SKILLS_DIRECTIVE_PATH]
+    assert "2 skills were handed to you" in rule
+    assert "use_skill" in rule
+    assert "- `tau-agent-construction` — Use when building the agent." in rule
+    assert "hyper_tau.submit" in rule
+    # The command is unchanged: Bob finds global skills and rules on its own.
+    assert "--skills" not in " ".join(builder.harness_command())
+
+
+def test_bob_without_skills_writes_no_skill_and_reads_none():
+    builder = BobShellSandboxBuilder("bob-default")
+    files = builder.runtime_files(include_client_tool=False)
+    assert not any("/.bob/skills/" in path or "/.bob/rules/" in path for path in files)
+    assert "skills" not in builder.harness_identity().config
+    assert builder.skills_read([]) is None
+
+
+def test_bob_reads_the_skills_it_activated_with_use_skill(tmp_path):
+    builder = BobShellSandboxBuilder("bob-default", skills_dir=_skills_dir(tmp_path))
+
+    steps = []
+    for frame in (
+        {
+            "type": "tool_use",
+            "tool_id": "t1",
+            "tool_name": "use_skill",
+            "parameters": {"skill_name": "tau-agent-construction"},
+        },
+        {"type": "tool_result", "tool_id": "t1", "status": "success", "output": "body"},
+        {
+            "type": "tool_use",
+            "tool_id": "t2",
+            "tool_name": "read_file",
+            "parameters": {"path": "README.md"},
+        },
+        {
+            "type": "tool_use",
+            "tool_id": "t3",
+            "tool_name": "use_skill",
+            "parameters": {"skill_name": "tau-agent-construction"},
+        },
+        {
+            "type": "tool_use",
+            "tool_id": "t4",
+            "tool_name": "use_skill",
+            "parameters": {"skill_name": "create-plan"},
+        },
+    ):
+        steps += builder.normalize_event(
+            NativeProcessEvent(
+                sequence=0,
+                channel="stdout",
+                text=json.dumps(frame),
+                elapsed_seconds=1.0,
+            )
+        )
+
+    assert builder.skills_read(steps) == ["tau-agent-construction"], (
+        "once per skill, the run's skills only"
+    )
+
+
+def test_the_factory_hands_bob_a_skills_dir_and_still_refuses_one_for_opencode(
+    tmp_path,
+):
+    from tau2.hyper.harnesses.factory import create_developer_builder
+
+    skills = str(_skills_dir(tmp_path))
+    builder = create_developer_builder(
+        "bob", "bob-default", None, None, developer_skills_dir=skills
+    )
+    assert isinstance(builder, BobShellSandboxBuilder)
+    assert builder.harness_identity().config["skills"] == [
+        "policy-from-evidence",
+        "tau-agent-construction",
+    ]
+
+    import pytest
+
+    with pytest.raises(NotImplementedError):
+        create_developer_builder(
+            "opencode", "gpt-5.4", None, None, developer_skills_dir=skills
+        )
