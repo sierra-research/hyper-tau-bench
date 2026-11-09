@@ -14,6 +14,7 @@ Manages the full lifecycle of a sandbox-mode evaluation:
 from __future__ import annotations
 
 import hashlib
+import json
 import time
 import os
 import shutil
@@ -382,6 +383,47 @@ def _kit_baseline_commit(kit_path: Path) -> Optional[str]:
         return None
     first = out.stdout.strip().splitlines()
     return first[-1] if out.returncode == 0 and first else None
+
+
+DEPLOYMENT_SNAPSHOT_FILE = "deployment-snapshot.json"
+
+
+def write_deployment_snapshot(kit_path: Path, snapshot: DeploymentSnapshot) -> Path:
+    """Keep the build's capability state beside the kit (not under workspace/).
+
+    A Client may enable an operation during the build; the scoring runs the
+    kit against that state. The file lets a later ``--score-only`` of the same
+    kit run against it too, instead of the empty snapshot.
+    """
+    path = Path(kit_path) / DEPLOYMENT_SNAPSHOT_FILE
+    path.write_text(
+        json.dumps(snapshot.model_dump(mode="json"), indent=2, sort_keys=True) + "\n"
+    )
+    return path
+
+
+def load_deployment_snapshot(kit_path: Path) -> DeploymentSnapshot:
+    """The snapshot a build left beside the kit, else the empty one.
+
+    A kit built before the file existed, or by hand, has none: it is scored
+    against the empty snapshot, as every score-only run was before.
+    """
+    path = Path(kit_path) / DEPLOYMENT_SNAPSHOT_FILE
+    if not path.is_file():
+        return empty_deployment_snapshot()
+    snapshot = DeploymentSnapshot.model_validate(json.loads(path.read_text()))
+    expected = hashlib.sha256(
+        json.dumps(
+            {"enabled": list(snapshot.enabled_capability_ids)},
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode()
+    ).hexdigest()
+    if snapshot.sha256 != expected:
+        raise ValueError(
+            f"{path} does not match its enabled capabilities (sha256 {snapshot.sha256})"
+        )
+    return snapshot
 
 
 def limit_test_task_ids(task_ids: list[str], limit: int) -> list[str]:
@@ -757,7 +799,18 @@ class SandboxOrchestrator:
                 submitted=True,
                 done_reason="score_only",
             )
-            self._deployment_snapshot = empty_deployment_snapshot()
+            self._deployment_snapshot = load_deployment_snapshot(kit_path)
+            if (kit_path / DEPLOYMENT_SNAPSHOT_FILE).is_file():
+                logger.info(
+                    "Score-only run: deployment snapshot from "
+                    f"{DEPLOYMENT_SNAPSHOT_FILE} (enabled: "
+                    f"{list(self._deployment_snapshot.enabled_capability_ids) or 'none'})"
+                )
+            else:
+                logger.info(
+                    f"Score-only run: no {DEPLOYMENT_SNAPSHOT_FILE} beside the kit, "
+                    "scoring against the empty deployment snapshot"
+                )
         else:
             # Phase 1: Build the kit
             logger.info(f"Phase 1: Building kit at {kit_path}")
@@ -853,6 +906,9 @@ class SandboxOrchestrator:
                 if self._capability_session is not None
                 else empty_deployment_snapshot()
             )
+            # Kept beside the kit so a --score-only of this kit scores it as the
+            # build left it: with every operation the Client enabled.
+            write_deployment_snapshot(kit_path, self._deployment_snapshot)
 
         logger.info(
             f"Builder finished: {build_result.done_reason}, "

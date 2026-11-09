@@ -1187,7 +1187,10 @@ def main():
         help=(
             "Score the kit at --kit-dir as it is: no kit build, no Developer. "
             "For a re-score of a finished build (after a provider outage, say) "
-            "or a submission made elsewhere. Requires --kit-dir."
+            "or a submission made elsewhere. Requires --kit-dir. The kit is scored "
+            "with the operations the Client enabled during its build, read from the "
+            "deployment-snapshot.json the build left beside the kit (none: the empty "
+            "deployment)."
         ),
     )
     hyper_tau_parser.add_argument(
