@@ -738,6 +738,13 @@ class EvaluationResult(BaseModel):
         default_factory=list,
         description="The simulation messages (failure traces).",
     )
+    conversation_id: Optional[str] = Field(
+        default=None,
+        description=(
+            "The conversation id the simulation's model calls were made under "
+            "(a provider base_url's {conversation}); None when unscoped."
+        ),
+    )
     error: Optional[str] = Field(
         default=None,
         description=(

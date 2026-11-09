@@ -25,6 +25,7 @@ from tau2.user.user_simulator_base import (
 )
 from tau2.utils import DATA_DIR
 from tau2.utils.llm_utils import generate
+from tau2.utils.model_routing import seat_scope
 
 GLOBAL_USER_SIM_GUIDELINES_DIR = DATA_DIR / "tau2" / "user_simulator"
 
@@ -231,14 +232,16 @@ class UserSimulator(
             state.messages.append(message)
         messages = state.system_messages + state.flip_roles()
 
-        # Generate response
-        assistant_message = generate(
-            model=self.llm,
-            messages=messages,
-            tools=self.tools,
-            call_name="user_simulator_response",
-            **self.llm_args,
-        )
+        # Generate response (its own conversation beside the agent's when the
+        # calls are routed by conversation)
+        with seat_scope("user"):
+            assistant_message = generate(
+                model=self.llm,
+                messages=messages,
+                tools=self.tools,
+                call_name="user_simulator_response",
+                **self.llm_args,
+            )
 
         user_response = assistant_message.content
         logger.debug(f"Response: {user_response}")

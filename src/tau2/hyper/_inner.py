@@ -41,12 +41,14 @@ from tau2.hyper.data_model import EvaluationResult
 from tau2.orchestrator.orchestrator import Orchestrator
 from tau2.runner.build import build_agent, build_environment, build_user
 from tau2.runner.simulation import run_simulation
+from tau2.utils.model_routing import conversation_id_segment, conversation_scope
 
 if TYPE_CHECKING:
     from tau2.hyper.visualizer import HyperTauDisplay
 
 _DEFAULT_INNER_MAX_WORKERS = 32
 _INNER_MAX_WORKERS_ENV = "TAU2_HYPER_INNER_MAX_WORKERS"
+_CONVERSATION_PREFIX_ENV = "TAU2_CONVERSATION_PREFIX"
 
 # Transient provider failures (503s, rate limits, socket resets) must not be
 # scored as task failures: the 2026-08-27 final-12 construction batch zeroed
@@ -624,6 +626,7 @@ def run_inner_simulations(
     display: Optional["HyperTauDisplay"] = None,
     eval_kind: str = "train",
     max_workers: Optional[int] = None,
+    conversation_prefix: Optional[str] = None,
 ) -> list[EvaluationResult]:
     """Run :func:`run_inner_simulation` for each task in parallel.
 
@@ -654,9 +657,18 @@ def run_inner_simulations(
             ``"test"``, or ``"regression"``.
         max_workers: Optional per-call concurrency cap. When omitted,
             ``TAU2_HYPER_INNER_MAX_WORKERS`` can override the default of 32.
+        conversation_prefix: Names each simulated conversation
+            ``<prefix>-<eval_kind>-<task id>`` for the model calls made inside
+            it (``tau2.utils.model_routing.conversation_scope``), so a provider
+            whose base_url carries ``{conversation}`` receives one conversation
+            per task. The id is on the result as ``conversation_id``. When
+            omitted, ``TAU2_CONVERSATION_PREFIX`` is read; unset means no scope.
     """
     if not tasks:
         return []
+
+    if conversation_prefix is None:
+        conversation_prefix = os.environ.get(_CONVERSATION_PREFIX_ENV) or None
 
     grounding_classification = None
     if client_api_mode == "rest" and custom_environment is not None:
@@ -679,7 +691,22 @@ def run_inner_simulations(
         for i, t in enumerate(tasks):
             display.show_eval_task_start(t.id, eval_kind, i, total)
 
+    def _conversation_id(task: Task) -> Optional[str]:
+        if not conversation_prefix:
+            return None
+        return conversation_id_segment(f"{conversation_prefix}-{eval_kind}-{task.id}")
+
     def _run_one(task: Task) -> EvaluationResult:
+        conversation_id = _conversation_id(task)
+        if conversation_id is None:
+            result = _run_one_unscoped(task)
+        else:
+            with conversation_scope(conversation_id):
+                result = _run_one_unscoped(task)
+        result.conversation_id = conversation_id
+        return result
+
+    def _run_one_unscoped(task: Task) -> EvaluationResult:
         if stop_event is not None and stop_event.is_set():
             return EvaluationResult(task_id=task.id, reward=0.0, messages=[])
         for attempt in range(1, _TRANSIENT_ERROR_MAX_ATTEMPTS + 1):

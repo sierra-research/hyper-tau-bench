@@ -23,6 +23,7 @@ from tau2.evaluator.evaluator_response_assertions import (
     ResponseAssertionsEvaluator,
 )
 from tau2.orchestrator.modes import CommunicationMode
+from tau2.utils.model_routing import seat_scope
 
 
 class EvaluationType(str, Enum):
@@ -95,7 +96,18 @@ class EvaluationType(str, Enum):
     ALL_WITH_NL_ASSERTIONS_IGNORE_BASIS = "all_with_nl_assertions_ignore_basis"
 
 
-def evaluate_simulation(
+def evaluate_simulation(*args, **kwargs) -> RewardInfo:
+    """Evaluate the simulation; see :func:`_evaluate_simulation` for the arguments.
+
+    The judges' model calls run as the ``judge`` seat of the conversation under
+    evaluation, so a provider routed by conversation keeps them apart from the
+    agent's calls and their cost.
+    """
+    with seat_scope("judge"):
+        return _evaluate_simulation(*args, **kwargs)
+
+
+def _evaluate_simulation(
     simulation: SimulationRun,
     task: Task,
     evaluation_type: EvaluationType,

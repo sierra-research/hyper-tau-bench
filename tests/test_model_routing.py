@@ -340,3 +340,61 @@ def test_shipped_manifest_keeps_registry_ids_as_written():
         # Bare OpenAI ids stay bare so the Responses API gate still fires.
         if route.provider.name == "openai":
             assert route.litellm_model == model
+
+
+# --- Conversation-scoped providers --------------------------------------------
+
+
+def test_conversation_placeholder_fills_from_the_active_scope(monkeypatch):
+    monkeypatch.setenv("STRATA_KEY", "k-strata")
+    routing = parse_routing(
+        {
+            "providers": {
+                "strata": {
+                    "base_url": "http://localhost:8080/c/{conversation}/v1",
+                    "api_key_env": "STRATA_KEY",
+                }
+            },
+            "models": {"gpt-5.6-sol": {"provider": "strata"}},
+        }
+    )
+    route = routing.resolve("gpt-5.6-sol")
+    assert route.provider.is_conversation_scoped
+
+    # outside any scope the placeholder is filled with the unscoped segment
+    assert route.request_kwargs()["api_base"] == "http://localhost:8080/c/unscoped/v1"
+
+    with model_routing.conversation_scope("hyper-007-run/arm-b test 2") as segment:
+        assert segment == "hyper-007-run-arm-b-test-2"
+        assert route.request_kwargs()["api_base"] == (
+            "http://localhost:8080/c/hyper-007-run-arm-b-test-2/v1"
+        )
+        # the agent's seat is the conversation itself; other seats are suffixed
+        with model_routing.seat_scope(model_routing.AGENT_SEAT):
+            assert route.request_kwargs()["api_base"].endswith("/c/hyper-007-run-arm-b-test-2/v1")
+        with model_routing.seat_scope("user"):
+            assert route.request_kwargs()["api_base"].endswith("/c/hyper-007-run-arm-b-test-2-user/v1")
+        with model_routing.seat_scope("judge"):
+            assert route.request_kwargs()["api_base"].endswith("/c/hyper-007-run-arm-b-test-2-judge/v1")
+        assert route.request_kwargs()["api_base"].endswith("/c/hyper-007-run-arm-b-test-2/v1")
+    assert model_routing.active_conversation() is None
+
+
+def test_seat_scope_outside_a_conversation_changes_nothing():
+    with model_routing.seat_scope("judge") as segment:
+        assert segment is None
+        assert model_routing.active_conversation() is None
+
+
+def test_unscoped_provider_ignores_the_conversation(monkeypatch):
+    monkeypatch.setenv("MY_KEY", "k")
+    routing = parse_routing(
+        {
+            "providers": {"plain": {"base_url": "http://localhost:9000/v1", "api_key_env": "MY_KEY"}},
+            "models": {"m": {"provider": "plain"}},
+        }
+    )
+    route = routing.resolve("m")
+    assert not route.provider.is_conversation_scoped
+    with model_routing.conversation_scope("c1"):
+        assert route.request_kwargs()["api_base"] == "http://localhost:9000/v1"

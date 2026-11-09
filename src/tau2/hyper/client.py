@@ -20,6 +20,8 @@ recordings stay distinguishable from inner-loop user turns.
 """
 
 import json
+import os
+from contextlib import nullcontext
 from dataclasses import dataclass, field
 from typing import Literal, Optional, Tuple
 
@@ -36,8 +38,18 @@ from tau2.hyper.data_model import ClientState
 from tau2.user.user_simulator import UserSimulator
 from tau2.user.user_simulator_base import ValidUserInputMessage
 from tau2.utils.llm_utils import generate
+from tau2.utils.model_routing import conversation_scope
 
 _CAPABILITY_CONTROL_TOOL_NAME = "respond_about_deployable_capability"
+
+
+_CONVERSATION_PREFIX_ENV = "TAU2_CONVERSATION_PREFIX"
+
+
+def _client_conversation():
+    """The Client's calls as ``<TAU2_CONVERSATION_PREFIX>-client``, when a run names one."""
+    prefix = os.environ.get(_CONVERSATION_PREFIX_ENV)
+    return conversation_scope(f"{prefix}-client") if prefix else nullcontext()
 
 
 @dataclass
@@ -254,14 +266,15 @@ class ClientSimulator(UserSimulator[ClientState]):
         state.messages.append(message)
         messages = state.system_messages + state.flip_roles()
         logger.debug(f"Client responding to: {getattr(message, 'content', '')[:100]}")
-        assistant_message: AssistantMessage = generate(
-            model=self.llm,
-            messages=messages,
-            tools=self.tools,
-            tool_choice="required" if self.tools else None,
-            call_name="client_simulator_response",
-            **self.llm_args,
-        )
+        with _client_conversation():
+            assistant_message: AssistantMessage = generate(
+                model=self.llm,
+                messages=messages,
+                tools=self.tools,
+                tool_choice="required" if self.tools else None,
+                call_name="client_simulator_response",
+                **self.llm_args,
+            )
         self._pending_capability_intent = None
         response_content = assistant_message.content
         if assistant_message.tool_calls:
@@ -321,13 +334,14 @@ class ClientSimulator(UserSimulator[ClientState]):
             ),
         )
         messages = state.system_messages + [prompt]
-        assistant_message: AssistantMessage = generate(
-            model=self.llm,
-            messages=messages,
-            tools=None,
-            call_name="client_initial_brief",
-            **self.llm_args,
-        )
+        with _client_conversation():
+            assistant_message: AssistantMessage = generate(
+                model=self.llm,
+                messages=messages,
+                tools=None,
+                call_name="client_initial_brief",
+                **self.llm_args,
+            )
         brief_text = assistant_message.content or ""
         # Store the brief as the Client's own turn. With ``flip_roles``,
         # this will appear as role="assistant" to the LLM on the next

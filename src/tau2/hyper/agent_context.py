@@ -15,6 +15,7 @@ from tau2.data_model.message import AssistantMessage, Message, UserMessage
 from tau2.environment.tool import Tool
 from tau2.hyper.action_catalog import ActionCatalog, ActionDefinition
 from tau2.utils.llm_utils import generate
+from tau2.utils.model_routing import AGENT_SEAT, seat_scope
 
 
 @dataclass(frozen=True)
@@ -467,14 +468,15 @@ class ModelGateway:
         """Generate one model response with optional selected actions."""
         config = self._config_for(model, kwargs)
         request_args = self._resolve_args(config, kwargs)
-        response = generate(
-            model=config.model,
-            messages=messages,
-            tools=list(actions) if actions is not None else None,
-            tool_choice=tool_choice,
-            call_name=call_name,
-            **request_args,
-        )
+        with seat_scope(AGENT_SEAT):
+            response = generate(
+                model=config.model,
+                messages=messages,
+                tools=list(actions) if actions is not None else None,
+                tool_choice=tool_choice,
+                call_name=call_name,
+                **request_args,
+            )
         self.credit_ledger.record(config, response)
         self.constraint_violation_log.record(config, response, call_name=call_name)
         return response

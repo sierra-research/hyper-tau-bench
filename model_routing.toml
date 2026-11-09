@@ -38,6 +38,18 @@
 # api_key_env = "MY_VLLM_API_KEY"      # vLLM accepts any non-empty string
 # api = "chat"
 #
+# A base_url may carry "{conversation}": it is filled at call time with the
+# simulated conversation's id, so a proxy that groups calls by a path segment
+# (Strata's /c/<conversation>/v1) sees one conversation per held-out task.
+# The id is "<TAU2_CONVERSATION_PREFIX>-<test|train>-<task id>" for the built
+# agent's calls, the same with "-user" for the simulated customer and "-judge"
+# for the judges, and "<prefix>-client" for the Client during the build; with
+# no prefix set, calls outside a scope use "unscoped". Each test's id is on
+# the result as test_details[].conversation_id.
+# [providers.strata]
+# base_url = "http://localhost:8080/c/{conversation}/v1"
+# api_key_env = "OPENAI_API_KEY"       # the proxy injects its own upstream key
+#
 # The Developer sidecar (Codex, Claude Code, OpenCode, Prime) uses the
 # provider its harness speaks: codex/prime → openai, claude-code → anthropic,
 # opencode → openai, or openrouter for `openrouter/...` ids. Point that

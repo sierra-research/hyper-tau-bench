@@ -1101,6 +1101,7 @@ class SandboxOrchestrator:
                     "task_id": r.task_id,
                     "reward": r.reward,
                     "error": r.error,
+                    "conversation_id": r.conversation_id,
                     "reward_breakdown": r.reward_breakdown,
                     "nl_assertion_details": r.nl_assertion_details,
                     "response_assertion_details": r.response_assertion_details,

@@ -23,16 +23,87 @@ Unlisted models fall back to LiteLLM's own prefix convention (bare id →
 from __future__ import annotations
 
 import os
+import re
 import tomllib
+from contextlib import contextmanager
+from contextvars import ContextVar
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Iterable, Mapping, Optional
+from typing import Any, Iterable, Iterator, Mapping, Optional
 
 ROUTING_PATH_ENV = "TAU2_MODEL_ROUTING"
 ROUTING_FILENAME = "model_routing.toml"
 
 WIRE_FORMATS = ("openai", "anthropic", "google", "bob")
 API_MODES = ("auto", "chat", "responses")
+
+# A provider's base_url may carry this placeholder. It is filled at call time
+# with the active conversation id (``conversation_scope``), so a proxy that
+# groups calls by a path segment — Strata's ``/c/<conversation>/v1`` — sees
+# one conversation per simulated conversation instead of one per run. A call
+# made outside any scope fills it with ``UNSCOPED_CONVERSATION``.
+CONVERSATION_PLACEHOLDER = "{conversation}"
+UNSCOPED_CONVERSATION = "unscoped"
+_CONVERSATION_ID_CHARS = re.compile(r"[^A-Za-z0-9._-]+")
+
+_active_conversation: ContextVar[Optional[str]] = ContextVar(
+    "tau2_active_conversation", default=None
+)
+# The simulated conversation the active scope belongs to: the agent's seat is
+# that conversation itself, the other seats (the simulated user, the judge)
+# are its own suffixed conversations, so each one's calls and cost stay apart.
+_conversation_base: ContextVar[Optional[str]] = ContextVar(
+    "tau2_conversation_base", default=None
+)
+AGENT_SEAT = "agent"
+
+
+def conversation_id_segment(value: str) -> str:
+    """A conversation id as a URL path segment: letters, digits, ``._-``."""
+    cleaned = _CONVERSATION_ID_CHARS.sub("-", value).strip("-")
+    return cleaned or UNSCOPED_CONVERSATION
+
+
+def active_conversation() -> Optional[str]:
+    """The conversation id the current call belongs to, or ``None``."""
+    return _active_conversation.get()
+
+
+@contextmanager
+def conversation_scope(conversation_id: str) -> Iterator[str]:
+    """Name the conversation every model call inside the block belongs to.
+
+    Context variables are per thread and per task, so one scope per worker
+    keeps parallel conversations apart.
+    """
+    segment = conversation_id_segment(conversation_id)
+    token = _active_conversation.set(segment)
+    base_token = _conversation_base.set(segment)
+    try:
+        yield segment
+    finally:
+        _conversation_base.reset(base_token)
+        _active_conversation.reset(token)
+
+
+@contextmanager
+def seat_scope(seat: str) -> Iterator[Optional[str]]:
+    """Name the seat making the calls inside the block.
+
+    Inside a ``conversation_scope`` the agent's seat (``AGENT_SEAT``) keeps the
+    conversation's own id and any other seat gets ``<conversation>-<seat>``
+    (``-user``, ``-judge``). Outside any scope this does nothing.
+    """
+    base = _conversation_base.get()
+    if base is None:
+        yield None
+        return
+    segment = base if seat == AGENT_SEAT else conversation_id_segment(f"{base}-{seat}")
+    token = _active_conversation.set(segment)
+    try:
+        yield segment
+    finally:
+        _active_conversation.reset(token)
 
 # Providers the code knows how to reach without any manifest entry. A manifest
 # ``[providers.<name>]`` table for one of these overrides its fields; a manifest
@@ -107,6 +178,19 @@ class ProviderRoute:
             raise ModelRoutingError(f"providers.{self.name}.api_key_env is required")
         if not self.base_url:
             raise ModelRoutingError(f"providers.{self.name}.base_url is required")
+
+    @property
+    def is_conversation_scoped(self) -> bool:
+        """True when the base URL names the conversation (``{conversation}``)."""
+        return CONVERSATION_PLACEHOLDER in self.base_url
+
+    def resolved_base_url(self) -> str:
+        """The base URL for the current call, the placeholder filled in."""
+        if not self.is_conversation_scoped:
+            return self.base_url
+        return self.base_url.replace(
+            CONVERSATION_PLACEHOLDER, active_conversation() or UNSCOPED_CONVERSATION
+        )
 
     @property
     def is_builtin_endpoint(self) -> bool:
@@ -196,7 +280,7 @@ class ModelRoute:
         if api_key is not None:
             kwargs["api_key"] = api_key
         if not self.provider.is_builtin_endpoint:
-            kwargs["api_base"] = self.provider.base_url
+            kwargs["api_base"] = self.provider.resolved_base_url()
         return kwargs
 
 
