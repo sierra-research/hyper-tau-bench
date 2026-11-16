@@ -695,7 +695,9 @@ def test_construction_db_compare_ignores_agent_discoverable_audit_logs():
     task = Task(
         id="ignore_agent_discoverable_audit",
         user_scenario={"instructions": "No operation is needed."},
-        evaluation_criteria=EvaluationCriteria(reward_basis=[RewardType.DB]),
+        evaluation_criteria=EvaluationCriteria(
+            actions=[], reward_basis=[RewardType.DB]
+        ),
     )
 
     def generated_constructor(**_kwargs):

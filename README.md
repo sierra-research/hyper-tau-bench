@@ -19,6 +19,13 @@ pass rate.
 
 ![τ^τ-bench overview: evidence, sandboxed agent construction, evaluation](figs/fig1_overview.png)
 
+> **Scoring update — 1.0.2:** Banking construction scoring now excludes
+> reference wrapper audit logs from both views of the shared database. Scores
+> from 1.0.1 and 1.0.2 are not directly comparable on banking or the overall
+> benchmark. Existing published leaderboard scores remain historical until
+> re-evaluated. See the [changelog](CHANGELOG.md) for the verified impact,
+> regression checks, and migration guidance.
+
 ## Domains
 
 | Domain | Description |

@@ -43,7 +43,12 @@ def _project_db_state_to_reference(source_db, reference_db) -> dict:
 
 
 def _drop_construction_agent_audit_tables(state: dict | None) -> dict | None:
-    """Ignore agent-side discoverable wrapper audit logs in construction scoring."""
+    """Ignore agent wrapper audit logs in either construction DB view.
+
+    Banking shares its DB between the agent and user toolkits. These logs
+    describe reference wrapper calls, not customer state, so both views must
+    exclude them. Client REST scoring checks required calls via grounding.
+    """
 
     if not isinstance(state, dict):
         return state
@@ -103,6 +108,8 @@ def _hashes_for_compare(
                 predicted_env.user_tools.db, gold_env.user_tools.db
             )
             gold_user_state = gold_env.user_tools.db.model_dump(mode="json")
+            pred_user_state = _drop_construction_agent_audit_tables(pred_user_state)
+            gold_user_state = _drop_construction_agent_audit_tables(gold_user_state)
             pred_user_state, gold_user_state = canonicalize_new_ids(
                 pred_user_state,
                 gold_user_state,
