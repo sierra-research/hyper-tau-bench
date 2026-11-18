@@ -16,8 +16,43 @@ test('direct load: homepage is the τ^τ-bench leaderboard', async ({ page }) =>
   // Reference (human performance) row + the six baseline developer rows.
   await expect(page.locator('.ht-table tbody tr')).toHaveCount(7)
   await expect(page.locator('.ht-reference-row')).toBeVisible()
-  // Overall column uses the shared score-bar treatment.
-  await expect(page.locator('.ht-table .score-bar-fill')).toHaveCount(7)
+  // Four baselines have a full 1.0.2 rescore.
+  await expect(page.locator('.ht-table .score-bar-fill')).toHaveCount(4)
+})
+
+test('scorer selection keeps original and corrected rankings separate', async ({ page }) => {
+  await page.goto(at('/'))
+  const scorer = page.getByRole('combobox', { name: 'Scoring' })
+  const opus = page.getByRole('row').filter({ hasText: 'Claude Opus 5' })
+  const sol = page.getByRole('row').filter({ hasText: 'GPT-5.6-sol' })
+  const human = page.locator('.ht-reference-row')
+  await expect(scorer).toHaveValue('1.0.2')
+  await expect(opus.locator('.score-cell')).toHaveText('27.6%')
+  await expect(sol.locator('.rank-cell')).toHaveText('—')
+  await expect(human.locator('.score-cell')).toHaveText('—')
+  await page.getByRole('button', { name: 'Banking', exact: true }).click()
+  await expect(opus.locator('.score-cell')).toHaveText('11.5%')
+  await expect(sol.locator('.score-cell')).toHaveText('—')
+  await page.getByTitle('Sorted descending').click()
+  await expect(opus.locator('.rank-cell')).toHaveText('#1')
+  await expect(page.locator('.model-row').last().locator('.rank-cell')).toHaveText('—')
+
+  await sol.locator('.expand-cell').click()
+  const bankingDetail = page.locator('.domain-breakdown-card').filter({ hasText: 'Banking' })
+  await expect(bankingDetail.locator('.domain-card-body')).toHaveText('—')
+  await scorer.selectOption('release-v1')
+  await expect(opus.locator('.score-cell')).toHaveText('5.9%')
+  await expect(sol.locator('.score-cell')).toHaveText('9.0%')
+  await expect(bankingDetail.locator('.domain-card-body')).toHaveText('9.0%')
+  await page.getByRole('button', { name: 'Overall', exact: true }).click()
+  await expect(opus.locator('.score-cell')).toHaveText('23.9%')
+  await expect(sol.locator('.score-cell')).toHaveText('22.0%')
+  await expect(human.locator('.score-cell')).toHaveText('82.2%')
+
+  await scorer.selectOption('1.0.2')
+  await page.getByRole('button', { name: 'Airline', exact: true }).click()
+  await expect(sol.locator('.score-cell')).toHaveText('49.8%')
+  await expect(human.locator('.score-cell')).toHaveText('82.3%')
 })
 
 test('direct load: build trajectories', async ({ page }) => {

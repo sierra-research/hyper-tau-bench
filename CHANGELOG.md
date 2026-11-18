@@ -52,6 +52,33 @@ uv run pytest tests/test_hyper/test_banking_construction_grading.py \
 This verifies the reported scoring defect, not every policy/golden-action
 choice or the issue author's private 175-build / 939-conversation rescore.
 
+### Leaderboard results
+
+Four developer configurations have saved recordings for all 53 release tasks,
+including all 35 banking tasks. Replaying the recorded banking operations
+with the correction in `9145ed87c114e2f27489e6fb3b89737594d85c10`
+preserves the original conversations, other grading checks, and serving
+penalties. For all four configurations, the original means reproduce every
+published domain and overall score at the leaderboard's one-decimal precision.
+
+| Developer / harness | Original banking | 1.0.2 banking | Original overall | 1.0.2 overall |
+| --- | ---: | ---: | ---: | ---: |
+| Claude Opus 5 / Claude Code | 5.93% | 11.49% | 23.94% | 27.61% |
+| GPT-5.6-terra / Codex | 6.94% | 8.32% | 17.98% | 18.89% |
+| Kimi K3 / Kimi Code | 4.41% | 6.80% | 16.08% | 17.66% |
+| Claude Sonnet 5 / Claude Code | 3.18% | 4.69% | 14.91% | 15.90% |
+
+The replay included 173 retained banking recordings across all six developer
+configurations. It reproduced all 6,164 recorded database grades under the
+original scorer. Applying the fix gave 252 more conversations a passing
+reward across those recordings. The leaderboard uses only complete task means.
+
+For GPT-5.6-sol / Codex, 28 of 53 selected recordings were available. For
+Kimi K3 / OpenCode, recordings covered 31 distinct tasks, with only 15
+confirmed in the original selection. The human reference was outside the replay.
+Their original banking and overall scores appear under **Original release**.
+Airline, retail, and telecom use the same grading in both views.
+
 ### Versioning and historical scores
 
 - Package and lockfile version: **1.0.2**. New Hyper-τ checkpoints and final
