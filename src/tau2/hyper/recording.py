@@ -28,6 +28,7 @@ from tau2.hyper.result_serialization import (
     serialize_result_event,
     serialize_result_summary,
 )
+from tau2.utils.utils import get_tau2_version
 
 # Default save directory (relative to project root)
 _SIMULATIONS_DIR = Path("data/simulations/hyper_tau")
@@ -96,6 +97,7 @@ class RecordingDisplay:
         self.inner = inner_display
         self.events: list[dict] = []
         self.started_at = datetime.now(timezone.utc).isoformat()
+        self.scorer_version = get_tau2_version()
         self._lock = threading.RLock()
         self._task = task
         self._config = dict(config or {})
@@ -161,6 +163,7 @@ class RecordingDisplay:
             assert self._checkpoint_path is not None
             payload = {
                 "status": "in_progress",
+                "scorer_version": self.scorer_version,
                 "task_id": self._task.id if self._task else "unknown",
                 "started_at": self.started_at,
                 "updated_at": datetime.now(timezone.utc).isoformat(),
@@ -390,6 +393,7 @@ class RecordingDisplay:
 
             recording = {
                 "status": "complete",
+                "scorer_version": self.scorer_version,
                 "task_id": self._task.id if self._task else "unknown",
                 "started_at": self.started_at,
                 "saved_at": datetime.now(timezone.utc).isoformat(),

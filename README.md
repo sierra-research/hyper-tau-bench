@@ -19,6 +19,14 @@ pass rate.
 
 ![τ^τ-bench overview: evidence, sandboxed agent construction, evaluation](figs/fig1_overview.png)
 
+> **Scoring update — 1.0.2:** Banking construction scoring now excludes
+> reference wrapper audit logs from both views of the shared database. Scores
+> from 1.0.1 and 1.0.2 are not directly comparable on banking or the overall
+> benchmark. The leaderboard now shows corrected results for four configurations
+> with complete recordings. Select **Original release** to see all published
+> baselines and the original human reference. The [changelog](CHANGELOG.md)
+> lists the paired scores and replay coverage.
+
 ## Domains
 
 | Domain | Description |
@@ -189,26 +197,31 @@ Add a directory under `web/leaderboard/public/hyper-submissions/` named
 
 ```json
 {
-  "harness": { "name": "Codex" },
+  "harness": { "name": "Claude Code" },
   "builder": {
-    "model_name": "GPT-5.6-sol",
-    "reasoning_effort": "xhigh"
+    "model_name": "Claude Opus 5",
+    "reasoning_effort": "max"
   },
   "submitting_organization": "Your organization",
   "submission_date": "2026-08-31",
+  "scorer_version": "1.0.2",
   "scores": {
-    "overall": 22.0,
-    "airline": 49.8,
-    "retail": 59.2,
-    "telecom": 32.9,
-    "banking": 9.0
+    "overall": 27.61,
+    "airline": 55.9,
+    "retail": 72.8,
+    "telecom": 48.2,
+    "banking": 11.49
   },
-  "build_time_min": 47.9,
-  "build_cost_usd": 18.2,
-  "serve_credit_ratio": 0.45
+  "build_time_min": 216.3,
+  "build_cost_usd": 42.0,
+  "serve_credit_ratio": 0.58
 }
 ```
 
+- `scorer_version` — version used to grade the reported scores. Use the
+  version recorded by the scorer. For rescored historical submissions, keep the
+  originally published scores in `release_v1_scores`. Unversioned legacy
+  submissions have banking and overall scores only on the original release board.
 - `scores` — mean reward per source domain (0–100), and `overall` the mean
   across all 53 tasks (`airline`/`retail` mean the `_plus` domains).
 - `build_time_min` / `build_cost_usd` — mean wall-clock build time and mean
