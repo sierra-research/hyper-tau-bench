@@ -10,14 +10,26 @@ const at = (route) => `${SITE_BASE}${route}`
 // Direct loads: every route serves a real page with its own title and content.
 // ---------------------------------------------------------------------------
 
-test('direct load: homepage is the τ^τ-bench leaderboard', async ({ page }) => {
-  await page.goto(at('/'))
+test('direct load: homepage is the τ^τ-bench leaderboard', async ({ page, request }) => {
+  const [manifest] = await Promise.all([
+    page.waitForResponse(response => new URL(response.url()).pathname.endsWith('/manifest.json')),
+    page.goto(at('/')),
+  ])
+  expect(manifest.ok()).toBe(true)
+  const { submissions } = await manifest.json()
   await expect(page).toHaveTitle(/hyper-tau-bench/)
-  // Reference (human performance) row + the six baseline developer rows.
-  await expect(page.locator('.ht-table tbody tr')).toHaveCount(7)
+  await expect(page.locator('.ht-table .model-row:not(.ht-reference-row)')).toHaveCount(submissions.length)
   await expect(page.locator('.ht-reference-row')).toBeVisible()
-  // Four baselines have a full 1.0.2 rescore.
-  await expect(page.locator('.ht-table .score-bar-fill')).toHaveCount(4)
+
+  const scorer = await page.getByRole('combobox', { name: 'Scoring' }).inputValue()
+  const files = ['reference.json', ...submissions.map(dir => `${dir}/submission.json`)]
+  const entries = await Promise.all(files.map(async file => {
+    const response = await request.get(new URL(file, manifest.url()).href)
+    await expect(response).toBeOK()
+    return response.json()
+  }))
+  const scored = entries.filter(entry => entry.scorer_version === scorer && Number.isFinite(entry.scores?.overall))
+  await expect(page.locator('.ht-table .score-bar-fill')).toHaveCount(scored.length)
 })
 
 test('scorer selection keeps original and corrected rankings separate', async ({ page }) => {
@@ -33,8 +45,10 @@ test('scorer selection keeps original and corrected rankings separate', async ({
   await page.getByRole('button', { name: 'Banking', exact: true }).click()
   await expect(opus.locator('.score-cell')).toHaveText('11.5%')
   await expect(sol.locator('.score-cell')).toHaveText('—')
+  const bankingRank = await opus.locator('.rank-cell').innerText()
+  expect(bankingRank).toMatch(/^#\d+$/)
   await page.getByTitle('Sorted descending').click()
-  await expect(opus.locator('.rank-cell')).toHaveText('#1')
+  await expect(opus.locator('.rank-cell')).toHaveText(bankingRank)
   await expect(page.locator('.model-row').last().locator('.rank-cell')).toHaveText('—')
 
   await sol.locator('.expand-cell').click()
