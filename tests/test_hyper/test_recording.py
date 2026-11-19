@@ -218,3 +218,18 @@ def test_restarting_suite_immediately_resets_disk_checkpoint(tmp_path):
         "mean_reward": 0.0,
         "results": [],
     }
+
+
+def test_scorer_version_persists_across_checkpoint_and_final_save(
+    tmp_path, monkeypatch
+):
+    monkeypatch.setattr("tau2.hyper.recording.get_tau2_version", lambda: "1.0.2")
+    recorder = RecordingDisplay(task=_task(), checkpoint_dir=tmp_path)
+    recorder.show_eval_task_start("task_1", "test", 0, 1)
+    checkpoint = json.loads(recorder.checkpoint_path.read_text())
+    assert checkpoint["scorer_version"] == "1.0.2"
+
+    # A recorder keeps the version that started the run.
+    monkeypatch.setattr("tau2.hyper.recording.get_tau2_version", lambda: "future")
+    final = json.loads(recorder.save().read_text())
+    assert final["scorer_version"] == "1.0.2"
