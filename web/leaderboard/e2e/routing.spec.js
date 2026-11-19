@@ -21,7 +21,8 @@ test('direct load: homepage is the τ^τ-bench leaderboard', async ({ page, requ
   await expect(page.locator('.ht-table .model-row:not(.ht-reference-row)')).toHaveCount(submissions.length)
   await expect(page.locator('.ht-reference-row')).toBeVisible()
 
-  const scorer = await page.getByRole('combobox', { name: 'Scoring' }).inputValue()
+  const versions = page.getByRole('radiogroup', { name: 'Scoring version' })
+  const scorer = await versions.getByRole('radio', { checked: true }).inputValue()
   const files = ['reference.json', ...submissions.map(dir => `${dir}/submission.json`)]
   const entries = await Promise.all(files.map(async file => {
     const response = await request.get(new URL(file, manifest.url()).href)
@@ -34,11 +35,13 @@ test('direct load: homepage is the τ^τ-bench leaderboard', async ({ page, requ
 
 test('scorer selection keeps original and corrected rankings separate', async ({ page }) => {
   await page.goto(at('/'))
-  const scorer = page.getByRole('combobox', { name: 'Scoring' })
+  const versions = page.getByRole('radiogroup', { name: 'Scoring version' })
+  const corrected = versions.getByRole('radio', { name: 'Corrected 1.0.2' })
+  const original = versions.getByRole('radio', { name: 'Original release' })
   const opus = page.getByRole('row').filter({ hasText: 'Claude Opus 5' })
   const sol = page.getByRole('row').filter({ hasText: 'GPT-5.6-sol' })
   const human = page.locator('.ht-reference-row')
-  await expect(scorer).toHaveValue('1.0.2')
+  await expect(corrected).toBeChecked()
   await expect(opus.locator('.score-cell')).toHaveText('27.6%')
   await expect(sol.locator('.rank-cell')).toHaveText('—')
   await expect(human.locator('.score-cell')).toHaveText('—')
@@ -54,7 +57,7 @@ test('scorer selection keeps original and corrected rankings separate', async ({
   await sol.locator('.expand-cell').click()
   const bankingDetail = page.locator('.domain-breakdown-card').filter({ hasText: 'Banking' })
   await expect(bankingDetail.locator('.domain-card-body')).toHaveText('—')
-  await scorer.selectOption('release-v1')
+  await original.check()
   await expect(opus.locator('.score-cell')).toHaveText('5.9%')
   await expect(sol.locator('.score-cell')).toHaveText('9.0%')
   await expect(bankingDetail.locator('.domain-card-body')).toHaveText('9.0%')
@@ -63,7 +66,9 @@ test('scorer selection keeps original and corrected rankings separate', async ({
   await expect(sol.locator('.score-cell')).toHaveText('22.0%')
   await expect(human.locator('.score-cell')).toHaveText('82.2%')
 
-  await scorer.selectOption('1.0.2')
+  await original.focus()
+  await page.keyboard.press('ArrowLeft')
+  await expect(corrected).toBeChecked()
   await page.getByRole('button', { name: 'Airline', exact: true }).click()
   await expect(sol.locator('.score-cell')).toHaveText('49.8%')
   await expect(human.locator('.score-cell')).toHaveText('82.3%')

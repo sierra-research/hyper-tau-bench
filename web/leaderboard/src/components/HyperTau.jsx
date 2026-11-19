@@ -23,6 +23,10 @@ const HYPER_BASE = import.meta.env.VITE_HYPER_SUBMISSIONS_BASE_URL
 const NO_CACHE = { cache: 'no-cache' }
 
 const CURRENT_SCORER = '1.0.2'
+const SCORING_VERSIONS = [
+  { value: CURRENT_SCORER, label: `Corrected ${CURRENT_SCORER}` },
+  { value: 'release-v1', label: 'Original release' },
+]
 
 function rowForScorer(row, scorer) {
   if (!row) return null
@@ -288,16 +292,28 @@ const HyperTau = () => {
         ) : (
           <div className="reliability-metrics">
             <div className="ht-scorer-controls">
-              <label>
-                Scoring{' '}
-                <select value={scorer} onChange={e => setScorer(e.target.value)}>
-                  <option value={CURRENT_SCORER}>{CURRENT_SCORER} (corrected)</option>
-                  <option value="release-v1">Original release</option>
-                </select>
-              </label>
-              {scorer === CURRENT_SCORER && (
-                <span>A dash in Overall or Banking means a corrected score is unavailable.</span>
-              )}
+              <div className="ht-scorer-setting">
+                <span id="ht-scorer-label">Scoring version</span>
+                <div className="ht-scorer-options" role="radiogroup" aria-labelledby="ht-scorer-label">
+                  {SCORING_VERSIONS.map(({ value, label }) => (
+                    <label key={value}>
+                      <input
+                        type="radio"
+                        name="scoring-version"
+                        value={value}
+                        checked={scorer === value}
+                        onChange={() => setScorer(value)}
+                      />
+                      <span>{label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <p className="ht-scorer-note">
+                {scorer === CURRENT_SCORER
+                  ? 'Dashes mark missing Overall or Banking scores.'
+                  : 'Overall and Banking use the original grading rules.'}
+              </p>
             </div>
             <div className="metrics-table-container">
               <table className="reliability-table ht-table">
