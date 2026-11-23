@@ -76,8 +76,11 @@ reward across those recordings. The leaderboard uses only complete task means.
 For GPT-5.6-sol / Codex, 28 of 53 selected recordings were available. For
 Kimi K3 / OpenCode, recordings covered 31 distinct tasks, with only 15
 confirmed in the original selection. The human reference was outside the replay.
-Their original banking and overall scores appear under **Original release**.
-Airline, retail, and telecom use the same grading in both views.
+The leaderboard displays each entry's latest published scores. This includes
+the original results for these entries and Google Arc's submitted 52.2% overall,
+alongside the four rescored configurations above. Grader 1.0.2 changes the
+Banking and Overall comparisons. Airline, retail, and telecom share the same
+grading rules across these releases.
 
 ### Versioning and historical scores
 
@@ -90,8 +93,8 @@ Airline, retail, and telecom use the same grading in both views.
   Keep the original task definitions, model configuration, and credit budgets.
 - If replayable submissions or complete scoring inputs are unavailable, rerun
   the sealed evaluation and identify it as a new evaluation. Aggregate scores
-  alone cannot recover the corrected result. Do not replace leaderboard values
-  with an estimated uplift or mix old and corrected banking scores.
+  alone cannot recover the corrected result. Use the published result until
+  a verified rescore is available.
 - Pin the pre-fix commit above to reproduce historical scoring. This PR updates
   the source version; publishing a release/tag follows repository maintainer
   review and merge.

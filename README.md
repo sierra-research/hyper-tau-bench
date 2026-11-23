@@ -22,9 +22,8 @@ pass rate.
 > **Scoring update — 1.0.2:** Banking construction scoring now excludes
 > reference wrapper audit logs from both views of the shared database. Scores
 > from 1.0.1 and 1.0.2 are not directly comparable on banking or the overall
-> benchmark. The leaderboard now shows corrected results for four configurations
-> with complete recordings. Select **Original release** to see all published
-> baselines and the original human reference. The [changelog](CHANGELOG.md)
+> benchmark. The leaderboard ranks the latest published score for each
+> submission, including its original result until a rescore is published. The [changelog](CHANGELOG.md)
 > lists the paired scores and replay coverage.
 
 ## Domains
@@ -220,8 +219,8 @@ Add a directory under `web/leaderboard/public/hyper-submissions/` named
 
 - `scorer_version` — version used to grade the reported scores. Use the
   version recorded by the scorer. For rescored historical submissions, keep the
-  originally published scores in `release_v1_scores`. Unversioned legacy
-  submissions have banking and overall scores only on the original release board.
+  originally published scores in `release_v1_scores`. The leaderboard uses
+  the values in `scores` for every submission.
 - `scores` — mean reward per source domain (0–100), and `overall` the mean
   across all 53 tasks (`airline`/`retail` mean the `_plus` domains).
 - `build_time_min` / `build_cost_usd` — mean wall-clock build time and mean
