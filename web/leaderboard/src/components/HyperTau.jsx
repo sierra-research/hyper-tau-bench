@@ -9,7 +9,7 @@ import { REPO_URL, repoUrl } from '../routes'
 // τ^τ-bench leaderboard — a separate board from the τ²/τ³ tracks because the
 // unit of evaluation is different: rows are developer configurations (coding
 // harness × builder model), each scored over the 53 release tasks, not models
-// scored by pass^k. The original release view preserves the published results.
+// scored by pass^k. Each row uses that submission's published scores.
 //
 // The markup deliberately clones the main Leaderboard's reliability table
 // (same shared classes: rank badges, model-info, retrieval-badge chips, the
@@ -21,25 +21,6 @@ const HYPER_BASE = import.meta.env.VITE_HYPER_SUBMISSIONS_BASE_URL
   || `${import.meta.env.BASE_URL}hyper-submissions`
 
 const NO_CACHE = { cache: 'no-cache' }
-
-const CURRENT_SCORER = '1.0.2'
-const SCORING_VERSIONS = [
-  { value: CURRENT_SCORER, label: `Corrected ${CURRENT_SCORER}` },
-  { value: 'release-v1', label: 'Original release' },
-]
-
-function rowForScorer(row, scorer) {
-  if (!row) return null
-  const legacy = !row.scorer_version || row.scorer_version === '1.0.1'
-  if (scorer === 'release-v1') {
-    if (row.release_v1_scores) return { ...row, scores: row.release_v1_scores }
-    return legacy ? row : null
-  }
-  if (row.scorer_version === scorer) return row
-  // The banking fix also changes the overall mean. The other domains carry over.
-  if (legacy) return { ...row, scores: { ...row.scores, banking: null, overall: null } }
-  return null
-}
 
 // Scope selector (the analog of the main board's Pass^1–4 toggle): overall
 // first, then the four domains. Banking carries 35 of the 53 tasks.
@@ -94,11 +75,10 @@ const fmtDate = (iso) => {
 
 const HyperTau = () => {
   const [rows, setRows] = useState([])
-  const [referenceData, setReference] = useState(null)
+  const [reference, setReference] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [scope, setScope] = useState('overall')
-  const [scorer, setScorer] = useState(CURRENT_SCORER)
   const [sortDirection, setSortDirection] = useState('desc')
   const [expandedRows, setExpandedRows] = useState(new Set())
   // Easter egg: clicking the 👤 Human chip reveals who this human actually is.
@@ -134,15 +114,13 @@ const HyperTau = () => {
     load()
   }, [])
 
-  const reference = rowForScorer(referenceData, scorer)
   const ranked = useMemo(() => {
-    const visible = rows.map(row => rowForScorer(row, scorer)).filter(Boolean)
-    const scored = visible.filter(row => row.scores?.[scope] != null)
+    const scored = rows.filter(row => row.scores?.[scope] != null)
       .sort((a, b) => b.scores[scope] - a.scores[scope])
       .map((row, index) => ({ ...row, rank: index + 1 }))
     if (sortDirection === 'asc') scored.reverse()
-    return scored.concat(visible.filter(row => row.scores?.[scope] == null))
-  }, [rows, scope, scorer, sortDirection])
+    return scored.concat(rows.filter(row => row.scores?.[scope] == null))
+  }, [rows, scope, sortDirection])
 
   const toggleExpand = (key) => {
     setExpandedRows((prev) => {
@@ -291,30 +269,6 @@ const HyperTau = () => {
           <div className="ht-loading">Failed to load: {error}</div>
         ) : (
           <div className="reliability-metrics">
-            <div className="ht-scorer-controls">
-              <div className="ht-scorer-setting">
-                <span id="ht-scorer-label">Scoring version</span>
-                <div className="ht-scorer-options" role="radiogroup" aria-labelledby="ht-scorer-label">
-                  {SCORING_VERSIONS.map(({ value, label }) => (
-                    <label key={value}>
-                      <input
-                        type="radio"
-                        name="scoring-version"
-                        value={value}
-                        checked={scorer === value}
-                        onChange={() => setScorer(value)}
-                      />
-                      <span>{label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-              <p className="ht-scorer-note">
-                {scorer === CURRENT_SCORER
-                  ? 'Dashes mark missing Overall or Banking scores.'
-                  : 'Overall and Banking use the original grading rules.'}
-              </p>
-            </div>
             <div className="metrics-table-container">
               <table className="reliability-table ht-table">
                 <thead>
